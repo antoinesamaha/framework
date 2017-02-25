@@ -1,0 +1,89 @@
+package com.fab.model.fieldFactory;
+
+import com.fab.codeWriter.CodeWriter;
+import com.fab.codeWriter.CodeWriter_OneFile;
+import com.fab.model.table.FieldDefinition;
+
+public abstract class FDAbstract implements IFieldType {
+
+	public String getVariableName(FieldDefinition fldDef){
+		return fldDef.getCW_VariableName();
+	}
+	
+	public String getGetterSetterMethodsPartialName(FieldDefinition fldDef){
+		return fldDef.getCW_GetterSetterMethodsPartialName();
+	}
+
+	protected String getFieldVariableName(FieldDefinition fldDef){
+		return fldDef.getCW_FieldVariableName();
+	}
+
+	protected void addFieldDeclarationInFocDesc_Common(CodeWriter codeWriter, FieldDefinition fldDef, String varName){
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+		if(!fldDef.isDbResident()){
+			intWrt.printCore("    "+varName+".setDBResident(false);\n");	
+		}
+		intWrt.printCore("    addField("+varName+");\n\n");
+	}
+
+	@Override
+	public void addGetterSetterInFocObject(CodeWriter codeWriter, FieldDefinition fldDef) {
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+		
+		String varName = getGetterSetterMethodsPartialName(fldDef);
+		
+		intWrt.printCore("  public "+getJavaType(fldDef)+" get"+varName+"(){\n");
+		intWrt.printCore("    return ("+getJavaType(fldDef)+") getProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fldDef.getCW_FieldConstanteName()+");\n");
+		intWrt.printCore("  }\n\n");
+		
+		intWrt.printCore("  public void set"+varName+"("+getJavaType(fldDef)+" obj){\n");
+		intWrt.printCore("    setProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fldDef.getCW_FieldConstanteName()+", obj);\n");
+		intWrt.printCore("  }\n\n");
+	}	
+	
+	public void addDeclarationInFocObjectWebClient(CodeWriter codeWriter, FieldDefinition fldDef) {
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+
+		String varName = getVariableName(fldDef);
+
+		intWrt.printCore("  private "+getJavaType(fldDef)+" "+varName+" = "+getDefaultValue(fldDef)+";\n");
+	}
+
+	public void addGetterSetterInWebFocObjectClient(CodeWriter codeWriter, FieldDefinition fldDef) {
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+
+		String varFctName = getGetterSetterMethodsPartialName(fldDef);
+		String varName    = getVariableName(fldDef);
+		
+		intWrt.printCore("  public "+getJavaType(fldDef)+" get"+varFctName+"(){\n");
+		intWrt.printCore("    return "+varName+";\n");
+		intWrt.printCore("  }\n\n");
+		
+		intWrt.printCore("  public void set"+varFctName+"("+getJavaType(fldDef)+" "+varName+"){\n");
+		intWrt.printCore("    this." + varName + " = "+varName+";\n");
+		intWrt.printCore("  }\n\n");
+	}
+	
+	public void addCopyFromFocObjectToCltObject(CodeWriter_OneFile intWrt, FieldDefinition fldDef, String indentation){
+		String          methodPartialName = getGetterSetterMethodsPartialName(fldDef);
+		intWrt.printCore(indentation+"clt.set"+methodPartialName+"(focObj.get"+methodPartialName+"());\n");
+	}
+	
+	public void addCopyFromCltObjectToFocObject(CodeWriter_OneFile intWrt, FieldDefinition fldDef, String indentation){
+		String          methodPartialName = getGetterSetterMethodsPartialName(fldDef);
+		intWrt.printCore(indentation+"focObj.set"+methodPartialName+"(clt.get"+methodPartialName+"());\n");
+	}
+	
+	public String getConvertString2ValueFunction(){
+		return null;
+	}
+	
+	public String getConvertValue2StringFunction(){
+		return null;
+	}
+	
+	public String getClassFor_GuiComponent_Details(){
+		return null;
+	}
+	
+}
