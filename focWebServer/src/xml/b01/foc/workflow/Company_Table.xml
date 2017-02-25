@@ -1,0 +1,9 @@
+<VerticalLayout width="100%"  >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable name="COMPANY_TABLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" checkBox="true"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Name" />
+        <TableColumn name="DESCRIP" caption="Description" />
+    </GuiTable>
+</VerticalLayout>
+

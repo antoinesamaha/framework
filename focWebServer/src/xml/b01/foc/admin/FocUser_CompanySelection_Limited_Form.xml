@@ -1,0 +1,9 @@
+<VerticalLayout title ="User Settings" spacing="true" margin="true" captionMargin="0">
+    <ValidationSettings title="Login details" withApply="true" withSave="false" withAttach="false" withPrint="false" withEmail="false" viewSelector="false"/>
+    <!-- GuiField name="CURRENT_COMPANY" caption="Company Name" captionPos="top" width="-1px" height="-1px" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
+    <GuiField name="CURRENT_SITE" caption="Site Name" captionPos="top" width="-1px" height="-1px" visibleWhen="NOT(CURRENT_COMPANY=null)" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
+    <GuiField name="CURRENT_TITLE" caption="Title" captionPos="top" width="-1px" height="-1px" visibleWhen="AND(NOT(CURRENT_SITE=null),NOT(CURRENT_COMPANY=null))" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
+    <GuiField name="CONTEXT_HELP_ACTIVATION" caption="Context Help Activation" /-->
+    <Button name="CHANGE_PASSWORD" caption="Change Password" alignment="bottom_left"/>
+    <!-- GuiField name="REPLACEMENT_USER" captionProperty="NAME" caption="Current Replacement User" captionPos="top" width="-1px" height="-1px" immediate="true" gearEnabled="false" / -->
+</VerticalLayout>

@@ -1,0 +1,8 @@
+<VerticalLayout name="RIGHT_PANEL_TREE_VL">
+    <ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="false" withEmail="false" />
+
+		<GuiTree name="RIGHT_PANEL_TREE" dataPath="DATAROOT" width="275px" height="-1px" pageLength="20" viewSelector="false" inLineEditable="false" openEnabled="false" addEnabled="false" deleteEnabled="false">
+        <TableColumn name="NAME" caption="Field Name" />
+    </GuiTree>
+</VerticalLayout>
+

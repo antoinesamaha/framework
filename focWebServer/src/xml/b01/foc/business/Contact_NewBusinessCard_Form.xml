@@ -1,0 +1,41 @@
+<VerticalLayout spacing="true" width="700px" alignment="left" >
+    <ValidationSettings formTitle="Contact" withApply="true" withAttach="false" withPrint="true" />
+    <Label value="Contact details" style="f16,bold" />
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="NEW_CONTACT.TITLE" caption="Title" width="50px" height="-1px"  />
+        <GuiField name="NEW_CONTACT.FIRST_NAME" caption="First Name" width="-1px" height="-1px"  />
+        <GuiField name="NEW_CONTACT.FAMILY_NAME" caption="Family Name" captionPos="top" captionWidth="100px" width="-1px" height="-1px"  />    
+        <GuiField name="NEW_CONTACT.POSITION_DESC" caption="Position" width="-1px" height="-1px"  />
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="NEW_CONTACT.MOBILE" caption="Mobile" width="120px" height="-1px"  />
+        <GuiField name="NEW_CONTACT.PHONE1" caption="Phone (Primary)" width="120px" height="-1px"  />
+        <GuiField name="NEW_CONTACT.PHONE2" caption="Phone (Secondary)" width="120px" height="-1px"  />
+    </HorizontalLayout>   
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="NEW_CONTACT.EMAIL" caption="Email (Primary)" width="200px" height="-1px"  />
+        <GuiField name="NEW_CONTACT.EMAIL2" caption="Email (Secondary)" width="200px" height="-1px"  />            
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="NEW_CONTACT.INTRODUCTION" caption="Introduction" width="600px" height="-1px"  />    
+    </HorizontalLayout>        
+    <Line />
+    <Line />
+    <Label value="Company details" style="f16,bold" />
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField name="NEW_COMPANY.NAME" caption="Company Name" width="400px" height="-1px"  />
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField dataPath="NEW_COMPANY.PHONE1" caption="Company Phone1" width="-1px" height="-1px" />
+       <GuiField dataPath="NEW_COMPANY.PHONE2" caption="Company Phone2" width="-1px" height="-1px" />
+       <GuiField dataPath="NEW_COMPANY.MOBILE" caption="Company mobile" width="-1px" height="-1px" />       
+       <GuiField dataPath="NEW_COMPANY.EMAIL" caption="Company email" width="-1px" height="-1px" />
+    </HorizontalLayout>
+    <GuiField name="NEW_CONTACT.INTRODUCTION" caption="Introduction" width="600px" height="-1px"  />    
+    <GuiField dataPath="NEW_COMPANY.COMMENT" caption="Comment" width="-1px" height="-1px" />
+    
+    <GuiField dataPath="NEW_COMPANY.INVOICING_ADDRESS" caption="Company Address" width="-1px" height="-1px" />
+    <Line />        
+</VerticalLayout>
+
+

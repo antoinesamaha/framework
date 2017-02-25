@@ -1,0 +1,16 @@
+<VerticalLayout captionMargin="0" height="100%">
+  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withPrint="false" />
+  <!-- VerticalLayout name="UPLOAD_IMAGE_LAYOUT" width="200px" height="30px" left="20px">
+  </VerticalLayout -->
+  <GuiTable name="PHOTO_ALBUM" dataPath="DATAROOT" caption="Photo album" captionMargin="0" width="100%" height="500px" addEnabled="false" inLineEditable="false">
+    <TableColumn name="IMAGE_CLOUD" caption="Document" editable="false"></TableColumn>
+    <TableColumn name="IMAGE_NAME" caption="Document name"></TableColumn>
+    <TableColumn name="DESCRIPTION" caption="Description"></TableColumn>
+    <TableColumn name="DOCUMENT_TYPE" captionProperty="CAPTION" caption="Document Type"></TableColumn>
+    <TableColumn name="CREATION_USER" captionProperty="NAME" caption="Creation User"></TableColumn>
+    <TableColumn name="TRANSACTION_CODE" caption="Transaction code"></TableColumn>
+    <TableColumn name="UPLOAD_DATE" caption="Upload date"></TableColumn>
+    <TableColumn name="ALLOWED_GROUPS" caption="Allowed Groups"></TableColumn>
+    <TableColumn name="DOWNLOAD" />
+  </GuiTable>
+</VerticalLayout>

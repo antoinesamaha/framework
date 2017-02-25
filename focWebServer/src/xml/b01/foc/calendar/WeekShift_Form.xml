@@ -1,0 +1,25 @@
+<VerticalLayout spacing="true">
+   <ValidationSettings formTitle="Week Shift" withApply="true" withAttach="true" withPrint="true" />
+   <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <HorizontalLayout spacing="true">
+    	<VerticalLayout spacing="true">
+    		<GuiField name="MONDAY_SHIFT" caption="Monday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="TUESDAY_SHIFT" caption="Tuesday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="WEDNESDAY_SHIFT" caption="Wednesday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="THURSDAY_SHIFT" caption="Thursday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="FRIDAY_SHIFT" caption="Friday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="SATURDAY_SHIFT" caption="Saturday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="SUNDAY_SHIFT" caption="Sunday" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    	</VerticalLayout>
+    	
+    	<VerticalLayout spacing="true">
+    		<GuiField name="MONDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="TUSEDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="WEDNESDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="THURDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="FRIDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="SATURDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    		<GuiField name="SUNDAY_OT_FACTOR" caption="OT Factor" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    	</VerticalLayout>
+    </HorizontalLayout>
+</VerticalLayout>

@@ -1,0 +1,9 @@
+<VerticalLayout spacing="true" width="100%" margin="true">
+		<!-- ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" / -->
+
+	  <GuiField name="WF_CANCEL_REASON" caption="Cancel reason" width="500px"/>
+    <HorizontalLayout spacing="true" margin="true">			
+			<Button name="YES_CANCEL_TRANSACTION" caption="Yes, Cancel"  />
+			<Button name="NO_DONT_CANCEL" caption="Do Not Cancel"  />
+		</HorizontalLayout>
+</VerticalLayout>

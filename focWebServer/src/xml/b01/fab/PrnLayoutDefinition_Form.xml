@@ -1,0 +1,8 @@
+<VerticalLayout width="100%" margin="true">
+  <ValidationSettings formTitle="Report Layout Configuration" withApply="true" withAttach="false" withPrint="true" />
+  <GuiField name="NAME" caption="Name" />
+  <GuiField name="DESCRIP" caption="Description" />
+  <GuiField name="CONTEXT" caption="Context Name" editable="false"/>
+  <GuiField name="LAYOUT_FILE" caption="Layout File Name" />
+  <GuiField name="JASPER_FILE" caption="Jasper File" />  
+</VerticalLayout>

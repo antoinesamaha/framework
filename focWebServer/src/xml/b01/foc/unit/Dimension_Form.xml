@@ -1,0 +1,9 @@
+<VerticalLayout >
+    <ValidationSettings formTitle="Dimension" withApply="true" withAttach="true" withPrint="true" />
+    <GuiField name="NAME" caption="Dimension" captionPos="left" captionStyle="f16,bold" captionWidth="150px" width="-1px" height="-1px" help="Dimension Name. If you want to add a unit find the right dimension or insert a new one." helpIndex="10" />
+    <GuiTable title="Units And Conversion Factors" name="UNIT_LIST" dataPath="UNIT_LIST" width="-1px" pageLength="fit" height="100%" withFilter="false" inLineEditable="onSelection" >
+        <TableColumn name="NAME" caption="Unit Name" />
+        <TableColumn name="SYMBOL" caption="Symbol" />
+        <TableColumn name="FACTOR" caption="Conv. Factor" />
+    </GuiTable>
+</VerticalLayout>

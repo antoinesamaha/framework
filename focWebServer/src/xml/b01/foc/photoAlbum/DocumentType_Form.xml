@@ -1,0 +1,39 @@
+<VerticalLayout captionMaArgin="0" width="90%" margin="true">
+  <ValidationSettings withAttach="false" withApply="true" withPrint="false" />
+  <Label value="Document Type" style="H2" />
+  <HorizontalLayout captionMargin="0" spacing="true">
+	  <GuiField name="NAME" caption="Name" editable="true" width="200px"/>
+	  <GuiField name="CAPTION" caption="Caption" editable="true" width="400px"/>
+  </HorizontalLayout>
+  <!-- IncludeXML name="DOC_TYPE_ACCESS_TABLE" dataPath="DOC_TYPE_ACCESS_LIST" storage="DOC_TYPE_ACCESS" type="table" / -->
+  
+  <!-- <GuiTable name="DOC_TYPE_ACCESS_TABLE" dataPath="DOC_TYPE_ACCESS_LIST" caption="Document Access" captionMargin="0" width="100%" height="-1px" addEnabled="true" inLineEditable="true">
+    <TableColumn name="DOC_RIGHTS_GROUP_NAME" dataPath="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Doc. Right Group Name" editable="true" />
+    <TableColumn name="ACCESS_RIGHT" caption="Access Right" editable="true" />
+  </GuiTable> -->
+  
+  
+  <HorizontalLayout captionMargin="false" margin="0" spacing="true" height="100%" width="90%">
+     
+    <VerticalLayout captionMargin="0" spacing="true" width="450px">
+	    <TableGrid title="Document Type Access" name="NOT_SELECTED_GROUPS_LIST_TABLE" dataPath="SOURCE_LIST" width="100%" height="100%" addEnabled="true" deleteEnabled="false" alignment="left" gridSelectionMode="Multi" refreshEnabled="false">
+	      <TableColumn name="NAME" caption="Doc. Right Group Name" editable="true" />
+	    </TableGrid>
+    </VerticalLayout>
+    
+    <VerticalLayout width="100px" alignment="center" spacing="true">
+      <Label value=" " width="100px" height="44px"/>
+      <Button name="ADD_BUTTON" caption="Add >" width="100px"/>
+      <Button name="REMOVE_BUTTON" caption="$P{LT} Remove" width="100px"/>
+    </VerticalLayout>
+    
+    <VerticalLayout captionMargin="0" spacing="true" width="450px">
+	    <TableGrid title="Document Type Access Rights" name="DOC_TYPE_ACCESS_TABLE" dataPath="DOC_TYPE_ACCESS_LIST" height="100%" width="100%" addEnabled="false" deleteEnabled="false" alignment="right" refreshEnabled="false" gridSelectionMode="Multi" >
+	      <TableColumn name="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Doc. Right Group Name" editable="true" />
+	      <TableColumn name="ACCESS_RIGHT" caption="Access Right" editable="true" />
+	    </TableGrid>
+    </VerticalLayout>
+  
+  </HorizontalLayout>
+  
+</VerticalLayout>

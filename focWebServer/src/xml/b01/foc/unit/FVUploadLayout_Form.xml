@@ -1,0 +1,8 @@
+<VerticalLayout margin="true" spacing="true" height="-1px">
+  <ValidationSettings formTitle="Upload Dialog" withApply="false" withAttach="false" withPrint="false" withEmail="false" viewSelector="false"/>
+  
+  <Label name="_LABEL_EXPLANATION" />
+
+  <VerticalLayout name="_FORMAT" />
+  <Line />
+</VerticalLayout>

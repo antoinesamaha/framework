@@ -1,0 +1,10 @@
+<VerticalLayout width="100%"  >
+    <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="User Groups" name="TABLE" dataPath="DATAROOT" >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Name" />
+        <TableColumn name="DESCRIP" caption="Description" />
+        <TableColumn name="GUEST_APPLICABLE" caption="Guest" />
+    </GuiTable>
+</VerticalLayout>
+

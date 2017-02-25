@@ -1,0 +1,6 @@
+<VerticalLayout>
+	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiField name="NAME" caption="Name" width="-1px" height="-1px"  />
+  <GuiField name="DESCRIP" caption="Description" width="-1px" height="-1px"  />
+  <GuiField name="DESTINATION_TABLE" caption="Destination table" width="-1px" height="-1px"  />
+</VerticalLayout>

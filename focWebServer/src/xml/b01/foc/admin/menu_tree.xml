@@ -1,0 +1,5 @@
+<AbsoluteLayout name="login_layout" width="350px" height="130px">
+  <GuiTree name="NAME" caption="Username" captionPos="left" top="10px" left="10px" />
+  <GuiField name="PASSWORD" caption="Password" captionPos="left" top="60px" left="10px" />
+  <Button name="login" caption="Log In" top="100px" left="10px" /> 
+ </AbsoluteLayout>

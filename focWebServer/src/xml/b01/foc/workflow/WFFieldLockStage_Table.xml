@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VerticalLayout >
+  <ValidationSettings formTitle="Fields lock by stage" withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable name="WF_FIELD_LOCK_STAGE_TABLE" dataPath="DATAROOT" width="100%" height="-1px" >
+	  <TableColumn name="FIELD_NAME" caption="Field Name" />
+	  <TableColumn name="WF_LOCK_STAGE.NAME" caption="Lock Stage Name" />
+	  <TableColumn name="WF_LOCK_STAGE.DESCRIP" caption="Lock Stage Description" />
+  </GuiTable>
+</VerticalLayout>

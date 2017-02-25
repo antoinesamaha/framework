@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VerticalLayout>
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="Contacts Mobile" name="Contact" dataPath="DATAROOT" width="100%" height="100%">
+        <TableColumn name="FIRST_NAME" caption="first_name" link="true" />
+        <TableColumn name="FAMILY_NAME" caption="family_name" link="true" />
+        <TableColumn name="MOBILE" caption="mobile" />
+        <TableColumn name="PHONE1" caption="phone1" />        
+        <TableColumn name="COMPANY_NAME" caption="Company" />
+    </GuiTable>
+</VerticalLayout>

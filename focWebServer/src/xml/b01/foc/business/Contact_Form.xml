@@ -1,0 +1,36 @@
+<VerticalLayout spacing="true" margin="true" width="700px" alignment="left" >
+    <ValidationSettings formTitle="Contact" withApply="true" withAttach="true" withPrint="true" />
+    <Label value="Contact details" style="f16,bold" />
+    <HorizontalLayout width="-1px" spacing="true">
+        <GuiField name="TITLE" caption="Title" width="100px" height="-1px"  />
+        <GuiField name="FIRST_NAME" caption="First Name" width="200px" height="-1px"  />
+        <GuiField name="FAMILY_NAME" caption="Family Name" width="200px" height="-1px"  />    
+        <GuiField name="POSITION_DESC" caption="Position" width="200px" height="-1px"  />
+    </HorizontalLayout>
+    <Line />
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField name="ADR_BK_PARTY1" dataPath="ADR_BK_PARTY" captionProperty="CODE" caption="Company Code" width="-1px" height="-1px" immediate="true" />
+       <GuiField name="ADR_BK_PARTY2" dataPath="ADR_BK_PARTY" captionProperty="NAME" caption="Company Name" width="-1px" height="-1px" immediate="true" />
+       <GuiField name="COMPANY_NAME" caption="Company name indication" width="435px" height="-1px" visibleWhen="IS_EMPTY($F{ADR_BK_PARTY.CODE})" />
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField dataPath="ADR_BK_PARTY.PHONE1" caption="Company Phone1" width="-1px" height="-1px" editable="false" />
+       <GuiField dataPath="ADR_BK_PARTY.PHONE2" caption="Company Phone2" width="-1px" height="-1px" editable="false" />
+       <GuiField dataPath="ADR_BK_PARTY.MOBILE" caption="Company mobile" width="-1px" height="-1px" editable="false" />       
+    </HorizontalLayout>
+    <Line />        
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="MOBILE" caption="Mobile" width="150px" height="-1px"  />
+        <GuiField name="PHONE1" caption="Phone (Primary)" width="150px" height="-1px"  />
+        <GuiField name="PHONE2" caption="Phone (Secondary)" width="150px" height="-1px"  />
+    </HorizontalLayout>   
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="EMAIL" caption="Email (Primary)" width="300px" height="-1px"  />
+        <GuiField name="EMAIL2" caption="Email (Secondary)" width="300px" height="-1px"  />            
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="INTRODUCTION" caption="Introduction" width="600px" height="-1px"  />    
+    </HorizontalLayout>    
+</VerticalLayout>
+
+

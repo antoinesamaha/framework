@@ -1,0 +1,15 @@
+<VerticalLayout >
+  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withPrint="false" />
+  <GuiTable name="PHOTO_ALBUM" dataPath="DATAROOT" caption="Photo album" width="100%" height="500px" addEnabled="false" inLineEditable="false">
+    <OpenForm containerWindow="same window" context="Main"/>        
+    <TableColumn name="IMAGE_CLOUD" caption="Document" editable="false"></TableColumn>
+    <TableColumn name="IMAGE_NAME" caption="Document name"></TableColumn>
+    <TableColumn name="DESCRIPTION" caption="Description"></TableColumn>
+    <TableColumn name="DOCUMENT_TYPE" captionProperty="NAME" caption="Document Type"></TableColumn>
+    <TableColumn name="CREATION_USER" captionProperty="NAME" caption="Creation User"></TableColumn>
+    <TableColumn name="TRANSACTION_CODE" caption="Transaction code"></TableColumn>
+    <TableColumn name="UPLOAD_DATE" caption="Upload date"></TableColumn>
+    <TableColumn name="ALLOWED_GROUPS" caption="Allowed Groups"></TableColumn>
+    <TableColumn name="DOWNLOAD" caption="Download" />
+  </GuiTable>
+</VerticalLayout>

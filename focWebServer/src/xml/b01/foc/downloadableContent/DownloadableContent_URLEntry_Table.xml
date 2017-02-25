@@ -1,0 +1,9 @@
+<VerticalLayout width="700px">
+
+  <Label value="Documents" style="f16,bold" width="100%" alignment="center"/>
+  <!-- Label value="Choose the document you wish to download" style="f12,text-left"/ -->
+  
+  <IncludeXMLForEach name="DOWNLOADABLE_CONTENT_LIST" dataPath="DATAROOT" storage="DOWNLOADABLE_CONTENT" view="Standard" context="FOREACH FORM" type="form" editable="false" width="100%">
+  </IncludeXMLForEach>
+  
+</VerticalLayout>

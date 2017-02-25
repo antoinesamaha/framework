@@ -1,0 +1,12 @@
+<VerticalLayout captionMargin="0" margin="true">
+    <ValidationSettings withApply="true" />
+    <GuiTable title="Invoices" name="INVOICE" dataPath="DATAROOT" width="100%" height="99%" duplicateEnabled="true">
+	    <TableColumn name="GROUP" captionProperty="NAME" caption="Group" />
+	    <TableColumn name="STORAGE_NAME" caption="Storage" />
+	    <TableColumn name="CONTEXT" caption="Context" />
+	    <TableColumn name="TYPE" caption="Type" />
+	    <TableColumn name="ALLOW" caption="Allow"  />
+	    <TableColumn name="VIEW" caption="Mandatory View" />
+	  </GuiTable>
+</VerticalLayout>
+

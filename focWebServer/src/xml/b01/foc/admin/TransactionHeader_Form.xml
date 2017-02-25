@@ -1,0 +1,10 @@
+<VerticalLayout name="transactionHeader" >
+	<HorizontalLayout name="test" height="-1px" width="100%" >
+	  <GuiField name="COMPANY.LOGO" width="250px" height="150px" editable="true" />
+	  <VerticalLayout >
+		  <GuiField name="CODE" caption="Code" captionPos="left" captionWidth="80px" width="-1px" height="-1px" />
+		  <GuiField name="SITE" caption="Site" captionPos="left" captionWidth="80px" width="-1px" height="-1px" />
+	  </VerticalLayout>
+	</HorizontalLayout>
+  <Label name="null" value=" " bgColor="#CCCCCC" height="2px" width="100%"  />
+</VerticalLayout>

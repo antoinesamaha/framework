@@ -1,0 +1,6 @@
+<VerticalLayout width="100%" >
+ <ValidationSettings formTitle="Rates" withApply="true" withAttach="true" withPrint="true" />
+ <GuiTable name="CURR_LINE" dataPath="DATAROOT" caption="" width="700px" height="-1px" checkBox="true"  >
+  <TableColumn />
+ </GuiTable>
+</VerticalLayout>

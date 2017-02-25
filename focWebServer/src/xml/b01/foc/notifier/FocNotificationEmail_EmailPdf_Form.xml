@@ -1,0 +1,18 @@
+<VerticalLayout width="90%" captionProperty="0" >
+    <ValidationSettings formTitle="Email Form" withApply="true" applyLink="Send" withSave="false" withAttach="false" withPrint="true" withEmail="false" />
+    <Label value="E-Mail" style="H2"/>
+    <VerticalLayout width="100%" >
+        <GuiField name="TEMPLATE" caption="Template:" captionPos="left" width="250px" />
+        <GuiField name="SENDER" caption="From:" captionPos="left" width="500px"  editable="false" />
+        <GuiField name="RECIPIENTS" caption="To:" captionPos="left" width="500px" />
+        <GuiField name="CC" caption="cc:" captionPos="left" width="500px" />
+        <GuiField name="BCC" caption="Bcc:" captionPos="left" width="500px" />       
+        <GuiField name="SUBJECT" caption="Subject:" captionPos="left" width="100%"  />
+        <GuiField name="TEXT" textArea="true" width="100%" height="300px"  />
+    </VerticalLayout>
+    <!-- HorizontalLayout width="-1px" spacing="true"  >
+        <Button name="SEND_EMAIL" caption="Send"  />
+        <Button name="CANCEL_SEND" caption="Cancel"  />
+    </HorizontalLayout -->
+</VerticalLayout>
+

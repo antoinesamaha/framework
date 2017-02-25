@@ -1,0 +1,10 @@
+<VerticalLayout width="100%"  >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" withEmail="true"/>
+    <GuiTable name="OUT_LOG_TABLE" dataPath="DATAROOT" caption="" width="100%" height="-1px">
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="FUSER" caption="From" captionProperty="NAME" />
+        <TableColumn name="STORAGE" caption="Storage" />
+        <TableColumn name="TRANSACTION_TYPE" caption="Transaction Type" />
+    </GuiTable>
+</VerticalLayout>
+

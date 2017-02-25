@@ -1,0 +1,13 @@
+<VerticalLayout >
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <!-- <GuiTree name="SITE_SELECTION_TABLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" >
+    <TableColumn name="NAME" caption="Name" />
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="_SELECT" caption="Selected" />
+  </GuiTree> -->
+  <GuiTable name="SITE_SELECTION_TABLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" >
+    <TableColumn name="NAME" caption="Name" />
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="_SELECT" caption="Selected" />
+  </GuiTable>
+</VerticalLayout>

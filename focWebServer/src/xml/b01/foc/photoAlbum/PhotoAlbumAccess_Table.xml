@@ -1,0 +1,8 @@
+<VerticalLayout >
+  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withPrint="true" />
+  <Button name="MANAGE_VIEWING_RIGHTS" caption="Manage Viewing Rights" ></Button>
+  <GuiTable name="PHOTO_ALBUM_ACCESS" dataPath="DATAROOT" caption="Photo album access" width="100%" height="500px" addEnabled="false" inLineEditable="true" deleteEnabled="false" openEnabled="false" refreshEnabled="false">
+    <TableColumn name="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Doc Rights Group" editable="false"></TableColumn>
+    <TableColumn name="ACCESS_RIGHT" caption="Access Right" editable="true"></TableColumn>
+  </GuiTable>
+</VerticalLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite name="GroupsTestingSuite">
+
+  <Test name="CreateSupplierBill">
+    <Navigation_MenuClick propertyName="CODE" propertyValue="SupplierBill" />
+    <Table_AddItem tableName="INVOICE" />
+    <Component_SetValue componentName="PARTY2" componentValue="Terra Cool sarl" />  
+    <Component_SetValue componentName="PRICE_CURR" componentValue="LBP" />  
+    <Apply />
+  </Test>
+    
+  <Test name="OpenCreatedSupplierBill">
+    <Navigation_MenuClick propertyName="CODE" propertyValue="SupplierBill">
+    </Navigation_MenuClick>
+    <Table_SelectItem tableName="INVOICE" propertyName="CODE" propertyValue="19">
+    </Table_SelectItem>
+    <Table_OpenItem tableName="INVOICE"></Table_OpenItem>
+  </Test>
+  
+  <!--  Test name="newGroup">
+    <MenuBarClick button="Admin" />
+    <TableAdd table="MENU_TEMS" />
+    <Component_SetValue componentName="PARTY2" value="Trust trading" />    
+    <ValidationApply />
+  </Test>
+
+  <Test name="modifyGroup">
+    <MenuBarClick button="Admin" />
+    <TableOpen table="MENU_ITEMS" propertyId="CODE" propertyValue="" />
+    <Component_SetValue componentName="PARTY2" value="Trust trading" />    
+    <ValidationApply />
+  </Test>
+
+  <Test name="deleteGroup" successful="false" entryDate="" correctionDate="" developer="" qa="">
+    <MenuBarClick button="Admin" />
+    <TableDelete table="MENU_ITEMS" propertyId="CODE" propertyValue="" />
+    <Component_SetValue componentName="PARTY2" value="Trust trading" />    
+    <Fail />
+  </Test>
+      
+  <Test name="main">
+    <Call suite="FinanceTestSuite" name="changeInvoiceCurrency" />
+    <Call name="modifyGroup" />
+    <Call name="deleteGroup" />
+  </Test-->
+</TestSuite>

@@ -1,0 +1,21 @@
+
+<HorizontalLayout width="-1px" name="HOME_PAGE_HORIZONTAL_LAYOUT" alignment="right" captionMargin="0">
+  <Label value="User:" width="-1px" alignment="middle_right"/>
+  <Label value="$F{NAME} | " width="-1px" style="bold" alignment="middle_right"/>
+  
+  <Label value="Company:" width="-1px" alignment="middle_right"/>
+  <Label name="COMPANY" value="$F{CURRENT_COMPANY} | " width="-1px" style="bold" visibleWhen="NOT(CURRENT_COMPANY=null)" alignment="middle_right"/>
+  <Label name="COMPANY_NULL" value="not selected | " width="-1px" style="bold,alert" visibleWhen="CURRENT_COMPANY=null" alignment="middle_right"/>
+  
+  <Label value="Site:" width="-1px" alignment="middle_right"/>
+  <Label name="SITE" value="$F{CURRENT_SITE} | " width="-1px" style="bold" visibleWhen="NOT(CURRENT_SITE=null)" alignment="middle_right"/>
+  <Label name="SITE_NULL" value="not selected | " width="-1px" style="bold,alert" visibleWhen="CURRENT_SITE=null" alignment="middle_right"/>
+  
+  <Label value="Title:" width="-1px" alignment="middle_right"/>
+  <Label name="TITLE" value="$F{CURRENT_TITLE}  " width="-1px" style="bold" visibleWhen="NOT(CURRENT_TITLE=null)" alignment="middle_right"/>
+  <Label name="TITLE_NULL" value="not selected  " width="-1px" style="bold,alert" visibleWhen="CURRENT_TITLE=null" alignment="middle_right"/>
+  
+  <!-- <Button name="OPEN_USER_CREDENTIALS" caption="Modify" style="link"/> -->
+
+</HorizontalLayout>
+  

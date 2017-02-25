@@ -1,0 +1,8 @@
+<VerticalLayout >
+   <ValidationSettings formTitle="Day Shift" withApply="true" withAttach="true" withPrint="true" />
+   <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiTable name="WORK_SHIFT_LIST_TABLE" dataPath="WORK_SHIFT_LIST" inLineEditable="true" pageLength="fit">
+   	<TableColumn name="START_TIME" caption="Start Time" />
+   	<TableColumn name="END_TIME" caption="End Time" />
+   </GuiTable>
+</VerticalLayout>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite>
+  
+  <Test name="ADMIN.AUTO_POPULATE">
+    <Admin_MenuClick menuCode="ALL_AUTO_POPULATE" />
+    <ButtonClick name="YES"/>
+  </Test>  
+  
+  <Test name="ADMIN.COUNTRY_CONFIGURATOR">
+    <Admin_MenuClick menuCode="$F{COUNTRY_CONFIG_MENU_CODE}" />
+  </Test>
+  
+  <Test name="ADMIN.CUSTOMISE_FAMILY_EXPENSES_REVENUE">
+    <Navigation_MenuClick menuCode="FIN_GEN_LEDGER_ACTIVE" />
+    
+    <Table_SelectItem tableName="ACCOUNT_TREE" propertyName="CODE" propertyValue="$F{CODE}" />
+    <Table_OpenItem tableName="ACCOUNT_TREE" />
+    
+    <Component_SetValue componentName="FAMILY_CUSTOM" componentValue="true" />
+    <Component_SetValue componentName="FAMILY" componentValue="$F{FAMILY_VALUE}" />
+    <Apply />    
+
+  </Test>
+  
+  <Test name="CREATE_USERS">
+    <Table_AddItem tableName="USER_TABLE" />
+    <Component_SetValue componentName="NAME"      componentValue="$F{NAME_VALUE}" />
+    <Component_SetValue componentName="FULL_NAME" componentValue="$F{FULL_NAME_VALUE}" />
+    <Component_SetValue componentName="UGROUP"    componentValue="$F{UGROUP_VALUE}" />
+    
+    <Call testName="ADD_USERS_TO_COMPANY" COMPANY_VALUE="$F{COMPANY_VALUE}" ACCESS_RIGHT_VALUE="$F{ACCESS_RIGHT_VALUE}"/>
+    <Call testName="SELECT_TITLE_FOR_USER" NAME="$F{TITLE_NAME}"/>
+    <Apply />
+    <Apply />
+  </Test>
+  
+  <Test name="CREATE_USER_WITH_SITE">
+    <Table_AddItem tableName="USER_TABLE" />
+    <Component_SetValue componentName="NAME"      componentValue="$F{NAME_VALUE}" />
+    <Component_SetValue componentName="FULL_NAME" componentValue="$F{FULL_NAME_VALUE}" />
+    <Component_SetValue componentName="UGROUP"    componentValue="$F{UGROUP_VALUE}" />
+    
+    <Call testName="ADD_USERS_TO_COMPANY" COMPANY_VALUE="$F{COMPANY_VALUE}" ACCESS_RIGHT_VALUE="$F{ACCESS_RIGHT_VALUE}"/>
+    <Call testName="SELECT_SITE_FOR_USER" SITE="$F{SITE_NAME}"/>
+    <Apply />
+    <Call testName="SELECT_TITLE_FOR_USER" NAME="$F{TITLE_NAME}"/>
+    <Apply />
+    <Apply />
+  </Test>
+  
+  <Test name="SELECT_TITLE_FOR_USER">
+    <Table_SelectItem tableName="TITLE_SELECTION_TABLE" propertyName="NAME" propertyValue="$F{NAME}" variable="OBJECT_REFERENCE" />
+    <Table_SetCellValue tableName="TITLE_SELECTION_TABLE" objectReference="$V{OBJECT_REFERENCE}" tableField="_SELECT" componentValue="true" />
+  </Test>
+  
+  <Test name="SELECT_SITE_FOR_USER">
+    <Table_SelectItem tableName="SITE_SELECTION_TABLE" propertyName="NAME" propertyValue="$F{SITE}" variable="OBJECT_REFERENCE" />
+    <Table_SetCellValue tableName="SITE_SELECTION_TABLE" objectReference="$V{OBJECT_REFERENCE}" tableField="_SELECT" componentValue="true" />
+  </Test>
+  
+  <Test name="ADD_GROUP">
+    <Admin_MenuClick menuCode="FOC_GROUP" />
+    <Table_AddItem tableName="TABLE" />
+    <Component_SetValue componentName="NAME"    componentValue="$F{NAME_VALUE}" />
+    <Component_SetValue componentName="DESCRIP" componentValue="$F{DESCRIP_VALUE}" />
+  </Test>
+  
+	<Test name="OPEN_GROUP">
+    <Admin_MenuClick menuCode="FOC_GROUP" />
+    <Table_SelectItem tableName="TABLE" propertyName="NAME" propertyValue="$F{NAME}" />
+    <Table_OpenItem tableName="TABLE" />
+  </Test>
+  
+  <Test name="ADD_GROUP_ACCESS_MODULE">
+    <Table_SelectItem tableName="MODULES_TABLE" propertyName="MODULE_NAME" propertyValue="$F{MODULE_NAME_VALUE}" variable="LAST_ITEM_IN_TABLE"/>
+    <Component_SetValue componentName="MODULES_TABLE|$V{LAST_ITEM_IN_TABLE}|ACCESS" componentValue="Granted + Config"/>
+  </Test>
+  
+  <Test name="OPEN_COMPANY">
+    <Admin_MenuClick menuCode="COMPANY_TABLE" />
+    <Call suiteName="ADMIN" testName="OPEN_COMPANY_TABLE" NAME_VALUE="$F{NAME}" />
+  </Test>
+  
+  <Test name="OPEN_COMPANY_TABLE">
+    <Table_SelectItem tableName="COMPANY_TABLE" propertyName="NAME" propertyValue="$F{NAME_VALUE}" />
+    <Table_OpenItem tableName="COMPANY_TABLE" />
+  </Test>
+  
+  <Test name="ADD_USERS_TO_COMPANY">
+    <Table_AddItem tableName="COMAPNY_LIST" />
+    
+    <Component_SetValue componentName="COMPANY" componentValue="$F{COMPANY_VALUE}" />
+    <Component_SetValue componentName="ACCESS_RIGHT" componentValue="$F{ACCESS_RIGHT_VALUE}" />
+    <Apply />
+  </Test>
+  
+  <!-- <Test name="ADD_USERS_TO_COMPANY">
+    <Table_AddItem tableName="USERS_LIST" />
+    
+    <Component_SetValue componentName="USER" componentValue="$F{USER_VALUE}" />
+    <Component_SetValue componentName="ACCESS_RIGHT" componentValue="$F{ACCESS_RIGHT_VALUE}" />
+    <Apply />
+  </Test> -->
+  
+  <Test name="OPEN_SITE_TABLE">
+    <Table_SelectItem tableName="SITE" propertyName="NAME" propertyValue="$F{NAME_VALUE}" />
+    <Table_OpenItem tableName="SITE" />
+  </Test>
+  
+  <Test name="ADD_USERS_TO_SITE">
+    <Table_AddItem tableName="WF_OPERATOR_LIST" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WF_OPERATOR_LIST" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="USER" componentValue="$F{USER_VALUE}" />
+    <Table_SetCellValue tableName="WF_OPERATOR_LIST" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TITLE" componentValue="$F{TITLE_VALUE}" />
+  </Test>
+  
+  <Test name="ADD_USERS_RIGHT">
+    <Table_AddItem tableName="WF_USER_TRANS_RIGHT_LIST" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WF_USER_TRANS_RIGHT_LIST" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TITLE" componentValue="$F{TITLE_VALUE}" />
+    <Table_SetCellValue tableName="WF_USER_TRANS_RIGHT_LIST" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="RIGHT_LEVEL" componentValue="$F{RIGHT_LEVEL_VALUE}" />
+  </Test>
+  
+  <Test name="LOGOUT_LOGIN_FOR_SPECIFIC_USER">
+    <Logout />
+    <!-- Login / -->
+    
+    <Component_SetValue componentName="NAME"     componentValue="$F{USERNAME_VALUE}" />
+    <Component_SetValue componentName="PASSWORD" componentValue="$F{PASSWORD_VALUE}" />
+    <ButtonClick name="login" />
+  </Test>
+  
+  <Test name="LOGIN">
+    <!-- Login / -->
+    <Component_SetValue componentName="NAME"     componentValue="$F{USERNAME}" />
+    <Component_SetValue componentName="PASSWORD" componentValue="$F{PASSWORD}" />
+    <ButtonClick name="login" />
+  </Test>
+  
+  <Test name="TRANSACTION_CONFIG" >
+    <Admin_MenuClick menuCode="WF_TRANSACTION_CONFIG_TABLE" />
+    <Table_SelectItem tableName="WF_ASSIGNEMENT" propertyName="TRANSACTION" propertyValue="$F{MODULE_NAME}" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WF_ASSIGNEMENT" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="MAP" componentValue="$F{MAP_NAME}" />
+    <Apply />
+  </Test>
+
+  <Test name="TITLE.ADD">
+    <Admin_MenuClick menuCode="WF_TITLE_TABLE" />
+    <Table_AddItem tableName="WF_TITLE" variable="NEW_ITEM"/>
+    <Table_SetCellValue tableName="WF_TITLE" objectReference="$V{NEW_ITEM}" tableField="NAME" componentValue="$F{NAME}" />
+    <Apply />
+  </Test>
+    
+  <Test name="RIGHT_LEVEL.ADD">
+    <Admin_MenuClick menuCode="WF_RIGHT_LEVEL_TABLE" />
+    <Table_AddItem tableName="WF_RIGHT_LEVEL" variable="NEW_ITEM"/>
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="NAME" componentValue="$F{NAME}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="READ_RIGHT" componentValue="$F{READ}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="INSERT_RIGHT" componentValue="$F{INSERT}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="MODDIFY_DRAFT_RIGHT" componentValue="$F{MOD_DRAFT}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="MODDIFY_APPROVED_RIGHT" componentValue="$F{MOD_APP}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="DELETE_DRAFT_RIGHT" componentValue="$F{DEL_DRAFT}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="DELETE_APPROVED_RIGHT" componentValue="$F{DEL_APP}" />
+    
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="APPROVE_RIGHT" componentValue="$F{APPROVE}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="CLOSE_RIGHT" componentValue="$F{CLOSE}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="CANCEL_RIGHT" componentValue="$F{CANCEL}" />
+    
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="PRINT_DRAFT_RIGHT" componentValue="$F{PRINT_DRAFT}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="PRINT_APPROVE_RIGHT" componentValue="$F{PRINT_APP}" />
+
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="MODIFY_CODE_DRAFT_RIGHT" componentValue="$F{MOD_CODE_DRAFT}" />
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="MODIFY_CODE_APPROVED_RIGHT" componentValue="$F{MOD_CODE_APP}" />    
+    <Table_SetCellValue tableName="WF_RIGHT_LEVEL" objectReference="$V{NEW_ITEM}" tableField="MODIFY_SIGNATURE_STAGE" componentValue="$F{MOD_SIG_STAGE}" />
+    <Apply />
+  </Test>
+  
+  <Test name="SITE.ADD">
+    <Admin_MenuClick menuCode="SITE_TABLE" />
+    
+    <Table_AddItem tableName="SITE" />
+    
+    <Component_SetValue componentName="NAME"    componentValue="$F{NAME}" />
+    <Component_SetValue componentName="DESCRIP" componentValue="$F{DESCRIP}" />
+    <Component_SetValue componentName="TRANSACTION_PREFIX" componentValue="$F{TRANS_PREFIX}" />
+    <Component_SetValue componentName="FATHER_NODE>NAME" componentValue="$F{FATHER}" />
+    <Apply />
+    <Discard />
+  </Test>
+  
+  <Test name="SITE.OPEN">
+    <Admin_MenuClick menuCode="SITE_TABLE" />
+    
+    <Table_SelectItem tableName="SITE" propertyName="NAME" propertyValue="$F{NAME}" />
+    <Table_OpenItem tableName="SITE" />
+  </Test>
+  
+  <Test name="SITE.ADD_TRANS_RIGHT">
+    <Table_AddItem tableName="WF_USER_TRANS_RIGHT_LIST" variable="NEW_ITEM"/>
+    
+    <Table_SetCellValue tableName="WF_USER_TRANS_RIGHT_LIST" objectReference="$V{NEW_ITEM}" tableField="TRANSACTION" componentValue="$F{TRANSACTION}" />
+    <Table_SetCellValue tableName="WF_USER_TRANS_RIGHT_LIST" objectReference="$V{NEW_ITEM}" tableField="TITLE" componentValue="$F{TITLE}" />
+    <Table_SetCellValue tableName="WF_USER_TRANS_RIGHT_LIST" objectReference="$V{NEW_ITEM}" tableField="RIGHT_LEVEL" componentValue="$F{LEVEL}" />
+  </Test>
+  
+</TestSuite>

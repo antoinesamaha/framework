@@ -1,0 +1,15 @@
+<VerticalLayout name="Homepage before login" spacing = "true" margin="false" width="851px" captionMargin="1">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" withEmail="false" withPdf="false"/>
+  <!-- Label value="$P{B}EVERPRO$P{/B} by 01Barmaja" style="H1,orange" height="-1px" width="100%" margin="true"/ -->
+  
+  <AbsoluteLayout name="_COVERBANNER" width="851px" height="315px" spacing="false" margin="false" style="COVERBANNER">
+  </AbsoluteLayout>
+  
+  <HorizontalLayout width="100%" spacing="true" margin="true">
+    <Button name="CONTACT" caption="Contact us" width="200px" height="100px" style="button-dark-01" alignment="right" />
+    <Button name="LOGIN" caption="Login" width="200px" height="100px" style="button-dark-03"/>
+  </HorizontalLayout>
+  
+  <!-- Label value="Either Login, or contact 01Barmaja to open a new account for your company" style="instruction,text-center" width="100%" height="50px"/ -->
+  
+</VerticalLayout>

@@ -1,0 +1,6 @@
+<VerticalLayout spacing="true" >
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiField name="NAME" caption="Name" width="-1px" height="-1px" />
+  <GuiField name="DESCRIP" caption="Description" width="-1px" height="-1px" />
+  <GuiField name="IS_APPROVAL" caption="Approves Document" width="-1px" height="-1px" />
+</VerticalLayout>

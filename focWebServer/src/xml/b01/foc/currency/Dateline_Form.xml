@@ -1,0 +1,4 @@
+<VerticalLayout width = "700px" height="-1px" margin="true" >
+   <ValidationSettings formTitle="Currency Rate" withApply="true" withAttach="false" withPrint="false" emailEnabled="false"/>
+   <GuiField name="DATE" caption="Rate Date" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" alignment="center" />
+</VerticalLayout>

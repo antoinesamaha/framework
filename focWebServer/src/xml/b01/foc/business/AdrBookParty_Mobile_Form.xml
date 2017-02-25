@@ -1,0 +1,43 @@
+<VerticalLayout spacing="true" captionMargin="0" >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <HorizontalLayout spacing="true" width="-1px">
+      <GuiField name="CODE" caption="Code" width="100px" height="-1px"  />
+      <GuiField name="NAME" caption="Name" width="200px" height="-1px"  />
+    </HorizontalLayout>
+
+    <Line />
+    <HorizontalLayout spacing="true" width="-1px">
+      <VerticalLayout>
+        <GuiField name="PHONE1" caption="Phone 1" width="110px" height="-1px"  />
+        <GuiField name="PHONE2" caption="Phone 2" width="110px" height="-1px"  />
+        <GuiField name="FAX" caption="Fax" width="110px" height="-1px"  />
+        <GuiField name="EMAIL" caption="Email" width="110px" height="-1px"  />
+      </VerticalLayout>
+        
+      <VerticalLayout>
+        <GuiField name="EXTENTION1" caption="Ext. 1" width="110px" height="-1px"  />
+        <GuiField name="EXTENTION2" caption="Ext. 2" width="110px" height="-1px"  />
+        <GuiField name="MOBILE" caption="Mobile" width="110px " height="-1px"  />
+        <GuiField name="WEB" caption="Web" width="110px" height="-1px"  />
+      </VerticalLayout>
+    </HorizontalLayout>
+    
+    <MoreLayout moreCaption="Country, Language...">
+        <HorizontalLayout spacing="true" width="-1px">
+          <GuiField name="COUNTRY" caption="Country" width="110px" height="-1px"  />		    
+    		    <GuiField name="CITY" caption="City" width="110px" height="-1px"  />
+        </HorizontalLayout>                
+        <HorizontalLayout spacing="true" width="-1px">                
+    		    <GuiField name="REGION" caption="Region" width="110px" height="-1px"  />          
+          <GuiField name="COMPANY" caption="Company" width="110px" height="-1px"  />          			      
+        </HorizontalLayout>
+        <GuiField name="LANGUAGE" caption="Language" width="110px" height="-1px"  />
+    </MoreLayout>
+    <MoreLayout moreCaption="Addresses...">        
+    <VerticalLayout spacing="false">
+        <GuiField name="DELIVERY_ADDRESS" caption="Delivery Address" width="100%" height="80px"  />
+        <GuiField name="INVOICING_ADDRESS" caption="Invoicing Address" width="100%" height="-1px"  />
+    </VerticalLayout>
+    </MoreLayout>
+    <IncludeXML name="CONTACT_LIST" storage="ADR_BK_CONTACT" dataPath="null" type="table" />
+</VerticalLayout>

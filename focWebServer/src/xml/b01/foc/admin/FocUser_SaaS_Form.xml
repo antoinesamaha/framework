@@ -1,0 +1,34 @@
+<VerticalLayout width="900px" height="-1px"  margin="true">
+  <ValidationSettings formTitle="User Profile" withApply="true" withAttach="true" withPrint="true" />
+  
+  <HorizontalLayout spacing="true" width="100%">
+    <VerticalLayout height="-1px" width="100%" >
+      <Label value="User Information" style="bold,f16" />
+      <Line width="100%" />
+      <HorizontalLayout name="_PASSWORD_LAYOUT" spacing="true" captionMargin="0">
+        <GuiField name="NAME" caption="Login Username" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" helpIndex="1" help="Login Username Component"/>
+        <Button name="RESET_PASSWORD_SAAS" caption="Reset Password (The user will get his new password by email" alignment="bottom_left"/>
+      </HorizontalLayout>
+      <HorizontalLayout spacing="true" captionMargin="0">
+	      <GuiField name="CONTACT.TITLE" caption="Title (Mr, Mrs...)" captionPos="top" captionWidth="-1px" width="100px" height="-1px" />
+	      <GuiField name="CONTACT.FIRST_NAME"  caption="First name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" helpIndex="2" help="First Name Component"/>
+	      <GuiField name="CONTACT.FAMILY_NAME" caption="Last name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" help="Family Name Component" helpIndex="3"/>
+	      <GuiField name="CONTACT.FULL_NAME"   caption="Full Name" captionPos="top" captionWidth="-1px" width="300px" height="-1px" editable="false" />
+      </HorizontalLayout>
+      <HorizontalLayout captionMargin="0" spacing="true">
+	      <GuiField name="_EMAIL" dataPath="CONTACT.EMAIL" caption="EMail" width="300px" height="-1px"  />
+        <GuiField name="SUSPENDED" caption="Suspended" width="-1px" height="-1px" alignment="bottom_left" />	      
+      </HorizontalLayout>
+      <HorizontalLayout captionMargin="0" spacing="true">
+	      <GuiField name="_ROLE" dataPath="SAAS_APPLICATION_ROLE" caption="Role" width="300px" height="-1px"  />
+	      <GuiField name="IS_SAAS_ADMIN" caption="Is Admin" width="-1px" height="-1px" alignment="bottom_left" />
+      </HorizontalLayout>
+      <Line/>
+    </VerticalLayout>
+  </HorizontalLayout>
+  <VerticalLayout height="100%"  alignment="right">
+    <Label value="Signature Image" />
+    <GuiField name="SIGNATURE" caption="Signature scan" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  >
+    </GuiField>
+  </VerticalLayout>
+</VerticalLayout>

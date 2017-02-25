@@ -1,0 +1,20 @@
+<VerticalLayout name="transactionHeader" spacing="true" captionMargin="0" width="100%" margin="true">
+		<ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="false" withPdf="false"/>
+    <!-- Label value="Welcome to EVERPRO by 01Barmaja" style="f18,bold" />
+    <Label style="line" height="2px" width="100%" captionMargin="0"  /-->
+    <!-- IncludeXML name="USER_CREDENTIALS" storage="FUSER" context="HomePage" type="form" captionMargin="0"  / -->
+    <!-- Label style="line" height="2px" width="100%" captionMargin="0"  / -->
+    
+    <HorizontalLayout name="MENU_ITEMS_LAYOUT" captionMargin="0" spacing="true" />
+    
+    <!-- Label value="Recently visited" style="f16,bold" captionMargin="0"  / -->
+    <HorizontalLayout width="100%" captionMargin="0" spacing="true" margin="true">
+      <IncludeXML name="MENU_HISTORY" storage="MENU_ITEM" type="tree" captionMargin="0" context="History" />
+      <IncludeXML name="TRANSACTION_HISTORY" storage="WF_TRANSACTION_WRAPPER" type="table" captionMargin="0" context="TRANSACTION_HISTORY" />
+    </HorizontalLayout>
+    <HorizontalLayout width="100%" captionMargin="0" spacing="true" margin="true">
+	    <Button name="CLEAR_HISTORY" caption="Clear Menu History" />
+	    <Button name="CLEAR_TRANSACTION_HISTORY" caption="Clear Transaction History" />
+	  </HorizontalLayout>
+</VerticalLayout>
+

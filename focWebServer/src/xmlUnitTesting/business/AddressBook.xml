@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite>
+  
+  <Test name="ADR_BOOK_PARTY.NEW">
+    <Navigation_MenuClick menuCode="ADR_BK_PARTY" />
+    <Table_AddItem tableName="Address Book Party" />
+    <Component_SetValue componentName="NAME" componentValue="$F{PARTY_NAME}" />
+    <Component_SetValue componentName="EMAIL" componentValue="$F{EMAIL}" />
+    <!-- Address Book Party New Screen -->
+    <Component_SetValue componentName="DEFAULT_CONTACT.FIRST_NAME" componentValue="$F{FIRST_NAME}" />
+    <Component_SetValue componentName="DEFAULT_CONTACT.FAMILY_NAME" componentValue="$F{FAMILY_NAME}" />
+    <Component_SetValue componentName="DEFAULT_CONTACT.EMAIL" componentValue="$F{EMAIL}" />    
+    <Apply />
+  </Test>
+              
+  <Test name="ADR_BOOK_PARTY.NEW_CLIENT">
+    <Navigation_MenuClick menuCode="Client" />
+    <Table_AddItem tableName="PARTY" />
+    <Component_SetValue componentName="CREATION_FROM_ADR_BOOK" componentValue="Create new Address book entry" />
+    
+    <!-- <Component_SetValue componentName="NAME" componentValue="$F{PARTY_NAME}" />
+    <Component_SetValue componentName="EMAIL" componentValue="$F{EMAIL}" />
+    Address Book Party New Screen
+    <Component_SetValue componentName="DEFAULT_CONTACT.FIRST_NAME" componentValue="$F{FIRST_NAME}" />
+    <Component_SetValue componentName="DEFAULT_CONTACT.FAMILY_NAME" componentValue="$F{FAMILY_NAME}" />
+    <Component_SetValue componentName="DEFAULT_CONTACT.EMAIL" componentValue="$F{EMAIL}" /> -->    
+    <Apply />
+  </Test> 
+ 
+  <Test name="CONTACT.NEW">
+    <Navigation_MenuClick menuCode="Contact" />
+    <Table_AddItem tableName="Contact" />
+    <Component_SetValue componentName="FIRST_NAME" componentValue="$F{FIRST_NAME}" />
+    <Component_SetValue componentName="FAMILY_NAME" componentValue="$F{FAMILY_NAME}" />
+    <Component_SetValue componentName="EMAIL" componentValue="$F{EMAIL}" />    
+  </Test> 
+  
+  <Test name="ADR_BOOK_PARTY.OPEN">
+    <Navigation_MenuClick menuCode="$F{MENU_CODE}" />
+    <Table_SelectItem tableName="Address Book Party" propertyName="NAME" propertyValue="$F{ADR_BOOK_PARTY_NAME}" />
+    <Table_OpenItem tableName="Address Book Party" />
+  </Test>
+ 
+</TestSuite>

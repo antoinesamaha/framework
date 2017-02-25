@@ -1,0 +1,23 @@
+<VerticalLayout height="99%">
+    <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="Companies address book" name="Address Book Party" dataPath="DATAROOT" width="100%" height="99%"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="CODE" caption="code" link="true" width="-1px"/>
+        <TableColumn name="NAME" caption="name" width="-1px" />
+        <TableColumn name="EXTERNAL_CODE" caption="Ext.Code" width="-1px"/>
+        <TableColumn name="COMMENT" caption="Comment" width="-1px"/>
+        <TableColumn name="INTRODUCTION" caption="Introduction" width="-1px"/>
+        <TableColumn name="INDUSTRY" caption="industry" width="-1px"/>
+        <!--  TableColumn name="COMPANY" caption="company"    / -->
+        <TableColumn name="LANGUAGE" caption="language"    />
+        <TableColumn name="PHONE1" caption="phone1"    />
+        <TableColumn name="PHONE2" caption="phone2"    />
+        <TableColumn name="MOBILE" caption="mobile"    />
+        <TableColumn name="FAX" caption="fax"    />
+        <TableColumn name="EMAIL" caption="email"    />
+        <TableColumn name="COUNTRY" caption="country"    />
+        <TableColumn name="REGION" caption="region"    />
+        <TableColumn name="CITY" caption="city"    /> 
+    </GuiTable>
+</VerticalLayout>
+

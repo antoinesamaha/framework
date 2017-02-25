@@ -1,0 +1,13 @@
+<VerticalLayout >
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
+  <GuiTable name="WFTRANSACTION_WRAPPER_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="false" openEnabled="true" deleteEnabled="false" >
+    <TableColumn name="TYPE" caption="Type" />
+    <TableColumn name="CODE" caption="Code" link="true"/>
+    <TableColumn name="DESCRIPTION" caption="Description" link="true"/>
+    <TableColumn name="CURRENT_STAGE" caption="Stage" />
+    <TableColumn name="ON_BEHALF_OF" caption="On Behalf" />
+    <TableColumn name="TITLE" captionProperty="NAME" caption="Title" />
+    <TableColumn name="AREA" caption="Area" />
+  </GuiTable>
+  <Button name="SIGN_IN_SLIDE_SHOW" caption="Sign in slideshow..." />
+</VerticalLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VerticalLayout spacing="true" margin="true" captionMargin="0">
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiField name="FIELD_NAME" caption="Field Name" width="300px"/>
+  
+  <HorizontalLayout captionMargin="0">
+	  <GuiField name="WF_LOCK_STAGE_CODE" dataPath="WF_LOCK_STAGE" captionProperty="DESCRIP" caption="Lock Stage Code" width="350px" immediate="true"/>
+	  <GuiField name="WF_LOCK_STAGE_NAME" dataPath="WF_LOCK_STAGE" captionProperty="NAME" caption="Lock Stage Name" width="350px" immediate="true"/>
+  </HorizontalLayout>
+  
+  <HorizontalLayout captionMargin="0">
+	  <GuiField name="WF_TRANSACTION_CONFIG_CODE" dataPath="WF_TRANSACTION_CONFIG" captionProperty="TRANSACTION.CODE" caption="Transaction Code" width="250px" editable="false" />
+	  <GuiField name="WF_TRANSACTION_CONFIG_NAME" dataPath="WF_TRANSACTION_CONFIG" captionProperty="TRANSACTION.NAME" caption="Transaction Name" width="250px" editable="false" />
+  </HorizontalLayout>
+</VerticalLayout>

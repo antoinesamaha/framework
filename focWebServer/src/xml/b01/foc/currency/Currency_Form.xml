@@ -1,0 +1,10 @@
+<VerticalLayout width="300px" spacing="true" margin="true" alignment="center">
+   <ValidationSettings formTitle="Currency" withApply="true" withAttach="false" withPrint="false" />
+   
+   <Label value="Currency" style="H2"/>
+   
+   <GuiField name="NAME" caption="Symbol" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="DESCRIP" caption="Description" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="RATE_MODE" caption="Rate value X is given such as" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
+
+</VerticalLayout>

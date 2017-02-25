@@ -1,0 +1,9 @@
+<VerticalLayout>
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="false" />
+  <HorizontalLayout>
+	  <GuiField name="SENDER" caption="Sender" />
+	  <GuiField name="RECEIVER" caption="Receiver" />
+  </HorizontalLayout>
+  <GuiField name="SEND_DATE" caption="Send Date" />
+  <Button name="SEND_BUTTON" caption="Send" />
+</VerticalLayout>

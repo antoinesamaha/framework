@@ -1,0 +1,13 @@
+<VerticalLayout >
+ <ValidationSettings formTitle="Currency rates" withApply="true" withAttach="false" withPrint="true" />
+ <GuiTable name="CURRENCY_DATE_LINE_TABLE" dataPath="DATAROOT" height="-1px" inLineEditable="true" openEnabled="false" deleteEnabled="false">
+  <NewForm containerWindow="popup window"/>
+  <TableColumn name="DATE" caption="Date" editable="false"/>
+  <TableColumn name="RATE0" editable="true"/>
+  <TableColumn name="RATE1" editable="true"/>
+  <TableColumn name="RATE2" editable="true"/>
+  <TableColumn name="RATE3" editable="true"/>
+  <TableColumn name="RATE4" editable="true"/>
+  <TableColumn name="RATE5" editable="true"/>
+ </GuiTable>
+</VerticalLayout>

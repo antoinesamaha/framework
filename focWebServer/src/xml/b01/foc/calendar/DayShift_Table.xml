@@ -1,0 +1,8 @@
+<VerticalLayout >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable name="DAY_SHIFT_TABLE" dataPath="DATAROOT" >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Name" />
+    </GuiTable>
+</VerticalLayout>
+

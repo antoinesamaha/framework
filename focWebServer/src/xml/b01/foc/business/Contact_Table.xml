@@ -1,0 +1,20 @@
+<VerticalLayout height="99%">
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="Contacts" name="Contact" dataPath="DATAROOT" width="100%" height="99%" >
+        <TableColumn name="_LINE_NUMBER" caption="Ln" />
+        <TableColumn name="TITLE" caption="title" />
+        <TableColumn name="FIRST_NAME" caption="first_name" link="true" />
+        <TableColumn name="FAMILY_NAME" caption="family_name" link="true" />
+        <TableColumn name="POSITION_DESC" caption="position" />
+        <TableColumn name="MOBILE" caption="mobile" />
+        <TableColumn name="PHONE1" caption="phone1" />        
+        <TableColumn name="EMAIL" caption="email" />
+        <TableColumn name="PHONE2" caption="phone2" />        
+        <!-- TableColumn name="ADR_BK_PARTY.CODE" caption="Code" />
+        <TableColumn name="ADR_BK_PARTY.NAME" caption="Name" / -->
+        <TableColumn name="COMPANY_NAME" caption="Company" />
+        <TableColumn name="INTRODUCTION" caption="Intro." />        
+        <TableColumn name="ADR_BK_PARTY.INDUSTRY" caption="Co. Industry" />
+        <TableColumn name="ADR_BK_PARTY.COMMENT" caption="Co. Comment" />
+    </GuiTable>
+</VerticalLayout>

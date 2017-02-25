@@ -1,0 +1,8 @@
+<VerticalLayout width="100%" margin="true">
+    <ValidationSettings formTitle="Application Configuration" withApply="true" withAttach="true" withPrint="true" />
+    <HorizontalLayout captionMargin="0" spacing="true">
+        <GuiField name="APPLICATION_TYPE" caption="Application Type"  />
+        <GuiField name="PLAN" caption="Plan"  />
+        <GuiField name="RENEWED_UNTIL" caption="Renewed Until"  />
+    </HorizontalLayout> 
+</VerticalLayout>

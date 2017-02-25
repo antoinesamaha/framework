@@ -1,0 +1,10 @@
+<VerticalLayout spacing="true" margin="true" width="80%">
+  <ValidationSettings title="Property Unit" withAttach="false" withApply="true" withPrint="true" />
+  
+  <Label value="Document Dashboard" style="H2"/>
+  
+  <Label value="1- Please change the view bellow to get one of the Dashboards customized to your company" style="f12,bold"/>
+  
+  <Label value="2- Otherwize duplicate this view and customize it. You can obviously call everpro support" style="f12,bold"/>
+  
+</VerticalLayout>

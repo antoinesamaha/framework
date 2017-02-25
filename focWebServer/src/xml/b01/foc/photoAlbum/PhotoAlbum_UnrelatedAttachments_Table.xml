@@ -1,0 +1,9 @@
+<VerticalLayout >
+  <ValidationSettings title="Unrelated Attachments" withAttach="false" withApply="true" withPrint="true" />
+  <GuiTable name="_PHOTO_ALBUM_UNRELATED_ATTACHMENTS_TABLE" dataPath="DATAROOT" width="100%" height="99%" addEnabled="false" >
+    <TableColumn name="_SELECT" caption="Select" width="-1px"/>
+    <TableColumn name="IMAGE_CLOUD" caption="Image" editable="false"/>
+    <TableColumn name="IMAGE_NAME" caption="Image name" />
+    <TableColumn name="UPLOAD_DATE" caption="Upload date" />
+  </GuiTable>
+</VerticalLayout>

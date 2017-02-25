@@ -1,0 +1,7 @@
+<VerticalLayout >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="Week shifts" name="WEEK_SHIFT_TABLE" dataPath="DATAROOT" >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Name" />
+    </GuiTable>
+</VerticalLayout>

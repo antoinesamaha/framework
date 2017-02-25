@@ -1,0 +1,11 @@
+<VerticalLayout width="100%"  >
+    <ValidationSettings formTitle="User profiles" withApply="false" withAttach="true" withPrint="true" commitData="false"/>
+    <GuiTree name="TABLE" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="30"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="DATE_TIME" caption="Date"    />
+        <TableColumn name="TYPE" caption="Message Type"    />
+        <TableColumn name="SUCCESSFUL" caption="Successful"    />
+        <TableColumn name="MESSAGE" caption="Message"    />
+    </GuiTree>
+</VerticalLayout>
+

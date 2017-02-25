@@ -1,0 +1,8 @@
+<VerticalLayout captionMargin="0" width="95%" margin="true">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
+  <GuiTree title="Sites" name="SITE" dataPath="DATAROOT" caption="" width="100%" height="-1px" >
+    <TableColumn name="NAME" caption="Name" />
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="TRANSACTION_PREFIX" caption="Trans. Prefix" />
+  </GuiTree>
+</VerticalLayout>

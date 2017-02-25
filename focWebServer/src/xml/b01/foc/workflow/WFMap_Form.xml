@@ -1,0 +1,8 @@
+<VerticalLayout spacing="true" >
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <HorizontalLayout captionMargin="0" spacing="true" margin="true">
+      <GuiField name="NAME" caption="Name" width="150px" height="-1px" />
+      <GuiField name="DESCRIP" caption="Description" width="250px" height="-1px" />
+  </HorizontalLayout>
+  <IncludeXML name="WF_SIGNATURE_TABLE_LIST" dataPath="WF_SIGNATURE_LIST" storage="WF_SIGNATURE" type="table" />
+</VerticalLayout>

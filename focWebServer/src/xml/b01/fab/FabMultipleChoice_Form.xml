@@ -1,0 +1,6 @@
+<VerticalLayout  >
+ <ValidationSettings formTitle="Fab Choice Set" withApply="true" withAttach="true" withPrint="true" />
+ <GuiField idx="1" name="INT_VALUE" caption="Integer Value" captionPos="left" width="-1px" height="-1px" captionWidth="150px"  />
+ <GuiField idx="1" name="DISPLAY_TEXT" caption="Display Text" captionPos="left" width="-1px" height="-1px" captionWidth="150px"  />
+</VerticalLayout>
+

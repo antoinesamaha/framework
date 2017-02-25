@@ -1,0 +1,4 @@
+<VerticalLayout width="300px" height="150px"  >
+  <IncludeXML name="SESSION_CREDENTIALS" storage="DOCUMENT_HEADER" dataPath="DATAROOT"  />
+</VerticalLayout>
+

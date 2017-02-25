@@ -1,0 +1,9 @@
+<VerticalLayout spacing="true">
+	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+	<HorizontalLayout spacing="true">
+	  <GuiField name="NAME" caption="Name" width="-1px" height="-1px"  />
+	  <GuiField name="DESCRIP" caption="Description" width="-1px" height="-1px"  />
+	  <GuiField name="DESTINATION_TABLE" caption="Destination table" width="-1px" height="-1px"  />
+  </HorizontalLayout>
+  <IncludeXML name="MIG_FIELD_MAP_LIST_TABLE" dataPath="MIG_FIELD_MAP_LIST" storage="MIG_FIELD_MAP" type="table" />
+</VerticalLayout>

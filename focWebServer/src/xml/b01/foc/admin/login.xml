@@ -1,0 +1,7 @@
+<VerticalLayout name="login_layout" width="-1px" height="-1px" spacing="true" captionMargin="0" margin="true">
+  <Label value="" />  
+  <GuiField name="NAME" caption="Username" captionPos="left" captionStyle="bold,f14,textOrange" width="250px" />
+  <GuiField name="PASSWORD" caption="Password" captionPos="left" captionStyle="bold,f14,textOrange" width="250px" /><!--   -->
+  <CheckBoxField name="LOGIN_MODE" caption="Mobile device browsing" visibleWhen="$P{DEV_MODE}=1"/>  
+  <Button name="login" caption="Log In" width="100%" style="button-dark-01"/>
+</VerticalLayout>

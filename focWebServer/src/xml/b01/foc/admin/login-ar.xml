@@ -1,0 +1,9 @@
+<VerticalLayout name="login_layout" width="100%" height="-1px" spacing="true" captionMargin="0" margin="true" alignment="center" >
+  <VerticalLayout width="-1px" height="-1px" spacing="true" captionMargin="0" margin="true" alignment="middle_left" >
+	  <Label value="" />  
+	  <GuiField name="NAME" caption="المستخدم" captionPos="right" width="250px" alignment="bottom_center"/>
+	  <GuiField name="PASSWORD" caption="كلمة السر" captionPos="right" width="250px" alignment="center"/>
+	  <CheckBoxField name="LOGIN_MODE" caption="Mobile device browsing" visibleWhen="$P{DEV_MODE}=1"/>  
+	  <Button name="login" caption="تسجيل الدخول" style="bold,button-LOGIN" width="100%" height="100px" alignment="center"/>
+  </VerticalLayout>
+</VerticalLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VerticalLayout spacing="true" width="700px" alignment="left" spacinf="false">
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="TITLE" caption="Title" width="50px" height="-1px"  />
+        <GuiField name="FIRST_NAME" caption="First Name" width="110px" height="-1px"  />
+        <GuiField name="FAMILY_NAME" caption="Family Name" width="110px" height="-1px"  />    
+    </HorizontalLayout>
+    <GuiField name="POSITION_DESC" caption="Position" width="110px" height="-1px"  />
+    <Line />
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField name="ADR_BK_PARTY1" dataPath="ADR_BK_PARTY" captionProperty="CODE" caption="Company Code" width="100px" height="-1px"  />
+       <GuiField name="ADR_BK_PARTY2" dataPath="ADR_BK_PARTY" captionProperty="NAME" caption="Company Name" width="100px" height="-1px"  />
+       <GuiField name="COMPANY_NAME" caption="Company name indication" width="150px" height="-1px" visibleWhen="IS_EMPTY($F{ADR_BK_PARTY.CODE})" />
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+       <GuiField dataPath="ADR_BK_PARTY.PHONE1" caption="Company Phone1" width="140px" height="-1px" editable="false" />
+       <GuiField dataPath="ADR_BK_PARTY.MOBILE" caption="Company mobile" width="140px" height="-1px" editable="false" />       
+    </HorizontalLayout>
+    <Line />        
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="MOBILE" caption="Mobile" width="90px" height="-1px"  />
+        <GuiField name="PHONE1" caption="Phone (Primary)" width="90px" height="-1px"  />
+        <GuiField name="PHONE2" caption="Phone (Secondary)" width="90px" height="-1px"  />
+    </HorizontalLayout>   
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="EMAIL" caption="Email 1" width="120px" height="-1px"  />
+    </HorizontalLayout>
+    <HorizontalLayout width="-1px" spacing="true" >
+        <GuiField name="INTRODUCTION" caption="Introduction" width="200px" height="-1px"  />    
+    </HorizontalLayout>    
+</VerticalLayout>

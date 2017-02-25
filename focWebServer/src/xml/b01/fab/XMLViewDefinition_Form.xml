@@ -1,0 +1,10 @@
+<VerticalLayout width="100%" >
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+      
+  <GuiField name="TYPE" caption="Type" />
+  <GuiField name="CONTEXT" caption="Context" />
+  <GuiField name="VIEW" caption="View" />
+  <GuiField name="STORAGE_NAME" caption="Storage Name" />
+  <GuiField name="FLD_JAVA_CLASS_NAME" caption="Java Class Name" width="100%"/>
+  
+</VerticalLayout>

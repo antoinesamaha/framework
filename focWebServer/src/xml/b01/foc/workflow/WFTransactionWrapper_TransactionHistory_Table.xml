@@ -1,0 +1,7 @@
+<VerticalLayout height="-1px" captionMargin="0">
+  <GuiTable title="Recent Documents" name="WFTRANSACTION_WRAPPER_TABLE" dataPath="DATAROOT" width="100%" height="-1px" pageLength="10" addEnabled="false" openEnabled="true" deleteEnabled="false" withFilter="false" refreshEnabled="false">
+    <TableColumn name="TYPE" caption="Type" />
+    <TableColumn name="CODE" caption="Code" link="true"/>
+    <TableColumn name="DESCRIPTION" caption="Description" link="true"/>
+  </GuiTable>
+</VerticalLayout>

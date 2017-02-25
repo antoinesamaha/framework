@@ -1,0 +1,12 @@
+<VerticalLayout spacing="true">
+  <ValidationSettings title="Property Unit" withAttach="false" withApply="true" withPrint="true" />
+  
+  <VerticalLayout>
+	  <GuiField name="DOCUMENT_NAME" caption="Document title" width="300px" height="25px" />
+	  <GuiField name="LAST_MODIFICATION_DATE" caption="Last modification date" width="-1px" height="-1px" />
+    <GuiField name="UPLOAD_DATE" caption="Upload date" width="150px" height="25px" />
+	  <GuiField name="DESCRIPTION" caption="Description" textArea="true" width="-1px" height="150px" />
+    <GuiField name="VISIBILITY" caption="Visibility" width="-1px" height="-1px" />
+  </VerticalLayout>
+  <Blob name="DOCUMENT_CLOUD" width="-1px" height="-1px" />
+</VerticalLayout>

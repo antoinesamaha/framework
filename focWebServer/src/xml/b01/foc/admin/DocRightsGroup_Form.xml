@@ -1,0 +1,6 @@
+<VerticalLayout spacing="true">
+  <ValidationSettings formTitle="Document Rights Group" withApply="true" withAttach="true" withPrint="true" />
+  <GuiField name="NAME" caption="Name" width="400px" />
+  
+  <IncludeXML name="DOC_RIGHTS_GROUP_USERS_LIST" dataPath="DOC_RIGHTS_GROUP_USERS_LIST" storage="DOC_RIGHTS_GROUP_USERS" type="table" />
+</VerticalLayout>

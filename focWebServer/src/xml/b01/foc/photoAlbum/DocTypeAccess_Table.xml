@@ -1,0 +1,7 @@
+<VerticalLayout captionMargin="0" height="100%">
+  <ValidationSettings title="" withAttach="false" withApply="true" withPrint="false" />
+  <GuiTable name="DOC_TYPE_ACCESS_TABLE" dataPath="DATAROOT" caption="Document Access" captionMargin="0" width="100%" height="-1px" pageLength="fit" addEnabled="true" inLineEditable="true">
+    <TableColumn name="DOC_RIGHTS_GROUP_NAME" dataPath="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Doc. Right Group Name" editable="true" />
+    <TableColumn name="ACCESS_RIGHT" caption="Access Right" editable="true" />
+  </GuiTable>
+</VerticalLayout>

@@ -1,0 +1,25 @@
+<VerticalLayout border="true" height="-1px"  >
+    <ValidationSettings formTitle="Company Configuration" withApply="true" withAttach="true" withPrint="true" />
+		<TabLayout>
+		    
+	    <VerticalLayout name="Business Configuration" >
+	    	<IncludeXML name="BUSINESS_CONFIG" dataPath="BUSINESS_CONFIG" storage="CONFIG_BUSINESS" type="form" />
+	    </VerticalLayout>
+	    <VerticalLayout name="Finance Configuration">
+		    <IncludeXML name="FINANCE_CONFIG_NAME" dataPath="FINANCE_CONFIG" storage="FINANCE_CONFIG" type="form" />
+	    </VerticalLayout>
+	    <VerticalLayout name="Payroll Configuration">
+		    <IncludeXML name="PAYROLL_CONFIG" dataPath="PAYROLL_CONFIG" storage="HR_CONFIG" type="form" />
+	    </VerticalLayout>
+	    <VerticalLayout name="Inventory Configuration">
+		    <IncludeXML name="INVENTORY_CONFIG" dataPath="INVENTORY_CONFIG" storage="STK_CONFIG" type="form" />
+	    </VerticalLayout>
+	    <VerticalLayout name="Sales Configuration">
+		    <IncludeXML name="SALES_CONFIG" dataPath="SALES_CONFIG" storage="SALES_CONFIG" type="form" />
+	    </VerticalLayout>
+	    <VerticalLayout name="WBS General Configuration">
+		    <IncludeXML name="WBS_GENERAL_CONFIG" dataPath="WBS_GENERAL_CONFIG" storage="BUDGETGENERALCONFIGURATION" type="form" />
+	    </VerticalLayout>
+    </TabLayout>
+</VerticalLayout>
+

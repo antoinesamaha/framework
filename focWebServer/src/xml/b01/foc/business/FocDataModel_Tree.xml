@@ -1,0 +1,23 @@
+<VerticalLayout width="100%"  >
+
+    <HorizontalLayout width="-1px" spacing="true">
+      <Button name="ADD_BUTTON" caption="Add" />
+      <Button name="REPLACE_BUTTON" caption="Replace" />
+      <Button name="CLEAR_BUTTON" caption="Clear" />
+      <Button name="CLOSE_BUTTON" caption="Ok" />      
+    </HorizontalLayout>
+    
+    <HorizontalLayout>
+      <Label name="LABEL_COPY" value="Expression" style="h3"/>
+      <TextField name="TEXT_FIELD_COPY" />
+    </HorizontalLayout>
+    
+    <GuiTree name="DATAMODEL" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="30"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="PATH_SECTION" caption="Path Selection"    />
+        <TableColumn name="DESCRIPTION" caption="Description"    />
+        <TableColumn name="VALUE" caption="Value"    />
+    </GuiTree>
+
+</VerticalLayout>
+

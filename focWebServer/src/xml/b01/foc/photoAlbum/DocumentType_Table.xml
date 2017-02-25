@@ -1,0 +1,7 @@
+<VerticalLayout captionMaArgin="0" width="90%" height="-1px">
+  <ValidationSettings withAttach="false" withApply="true" withPrint="false" />
+  <GuiTable title="Document Types" name="DOCUMENT_TYPE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="true" inLineEditable="false" deleteEnabled="true" openEnabled="true" refreshEnabled="true">
+    <TableColumn name="NAME" caption="Name" editable="true" />
+    <TableColumn name="CAPTION" caption="Caption" editable="true" />
+  </GuiTable>
+</VerticalLayout>

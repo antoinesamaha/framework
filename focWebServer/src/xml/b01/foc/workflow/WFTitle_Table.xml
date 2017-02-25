@@ -1,0 +1,9 @@
+<VerticalLayout >
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable title="User Titles" name="WF_TITLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" inLineEditable="true" >
+    <TableColumn name="NAME" caption="Name" />
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="PROJECT_SPECIFIC" caption="Project specific" />
+    <TableColumn name="USER_DATAPATH_FROM_PROJ_WBS" caption="User Datapath From Proj WBS" />
+  </GuiTable>
+</VerticalLayout>

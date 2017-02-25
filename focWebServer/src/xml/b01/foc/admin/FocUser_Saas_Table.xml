@@ -1,0 +1,11 @@
+<VerticalLayout width="100%" height="-1px" spacing ="false" margin="false" captionMargin="0">
+    <ValidationSettings withApply="true" withAttach="false" withPrint="true" />
+    <GuiTable title="Users" name="USER_TABLE" dataPath="DATAROOT" height="99%" sortingExpression="NAME" >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Username"    />
+        <TableColumn name="FULL_NAME" caption="Full Name"    />
+        <TableColumn name="SAAS_APPLICATION_ROLE" caption="Role"    />
+        <TableColumn name="SUSPENDED" caption="Suspended"    />
+    </GuiTable>
+</VerticalLayout>
+

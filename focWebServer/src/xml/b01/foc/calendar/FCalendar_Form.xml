@@ -1,0 +1,23 @@
+<VerticalLayout margin="true">
+   <ValidationSettings formTitle="Day Shift" withApply="true" withAttach="true" withPrint="true" />
+   <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+      
+   <HorizontalLayout spacing="true">
+   		<VerticalLayout >
+				<GuiField name="STARTING_DAY_OF_WEEK" caption="Starting Day of Week" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+				<GuiTable name="HOLIDAY_LIST_TABLE" dataPath="HOLIDAY_LIST" inLineEditable="true" pageLength="10" width="350px">
+					<TableColumn name="HOLIDAY_DATE" caption="Start Time" />
+					<TableColumn name="HOLIDAY_END_DATE" caption="End Time" />
+					<TableColumn name="REASON" caption="Reason" />
+				</GuiTable>
+			</VerticalLayout>
+		  <VerticalLayout >
+				 <GuiField name="WEEK_SHIFT" caption="Default week shift" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+			   <GuiTable name="CAL_WEEK_SHIFT_EXCEPTION_LIST_TABLE" dataPath="CAL_WEEK_SHIFT_EXCEPTION_LIST" inLineEditable="true" pageLength="10" width="350px">
+			   	<TableColumn name="START_DATE" caption="Start Time" />
+			   	<TableColumn name="END_DATE" caption="End Time" />
+			   	<TableColumn name="WEEK_SHIFT" caption="Week Shitf" />
+			   </GuiTable>
+	   </VerticalLayout>
+   </HorizontalLayout>
+</VerticalLayout>

@@ -1,0 +1,4 @@
+<VerticalLayout width="100%" >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    
+</VerticalLayout>

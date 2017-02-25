@@ -1,0 +1,11 @@
+<VerticalLayout border="true" height="-1px"  >
+    <ValidationSettings formTitle="Guest User for $F{CONTACT.FULL_NAME}" withApply="true" withAttach="true" withPrint="true" />
+    
+    <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    <GuiField name="FULL_NAME" caption="Full name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    <GuiField name="UGROUP" caption="Group" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    <GuiField name="CONTACT" caption="Related contact" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+    <!-- Button name="CHANGE_PASSWORD" caption="Change password"  /-->
+    <Button name="RESET_PASSWORD" caption="Reset password"  />
+</VerticalLayout>
+

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite>
+  
+  <Test name="WORKFLOW.CREATE_STAGE" >
+    <Table_AddItem tableName="WFSTAGE_TABLE" />
+    <Component_SetValue componentName="NAME"        componentValue="$F{NAME_VALUE}" />
+    <Component_SetValue componentName="DESCRIP"     componentValue="$F{DESCRIP_VALUE}" />
+    <Component_SetValue componentName="IS_APPROVAL" componentValue="$F{IS_APPROVAL_VALUE}" />
+    <Apply />
+  </Test>
+  
+  <Test name="CREATE_TITLE" >
+    <Table_AddItem tableName="WF_TITLE" variable="LAST_ITEM_IN_TABLE" />
+    <Table_SetCellValue tableName="WF_TITLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="NAME" componentValue="$F{NAME_VALUE}" />
+    <Table_SetCellValue tableName="WF_TITLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="DESCRIP" componentValue="$F{DESCRIP_VALUE}" />
+  </Test>
+  
+  <Test name="WORKFLOW.CREATE_WF_SEQUENCE_MAP" >
+    <Table_AddItem tableName="WFMAP_TABLE" />
+    <Component_SetValue componentName="NAME"    componentValue="$F{NAME_VALUE}" />
+    <Component_SetValue componentName="DESCRIP" componentValue="$F{DESCRIP_VALUE}" />
+  </Test>
+  
+  <Test name="WORKFLOW.CREATE_WF_SEQUENCE_WFSIGNATURE_MAP_1" >
+    <Table_AddItem tableName="WFSIGNATURE_TABLE" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WFSIGNATURE_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TARGET_STAGE" componentValue="$F{TARGET_STAGE_VALUE}" />
+    <Table_SetCellValue tableName="WFSIGNATURE_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TITLE_1" componentValue="$F{TITLE_1_VALUE}" />
+  </Test>
+  
+  <Test name="WORKFLOW.CREATE_WF_SEQUENCE_WFSIGNATURE_MAP" >
+    <Table_AddItem tableName="WFSIGNATURE_TABLE" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WFSIGNATURE_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="PREVIOUS_STAGE" componentValue="$F{PREVIOUS_STAGE_VALUE}" />
+    <Table_SetCellValue tableName="WFSIGNATURE_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TARGET_STAGE" componentValue="$F{TARGET_STAGE_VALUE}" />
+    <Table_SetCellValue tableName="WFSIGNATURE_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="TITLE_1" componentValue="$F{TITLE_1_VALUE}" />
+  </Test>
+  
+  <Test name="WORKFLOW.APPLY_USER_SIGNATURE_FIRST_TRANSACTION">
+    <Navigation_MenuClick menuCode="WF_MY_PENDING_SIGNATURE" />
+    <ButtonClick name="SIGN_IN_SLIDE_SHOW" />
+    <Sign />
+  </Test>
+  
+  
+</TestSuite>

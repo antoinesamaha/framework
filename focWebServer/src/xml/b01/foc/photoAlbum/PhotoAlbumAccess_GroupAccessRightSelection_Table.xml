@@ -1,0 +1,30 @@
+<VerticalLayout captionMargin="0" margin="true" alignment="center" height="100%" width="-1px">
+  <ValidationSettings withApply="true" withAttach="false" withEmail="false" withSave="false" withPrint="false" formTitle="Groups Viewing Rights Management" />
+  
+  <HorizontalLayout captionMargin="false" margin="0" alignment="center" spacing = "true" height="100%" width="100%">
+  
+    <VerticalLayout captionMargin="0" spacing="true" width="450px">
+      <!-- Label value="Groups full registry" style="H2" width="100%" / -->
+		  <TableGrid title="All Groups" name="NOT_SELECTED_GROUPS_LIST_TABLE" dataPath="SOURCE_LIST" width="100%" height="100%" addEnabled="true" deleteEnabled="false" alignment="left" gridSelectionMode="Multi" refreshEnabled="false">
+	      <OpenForm containerWindow="same window" context="Main" />
+	      <NewForm context="Main" />
+	      <TableColumn name="NAME" caption="Groups" />
+		  </TableGrid>
+	  </VerticalLayout>
+		  	  
+	  <VerticalLayout width="100px" alignment="center" spacing="true">
+      <Label value=" " width="100px" height="44px"/>
+      <Button name="ADD_BUTTON" caption="Add >" width="100px"/>
+      <Button name="REMOVE_BUTTON" caption="$P{LT} Remove" width="100px"/>
+	  </VerticalLayout>
+	  
+	  <VerticalLayout captionMargin="0" spacing="true" width="450px">
+	    <!-- Label value="Selected Groups" style="H2" width="100%" / -->
+		  <TableGrid title="Group Rights" name="SELECTED_GROUPS_LIST_TABLE" dataPath="DATAROOT" height="100%" width="100%" addEnabled="false" deleteEnabled="false" alignment="right" refreshEnabled="false" gridSelectionMode="Multi">
+			   <TableColumn name="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Group" editable="false"/>
+			   <TableColumn name="ACCESS_RIGHT" caption="Right" editable="true"/>
+		  </TableGrid>
+		</VerticalLayout>
+	  
+  </HorizontalLayout>
+</VerticalLayout>

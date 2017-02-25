@@ -1,0 +1,12 @@
+<VerticalLayout>
+	<GuiTable name="MIG_FIELD_MAP_TABLE" dataPath="DATAROOT" inLineEditable="true" addEnabled="fasle" openEnabled="false" deleteEnabled="fasle">
+  	<TableColumn name="DB_FIELD_TITLE" caption="DB Field Title" editable="false"/>
+  	<TableColumn name="DB_FIELD_EXPLANATION" caption="Description" editable="false"/>
+    <TableColumn name="DB_FIELD_TYPE" caption="Type" editable="false"/>
+    <TableColumn name="DB_FIELD_NAME" caption="DB Field Name" editable="false"/>
+    <TableColumn name="DB_FOREIGN_FIELD" caption="DB Foreign field" />
+		<TableColumn name="COLUMN_TITLE" caption="Text Column title" />  	
+  	<TableColumn name="MANDATORY" caption="Mandatory" />
+  	<TableColumn name="IS_KEY" caption="Key" />
+	</GuiTable>
+</VerticalLayout>

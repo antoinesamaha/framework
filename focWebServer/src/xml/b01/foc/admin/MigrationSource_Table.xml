@@ -1,0 +1,8 @@
+<VerticalLayout >
+	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable title="Import source for data migration" name="MIG_SOURCE_TABLE" dataPath="DATAROOT">
+  	<TableColumn name="NAME" caption="Name" />
+    <TableColumn name="DESCRIP" caption="Description" />
+  	<TableColumn name="DESTINATION_TABLE" caption="Destination Table" />
+	</GuiTable>
+</VerticalLayout>

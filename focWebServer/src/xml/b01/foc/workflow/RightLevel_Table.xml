@@ -1,0 +1,22 @@
+<VerticalLayout margin="true" captionMargin="0">
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable name="WF_RIGHT_LEVEL" dataPath="DATAROOT" caption="" width="100%" height="-1px" inLineEditable="true"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="Right Level Name"  />
+        <TableColumn name="READ_RIGHT" caption="Read"  />
+        <TableColumn name="INSERT_RIGHT" caption="Add"  />
+        <TableColumn name="MODDIFY_DRAFT_RIGHT" caption="Modify Draft"  />
+        <TableColumn name="MODDIFY_APPROVED_RIGHT" caption="Modify Approved"  />
+        <TableColumn name="DELETE_DRAFT_RIGHT" caption="Delete Draft"  />        
+        <TableColumn name="DELETE_APPROVED_RIGHT" caption="Delete Approved"  />
+        <TableColumn name="APPROVE_RIGHT" caption="Approve"  />
+        <TableColumn name="CLOSE_RIGHT" caption="Close"  />
+        <TableColumn name="CANCEL_RIGHT" caption="Cancel"  />
+        <TableColumn name="PRINT_DRAFT_RIGHT" caption="Print Draft"  />
+        <TableColumn name="PRINT_APPROVE_RIGHT" caption="Print Approved"  />
+        <TableColumn name="MODIFY_CODE_DRAFT_RIGHT" caption="Modify Code Draft"  />
+        <TableColumn name="MODIFY_CODE_APPROVED_RIGHT" caption="Modify Code Approved"  />
+        <TableColumn name="MODIFY_SIGNATURE_STAGE" caption="Modify Signature Stage"  />
+        <TableColumn name="VIEW_LOG" caption="View Log"  />
+    </GuiTable>
+</VerticalLayout>

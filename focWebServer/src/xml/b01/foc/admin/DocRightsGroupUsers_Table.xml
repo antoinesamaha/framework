@@ -1,0 +1,7 @@
+<VerticalLayout>
+  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable name="DOC_RIGHTS_GROUP_USERS_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="true" openEnabled="false" viewSelector="true" inLineEditable="true">
+    <TableColumn name="USER_CODE" dataPath="USER" captionProeprty="CODE" caption="Code" immediate="true"/>
+    <TableColumn name="USER_NAME" dataPath="USER" captionProeprty="NAME" caption="Name" immediate="true"/>
+  </GuiTable>
+</VerticalLayout>

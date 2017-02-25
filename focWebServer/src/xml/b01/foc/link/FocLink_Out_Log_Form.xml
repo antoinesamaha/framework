@@ -1,0 +1,15 @@
+<VerticalLayout width="100%" >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    
+    <GuiField name="FUSER" caption="From: " captionProperty="NAME" />
+    <GuiField name="STORAGE" caption="Storage: " width="25%" />
+    <GuiField name="TRANSACTION_TYPE" caption="Transaction type: " width="25%" />
+    <GuiField name="XML_MESSAGE" caption="XML message: " textArea="true" width="100%" />
+    
+    <GuiTable name="DETAILS_TABLE" dataPath="FOC_LINK_OUT_LOG_DETAILS_LIST" width="100%" inLineEditable="false" pageLength="fit" >
+      <OpenForm containerWindow="same window" />
+      <TableColumn name="FUSER" captionProperty="NAME" caption="To" />
+      <TableColumn name="STATUS" caption="Status" />
+      <TableColumn name="RECEIVER_COMMENT" caption="Receiver Comment" />
+    </GuiTable>
+</VerticalLayout>

@@ -1,0 +1,7 @@
+<VerticalLayout width="90%" height="-1px" spacing="true" >
+  <ValidationSettings formTitle="Account Management" withApply="true" withPrint="true" />
+  <Label value="Company Info" style="H2"/>
+  <IncludeXML name="COMPANY_INFO" storage="COMPANY" dataPath="DATAROOT" type="form" context="Saas" defaultView="Standard" />
+  <Label value="User List" style="H2"/>
+  <IncludeXML name="USER_TABLE" storage="FUSER" dataPath="DATAROOT" type="table" context="Saas" defaultView="Standard" />
+</VerticalLayout>

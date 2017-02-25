@@ -1,0 +1,11 @@
+<VerticalLayout >
+    <ValidationSettings withApply="true" />
+    <GuiTable name="GROUP_VIEW_RIGHTS" dataPath="DATAROOT" inLineEditable="true">
+      <TableColumn name="STORAGE_NAME" caption="Storage" />
+      <TableColumn name="CONTEXT" caption="Context" />
+      <TableColumn name="TYPE" caption="Type" />
+      <TableColumn name="ALLOW" caption="Allow"  />
+      <TableColumn name="VIEW" caption="Mandatory View" />
+    </GuiTable>
+</VerticalLayout>
+

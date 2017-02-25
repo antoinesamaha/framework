@@ -1,0 +1,8 @@
+  <VerticalLayout captionMargin="0" width="100%" spacing="true">
+  	<Button name="DOCUMENT_NAME_BUTTON" caption="$F{DOCUMENT_NAME}:" style="bold,f14"/>
+  	<Label value="           $F{DESCRIPTION}" style="f12"/>
+  	<Label value="                                                                                                                      Last modified $F{LAST_MODIFICATION_DATE}" style="oblic,f9" visibleWhen="NOT_EMPTY($F{LAST_MODIFICATION_DATE})"/>
+  	
+  	<!-- Blob name="DOCUMENT_CLOUD" width="-1px" height="-1px" / -->
+  </VerticalLayout>
+  

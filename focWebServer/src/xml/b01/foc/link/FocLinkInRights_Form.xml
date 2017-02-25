@@ -1,0 +1,14 @@
+<VerticalLayout width="100%" >
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    
+    <GuiField name="NAME" caption="Name: " />
+    
+    <GuiTable name="DETAILS_TABLE" dataPath="FOC_LINK_IN_RIGHTS_DETAILS_LIST" width="100%" inLineEditable="true" pageLength="fit" >
+      <OpenForm containerWindow="same window" />
+      <TableColumn name="TABLE_NAME" caption="Table" />
+      <TableColumn name="FIELD_NAME" caption="Field" />
+      <TableColumn name="INSERT_ALLOWED" caption="Insert Allowed" />
+      <TableColumn name="DELETE_ALLOWED" caption="Delete Allowed" />
+      <TableColumn name="UPDATE_ALLOWED" caption="Update Allowed" />
+    </GuiTable>
+</VerticalLayout>

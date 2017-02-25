@@ -1,0 +1,19 @@
+<VerticalLayout spacing="true" margin="true" width="80%">
+  <ValidationSettings title="Property Unit" withAttach="false" withApply="true" withPrint="true" />
+  
+  <Label value="Document Info" style="H2"/>
+  <VerticalLayout captionMargin="0">
+  	<HorizontalLayout captionMargin="0" spacing="true">
+	    <GuiField name="IMAGE_NAME" caption="Image title" width="350px" />
+  	  <GuiField name="UPLOAD_DATE" caption="Upload date" width="150px" />
+	  	<GuiField name="DOCUMENT_TYPE" captionProperty="CAPTION" caption="Document Type" width="150px" />
+	  	<GuiField name="KEYWORD" caption="Keyword" width="150px" />
+	  	<GuiField name="CREATION_USER" captionProperty="NAME" caption="Creation User" width="150px" />
+	  </HorizontalLayout>
+	<GuiField name="DESCRIPTION" caption="Description" width="100%" />
+  </VerticalLayout>
+  <!-- Blob name="IMAGE_CLOUD" width="-1px" height="-1px" editable="true"/ -->
+  <GuiField name="IMAGE_CLOUD" width="-1px" height="-1px" editable="true"/> 
+  <!-- <Button name="DOWNLOAD" /> -->
+  <IncludeXML name="PHOTO_ALBUM_ACCESS_LIST" dataPath="PHOTO_ALBUM_ACCESS_LIST" storage="PHOTO_ALBUM_ACCESS" context="GROUP_ACCESS_RIGHT_SELECTION" type="table"/>
+</VerticalLayout>

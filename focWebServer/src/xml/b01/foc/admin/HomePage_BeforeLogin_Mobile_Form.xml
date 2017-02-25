@@ -1,0 +1,10 @@
+<VerticalLayout name="Homepage before login" spacing = "true">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" withEmail="false" withPdf="false"/>
+  <Label value="Welcome to EVERPRO by 01Barmaja" style="f10,bold" height="30px"/>
+  <!-- Label style="line" height="2px" width="100%"  / -->
+  <Line />
+  <HorizontalLayout width="100%">
+    <Button name="LOGIN" caption="Login" width="200px" alignment="right"/>
+    <Button name="CONTACT" caption="Contact 01barmaja" width="200px" />
+  </HorizontalLayout>
+</VerticalLayout>

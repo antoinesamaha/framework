@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TestSuite>
+  
+  <Test name="CALENDAR.NEW">
+    <Navigation_MenuClick menuCode="CAL_CALENDAR" />
+    <Table_AddItem tableName="CALENDAR_TABLE" />
+    <Component_SetValue componentName="NAME" componentValue="$F{CALENDAR_NAME}" />
+    
+    <Component_SetValue componentName="STARTING_DAY_OF_WEEK" componentValue="$F{START_DATE}" />
+    <Component_SetValue componentName="WEEK_SHIFT" componentValue="$F{WEEK_SHIFT}" />
+    <Apply />
+    <Apply />
+  </Test>
+        
+  <Test name="WEEK_SHIFT.NEW">
+    <Navigation_MenuClick menuCode="CAL_WEEK_SHIFT" />
+    <Table_AddItem tableName="WEEK_SHIFT_TABLE" />
+    <Component_SetValue componentName="NAME" componentValue="$F{SHIFT_NAME}" />
+    
+    <Component_SetValue componentName="MONDAY_SHIFT" componentValue="$F{DAY_SHIFT}" />
+    <Component_SetValue componentName="TUESDAY_SHIFT" componentValue="$F{DAY_SHIFT}" />
+    <Component_SetValue componentName="WEDNESDAY_SHIFT" componentValue="$F{DAY_SHIFT}" />
+    <Component_SetValue componentName="THURSDAY_SHIFT" componentValue="$F{DAY_SHIFT}" />
+    <Component_SetValue componentName="FRIDAY_SHIFT" componentValue="$F{DAY_SHIFT}" />
+    <!-- Component_SetValue componentName="SATURDAY_SHIFT" componentValue="$F{SHIFT_NAME}" />
+    <Component_SetValue componentName="SUNDAY_SHIFT" componentValue="$F{SHIFT_NAME}" / -->
+    <Apply />
+    <Apply />
+  </Test> 
+  
+  <Test name="DAY_SHIFT.NEW">
+    <Navigation_MenuClick menuCode="CAL_DAY_SHIFT" />
+    <Table_AddItem tableName="DAY_SHIFT_TABLE" />
+    <Component_SetValue componentName="NAME" componentValue="$F{SHIFT_NAME}" />
+    
+    <Table_AddItem tableName="WORK_SHIFT_LIST_TABLE" variable="LAST_ITEM_IN_TABLE"/>
+    <Table_SetCellValue tableName="WORK_SHIFT_LIST_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="START_TIME" componentValue="$F{START}" />
+    <Table_SetCellValue tableName="WORK_SHIFT_LIST_TABLE" objectReference="$V{LAST_ITEM_IN_TABLE}" tableField="END_TIME" componentValue="$F{END}" />
+    <Apply />
+    <Apply />
+  </Test> 
+ 
+  <!-- 
+  <Test name="CONTACT.NEW">
+    <Navigation_MenuClick menuCode="Contact" />
+    <Table_AddItem tableName="Contact" />
+    <Component_SetValue componentName="FIRST_NAME" componentValue="$F{contactfirstname}" />
+    <Component_SetValue componentName="" componentValue="$F{clientPartySalesman}" />    
+  </Test>
+   --> 
+ 
+</TestSuite>

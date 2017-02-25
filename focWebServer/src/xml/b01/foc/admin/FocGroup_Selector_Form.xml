@@ -1,0 +1,4 @@
+<VerticalLayout height="-1px" name="_MAIN_LAYOUT">
+    <ValidationSettings formTitle="Select a Group" withApply="true" withAttach="false" withPrint="false" />	   
+</VerticalLayout>
+

@@ -1,0 +1,9 @@
+<VerticalLayout >
+	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+  <GuiTree name="MENU_RIGHTS" dataPath="DATAROOT" width="100%" height="-1px" >
+    <TableColumn name="MENU_CODE" caption="Code" />
+    <TableColumn name="MENU_TITLE" caption="Menu Title" />
+    <TableColumn name="MENU_CUSTOM_TITLE" caption="Custom Title" />
+    <TableColumn name="ALLOW" caption="Allow" />
+  </GuiTree> 
+</VerticalLayout>

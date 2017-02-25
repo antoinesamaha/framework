@@ -1,0 +1,9 @@
+<VerticalLayout name="null"  >
+    <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+    <GuiTable title="Companies address book" name="Address Book Party" dataPath="DATAROOT" width="100%" height="100%"  >
+        <OpenForm containerWindow="same window" />
+        <TableColumn name="NAME" caption="name" expandRatio="1" link="true" />
+        <TableColumn name="PHONE1" caption="phone1" width="-1px"   />
+    </GuiTable>
+</VerticalLayout>
+
