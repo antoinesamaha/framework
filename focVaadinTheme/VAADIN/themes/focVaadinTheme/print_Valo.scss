@@ -1,0 +1,252 @@
+
+      
+  @media
+  print
+  {
+
+      /*we need it to display table row borders*/
+      /*Activating this will make the borders appeaqr, but this takes space and aparently Vaadin computes the height and width without lines
+          which makes some lines disapear in the printing.*/
+      /*
+        .v-table-header table, .v-table-table{
+            border-collapse: collapse;
+        }
+        .v-table-row, .v-table-table{
+            border-bottom: 1px solid #d3d4d5;
+        }
+        .qweqweqwv-table-header .qweqweqwev-table, .qweqweqwev-table-table, .qweqweqv-table-row{
+          border-collapse: collapse;
+          border: 1px solid #d3d4d5;
+        }
+        */
+      /*Hides search magnifier*/
+      .filtertextField {
+        visibility: hidden;
+      }
+      /*Hides the column selector of tables*/
+      .v-table-column-selector {
+        height: 0px;
+        width: 0px;
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      /*Hides The View Selector ComboBox*/
+      .v-horizontallayout .noPrint {
+        visibility: hidden;/* In css3 */
+        display: none;
+        margin: 0px;
+        /*In css 3 coming with scss vaadin 7 we replaced the bellow with visibility - HADI
+        display: none;        
+        */
+        height: 0px;
+        border-width: 0px;
+        border-bottom-color: #FFFFFF;
+        //border-color: 
+      }
+      
+      /*Hides validation layout accept the view selector*/
+      .noPrint .v-button-wrap,.v-button-caption {
+        display: none;
+        visibility: hidden;/* In css3 */
+        height: 0px;
+      }
+      
+      /*Hide Scroll Bars*/
+      /*.v-scrollable {
+        overflow: hidden;
+        background-color: transparent;
+      }*/
+      /*It's important for scrolling pages and it must be anywhere under this style name '.v-scrollable' else it will not works*/
+      .focMainWindow {
+        scroll: no;
+        overflow: visible;
+        /* margin : 20px; */
+        margin-left: 20px;
+        margin-right: 20px;
+      }
+      /*Hides table wrapper buttons panel*/
+      .noPrint .v-filterselect-input {
+        display: none;
+        visibility: hidden;/* In css3 */
+        height: 1px;
+      }
+      
+      /*Hides the navigation bar*/
+      .focBanner {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      /*Removes TextField Border*/
+      .v-textfield {
+        font-weight: normal;
+        border-width: 0px;
+      }
+      
+      /*It's necessary for page size*/
+      @PAGE {
+        margin: 0px;
+        padding: 0px;
+        page-break-after: always;
+        page-break-inside: avoid;
+      }
+      /*This is to remove the scroll bar when we are printing a window*/
+      .focVaadinTheme .v-scrollable {
+        overflow: visible !important;
+      }
+      
+      .v-richtextarea {
+        border: none;
+      }
+      
+      .gwt-RichTextToolbar {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      /*It duplicates the line*/
+      /* .seperationLine {
+		    border-color: #AAAAAA;
+		    border-style: solid;
+		    border-width: 2px 0 0;
+		    clear: both;
+		    margin: 0 0 0px;
+		    height: 0;
+		  } */
+      
+      .foc-line {
+        background-color: #AAAAAA;
+        height: 1px;
+      }
+      
+      .everproLogo a img {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      .v-button {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      .noPrint .v-captiontext,.noPrint .v-menubar-menuitem,.noPrint .v-label,.noPrint .v-slot
+        {
+        display: none;
+        visibility: hidden;/* In css3 */
+        height: 1px
+      }
+      
+      .v-app .v-window {
+        width: 100%;
+        border: none;
+      }
+      
+      .foc-validation {
+        height: 0px;
+        background-color: #FFFFFF;
+        border-style: solid;
+        border-width: 0px;
+        border-bottom-color: #FFFFFF;
+        border-top: none;
+        border-right: none;
+        border-left: none;
+        border-bottom: none;
+      }
+      /*
+        .foc-validation {
+          border-bottom-color:#FFFFFF;
+          border-width: 0px;
+          border-bottom: none;
+        }
+        */
+      /*this allows to remove the scroll bar on the right side of the page*/
+      .v-verticallayout>div {
+        scroll: no;
+        overflow: visible;
+      }
+      
+      .v-nativebutton-focBannerButton {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      .v-panel-content {
+        overflow-y: hidden !important;
+        overflow-x: hidden !important;
+      }
+      
+      .v-panel-caption,.v-panel-nocaption,.white .v-panel-caption,.white .v-panel-nocaption{
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      .v-panel-deco,.white .v-panel-deco {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      /*This is to remove the lines on top and bottom when we print*/
+      .v-panel-caption,.v-panel-nocaption,.white .v-panel-caption,.white .v-panel-nocaption
+        {
+        display: none;
+        visibility: hidden;/* In css3 */
+      }
+      
+      .noPrint .v-popupview {
+        display: none;
+        visibility: hidden;/* In css3 */
+        height: 1px
+      }
+      
+      thead {
+        display: table-header-group;
+      }
+      
+      tfoot {
+        display: table-footer-group;
+      }
+      
+      body {
+        border: none;
+        scrollbar-face-color: #FFFFFF;
+        scrollbar-shadow-color: #FFFFFF;
+        scrollbar-highlight-color: #FFFFFF;
+        scrollbar-3dlight-color: #FFFFFF;
+        scrollbar-darkshadow-color: #FFFFFF;
+        scrollbar-track-color: #FFFFFF;
+        scrollbar-arrow-color: #FFFFFF;
+        scrollbar-arrow-color: green;
+      }
+      
+      /*no effects*/
+      
+      /*This was tested by Antoine and it worked once to avoid the FVLabels that are inside the table from getting cut */
+      .v-label{
+        page-break-inside: avoid;
+      }
+      
+      
+      /*
+      These 3 lines are what made the difference and corrected the bug related to Page break while printing.
+      The printing works when launched using the print button. It will still not work if printed from the 
+      browser print button directly   
+      */
+      .v-widget {
+        display: block;
+        visibility: visible;
+      }
+
+      /*START --- These two styles below are removed for valo printing there existence makes the validation layout looking bad when printing*/
+      /* THESE ARE THE ORIGINAL THAT MAKE TABLE PRINTING RIGHT BUT PO WRONG*/
+      /*.v-slot, .v-spacing {
+        display: block;
+        visibility: visible;
+      }*/
+  
+      /*.v-align-middle > .v-widget, .v-align-bottom > .v-widget {
+        display: block;
+        visibility: visible;
+      }*/
+      /*END --- These three styles are removed for valo printing there existence makes the validation layout looking bad when printing*/
+  }
+  

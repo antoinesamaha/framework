@@ -1,0 +1,2209 @@
+$v-focus-color: #ffb13c;
+$v-selection-color: #ffb13c;
+$v-font-size: 14px;
+$v-link-font-color: #0000ff;/*Change the link colour*/
+$v-border-radius: 0;
+$v-textfield-border-radius: 0;
+$v-table-header-background-color: #ff0000;
+/*$v-font-color: #464440;*/
+
+@import "print_Valo.scss";
+@import "foctheme_valo_fontsColors.scss";
+@import "../valo/valo.scss";
+
+@mixin focVaadinTheme {
+  @include valo;
+  
+  /* If we do not put this the panels will have a very small 1px border of white. 
+     It only shows in the home form when the footer layout has a background, 
+     if shows as a white border*/
+  .v-panel {
+    border: 0px;
+  }
+  
+  .v-caption {
+    font-weight: bold;
+  }
+  
+  .v-checkbox label {
+    font-weight: bold;
+    font-size: 12px;
+  }
+
+  /*wrap cell content in valo*/
+  .v-table-cell-wrapper {
+    white-space: normal;
+  }
+  
+  .v-nativebutton-focBannerButton_ContactUs{
+    font-weight: normal;
+    text-decoration: underline; 
+  }
+
+  /* This makes the User name Drop down menu in the Black Bar look black */
+  .focBannerButton .v-menubar-menuitem-userItemCaption{ 
+    color: white;
+    border: 5px;
+    border-color: black;
+    
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+    background: #7d7e7d; /* Old browsers 0e0e0e*/
+    background: -moz-linear-gradient(top,  #7d7e7d 0%, #2A1818 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#2A1818)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgb(100, 120, 140) 0%, rgb(56, 66, 75) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #7d7e7d 0%,#2A1818 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#2A1818',GradientType=0 ); /* IE6-9 */
+    
+    /*background-color: black;*/
+    /*margin-top: 3%;*/
+  }
+
+  .focBorder{ 
+    border: 3px solid;
+    border-width: 1px;
+    border-top:thick;
+    border-bottom:thick;
+    border-left:thick;
+    border-right:thick;
+    border-color: red;
+  }
+
+  .desktop{
+    background-color: gray;
+  }
+
+  .desktopLeft{
+    /* IE10 Consumer Preview */ 
+    background-image: -ms-linear-gradient(left, #FFFFFF 95%, #000000 100%);
+    
+    /* Mozilla Firefox */ 
+    background-image: -moz-linear-gradient(left, #FFFFFF 95%, #000000 100%);
+    
+    /* Opera */ 
+    background-image: -o-linear-gradient(left, #FFFFFF 95%, #000000 100%);
+    
+    /* Webkit (Safari/Chrome 10) */ 
+    background-image: -webkit-gradient(linear, left top, right top, color-stop(0.95, #FFFFFF), color-stop(1, #000000));
+    
+    /* Webkit (Chrome 11+) */ 
+    background-image: -webkit-linear-gradient(left, #FFFFFF 95%, #000000 100%);
+    
+    /* W3C Markup, IE10 Release Preview */ 
+    background-image: linear-gradient(to right, #FFFFFF 95%, #000000 100%);
+  }
+
+  .desktopRight{
+    /* IE10 Consumer Preview */ 
+    background-image: -ms-linear-gradient(right, #FFFFFF 95%, #000000 100%);
+    
+    /* Mozilla Firefox */ 
+    background-image: -moz-linear-gradient(right, #FFFFFF 95%, #000000 100%);
+    
+    /* Opera */ 
+    background-image: -o-linear-gradient(right, #FFFFFF 95%, #000000 100%);
+    
+    /* Webkit (Safari/Chrome 10) */ 
+    background-image: -webkit-gradient(linear, right top, left top, color-stop(0.95, #FFFFFF), color-stop(1, #000000));
+    
+    /* Webkit (Chrome 11+) */ 
+    background-image: -webkit-linear-gradient(right, #FFFFFF 95%, #000000 100%);
+    
+    /* W3C Markup, IE10 Release Preview */ 
+    background-image: linear-gradient(to left, #FFFFFF 95%, #000000 100%);
+  }
+
+  .sky{
+    background: url("customimg/clouds_in_blue_sky.png") no-repeat ;
+    width: 1000px;
+    height: 709px;  
+  /*  border:1px solid;
+    border-radius:5px;
+   */}
+
+  .focSlogan{
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    text-align:left;
+  }
+  
+  .theSkyBeginning{
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    color: rgb(11, 146, 224);
+    width: 90%;
+    text-align:right;
+    height: 30px;
+  }
+  
+  .businessManImg{
+    width: 100px;
+    height: 100px;
+  }
+
+  .workerImg{
+    width: 100px;
+    height: 100px;
+  }
+  
+  .moduleTitle{
+    padding-top: 3px;
+    color: orange;
+    font-weight: bold;
+    font-size:28px;
+    height:35px;
+  }
+
+  .moduleText{
+    color: white;
+    font-weight: bold;
+    font-size:20px;
+  }
+  
+  .barmajaName{
+    color: white;
+    font-weight: bold;
+    font-size:20px;
+  }
+
+  .introText{
+    color: white;
+    font-size:14px;
+  }
+  
+  .v-panel .v-panel-content-sky {
+    background: url("customimg/clouds_in_blue_sky.png") no-repeat ;
+    width: 1000px;
+    height: 709px;  
+  }
+  
+  /*Hide Scroll Bars*/
+  /*
+  .v-horizontallayout > div {
+    background-color: transparent;
+  }
+  .v-horizontal > div {
+    background-color: transparent;
+  }
+  div.v.expand{
+    background-color: transparent;
+  }
+  .v-expand > div{
+    background-color: transparent;
+  }
+  .v-horizontal{
+    background-color: transparent;
+  }
+  .v-panel-content-desktop > div {
+    background: transparent;
+  }
+  */
+  
+  .everpro_plan1{
+    text-decoration: none;
+    background-color: rgb(116, 168, 245);
+    border:1px solid;  
+    border-radius:5px;
+    width: 300px;
+    height: 200px;
+  }
+  
+  .everpro_plan2{
+    text-decoration: none;
+    background-color: #ffb13c;
+    border:1px solid;
+    border-color: #ffb13c;
+    border-radius:5px;
+    width: 100px;
+    height: 200px;
+  }
+
+  .everpro_plan3{
+    text-decoration: none;
+    background-color: rgb(255,214,0);
+    border:1px solid;
+    border-radius:5px;
+    width: 100px;
+    height: 200px;
+  }
+  
+  .title1 {
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: black;
+    /*  color: #F06C05;*/
+  }
+
+/*  In Valo there is a border highlight for buttons when they get focus. In case we don't want the focus we add this
+    style noFocusHighlight*/
+  .noFocusHighlight:focus:after {
+     border: none;
+     -webkit-box-shadow: none;
+     box-shadow: none;
+  }
+
+/*
+  .v-foc-gridtree-node-expanded {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-expanded.png");
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  }
+
+  .v-foc-gridtree-node-collapsed {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-collapsed.png");
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  }
+  
+  .v-foc-gridtree-node-leaf {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-leaf.png");
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  }
+*/  
+
+  .foc-footerLayout {
+    color: white;
+/*    background-color: rgb(70, 83, 92);*/
+    background-color: rgb(70, 68, 64);
+    padding: 6px;
+    padding-right: 10px;
+    padding-left: 10px;
+    /*margin: 5px;*/
+  }
+  
+/*  
+  .v-ui > .v-widget {
+    overflow-y: visible;
+  }
+  */
+
+  .focMargin {
+    padding: 3px;
+    margin: 3px;
+  }
+  
+  .foc-normal {
+    /*font-family: arial, helvetica, sans-serif;
+    font-size: 12px;*/
+    font-weight: normal;
+  }
+  
+  .foc-title {
+    /*font-family: arial, helvetica, sans-serif;*/
+    font-weight: bold;
+    font-size: 22px;
+    text-decoration: underline;
+    /*color: #0055FF;*/
+  }
+  
+  .foc-h1 {
+    /*font-family: arial, helvetica, sans-serif;*/
+    font-weight: bold;
+    font-size: 20px;
+    /*color: #0055FF;*/
+  }
+  
+  .foc-h2 {
+    /*font-family: arial, helvetica, sans-serif;*/
+    font-weight: bold;
+    font-size: 16px;
+    /*color: #0055FF;*/
+  }
+  
+  .foc-h3 {
+    /*font-family: arial, helvetica, sans-serif;*/
+    font-weight: normal;
+    font-size: 14px;
+    /*color: #0055FF;*/
+  }
+  
+  .foc-instruction {
+    /*font-family: arial, helvetica, sans-serif;*/
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .foc-alert {
+    color: #F06C05;
+  }
+  
+  .foc-bold {
+    font-weight: bold;
+  }
+  
+  .border {
+    border: 1px solid #CCCCCC;
+    padding: 3px;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-top: 0px;
+  }
+  
+  .v-verticallayout-Level1 {
+    background-color: rgb(166, 193, 221);
+  }
+  
+  .v-verticallayout-Level2 {
+    background-color: rgb(204, 227, 255);
+  }
+  
+  .v-verticallayout-Level3 {
+    background-color: rgb(214, 255, 176);
+  }
+  
+  .v-verticallayout-Level4 {
+    background-color: rgb(230, 213, 202);
+  }
+  
+  .v-verticallayout-Level5 {
+    background-color: rgb(255, 235, 155);
+  }
+
+  .foc-border-left {
+    border: 1px solid #CCCCCC;
+    padding: 3px;
+  }
+  
+  .foc-border-right {
+    border: 1px solid #CCCCCC;
+    padding: 3px;
+  }
+  
+  .comparisonSheetScrollBar{
+    overflow-y: hidden;
+    overflow-x: auto !important;
+  }
+  
+  /*
+  .ooogreen .v-scrollable .v-widget {
+    overflow-x: auto !important;
+  }
+  */
+  
+  /*
+  .tableHeightForPrinting .v-table-table {
+    height: 106%;
+  }
+  */
+  /*
+  @media print and not((-webkit-min-device-pixel-ratio:0)) {
+  
+    table { 
+      page-break-inside:auto; 
+      position:relative; 
+      float:none;
+    }
+    tr { 
+      page-break-before:auto; 
+      page-break-after:auto;
+      position:relative; 
+      float:none;
+      display:block;
+    }
+    td{ 
+      border:solid 1px #CCCCCC;
+      width:auto;
+      position:relative; 
+      float:none;
+    }
+  }
+  */
+  
+  /*
+  @media print and (-webkit-min-device-pixel-ratio:0) {
+  
+    .v-table{
+       page-break-inside: avoid;
+       page-break-before: always;
+       page-break-after: always;
+    }
+    table { 
+      page-break-after:auto;
+    }
+    tr { 
+      display:block;
+      page-break-inside:avoid; 
+      page-break-after:auto; 
+    }
+    td { 
+      page-break-inside:avoid; 
+      page-break-after:auto;
+    }
+  }
+  */
+  
+  /*
+  TextFields components are normally a bit lower in Table than usually, 
+  as it makes the table more compact and, more importantly, 
+  prevents change of line height when switching between editable and non-editable mode. 
+  Some components do not have similar adjustments, which can make the table rows uneven.
+  
+  Solution 1: Override the CSS rules that make TextFields low in Table. (Done in the example below)
+  Solution 2: Use CSS to make the other components (DateField, ComboBox) the same height as TextField
+  */
+  
+  /*
+  .v-table-cell-wrapper input.v-textfield {
+    margin-bottom: 0px; /* Normally -2px in table 
+    margin-top: 0px; /* Normally -2px in table 
+    height: 19px; /* Not auto 
+  }
+  
+  .v-textfield-visible {
+    border: 1px solid #b6b6b6;
+    border-top-color: #9d9d9d;
+    border-bottom-color: #d6d6d6;
+    border-right-color: #d6d6d6;
+    color: #000000;
+    opacity: 1.0;
+    filter: none;
+  }
+  
+  .v-caption-visible {
+    opacity: 1.0;
+    filter: none;
+  }
+  
+  .uploadImageButtonUneditable .v-button {
+    display: none;
+  }
+  
+  .uploadImageButtonEditable .v-button {
+    visibility: visible;
+  }
+  
+  .linkButton {
+    height: 40px;
+  }
+  
+  .foc-validation {
+    background-color: #FFFFFF;
+    border-style: solid;
+    border-width: 1px;
+    border-bottom-color: #AAAAAA;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+  }
+  */
+
+  .foc-lineThrough {
+    text-decoration: line-through;
+  }
+  
+  .foc-underline {
+    text-decoration: underline;
+  }
+  
+  .foc-italic {
+    font-style: italic;
+  }
+  
+  .foc-oblique {
+    font-style: oblique;
+  }
+  
+  .foc-text-left {
+    text-align: left;
+  }
+  
+  .foc-text-right {
+    text-align: right;
+  }
+  
+  .foc-text-center {
+    text-align: center;
+  }
+  
+  .foc-text-justify {
+    text-align: justify;
+  }
+  
+  .foc-text-middle {
+    vertical-align: middle;
+  }
+  
+  .foc-text-bottom {
+    vertical-align: bottom;
+  }
+  
+  .foc-text-top {
+    vertical-align: top;
+  }
+
+  .focH1 {
+    font-family: arial, helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 1.9em;
+    color: #F06C05;
+  }
+  
+  .focLblH1 {
+    font: normal 22px arial, helvetica, sans-serif;
+    color: #505050;
+  }
+  
+  .focH2 {
+    font: bold 16px arial, helvetica, sans-serif;
+    color: #902020;
+  }
+  
+  .focLblH2 {
+    font: normal 16px arial, helvetica, sans-serif;
+    color: #505050;
+  }
+  
+  .focH3 {
+    font: bold 14px arial, helvetica, sans-serif;
+    color: #505050;
+  }
+  
+  .focLblH3 {
+    font: normal 14px arial, helvetica, sans-serif;
+    color: #505050;
+  }
+  
+  .focBanner_BLACK_NOT_ACTIVE_NOW {
+      font: normal 14px arial, helvetica, sans-serif;
+    color: #dddddd;
+  
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+background: #7d7e7d; /* Old browsers */
+background: -moz-linear-gradient(top,  #7d7e7d 0%, #2A1818 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#2A1818)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #7d7e7d 0%,#2A1818 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#2A1818',GradientType=0 ); /* IE6-9 */
+  }
+
+  .focBanner {
+    font: normal 14px arial, helvetica, sans-serif;
+    color: #dddddd;
+  
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+background: #7d7e7d; /* Old browsers */
+background: -moz-linear-gradient(top,  #7d7e7d 0%, #2A1818 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#2A1818)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgb(100, 120, 140) 0%, rgb(56, 66, 75) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #7d7e7d 0%,#2A1818 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#2A1818',GradientType=0 ); /* IE6-9 */
+  }
+
+  .v-nativebutton-focBannerButton {
+    font: normal 14px arial, helvetica, sans-serif;
+    color: #ffffff;
+    border: none;
+    font-color: #090909;
+    
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#7d7e7d+0,0e0e0e+100;Black+3D */
+background: #7d7e7d; /* Old browsers */
+background: -moz-linear-gradient(top,  #7d7e7d 0%, #2A1818 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#2A1818)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgb(100, 120, 140) 0%, rgb(56, 66, 75) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #7d7e7d 0%,#2A1818 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #7d7e7d 0%,#2A1818 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#2A1818',GradientType=0 ); /* IE6-9 */
+    
+/*    
+    background-image: -ms-linear-gradient(top, #616161 0%, #0F0F0F 100%);
+    background-image: -moz-linear-gradient(top, #616161 0%, #0F0F0F 100%);
+    background-image: -o-linear-gradient(top, #616161 0%, #0F0F0F 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #616161),
+      color-stop(1, #0F0F0F));
+    background-image: -webkit-linear-gradient(top, #616161 0%, #0F0F0F 100%);
+    background-image: linear-gradient(to bottom, #616161 0%, #0F0F0F 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#0F0F0F', startColorstr='#616161');
+      */
+  }
+  
+  .v-nativebutton-focBannerButton:HOVER {
+    /*background-color: #444444;*/
+    font-color: #090909;
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #0F0F0F 0%, #0F0F0F 100%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #0F0F0F 0%, #0F0F0F 100%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #0F0F0F 0%, #0F0F0F 100%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0F0F0F),
+      color-stop(1, #0F0F0F));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #0F0F0F 0%, #0F0F0F 100%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #0F0F0F 0%, #0F0F0F 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#0F0F0F', startColorstr='#0F0F0F');
+    height: 1%; /*For IE7*/
+  }
+  
+  /* This gives the right size to the logo EVERPRO in the black ruban*/
+  /*
+  .everproLogo a img {
+    width: 163px;
+    height: 40px;
+  }
+  */
+  .everproLogo a img {
+    width: 250x;
+    height: 40px;
+  }
+    
+  .v-caption-focNoCaptionMargin {
+    display: none;
+    height: 0px;
+  }
+
+  .v-caption-focCentralPanel {
+    display: none;
+    height: 0px;
+  }
+
+  .v-caption-margination{
+    display:none;
+    height:0px;
+  }
+  /*
+  .margination {
+    margin-top: -18px;
+    margin-bottom: 0px;
+  }
+  */
+
+  .foc-arial {
+    color: black;
+    line-height: 90%;
+    font-family: arial, helvetica, sans-serif;
+  }
+  
+  .foc-f4 {
+    font-size: 4px;
+  }
+
+  .foc-f5 {
+    font-size: 5px;
+  }
+
+  .foc-f6 {
+    font-size: 6px;
+  }
+
+  .foc-f7 {
+    font-size: 7px;
+  }
+
+  .foc-f8 {
+    font-size: 8px;
+  }
+
+  .foc-f9 {
+    font-size: 9px;
+  }
+  
+  .foc-f10 {
+    font-size: 10px;
+  }
+  
+  .foc-f11 {
+    font-size: 11px;
+  }
+  
+  .foc-f12 {
+    font-size: 12px;
+  }
+  
+  .foc-f13 {
+    font-size: 13px;
+  }
+  
+  .foc-f14 {
+    font-size: 14px;
+  }
+  
+  .foc-f15 {
+    font-size: 15px;
+  }
+  
+  .foc-f16 {
+    font-size: 16px;
+  }
+  
+  .foc-f17 {
+    font-size: 17px;
+  }
+  
+  .foc-f18 {
+    font-size: 18px;
+  }
+  
+  .foc-f19 {
+    font-size: 19px;
+  }
+  
+  .foc-f20 {
+    font-size: 20px;
+  }
+  
+  .foc-f21 {
+    font-size: 21px;
+  }
+  
+  .foc-f22 {
+    font-size: 22px;
+  }
+  
+  .foc-f23 {
+    font-size: 23px;
+  }
+  
+  .foc-f24 {
+    font-size: 24px;
+  }
+  
+  .foc-f25 {
+    font-size: 25px;
+  }
+  
+  .foc-f26 {
+    font-size: 26px;
+  }
+  
+  .foc-f27 {
+    font-size: 27px;
+  }
+  
+  .foc-f28 {
+    font-size: 28px;
+  }
+  
+  .foc-f29 {
+    font-size: 29px;
+  }
+  
+  .foc-f30 {
+    font-size: 30px;
+  }
+
+  .grid_red {
+    font-size: 12px;
+    background: red;
+    background: #FFFF99;
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, #FFFF99));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFFF99 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #FFFF99 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='#FFFF99');
+    /*height: 1%;*/ /*For IE7*/  
+
+    background: url("customimg/clouds_in_blue_sky.png") no-repeat ;
+  }
+  
+  .foc-red {
+    background: red;
+  }
+  
+  .foc-yellow {
+    background: yellow;
+  }
+  
+  .foc-gray {
+    background: #A9A9A9;
+  }
+  
+  .foc-white {
+    background: white;
+  }
+  
+  .foc-blue {
+    background: cornFlowerblue;
+    padding: 3px;
+  }
+
+  .foc-H1 {
+    background: #8080C0;
+    background: rgb(120,140,160);
+    font-weight: bold;
+    /*
+    cornFlowerblue;
+    background: rgb(66,74,84);*/
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 22px;
+  }
+  
+  .foc-H2 {
+    /*background: rgb(140,190,255);  100, 150, 240*/
+    background: rgb(99,110,130);
+    background: rgb(120,140,160);
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 18px;
+  }
+
+  .foc-textRed {
+    color: red;
+  }
+  
+  .foc-textGray {
+    color: #A9A9A9;
+  }
+  
+  .foc-textWhite {
+    color: white;
+  }
+  
+  .foc-textBlue {
+    color: blue;
+  }
+
+  .foc-textOrange {
+    color: orange;
+  }
+
+  .foc-bg1 {
+    background: rgb(230, 230, 255);
+  }
+  
+  .handPointerOnHover:HOVER{
+    cursor: pointer;
+  }
+  
+  .no-toolbar .gwt-RichTextToolbar {
+    display: none;
+  }
+  
+  .floatPosition {
+    position: fixed;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-top: 0px;
+    right: 0px;
+    /*z-index: 1000;*/
+    
+    background: #fff;
+    color: #000;
+    border: solid 1px #000;
+    border-radius: 10px 10px 0 0;
+    
+    vertical-align: baseline;
+  }
+  
+  /*Changing the background of Dialog header*/
+  .v-window-header, .v-window-outerheader, .v-window-closebox, .v-window-maximizebox, .v-window-restorebox{
+    color: white;
+    background-color: black; 
+  }
+  
+  .v-valo-link{
+    color: red;
+  }
+  
+  .menu_module_shortcut_button{
+    text-decoration: none;
+    text-align: center;
+    color: white;
+    background-color: #ffb13c;
+    border:1px solid;
+    border-color: #ffb13c;
+    border-radius:5px;
+    width: 100px;
+    height: 30px;
+  }
+
+  .menu_module_shortcut_button:HOVER {
+    background-color: #ffb13c;
+    border:3px solid;
+    border-color: #b97a57;
+  }
+      
+  .menu_shortcut_button{
+    width: 100%;
+    height: -1px;
+  }
+  
+  .v-table-inLineEditable .v-table-cell-wrapper > .v-widget {
+    margin: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .v-table-inLineEditable .v-table-cell-wrapper{
+    padding: 0px;
+    margin: 0xp;
+  }
+  
+  .v-tree-inLineEditable .v-tree-cell-wrapper > .v-widget {
+    margin: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  .v-tree-inLineEditable .v-tree-cell-wrapper{
+    padding: 0px;
+    margin: 0xp;
+  }
+   
+  .focPopupView_DropDownList {
+    text-decoration: none;
+    color: black;
+    background-image: url(icons/drop_down.png);
+    background-repeat: no-repeat;
+    background-position: right;
+    background-size:15px 15px;
+    opacity: 1;
+    margin: 0px;
+    padding:0px;
+    padding-right: 36px;
+  }
+  
+  .focPopupView_DropDownList:HOVER{
+    text-decoration: none;
+    color: black;
+  }
+  
+  .v-table-cell-content-actual {
+    background: #FFFFFF;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #FFFFFF 100%, #FFFFFF 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFFFFF 100%, #FFFFFF 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFFFFF 100%, #FFFFFF 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #FFFFFF),
+      color-stop(0.95, #FFFFFF));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFFFFF 100%, #FFFFFF 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #FFFFFF 95%, #FFFFFF 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#FFFFFF', startColorstr='#FFFFFF');
+    /*height: 1%;*/ /*For IE7*/    
+  }
+  
+  .v-table-cell-content-planned {
+    background: #ADD8E6;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #ADD8E6 100%, #ADD8E6 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #ADD8E6 100%, #ADD8E6 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #ADD8E6 100%, #ADD8E6 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #ADD8E6),
+      color-stop(0.95, #ADD8E6));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #ADD8E6 100%, #ADD8E6 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #ADD8E6 95%, #ADD8E6 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#ADD8E6', startColorstr='#ADD8E6');
+    /*height: 1%;*/ /*For IE7*/    
+  }
+  
+  .v-table-cell-content-notCompletedYet {
+    background: #FF6368;
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #FF6368 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FF6368 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FF6368 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, #FFFF99));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FF6368 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #FF6368 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='#FF6368');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  .v-table-cell-content-proposal {
+    background: #FFFF99;
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFFF99 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, #FFFF99));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFFF99 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #FFFF99 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='#FFFF99');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+  
+  .v-table-cell-content-approved {
+    background: #FFFFFF;
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #FFFFFF 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #FFFFFF  100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #FFFFFF 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, #FFFFFF));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #FFFFFF 100%, #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #FFFFFF 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='#FFFFFF');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+  
+  /* .v-table-cell-content-canceled {
+    color: white;
+    text-decoration: line-through;
+    background: #666666;
+  }
+   */
+   
+  .v-table-cell-content-closed {
+    background: #C5C5C5;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #DDDDDD 100%, #C5C5C5 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #DDDDDD 100%, #C5C5C5 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #DDDDDD 100%, #C5C5C5 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #DDDDDD),
+      color-stop(0.95, #C5C5C5));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #DDDDDD 100%, #C5C5C5 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #C5C5C5 95%, #DDDDDD 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#DDDDDD', startColorstr='#C5C5C5');
+    /*height: 1%;*/ /*For IE7*/    
+  }
+   
+  .v-table-cell-content-canceled {
+    text-decoration: line-through;
+    background: #A3A3A3;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, #DDDDDD 100%, #A3A3A3 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, #DDDDDD 100%, #A3A3A3 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, #DDDDDD 100%, #A3A3A3 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #DDDDDD),
+      color-stop(0.95, #A3A3A3));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, #DDDDDD 100%, #A3A3A3 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, #A3A3A3 95%, #DDDDDD 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#DDDDDD', startColorstr='#A3A3A3');
+    /*height: 1%;*/ /*For IE7*/    
+  }
+
+  .foc-avoidBreak {
+    display:inline;
+    page-break-inside:avoid; 
+    page-break-after:always;
+  }
+      
+  .foc-treegrid-1 {
+    background: rgb(166,193,221);
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, rgb(166,193,221) 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, rgb(166,193,221) 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, rgb(166,193,221) 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, rgb(166,193,221)));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, rgb(166,193,221) 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, rgb(166,193,221) 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='rgb(166,193,221)');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  .foc-treegrid-2 {
+    background: rgb(204, 227, 255);
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, rgb(204, 227, 255) 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, rgb(204, 227, 255) 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, rgb(204, 227, 255) 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, rgb(204, 227, 255)));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, rgb(204, 227, 255) 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, rgb(204, 227, 255) 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='rgb(204, 227, 255)');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  .foc-treegrid-3 {
+    background: rgb(214, 255, 176);
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, rgb(214, 255, 176) 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, rgb(214, 255, 176) 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, rgb(214, 255, 176) 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, rgb(214, 255, 176)));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, rgb(214, 255, 176) 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, rgb(214, 255, 176) 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='rgb(214, 255, 176)');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  .foc-treegrid-4 {
+    background: rgb(230, 213, 202);
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, rgb(230, 213, 202) 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, rgb(230, 213, 202) 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, rgb(230, 213, 202) 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, rgb(230, 213, 202)));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, rgb(230, 213, 202) 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, rgb(230, 213, 202) 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='rgb(230, 213, 202)');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  /*
+      colorArray.add(new Color(255, 235, 155)); //orange    
+  */
+
+  .foc-treegrid-5 {
+    background: rgb(255, 235, 155);
+    color: #000000;
+    /* background-color: #000000;*/
+    /* IE10 Consumer Preview */
+    background-image: -ms-linear-gradient(top, rgb(255, 235, 155) 100%, #CCCCCC 95%);
+    /* Mozilla Firefox */
+    background-image: -moz-linear-gradient(top, rgb(255, 235, 155) 100%, #CCCCCC 95%);
+    /* Opera */
+    background-image: -o-linear-gradient(top, rgb(255, 235, 155) 100%, #CCCCCC 95%);
+    /* Webkit (Safari/Chrome 10) */
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(1, #CCCCCC),
+      color-stop(0.95, rgb(255, 235, 155)));
+    /* Webkit (Chrome 11+) */
+    background-image: -webkit-linear-gradient(top, rgb(255, 235, 155) 100%,  #CCCCCC 95%);
+    /* W3C Markup, IE10 Release Preview */
+    background-image: linear-gradient(to bottom, rgb(255, 235, 155) 95%, #CCCCCC 100%);
+    /* For IE7-8-9*/
+    filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,
+      endColorstr='#CCCCCC', startColorstr='rgb(255, 235, 155)');
+    /*height: 1%;*/ /*For IE7*/  
+  }
+
+  .foc-treegrid-grey {
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e5e696+0,d1d360+100;Wax+3D */
+background: #e5e696; /* Old browsers */
+background: -moz-linear-gradient(top,  #e5e696 0%, #d1d360 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e696), color-stop(100%,#d1d360)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #e5e696 0%,#d1d360 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #e5e696 0%,#d1d360 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #e5e696 0%,#d1d360 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #e5e696 0%,#d1d360 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', endColorstr='#d1d360',GradientType=0 ); /* IE6-9 */
+  }
+
+  .v-foc-gridtree-node-expanded-material {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-expanded.png"), url("icons/16x16/material.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+
+    height: 20px;
+    padding-left: 40px;
+  }
+
+  .v-foc-gridtree-node-collapsed-material  {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-collapsed.png"), url("icons/16x16/material.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 40px;
+  }
+  
+  .v-foc-gridtree-node-leaf-material  {
+    border: 0px;
+    
+    background-image: url("icons/tree-node-leaf.png"), url("icons/16x16/material.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  
+  }
+
+
+  .v-foc-gridtree-node-expanded-service {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-expanded.png"), url("icons/16x16/service.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+
+    height: 20px;
+    padding-left: 40px;
+  }
+
+  .v-foc-gridtree-node-collapsed-service {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-collapsed.png"), url("icons/16x16/service.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 40px;
+  }
+  
+  .v-foc-gridtree-node-leaf-service {
+    border: 0px;
+    
+    background-image: url("icons/tree-node-leaf.png"), url("icons/16x16/service.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  
+  }
+
+  .v-foc-gridtree-node-expanded-role {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-expanded.png"), url("icons/16x16/resourcerole.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+
+    height: 20px;
+    padding-left: 40px;
+  }
+
+  .v-foc-gridtree-node-collapsed-role {
+    border: 0px;
+    
+    background-image: url("icons/16x16/tree-node-collapsed.png"), url("icons/16x16/resourcerole.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 40px;
+  }
+  
+  .v-foc-gridtree-node-leaf-role {
+    border: 0px;
+    
+    background-image: url("icons/tree-node-leaf.png"), url("icons/16x16/resourcerole.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  
+  }
+
+/*  
+  .v-foc-gridtree-node-expanded {
+    border: 0px;
+    
+    background-image: url("icons/16x16/add.png"), url("icons/16x16/adobe.png");
+    background-position: 0px 0px, 16px 0px; 
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 40px;
+  }
+
+  .v-foc-gridtree-node-collapsed {
+    border: 0px;
+    
+    background-image: url("icons/16x16/adobe.png"), url("icons/16x16/add.png");
+    background-position: 0px 0px, 16px 0px;
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 40px;
+  }
+  
+  .v-foc-gridtree-node-leaf {
+    border: 0px;
+    
+    background-image: url("icons/tree-node-leaf.png");
+    background-repeat:  no-repeat;
+    background-color: transparent;
+    height: 20px;
+    padding-left: 25px;
+  
+  }
+  
+  .v-grid-cell.numeric {
+    text-align: right;
+  }
+*/  
+
+/*
+  .v-label-foc-text-middle{
+     text-align: right;
+     height: 20px;
+  }
+  
+  .v-textfield-yellow{
+     background: yellow;
+  }
+  */
+  
+    /*
+  These colors are used in the Comparison Sheet HTML
+  We are not sure they are not used elsewhere
+  */
+  .yellow {
+    background-color: yellow;
+  }
+  
+  .red {
+    background-color: red;
+  }
+
+  .orange {
+    background-color: orange;
+  }
+
+  .foc-orange {
+    background-color: orange;
+    background-color: rgb(255,201,14);
+  }
+  
+  .green {
+    background-color: green;
+  }
+
+  .moreBackground {
+    background-color: orange;
+    height: 20px;
+  }
+
+  .v-table-cell-content-orange {
+    color: white;
+    background: orange;
+  }
+
+  .v-table-cell-content-green {
+    color: white;
+    background: green;
+  }
+
+  .v-table-cell-content-grey {
+    color: white;
+    background: grey;
+  }
+  
+  .v-table-cell-content-highlight {
+    color: black;
+    background: orange;
+  }
+  
+  .v-table-cell-content-warning {
+    color: white;
+    background: red;
+  }
+  
+  .v-table-cell-content-normal {
+    color: black;
+  }
+  
+  /*
+  ---------------
+  */
+  
+  .v-textfield.numerical {
+    text-align: right;
+  }
+
+  .foc-button-orange-small {
+    text-shadow: 2px 2px rgb(300, 200, 50);
+
+    background: url("img/buttons/button-orange-small.png") no-repeat ;
+    border: none;
+    width: 200px;
+    height:60px;
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 22px;
+  }
+
+  .foc-button-orange:HOVER {
+    opacity: 0.7;
+  }
+
+  .foc-button-orange {
+    /* text-shadow: 2px 2px rgb(300, 200, 50); */
+    text-shadow: 1px 1px rgb(120,80,6);
+    
+    background: url("img/buttons/button-orange.png") no-repeat ;
+    background-size: cover;
+    border: none;
+    width: 160px;/*200, 50 is the maximum*/
+    height:40px;
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    
+    text-align: center;
+  }
+
+  .foc-button-green:HOVER {
+    opacity: 0.7;
+  }
+
+  .foc-button-green {
+    /* text-shadow: 2px 2px rgb(300, 200, 50); */
+    text-shadow: 1px 1px rgb(75,103,9);
+    
+    background: url("img/buttons/button-green.png") no-repeat ;
+    background-size: cover;
+    border: none;
+    width: 160px;
+    height:40px;
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  }
+  
+  .foc-button-blue:HOVER {
+    opacity: 0.7;
+  }
+  
+  .foc-button-blue {
+    /* text-shadow: 2px 2px rgb(300, 200, 50); */
+    text-shadow: 1px 1px rgb(10,60,105);
+
+    background: url("img/buttons/button-blue.png") no-repeat ;
+    background-size: cover;
+    border: none;
+    width: 160px;
+    height:40px;
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  }
+  
+  .foc-button-gray:HOVER {
+    opacity: 0.7;
+  }
+
+  .foc-button-gray {
+    /* text-shadow: 2px 2px rgb(300, 200, 50); */
+    text-shadow: 1px 1px rgb(33,38,42);
+    
+    background: url("img/buttons/button-gray.png") no-repeat ;
+    background-size: cover;
+    border: none;
+    width: 160px;
+    height:40px;
+    
+    padding: 1px;
+    padding-left:8px;
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  }
+
+  .foc-button-dark-01:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-01 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #D9532C;    
+/* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-02:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-02 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #D6A300;
+/* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-03:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-03 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #00A200;
+/* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-04:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-04 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #B81C46;
+/* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-05:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-05 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #5434AE;
+/* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-06:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-06 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #853B80;
+    /* border-radius: 8px;    */
+  }
+
+  .foc-button-dark-07:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-07 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #902020;
+    /* border-radius: 8px;    */
+  }
+
+  .foc-button-orange:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-orange {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    font-size: 17px;
+    text-align: center;
+  
+    background: #FA9600;
+    /* border-radius: 8px;    */
+  }
+
+  .foc-background-01:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-01 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #D9532C;    
+  }
+
+  .foc-background-02:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-02 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #D6A300;
+  }
+
+  .foc-button-dark-03:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-03 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #00A200;
+  }
+
+  .foc-background-04:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-button-dark-04 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #B81C46;
+  }
+
+  .foc-background-05:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-05 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #5434AE;
+  }
+
+  .foc-background-06:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-06 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #853B80;
+  }
+
+  .foc-background-07:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-07 {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #902020;
+  }
+
+  .foc-background-orange:HOVER {
+    opacity: 0.9;
+  }
+
+  .foc-background-orange {
+    border: none;
+
+    font-family: 'Raleway', sans-serif;
+    color: white;
+    text-align: center;
+  
+    background: #FA9600;
+  }
+
+  .foc-button-html {
+    margin:0px;
+    padding:0px;
+    spacing:false;
+    line-height: 2px;
+    /*height=200px;*/
+    /*background: #853B80;*/
+  }
+  /*
+  .v-button-caption-foc-button-html{
+    color:blue;
+    line-height: 2px;
+  }
+  
+  .v-button-wrap-foc-button-html{
+    color:blue;
+    line-height: 2px;
+  }
+  
+  .v-button-foc-button-html{
+    color:blue;
+    line-height: 2px;
+  }
+  */
+  
+  .ganttMaterialTable .v-table-row, .v-table-row-odd{
+    height: 30px;
+    max-height: 30px;
+  }
+  
+  .ganttMaterialTable .v-table-cell-content{
+    height: 29px;
+    max-height: 29px;
+  }
+  
+  .ganttMaterialTable .v-table-header-cell {
+    height: 42px; 
+    width:100%
+   }
+   
+  .ganttMaterialTable .v-table-header {
+    height: 42px;
+   }
+
+  .foc-COVERBANNER{
+    background-image: url("img/coverbanner.png");
+    background-size: 851px 315px;
+  }
+
+  /*Tree Table Coloring*/
+  .v-table-row-Level1 {
+    background-color: rgb(166, 193, 221);
+  }
+  
+  .v-table-row-Level2 {
+    background-color: rgb(204, 227, 255);
+  }
+  
+  .v-table-row-Level3 {
+    background-color: rgb(214, 255, 176);
+  }
+  
+  .v-table-row-Level4 {
+    background-color: rgb(230, 213, 202);
+  }
+  
+  .v-table-row-Level5 {
+    background-color: rgb(255, 235, 155);
+  }
+  
+  .v-table-row-Leaf {
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .v-table-row-LeafOdd {
+    background-color: rgb(240, 240, 240);
+  }
+  
+  .v-table-row-Dull {
+    background-color: rgb(150, 150, 130);
+  }
+  
+  .v-label-Level1 {
+    background-color: rgb(166, 193, 221);
+  }
+  
+  .v-label-Level2 {
+    background-color: rgb(204, 227, 255);
+  }
+  
+  .v-label-Level3 {
+    background-color: rgb(214, 255, 176);
+  }
+  
+  .v-label-Level4 {
+    background-color: rgb(230, 213, 202);
+  }
+  
+  .v-label-Level5 {
+    background-color: rgb(255, 235, 155);
+  }
+  
+  .v-label-Leaf {
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .v-verticallayout-Level1 {
+    background-color: rgb(166, 193, 221);
+  }
+  
+  .v-verticallayout-Level2 {
+    background-color: rgb(204, 227, 255);
+  }
+  
+  .v-verticallayout-Level3 {
+    background-color: rgb(214, 255, 176);
+  }
+  
+  .v-verticallayout-Level4 {
+    background-color: rgb(230, 213, 202);
+  }
+  
+  .v-verticallayout-Level5 {
+    background-color: rgb(255, 235, 155);
+  }
+  
+  .v-verticallayout-Leaf {
+    background-color: rgb(255, 255, 255);
+  }
+  
+  .focLinkInTable{
+    height: 20px;  
+  }  
+  
+  .foc-cityOrange{
+    background-image: url("customimg/barmaja/city_orange.jpg");
+    background-size: 1311px 245px;
+    opacity: 0.2;
+  }
+  
+  .foc-noOpacity{
+    color: white;
+    opacity:1;
+  }
+
+  .foc-ImageField{
+    text-decoration: none;
+    /*background-color: rgb(200, 200, 200);
+    border:1px solid;  
+    border-radius:5px;*/
+  }
+
+  .foc-validationHelpOn{
+    background-color: orange;
+  }
+  
+  .v-contexthelp-bubble .popupContent .helpText {
+    border: 10px solid orange;
+  }
+  
+  /*
+  Calendar Events
+  */
+  .v-calendar .v-calendar-event-1-all-day, .v-calendar .v-calendar-event-1 {
+		background-color: #D9532C;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+  .v-calendar .v-calendar-event-100-all-day, .v-calendar .v-calendar-event-100 {
+		background-color: #F9734C;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-2-all-day, .v-calendar .v-calendar-event-2 {
+		background-color: #D6A300;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+	.v-calendar .v-calendar-event-200-all-day, .v-calendar .v-calendar-event-200 {
+		background-color: #F6C320;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-3-all-day, .v-calendar .v-calendar-event-3 {
+		background-color: #00A200;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+	.v-calendar .v-calendar-event-300-all-day, .v-calendar .v-calendar-event-300 {
+		background-color: #20C220;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-4-all-day, .v-calendar .v-calendar-event-4 {
+		background-color: #B81C46;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+	.v-calendar .v-calendar-event-400-all-day, .v-calendar .v-calendar-event-400 {
+		background-color: #D83C66;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-5-all-day, .v-calendar .v-calendar-event-5 {
+		background-color: #5434AE;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+	.v-calendar .v-calendar-event-500-all-day, .v-calendar .v-calendar-event-500 {
+		background-color: #7454CE;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-6-all-day, .v-calendar .v-calendar-event-6 {
+		background-color: #853B80;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+
+	.v-calendar .v-calendar-event-600-all-day, .v-calendar .v-calendar-event-600 {
+		background-color: #A55BA0;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+	
+	.v-calendar .v-calendar-event-7-all-day, .v-calendar .v-calendar-event-7 {
+		background-color: #902020;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+	}
+	
+	.v-calendar .v-calendar-event-700-all-day, .v-calendar .v-calendar-event-700 {
+		background-color: #B04040;
+		font-size: 16px;
+		color:  white;
+		height: 20px;
+		border: thin;
+	}
+
+/*	
+  .v-tabsheet-content {
+    min-height: 500px;
+  }
+		
+	.v-tabsheet-tabs {
+		text-align: right !important;
+    direction: rtl !important;
+    float: right !important;
+	}
+		
+  .v-tabsheet-tabitem .v-captiontext {
+		font-weight: bold;
+		font-size: 18px;
+		height: 35px;		
+		min-width:160px;
+		background-color:#788CA0;
+		border-top-left-radius: 2px; 
+		border-top-right-radius: 2px;
+	}
+*/
+
+  .v-tabsheet-content {
+	  /*min-height: 500px;*/
+  }
+		
+	.v-tabsheet-tabs {
+		text-align: left !important;
+    direction: ltr !important;
+    float: left !important;
+	}
+		
+  .v-tabsheet-tabitem {
+		font-weight: bold;
+		font-size: 13px;
+		height: 35px;		
+		min-width:70px;
+		background-color:#788CA0;
+		border-top-left-radius: 3px; 
+		border-top-right-radius: 3px;
+		margin: 2px;
+	}
+	
+	.v-tabsheet-tabitem .v-captiontext {
+		font-weight: bold;
+		font-size: 13px;
+		padding: 2px;
+	}
+	
+	.foc-cellComment-left {
+    border-style: solid;
+    border-top-width: 0px;
+    border-right-width: 0px;
+	  border-bottom-width: 0px;
+    border-left-width: 4px;
+	  border-left-color: #0c0;
+	}
+	
+	.foc-cellComment-right {
+    border-style: solid;
+    border-top-width: 0px;
+    border-right-width: 0px;
+	  border-bottom-width: 0px;
+    border-left-width: 4px;
+	  border-left-color: #0c0;
+	}
+}

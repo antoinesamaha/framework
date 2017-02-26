@@ -1,0 +1,7 @@
+@import "addons.scss";
+@import "focVaadinTheme.scss";
+
+.focVaadinTheme {
+   @include addons;
+   @include focVaadinTheme;
+}

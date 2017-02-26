@@ -1,0 +1,44 @@
+/* This file is automatically managed and will be overwritten from time to time. */
+/* Do not manually edit this file. */
+
+/* Import and include this mixin into your project theme to include the addon themes */
+@mixin everpro_addons {
+	
+	.foc-magFont{
+    color: black;
+    line-height: 90%;
+    font-size: 8px;
+    font-family: arial, helvetica, sans-serif;	
+	}
+	
+  .foc-PRF{
+    background-image: url("customimg/mag/prfNew.png");
+    background-size: 1123px 794px;
+  }
+
+  .foc-CSQ{
+    background-image: url("customimg/mag/CSQ.png");
+    background-size: 794px 1123px;
+  }
+  
+  .foc-fontCSQSupplier{
+    color: black;
+    /*line-height: 90%;*/
+    font-size: 10px;
+    font-weight: bold;
+    font-family: arial, helvetica, sans-serif;  
+  }
+
+  .foc-fontCSQComment{
+    color: black;
+    line-height: 95%;
+    font-size: 12px;
+    font-family: arial, helvetica, sans-serif;  
+  }
+  
+  .foc-PO{
+    background-image: url("customimg/mag/PO_10Lines.png");
+    background-size: 794px 1123px;
+  }
+}
+
