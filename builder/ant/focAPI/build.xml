@@ -1,0 +1,42 @@
+<!--
+    =====================================================
+												  	EVERPRO API
+    =====================================================
+  -->
+	
+<project name="focAPI" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focAPI.buildDir}" />
+		<mkdir dir="${focAPI.buildDir}" />
+		<mkdir dir="${focAPI.classDir}" />
+		<mkdir dir="${focAPI.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focAPI.srcDir}" destdir="@{tarDir}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focAPI.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focAPI.classDir}" destfile="${focAPI.jarFile}" >
+		  <fileset dir="${focAPI.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	     </fileset>
+	  </jar>		  
+	</target>
+</project>

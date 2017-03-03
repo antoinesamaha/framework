@@ -1,0 +1,10 @@
+<project name="focWebServer">
+	<property name="focWebServer" value="focWebServer"/>
+	<property name="focWebServer.prjDir" value="${srcRoot}/focWebServer"/>
+	<property name="focWebServer.srcDir" value="${focWebServer.prjDir}/src"/>
+	<property name="focWebServer.buildDir" value="${exeRoot}/${appSubDir}/${focWebServer}/${buildSubDir}"/>
+	<property name="focWebServer.classDir" value="${focWebServer.buildDir}/${classSubDir}"/>
+	<property name="focWebServer.jarDir" value="${focWebServer.buildDir}/${jarSubDir}"/>
+	<property name="focWebServer.jarFile" value="${focWebServer.buildDir}/${jarSubDir}/01b-${focWebServer}.jar"/>
+	<property name="focWebServer.ojarName" value="${focWebServer}.jar"/>
+</project>

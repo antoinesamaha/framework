@@ -1,0 +1,44 @@
+<!--
+    =====================================================
+												  	EVERPRO SHARED
+    =====================================================
+  -->
+	
+<project name="focVaadinTheme" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focVaadinTheme.buildDir}" />
+		<mkdir dir="${focVaadinTheme.buildDir}" />
+		<mkdir dir="${focVaadinTheme.classDir}" />
+		<mkdir dir="${focVaadinTheme.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focVaadinTheme.srcDir}" destdir="@{tarDir}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+				  <pathelement path="${vaadinJAR1}"/>
+				  <pathelement path="${vaadinJAR2}"/>
+					<pathelement path="${vaadinJAR3}"/>
+					<pathelement path="${vaadinLib1}"/>
+					<pathelement path="${vaadinLib2}"/>
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focVaadinTheme.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar destfile="${focVaadinTheme.jarFile}" >
+			<fileset dir="${focVaadinTheme.classDir}"/>
+			<fileset dir="${focVaadinTheme.prjDir}" excludes="bin/** .settings/** src/** .classpath .project"/>
+		</jar>
+		<copy file="${focVaadinTheme.jarFile}" tofile="C:/eclipseworkspace/_resources/vaadin/vaadin-production/theme/${focVaadinTheme.ojarName}" />
+	</target>
+</project>

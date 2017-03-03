@@ -1,0 +1,10 @@
+<project name="focVaadinTheme">
+	<property name="focVaadinTheme" value="focVaadinTheme"/>
+	<property name="focVaadinTheme.prjDir" value="${srcRoot}/focVaadinTheme"/>
+	<property name="focVaadinTheme.srcDir" value="${focVaadinTheme.prjDir}/src"/>
+	<property name="focVaadinTheme.buildDir" value="${exeRoot}/${appSubDir}/${focVaadinTheme}/${buildSubDir}"/>
+	<property name="focVaadinTheme.classDir" value="${focVaadinTheme.buildDir}/${classSubDir}"/>
+	<property name="focVaadinTheme.jarDir" value="${focVaadinTheme.buildDir}/${jarSubDir}"/>
+	<property name="focVaadinTheme.jarFile" value="${focVaadinTheme.buildDir}/${jarSubDir}/01b-${focVaadinTheme}.jar"/>
+	<property name="focVaadinTheme.ojarName" value="${focVaadinTheme}.jar"/>
+</project>

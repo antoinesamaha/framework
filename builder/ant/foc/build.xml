@@ -1,0 +1,63 @@
+<!--
+    =====================================================
+												  	FOC
+    =====================================================
+  -->
+<project name="foc" default="makeJar">
+	
+	<property name="foc.localClassDir" value="${foc.classDir}"></property>
+	
+	<target name="prepareDir">
+		<delete dir="${foc.buildDir}" />
+		<mkdir dir="${foc.buildDir}" />
+		<mkdir dir="${foc.classDir}" />
+		<mkdir dir="${foc.jarDir}" />
+	</target>
+
+	<target name="compile_internal" depends="prepareDir">
+		<compileMacro tarDir="${foc.classDir}"/>
+	</target>
+
+	<target name="compileExternal" depends="prepareDir">
+		<compileMacro tarDir="${foc.localClassDir}"/>
+	</target>
+	
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${foc.srcDir}" destdir="@{tarDir}" deprecation="on" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" > <!-- target="1.6" encoding="8859_1"  -->
+				<classpath>
+					<!-- <pathelement location="lib/"/> -->
+					<pathelement path="${focAPI.jarFile}/"/>
+					<pathelement path="${focShared.jarFile}/"/>
+					<pathelement path="${java.class.path}/"/>
+					<pathelement path="${JasperReportDir}/${JasperReportFile1}/"/>
+					<pathelement path="${JasperReportDir}/${JasperReportFile2}/"/>
+					<pathelement path="${JasperReportDir}/${JasperReportFile3}/"/>
+					<pathelement path="${TomcatDir}/${TomcatFile1}/"/>
+					<pathelement path="${mailapiJAR}"/>
+					<pathelement path="${vaadinJAR1}"/>
+					<pathelement path="${vaadinJAR2}"/>
+          <pathelement path="${vaadinLib1}/"/>
+					<pathelement path="${vaadinAddOnJar.EverproTreeGrid}/"/>
+					<pathelement path="${smtpJAR}/"/>
+					<pathelement path="${wibuJar}"/>
+					<pathelement path="${junitJAR}"/>
+					<pathelement path="${wibuJar}/"/>					
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+	
+	<target name="makeJar" depends="compile_internal">
+		<jar basedir="${foc.classDir}" destfile="${foc.jarFile}" >
+	     <fileset dir="${foc.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	     </fileset>		    
+		</jar>
+	</target>
+</project>

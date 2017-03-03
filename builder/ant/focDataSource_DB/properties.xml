@@ -1,0 +1,10 @@
+<project name="focDataSource_DB">
+	<property name="focDataSource_DB" value="focDataSource_DB"/>
+	<property name="focDataSource_DB.prjDir" value="${srcRoot}/focDataSource_DB"/>
+	<property name="focDataSource_DB.srcDir" value="${focDataSource_DB.prjDir}/src"/>
+	<property name="focDataSource_DB.buildDir" value="${exeRoot}/${appSubDir}/${focDataSource_DB}/${buildSubDir}"/>
+	<property name="focDataSource_DB.classDir" value="${focDataSource_DB.buildDir}/${classSubDir}"/>
+	<property name="focDataSource_DB.jarDir" value="${focDataSource_DB.buildDir}/${jarSubDir}"/>
+	<property name="focDataSource_DB.jarFile" value="${focDataSource_DB.buildDir}/${jarSubDir}/01b-${focDataSource_DB}.jar"/>
+	<property name="focDataSource_DB.ojarName" value="${focDataSource_DB}.jar"/>
+</project>

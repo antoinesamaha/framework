@@ -1,0 +1,12 @@
+<project name="focFramework">
+	<property name="focFramework" value="focFramework"/>
+	<property name="focFramework.prjDir" value="${srcRoot}/focFramework"/>
+	<property name="focFramework.srcDir" value="${focFramework.prjDir}/src"/>
+	<property name="focFramework.buildDir" value="${exeRoot}/${appSubDir}/${focFramework}/${buildSubDir}"/>
+	<property name="focFramework.classDir" value="${focFramework.buildDir}/${classSubDir}"/>
+	<property name="focFramework.jarDir" value="${focFramework.buildDir}/${jarSubDir}"/>
+	<property name="focFramework.jarFile" value="${focFramework.buildDir}/${jarSubDir}/01b-${focFramework}.jar"/>
+	<property name="focFramework.ojarName" value="${focFramework}.jar"/>
+	<property name="focFramework.exeDir" value="${exeRoot}/${appSubDir}/${focFramework}"/>	
+	<property name="focFramework.packDir" value="${focFramework.exeDir}/${versionSubDir}"/>	
+</project>

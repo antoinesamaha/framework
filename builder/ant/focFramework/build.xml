@@ -1,0 +1,69 @@
+<!--
+    =====================================================
+												  	focFramework
+    =====================================================
+  -->
+	
+<project name="focFramework" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focFramework.buildDir}" />
+		<mkdir dir="${focFramework.buildDir}" />
+		<mkdir dir="${focFramework.classDir}" />
+		<mkdir dir="${focFramework.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focFramework.srcDir}" destdir="@{tarDir}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+					<pathelement path="${foc.jarFile}/"/>
+					<pathelement path="${focAPI.jarFile}/"/>
+					<pathelement path="${focWebServer.jarFile}/"/>
+					<pathelement path="${focShared.jarFile}/"/>
+					<pathelement path="${basics.jarFile}/"/>
+					<pathelement path="${budget.jarFile}/"/>
+					<pathelement path="${scheduler.jarFile}/"/>
+					<pathelement path="${everpro_main.jarFile}/"/>
+					<pathelement path="${GWTDir}/${GWTFile1}"/>
+					<pathelement path="${vaadinJAR1}"/>
+				  <pathelement path="${vaadinJAR2}"/>
+					<pathelement path="${vaadinJAR3}"/>
+					<pathelement path="${vaadinLib1}"/>
+					<pathelement path="${vaadinLib2}"/>
+					<pathelement path="${vaadinAddOnJar.DnD}"/>
+					<pathelement path="${vaadinAddOnJar.EverproTreeGrid}"/>
+					<pathelement path="${vaadinAddOnJar.Gantt}"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile1}/"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile2}/"/>
+					
+					<pathelement path="${TomcatDir}/${TomcatFile1}"/>
+					<pathelement path="${TomcatDir}/${TomcatFile2}"/>
+					<pathelement path="${TomcatDir}/${TomcatFile3}"/>
+					<pathelement path="${TomcatDir}/${TomcatFile4}"/>
+					<pathelement path="${JasperReportDir}/${JasperReportFile4}"/>
+					<pathelement path="${mailapiJAR}"/>
+					<pathelement path="${jsonJAR}"/>
+					<pathelement path="${jsonJAR2}"/>         
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focFramework.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focFramework.classDir}" destfile="${focFramework.jarFile}">
+			<fileset dir="${focFramework.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+         </patternset>
+			</fileset>
+		</jar>
+	</target>
+</project>

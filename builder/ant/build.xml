@@ -1,0 +1,466 @@
+<!--
+    =====================================================
+												  	MAIN
+    =====================================================
+  -->
+<project name="foc" default="full">
+	<property name="jre" value="true" />
+	<property name="drive_workspace" value="c" />
+	<property name="drive_java" value="c" />
+	<property name="eclipseworkspace" value="eclipseworkspace_everpro" />
+	<property name="clientplugin_dir" value="c3plugin" />
+	<property name="everpro_main_dir" value="everpro_main" />
+  <property name="customEverproWebServer.SpecificDir" value="customEverproWebServer" />
+
+	<property name="compile_debug_true" value="true" />
+	<property name="compile_debug_lines" value="lines,vars,source" />
+
+	<!--property name="jdkVersion" value="1.6.0_03" />
+  <property name="jdkDirName" value="jdk${jdkVersion}" />
+  <property name="jdkFullPath" value="C:/Program Files/java/${jdkDirName}" />
+  <property name="jreDirName" value="jre${jdkVersion}" />
+  <property name="jreFullPath" value="${jdkFullPath}/jre" />
+  <property name="jreFullPathWithOutRoot" value="java/${jdkDirName}/jre" /-->
+
+	<property name="exeRoot" value="${drive_java}:/exe" />
+	<property name="srcRoot" value="${drive_workspace}:/${eclipseworkspace}" />
+	<!-- <property name="resources" value="${drive_workspace}:/eclipseworkspace/_resources" /> -->
+	<property name="resources" value="${drive_java}:/eclipseworkspace/_resources" />
+	<property name="appSubDir" value="app" />
+	<property name="buildSubDir" value="build" />
+	<property name="jarSubDir" value="jar" />
+	<property name="classSubDir" value="class" />
+	<property name="versionSubDir" value="pack" />
+
+	<property name="war_name"    value="acec" />
+	<property name="war_packDir" value="${exeRoot}/app/everproWar/${war_name}" />
+	<property name="war_ftpSourceDir" value="${drive_workspace}:/prod/cloudStart/ftpSource/everpro/versions/standard/war-0001" />
+		
+	<!-- Mysql properties -->
+	<property name="mysqlJarDir" value="${resources}/jar" />
+	<property name="mysqlJarName" value="mysql-connector-java-3.0.14-production-bin.jar" />
+	<property name="mysqlJarName_5.0.7" value="mysql-connector-java-5.1.38-bin.jar" />
+
+	<!-- Oracle properties -->
+	<property name="oracleJarDir" value="${resources}/jar" />
+	<property name="oracleJarName" value="ojdbc14.jar" />
+
+	<!-- SQL server properties -->
+	<property name="sqlJarDir" value="${resources}/jar" />
+	<property name="sqlJarName" value="jtds-1.2.jar" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+  <!-- JCraft FTP SSH -->
+  <property name="jschJarFile1" value="${resources}/jCraft/jsch-0.1.51.jar" />
+	
+	<!-- COMM API -->
+	<property name="commApiDir" value="${resources}/jar" />
+
+	<!-- JUNIT API -->
+	<property name="junitJAR" value="${resources}/jar/junit-4.1.jar" />
+
+  <!-- PDFBox -->
+  <property name="pdfJAR" value="${resources}/pdfBox/pdfbox-app-2.0.1.jar" />
+	
+  <!-- EXCEL Export vaadin -->
+  <property name="excelExportJAR" value="${resources}/tableExcelExport/TableExport-1.4.0.jar" />
+
+	<!-- AWS JAR -->
+	<property name="awsJAR.Dir" value="${resources}/aws" />
+	<property name="awsJAR.FileName1" value="aws-java-sdk-1.10.56.jar" />
+	<property name="awsJAR1" value="${awsJAR.Dir}/${awsJAR.FileName1}" />
+	
+  <!-- AWS COMMONS JAR -->
+  <property name="awsCommonsJAR.Dir" value="${resources}/aws/commons-codec-1.3" />
+	<property name="awsCommonsJAR.FileName1" value="commons-codec-1.3.jar" />
+	<property name="awsCommonsJAR1" value="${awsCommonsJAR.Dir}/${awsCommonsJAR.FileName1}" />
+
+  <!-- COMMONS IO JAR -->
+  <property name="commonsIOJAR.Dir" value="${resources}/commons-io-2.4" />
+  <property name="commonsIOJAR.FileName1" value="commons-io-2.4.jar" />
+  <property name="commonsIOJAR1" value="${commonsIOJAR.Dir}/${commonsIOJAR.FileName1}" />
+	
+	 <!-- BARCODE JAR -->
+	<property name="BarcodeJAR.Dir" value="${resources}/barcode" />
+	<property name="BarcodeJAR.FileName1" value="barcode4j-2.1.jar" />
+	<property name="BarcodeJAR.FileName2" value="avalon-framework-4_2_0.jar" />
+	<property name="BarcodeJAR1" value="${BarcodeJAR.Dir}/${BarcodeJAR.FileName1}" />
+	<property name="BarcodeJAR2" value="${BarcodeJAR.Dir}/${BarcodeJAR.FileName2}" />
+	
+	<!-- VAADIN JAR -->
+	<property name="vaadinJAR.Dir" value="${resources}/vaadin/vaadin-production" />
+	<property name="vaadinOtherLib.Dir" value="${vaadinJAR.Dir}/lib" />
+	<property name="vaadinAddOn.Dir" value="${vaadinJAR.Dir}/addon" />
+	
+	<property name="vaadinJAR.FileName1" value="vaadin-server.jar" />
+	<property name="vaadinJAR.FileName2" value="vaadin-shared.jar" />
+	<property name="vaadinJAR.FileName3" value="vaadin-themes.jar" />
+	
+	<property name="vaadinOtherLib.FileName1" value="jsoup-1.8.3.jar" />
+	<property name="vaadinOtherLib.FileName2" value="vaadin-client-compiler-deps-1.2.0.jar" />
+	<property name="vaadinOtherLib.FileName3" value="ant-1.6.5.jar" />
+	
+	<property name="vaadinAddOn.DnD" value="dragdroplayouts-1.3.2.jar" />
+	<property name="vaadinAddOn.EverproTreeGrid" value="everproTreeGrid-1.2.0.jar" />
+	<property name="vaadinAddOn.ExpandingTextArea" value="expandingtextarea-1.0.1.jar" />
+	<property name="vaadinAddOn.Gantt" value="gantt-addon-0.9.0.jar" />
+	<property name="vaadinAddOn.ContextHelp" value="contexthelp-2.0.1.jar" />
+	<property name="vaadinAddOn.JFreeChartWrapper" value="jfreechartwrapper-3.0.2.jar" />
+	
+	<property name="vaadinJAR1" value="${vaadinJAR.Dir}/${vaadinJAR.FileName1}" />
+	<property name="vaadinJAR2" value="${vaadinJAR.Dir}/${vaadinJAR.FileName2}" />
+	<property name="vaadinJAR3" value="${vaadinJAR.Dir}/${vaadinJAR.FileName3}" />
+	
+	<property name="vaadinLib1" value="${vaadinOtherLib.Dir}/${vaadinOtherLib.FileName1}" />
+	<property name="vaadinLib2" value="${vaadinOtherLib.Dir}/${vaadinOtherLib.FileName2}" />
+  <property name="vaadinLib3" value="${vaadinOtherLib.Dir}/${vaadinOtherLib.FileName3}" />
+	
+	<property name="vaadinAddOnJar.DnD" value="${vaadinAddOn.Dir}/${vaadinAddOn.DnD}" />
+	<property name="vaadinAddOnJar.EverproTreeGrid" value="${vaadinAddOn.Dir}/${vaadinAddOn.EverproTreeGrid}" />
+	<property name="vaadinAddOnJar.ExpandingTextArea" value="${vaadinAddOn.Dir}/${vaadinAddOn.ExpandingTextArea}" />
+	<property name="vaadinAddOnJar.Gantt" value="${vaadinAddOn.Dir}/${vaadinAddOn.Gantt}" />
+	<property name="vaadinAddOnJar.ContextHelp" value="${vaadinAddOn.Dir}/${vaadinAddOn.ContextHelp}" />
+	<property name="vaadinAddOnJar.JFreeChartWrapper" value="${vaadinAddOn.Dir}/${vaadinAddOn.JFreeChartWrapper}" />
+	
+  <!-- JSON -->
+  <property name="jsonJAR" value="${vaadinOtherLib.Dir}/json-0.0.20080701.jar" />
+  <property name="jsonJAR2" value="${resources}/json/json-simple-1.1.1.jar" />
+
+	<!-- QRCode JAR -->
+	<property name="qrCodeJAR.Dir" value="${resources}/qrCode" />
+	<property name="qrCodeJAR.FileName1" value="zxing-core-1.7.jar" />
+	<property name="qrCodeJAR.FileName2" value="zxing-j2se-1.7.jar" />
+	<property name="qrCodeJAR.FileName3" value="qrgen-1.2.jar/qrgen-1.2.jar" />
+	<property name="qrCodeJAR1" value="${qrCodeJAR.Dir}/${qrCodeJAR.FileName1}" />
+	<property name="qrCodeJAR2" value="${qrCodeJAR.Dir}/${qrCodeJAR.FileName2}" />
+	<property name="qrCodeJAR3" value="${qrCodeJAR.Dir}/${qrCodeJAR.FileName3}" />
+	
+  <!-- VAADIN CHRAT ADDON -->
+  <!-- property name="vaadinChartJAR.Dir" value="${resources}/vaadin/chart" />
+  <property name="vaadinChartJAR.FileName1" value="commons-io-2.2.jar" />
+  <property name="vaadinChartJAR.FileName2" value="gson-2.2.jar" />
+  <property name="vaadinChartJAR.FileName3" value="vaadin-charts-1.0.1.jar" />
+  <property name="vaadinChartJAR1" value="${vaadinChartJAR.Dir}/${vaadinChartJAR.FileName1}" />
+  <property name="vaadinChartJAR2" value="${vaadinChartJAR.Dir}/${vaadinChartJAR.FileName2}" />
+  <property name="vaadinChartJAR3" value="${vaadinChartJAR.Dir}/${vaadinChartJAR.FileName3}" / -->
+	
+	<!-- JasperReport Directory-->
+	<property name="JasperReportDir" value="${resources}/jasper" />
+	<property name="JasperReportFile1" value="jasperreports-6.2.2.jar" />
+	<property name="JasperReportFile2" value="commons-logging-1.1.jar" />
+	<property name="JasperReportFile3" value="commons-collections-3.2.1.jar" />
+	<property name="JasperReportFile4" value="iText-2.1.7.jar" />
+	<property name="JasperReportFile5" value="poi-3.7-20101029.jar" />
+	<property name="JasperReportFile6" value="commons-beanutils-1.8.2.jar" />
+	<property name="JasperReportFile7" value="commons-digester-2.1.jar" />
+
+  <!-- WEB SERVICES Directory-->
+	<property name="WebServicesDir" value="${resources}/webservices" />
+	<property name="wsFile1" value="axis.jar" />
+	<property name="wsFile2" value="commons-logging.jar" />
+	<property name="wsFile3" value="commons-discovery-0.2.jar" />
+	<property name="wsFile4" value="jaxrpc.jar" />
+	<property name="wsFile5" value="saaj.jar" />
+	<property name="wsFile6" value="wsdl4.jar" />
+
+	<!-- Google Web Toolkit GWT -->
+	<property name="GWTDir" value="${resources}/gwt" />
+	<property name="GWTFile1" value="gwt-servlet.jar" />
+
+	<!-- JavaMail Library -->
+	<property name="JavaMailDir" value="${resources}/javamail-1.4.4" />
+	<property name="mailapiJAR" value="${JavaMailDir}/mailapi.jar" />
+	<property name="smtpJAR" value="${JavaMailDir}/smtp.jar" />
+
+	<!-- Apache - Tomcat -->
+	<property name="TomcatDir" value="${resources}/tomcat" />
+	<property name="TomcatFile1" value="servlet-api.jar" />
+	<property name="TomcatFile2" value="tomcat-api.jar" />
+	<property name="TomcatFile3" value="tomcat-coyote.jar" />
+	<property name="TomcatFile4" value="tomcat-util.jar" />
+
+	<!-- POI Directory-->
+	<property name="POIDir" value="${resources}/jar/poi" />
+	<property name="POIFile1" value="poi.jar" />
+	<property name="POIFile2" value="poi-scratchpad.jar" />
+  <property name="POIFile3" value="poi-ooxml.jar" />
+	<property name="POIFile4" value="ooxml-schemas-1.1.jar" />
+	<property name="POIFile5" value="xmlbeans-2.3.0.jar" />
+	<!--
+	<property name="POIFile4" value="poi-scratchpad.jar" />
+	<property name="POIFile5" value="poi-scratchpad.jar" />
+	<property name="POIFile6" value="poi-scratchpad.jar" />
+	-->
+	<!--property name="POIFile1" value="poi-3.0.1-FINAL-20070705.jar"/>
+  <property name="POIFile2" value="poi-scratchpad-3.0.1-FINAL-20070705.jar"/-->
+
+	<!-- eclipse Directory-->
+	<property name="eclipseDir" value="${resources}/eclipse" />
+	<property name="eclipseFile1" value="org.eclipse.jdt.core.manipulation_1.0.1.r321_v20060721.jar" />
+	<property name="eclipseFile2" value="org.eclipse.jdt.core_3.2.3.v_686_R32x.jar" />
+
+	<!-- jFreeChart Directory-->
+	<property name="jFreeChartDir" value="${resources}/jfreeChart" />
+	<property name="jFreeChartFile1" value="jfreechart-1.0.19.jar" />
+	<property name="jFreeChartFile2" value="jcommon-1.0.17.jar" />
+	<property name="jFreeChartFile3" value="baselet_batik-awt-util.jar" />
+	<property name="jFreeChartFile4" value="batik-svggen.jar" />
+	<property name="jFreeChartFile5" value="batik-util.jar" />
+
+	<property name="wibuJar.Dir" value="${resources}/jar/wibu" />
+	<property name="wibuJar.File" value="CodeMeter.jar" />
+	<property name="wibuJar" value="${wibuJar.Dir}/${wibuJar.File}" />
+	<!--property name="wibu.FirmCode" value="100497"/-->
+	<property name="wibu.FirmCode" value="100497" />
+	<property name="wibuProtect" value="true" />
+
+	<property name="global.signAlias" value="01Barmaja" />
+	<property name="global.signStorepass" value="01Barmaja10" />
+
+	<property name="obfuscate" value="true" />
+
+	<import file="macros.xml" />
+	<import file="obfuscation.xml" />
+
+	<import file="foc/properties.xml" />
+	<import file="focOfficeLink/properties.xml" />
+	<import file="devtask/properties.xml" />
+	<import file="focAPI/properties.xml" />
+	<import file="focShared/properties.xml" />
+	<import file="focVaadinTheme/properties.xml" />
+	<import file="focDataSource_DB/properties.xml" />
+	<import file="focDataSource/properties.xml" />
+	<import file="focWebServer/properties.xml" />
+	<import file="focFramework/properties.xml" />
+	  
+	<!--
+      Everpro WEB
+      -->
+	<target name="focFramework">
+		<!-- SHOULD BE HERE -->
+		<preparePackDir packDir="${focFramework.packDir}" />
+
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${focAPI.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${focShared.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${focVaadinTheme.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${foc.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${focDataSource_DB.prjDir}" foc-app="foc" web="false" />
+
+		<ant dir="${focAPI}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focShared}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focVaadinTheme}" antfile="build.xml" target="makeJar" />
+		<ant dir="${foc}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focDataSource_DB}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focOfficeLink}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focWebServer}" antfile="build.xml" target="makeJar" />
+
+		<copy file="${foc.jarFile}" todir="${focFramework.buildDir}/jar" />
+		<copy file="${focDataSource_DB.jarFile}" tofile="${focFramework.buildDir}/jar/${focDataSource.jarFileName}" />
+		<copy file="${focOfficeLink.jarFile}" todir="${focFramework.buildDir}/jar" />
+		<copy file="${focWebServer.jarFile}" todir="${focFramework.buildDir}/jar" />
+		
+		<doObfuscateDir jarDir="${focFramework.buildDir}/jar" />
+
+		<copy file="${focAPI.jarFile}" tofile="${focFramework.buildDir}/jar/${focAPI.ojarName}" />
+		<copy file="${focShared.jarFile}" tofile="${focFramework.buildDir}/jar/${focShared.ojarName}" />
+		<copy file="${focVaadinTheme.jarFile}" tofile="${focFramework.buildDir}/jar/${focVaadinTheme.ojarName}" />
+		
+		<!-- Copy external Jars in the same ext library making them ready to be copied to web versions-->
+		<!-- This is not needed for the compile -->
+    <copy file="${vaadinAddOnJar.DnD}" tofile="${focFramework.packDir}/ext/${vaadinAddOn.DnD}" />
+    <copy file="${vaadinJAR1}" tofile="${focFramework.packDir}/ext/${vaadinJAR.FileName1}" />
+    <copy file="${vaadinJAR2}" tofile="${focFramework.packDir}/ext/${vaadinJAR.FileName2}" />
+    <copy file="${vaadinLib1}" tofile="${focFramework.packDir}/ext/${vaadinOtherLib.FileName4}" />
+    <copy file="${vaadinLib3}" tofile="${focFramework.packDir}/ext/${vaadinOtherLib.FileName3}" />
+    	
+    <copy file="${vaadinLib3}" tofile="${focFramework.packDir}/ext/${vaadinOtherLib.FileName3}" />
+		
+		<copy todir="${focFramework.packDir}/jar">
+			<fileset dir="${focFramework.buildDir}/jar">
+				<exclude name="01b-*.jar" />
+			</fileset>
+		</copy>
+
+		<!--zip 
+		  destfile="${everproWebServer.packDir}/everpro.war" 
+			  basedir="${everproWebServer.prjDir}/WebContent"
+				excludes="WEB-INF/lib/*.jar"
+			/-->
+	</target>
+
+	<!-- Everpro WEB -->
+	<target name="Everpro_WAR"> <!-- depends="EverproWebServer" -->
+    <!-- SHOULD BE HERE -->
+    <preparePackDir packDir="${war_packDir}" />
+
+    <addProjectToPack packDir="${war_packDir}" projectDir="${focAPI.prjDir}" foc-app="foc" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${focShared.prjDir}" foc-app="foc" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${everproAPI.prjDir}" foc-app="foc" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${foc.prjDir}" foc-app="foc" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${scheduler.prjDir}" foc-app="app" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${basics.prjDir}" foc-app="app" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${budget.prjDir}" foc-app="app" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${everproWebServer.prjDir}" foc-app="app" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${everpro_main.prjDir}" foc-app="app" web="false" />
+    <addProjectToPack packDir="${war_packDir}" projectDir="${focDataSource_DB.prjDir}" foc-app="foc" web="false" />
+
+    <echo message="Copy WebContent from Eclipse to WAR Directory"/>
+
+		<property name="War_WebContent_Folder" value="${war_packDir}/WebContent" />
+		<property name="War_ResourceJar_Folder" value="${war_packDir}/resources" />
+
+		<copy todir="${War_WebContent_Folder}">
+      <fileset dir="${everproWebServer.prjDir}/WebContent">
+      	<exclude name="WEB-INF/lib/*.jar" />
+      	<exclude name="WEB-INF/services/**" />
+      </fileset>
+    </copy>
+		
+		<echo message="Making the resources.jar"/>
+		
+	  <property name="resource_web.jarFile" value="${War_WebContent_Folder}/WEB-INF/lib/resources_web.jar" />
+		
+		<delete file="${War_ResourceJar_Folder}/properties/config.properties"/>
+    <copy file="../configFiles/${war_name}/config.properties" tofile="${War_ResourceJar_Folder}/properties/config.properties" />
+    <jar 
+      destfile="${resource_web.jarFile}"
+      basedir="${War_ResourceJar_Folder}"
+      includes="properties/**"
+    />
+
+    <echo message="Zipping the WAR File"/>
+    
+    <zip 
+      destfile="${war_packDir}/${war_name}.war" 
+      basedir="${War_WebContent_Folder}"
+    />
+	  
+    <delete includeemptydirs="true">
+        <fileset dir="${war_ftpSourceDir}">
+		        <include name="**/*"/>
+		        <exclude name="**/resources_web/**"/>
+        </fileset>
+    </delete>
+    <copy todir="${war_ftpSourceDir}">
+      <fileset dir="${War_WebContent_Folder}">
+      	<exclude name="**/resources_web.jar" />
+      </fileset>
+    </copy>
+    
+  </target>
+	
+	
+
+
+	
+	
+	<!-- 
+	     FENIX INSPECTION
+	-->
+	
+	<target name="Fenix_Inspection">
+	
+		<!-- SHOULD BE HERE -->
+		<preparePackDir packDir="${fenix_inspection.packDir}" />
+
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${focAPI.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${focShared.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${focVaadinTheme.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${foc.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${focDataSource_DB.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${focOfficeLink.prjDir}" foc-app="foc" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${fenix_common.prjDir}" foc-app="app" web="false" />
+		<addProjectToPack packDir="${fenix_inspection.packDir}" projectDir="${fenix_inspection.prjDir}" foc-app="app" web="false" />
+		<jar 
+			destfile="${fenix_inspection.packDir}/jar/resources_web.jar"
+			basedir="${fenix_inspection.packDir}"
+			includes="properties/**"
+		/>
+    <jar 
+      destfile="${fenix_inspection.packDir}/jar/resources.jar"
+      basedir="${fenix_inspection.packDir}"
+    />
+
+		<ant dir="${focAPI}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focShared}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focVaadinTheme}" antfile="build.xml" target="makeJar" />
+		<ant dir="${foc}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focDataSource_DB}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focOfficeLink}" antfile="build.xml" target="makeJar" />
+		<ant dir="${focWebServer}" antfile="build.xml" target="makeJar" />
+		<ant dir="${fenix_common}" antfile="build.xml" target="makeJar" />
+		<ant dir="${fenix_inspection}" antfile="build.xml" target="makeJar" />
+		
+		<copy file="${foc.jarFile}" todir="${fenix_inspection.buildDir}/jar" />
+		<copy file="${focDataSource_DB.jarFile}" tofile="${fenix_inspection.buildDir}/jar/${focDataSource.jarFileName}" />
+		<copy file="${focWebServer.jarFile}" todir="${fenix_inspection.buildDir}/jar" />
+		<copy file="${focOfficeLink.jarFile}" todir="${fenix_inspection.buildDir}/jar" />
+		<copy file="${fenix_common.jarFile}" todir="${fenix_inspection.buildDir}/jar" />
+		<copy file="${fenix_inspection.jarFile}" todir="${fenix_inspection.buildDir}/jar" />
+		
+		<doObfuscateDir jarDir="${fenix_inspection.buildDir}/jar" />
+
+		<copy file="${focAPI.jarFile}" tofile="${fenix_inspection.buildDir}/jar/${focAPI.ojarName}" />
+		<copy file="${focShared.jarFile}" tofile="${fenix_inspection.buildDir}/jar/${focShared.ojarName}" />
+		<copy file="${focVaadinTheme.jarFile}" tofile="${fenix_inspection.buildDir}/jar/${focVaadinTheme.ojarName}" />
+		
+		<!-- Copy external Jars in the same ext library making them ready to be copied to web versions-->
+		<!-- This is not needed for the compile -->
+    <copy file="${vaadinAddOnJar.DnD}" tofile="${fenix_inspection.packDir}/ext/${vaadinAddOn.DnD}" />
+    <copy file="${vaadinJAR1}" tofile="${fenix_inspection.packDir}/ext/${vaadinJAR.FileName1}" />
+    <copy file="${vaadinJAR2}" tofile="${fenix_inspection.packDir}/ext/${vaadinJAR.FileName2}" />
+    <copy file="${vaadinLib1}" tofile="${fenix_inspection.packDir}/ext/${vaadinOtherLib.FileName4}" />
+    <copy file="${vaadinLib3}" tofile="${fenix_inspection.packDir}/ext/${vaadinOtherLib.FileName3}" />
+    	
+    <copy file="${vaadinLib3}" tofile="${fenix_inspection.packDir}/ext/${vaadinOtherLib.FileName3}" />
+		
+		<copy todir="${fenix_inspection.packDir}/jar">
+			<fileset dir="${fenix_inspection.buildDir}/jar">
+				<exclude name="01b-*.jar" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${fenix_common.prjDir}/externalJars">
+			<fileset dir="${fenix_inspection.buildDir}/jar">
+				<include name="foc*.jar" />
+				<include name="officeLink.jar" />
+			</fileset>
+		</copy>
+
+	</target>
+	
+	<!--
+	    =====================================================
+	    =====================================================
+	  	MACRO - OBFUSCATE
+	    =====================================================
+	    =====================================================
+		-->
+
+	<!--
+  
+  	Foc compile and jar creation
+  	
+  -->
+
+	<property name="foc.build.dir" value="${exeRoot}/foc/build" />
+	<property name="foc.build.classes.dir" value="${foc.build.dir}/classes" />
+
+	<target name="full">
+
+	</target>
+
+	<target name="createFiles">
+		<property name="machineCode" value=" 00-50-FC-87-3B-FC" />
+		<property name="workspaceDir" value="d:/${eclipseworkspace}/l3drivers/src" />
+
+		<ant dir="${foc}" antfile="build.xml" target="makeJar" />
+
+		<taskdef name="createsecurityjavafile" classname="b01.ant.tasks.CreateSecurityJavaFile" classpath="${devutil.ojarFullName}" />
+
+		<createsecurityjavafile packageName="b01.l3.drivers.axsym" srcDir="${workspaceDir}/b01/l3/drivers/axsym" code="${machineCode}" />
+		<!-- Ghorra Cobas integra PC Aspire-->
+	</target>
+
+</project>

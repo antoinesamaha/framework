@@ -1,0 +1,42 @@
+<!--
+    =====================================================
+												  	EVERPRO SHARED
+    =====================================================
+  -->
+	
+<project name="focShared" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focShared.buildDir}" />
+		<mkdir dir="${focShared.buildDir}" />
+		<mkdir dir="${focShared.classDir}" />
+		<mkdir dir="${focShared.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focShared.srcDir}" destdir="@{tarDir}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focShared.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focShared.classDir}" destfile="${focShared.jarFile}" >
+			 <fileset dir="${focShared.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	     </fileset>		    		    
+		</jar>
+	</target>
+</project>

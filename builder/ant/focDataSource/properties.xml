@@ -1,0 +1,5 @@
+<project name="focDataSource">
+	<property name="focDataSource" value="focDataSource"/>
+	<property name="focDataSource.jarFileName" value="01b-${focDataSource}.jar"/>
+	<property name="focDataSource.ojarName" value="${focDataSource}.jar"/>
+</project>

@@ -1,0 +1,88 @@
+<!--
+    =====================================================
+												  	FocWebServer
+    =====================================================
+  -->
+	
+<project name="focWebServer" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focWebServer.buildDir}" />
+		<mkdir dir="${focWebServer.buildDir}" />
+		<mkdir dir="${focWebServer.classDir}" />
+		<mkdir dir="${focWebServer.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focWebServer.srcDir}" destdir="@{tarDir}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+					<pathelement path="${foc.jarFile}/"/>
+					<pathelement path="${focAPI.jarFile}/"/>
+					<pathelement path="${focShared.jarFile}/"/>
+					<pathelement path="${focVaadinTheme.jarFile}/"/>
+					<pathelement path="${focOfficeLink.jarFile}/"/>
+					<pathelement path="${GWTDir}/${GWTFile1}"/>
+					<pathelement path="${vaadinJAR1}"/>
+					<pathelement path="${vaadinJAR2}"/>
+					<pathelement path="${vaadinJAR3}"/>
+					<pathelement path="${vaadinLib1}"/>
+	        <pathelement path="${vaadinAddOnJar.ExpandingTextArea}"/>
+					<pathelement path="${vaadinAddOnJar.DnD}"/>
+					<pathelement path="${vaadinAddOnJar.EverproTreeGrid}"/>
+					<pathelement path="${vaadinAddOnJar.ContextHelp}"/>
+					<pathelement path="${vaadinAddOnJar.JFreeChartWrapper}"/>
+					<pathelement path="${TomcatDir}/${TomcatFile1}"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile1}"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile2}"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile3}/"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile4}/"/>
+					<pathelement path="${jFreeChartDir}/${jFreeChartFile5}/"/>					
+					<pathelement path="${JasperReportDir}/${JasperReportFile1}/"/>
+          <pathelement path="${JasperReportDir}/${JasperReportFile4}"/>
+          <pathelement path="${POIDir}/${POIFile1}"/>
+					<pathelement path="${POIDir}/${POIFile3}"/>
+          <pathelement path="${POIDir}/${POIFile4}"/>
+					<pathelement path="${POIDir}/${POIFile5}"/>
+				  <pathelement path="${qrCodeJAR1}"/>
+					<pathelement path="${qrCodeJAR2}"/>
+					<pathelement path="${qrCodeJAR3}"/>
+					<pathelement path="${BarcodeJAR1}"/>
+					<pathelement path="${BarcodeJAR2}"/>
+				  	
+					<pathelement path="${pdfJAR}"/>
+					<pathelement path="${excelExportJAR}"/>
+					
+					<pathelement path="${WebServicesDir}/${wsFile1}"/>
+					<pathelement path="${WebServicesDir}/${wsFile2}"/>
+					<pathelement path="${WebServicesDir}/${wsFile3}"/>
+					<pathelement path="${WebServicesDir}/${wsFile4}"/>
+					<pathelement path="${WebServicesDir}/${wsFile5}"/>
+					<pathelement path="${WebServicesDir}/${wsFile6}"/>
+					
+          	
+          <pathelement path="${mailapiJAR}"/>
+					<pathelement path="${jsonJAR}"/>
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focWebServer.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focWebServer.classDir}" destfile="${focWebServer.jarFile}">
+	     <fileset dir="${focWebServer.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	      </fileset>
+		</jar>
+	</target>
+</project>

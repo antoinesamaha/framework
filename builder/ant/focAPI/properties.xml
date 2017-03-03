@@ -1,0 +1,10 @@
+<project name="focAPI">
+	<property name="focAPI" value="focAPI"/>
+	<property name="focAPI.prjDir" value="${srcRoot}/focAPI"/>
+	<property name="focAPI.srcDir" value="${focAPI.prjDir}/src"/>
+	<property name="focAPI.buildDir" value="${exeRoot}/${appSubDir}/${focAPI}/${buildSubDir}"/>
+	<property name="focAPI.classDir" value="${focAPI.buildDir}/${classSubDir}"/>
+	<property name="focAPI.jarDir" value="${focAPI.buildDir}/${jarSubDir}"/>
+	<property name="focAPI.jarFile" value="${focAPI.buildDir}/${jarSubDir}/01b-${focAPI}.jar"/>
+	<property name="focAPI.ojarName" value="${focAPI}.jar"/>
+</project>

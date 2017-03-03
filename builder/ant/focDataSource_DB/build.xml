@@ -1,0 +1,47 @@
+<!--
+    =====================================================
+												  	EVERPRO API
+    =====================================================
+  -->
+	
+<project name="focDataSource_DB" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focDataSource_DB.buildDir}" />
+		<mkdir dir="${focDataSource_DB.buildDir}" />
+		<mkdir dir="${focDataSource_DB.classDir}" />
+		<mkdir dir="${focDataSource_DB.jarDir}" />
+	</target>
+
+	<macrodef name="compileMacro">
+		<attribute name="tarDir" default="NOT_SET"/>
+		<element name="justdoit" implicit="yes"/>
+		<sequential>
+			<javac srcdir="${focDataSource_DB.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}">
+				<classpath>
+					<pathelement path="${java.class.path}/"/>
+					<pathelement path="${foc.jarFile}/"/>
+					<pathelement path="${focAPI.jarFile}/"/>
+					<pathelement path="${focShared.jarFile}/"/>
+          <pathelement path="${vaadinJAR1}"/>
+          <pathelement path="${vaadinJAR2}"/>
+				</classpath>
+			</javac>
+		</sequential>
+	</macrodef>
+
+	<target name="compile" depends="prepareDir" >
+		<compileMacro tarDir="${focDataSource_DB.classDir}"/>
+	</target>
+	
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focDataSource_DB.classDir}" destfile="${focDataSource_DB.jarFile}" >
+		  <fileset dir="${focDataSource_DB.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	     </fileset>		    
+		</jar>
+	</target>
+</project>

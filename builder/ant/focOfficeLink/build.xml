@@ -1,0 +1,45 @@
+<!--
+    =====================================================
+												  	focOfficeLink
+    =====================================================
+  -->
+	
+<project name="focOfficeLink" default="makeJar">
+			
+	<target name="prepareDir">
+		<delete dir="${focOfficeLink.buildDir}" />
+		<mkdir dir="${focOfficeLink.buildDir}" />
+		<mkdir dir="${focOfficeLink.classDir}" />
+		<mkdir dir="${focOfficeLink.jarDir}" />
+	</target>
+
+	<target name="compile" depends="prepareDir">
+		<javac srcdir="${focOfficeLink.srcDir}" destdir="${focOfficeLink.classDir}">
+			<classpath>
+				<!-- <pathelement location="lib/"/> -->
+				<pathelement path="${java.class.path}/"/>
+				<pathelement path="${focAPI.jarFile}/"/>
+				<pathelement path="${focShared.jarFile}/"/>
+				<pathelement path="${everproAPI.jarFile}/"/>
+				<pathelement path="${foc.jarFile}/"/>
+        <pathelement path="${vaadinJAR1}"/>
+        <pathelement path="${vaadinJAR2}"/>
+				<pathelement path="${POIDir}/${POIFile1}/"/>
+				<pathelement path="${POIDir}/${POIFile2}/"/>
+				<pathelement path="${POIDir}/${POIFile3}/"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="makeJar" depends="compile">
+		<jar basedir="${focOfficeLink.classDir}" destfile="${focOfficeLink.jarFile}" >
+		  <fileset dir="${focOfficeLink.srcDir}" >
+         <patternset>
+            <include name="**/*.xml"/>
+            <include name="**/*.java"/>
+         </patternset>
+	     </fileset>		    
+		</jar>
+		
+	</target>
+</project>
