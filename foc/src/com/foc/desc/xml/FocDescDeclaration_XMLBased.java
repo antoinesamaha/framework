@@ -96,7 +96,7 @@ public class FocDescDeclaration_XMLBased implements IFocDescDeclaration {
 	  return focDesc;
 	}
 
-	public XMLFocDesc parse(){
+	private XMLFocDesc parse(){
 		XMLFocDesc xmlFocDesc = null;
 		try{
       ClassResource resource = null;

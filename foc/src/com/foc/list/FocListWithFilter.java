@@ -2,6 +2,7 @@ package com.foc.list;
 
 import com.foc.db.SQLFilter;
 import com.foc.desc.FocConstructor;
+import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FilterDesc;
@@ -12,19 +13,19 @@ import com.foc.shared.dataStore.IFocData;
 public class FocListWithFilter extends FocList {
 	private FocListFilterBindedToList filter = null;
 
-  private void init(FocDescForFilter filterFocDesc){
+  private void init(FocDesc filterFocDesc){
     if(filterFocDesc != null){
       FocConstructor constr = new FocConstructor(filterFocDesc, null);
       setFocListFilter((FocListFilterBindedToList)constr.newItem());
     }
   }
   
-	public FocListWithFilter(FocDescForFilter filterFocDesc, FocLink focLink) {
+	public FocListWithFilter(FocDesc filterFocDesc, FocLink focLink) {
 		super(focLink);
     init(filterFocDesc);
 	}
 	
-	public FocListWithFilter(FocDescForFilter filterFocDesc, FocObject masterObject, FocLink focLink, SQLFilter filter) {
+	public FocListWithFilter(FocDesc filterFocDesc, FocObject masterObject, FocLink focLink, SQLFilter filter) {
     super(masterObject, focLink, filter);
     init(filterFocDesc);    
   }

@@ -60,6 +60,7 @@ import com.foc.business.notifier.FocNotificationManager;
 import com.foc.business.photoAlbum.PhotoAlbumManagmentModule;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
@@ -74,6 +75,8 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.xml.FocDescDeclaration_XMLBased_WFLog;
+import com.foc.desc.xml.XMLFocDesc;
 import com.foc.fUnit.FocTestSuite;
 import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
@@ -1235,20 +1238,35 @@ public class Application {
 	  }
 	  	  
 	  //This scan is only useful when we have FocObjects that are declared only by the table name...
+	  ArrayList<IFocDescDeclaration> newDeclarations = new ArrayList<IFocDescDeclaration>();
 	  Iterator<IFocDescDeclaration> iter3 = getFocDescDeclarationIterator();
 	  while(iter3 != null && iter3.hasNext()){
 	  	IFocDescDeclaration focDescDeclaration = iter3.next();
 	  	if(focDescDeclaration != null){
 	  		FocDesc focDesc = focDescDeclaration.getFocDescription();
 	  		if(focDesc != null){
+	  			//Scanning the FObectField 
 		  		for(int i=0; i<focDesc.getFieldsSize(); i++){
 		  			FField fld = focDesc.getFieldAt(i);
 		  			if(fld instanceof FObjectField){
 		  				((FObjectField)fld).getFocDescFromStorageNameIfNeeded(focDesc);
 		  			}
 		  		}
+		  		//Adding the Workflow and LOG Table
+		  		if(focDesc instanceof XMLFocDesc){
+		  			XMLFocDesc xmlFocDesc = (XMLFocDesc) focDesc;
+		  			if(xmlFocDesc.iWorkflow_getWorkflowDesc() != null){
+		  				FocDescDeclaration_XMLBased_WFLog logDeclaration = new FocDescDeclaration_XMLBased_WFLog(xmlFocDesc);
+		  				logDeclaration.getFocDescription();
+		  				newDeclarations.add(logDeclaration);
+		  			}
+		  		}
 	  		}
 	  	}
+	  }
+	  for(int i=0; i<newDeclarations.size(); i++){
+	  	IFocDescDeclaration logDeclaration = newDeclarations.get(i);
+	  	declaredObjectList_DeclareObject(logDeclaration);
 	  }
   }
   

@@ -14,7 +14,7 @@
 	</target>
 
 	<target name="compile" depends="prepareDir">
-		<javac srcdir="${focOfficeLink.srcDir}" destdir="${focOfficeLink.classDir}">
+		<javac srcdir="${focOfficeLink.srcDir}" destdir="${focOfficeLink.classDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" >
 			<classpath>
 				<!-- <pathelement location="lib/"/> -->
 				<pathelement path="${java.class.path}/"/>

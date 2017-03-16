@@ -1,18 +1,16 @@
 package com.foc.vaadin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import com.foc.Globals;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocVersion;
 import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.desc.FocModule;
-import com.foc.desc.xml.XMLDescFileScanner;
 import com.foc.menuStructure.FocMenuItem;
-import com.foc.shared.dataStore.IFocData;
-import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
-import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.xmlViewKeyGenerator.XmlViewFileScanner;
 
 public abstract class FocWebModule extends FocModule implements IFocWebModule{
@@ -20,13 +18,15 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 	private boolean adminConsole          = false;
 	private String  name                  = null;
 	private String  title                 = null;
+	private int     versionID             = 0;
+	private String  versionLabel          = null;
+
 	private int     priorityInDeclaration = 0;
 	private int     order                 = 0;
 	
 	private HashMap<String, FocMenuItem> menuDictionary = null;
-	
-	private String modelPackage = null;
-	private String guiPackage   = null;
+
+	private ArrayList<FoldersToScan> packages2Scan = null;
 	
 	public FocWebModule(String name, String title){
 	  setName(name);
@@ -35,37 +35,87 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 	
 	public FocWebModule(String name, String title, String modelPackage, String guiPackage){
 		this(name, title);
-		this.modelPackage = modelPackage;
-		this.guiPackage = guiPackage;
+		if(!Utils.isStringEmpty(modelPackage) || !Utils.isStringEmpty(guiPackage)){
+			addPackages(modelPackage, guiPackage);
+		}
+	}
+
+	public FocWebModule(String name, String title, String modelPackage, String guiPackage, String versionLabel, int versionID){
+	  this(name, title, modelPackage, guiPackage);
+	  setVersionLabel(versionLabel);
+	  setVersionID(versionID);
+	}
+
+	public void dispose(){
+		super.dispose();
+		dispose_Packages();
 	}
 	
-	protected void scanPackage(String packageName){
+	private void dispose_Packages(){
+		if(packages2Scan != null){
+			Iterator<FoldersToScan> iter = (Iterator<FoldersToScan>) packages2Scan.iterator();
+			while(iter != null && iter.hasNext()){
+				FoldersToScan f2s = iter.next();
+				f2s.dispose();
+			}
+			packages2Scan.clear();
+			packages2Scan = null;
+		}
+	}
+	
+	public void addPackages(String modelPackage, String guiPackage){
+		if(packages2Scan == null){
+			packages2Scan = new ArrayList<FoldersToScan>();
+		}
+		FoldersToScan f2s = new FoldersToScan(modelPackage, guiPackage);
+		packages2Scan.add(f2s);
+	}
+	
+	public int getVersionID() {
+		return versionID;
+	}
+
+	public void setVersionID(int versionID) {
+		this.versionID = versionID;
+	}
+	
+	public String getVersionLabel() {
+		return versionLabel;
+	}
+
+	public void setVersionLabel(String versionLabel) {
+		this.versionLabel = versionLabel;
+	}
+
+	public void scanGuiPackage(String packageName){
 		XmlViewFileScanner xmlViewFileScanner = new XmlViewFileScanner(this, packageName);
 		xmlViewFileScanner.scanPush();
 		xmlViewFileScanner.dispose();
 	}
 	
-  public void declareXMLViewsInDictionary() {
-  	if(!Utils.isStringEmpty(guiPackage)){
-  		String xmlPath = guiPackage.replace(".", "/");
-  		xmlPath = "/" + xmlPath + "/xml/"; 
-  		
-  		XmlViewFileScanner xmlViewFileScanner = new XmlViewFileScanner(this, xmlPath, guiPackage);
-  		xmlViewFileScanner.scanPush();
-  		xmlViewFileScanner.dispose();
-  	}
-  }
-	
 	@Override
 	public void declareFocObjectsOnce(){
-  	if(!Utils.isStringEmpty(modelPackage)){
-  		String xmlPath = modelPackage.replace(".", "/");
-  		xmlPath = "/" + xmlPath + "/xml/"; 
-  		
-  		XMLDescFileScanner scanner = new XMLDescFileScanner(this, xmlPath, modelPackage);
-  		scanner.scanDirectory();
-  		scanner.dispose();
-  	}		
+		if(getVersionID() > 0 && !Utils.isStringEmpty(getVersionLabel()) && !Utils.isStringEmpty(getName())){
+			FocVersion.addVersion(getName(), getVersionLabel(), getVersionID());
+		}
+		
+		if(packages2Scan != null){
+			for(int i=0; i<packages2Scan.size(); i++){
+				FoldersToScan f2s = packages2Scan.get(i);
+				
+				scanModelPackage(f2s.getModelPackage());
+			}
+		}
+	}
+	
+	public void declareXMLViewsInDictionary() {
+		if(packages2Scan != null){
+			for(int i=0; i<packages2Scan.size(); i++){
+				FoldersToScan f2s = packages2Scan.get(i);
+				
+				scanGuiPackage(f2s.getGuiPackage());
+			}
+		}		
 	}
 	
 	@Override
@@ -150,4 +200,27 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 		}
 		return group;
 	}
+
+  public class FoldersToScan {
+  	private String modelPackage = null;
+  	private String guiPackage   = null;
+
+		public FoldersToScan(String modelPackage, String guiPackage){
+  		this.modelPackage = modelPackage;
+  		this.guiPackage   = guiPackage;
+  	}
+  	
+  	public void dispose(){
+  		
+  	}
+  	
+  	public String getModelPackage() {
+			return modelPackage;
+		}
+
+		public String getGuiPackage() {
+			return guiPackage;
+		}
+  }
+  
 }

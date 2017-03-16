@@ -27,6 +27,9 @@ public class FocFileLoader {
 		if(!rootDirectory.endsWith("/")) {
 			rootDirectory += "/";
 		}
+		if(!rootDirectory.startsWith("/")) {
+			rootDirectory = "/"+rootDirectory;
+		}
 		
 		try{
 			Globals.logString("GETTING RESOURCE URL:"+rootDirectory);

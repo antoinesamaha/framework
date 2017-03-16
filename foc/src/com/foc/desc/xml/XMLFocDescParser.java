@@ -10,6 +10,7 @@ import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FCloudStorageField;
+import com.foc.desc.field.FCompanyField;
 import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
@@ -20,6 +21,7 @@ import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FTimeField;
+import com.foc.list.filter.FocListFilter;
 import com.foc.util.Utils;
 
 public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
@@ -71,6 +73,14 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	if(onTableName != null){
     		xmlFilter = new XMLFilter(onTableName);
     	}
+    	String filterLevelStr = getString(att, ATT_FILTER_LEVEL);
+    	if(filterLevelStr == null) filterLevelStr = FXMLDesc.VAL_FILTER_LEVEL_DATABASE;
+    	if(filterLevelStr.equals(FXMLDesc.VAL_FILTER_LEVEL_DATABASE)){
+    		xmlFilter.setFilterLevel(FocListFilter.LEVEL_DATABASE);	
+    	}else if(filterLevelStr.equals(FXMLDesc.VAL_FILTER_LEVEL_MEMORY)){
+    		xmlFilter.setFilterLevel(FocListFilter.LEVEL_MEMORY);
+    	}
+    	
     } else if(qName.equals(TAG_FILTER_CONDITION)){
     	if(xmlFilter != null){
     		xmlFilter.addCondition(att);
@@ -121,7 +131,9 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
   			refFld.setName(refName);
   		}
   		fld = refFld;
-  		
+  	} else if (qName.equals(TAG_COMPANY)){
+  		fld = new FCompanyField(true, true);
+  		xmlFocDesc.addField(fld);
     } else if (qName.equals(TAG_CODE)) {
     	fld = xmlFocDesc.addCodeField();    	
     } else if (qName.equals(TAG_EXTERNAL_CODE)) {

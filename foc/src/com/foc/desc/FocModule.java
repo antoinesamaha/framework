@@ -3,6 +3,7 @@ package com.foc.desc;
 import com.foc.Globals;
 import com.foc.desc.xml.XMLDescFileScanner;
 import com.foc.menu.FMenuList;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -23,10 +24,15 @@ public abstract class FocModule {
   	
   }
 
-  public void scanPackageForDescDeclarations(String packageName){
-  	XMLDescFileScanner scanner = new XMLDescFileScanner(this, packageName);
-		scanner.scanDirectory();
-		scanner.dispose();
+  public void scanModelPackage(String packageName){
+  	if(!Utils.isStringEmpty(packageName)){
+  		packageName = packageName.replace(".", "/");
+  		if(!packageName.startsWith("/")) packageName = "/" + packageName;
+  		
+	  	XMLDescFileScanner scanner = new XMLDescFileScanner(this, packageName);
+			scanner.scanDirectory();
+			scanner.dispose();
+  	}
   }
   
   public boolean isDeclared(){

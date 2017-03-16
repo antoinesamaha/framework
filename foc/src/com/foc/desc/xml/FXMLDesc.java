@@ -11,10 +11,15 @@ public interface FXMLDesc {
   public static final String ATT_FILTER_ON_TABLE         = "onTable";
   public static final String ATT_FILTER_ON_FIELD         = "field";
   public static final String ATT_FILTER_CONDITION_PREFIX = "prefix";
+  public static final String ATT_FILTER_LEVEL            = "level";
+  
+  public static final String VAL_FILTER_LEVEL_DATABASE   = "db";
+  public static final String VAL_FILTER_LEVEL_MEMORY     = "mem";
   
   //Fields Predefined
   public static final String TAG_REF           = "REF";
   public static final String TAG_CODE          = "CODE";
+  public static final String TAG_COMPANY       = "COMPANY";
   public static final String TAG_EXTERNAL_CODE = "EXTERNAL_CODE";
   public static final String TAG_DATE          = "DATE";
   public static final String TAG_DESCRIPTION   = "DESCRIPTION";
@@ -86,4 +91,5 @@ public interface FXMLDesc {
   public static final String ATT_JOIN_FLD_TAR = "targetField";
   //-------------------------
   
+  //Filter
 }

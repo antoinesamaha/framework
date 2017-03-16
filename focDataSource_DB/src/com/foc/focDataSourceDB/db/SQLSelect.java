@@ -260,7 +260,11 @@ public class SQLSelect extends SQLSelectPlain {
 	      				&& 	(prop instanceof FBlobProperty || prop instanceof FBlobStringProperty)
 	      				){
 	      			Blob b = resultSet.getBlob(i+1);
-	      			value = Utils.inputStreamToString(b.getBinaryStream());
+	      			if(b != null){
+	      				value = Utils.inputStreamToString(b.getBinaryStream());
+	      			}else{
+	      				value = "";
+	      			}
 	      		}else{
 	      			value = resultSet.getString(i+1);
 	      		}

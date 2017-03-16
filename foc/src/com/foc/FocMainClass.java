@@ -101,7 +101,7 @@ public class FocMainClass {
 		return app;
 	}
 	  
-  protected void declareModules(Application app/*, FabrakaPlugInterface plug*/){
+  protected void declareModules(Application app){
 //    CashierModule.getInstance().declare();
 
     //Common
@@ -137,7 +137,7 @@ public class FocMainClass {
 
 //    BudgetModule.getInstance().setBudgetReplacementTitle("Project");
   }
-  
+
   public static String[] addArg(String args[], String argToAdd){
 		if(args == null){
 			args = new String[1];

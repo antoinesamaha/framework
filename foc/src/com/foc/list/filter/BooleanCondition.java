@@ -7,6 +7,7 @@ package com.foc.list.filter;
 
 import java.awt.Component;
 
+import com.foc.db.DBManager;
 import com.foc.desc.*;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
@@ -112,6 +113,10 @@ public class BooleanCondition extends FilterCondition{
     int valueCondition = getValue(filter);
     if(valueCondition != VALUE_INDIFFERENT){
       buffer = new StringBuffer();
+      
+    	if(getProvider() == DBManager.PROVIDER_ORACLE){
+    		fieldName = "\"" + fieldName + "\"";
+    	}
       
       if(valueCondition == VALUE_TRUE){
         buffer.append(fieldName+"=1");

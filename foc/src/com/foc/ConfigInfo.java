@@ -14,6 +14,7 @@ import com.foc.gui.DisplayManager;
 import com.foc.gui.MainFrame;
 import com.foc.gui.table.FTable;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -340,7 +341,7 @@ public class ConfigInfo {
         
         str = getProperty("gui.font.size");
         if(str != null){
-          fontSize = Integer.valueOf(str).intValue();  
+          fontSize = Utils.parseInteger(str, 14);  
         }
         DisplayManager dm = Globals.getDisplayManager();
         if(dm != null){

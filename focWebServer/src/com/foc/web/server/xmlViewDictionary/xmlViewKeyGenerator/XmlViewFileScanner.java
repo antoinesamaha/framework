@@ -1,16 +1,12 @@
 package com.foc.web.server.xmlViewDictionary.xmlViewKeyGenerator;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import com.fab.codeWriter.CodeWriterConstants;
-import com.foc.Globals;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocWebModule;
-import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 

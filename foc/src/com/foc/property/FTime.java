@@ -188,9 +188,13 @@ public class FTime extends FProperty {
       if (str != null && !str.equals("00:00:00")){
       	if(getProvider() == DBManager.PROVIDER_ORACLE){
       		try{
-      			String timeStr = str.substring(11, (str.length() -3));
-      			if(!timeStr.equals("00:00")){
-      				time = java.sql.Time.valueOf(timeStr+":00");
+      			if(str.length()-1 > 11){
+	      			String timeStr = str.substring(11, (str.length() -3));
+	      			if(!timeStr.equals("00:00")){
+	      				time = java.sql.Time.valueOf(timeStr+":00");
+	      			}
+      			}else{
+      				time = java.sql.Time.valueOf("00:00:00");
       			}
       		}catch(Exception e){
       			Globals.logString("FTime.setSqlStringInternal() str="+str);

@@ -3285,6 +3285,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					String monthStrg = sdf.format(date);
 					codePrefix = codePrefix.replace("{MMM}", monthStrg);
 				}
+				
+				if(codePrefix.contains("{DD}")){
+					int day = cal.get(Calendar.DAY_OF_MONTH);
+					String dayStrg = day+"";
+					if(day < 10) dayStrg = "0"+dayStrg; 
+					codePrefix = codePrefix.replace("{DD}", dayStrg);
+				}
 			}
 		}
   	return codePrefix;

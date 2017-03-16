@@ -76,7 +76,7 @@ public class XMLJoin implements FXMLDesc {
 			
 			if(!Utils.isStringEmpty(otherAlias) && !Utils.isStringEmpty(otherFieldName) && !Utils.isStringEmpty(thisFieldName)){
 				XMLJoin otherJoin = focDescParser.getJoin(otherAlias);
-				if(otherJoin.getTableAlias() != null){
+				if(otherJoin != null && otherJoin.getTableAlias() != null){
 					boolean fieldInSource = true;
 					FField fld = getOtherField();
 					if(fld instanceof FReferenceField){
@@ -84,14 +84,30 @@ public class XMLJoin implements FXMLDesc {
 						if(fld == null) fld = getThisField();
 						fieldInSource = false;
 					}
-				  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
-				  
-				  if(type.equals("left")){
-				  	join.setType(SQLJoin.JOIN_TYPE_LEFT);
-				  }else if(type.equals("right")){
-				  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
-				  }
-				  tableAlias.addJoin(join);
+					if(fld != null){
+					  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
+					  
+					  if(type.equals("left")){
+					  	join.setType(SQLJoin.JOIN_TYPE_LEFT);
+					  }else if(type.equals("right")){
+					  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
+					  }
+					  tableAlias.addJoin(join);
+					}else{
+						if(getFocDesc() != null){
+							Globals.logString("MODEL ERROR -------------------------");
+							Globals.logString("MODEL ERROR : In Table "+getFocDesc().getStorageName()+" Reference field not found for table Alias:"+otherAlias+" for Table Name "+ otherJoin.getTable());
+							Globals.logString("-------------------------------------");							
+						}
+					}
+				}else{
+					if(otherJoin == null){
+						if(getFocDesc() != null){
+							Globals.logString("MODEL ERROR -------------------------");
+							Globals.logString("MODEL ERROR : In Table "+getFocDesc().getStorageName()+" Join not found for :"+otherAlias);
+							Globals.logString("-------------------------------------");							
+						}
+					}
 				}
 			}
 

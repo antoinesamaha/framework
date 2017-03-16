@@ -69,15 +69,15 @@ public class XMLDescFileScanner {
 		return focDescClass;
 	}
 
-	public Class<XMLFocObject> getFocObject_Class(String xmlFileName, boolean oldFashion){
+	public Class<FocObject> getFocObject_Class(String xmlFileName, boolean oldFashion, Class<FocObject> defaultClass){
 		String focObjClassName = xmlFileName.replace(".xml", "");
 		if(oldFashion){
 			focObjClassName = ASCII.convertJavaNaming_ToVariableGetterSetterNaming(focObjClassName);
 		}
-		focObjClassName        = getJavaPackage() + "." + focObjClassName;
-		Class<XMLFocObject> focObjClass = null;
+		focObjClassName = getJavaPackage() + "." + focObjClassName;
+		Class<FocObject> focObjClass = null;
 		try{
-			focObjClass = (Class<XMLFocObject>) Class.forName(focObjClassName);
+			focObjClass = (Class<FocObject>) Class.forName(focObjClassName);
 		}catch (NoClassDefFoundError e1){
 			focObjClass = null;
 		}catch (ClassNotFoundException e1){
@@ -86,10 +86,10 @@ public class XMLDescFileScanner {
 			focObjClass = null;
 		}
 		if(focObjClass == null && !oldFashion){
-			focObjClass = getFocObject_Class(xmlFileName, true);
+			focObjClass = getFocObject_Class(xmlFileName, true, defaultClass);
 		}
 		if(focObjClass == null){
-			focObjClass = XMLFocObject.class;
+			focObjClass = defaultClass;
 		}		
 		return focObjClass;		
 	}
@@ -107,8 +107,13 @@ public class XMLDescFileScanner {
 					if(indexOfDOT > 0){
 						String storageName = xmlFileName.substring(0, xmlFileName.indexOf("."));
 
+						Class defaultFocObjectClass = XMLFocObject.class;
+						if(xmlFileName.endsWith("Filter.xml")){
+							defaultFocObjectClass = XMLFocObjectFilterBindedToList.class;
+						}
+						
 						Class<XMLFocDesc> focDescClass = getFocDesc_Class(xmlFileName, false);
-						Class<XMLFocObject> focObjClass  = getFocObject_Class(xmlFileName, false);
+						Class focObjClass  = getFocObject_Class(xmlFileName, false, defaultFocObjectClass);
 						
 						String fullXMLFileNameWithPath = getRootXmlDirectoryPath();
 						if(fullXMLFileNameWithPath.endsWith("/")){

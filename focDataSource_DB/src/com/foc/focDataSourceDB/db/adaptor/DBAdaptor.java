@@ -696,11 +696,13 @@ public class DBAdaptor {
 	      	
 	        if (allTablesForThisConnection.get(dbTableName) == null) {
 	        	//Logging the TableNames
+	        	/*
 		      	Iterator iter = allTablesForThisConnection.values().iterator();
 		      	while(iter != null && iter.hasNext()){
 		      		String str = (String)iter.next();
 		      		Globals.logString("Table : "+str);
 		      	}
+		      	*/
 
 	        	focDesc.beforeAdaptTableModel(false);
 	          if(focDesc.isDbResident()){
