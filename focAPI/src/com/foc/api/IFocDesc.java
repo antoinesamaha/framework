@@ -4,4 +4,5 @@ public interface IFocDesc {
   public String 	getStorageName();
   public boolean 	isPersistent();
   public void 		dispose();
+  
 }
