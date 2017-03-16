@@ -34,53 +34,54 @@ public class FocFileLoader {
 		try{
 			Globals.logString("GETTING RESOURCE URL:"+rootDirectory);
 			URL url = getClass().getResource(rootDirectory);
-			URI uri = url.toURI();
+			URI uri = url != null ? url.toURI() : null;
 			
-			if(uri.getScheme().equals("jar")){
-				JarURLConnection connection = (JarURLConnection) url.openConnection();
-				File file = new File(connection.getJarFileURL().toURI());
-				
-				if(rootDirectory.startsWith("/")) {
-					rootDirectory = rootDirectory.substring(1);
-				}
-				
-			  final JarFile jar = new JarFile(file);
-			  final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
-		    while(entries.hasMoreElements()) {
-	        String name = entries.nextElement().getName();
-	        if (    name.startsWith(rootDirectory)
-	        		&& (Utils.isStringEmpty(extension) || name.endsWith(extension))
-	        		) { //filter according to the path
-	        	//xmlFileNames.add(name.replace(xmlDirectoryPath, ""));
-	        	int firstIndex = rootDirectory.length();
-//	        	int firstIndex = name.lastIndexOf('/') + 1;
-	        	int lastIndex  = name.length();
-	        	if(firstIndex < lastIndex){
-		        	name = name.substring(firstIndex, lastIndex);
-		        	if(!name.contains("/")){
-			        	if(xmlFileNames == null){
-			        		xmlFileNames = new ArrayList<String>();
+			if(uri != null){
+				if(uri.getScheme().equals("jar")){
+					JarURLConnection connection = (JarURLConnection) url.openConnection();
+					File file = new File(connection.getJarFileURL().toURI());
+					
+					if(rootDirectory.startsWith("/")) {
+						rootDirectory = rootDirectory.substring(1);
+					}
+					
+				  final JarFile jar = new JarFile(file);
+				  final Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+			    while(entries.hasMoreElements()) {
+		        String name = entries.nextElement().getName();
+		        if (    name.startsWith(rootDirectory)
+		        		&& (Utils.isStringEmpty(extension) || name.endsWith(extension))
+		        		) { //filter according to the path
+		        	//xmlFileNames.add(name.replace(xmlDirectoryPath, ""));
+		        	int firstIndex = rootDirectory.length();
+	//	        	int firstIndex = name.lastIndexOf('/') + 1;
+		        	int lastIndex  = name.length();
+		        	if(firstIndex < lastIndex){
+			        	name = name.substring(firstIndex, lastIndex);
+			        	if(!name.contains("/")){
+				        	if(xmlFileNames == null){
+				        		xmlFileNames = new ArrayList<String>();
+				        	}
+				        	xmlFileNames.add(name);
 			        	}
-			        	xmlFileNames.add(name);
 		        	}
-	        	}
-	        }
-		    }
-		    jar.close();
-			}else{
-				File xmlDirectoryFiles = new File(uri);
-				File[] xmlFiles = xmlDirectoryFiles != null ? xmlDirectoryFiles.listFiles(new ExtensionFilter(extension)) : null;
-				if(xmlFiles != null){
-					for(int i=0; i<xmlFiles.length; i++){
-						File xmlFile = xmlFiles[i];
-	        	if(xmlFileNames == null){
-	        		xmlFileNames = new ArrayList<String>();
-	        	}
-						xmlFileNames.add(xmlFile.getName());
+		        }
+			    }
+			    jar.close();
+				}else{
+					File xmlDirectoryFiles = new File(uri);
+					File[] xmlFiles = xmlDirectoryFiles != null ? xmlDirectoryFiles.listFiles(new ExtensionFilter(extension)) : null;
+					if(xmlFiles != null){
+						for(int i=0; i<xmlFiles.length; i++){
+							File xmlFile = xmlFiles[i];
+		        	if(xmlFileNames == null){
+		        		xmlFileNames = new ArrayList<String>();
+		        	}
+							xmlFileNames.add(xmlFile.getName());
+						}
 					}
 				}
 			}
-			
 		}catch(Exception e){
 			Globals.logException(e);
 		}

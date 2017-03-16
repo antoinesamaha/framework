@@ -26,9 +26,6 @@ public abstract class FocModule {
 
   public void scanModelPackage(String packageName){
   	if(!Utils.isStringEmpty(packageName)){
-  		packageName = packageName.replace(".", "/");
-  		if(!packageName.startsWith("/")) packageName = "/" + packageName;
-  		
 	  	XMLDescFileScanner scanner = new XMLDescFileScanner(this, packageName);
 			scanner.scanDirectory();
 			scanner.dispose();
