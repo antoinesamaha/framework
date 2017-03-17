@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import com.foc.ConfigInfo;
 import com.foc.desc.*;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FMultipleChoiceItem;
@@ -117,6 +118,9 @@ public class MultipleChoiceCondition extends FilterCondition{
 
   public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
     StringBuffer buffer = null;
+    
+    fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
+    
     int operation = getOperation(filter);
     if(operation != OPERATION_NONE){
       buffer = new StringBuffer();

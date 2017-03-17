@@ -10,6 +10,7 @@ import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.list.filter.FocListFilter;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.property.FProperty;
 import com.foc.property.FString;
 
@@ -412,7 +413,7 @@ public abstract class FNode<N extends FNode, O extends Object> implements FINode
 		return node;
 	}
 
-  private FocListFilter getFocListFilter(){
+  private IFocListFilter getFocListFilter(){
     return getTree().getFocListFilter();
   }
 
@@ -459,7 +460,7 @@ public abstract class FNode<N extends FNode, O extends Object> implements FINode
 	        
 	        //Check the FocListFilter internal visible array 
 	        if(visible){
-	  	      FocListFilter focListFilter = getFocListFilter();
+	  	      IFocListFilter focListFilter = getFocListFilter();
 	  	      if(focListFilter != null && element != null){
 	  	        int position = focList.getFocListElementPosition(element);
 	  	        localVisible = focListFilter.isObjectExist(position);

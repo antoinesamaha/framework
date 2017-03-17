@@ -820,6 +820,28 @@ public abstract class FField implements Cloneable, IFocData {
 	  return null;
 	}
 	
+	public static String adaptFieldNameToProvider(int provider, String fieldName){
+		String fieldNameString = fieldName;
+		if(provider == DBManager.PROVIDER_MSSQL){
+  		int dotIndex = fieldNameString.indexOf('.');
+  		if(dotIndex > 0){//If there is a dot we put the [ after the .
+  			String initial = fieldNameString;
+  			fieldNameString = initial.substring(0, dotIndex+1) + "[" + initial.substring(dotIndex+1) + "]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
+  		}else{
+  			fieldNameString = "["+ fieldNameString +"]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
+  		}
+  	}else if(provider == DBManager.PROVIDER_ORACLE){
+			int dotIndex = fieldNameString.indexOf('.');
+			if(dotIndex > 0){//If there is a dot we put the " after the .
+				String initial = fieldNameString;
+				fieldNameString = initial.substring(0, dotIndex+1) + "\"" + initial.substring(dotIndex+1) + "\""; //This is to cover for fields with names like keywords (TRANSACTION for example)
+			}else{
+				fieldNameString = "\""+ fieldNameString +"\""; //This is to cover for fields with names like keywords (TRANSACTION for example)
+			}	        		
+		}
+		return fieldNameString;
+	}
+	
   //--------------------------------------------------------
   // IFocData
   //--------------------------------------------------------  

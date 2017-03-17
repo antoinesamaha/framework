@@ -8,6 +8,7 @@ import com.foc.list.FocLinkSimple;
 import com.foc.list.FocListOrder;
 import com.foc.list.FocListWithFilter;
 import com.foc.list.filter.FilterDesc;
+import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.NumCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
@@ -76,7 +77,7 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
     if(urlKey != null && !urlKey.isEmpty()){
       FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
       StringCondition mcCond = (StringCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.URL_KEY_CONDITION);
-      mcCond.forceToValue(getFocListFilter(), StringCondition.OPERATION_EQUALS, urlKey);
+      mcCond.forceToValue((FocListFilter) getFocListFilter(), StringCondition.OPERATION_EQUALS, urlKey);
     }
   }
 
@@ -84,7 +85,7 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
     if(tableName != null && !tableName.isEmpty()){
       FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
       StringCondition mcCond = (StringCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.TABLE_NAME_CONDITION);
-      mcCond.forceToValue(getFocListFilter(), StringCondition.OPERATION_EQUALS, tableName);
+      mcCond.forceToValue((FocListFilter) getFocListFilter(), StringCondition.OPERATION_EQUALS, tableName);
     }
   }
 
@@ -92,20 +93,20 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
     if(objRef > 0){
       FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
       NumCondition mcCond = (NumCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.OBJECT_REF_CONDITION);
-      mcCond.forceToValue(getFocListFilter(), NumCondition.OPERATOR_EQUALS, objRef, objRef);
+      mcCond.forceToValue((FocListFilter) getFocListFilter(), NumCondition.OPERATOR_EQUALS, objRef, objRef);
     }
   }
   
   public void applyFilterOnUnrelatedObjects(){
   	FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
   	NumCondition mcCond = (NumCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.OBJECT_REF_CONDITION);
-    mcCond.forceToValue(getFocListFilter(), NumCondition.OPERATOR_EQUALS, 0, 0);
+    mcCond.forceToValue((FocListFilter) getFocListFilter(), NumCondition.OPERATOR_EQUALS, 0, 0);
   }
   
   public void applyFilterOnDocumentType(DocumentType type){
   	FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
   	ObjectCondition mcCond = (ObjectCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.CONDITION_TYPE);
-    mcCond.forceToValue(getFocListFilter(), NumCondition.OPERATOR_EQUALS, type);
+    mcCond.forceToValue((FocListFilter) getFocListFilter(), NumCondition.OPERATOR_EQUALS, type);
   }
 
 	public FocObject getFocObject() {

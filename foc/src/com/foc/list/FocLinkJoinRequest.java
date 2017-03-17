@@ -32,6 +32,6 @@ public class FocLinkJoinRequest extends FocLinkSimple {
   
   public boolean loadDB(FocList focList) {
     boolean loaded = Globals.getApp().getDataSource().focList_Join_Load(focList);
-    return true;
+    return loaded;
   }
 }

@@ -29,8 +29,8 @@ import com.foc.gui.table.cellControler.TreeCellControler;
 import com.foc.gui.tree.FTreeModel;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
-import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.FocListFilterListener;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.property.FProperty;
 import com.foc.tree.FNode;
 import com.foc.tree.FTree;
@@ -49,7 +49,7 @@ public class FTreeTableModel extends FAbstractTableModel implements FocListener,
     refreshTree(tree);
     this.tree = tree;
     startListeningToListEvents_IfNecessary();
-    FocListFilter focListFilter = tree.getFocListFilter();
+    IFocListFilter focListFilter = tree.getFocListFilter();
     if(focListFilter != null){
       focListFilter.addListener((FocListFilterListener)this);
     }
@@ -58,13 +58,13 @@ public class FTreeTableModel extends FAbstractTableModel implements FocListener,
   public void dispose(){
     super.dispose();
     unplugTreeListeners();
-    if(tree != null && tree.getFocListFilter()!= null){ 
-      for(int i=0; i < tree.getFocListFilter().getListenersCount(); i++){
-        FocListFilter focListFilter = tree.getFocListFilter();
-        if(focListFilter != null){
-          focListFilter.removeListener((FocListFilterListener)this);
-        }
+    if(tree != null){ 
+//      for(int i=0; i < tree.getFocListFilter().getListenersCount(); i++){
+      IFocListFilter focListFilter = tree.getFocListFilter();
+      if(focListFilter != null){
+        focListFilter.removeListener((FocListFilterListener)this);
       }
+//      }
     }
     disposeTree();
     listenerList = null;

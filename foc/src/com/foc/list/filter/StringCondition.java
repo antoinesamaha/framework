@@ -27,7 +27,7 @@ import com.foc.property.FString;
 /**
  * @author 01Barmaja
  */
-public class StringCondition extends FilterCondition{
+public class StringCondition extends FilterCondition {
   static protected final int FLD_CONDITION_OPERATION = 1;
   static protected final int FLD_CONDITION_TEXT = 2;
 
@@ -148,7 +148,6 @@ public class StringCondition extends FilterCondition{
     return include;
   }
   
-  @Override
   public void forceFocObjectToConditionValueIfNeeded(FocListFilter filter, FocObject focObject) {
     if(getOperation(filter) == OPERATION_EQUALS){
       FString fString = (FString) getFieldPath().getPropertyFromObject(focObject);
@@ -174,6 +173,8 @@ public class StringCondition extends FilterCondition{
     if (writeCondition){
     	boolean ignoreCase = true;
     	
+    	fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
+    	
     	String speachMarks_Start = "\"";
     	String speachMarks_End   = "\"";
     	if(getProvider() == DBManager.PROVIDER_MSSQL){
@@ -182,7 +183,6 @@ public class StringCondition extends FilterCondition{
     	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
       	speachMarks_Start = "'";
       	speachMarks_End   = "'";
-    		fieldName = "\"" + fieldName + "\"";
     	}else if(getProvider() == DBManager.PROVIDER_H2){
       	speachMarks_Start = "'";
       	speachMarks_End   = "'";

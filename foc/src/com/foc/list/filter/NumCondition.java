@@ -10,9 +10,9 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import com.foc.Globals;
-import com.foc.db.DBManager;
-import com.foc.desc.*;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FNumField;
@@ -28,7 +28,7 @@ import com.foc.property.FPropertyListener;
 /**
  * @author 01Barmaja
  */
-public class NumCondition extends FilterCondition{
+public class NumCondition extends FilterCondition {
   private static final int FLD_FIRST_VALUE = 1;
   private static final int FLD_LAST_VALUE = 2;
   private static final int FLD_OPERATOR = 3;
@@ -142,10 +142,8 @@ public class NumCondition extends FilterCondition{
     double lastValue  = getLastValue(filter);
     int op = getOperator(filter);
     buffer = new StringBuffer();
-        
-    if(getProvider() == DBManager.PROVIDER_ORACLE){
-  		fieldName = "\"" + fieldName + "\"";
-  	}
+
+    fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
     
     if (op != OPERATOR_INDIFERENT){
       if (op == OPERATOR_GREATER_THAN){

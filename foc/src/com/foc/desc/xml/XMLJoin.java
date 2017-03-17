@@ -66,6 +66,9 @@ public class XMLJoin implements FXMLDesc {
 	public FField getOtherField(){
 		FocDesc focDesc = getOtherFocDesc();
 		FField field = focDesc.getFieldByName(getOtherFieldName());
+		if(field == null){
+			field = focDesc.getFieldByName(getOtherFieldName());
+		}
 		return field;
 	}
 

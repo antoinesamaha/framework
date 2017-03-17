@@ -136,23 +136,7 @@ public class SQLSelect extends SQLSelectPlain {
 	        if(tableAlias != null && !tableAlias.isEmpty()){
 	        	fieldNameString = tableAlias + "." + fieldNameString;
 	        }else{
-	        	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL){
-	        		int dotIndex = fieldNameString.indexOf('.');
-	        		if(dotIndex > 0){//If there is a dot we put the [ after the .
-	        			String initial = fieldNameString;
-	        			fieldNameString = initial.substring(0, dotIndex+1) + "[" + initial.substring(dotIndex+1) + "]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
-	        		}else{
-	        			fieldNameString = "["+ fieldNameString +"]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
-	        		}
-	        	}else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
-	        		int dotIndex = fieldNameString.indexOf('.');
-	        		if(dotIndex > 0){//If there is a dot we put the " after the .
-	        			String initial = fieldNameString;
-	        			fieldNameString = initial.substring(0, dotIndex+1) + "\"" + initial.substring(dotIndex+1) + "\""; //This is to cover for fields with names like keywords (TRANSACTION for example)
-	        		}else{
-	        			fieldNameString = "\""+ fieldNameString +"\""; //This is to cover for fields with names like keywords (TRANSACTION for example)
-	        		}	        		
-	        	}
+	        	fieldNameString = FField.adaptFieldNameToProvider(focDesc.getProvider(), fieldNameString);
 	        }
         	if(sqlGroupBy != null){
         		fieldNameString = sqlGroupBy.addFormulaToFieldName(path.get(0), fieldNameString);

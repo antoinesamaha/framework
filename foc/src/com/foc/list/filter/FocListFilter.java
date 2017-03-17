@@ -13,7 +13,9 @@ import java.util.Iterator;
 
 import com.foc.db.SQLFilter;
 import com.foc.db.SQLJoin;
-import com.foc.desc.*;
+import com.foc.desc.FocConstructor;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.gui.FAbstractListPanel;
@@ -30,8 +32,6 @@ import com.foc.property.FProperty;
  * @author 01Barmaja
  */
 public abstract class FocListFilter extends FocObject implements IFocListFilter {  
-  public abstract FilterDesc getThisFilterDesc();
-  
   public static final int LEVEL_MEMORY   = 1;
   public static final int LEVEL_DATABASE = 2;
   public static final int LEVEL_DATABASE_AND_MEMORY = 3;
@@ -75,6 +75,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     super.dispose();
   }
   
+  @Override
   public boolean isActive() {
     return active || allwaysActive;
   }
@@ -109,7 +110,8 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
   // MEMORY LEVEL
   // oooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
-    
+
+  @Override
   public ArrayList<Integer> getVisibleArray(){
     if(visibleArray == null){
       visibleArray = new ArrayList<Integer>();
@@ -133,6 +135,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     notifyListener();
   }
   
+  @Override
   public boolean isObjectExist(int objectIndex){
     boolean exist = getVisibleArray().contains(objectIndex);
     return exist;
@@ -592,7 +595,8 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     }
     return listeners;
   }
-  
+
+  @Override
   public void addListener(FocListFilterListener listener){
     getListeners().add(listener);
   }
@@ -601,10 +605,20 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     return getListeners().size();
   }
   
+  @Override
   public void removeListener(FocListFilterListener listener){
     ArrayList<FocListFilterListener> focListFilterListener = getListeners();
     focListFilterListener.remove(listener);
   }
+
+//  public void removeAllFilters(){
+//	  for(int i=0; i < tree.getFocListFilter().getListenersCount(); i++){
+//	    IFocListFilter focListFilter = tree.getFocListFilter();
+//	    if(focListFilter != null){
+//	      focListFilter.removeListener((FocListFilterListener)this);
+//	    }
+//	  }
+//  }
   
   public void notifyListener(){
     for(int i=0; i < getListenersCount(); i++){

@@ -1495,7 +1495,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		if(getTableOrTree() != null && getTableOrTree().getFocList() != null){
 			FocDesc focDesc = getTableOrTree().getFocList().getFocDesc();
 			if(focDesc != null){
-						isFieldDepartmentFound = focDesc.getFieldByID(FField.FLD_DEPARTMENT) != null;
+				isFieldDepartmentFound = focDesc.getFieldByID(FField.FLD_DEPARTMENT) != null;
 			}
 		}
 		

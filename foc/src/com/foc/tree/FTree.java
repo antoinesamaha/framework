@@ -25,6 +25,7 @@ import com.foc.gui.treeTable.FTreeTableModel;
 import com.foc.list.FocList;
 import com.foc.list.FocListWithFilter;
 import com.foc.list.filter.FocListFilter;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.tree.objectTree.FObjectNode;
@@ -762,8 +763,8 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
     return node;
   }
   
-  public FocListFilter getFocListFilter(){
-    FocListFilter focListFilter = null;
+  public IFocListFilter getFocListFilter(){
+    IFocListFilter focListFilter = null;
     FocList focList = getFocList();
     if(focList instanceof FocListWithFilter){
       focListFilter = ((FocListWithFilter)focList).getFocListFilter();

@@ -36,6 +36,7 @@ public class FocListFilterBindedToList extends FocListFilter {
   	this.focList = focList;
   }
 
+  @Override
   public void setActive(FocListWithFilter focList, boolean active) {
   	setGuiFocList(focList);
   	setActive(active);
@@ -55,7 +56,7 @@ public class FocListFilterBindedToList extends FocListFilter {
 
 	@Override
 	public FilterDesc getThisFilterDesc() {
-		FocDescForFilter focDesc = (FocDescForFilter) getThisFocDesc();
+		IFocDescForFilter focDesc = (IFocDescForFilter) getThisFocDesc();
 		return focDesc.getFilterDesc();
 	}
 }

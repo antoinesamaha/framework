@@ -5,6 +5,7 @@ package com.foc.gui;
 
 import com.foc.list.FocList;
 import com.foc.list.FocListWithFilter;
+import com.foc.list.filter.FocListFilter;
 
 /**
  * @author 01Barmaja
@@ -35,7 +36,7 @@ public class FGListWithFilterPanel extends FListPanel {
 	public void setFocList(FocList focList){
   	super.setFocList(focList);
   	FocListWithFilter lwf = (FocListWithFilter) focList; 
-    this.fTableModel.getTableView().setFilter(lwf.getFocListFilter(), false);
+    this.fTableModel.getTableView().setFilter((FocListFilter) lwf.getFocListFilter(), false);
   }
 
 	@Override

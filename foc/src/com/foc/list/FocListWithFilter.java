@@ -6,8 +6,9 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FilterDesc;
-import com.foc.list.filter.FocDescForFilter;
+import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.FocListFilterBindedToList;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.shared.dataStore.IFocData;
 
 public class FocListWithFilter extends FocList {
@@ -81,20 +82,20 @@ public class FocListWithFilter extends FocList {
   	return filter;
   }
   
-  public FocListFilterBindedToList getFocListFilter(){
+  public IFocListFilter getFocListFilter(){
   	return filter;
   }
 
   @Override
   protected void fillForeignObjectsProperties(FocObject newFocObj){
   	super.fillForeignObjectsProperties(newFocObj);
-    FocListFilterBindedToList focListFilter = getFocListFilter();
+    IFocListFilter focListFilter = getFocListFilter();
     if(focListFilter != null){
 	    FilterDesc filterDesc = focListFilter.getThisFilterDesc();
 	    if(filterDesc != null && focListFilter.isActive()){
 	      for(int i=0; i<filterDesc.getConditionCount(); i++){
 	        FilterCondition cond = filterDesc.getConditionAt(i);
-	        cond.forceFocObjectToConditionValueIfNeeded(focListFilter, newFocObj);
+	        cond.forceFocObjectToConditionValueIfNeeded((FocListFilter) focListFilter, newFocObj);
 	      }
 	    }
     }  	

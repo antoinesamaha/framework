@@ -17,6 +17,7 @@ import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.*;
 import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.gui.FGComboBox;
@@ -176,6 +177,8 @@ public class DateCondition extends FilterCondition {
 	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
 	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
     	
+	    fieldName = FField.adaptFieldNameToProvider(provider, fieldName);
+	    
 	    if(provider == DBManager.PROVIDER_MSSQL){
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
 	        buffer.append(fieldName + ">= CAST(N'" + firstDateFormat + "' AS Date)");
@@ -187,7 +190,7 @@ public class DateCondition extends FilterCondition {
 	        buffer.append(fieldName + " = CAST(N'" + firstDateFormat + "' AS Date)");
 	      }
 	    }else if(provider == DBManager.PROVIDER_ORACLE){
-	    	fieldName = "\""+fieldName+"\"";
+//	    	fieldName = "\""+fieldName+"\"";
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
 	        buffer.append(fieldName + ">= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
 	      }else if (op == OPERATOR_LESS_THAN) {
