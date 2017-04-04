@@ -309,6 +309,15 @@ public class FObject extends FProperty implements FPropertyListener{
     }
   }*/
 
+  public FocObject newObjectCreatedLocally_IfNull(){
+  	FocObject obj = getObject_CreateIfNeeded();
+  	if(obj == null){
+  		newObject();
+  		obj = getObject_CreateIfNeeded();
+  	}
+  	return obj;
+  }
+  
   protected void newObject(){
   	if(getFocDesc() != null){
 	    FocConstructor constr = new FocConstructor(getFocDesc(), null, getFocObject());

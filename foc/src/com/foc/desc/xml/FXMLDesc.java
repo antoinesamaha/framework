@@ -49,6 +49,8 @@ public interface FXMLDesc {
   public static final String ATT_CACHED_LIST      = "cachedList";
   public static final String ATT_FORCED_DB_NAME   = "forcedDBName";
   public static final String ATT_NULL_VALUES_ALLOWED = "nullValueAllowed";
+  public static final String ATT_LIST_FILTER_PROPERTY = "listFilterProperty";
+  public static final String ATT_LIST_FILTER_VALUE    = "listFilterValue";
   
   //TAG_MULTIPLE_CHOICE
   public static final String ATT_SORT_ITEMS      = "sortChoices";
@@ -70,7 +72,7 @@ public interface FXMLDesc {
   //Table node attributes 
   public static final String ATT_WORKFLOW    = "workflow";
   public static final String ATT_TREE        = "tree";
-  public static final String ATT_DB_RESIDENT = "dbResident";
+  public static final String ATT_DB_RESIDENT = "dbResident";//Used for fields also
   public static final String ATT_CACHED      = "cached";
   public static final String ATT_DB_SOURCE   = "dbSource";
   public static final String ATT_ALLOW_ADAPT_DATA_MODEL = "allowAdaptDataModel";
@@ -89,6 +91,8 @@ public interface FXMLDesc {
   public static final String TAG_JOIN_FIELD   = "JoinField";
   public static final String ATT_JOIN_FLD_SRC = "sourceField";
   public static final String ATT_JOIN_FLD_TAR = "targetField";
+  
+  public static final String ATT_JOIN_WHERE = "where";
   //-------------------------
   
   //Filter

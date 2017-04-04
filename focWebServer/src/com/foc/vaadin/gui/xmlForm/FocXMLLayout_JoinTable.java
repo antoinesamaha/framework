@@ -16,6 +16,23 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 	abstract public FocDesc getOriginalFocDesc();
 	abstract public int getOriginalObjectReference(FocObject focObject);
 	
+	private ICentralPanel formLayout = null;
+
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		formLayout = null;
+	}
+
+	public ICentralPanel getFormLayout() {
+		return formLayout;
+	}
+	
+	public void setFormLayout(ICentralPanel formLayout) {
+		this.formLayout = formLayout;
+	}
+	
 	@Override
 	public ICentralPanel table_OpenItem(String tableName, ITableTree table, FocObject focObject, int viewContainer_Open) {
 		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
@@ -24,25 +41,11 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newObject.load();
 
 		XMLViewKey xmlViewKey = new XMLViewKey(newObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
-		ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, newObject);
-		centralPanel.setFocDataOwner(true);
-		getMainWindow().changeCentralPanelContent(centralPanel, true);
+		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, newObject);
+		formLayout.setFocDataOwner(true);
+		getMainWindow().changeCentralPanelContent(formLayout, true);
 		
-		return centralPanel;
-	}
-	
-	@Override
-	public FocObject table_AddItem(String tableName, ITableTree table, FocObject fatherObject) {
-		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
-		FocObject incident = (FocObject) constr.newItem();
-		incident.setCreated(true);
-		incident.setCompany(Globals.getApp().getCurrentCompany());
-		
-		XMLViewKey xmlViewKey = new XMLViewKey(incident.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
-		ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, incident);
-		getMainWindow().changeCentralPanelContent(centralPanel, true);
-		
-		centralPanel.getValidationLayout().addValidationListener(new IValidationListener() {
+		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
 			@Override
 			public void validationDiscard(FVValidationLayout validationLayout) {
 			}
@@ -60,7 +63,39 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			}
 		});
 		
-		return incident;
+		return formLayout;
+	}
+	
+	@Override
+	public FocObject table_AddItem(String tableName, ITableTree table, FocObject fatherObject) {
+		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
+		FocObject newFocObject = (FocObject) constr.newItem();
+		newFocObject.setCreated(true);
+		newFocObject.setCompany(Globals.getApp().getCurrentCompany());
+		
+		XMLViewKey xmlViewKey = new XMLViewKey(newFocObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
+		formLayout = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, newFocObject);
+		getMainWindow().changeCentralPanelContent(formLayout, true);
+		
+		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
+			@Override
+			public void validationDiscard(FVValidationLayout validationLayout) {
+			}
+			
+			@Override
+			public boolean validationCommit(FVValidationLayout validationLayout) {
+				return false;
+			}
+			
+			@Override
+			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+				if(getFocList() != null){
+					getFocList().reloadFromDB();
+				}
+			}
+		});
+		
+		return newFocObject;
 	}
 	
 	@Override

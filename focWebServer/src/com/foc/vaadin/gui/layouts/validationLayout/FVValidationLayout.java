@@ -55,7 +55,6 @@ import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.ASCII;
-import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
@@ -1455,6 +1454,13 @@ public class FVValidationLayout extends HorizontalLayout {
       	setComponentAlignment(getApplyButton(false), Alignment.BOTTOM_LEFT);    		
     	}
     }
+  }
+  
+  public void hideApplyButtons(boolean hide){
+  	Button button = valo_GetSaveButton(false);
+  	if(button != null) button.setVisible(!hide);
+  	button = valo_GetApplyButton(false);
+  	if(button != null) button.setVisible(!hide);
   }
   
   public FocObject getFocObject(){

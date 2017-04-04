@@ -33,6 +33,7 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   
   private boolean callFocus             = true;
   private long    lastTimeFocusListener = 0;
+  private boolean descriptionEqualValue = false;
   
   public FVTextField(FProperty property, Attributes attributes) {
     delegate = new FocXMLGuiComponentDelegate(this);
@@ -133,6 +134,13 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
     
     FocXMLGuiComponentStatic.applyAttributes(this, atr);
     
+    if(getDescription().equals("[VALUE]")){
+    	setDescriptionEqualValue(true);
+    	setDescription(getValue());
+    }else{
+    	setDescriptionEqualValue(false);
+    }
+    
     if(atr != null && atr.getValue(FXML.ATT_PROMPT) != null){
     	setInputPrompt(atr.getValue(FXML.ATT_PROMPT));
     }
@@ -154,6 +162,9 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
     	super.setValue(FField.NO_RIGHTS_STRING);
     }else{
     	super.setValue(newValue);
+    }
+    if(isDescriptionEqualValue()){
+    	setDescription(getValue());
     }
   }
 
@@ -178,6 +189,9 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 	  if(focData instanceof FProperty){
 	  	String val = getValue();
 	  	((FProperty)focData).setString(val);
+//	  	if(true){
+//	  		setDescription(val);
+//	  	}
 //	    ((FProperty)focData).setValue(getValue());
 	  }
 	  return false;
@@ -188,6 +202,9 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
     if(focData instanceof FProperty){
 //      setValue((String) ((FProperty)focData).getValue());
     	setValue(((FProperty)focData).getString());
+    	if(isDescriptionEqualValue()){
+    		setDescription(getValue());
+    	}
     }
   }
   
@@ -245,5 +262,12 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 	public void refreshEditable() {
 		setEnabled(getDelegate() != null ? getDelegate().isEditable() : true);
 	}
-	
+
+	public boolean isDescriptionEqualValue() {
+		return descriptionEqualValue;
+	}
+
+	public void setDescriptionEqualValue(boolean descriptionEqualValue) {
+		this.descriptionEqualValue = descriptionEqualValue;
+	}
 }

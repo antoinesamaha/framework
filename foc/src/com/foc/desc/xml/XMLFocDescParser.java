@@ -135,9 +135,17 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
   		fld = new FCompanyField(true, true);
   		xmlFocDesc.addField(fld);
     } else if (qName.equals(TAG_CODE)) {
-    	fld = xmlFocDesc.addCodeField();    	
+    	fld = xmlFocDesc.addCodeField();
+    	int size = getSize(att);
+    	if(size > 0){
+    		fld.setSize(size);
+    	}    	
     } else if (qName.equals(TAG_EXTERNAL_CODE)) {
-    	fld = xmlFocDesc.addExternalCodeField();    	
+    	fld = xmlFocDesc.addExternalCodeField();
+    	int size = getSize(att);
+    	if(size > 0){
+    		fld.setSize(size);
+    	}    	
     } else if (qName.equals(TAG_NAME)) {
     	fld = xmlFocDesc.addNameField();
     	int size = getSize(att);
@@ -225,6 +233,16 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	boolean nullAllowed = getBoolean(att, ATT_NULL_VALUES_ALLOWED, true);
     	if(!nullAllowed){
     		oFld.setNullValueMode(FObjectField.NULL_VALUE_NOT_ALLOWED);
+    	}
+
+    	String filterProperty = getString(att, ATT_LIST_FILTER_PROPERTY);
+    	if(filterProperty != null){
+    		oFld.setSelectionFilter_PropertyDataPath(filterProperty);
+    	}
+
+    	String filterValue = getString(att, ATT_LIST_FILTER_VALUE);
+    	if(filterValue != null){
+    		oFld.setSelectionFilter_Propertyvalue(filterValue);
     	}
     	
     	xmlFocDesc.addField(oFld);

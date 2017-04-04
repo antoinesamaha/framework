@@ -158,7 +158,8 @@ public abstract class FField implements Cloneable, IFocData {
 	public static final String FNAME_DEPARTMENT                   = "DEPARTMENT";
 	public static final String FNAME_IS_SYSTEM_OBJECT             = "IS_SYSTEM";
 	public static final String FNAME_EXTERNAL_CODE                = "EXTERNAL_CODE";
-	
+	public static final String FNAME_SITE                         = "SITE";
+
   final public static String FLD_NAME_PARAM_SET_COST_QUANTITY   = "FACTOR";
   
   public void init(String name, String title, int id, boolean key, int size, int decimals) {

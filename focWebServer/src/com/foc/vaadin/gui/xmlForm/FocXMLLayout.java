@@ -999,7 +999,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					if(prop != null){
 						FField fld = prop.getFocField();
 						FocObject focObj = prop.getFocObject();
-						if(fld != null && focObj != null && fld.isMandatory()){
+						if(fld != null && focObj != null && fld.isMandatory() && !focObj.isDeleted()){
 							boolean valid = focObj.isPropertyDataValid(fld, prop);
 							if(!valid){
 								String caption = comp.getDelegate().getCaptionFromAttributes();

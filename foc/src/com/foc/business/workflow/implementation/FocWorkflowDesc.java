@@ -41,7 +41,7 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 	}
 	
 	protected void addSite1Field(){
-    FField focFld = WFSiteDesc.newSiteField(this, "SITE", iWorkflow_getFieldID_ForSite_1(), FField.NO_FIELD_ID);
+    FField focFld = WFSiteDesc.newSiteField(this, FField.FNAME_SITE, iWorkflow_getFieldID_ForSite_1(), FField.NO_FIELD_ID);
     addField(focFld);
 	}
 	

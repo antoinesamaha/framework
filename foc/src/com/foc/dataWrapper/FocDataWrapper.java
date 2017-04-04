@@ -29,6 +29,7 @@ import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.list.FocListListener;
 import com.foc.list.FocListOrderFocObject;
+import com.foc.property.FBoolean;
 import com.foc.property.FMultipleChoice;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
@@ -762,6 +763,16 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     			equals = ((FMultipleChoice)prop).getInteger() == (Integer)propertyValue;
     		}else if(propertyValue instanceof FMultipleChoiceItem){
     			equals = ((FMultipleChoice)prop).getInteger() == ((FMultipleChoiceItem)propertyValue).getId();
+    		}
+    	}else if(prop instanceof FBoolean){
+    		if(propertyValue instanceof String){
+    			if(propertyValue != null){
+    				String upperVal = ((String) propertyValue).toUpperCase();
+	    			boolean val = upperVal.equals("TRUE") || upperVal.equals("1");  
+	    			equals = prop.getValue().equals(val);
+    			}
+    		}else{
+    			equals = prop.getValue().equals(propertyValue);
     		}
     	}else{
     		equals = prop.getValue().equals(propertyValue);

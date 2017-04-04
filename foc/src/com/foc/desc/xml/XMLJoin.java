@@ -24,7 +24,12 @@ public class XMLJoin implements FXMLDesc {
 	private String table   = null;
 	private String type    = null;
 	private String on      = null;
+	private String where   = null;
 	
+	public String getWhere() {
+		return where;
+	}
+
 	private String otherAlias = null;
 	private String otherFieldName = null;
 	private String thisFieldName  = null;
@@ -40,6 +45,7 @@ public class XMLJoin implements FXMLDesc {
   	alias = XMLFocDescParser.getString(att, ATT_JOIN_ALIAS);
   	on    = XMLFocDescParser.getString(att, ATT_JOIN_ON);
   	type  = XMLFocDescParser.getString(att, ATT_JOIN_TYPE);
+  	where = XMLFocDescParser.getString(att, ATT_JOIN_WHERE);
   	
   	parseOn();
 	}
@@ -95,6 +101,10 @@ public class XMLJoin implements FXMLDesc {
 					  }else if(type.equals("right")){
 					  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
 					  }
+					  if(Utils.isStringEmpty(getWhere())){
+					  	join.setAdditionalWhere(getWhere());
+					  }
+					  
 					  tableAlias.addJoin(join);
 					}else{
 						if(getFocDesc() != null){

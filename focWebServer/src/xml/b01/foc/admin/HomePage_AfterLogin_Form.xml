@@ -1,4 +1,4 @@
-<VerticalLayout name="transactionHeader" spacing="true" captionMargin="0" width="100%" margin="true">
+<VerticalLayout name="transactionHeader" captionMargin="0" width="100%" margin="true">
 		<ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="false" withPdf="false"/>
     <!-- Label value="Welcome to EVERPRO by 01Barmaja" style="f18,bold" />
     <Label style="line" height="2px" width="100%" captionMargin="0"  /-->
