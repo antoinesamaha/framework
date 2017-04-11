@@ -386,6 +386,15 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		beforeLayoutConstruction();
 		parseXML();
 		mapDataPath2ListenerAction_ApplyVisibilityFormulas();
+		//Call After Contruction for Tables with inner details layout 
+		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
+		while(iter != null && iter.hasNext()){
+			FocXMLGuiComponent comp = iter.next();
+			if(comp instanceof FVTableWrapperLayout){
+				((FVTableWrapperLayout)comp).innerLayout_AfterConstruction();
+			}
+		}
+		//------------------
 		afterLayoutConstruction();
 	}
 
@@ -2389,6 +2398,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			childLayoutArray = new ArrayList<FocXMLLayout>();
 		}
 		childLayoutArray.add(xmlLayout);
+	}
+
+	public void childXMLLayoutArray_Remove(FocXMLLayout xmlLayout) {
+		if(childLayoutArray != null){
+			childLayoutArray.remove(xmlLayout);
+		}
 	}
 
 	public int childXMLLayoutArray_Size() {

@@ -675,7 +675,7 @@ public class FObject extends FProperty implements FPropertyListener{
 
   public void restore() {
     unplugListenerToReferencePropertyOfObjectValue();
-    disposeLocallyConstructedObject(focObjValue);
+    if(backupObject != focObjValue) disposeLocallyConstructedObject(focObjValue);
     setObject_Encapsulation(backupObject);
     if(localReference != null){
     	localReference.setFocObject(focObjValue);

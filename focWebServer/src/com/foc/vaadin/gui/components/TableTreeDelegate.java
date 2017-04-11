@@ -99,7 +99,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	private XMLViewKey xmlViewKey_New = null;
 	private XMLViewKey xmlViewKey_Open = null;
   private int viewContainer_Open = 0;
-	private int viewContainer_New = VIEW_CONTAINER_NOT_SET;
+	private int viewContainer_New = ITableTree.VIEW_CONTAINER_NOT_SET;
 	private int editingMode = -1;
 	private FVTableWrapperLayout wrapperLayout = null;
 	private ValidationListener_ForOpenedObjectToGetReloadedAfterEdit validationListener_ToReloadOpenedObjects = null;
@@ -1702,10 +1702,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		}
 
 		if(panel != null){
-			int viewContainer = viewContainer_New;
-			if(viewContainer == ITableTree.VIEW_CONTAINER_NOT_SET){
-				viewContainer = viewContainer_Open;
-			}
+			int viewContainer = getViewContainer_ForNew();
 			openFormPanel(panel, viewContainer);
 		}else{
 			// if(!getTreeOrTable().getFocList().isDirectlyEditable()){
@@ -1775,6 +1772,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				FocXMLLayout.popupInDialog(panel);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_SAME_WINDOW){
 				getMainWindow().changeCentralPanelContent(panel, true);
+			}else if(viewContainer == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
+				getWrapperLayout().innerLayout_Replace(panel);
 			}
 		}
 	}
@@ -1811,6 +1810,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			view = ITableTree.VIEW_CONTAINER_SAME_WINDOW;
 		}else if(attribValue.equals(FXML.VAL_VIEW_CONTAINER__POPUP_WINDOW)){
 			view = ITableTree.VIEW_CONTAINER_POPUP;
+		}else if(attribValue.equals(FXML.VAL_VIEW_CONTAINER__INNER_LAYOUT)){
+			view = ITableTree.VIEW_CONTAINER_INNER_LAYOUT;
+			if(wrapperLayout != null){
+				wrapperLayout.innerLayout_Create();
+			}
 		}
 		return view;
 	}
@@ -1823,24 +1827,36 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			attrib = FXML.VAL_VIEW_CONTAINER__POPUP_WINDOW;
 		}else if(value == ITableTree.VIEW_CONTAINER_SAME_WINDOW){
 			attrib = FXML.VAL_VIEW_CONTAINER__SAME_WINDOW;
+		}else if(value == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
+			attrib = FXML.VAL_VIEW_CONTAINER__INNER_LAYOUT;
 		}
 		return attrib;
 	}
 
-	public static final int VIEW_CONTAINER_NOT_SET = -1;
-
-	public static final int VIEW_CONTAINER_SAME_WINDOW = 0;
-
-	public static final int VIEW_CONTAINER_NONE = 1;
-
-	public static final int VIEW_CONTAINER_POPUP = 2;
+//	public static final int VIEW_CONTAINER_NOT_SET      = -1;
+//	public static final int VIEW_CONTAINER_SAME_WINDOW  =  0;
+//	public static final int VIEW_CONTAINER_NONE         =  1;
+//	public static final int VIEW_CONTAINER_POPUP        =  2;
+//	public static final int VIEW_CONTAINER_INNER_LAYOUT =  3;
 
 	public void setViewContainer_ForOpen(String attribValue) {
 		viewContainer_Open = viewContainer_ForAttribute(attribValue);
 	}
 
+	public int getViewContainer_ForOpen() {
+		return viewContainer_Open;
+	}
+
 	public void setViewContainer_ForNew(String attribValue) {
 		viewContainer_New = viewContainer_ForAttribute(attribValue);
+	}
+	
+	public int getViewContainer_ForNew(){
+		int viewContainer = viewContainer_New;
+		if(viewContainer == ITableTree.VIEW_CONTAINER_NOT_SET){
+			viewContainer = viewContainer_Open;
+		}
+		return viewContainer;
 	}
 
 	public void setXmlViewKey_New(XMLViewKey xmlViewKey_New) {

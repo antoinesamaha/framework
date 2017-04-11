@@ -97,7 +97,12 @@ public class FVTabbedLayout extends TabSheet implements FVLayout {
   public void addComponent(Component comp, Attributes attributes) {
     comp.addStyleName("padding");
     
-    String positionString = attributes.getValue("position");
+    String title = attributes.getValue(FXML.ATT_TITLE);
+    if(title == null){
+    	title = attributes.getValue(FXML.ATT_NAME);
+    }
+    
+    String positionString = attributes.getValue(FXML.ATT_TAB_POSITION);
     if(positionString != null){
     	int position = 0;
     	try {
@@ -106,10 +111,9 @@ public class FVTabbedLayout extends TabSheet implements FVLayout {
     		Globals.logException(e);
     	}
     	
-    	addTab(comp, attributes.getValue("name"), null, position);
-    }
-    else{
-    	addTab(comp, attributes.getValue("name"));
+    	addTab(comp, title, null, position);
+    }else{
+    	addTab(comp, title);
     }
     
     if(delegate != null && delegate.isConstructionMode()){

@@ -1951,6 +1951,15 @@ public class FVValidationLayout extends HorizontalLayout {
   	return valo_DeleteEmbedded;
 	}
 
+  public void setDeleteButtonVisible(boolean visible){
+  	if(valo_DeleteEmbedded != null){
+  		valo_DeleteEmbedded.setVisible(visible);
+  	}
+  	if(deleteButton != null){
+  		deleteButton.setVisible(visible);
+  	}
+  }
+  
   public FVCheckBox valo_GetNotCompletedYet(boolean createIfNeeded){
   	if(valo_NotCompletedYet == null && createIfNeeded){// && !isObjectLocked()){
   		FocObject focObj = getFocObject();

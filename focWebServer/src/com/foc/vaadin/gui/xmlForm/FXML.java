@@ -50,6 +50,7 @@ public interface FXML {
   public static final String ATT_HELP                     = "help"             ;
   public static final String TAG_SCREEN_HELP              = "ScreenHelp"       ;
   
+  public static final String ATT_TAB_POSITION             = "position"         ;
   public static final String ATT_AVOID_ROW_BREAK          = "avoidRowBreak"    ;
   public static final String ATT_CAPTION_MODE             = "captionMode"      ;
   public static final String ATT_LINK                     = "link";
@@ -257,6 +258,7 @@ public interface FXML {
   public static final String VAL_VIEW_CONTAINER__NONE         = "none"        ;
   public static final String VAL_VIEW_CONTAINER__SAME_WINDOW  = "same window" ;
   public static final String VAL_VIEW_CONTAINER__POPUP_WINDOW = "popup window";
+  public static final String VAL_VIEW_CONTAINER__INNER_LAYOUT = "inner layout";
   
   public static final String VAL_INLINE_EDITABLE           = "optional";
   
