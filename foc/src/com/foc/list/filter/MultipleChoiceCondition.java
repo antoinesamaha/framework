@@ -210,4 +210,25 @@ public class MultipleChoiceCondition extends FilterCondition{
 	public void resetToDefaultValue(FocListFilter filter){
 		setToValue(filter, OPERATION_NONE, 1);
 	}
+	
+  public String buildDescriptionText(FocListFilter filter) {
+  	String description = null;
+  	
+    int operation = getOperation(filter);
+    if(operation != OPERATION_NONE){
+    	String fieldName  = getFieldLabel();
+      int value = getValue(filter);
+
+      switch(operation){
+      case OPERATION_EQUALS:
+      	description = fieldName + " = " + value;
+      	break;
+      case OPERATION_DIFFERENT_FROM:
+      	description = fieldName + " <> " + value ;
+      	break;
+      }
+    }
+  	
+  	return description;
+  }
 }

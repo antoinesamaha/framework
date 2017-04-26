@@ -41,9 +41,9 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newObject.load();
 
 		XMLViewKey xmlViewKey = new XMLViewKey(newObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
-		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, newObject);
+		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newObject);
 		formLayout.setFocDataOwner(true);
-		getMainWindow().changeCentralPanelContent(formLayout, true);
+		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
 			@Override
@@ -74,8 +74,8 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newFocObject.setCompany(Globals.getApp().getCurrentCompany());
 		
 		XMLViewKey xmlViewKey = new XMLViewKey(newFocObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
-		formLayout = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, newFocObject);
-		getMainWindow().changeCentralPanelContent(formLayout, true);
+		formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newFocObject);
+		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
 			@Override

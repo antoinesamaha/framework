@@ -28,7 +28,8 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	private FVVerticalLayout         centralPanel             = null;
 	private ArrayList<ICentralPanel> arrayOfCentralComponents = null;
   private FVMenuTree               menuTree                 = null;
-  
+
+  private Window wrapperWindow = null; 
 	private Window utilityWindow = null;
 	
 	private String preferredWidth = null;
@@ -97,9 +98,13 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		}
 	}
 
+	public Window getWrapperWindow(){
+		return wrapperWindow;
+	}
+	
 	public Window newWrapperWindow(){
-		Window window = new Window();
-		window.setClosable(false);
+		wrapperWindow = new Window();
+		wrapperWindow.setClosable(false);
 		/*
 		window.addCloseListener(new CloseListener() {
       @Override
@@ -116,14 +121,13 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
     });
     */
 	  
-//		window.setSizeFull();
-		window.setWidth(getPreferredWidth());
-		window.addStyleName("focCentralPanel");
-		window.center();
+		wrapperWindow.setWidth(getPreferredWidth());
+		wrapperWindow.addStyleName("focCentralPanel");
+		wrapperWindow.center();
 		
-		window.setContent(this);
-//		window.markAsDirtyRecursive();
-		return window;
+		wrapperWindow.setContent(this);
+
+		return wrapperWindow;
 	}
 
 	public void fill(){
@@ -262,9 +266,12 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	
 	private void replaceValidationLayout(ICentralPanel centralPanel){
 		if(Globals.isValo()){
-			FocWebApplication webApp = findAncestor(FocWebApplication.class);
-			if(webApp != null){
-				webApp.replaceFooterLayout(centralPanel.getValidationLayout());
+			//Here we need to check if we are in a popup window or in the MainWindow UI
+			if(getWrapperWindow() == null){
+				FocWebApplication webApp = findAncestor(FocWebApplication.class);
+				if(webApp != null){
+					webApp.replaceFooterLayout(centralPanel.getValidationLayout());
+				}
 			}
 		}
 	}
@@ -379,8 +386,14 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		if(getCentralPanel() == null){
 			Window window = findAncestor(Window.class);
 			if(window != null && getUI() != null){
+				INavigationWindow navWindow = null;
+				if(getUI().getContent() instanceof INavigationWindow){
+					navWindow = (INavigationWindow) (getUI().getContent());
+				}
 				getUI().removeWindow(window);
-				((INavigationWindow)getUI().getContent()).refreshCentralPanelAndRightPanel();
+				if(navWindow != null){
+					navWindow.refreshCentralPanelAndRightPanel();
+				}
 			}
 		}
 	}

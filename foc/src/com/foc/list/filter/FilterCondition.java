@@ -30,6 +30,7 @@ public abstract class FilterCondition {
   public abstract boolean      isValueLocked(FocListFilter filter);
   public abstract void         resetToDefaultValue(FocListFilter filter);
   public abstract void         forceFocObjectToConditionValueIfNeeded(FocListFilter filter, FocObject focObject);
+  public abstract String       buildDescriptionText(FocListFilter filter);
   
   public FilterCondition(FFieldPath filterFieldPath, String filterFieldPrefix){
     this.fieldPath = filterFieldPath;

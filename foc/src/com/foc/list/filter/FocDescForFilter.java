@@ -2,6 +2,7 @@ package com.foc.list.filter;
 
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 
@@ -22,7 +23,7 @@ public abstract class FocDescForFilter extends FocDesc implements IFocDescForFil
 	
 		addReferenceField();
 		addNameField();
-    
+
     if(getFilterDesc() != null){
       getFilterDesc().fillDesc(this, 1);
     }

@@ -9,6 +9,8 @@ import com.foc.vaadin.gui.components.FVTable;
 import com.foc.vaadin.gui.components.FVTextField;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.event.ShortcutListener;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.FontIcon;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
@@ -185,6 +187,14 @@ public class FocXMLGuiComponentStatic {
         if(!Utils.isStringEmpty(tabIndexString) && xmlComponent.getFormField() != null){
         	int tabIndex = Utils.parseInteger(tabIndexString, -1);
         	xmlComponent.getFormField().setTabIndex(tabIndex);
+        }
+        
+        String iconName = attributes.getValue(FXML.ATT_ICON);
+        if(!Utils.isStringEmpty(iconName)){
+        	FontIcon icon = FontAwesome.valueOf(iconName.toUpperCase());
+        	if(icon != null){
+        		component.setIcon(icon);
+        	}
         }
         
       } catch (Exception e) {

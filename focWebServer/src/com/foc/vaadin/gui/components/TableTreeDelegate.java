@@ -1698,7 +1698,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			panel = getFocXMLLayout().table_NewCentralPanel_ForForm(getTableName(), getTreeOrTable(), newObj);
 		}
 		if(panel == null && getEditingMode() == MODE_NOT_EDITABLE){
-			panel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), getXmlViewKey_New(), newObj);
+			panel = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), getXmlViewKey_New(), newObj);
 		}
 
 		if(panel != null){
@@ -1732,7 +1732,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 					focObject = originalObject.newObjectReloaded();
 				}
 //				ICentralPanel panel = (ICentralPanel) XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), getXmlViewKey_Open(), focObject);
-				centralPanel = (ICentralPanel) XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), getXmlViewKey_Open(), focObject);
+				centralPanel = (ICentralPanel) XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), getXmlViewKey_Open(), focObject);
 				if(useADuplicateObject){
 					centralPanel.setFocDataOwner(true);
 				  FVValidationLayout vLay = centralPanel.getValidationLayout();
@@ -1771,7 +1771,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			if(viewContainer == ITableTree.VIEW_CONTAINER_POPUP){
 				FocXMLLayout.popupInDialog(panel);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_SAME_WINDOW){
-				getMainWindow().changeCentralPanelContent(panel, true);
+				getParentNavigationWindow().changeCentralPanelContent(panel, true);
+//				getMainWindow().changeCentralPanelContent(panel, true);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
 				getWrapperLayout().innerLayout_Replace(panel);
 			}
@@ -1780,6 +1781,15 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 	public FocWebVaadinWindow getMainWindow() {
 		return (FocWebVaadinWindow) FocWebApplication.getInstanceForThread().getNavigationWindow();
+	}
+
+	public INavigationWindow getParentNavigationWindow(){
+		INavigationWindow parentNavigationWindow = null;
+		if(getWrapperLayout() != null){
+			parentNavigationWindow = getWrapperLayout().findAncestor(FocCentralPanel.class);
+		}
+		if(parentNavigationWindow == null) parentNavigationWindow = getMainWindow();
+		return parentNavigationWindow;
 	}
 
 	public XMLViewKey getXmlViewKey_New() {
@@ -2131,7 +2141,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 	public void newFormulaForm(ITableTree breakdownTable, CompositeKeyPropertyFormulaEnvironment formulaEnvironment){
 	  XMLViewKey formulaKey = new XMLViewKey(BusinessEssentialsWebModule.STORAGE_FORMULA, XMLViewKey.TYPE_FORM); 
-	  FocFormula_Form formulaLayout = (FocFormula_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(getMainWindow(), formulaKey, null);
+	  FocFormula_Form formulaLayout = (FocFormula_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(getParentNavigationWindow(), formulaKey, null);
 	  setFormulaForm(formulaLayout);
 	  if(getTreeOrTable() instanceof FVTreeGrid){
 	  	FVTreeGrid treeGrid = (FVTreeGrid) getTreeOrTable();

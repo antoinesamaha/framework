@@ -145,8 +145,13 @@ public class FReference extends FProperty {
   @Override
   public String getSqlString() {
   	String str = super.getSqlString();
-  	if(Globals.getDBManager().isProviderSupportNullValues() && getInteger() == 0){
-  		str = null;
+  	long sqlRef = getLong();
+  	if(sqlRef <= 0){
+  		if(Globals.getDBManager().isProviderSupportNullValues()){
+  			str = null;
+  		}else{
+  			str = String.valueOf(sqlRef);
+  		}
   	}
   	return str;
   }

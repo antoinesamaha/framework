@@ -40,8 +40,9 @@ public class WFSite extends FocObject {
   	WFSite site = (WFSite) this;
   	while(!has && site != null){
   		has = site.equalsRef(parent);
-  		
-  		site = (WFSite) site.getFatherObject();
+  		WFSite fatherSite = (WFSite) site.getFatherObject();
+  		if(fatherSite == site) break;
+  		site = fatherSite;
   	}
   	return has;
   }

@@ -14,7 +14,6 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.HasComponents;
 
 import fi.jasoft.dragdroplayouts.DDAbsoluteLayout;
 import fi.jasoft.dragdroplayouts.DDHorizontalLayout.HorizontalLayoutTargetDetails;
@@ -47,7 +46,7 @@ public class FVHorizontalDropHandler extends FVDropHandler {
     int idx = (details).getOverIndex();
 
     // Detach
-    layout.removeComponent(comp);
+    if(layout != null && comp != null) layout.removeComponent(comp);
     idx--;
 
     // Increase index if component is dropped after or above a previous
@@ -57,32 +56,36 @@ public class FVHorizontalDropHandler extends FVDropHandler {
         idx++;
     }
 
-    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout)comp.getParent());
+    if(comp != null){
+	    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout)comp.getParent());
+	    
+	    if (newAttributes.getIndex(FXML.ATT_IDX) != -1) {
+	      newAttributes.setValue(newAttributes.getIndex("idx"), idx+"");
+	    } else {
+	      newAttributes.addAttribute("", FXML.ATT_IDX, FXML.ATT_IDX, "CDATA", idx+"");
+	    }
+	    
+	    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
     
-    if (newAttributes.getIndex(FXML.ATT_IDX) != -1) {
-      newAttributes.setValue(newAttributes.getIndex("idx"), idx+"");
-    } else {
-      newAttributes.addAttribute("", FXML.ATT_IDX, FXML.ATT_IDX, "CDATA", idx+"");
-    }
+	    // Add component
+	    if(layout != null){
+		    if (idx >= 0) {
+		        layout.addComponent(comp, idx);
+		    } else {
+		        layout.addComponent(comp);
+		    }
+	    }
     
-    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
-    
-    // Add component
-    if (idx >= 0) {
-        layout.addComponent(comp, idx);
-    } else {
-        layout.addComponent(comp);
-    }
-    
-    if (comp instanceof FVLayout) {
-      Globals.logString("Here3");
-      ((FVLayout) comp).setDragDrop(true);
-    }
-
-    // Add component alignment if given
-    if (dropAlignment != null) {
-        layout.setComponentAlignment(comp, dropAlignment);
-    }
+	    if (comp instanceof FVLayout) {
+	      Globals.logString("Here3");
+	      ((FVLayout) comp).setDragDrop(true);
+	    }
+	
+	    // Add component alignment if given
+	    if (dropAlignment != null && layout != null && comp != null) {
+	      layout.setComponentAlignment(comp, dropAlignment);
+	    }
+  	}
   }
 
   @Override

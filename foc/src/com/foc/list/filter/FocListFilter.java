@@ -11,6 +11,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.foc.ConfigInfo;
 import com.foc.db.SQLFilter;
 import com.foc.db.SQLJoin;
 import com.foc.desc.FocConstructor;
@@ -27,6 +28,7 @@ import com.foc.gui.treeTable.FTreeTableModel;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.property.FProperty;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -58,6 +60,18 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     if(isRevisionSupportEnabled()){
       allwaysActive = true;
     }
+    
+    FilterDesc filterDesc = getThisFilterDesc();
+    if(filterDesc != null){
+	  	for(int i=0; i<filterDesc.getConditionCount(); i++){
+	      FilterCondition cond = filterDesc.getConditionAt(i);
+	      if(cond != null && !cond.isValueLocked(this)){
+	        cond.resetToDefaultValue(this);
+	      }
+	    }
+    }
+    
+    adjustDescription();
   }
 
   public void dispose(){    
@@ -103,6 +117,30 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
     }
   	
   	return foundCond;
+  }
+  
+  public void adjustDescription(){
+  	FilterDesc filterDesc = getThisFilterDesc();
+  	String description = "";
+
+  	for(int i=0; i<filterDesc.getConditionCount(); i++){
+      FilterCondition cond = filterDesc.getConditionAt(i);
+      if(cond != null && cond.isDisplay()){
+      	String descPart = cond.buildDescriptionText(this);
+      	if(!Utils.isStringEmpty(descPart)){
+      		if(description.length() > 0){
+      			if(ConfigInfo.isArabic()){
+      				description = description + " | ";
+      			}else{
+      				description = " | " + description ;
+      			}
+      		}
+      		description = description + descPart;
+      	}
+      }
+    }
+  	
+  	setDescription(description);
   }
   
   // ooooooooooooooooooooooooooooooooooo
@@ -368,6 +406,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
   }
   
   public void setActive(boolean active) {
+  	adjustDescription();
     if(isRevisionSupportEnabled() && firstTime ){
       FProperty revNumber =  getRevisionProperty();
       RevisionCondition cond = getRevisionCondition();

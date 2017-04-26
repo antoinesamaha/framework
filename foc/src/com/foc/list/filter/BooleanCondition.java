@@ -7,6 +7,7 @@ package com.foc.list.filter;
 
 import java.awt.Component;
 
+import com.foc.ConfigInfo;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -131,9 +132,15 @@ public class BooleanCondition extends FilterCondition{
     
     if(focDesc != null){
       FMultipleChoiceField multipleChoice = new FMultipleChoiceField(getFieldPrefix()+"_VAL", "Value", firstID + FLD_VALUE, false, 1);
-      multipleChoice.addChoice(VALUE_INDIFFERENT, "All");
-      multipleChoice.addChoice(VALUE_TRUE, "True");
-      multipleChoice.addChoice(VALUE_FALSE, "False");
+      if(ConfigInfo.isArabic()){
+	      multipleChoice.addChoice(VALUE_INDIFFERENT, "لا شرط");
+	      multipleChoice.addChoice(VALUE_TRUE, "نعم");
+	      multipleChoice.addChoice(VALUE_FALSE, "لا");
+      }else{      
+	      multipleChoice.addChoice(VALUE_INDIFFERENT, "All");
+	      multipleChoice.addChoice(VALUE_TRUE, "True");
+	      multipleChoice.addChoice(VALUE_FALSE, "False");
+      }
       multipleChoice.setSortItems(false);
       focDesc.addField(multipleChoice);
       multipleChoice.addListener(new ColorPropertyListener(this, firstID + FLD_VALUE));
@@ -169,4 +176,22 @@ public class BooleanCondition extends FilterCondition{
   public void resetToDefaultValue(FocListFilter filter){
   	setValue(filter, VALUE_INDIFFERENT);
   }
+  
+	@Override
+	public String buildDescriptionText(FocListFilter filter) {
+    String description = null;
+    
+    int valueCondition = getValue(filter);
+    if(valueCondition != VALUE_INDIFFERENT){
+    	String fieldName = getFieldLabel();
+    	
+      if(valueCondition == VALUE_TRUE){
+      	description = (fieldName+" = TRUE");
+      }else{
+      	description = (fieldName+" = FALSE");
+      }
+    }
+    		
+		return description;
+	}
 }

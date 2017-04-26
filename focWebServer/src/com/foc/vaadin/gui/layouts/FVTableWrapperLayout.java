@@ -9,7 +9,6 @@ import org.xml.sax.Attributes;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
-import com.foc.OptionDialog;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -120,8 +119,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private String codeFrom = null;
 	private String codeTo = null;
 
+	//BAntoineS - Horizontal
+//	private FVVerticalLayout verticalTableLayout = null;
+	//EAntoineS
+	
 	private FVVerticalLayout innerLayout = null;
-
+	private boolean innerLayout_EnableAddEmptyItemAfterCommit = true;
+	
 	public FVTableWrapperLayout() {
 		super(null);
 		setSpacing(false);
@@ -129,6 +133,18 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		setCaption(null);
     addStyleName("focNoCaptionMargin");
 		setHeight("100%");
+		
+		//BAntoineS - Horizontal
+		/*
+		verticalTableLayout = new FVVerticalLayout();
+		verticalTableLayout.setSpacing(false);
+		verticalTableLayout.setMargin(false);
+		verticalTableLayout.setCaption(null);
+		verticalTableLayout.addStyleName("focNoCaptionMargin");
+		verticalTableLayout.setHeight("100%");
+		addComponent(verticalTableLayout);
+		 */
+		//EAntoineS - Horizontal
 	}
 
 	public void dispose() {
@@ -194,7 +210,11 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			// headerRootLayout.addStyleName("foc-blue");
 			// headerRootLayout.addStyleName("noPrint");
 			// headerRootLayout.setCaption(null);
+			
+			//BAntoineS - Horizontal
+			//verticalTableLayout.addComponentAsFirst(headerRootLayout);;
 			addComponentAsFirst(headerRootLayout);
+			//EAntoineS - Horizontal
 
 			headerLeftLayout = new FVHorizontalLayout(null);
 			headerRootLayout.addComponent(headerLeftLayout);
@@ -944,8 +964,12 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 
 		tablePanel.setHeight("100%");
+		//BAntoineS - Horizontal
+		//verticalTableLayout.addComponent(tablePanel);
+		//verticalTableLayout.setExpandRatio(tablePanel, 1);
 		addComponent(tablePanel);
 		setExpandRatio(tablePanel, 1);
+		//EAntoineS - Horizontal
 
 		// addComponent((Component) tableOrTree);
 
@@ -1542,7 +1566,10 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	public void innerLayout_Create() {
 		if(innerLayout == null){
 			innerLayout = new FVVerticalLayout();
+			//BAntoineS - Horizontal
+//			addComponentAsFirst(innerLayout);
 			addComponent(innerLayout);
+			//EAntoineS - Horizontal			
 			
 //			addItemClickListenerContent();
 		}
@@ -1583,6 +1610,9 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				
 				@Override
 				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+					if(innerLayout_IsEnableAddEmptyItemAfterCommit()){
+						if(commited) getTableTreeDelegate().addItem(null);
+					}
 					refresh();
 				}
 			});
@@ -1598,24 +1628,27 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		if(innerLayout != null){
 			final ICentralPanel previousCentralPanel = innerLayout_GetICentralPanel();
 			if(			previousCentralPanel != null 
-					&& 	previousCentralPanel.getFocData() instanceof FocObject
-					&& 	((FocObject) previousCentralPanel.getFocData()).isModified()
-					){
+					&& 	previousCentralPanel.getFocData() instanceof FocObject){
 				
-				OptionDialog optionDialog = new OptionDialog("This will make you loose info", "Are you sure you want to cancel....") {
-					@Override
-					public boolean executeOption(String optionName) {
-						if(optionName.equals("DISCARD")){
-							((FocObject) previousCentralPanel.getFocData()).restore();
+				FocObject focObj = (FocObject) previousCentralPanel.getFocData();
+				if(focObj != null){
+					if(focObj.isCreated() && focObj.isEmpty()){
+						focObj.setDeleted(true);
+						innerLayout_Replace_Internal(centralPanel);
+					}else{
+						
+						if(focObj.isModified() || focObj.isCreated()){
+							if(getFocXMLLayout() != null && previousCentralPanel.getValidationLayout() != null){
+								if(!previousCentralPanel.getValidationLayout().saveAndRefreshWithoutGoBack()){
+									innerLayout_Replace_Internal(centralPanel);
+								}
+							}
+						}else{
 							innerLayout_Replace_Internal(centralPanel);
 						}
-						return false;
+						
 					}
-				};
-				optionDialog.addOption("DISCARD", "Loose Changes");
-				optionDialog.addOption("KEEP", "Keep Current Layout");
-				optionDialog.popup();
-				
+				}				
 			}else{
 				innerLayout_Replace_Internal(centralPanel);
 			}
@@ -1631,5 +1664,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				getTableTreeDelegate().addItem(null);
 			}
 		}
+	}
+	
+	public boolean innerLayout_IsEnableAddEmptyItemAfterCommit(){
+		return this.innerLayout_EnableAddEmptyItemAfterCommit;
+	}
+	
+	public void innerLayout_SetEnableAddEmptyItemAfterCommit(boolean innerLayout_EnableAddEmptyItemAfterCommit){
+		this.innerLayout_EnableAddEmptyItemAfterCommit = innerLayout_EnableAddEmptyItemAfterCommit;
 	}
 }

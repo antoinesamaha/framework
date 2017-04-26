@@ -100,6 +100,7 @@ import com.foc.gui.table.IFocCellPainter;
 import com.foc.link.FocLinkOutRights;
 import com.foc.list.FocList;
 import com.foc.plugin.IFocObjectPlugIn;
+import com.foc.property.FBoolean;
 import com.foc.property.FCloudImageProperty;
 import com.foc.property.FCloudStorageProperty;
 import com.foc.property.FColorProperty;
@@ -2148,22 +2149,15 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
           if( prop != null && prop instanceof FObject){
             FocObject obj = (FocObject)prop.getObject();
             if( obj != null && obj.isCreated()){
-            	error = error || obj.commitStatusToDatabaseWithPropagation();
+            	error = error || !obj.validate(true);//commitStatusToDatabaseWithPropagation(); VALIDATE_VALIDATE_VALIDATE
+            	if(error){
+            		int debug = 3;
+            		debug++;
+            	}
             }
           }
         }
-        /*
-        for( int i = 0; i < propertiesArray.length; i++){
-          FProperty prop = propertiesArray[i];
-          if( prop != null && prop instanceof FObject){
-            FocObject obj = (FocObject)prop.getObject();
-            if( obj != null && obj.isCreated()){
-              obj.commitStatusToDatabaseWithPropagation();
-            }
-          }
-        }
-        */
-        
+             
         this.save();
       }
     }
@@ -2171,8 +2165,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   }
   
   public boolean commitStatusToDatabaseWithPropagation() {
-  	boolean error = super.commitStatusToDatabaseWithPropagation();
-  	fireEvent(FocEvent.ID_SAVE_AFTER_PROPAGATION);
+  	boolean error = false;
+  	if(!isCreated() || !isEmpty()){
+	  	error = super.commitStatusToDatabaseWithPropagation();
+	  	fireEvent(FocEvent.ID_SAVE_AFTER_PROPAGATION);
+  	}else{
+  		int debug = 3;
+  		debug++;
+  	}
   	return error;
   }
 
@@ -3650,10 +3650,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 
 	@Override
 	public void resetStatus(){
-		boolean wasModified = isModified();
-		super.resetStatus();
-		if(wasModified){
-			getThisFocDesc().resetStatusForFocObject(this);
+		//The condition is because when the object is Created and empty it is not saved => Ref < 0 and we should not reset the status
+		if(!isCreated() || hasRealReference()){
+		//-------------
+			boolean wasModified = isModified();
+			super.resetStatus();
+			if(wasModified){
+				getThisFocDesc().resetStatusForFocObject(this);
+			}
 		}
 	}
 
@@ -4455,5 +4459,48 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   
   public boolean hasAdrBookParty() {
   	return this instanceof IAdrBookParty;
+  }
+  
+  public boolean isEmpty(){
+  	boolean empty = true;
+  	
+  	FocFieldEnum enumer = this.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
+  	while(empty && enumer != null && enumer.hasNext()){
+  		enumer.nextField();
+  		FProperty prop = enumer.getProperty();
+  		if(prop != null){
+	  		if(!(prop instanceof FReference)){
+	  			if(prop instanceof FBoolean){
+	  			}else if(prop instanceof FList){
+	  				FocList focList = ((FList)prop).getList();
+	  				empty = focList == null || focList.size() == 0;
+	  				if(!empty){
+	  					empty = true;
+	  					for(int i=0; i<focList.size() && empty; i++){
+	  						FocObject listItem = focList.getFocObject(i);
+	  						empty = listItem.isEmpty();
+	  					}
+	  				}
+	  			}else{
+	  				boolean checkThisProperty = true;
+	  				if(prop instanceof FObject){
+	  					FObjectField objField = (FObjectField) ((FObject)prop).getFocField();
+	  					checkThisProperty = !objField.isCascade();
+	  					if(checkThisProperty){
+	  						FocObject valueObj = (FocObject) prop.getObject();
+	  						if(valueObj != null && valueObj.isCreated() && valueObj.isEmpty()){
+	  							checkThisProperty = false;
+	  						}
+	  					}
+	  				}
+	  				if(checkThisProperty){
+	  					empty = prop.isEmpty();
+	  				}
+	  			}
+	  		}
+	  	}
+  	}
+  	
+  	return empty;
   }
 }

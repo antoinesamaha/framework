@@ -225,4 +225,10 @@ public class RevisionCondition extends FilterCondition{
   public void resetToDefaultValue(FocListFilter filter){
   	setToValue(filter, OPERATOR_EQUALS, 1);
   }
+  
+  @Override
+  public String buildDescriptionText(FocListFilter filter) {
+  	String description = null;
+  	return description;
+  }
 }

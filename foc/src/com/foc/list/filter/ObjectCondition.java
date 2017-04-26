@@ -9,7 +9,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 
 import com.foc.ConfigInfo;
-import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -29,7 +28,7 @@ import com.foc.util.Utils;
 /**
  * @author 01Barmaja
  */
-public class ObjectCondition extends FilterCondition{
+public class ObjectCondition extends FilterCondition {
   static public final int FLD_CONDITION_OPERATION          = 1;
   static public final int FLD_CONDITION_OBJECT             = 2;
   static public final int FLD_CONDITION_OBJECT_LIST_STRING = 3;
@@ -323,4 +322,34 @@ public class ObjectCondition extends FilterCondition{
 	public void setDisplayFieldID(int displayFieldID) {
 		this.displayFieldID = displayFieldID;
 	}
+	
+  @Override
+  public String buildDescriptionText(FocListFilter filter) {
+  	String description = null;
+  	
+    int operation = getOperation(filter);
+    if(operation != OPERATION_NONE){
+    	String fieldName = getFieldLabel();
+      FocObject condObject = getObject(filter);
+
+      switch(operation){
+      case OPERATION_EMPTY:
+      	description = fieldName + " Is Empty";
+      	break;
+      case OPERATION_EQUALS:
+      	int fieldID = getDisplayFieldID();
+      	
+      	FProperty prop = condObject.getFocProperty(fieldID);
+      	String    val  = prop.getString();
+      	
+      	description = fieldName + " = " + val;
+      	break;
+      case OPERATION_NOT_EMPTY:
+      	description = fieldName + " Not Empty";
+      	break;
+      }
+    }
+  	
+  	return description;
+  }
 }

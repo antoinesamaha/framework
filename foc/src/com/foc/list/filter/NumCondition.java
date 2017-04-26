@@ -306,4 +306,31 @@ public class NumCondition extends FilterCondition {
   	setToValue(filter, OPERATOR_INDIFERENT, 0, 0);
   }
 
+  public String buildDescriptionText(FocListFilter filter) {
+  	String description = null;
+  	
+    int operation = getOperator(filter);
+    if(operation != OPERATOR_INDIFERENT){
+    	String fieldName  = getFieldLabel();
+      double firstValue = getFirstValue(filter);
+      double lastValue  = getLastValue(filter);
+
+      switch(operation){
+      case OPERATOR_BETWEEN:
+      	description = firstValue + " < " + fieldName + " < " + lastValue;
+      	break;
+      case OPERATOR_EQUALS:
+      	description = fieldName + " = " + firstValue ;
+      	break;
+      case OPERATOR_GREATER_THAN:
+      	description = fieldName + " > " + firstValue;
+      	break;
+      case OPERATOR_LESS_THAN:
+      	description = fieldName + " < " + lastValue;
+      	break;      	
+      }
+    }
+  	
+  	return description;
+  }
 }

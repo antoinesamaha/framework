@@ -254,9 +254,11 @@ public class XMLViewDictionary implements IXMLViewDictionary {
         view = getXmlViewDicMap().get(key);
       }
       if(view == null){
-      	Globals.logString("ERROR : View Not Found for key:"+xmlViewKey.getStringKey());
-      	if(popupMessageIfNotFound){
-      		Globals.showNotification("View Not Found", xmlViewKey.getStringKey(), FocWebEnvironment.TYPE_ERROR_MESSAGE);
+      	if(!xmlViewKey.isForNewObjectOnly()){
+	      	Globals.logString("ERROR : View Not Found for key:"+xmlViewKey.getStringKey());
+	      	if(popupMessageIfNotFound){
+	      		Globals.showNotification("View Not Found", xmlViewKey.getStringKey(), FocWebEnvironment.TYPE_ERROR_MESSAGE);
+	      	}
       	}
       }
     }

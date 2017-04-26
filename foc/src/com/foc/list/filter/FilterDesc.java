@@ -9,6 +9,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
+import com.foc.desc.field.FStringField;
 
 /**
  * @author 01Barmaja
@@ -79,6 +80,12 @@ public class FilterDesc {
   }
   
   public int fillDesc(FocDesc focDesc, int idStart){
+		//This will be managed automatically to store the Filter Description, a summary sentence
+  	if(focDesc != null){
+			FStringField descriptionField = focDesc.addDescriptionField();
+			descriptionField.setSize(1000);
+  	}
+  	
     for(int i=0; i<getConditionCount(); i++){
       FilterCondition cond = getConditionAt(i);
       idStart = cond.fillDesc(focDesc, idStart);

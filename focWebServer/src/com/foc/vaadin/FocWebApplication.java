@@ -2,6 +2,8 @@ package com.foc.vaadin;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +16,7 @@ import com.foc.db.DBManager;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.layouts.validationLayout.FVHelpLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
@@ -523,5 +526,19 @@ public abstract class FocWebApplication extends UI {
 			}
 		}
 		return footerLayout;
+	}
+	
+	public boolean hasModalWindowOverIt(Window myWindow){
+		boolean hasOtherWindow = false;
+		if(myWindow == null){//Today we do not block if a window has another window over it. 
+			//We block only when window over main application window.
+			Collection<Window> coll = getWindows();
+			Iterator<Window> iter = coll.iterator();
+			while(iter != null && iter.hasNext()){
+				Window window = iter.next();
+				hasOtherWindow = window != myWindow;
+			}
+		}
+		return hasOtherWindow;
 	}
 }

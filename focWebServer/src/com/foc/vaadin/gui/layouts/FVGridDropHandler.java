@@ -15,7 +15,6 @@ import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.HasComponents;
 
 import fi.jasoft.dragdroplayouts.DDAbsoluteLayout;
 import fi.jasoft.dragdroplayouts.DDGridLayout;
@@ -60,69 +59,70 @@ public class FVGridDropHandler extends FVDropHandler {
     Component comp = transferable.getComponent();
     
     ComponentContainer sourceLayout = null;
-    
-    if (comp == layout) {
-    // Dropping myself on myself, if parent is absolute layout then
-    // move
-      if (comp.getParent() instanceof DDAbsoluteLayout) {
-          MouseEventDetails mouseDown = transferable.getMouseDownEvent();
-          MouseEventDetails mouseUp = details.getMouseEvent();
-          int movex = mouseUp.getClientX() - mouseDown.getClientX();
-          int movey = mouseUp.getClientY() - mouseDown.getClientY();
-      
-          DDAbsoluteLayout parent = (DDAbsoluteLayout) comp.getParent();
-          ComponentPosition position = parent.getPosition(comp);
-          
-          sourceLayout = parent;
-      
-          float x = position.getLeftValue() + movex;
-          float y = position.getTopValue() + movey;
-          position.setLeft(x, Sizeable.Unit.PIXELS);
-          position.setTop(y, Sizeable.Unit.PIXELS);
-      
-          return;
-      }
-    
-    } else {
-    
-    // Check that we are not dragging an outer layout into an inner
-    // layout
-      Component parent = layout.getParent();
-      while (parent != null) {
-          if (parent == comp) {
-              return;
-          }
-          parent = parent.getParent();
-      }
-      
-      // Remove component from its source
-      if (source instanceof ComponentContainer) {
-          sourceLayout = (ComponentContainer) source;
-          sourceLayout.removeComponent(comp);
-      }
+    if(comp != null){
+	    if (comp == layout) {
+	    // Dropping myself on myself, if parent is absolute layout then
+	    // move
+	      if (comp.getParent() instanceof DDAbsoluteLayout) {
+	          MouseEventDetails mouseDown = transferable.getMouseDownEvent();
+	          MouseEventDetails mouseUp = details.getMouseEvent();
+	          int movex = mouseUp.getClientX() - mouseDown.getClientX();
+	          int movey = mouseUp.getClientY() - mouseDown.getClientY();
+	      
+	          DDAbsoluteLayout parent = (DDAbsoluteLayout) comp.getParent();
+	          ComponentPosition position = parent.getPosition(comp);
+	          
+	          sourceLayout = parent;
+	      
+	          float x = position.getLeftValue() + movex;
+	          float y = position.getTopValue() + movey;
+	          position.setLeft(x, Sizeable.Unit.PIXELS);
+	          position.setTop(y, Sizeable.Unit.PIXELS);
+	      
+	          return;
+	      }
+	    
+	    } else {
+	    
+	    // Check that we are not dragging an outer layout into an inner
+	    // layout
+	      Component parent = layout.getParent();
+	      while (parent != null) {
+	          if (parent == comp) {
+	              return;
+	          }
+	          parent = parent.getParent();
+	      }
+	      
+	      // Remove component from its source
+	      if (source instanceof ComponentContainer) {
+	          sourceLayout = (ComponentContainer) source;
+	          sourceLayout.removeComponent(comp);
+	      }
+	    }
+	    
+	    int row = details.getOverRow();
+	    int column = details.getOverColumn();
+	    
+	    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout)sourceLayout);
+	    
+	    if(newAttributes.getValue(FXML.ATT_COL) != null) {
+	      newAttributes.setValue(newAttributes.getIndex(FXML.ATT_COL), column+"");
+	    } else {
+	      newAttributes.addAttribute("", FXML.ATT_COL, FXML.ATT_COL, "CDATA", column+"");
+	    }
+	    
+	    if(newAttributes.getValue(FXML.ATT_ROW) != null) {
+	      newAttributes.setValue(newAttributes.getIndex(FXML.ATT_ROW), row+"");
+	    } else {
+	      newAttributes.addAttribute("", FXML.ATT_ROW, FXML.ATT_ROW, "CDATA", row+"");
+	    }
+	    
+	    
+	    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
+	    
+	    addComponent(event, comp, column, row);
     }
-    
-    int row = details.getOverRow();
-    int column = details.getOverColumn();
-    
-    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout)sourceLayout);
-    
-    if(newAttributes.getValue(FXML.ATT_COL) != null) {
-      newAttributes.setValue(newAttributes.getIndex(FXML.ATT_COL), column+"");
-    } else {
-      newAttributes.addAttribute("", FXML.ATT_COL, FXML.ATT_COL, "CDATA", column+"");
-    }
-    
-    if(newAttributes.getValue(FXML.ATT_ROW) != null) {
-      newAttributes.setValue(newAttributes.getIndex(FXML.ATT_ROW), row+"");
-    } else {
-      newAttributes.addAttribute("", FXML.ATT_ROW, FXML.ATT_ROW, "CDATA", row+"");
-    }
-    
-    
-    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
-    
-    addComponent(event, comp, column, row);
   }
   
   protected void addComponent(DragAndDropEvent event, Component component, int column, int row) {

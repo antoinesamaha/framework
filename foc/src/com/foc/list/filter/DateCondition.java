@@ -98,7 +98,7 @@ public class DateCondition extends FilterCondition {
   // oooooooooooooooooooooooooooooooooo
   
   public void fillProperties(FocObject focFatherObject){
-    new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_OPERATOR, OPERATOR_GREATER_THAN);
+  	new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_OPERATOR, OPERATOR_GREATER_THAN);
     new FDate(focFatherObject, getFirstFieldID() + FLD_FIRST_DATE, new Date(0));
     new FDate(focFatherObject, getFirstFieldID() + FLD_LAST_DATE, new Date(0));
   }
@@ -147,6 +147,16 @@ public class DateCondition extends FilterCondition {
     }
   }
 
+  public static int adjustTheOperation(int op, Date firstDate, Date lastDate) {
+    if (op != OPERATOR_INDIFERENT){
+    	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
+    	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
+	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
+	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
+    }
+    return op;
+  }
+  
   public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) {
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
     StringBuffer buffer = null;
@@ -171,12 +181,9 @@ public class DateCondition extends FilterCondition {
       lastDateFormat = String.valueOf(lastDate);
     }
     
+    op = adjustTheOperation(op, firstDate, lastDate); 
+    
     if (op != OPERATOR_INDIFERENT){
-    	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
-    	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
-	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
-	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
-    	
 	    fieldName = FField.adaptFieldNameToProvider(provider, fieldName);
 	    
 	    if(provider == DBManager.PROVIDER_MSSQL){
@@ -387,5 +394,40 @@ public class DateCondition extends FilterCondition {
   public void resetToDefaultValue(FocListFilter filter){
   	Date date = new Date(0);
   	setToValue(filter, OPERATOR_GREATER_THAN, date, date);
+  }
+  
+  @Override
+  public String buildDescriptionText(FocListFilter filter) {
+  	String description = null;
+  	
+  	int op = getOperator(filter);
+  	Date firstDate = getFirstDate(filter);
+  	Date lastDate = getFirstDate(filter);
+  	
+  	op = adjustTheOperation(op, firstDate, lastDate);
+  	if (op != OPERATOR_INDIFERENT){
+  		String fieldName = getFieldLabel();
+  		
+      SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+      String firstDateFormat = dateFormat.format(firstDate);
+      String lastDateFormat = dateFormat.format(lastDate);
+  		
+      switch(op){
+      case OPERATOR_EQUALS:
+      	description = fieldName + " = " + firstDateFormat; 
+      	break;
+      case OPERATOR_BETWEEN:
+      	description = firstDateFormat + " < " + fieldName + " < " + lastDateFormat;
+      	break;
+      case OPERATOR_GREATER_THAN:
+      	description = fieldName + " > " + firstDateFormat;
+      	break;
+      case OPERATOR_LESS_THAN:
+      	description = fieldName + " < " + lastDateFormat;
+      	break;
+      }
+  	}  	
+  	
+  	return description;
   }
 }

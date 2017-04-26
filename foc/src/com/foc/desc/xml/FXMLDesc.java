@@ -6,12 +6,13 @@ public interface FXMLDesc {
   public static final String TAG_JOINS  = "Joins";
   
   //Filter Tags and Attributes
-  public static final String TAG_FILTER                  = "Filter";
-  public static final String TAG_FILTER_CONDITION        = "FilterCondition";
-  public static final String ATT_FILTER_ON_TABLE         = "onTable";
-  public static final String ATT_FILTER_ON_FIELD         = "field";
-  public static final String ATT_FILTER_CONDITION_PREFIX = "prefix";
-  public static final String ATT_FILTER_LEVEL            = "level";
+  public static final String TAG_FILTER                   = "Filter";
+  public static final String TAG_FILTER_CONDITION         = "FilterCondition";
+  public static final String ATT_FILTER_ON_TABLE          = "onTable";
+  public static final String ATT_FILTER_ON_FIELD          = "field";
+  public static final String ATT_FILTER_CONDITION_PREFIX  = "prefix";
+  public static final String ATT_FILTER_CONDITION_CAPTION = "caption";
+  public static final String ATT_FILTER_LEVEL             = "level";
   
   public static final String VAL_FILTER_LEVEL_DATABASE   = "db";
   public static final String VAL_FILTER_LEVEL_MEMORY     = "mem";

@@ -20,6 +20,7 @@ import com.foc.list.filter.FilterConditionFactory;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.IFocDescForFilter;
 import com.foc.shared.dataStore.AbstractDataStore;
+import com.foc.util.Utils;
 
 public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 
@@ -191,6 +192,9 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 						FFieldPath fieldPath = FFieldPath.newFFieldPath(subjectFocDesc, condition.getFieldPath());
 						FilterCondition cond = FilterConditionFactory.newConditionForField(fld, fieldPath, condition.getPrefix());
 						if(cond != null){
+							if(!Utils.isStringEmpty(condition.getCaption())){
+								cond.setFieldLabel(condition.getCaption());
+							}
 							filterDesc.addCondition(cond);
 						}
 					}else{

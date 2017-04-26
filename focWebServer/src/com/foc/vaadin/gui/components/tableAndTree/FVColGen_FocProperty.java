@@ -391,6 +391,15 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 				}
 			}else{
 				objReturned = property;
+				if((property instanceof FMultipleChoice)){
+					FocXMLAttributes attributes = column.getAttributes();
+					if(attributes != null && attributes.getValue(FXML.ATT_LINK) != null && attributes.getValue(FXML.ATT_LINK).equals("true")){
+						HyperLinkButton button = new HyperLinkButton(focObject, property.getString());
+						button.addClickListener(hyperLinkButtonListener);
+						button.addStyleName("focLinkInTable");
+						objReturned = button;
+					}
+				}
 			}
 		}
 //		if(objReturned instanceof String){

@@ -36,6 +36,8 @@ import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.list.FocList;
+import com.foc.list.filter.FilterCondition;
+import com.foc.list.filter.FocListFilter;
 import com.foc.pivot.FPivotBreakdown;
 import com.foc.pivot.FPivotTable;
 import com.foc.property.FObject;
@@ -386,15 +388,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		beforeLayoutConstruction();
 		parseXML();
 		mapDataPath2ListenerAction_ApplyVisibilityFormulas();
-		//Call After Contruction for Tables with inner details layout 
-		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
-		while(iter != null && iter.hasNext()){
-			FocXMLGuiComponent comp = iter.next();
-			if(comp instanceof FVTableWrapperLayout){
-				((FVTableWrapperLayout)comp).innerLayout_AfterConstruction();
-			}
-		}
-		//------------------
+		innerLayout_AfterConstruction();
 		afterLayoutConstruction();
 	}
 
@@ -438,6 +432,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	@Override
 	public INavigationWindow getMainWindow() {
 		return mainWindow;
+	}
+
+	public INavigationWindow getParentNavigationWindow(){
+		INavigationWindow parentNavigationWindow = findAncestor(FocCentralPanel.class);
+		if(parentNavigationWindow == null) parentNavigationWindow = getMainWindow();
+		return parentNavigationWindow;
 	}
 
 	@Override
@@ -669,6 +669,17 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
+	public Component newFilterConditionGuiField(DefaultHandler handler, FocListFilter listFilter, String dataPath, FocXMLAttributes attributes){
+		Component comp = null;
+		if(listFilter != null && listFilter.getThisFilterDesc() != null && !Utils.isStringEmpty(dataPath)){
+			FilterCondition filterCond = listFilter.getThisFilterDesc().findConditionByFieldPrefix(dataPath);
+			if(filterCond != null){
+				FocXMLFilterConditionBuilder.addConditionComponents(handler, this, listFilter, filterCond, attributes);
+			}
+		}
+		return comp;
+	}
+	
 	public Component newGuiField(FVLayout layout, String name, String dataPath, FocXMLAttributes attributes) {
 		return newGuiField(layout, null, name, null, dataPath, null, attributes);
 	}
@@ -1055,9 +1066,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public boolean validationCommit(FVValidationLayout validationLayout) {
 		boolean error = copyGuiToMemory();
 		if(!error && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
-			error = validateDataBeforeCommit(validationLayout);
+			if(!error) error = innerLayout_Commit();
+//			if(!error) innerLayout_checkAllSiblinsAndDeleteEmpty();
+			if(!error) error = validateDataBeforeCommit(validationLayout);
 		}
-//		dispose();
 		return error;
 	}
 	
@@ -1346,19 +1358,18 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		if(focCentralPanel == null){//Normally we never get inside these brackets, and even if we do the find should then give null again. Because since 2014-04-25 we have moved the find to before the ValidationCommit listeners. 
 			focCentralPanel = focCentralPanel_BeforeValidationCommitIsCalled;
 		}
-		if(focCentralPanel instanceof FocWebVaadinWindow){
+//		if(focCentralPanel instanceof FocWebVaadinWindow){
 			FocXMLLayout root = this;
 			while(root.getParentLayout() != null){
 				root = root.getParentLayout();
 			}
-			focCentralPanel.goBack(root);
-//			focCentralPanel.goBack(this);
-		}else{
-			FocWebApplication.getInstanceForThread().removeWindow(findAncestor(Window.class));
-			if(getMainWindow() != null){
-				getMainWindow().refreshCentralPanelAndRightPanel();
-			}
-		}
+			if(focCentralPanel != null) focCentralPanel.goBack(root);
+//		}else{
+//			FocWebApplication.getInstanceForThread().removeWindow(findAncestor(Window.class));
+//			if(getMainWindow() != null){
+//				getMainWindow().refreshCentralPanelAndRightPanel();
+//			}
+//		}
 	}
 
 	public void print() {
@@ -1459,9 +1470,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			validationLayout = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
 			if(!FocWebApplication.getInstanceForThread().isMobile()){
 				if(Globals.isValo()){
-					FocWebApplication focWebApplication = findAncestor(FocWebApplication.class);
-					if(focWebApplication != null){
-						focWebApplication.replaceFooterLayout(validationLayout);
+					INavigationWindow navigationindow = getParentNavigationWindow();
+					
+					if(navigationindow instanceof FocWebApplication){
+						((FocWebApplication)navigationindow).replaceFooterLayout(validationLayout);
+//					FocWebApplication focWebApplication = findAncestor(FocWebApplication.class);
+//					if(focWebApplication != null){
+//						focWebApplication.replaceFooterLayout(validationLayout);
 					}else{
 						addComponent(validationLayout);
 						setComponentAlignment(validationLayout, Alignment.BOTTOM_CENTER);
@@ -1742,6 +1757,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					setScreenHelp(focXmlAttributes.getValue(FXML.ATT_HELP));
 				}
 				addComponentToStack(null, null, focXmlAttributes);
+			}else if(qName.equals(FXML.TAG_CONDITION_FIELD)){
+				FocObject focObject = getFocObject();
+				if(focObject instanceof FocListFilter){
+					newFilterConditionGuiField(FocXMLHandler.this, (FocListFilter) focObject, dataPath, focXmlAttributes);
+				}
+				addComponentToStack(comp, name, focXmlAttributes);
 			}else if(qName.equals(FXML.TAG_FIELD)){
 				FVLayout layout = getCurrentLayout();
 				comp = newGuiField(layout, name, dataPath, focXmlAttributes);
@@ -2772,5 +2793,86 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			title = getValidationSettings(false).getTitle();
 		}
 		popupInDialog(FocXMLLayout.this, title, width, height);
+	}
+	
+	private void innerLayout_AfterConstruction(){
+		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
+		while(iter != null && iter.hasNext()){
+			FocXMLGuiComponent comp = iter.next();
+			if(comp instanceof FVTableWrapperLayout){
+				((FVTableWrapperLayout)comp).innerLayout_AfterConstruction();
+			}
+		}
+	}
+	
+	private boolean innerLayout_RemoveAllEmptyCreatedItems(boolean withCommit){
+		boolean error = false;
+		
+		//Fill array of FVTableWrapperLayout
+		ArrayList<FVTableWrapperLayout> arrayList = new ArrayList<FVTableWrapperLayout>();
+		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
+		while(iter != null && iter.hasNext() && !error){
+			FocXMLGuiComponent comp = iter.next();
+			if(comp instanceof FVTableWrapperLayout){
+				arrayList.add((FVTableWrapperLayout) comp);
+			}
+		}
+
+		//1- Set empty created items to deleted
+		//2- Commit other cases
+		for(int i=0; i<arrayList.size() && !error; i++){
+			FVTableWrapperLayout tableWrapperLayout = arrayList.get(i);
+			ICentralPanel centralPanel = tableWrapperLayout.innerLayout_GetICentralPanel();
+			if(centralPanel != null && centralPanel.getValidationLayout() != null){
+				boolean callCommit = true;
+				if(centralPanel.getFocData() instanceof FocObject){
+					FocObject focObject = (FocObject) centralPanel.getFocData();
+					if(focObject.isEmpty() && focObject.isCreated()){
+//						focObject.setDeleted(true);
+						callCommit = false;
+					}
+				}
+				if(callCommit && withCommit){
+					tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(false);
+					error = centralPanel.getValidationLayout().commit();
+					tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(true);
+				}
+			}
+		}
+		
+		arrayList.clear();
+		
+		return error;
+	}
+	
+	private void innerLayout_checkAllSiblinsAndDeleteEmpty(){
+		FocXMLLayout rootLayout   = this;
+		FocXMLLayout parentLayout = rootLayout.findAncestor(FocXMLLayout.class);
+		while(parentLayout != null){
+			parentLayout = rootLayout.findAncestor(FocXMLLayout.class);
+			if(parentLayout != null) rootLayout = parentLayout; 
+		}
+		
+		if(rootLayout != null){
+			rootLayout.innerLayout_RemoveAllEmptyCreatedItems(false);
+		}
+	}
+	
+	private boolean innerLayout_Commit(){
+		return innerLayout_RemoveAllEmptyCreatedItems(true);
+	}
+
+	@Override
+	public ICentralPanel getRootCentralPanel() {
+		FocXMLLayout layout = this;
+		while(layout != null && layout.getParentLayout() != null){
+			layout = layout.getParentLayout();
+		}
+  	return layout;
+	}
+
+	@Override
+	public boolean isRootLayout() {
+		return getRootCentralPanel() == this;
 	}
 }

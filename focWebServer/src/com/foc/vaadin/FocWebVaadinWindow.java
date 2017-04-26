@@ -1,7 +1,5 @@
 package com.foc.vaadin;
 
-import java.net.URI;
-
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
@@ -101,6 +99,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		//--------------------------------
 	}
 	
+	public void addButtonsInMenuBar(){
+		
+	}
+	
 	public boolean isIncludeLoginButtonInHeaderBar(){
 		return false;
 	}
@@ -108,7 +110,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	protected boolean isCropMarginPanels(){
 		return FocWebApplication.getInstanceForThread().isMobile();
 	}
-	
+
 	@Override
 	public void fill(){
 		setSizeFull();
@@ -130,7 +132,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			emptyLeftPanel.setStyleName("focBannerButton");
 			
 			emptyLeftPanel.addComponent(newLogoEmbedded(), "top:0.0px;right:10.0px;");
-			
+
 			headerMenuBar.addComponent(emptyLeftPanel);
 		}
 
@@ -387,6 +389,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				});
 			}
+			
+			addButtonsInMenuBar();
 			
 			if(!FocWebApplication.getInstanceForThread().isMobile()){
 				addCompanyNameLabel();

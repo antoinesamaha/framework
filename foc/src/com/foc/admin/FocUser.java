@@ -250,7 +250,9 @@ public class FocUser extends FocObject {
 						}
 					}
 				}
-				site = (WFSite) site.getFatherObject();
+				WFSite fatherSite = (WFSite) site.getFatherObject();
+				if(fatherSite == null || fatherSite == site) break;
+				site = fatherSite;
 			}
 		}
 		return titlesList;

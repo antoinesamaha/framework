@@ -108,7 +108,7 @@ public class StringCondition extends FilterCondition {
   // oooooooooooooooooooooooooooooooooo
   
   public void fillProperties(FocObject focFatherObject){
-    new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_CONDITION_OPERATION, OPERATION_CONTAINS);
+  	new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_CONDITION_OPERATION, OPERATION_CONTAINS);
     new FString(focFatherObject, getFirstFieldID() + FLD_CONDITION_TEXT, "");
   }
   
@@ -321,5 +321,39 @@ public class StringCondition extends FilterCondition {
     space.setLocation(2, 2);
     return space;
   }
+
+	@Override
+	public String buildDescriptionText(FocListFilter filter) {
+    String description = null;
+    
+    int operation = getOperation(filter);
+    String text = getText(filter) != null ? getText(filter).trim() : "";
+    
+    if((operation == OPERATION_CONTAINS || operation == OPERATION_STARTS_WITH) && text.isEmpty()) operation = OPERATION_NONE;
+    
+    if(operation != OPERATION_NONE){
+    	String fieldName = getFieldLabel();
+	    
+	    switch(operation){
+	    case OPERATION_EQUALS:
+	    	description = fieldName + " = " + text;
+	    	break;
+	    case OPERATION_CONTAINS:
+	    	description = fieldName + " = *" + text+"* ";
+	    	break;
+	    case OPERATION_STARTS_WITH:
+	    	description = fieldName + " = *" + text;
+	    	break;	    	
+	    case OPERATION_EMPTY:
+	    	description = fieldName + " = \" \"";
+	    	break;	    	
+	    case OPERATION_NOT_EMPTY:
+	    	description = fieldName + " <> \" \"";
+	    	break;	    	
+	    }
+    }		
+		
+		return description;
+	}
 
 }

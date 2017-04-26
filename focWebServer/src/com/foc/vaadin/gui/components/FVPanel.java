@@ -257,4 +257,14 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public ICentralPanel getRootCentralPanel() {
+		return this;
+	}
+
+	@Override
+	public boolean isRootLayout() {
+		return true;
+	}
 }

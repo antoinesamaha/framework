@@ -300,7 +300,9 @@ public class WorkflowDesc {
 								}
 							}
 						}
-						currSite = (WFSite) currSite.getFatherObject();
+						WFSite fatherSite = (WFSite) currSite.getFatherObject();
+						if(fatherSite == currSite) break;
+						currSite = fatherSite;
 					}
 					if(map != null) map.put(site.getReference().getInteger(), rightLevel);
 				}

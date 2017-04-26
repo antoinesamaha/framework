@@ -11,6 +11,7 @@ public interface FXML {
 	public static final String TAG_REPORT                		= "Report"           ;
 	public static final String TAG_FORM                  		= "Form"             ;
   public static final String TAG_FIELD                 		= "GuiField"         ;    
+  public static final String TAG_CONDITION_FIELD          = "ConditionField"   ;
   public static final String TAG_TABLE                 		= "GuiTable"         ;
   public static final String TAG_GRID                   	= "Grid"             ;
   public static final String TAG_HTML_TABLE               = "HtmlTable"        ;
@@ -77,6 +78,7 @@ public interface FXML {
   public static final String ATT_MARGIN                		= "margin"           ;
   public static final String ATT_ALIGNMENT             		= "alignment"        ;
   public static final String ATT_CAPTION               		= "caption"          ;
+  public static final String ATT_ICON                   	= "icon"             ;
   public static final String ATT_GEAR_ENABLED             = "gearEnabled"      ;
   public static final String ATT_USE_POPUP_VIEW           = "usePopupView"     ;
   public static final String ATT_MORE_CAPTION          		= "moreCaption"      ;

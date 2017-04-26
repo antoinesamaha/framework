@@ -40,6 +40,10 @@ public interface ICentralPanel {
   public void                addedToNavigator();
   public void                removedFromNavigator();
   public void                optionButtonClicked();
+
+  public ICentralPanel       getRootCentralPanel();//Is the Same when this Layout is the Root, not embedded 
+  public boolean             isRootLayout();//Used to indicate that this is the first level Layout and not embedded
+                                            //We need to know when we click Cancel=goBack() on an internal Layout...
   
   //Used when we goBack on a middle Layout we want to mark it as goBack Requested so we do not show it in the Navigation Window
   public boolean             isGoBackRequested();

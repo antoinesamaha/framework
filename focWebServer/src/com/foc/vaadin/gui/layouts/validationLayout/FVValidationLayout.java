@@ -717,8 +717,12 @@ public class FVValidationLayout extends HorizontalLayout {
   
   public void applyButtonClickListener(){
   	INavigationWindow nw = getNavigationWindow();
-  	apply();
-  	refreshPendingSignatureButtonCaption(nw);
+  	Window parentWindowIfDialog = findAncestor(Window.class);
+  	if(			FocWebApplication.getInstanceForThread() == null 
+  			|| !FocWebApplication.getInstanceForThread().hasModalWindowOverIt(parentWindowIfDialog)){
+	  	apply();
+	  	refreshPendingSignatureButtonCaption(nw);
+  	}
   }
   
 	public Button getSaveButton(boolean createIfNeeded){
@@ -750,13 +754,17 @@ public class FVValidationLayout extends HorizontalLayout {
   private void saveButtonClickListener(){
   	if(!Globals.getApp().checkSession()){
     	INavigationWindow nw = getNavigationWindow();
-    	saveAndRefreshWithoutGoBack();
-    	refreshPendingSignatureButtonCaption(nw);
+    	Window parentWindowIfDialog = findAncestor(Window.class);
+    	if(			FocWebApplication.getInstanceForThread() == null 
+    			|| !FocWebApplication.getInstanceForThread().hasModalWindowOverIt(parentWindowIfDialog)){
+	    	saveAndRefreshWithoutGoBack();
+	    	refreshPendingSignatureButtonCaption(nw);
+    	}
   	}
   }
     
-  public void saveAndRefreshWithoutGoBack(){
-    commit();
+  public boolean saveAndRefreshWithoutGoBack(){
+  	boolean error = commit();
 
     //This refresh is important for example in WBS BKDN_TREE view. 
     //BEcause all new created nodes Would appear as small whilte lines after this save if we do not have this refresh line.
@@ -766,6 +774,7 @@ public class FVValidationLayout extends HorizontalLayout {
     	FocXMLLayout centralPanel = (FocXMLLayout) getCentralPanel();
       centralPanel.refresh();
     }
+    return error;
   }
 
   public void addTransactionToRecentVisited(){
@@ -1526,7 +1535,9 @@ public class FVValidationLayout extends HorizontalLayout {
   }
   
 	public void goBack(){
-		getCentralPanel().goBack(null);
+		if(getCentralPanel() != null && getCentralPanel().isRootLayout()){
+			getCentralPanel().goBack(null);
+		}
 	}
 	
 	public boolean isAskForConfirmationForExit() {

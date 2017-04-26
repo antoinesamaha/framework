@@ -44,7 +44,7 @@ public class FVVerticalDropHandler extends FVDropHandler {
     int idx = (details).getOverIndex();
 
     // Detach
-    layout.removeComponent(comp);
+    if(comp != null && layout != null) layout.removeComponent(comp);
     idx--;
 
     // Increase index if component is dropped after or above a previous
@@ -55,10 +55,12 @@ public class FVVerticalDropHandler extends FVDropHandler {
     }
     
     // Add component
-    if (idx >= 0) {
-        layout.addComponent(comp, idx);
-    } else {
-        layout.addComponent(comp);
+    if(layout != null){
+	    if (idx >= 0) {
+	        layout.addComponent(comp, idx);
+	    } else {
+	        layout.addComponent(comp);
+	    }
     }
     
     if (comp instanceof FVLayout) {
@@ -66,8 +68,8 @@ public class FVVerticalDropHandler extends FVDropHandler {
     }
 
     // Add component alignment if given
-    if (dropAlignment != null) {
-        layout.setComponentAlignment(comp, dropAlignment);
+    if (dropAlignment != null && layout != null) {
+    	layout.setComponentAlignment(comp, dropAlignment);
     }
   }
 

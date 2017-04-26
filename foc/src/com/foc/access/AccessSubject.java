@@ -335,11 +335,6 @@ public abstract class AccessSubject extends AccessConsole {
     try{
 	    error = commitStatusToDatabase() || error;
 	
-	    //B
-	    //E
-	    
-	    //ATTENTION ATTENTION
-	    //ATTENTION ATTENTION    
 	    Iterator iter = newSubjectIterator();
 	    while(iter != null && iter.hasNext()){
 	      AccessSubject subject = (AccessSubject) iter.next();
