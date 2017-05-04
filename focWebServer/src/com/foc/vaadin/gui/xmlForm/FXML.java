@@ -287,4 +287,7 @@ public interface FXML {
   public static final String MS_STYLE_VAL_ALIGN_LEFT   = "text-left";
   public static final String MS_STYLE_VAL_ALIGN_RIGHT  = "text-right";
   public static final String MS_STYLE_VAL_ALIGN_CENTER = "text-center";
+  
+  public static final String ATT_IMPORT_COMMIT_WITH_PARENT = "commitWithParent";
+  
 }

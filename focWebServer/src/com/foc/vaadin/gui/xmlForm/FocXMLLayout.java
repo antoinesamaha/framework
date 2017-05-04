@@ -116,7 +116,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private RightPanel rightPanel = null;
 	private boolean copyingMemoryToGui = false;
 	private boolean enableRightsApplicationToGuiFields = true;
-	private FocXMLLayout parentLayout = null;
+	private FocXMLLayout parentLayout     = null;
+	private boolean      commitWithParent = false;
+	
 	private ArrayList<FocXMLLayout> childLayoutArray = null;
 	private boolean editable = true;
 	private FocXMLGuiComponentListener valueChangeListener = null;
@@ -1001,7 +1003,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		if(focData != null && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
 			focData.iFocData_cancel();
 		}
-//		dispose();
+		//Propagating the Validation Actions to child layouts if linked...
+		for(int i=0; i<childXMLLayoutArray_Size(); i++){
+			FocXMLLayout layout = childXMLLayoutArray_Get(i);
+			if(layout.isCommitWithParent()){
+				layout.validationDiscard(validationLayout); 
+			}
+		}
 	}
 
 	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout){
@@ -1058,7 +1066,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		
 		if(!error && focData != null){
 			error = focData.iFocData_validate();
-		}		
+		}
+		
 		return error;//true if error
 	}
 	
@@ -1070,12 +1079,30 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 //			if(!error) innerLayout_checkAllSiblinsAndDeleteEmpty();
 			if(!error) error = validateDataBeforeCommit(validationLayout);
 		}
+		
+		if(!error){
+			//Propagating the Validation Actions to child layouts if linked...
+			for(int i=0; i<childXMLLayoutArray_Size(); i++){
+				FocXMLLayout layout = childXMLLayoutArray_Get(i);
+				if(layout.isCommitWithParent()){
+					layout.validationCommit(validationLayout); 
+				}
+			}
+		}
+		
 		return error;
 	}
 	
 	@Override
 	public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-		// TODO Auto-generated method stub
+
+		//Propagating the Validation Actions to child layouts if linked...
+		for(int i=0; i<childXMLLayoutArray_Size(); i++){
+			FocXMLLayout layout = childXMLLayoutArray_Get(i);
+			if(layout.isCommitWithParent()){
+				layout.validationAfter(validationLayout, commited); 
+			}
+		}
 	}
 
 	@Override
@@ -2041,6 +2068,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				if(layout != null){
 					layout.parseXMLAndBuildGui();
 					showValidationLayoutForInclude_IfNeeded(layout, layout.getAttributes());
+					layout.setParentLayout(FocXMLLayout.this);//2017-05-04
+					String commitStr = layout.getAttributes() != null ? layout.getAttributes().getValue(FXML.ATT_IMPORT_COMMIT_WITH_PARENT) : null;
+					if(commitStr != null && commitStr.toUpperCase().equals("false")){
+						layout.setCommitWithParent(false);
+					}else{
+						layout.setCommitWithParent(true);
+					}
 				}
 			}else if(qName.equals(FXML.TAG_CHART)){
 				FVChartWrapperLayout chartLayout = (FVChartWrapperLayout) comp;
@@ -2874,5 +2908,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	@Override
 	public boolean isRootLayout() {
 		return getRootCentralPanel() == this;
+	}
+
+	public boolean isCommitWithParent() {
+		return commitWithParent;
+	}
+
+	public void setCommitWithParent(boolean commitWithParent) {
+		this.commitWithParent = commitWithParent;
 	}
 }

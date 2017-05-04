@@ -1029,6 +1029,24 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return prop != null ? (FocObject) prop.getObject() : null;
   }
 
+  public FocObject propertyObject_NewIfNull(int fieldID){
+  	FocObject obj = null;
+  	FObject objProperty = (FObject) getFocProperty(fieldID);
+  	if(objProperty != null){
+  		obj = objProperty.newObjectCreatedLocally_IfNull();
+  	}
+  	return obj;
+  }
+  
+  public FocObject propertyObject_NewIfNull(String fieldName){
+  	FocObject obj = null;
+  	FObject objProperty = (FObject) getFocPropertyByName(fieldName);
+  	if(objProperty != null){
+  		obj = objProperty.newObjectCreatedLocally_IfNull();
+  	}
+  	return obj;
+  }
+  
   public FocObject getPropertyObject(int fieldID){
   	FObject prop = (FObject)getFocProperty(fieldID);  	
   	return prop != null ? (FocObject) prop.getObject_CreateIfNeeded() : null;

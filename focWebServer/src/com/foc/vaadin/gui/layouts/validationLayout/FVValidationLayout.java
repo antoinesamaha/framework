@@ -842,7 +842,7 @@ public class FVValidationLayout extends HorizontalLayout {
 	        error = error || cloneValidationListeners.get(i).validationCommit(FVValidationLayout.this);
 	      }
 	      for(int i=0; i<cloneValidationListeners.size(); i++){
-	      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, true);
+	      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
 	      }
 	      
 	      cloneValidationListeners.clear();

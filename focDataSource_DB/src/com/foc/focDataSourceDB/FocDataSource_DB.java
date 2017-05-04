@@ -349,18 +349,20 @@ public class FocDataSource_DB implements IFocDataSource {
 		if(isEmptyDatabaseJustCreated() && Globals.getApp().isWebServer()){
 			Globals.getIFocNotification().setNotificationsEnabled(false);
 		}
+		/*
     for(int i = 0; i < focObject.propertiesArray_Size(); i++){
       FProperty prop = focObject.propertiesArray_Get(i);
       if(prop != null && prop instanceof FObject){
         FocObject obj = (FocObject)prop.getObject();
         if(obj != null && obj.isCreated() && prop.getFocField() != null && prop.getFocField().isDBResident()){
-        	//should not get here because the object must have bean validated 
+        	//should not get here because the object must have been validated 
         	//upon commitStatusToDataBase() when we have iterate the properties 
         	//and invoked commitStatusToDataBaseWithPropagation() on the focObjects
           obj.save();
         }
       }
     }
+    */
     if (focObject.isCreated()) {
       
     	dbInsert(focObject);
