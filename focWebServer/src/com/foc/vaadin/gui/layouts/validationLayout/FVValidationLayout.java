@@ -1535,6 +1535,8 @@ public class FVValidationLayout extends HorizontalLayout {
   }
   
 	public void goBack(){
+		//The condition on root prevents the navigation from going out of the main layout
+		//when we click on "Back" of an internal layout 
 		if(getCentralPanel() != null && getCentralPanel().isRootLayout()){
 			getCentralPanel().goBack(null);
 		}
@@ -1543,7 +1545,8 @@ public class FVValidationLayout extends HorizontalLayout {
 	public boolean isAskForConfirmationForExit() {
 		IFocData focData = getFocData();
 		boolean askForConfirmation = isAskForConfirmationForExit_Forced();
-		if(!askForConfirmation && focData != null && focData instanceof AccessSubject && getValidationSettings().isWithApply()){
+		if(!askForConfirmation && focData != null && focData instanceof AccessSubject && getValidationSettings().isWithApply()
+				&& (getCentralPanel() == null || getCentralPanel().isRootLayout())){//If not root, internal we do not want to ask for confirmation
 			askForConfirmation = ((AccessSubject) getFocData()).needValidationWithPropagation();
 		}
     return askForConfirmation;

@@ -1611,7 +1611,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				@Override
 				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
 					if(innerLayout_IsEnableAddEmptyItemAfterCommit()){
-						if(commited) getTableTreeDelegate().addItem(null);
+						getTableTreeDelegate().addItem(null);
 					}
 					refresh();
 				}
@@ -1657,12 +1657,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	
 	public void innerLayout_AfterConstruction() {
 		if(innerLayout != null && getTableTreeDelegate() != null){
-			FocDataWrapper dataWrapper = getFocDataWrapper();
-			if(dataWrapper != null && dataWrapper.size() > 0){
-				getTableTreeDelegate().open(dataWrapper.getAt(0));
-			}else{
+//      We always want to add a new 
+//			FocDataWrapper dataWrapper = getFocDataWrapper();
+//			if(dataWrapper != null && dataWrapper.size() > 0){
+//				getTableTreeDelegate().open(dataWrapper.getAt(0));
+//			}else{
 				getTableTreeDelegate().addItem(null);
-			}
+//			}
 		}
 	}
 	
