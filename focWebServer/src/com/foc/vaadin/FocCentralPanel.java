@@ -234,7 +234,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 						newCentralPanel.getRightPanel(false).refresh();
 					}
 					replaceValidationLayout(newCentralPanel);						
-				}				
+				}
 				afterGoBack();
 			}else{
 				if(ConfigInfo.isLogMemoryUsage() && newCentralPanel != null && newCentralPanel.getXMLView() != null){
@@ -246,10 +246,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				replaceValidationLayout(newCentralPanel);
 				
 				if(previousMode == PREVIOUS_REMOVE_ALL){
-					for(int i=getCentralPanelsArrayList().size()-1;i>=0; i--){
-						ICentralPanel iCentralPanel = getCentralPanelsArrayList().get(i);
-						removeFromCacheAndDispose(iCentralPanel);
-					}
+					removeFromCacheAndDispose_AllLayouts(false);
 				}else if(previousMode == PREVIOUS_REMOVE){
 					int index = getCentralPanelsArrayList().size()-1;
 					if(index >= 0){
@@ -262,6 +259,13 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				getCentralPanelsArrayList().add(newCentralPanel);
 			}
 		}	
+	}
+	
+	public void removeFromCacheAndDispose_AllLayouts(boolean keepLast){
+		for(int i=getCentralPanelsArrayList().size()-1;i>=1; i--){
+			ICentralPanel iCentralPanel = getCentralPanelsArrayList().get(i);
+			removeFromCacheAndDispose(iCentralPanel);
+		}
 	}
 	
 	private void replaceValidationLayout(ICentralPanel centralPanel){
@@ -424,6 +428,13 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		}
 	}
 
+	public void goBackTillFirstPage(){
+		while(getCentralPanelsArrayList().size() > 1){
+			goBack(null);
+		}
+	}
+
+	
 	public void init(){
 	}
 

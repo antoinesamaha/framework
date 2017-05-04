@@ -129,6 +129,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
     if(status == com.foc.Application.LOGIN_VALID){
     	approvedFocUser = loginAccess.getUser();
       
+    	anotherApplicationAlreadyRunning = null;
       for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
       	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
       	if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){

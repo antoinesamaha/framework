@@ -188,8 +188,8 @@ public class FTime extends FProperty {
       if (str != null && !str.equals("00:00:00")){
       	if(getProvider() == DBManager.PROVIDER_ORACLE){
       		try{
-      			if(str.length()-1 > 11){
-	      			String timeStr = str.substring(11, (str.length() -3));
+      			if(str.length()-1 > 11 && 11+5 < str.length()){
+	      			String timeStr = str.substring(11, 11+5);//(str.length() -3));
 	      			if(!timeStr.equals("00:00")){
 	      				time = java.sql.Time.valueOf(timeStr+":00");
 	      			}

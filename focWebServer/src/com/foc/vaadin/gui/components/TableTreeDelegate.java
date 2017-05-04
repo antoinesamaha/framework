@@ -2525,12 +2525,13 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				if(!isColumnIdSelectAdded){
 					FocXMLAttributes focXMLAttributes = new FocXMLAttributes();
 			  	focXMLAttributes.addAttribute(FXML.ATT_NAME, FVTableColumn.COL_ID_SELECT);
-			  	focXMLAttributes.addAttribute(FXML.ATT_CAPTION, "Select");
+			  	focXMLAttributes.addAttribute(FXML.ATT_CAPTION, "");//Select
+			  	focXMLAttributes.addAttribute(FXML.ATT_WIDTH, "40px");
 			  	addColumnAtFirst(focXMLAttributes);
 			  	getTreeOrTable().applyFocListAsContainer();
 				}
 			}else{
-				if(isColumnIdSelectAdded){
+        				if(isColumnIdSelectAdded){
 					newVisibleColumnIds().remove(FVTableColumn.COL_ID_SELECT);
 				}
 				getTreeOrTable().applyFocListAsContainer();

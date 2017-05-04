@@ -22,7 +22,12 @@ public class SQLDropIndex extends SQLRequest {
 
     if (index != null && index.getFieldCount() > 0 && focDesc != null && focDesc.isPersistent()) {
       request.append("DROP INDEX ");
-      request.append(index.getName());
+      if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
+      	request.append("\""+index.getName()+"\"");
+      }else{
+      	request.append(index.getName());
+      }
+      
       if(focDesc.getProvider() != DBManager.PROVIDER_ORACLE){
         request.append(" ON ");
         request.append(focDesc.getStorageName_ForSQL());

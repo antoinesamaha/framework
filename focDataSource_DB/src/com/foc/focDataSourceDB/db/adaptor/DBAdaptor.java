@@ -402,10 +402,20 @@ public class DBAdaptor {
 	      DatabaseMetaData dmt = connection.getMetaData();
 	      //Globals.logString(dmt.getTimeDateFunctions());
 	      if (dmt != null) {
-	        ResultSet resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
+	        ResultSet resultSet = null;
+	        if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE){
+	        	//Instead of Username we should use the TABLESPACE Name
+	        	resultSet = dmt.getTables(null, connectionPool.getCredentials().getUsername(), null, new String[] { "TABLE" });
+	        }else{
+	        	resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
+	        }
+	        
 	        if (resultSet != null) {
 	          while (resultSet.next()) {
 	            String tableName = resultSet.getString(3);
+	            
+	            Globals.logString(" TABLE : "+resultSet.getString(1)+" | "+resultSet.getString(2)+" | "+resultSet.getString(3));
+	            
 	            //String upperTableName = tableName.toUpperCase();
 	            allTables.put(tableName, tableName);
 	            getExeTables().put(tableName, tableName);

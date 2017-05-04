@@ -38,6 +38,7 @@ import com.foc.web.server.session.FocWebSession;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitDictionary;
 import com.vaadin.server.ExternalResource;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -377,7 +378,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}
 			});
 			if(isNavigationVisible()){
-				navigation = newButtonInHeaderBar("Navigation", true);
+//				navigation = newButtonInHeaderBar("Navigation", true);
+				navigation = newButtonInHeaderBar("", true);
+				navigation.setIcon(FontAwesome.TH_LIST);
+				navigation.addStyleName("foc-f22");
+				navigation.addStyleName("foc-bold");
+
 				if(FocWebApplication.getInstanceForThread().isMobile()){
 					navigation.setCaption("");
 					navigation.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_NAVIGATION));
@@ -558,7 +564,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 
   public Label newMidleTitleLabel(String companyName){
   	Label companyNameLabel = new Label(companyName);
-  	companyNameLabel.setHeight("-1px");
   	companyNameLabel.setStyleName("focBannerButton");
   	if(!Globals.isValo() || ConfigInfo.isGuiRTL()){
 	  	companyNameLabel.addStyleName("foc-f16");
@@ -566,6 +571,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  companyNameLabel.addStyleName("foc-bold");
   	companyNameLabel.addStyleName("foc-text-center");
   	companyNameLabel.addStyleName("foc-text-middle");
+//	  companyNameLabel.addStyleName("foc-text-bottom");
+  	companyNameLabel.setHeight("40px");
   	return companyNameLabel;
   }
   
@@ -593,10 +600,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	if(companyName == null) companyName = "";
   	if(centerHeaderLayout != null){
 	  	companyNameLabel = newMidleTitleLabel(companyName);
-	  	companyNameLabel.setHeight("40px");
+//	  	companyNameLabel.setHeight("40px");
 			centerHeaderLayout.addComponent(companyNameLabel);
 			centerHeaderLayout.setExpandRatio(companyNameLabel, 1);	
-			centerHeaderLayout.setComponentAlignment(companyNameLabel, Alignment.MIDDLE_CENTER);
+			centerHeaderLayout.setComponentAlignment(companyNameLabel, Alignment.BOTTOM_LEFT);
   	}
   }
 

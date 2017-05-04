@@ -15,6 +15,7 @@ import com.foc.property.FMultipleChoiceString;
 import com.foc.property.FProperty;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractSelect;
@@ -31,7 +32,12 @@ public class FVMultipleChoiceStringField extends FVMultipleChoiceComboBox implem
     	setNewItemsAllowed(true);
     }
     setNewItemHandler(this);
-    setInputPrompt("type new values");
+    
+    if(attributes != null && attributes.getValue(FXML.ATT_PROMPT) != null){
+    	setInputPrompt(attributes.getValue(FXML.ATT_PROMPT));
+    }else{
+    	setInputPrompt("type new values");
+    }
     setImmediate(true);
 
     /*
