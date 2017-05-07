@@ -3,6 +3,9 @@ package com.foc.vaadin.gui.xmlForm;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.foc.Globals;
+import com.foc.desc.FocDesc;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.FObjectField;
 import com.foc.list.filter.BooleanCondition;
 import com.foc.list.filter.DateCondition;
 import com.foc.list.filter.FilterCondition;
@@ -81,6 +84,18 @@ public class FocXMLFilterConditionBuilder {
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
 					handler.endElement(null, null, FXML.TAG_FIELD);
 				}else if(condition instanceof ObjectCondition){
+					String captionProperty = attributes.getValue(FXML.ATT_CAPTION_PROPERTY);
+					//Guessing the adequate captionProperty 
+					if(captionProperty == null){
+						ObjectCondition objCond  = (ObjectCondition)condition;
+						FObjectField    objField = (FObjectField) objCond.getFieldPath().getFieldFromDesc(listFilter.getThisFilterDesc().getSubjectFocDesc());
+						FocDesc fieldDesc = objField.getFocDesc();
+						
+						if(fieldDesc.getFieldByID(FField.FLD_CODE) != null) captionProperty = FField.FNAME_CODE;
+						if(fieldDesc.getFieldByID(FField.FLD_NAME) != null) captionProperty = FField.FNAME_NAME;
+						if(fieldDesc.getFieldByID(FField.FLD_DESCRIPTION) != null) captionProperty = FField.FNAME_DESCRIPTION;
+					}
+					
 					//Operation
 					FocXMLAttributes opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
@@ -90,6 +105,7 @@ public class FocXMLFilterConditionBuilder {
 					
 					opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OBJREF");
+					opAttributes.addAttribute(FXML.ATT_CAPTION_PROPERTY, captionProperty);
 					opAttributes.addAttribute(FXML.ATT_WIDTH, "270px");
 					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP>0)");
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);

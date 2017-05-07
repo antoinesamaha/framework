@@ -1012,7 +1012,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
-	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout){
+	public boolean checkMandatoryGuiFieldsAreFilled(){
 		boolean error = false;
 		
 		//Even though we have a data valildation check in the data layer or FocObject, we are doing a check on the GUI component
@@ -1063,6 +1063,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				}
 			}
 		}
+
+		return error;
+	}
+	
+	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout){
+		boolean error = checkMandatoryGuiFieldsAreFilled();
 		
 		if(!error && focData != null){
 			error = focData.iFocData_validate();
@@ -2070,7 +2076,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					showValidationLayoutForInclude_IfNeeded(layout, layout.getAttributes());
 					layout.setParentLayout(FocXMLLayout.this);//2017-05-04
 					String commitStr = layout.getAttributes() != null ? layout.getAttributes().getValue(FXML.ATT_IMPORT_COMMIT_WITH_PARENT) : null;
-					if(commitStr != null && commitStr.toUpperCase().equals("false")){
+					if(commitStr != null && commitStr.toLowerCase().equals("false")){
 						layout.setCommitWithParent(false);
 					}else{
 						layout.setCommitWithParent(true);

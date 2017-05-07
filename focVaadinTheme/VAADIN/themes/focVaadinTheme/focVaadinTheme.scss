@@ -537,7 +537,7 @@ $v-table-header-background-color: #ff0000;
   }
   
   .foc-text-middle {
-    vertical-align: middle;
+    vertical-align: middle !important;
   }
   
   .foc-text-bottom {
@@ -696,6 +696,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
     margin-bottom: 0px;
   }
   */
+
+
+	.foc-CompanyTitle{
+		margin-top: 10px;
+		height: 30px;
+	}
 
   .foc-arial {
     color: black;

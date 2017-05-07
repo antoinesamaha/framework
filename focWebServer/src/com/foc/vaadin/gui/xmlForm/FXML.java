@@ -251,6 +251,7 @@ public interface FXML {
 
   public static final String ATT_TEXT_AREA                 = "textArea"           ;
   public static final String ATT_FORMAT                    = "format"             ;
+  public static final String ATT_REQUIRED                  = "required"           ;
   
   public static final String VAL_VIEW_KEY_TYPE__FORM       = IXMLViewConst.TYPE_NAME_FORM;
   public static final String VAL_VIEW_KEY_TYPE__TABLE      = IXMLViewConst.TYPE_NAME_TABLE;

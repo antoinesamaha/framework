@@ -4489,6 +4489,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   		if(prop != null){
 	  		if(!(prop instanceof FReference)){
 	  			if(prop instanceof FBoolean){
+	  			}else if(prop.getFocField() != null && 
+	  					(prop.getFocField().getID() == FField.FLD_ORDER
+	  					)){
+	  				//Consider as empty
 	  			}else if(prop instanceof FList){
 	  				FocList focList = ((FList)prop).getList();
 	  				empty = focList == null || focList.size() == 0;

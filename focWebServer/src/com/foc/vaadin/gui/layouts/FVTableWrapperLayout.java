@@ -1638,11 +1638,12 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 					}else{
 						
 						if(focObj.isModified() || focObj.isCreated()){
-							if(getFocXMLLayout() != null && previousCentralPanel.getValidationLayout() != null){
-								if(!previousCentralPanel.getValidationLayout().saveAndRefreshWithoutGoBack()){
+							//We do not approve the previous unless the user clicks SAVE
+//							if(getFocXMLLayout() != null && previousCentralPanel.getValidationLayout() != null){
+//								if(!previousCentralPanel.getValidationLayout().saveAndRefreshWithoutGoBack()){
 									innerLayout_Replace_Internal(centralPanel);
-								}
-							}
+//								}
+//							}
 						}else{
 							innerLayout_Replace_Internal(centralPanel);
 						}

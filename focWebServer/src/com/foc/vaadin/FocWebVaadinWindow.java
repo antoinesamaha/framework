@@ -571,8 +571,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  companyNameLabel.addStyleName("foc-bold");
   	companyNameLabel.addStyleName("foc-text-center");
   	companyNameLabel.addStyleName("foc-text-middle");
+  	companyNameLabel.addStyleName("foc-CompanyTitle");
 //	  companyNameLabel.addStyleName("foc-text-bottom");
-  	companyNameLabel.setHeight("40px");
+//  	companyNameLabel.setHeight("40px");
   	return companyNameLabel;
   }
   
@@ -601,6 +602,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	if(centerHeaderLayout != null){
 	  	companyNameLabel = newMidleTitleLabel(companyName);
 //	  	companyNameLabel.setHeight("40px");
+	  	centerHeaderLayout.setHeight("40px");
 			centerHeaderLayout.addComponent(companyNameLabel);
 			centerHeaderLayout.setExpandRatio(companyNameLabel, 1);	
 			centerHeaderLayout.setComponentAlignment(companyNameLabel, Alignment.BOTTOM_LEFT);
