@@ -1600,6 +1600,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			vLay.addValidationListener(new IValidationListener() {
 				@Override
 				public void validationDiscard(FVValidationLayout validationLayout) {
+					getTableTreeDelegate().addItem(null);//When we cancel the inner form we want to clear it
+					refresh();
 				}
 				
 				@Override
@@ -1610,7 +1612,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				
 				@Override
 				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-					if(innerLayout_IsEnableAddEmptyItemAfterCommit()){
+					if(innerLayout_IsEnableAddEmptyItemAfterCommit() && commited){//If not committed for errors do not clear.
 						getTableTreeDelegate().addItem(null);
 					}
 					refresh();
