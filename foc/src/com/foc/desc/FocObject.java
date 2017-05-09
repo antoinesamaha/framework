@@ -69,6 +69,7 @@ import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.Workflow;
+import com.foc.business.workflow.implementation.WorkflowDesc;
 import com.foc.business.workflow.map.WFMap;
 import com.foc.business.workflow.map.WFSignature;
 import com.foc.business.workflow.map.WFSignatureDesc;
@@ -3486,6 +3487,39 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	      }
       }
     }
+    
+    WFTransactionConfig transactionConfig = workflow_getTransactionConfig();
+		if(transactionConfig != null && transactionConfig.isCodeBySITE()){
+	  	if(this instanceof IWorkflow){
+	  		IWorkflow workflow = (IWorkflow) this;
+	  		if(workflow != null && workflow.iWorkflow_getWorkflow() != null){
+	  			WFSite area = workflow.iWorkflow_getWorkflow().getArea();
+	  			if(area == null) area = Globals.getApp().getCurrentSite();
+	  			if(area != null && getThisFocDesc() != null && getThisFocDesc() instanceof IWorkflowDesc){
+	  				WorkflowDesc workflowDesc = ((IWorkflowDesc)getThisFocDesc()).iWorkflow_getWorkflowDesc();
+	  				if(workflowDesc != null){
+	  					FField fld = getThisFocDesc().getFieldByID(workflowDesc.getFieldID_Site_1());
+	  					if(fld != null && !Utils.isStringEmpty(fld.getDBName())){
+			  	    	String expression = "";
+			  	    	if(desc.getProvider() == DBManager.PROVIDER_ORACLE){
+			  	    		expression = "\""+fld.getDBName()+"\"="+area.getReferenceInt();
+			  	    	}else{
+			  	    		expression = fld.getDBName()+"="+area.getReferenceInt();
+			  	    	}
+			  	    	
+			  	      if(buff == null){
+			  	       	buff = new StringBuffer(expression);
+			  	      }else{
+			  	      	buff.append(" and ");
+			  	      	buff.append(expression);
+			  	      }
+			  	      
+	  					}		  	      
+	  				}	  				
+	  			}
+	  		}
+	  	}
+		}
     
     ArrayList valuesArray = Globals.getApp().getDataSource().command_Select(desc, fieldID, false, buff);
     for(int i=0; i<valuesArray.size(); i++){

@@ -72,6 +72,10 @@ public class WFTransactionConfig extends FocObject {
 		return getPropertyBoolean(WFTransactionConfigDesc.FLD_INCLUDE_PROJECT_CODE);
 	}
 
+	public boolean isCodeBySITE(){
+		return getPropertyBoolean(WFTransactionConfigDesc.FLD_CODE_BY_STE);
+	}
+
 	public boolean codePrefix_isUseSitePrefix(){
 		return getPropertyBoolean(WFTransactionConfigDesc.FLD_CODE_PREFIX_USE_SITE_PREFIX);
 	}
