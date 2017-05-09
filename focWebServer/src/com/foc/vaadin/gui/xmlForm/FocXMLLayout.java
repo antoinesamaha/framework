@@ -585,7 +585,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 		return name;
 	}
-
+	
+	public void removeComponent(String name) {
+		getComponentMap().remove(name);
+	}
+	
 	private Map<String, FocXMLGuiComponent> getComponentMap() {
 		if(compMap == null){
 			compMap = new HashMap<String, FocXMLGuiComponent>();
@@ -1133,6 +1137,27 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return error;
 	}
 
+	/*
+	public FVLayout searchLayoutsByNameAttribute(String name){
+		FVLayout layout = null;
+		if(!Utils.isStringEmpty(name)){
+			String myName = getAttributes() != null ? getAttributes().getValue(FXML.ATT_NAME) : null;
+			if(myName != null && myName.equals(name)){
+				layout = this;
+			}else{
+				for(int i = 0; i < childXMLLayoutArray_Size(); i++){
+					FocXMLLayout child = childXMLLayoutArray_Get(i);
+					if(child != null){
+						layout = child.searchLayoutsByNameAttribute(myName);
+						layout.getAttributes()
+					}
+				}
+			}
+		}
+		return layout;
+	}
+	*/
+	
 	public void scanLayoutsAndShowViewValidationLayouts() {
 		for(int i = 0; i < childXMLLayoutArray_Size(); i++){
 			FocXMLLayout child = childXMLLayoutArray_Get(i);

@@ -21,6 +21,7 @@ import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
+import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVGearWrapper.PopupLinkButton;
@@ -240,8 +241,19 @@ public class FocUnitTestingCommand {
    * Simulates a click on the "Apply" button in the validation layout.
    * 
    */
-  protected void validationApply() {
-    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+  protected void validationApply(String tableName) {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+  	
+  	if(tableName != null){
+	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+	    if (tableWrapper != null) {
+	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+	    	if(centralPanel != null){
+	    		navigationLayout = (FocXMLLayout) centralPanel; 
+	    	}
+	    }
+  	}
+  	
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 
@@ -263,8 +275,19 @@ public class FocUnitTestingCommand {
     }
   }
   
-  protected void validationSave() {
+  protected void validationSave(String tableName) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    
+  	if(tableName != null){
+	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+	    if (tableWrapper != null) {
+	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+	    	if(centralPanel != null){
+	    		navigationLayout = (FocXMLLayout) centralPanel; 
+	    	}
+	    }
+  	}
+    
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 
@@ -323,8 +346,19 @@ public class FocUnitTestingCommand {
    * Simulates a click on the "Discard" button in the validation layout.
    * 
    */
-  protected void validationDiscard() {
+  protected void validationDiscard(String tableName) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    
+  	if(tableName != null){
+	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+	    if (tableWrapper != null) {
+	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+	    	if(centralPanel != null){
+	    		navigationLayout = (FocXMLLayout) centralPanel; 
+	    	}
+	    }
+  	}
+    
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 

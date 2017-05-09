@@ -62,11 +62,9 @@ public class FocUnitMethodFactory {
     });
 
     methodMap.put(FXMLUnit.TAG_APPLY, new IFUnitMethod() {
-
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationApply();
-        
+     		command.validationApply(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
     
@@ -74,8 +72,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationSave();
-        
+        command.validationSave(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
 
@@ -99,7 +96,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationDiscard();
+        command.validationDiscard(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
 
