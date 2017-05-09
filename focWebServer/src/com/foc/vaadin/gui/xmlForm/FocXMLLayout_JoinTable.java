@@ -1,6 +1,7 @@
 package com.foc.vaadin.gui.xmlForm;
 
 import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -104,12 +105,19 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		FocObject newObject = (FocObject) constr.newItem();
 		newObject.setReference(getOriginalObjectReference(focObject));
 		newObject.load();
-		newObject.setDeleted(true);
-		boolean error = !newObject.validate(true);
 
-		if(!error){
-			super.table_DeleteItem(table, focObject);
+		StringBuffer checkDeletion = newObject.checkDeletionWithMessage(); 
+		if(checkDeletion != null && checkDeletion.length() > 0){
+			Globals.showNotification("Cannot Delete", checkDeletion.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);
+		}else{
+			newObject.setDeleted(true);
+			boolean error = !newObject.validate(true);
+			
+			if(!error){
+				super.table_DeleteItem(table, focObject);
+			}
 		}
+		focObject.dispose();
 	}
 	
 }

@@ -13,6 +13,7 @@ import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
+import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class FocUserHistory extends FocObject implements FocUserHistoryConst {
@@ -134,14 +135,20 @@ public class FocUserHistory extends FocObject implements FocUserHistoryConst {
     	String[] transKeyArray = transKey.split(INNER_DELIMITER);	
     	
     	if(transKeyArray.length == 2){
-	    	String transName = transKeyArray[0];
-	    	String transRef  = transKeyArray[1];
+	    	String transName   = transKeyArray[0];
+	    	String transRef    = transKeyArray[1];
+	    	int    transRefInt = Utils.parseInteger(transRef, 0);
 	    	FocDesc iWorkflowDesc = (FocDesc) WorkflowTransactionFactory.getInstance().findWorkflowDesc_ByDBTitle(transName);
 	    	
-	    	if(iWorkflowDesc != null){
-		    	FocList transList = iWorkflowDesc.getFocList(FocList.LOAD_IF_NEEDED);
-		    	IWorkflow iWorkflow = (IWorkflow) transList.searchByReference(Integer.valueOf(transRef));
-		    	
+	    	if(iWorkflowDesc != null && transRefInt > 0){
+	    		IWorkflow iWorkflow = null;
+	    		if(iWorkflowDesc.isListInCache()){
+			    	FocList transList = iWorkflowDesc.getFocList(FocList.LOAD_IF_NEEDED);
+			    	iWorkflow = (IWorkflow) transList.searchByReference(transRefInt);
+	    		}else{
+	    			iWorkflow = (IWorkflow) iWorkflowDesc.newObject(transRefInt, false);
+	    		}
+	    		
 		    	if(iWorkflow != null){
 		    		
 		    		boolean isForCurrentCompany = Globals.getApp().getCurrentCompany().equalsRef(((FocObject)iWorkflow).getCompany());

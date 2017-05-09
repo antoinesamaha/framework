@@ -160,12 +160,16 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 		FocList focList = getSelectionFocList();
 		if(focList != null){
 			focList.reloadFromDB();
-			if(getListWrapper() != null){
-				getListWrapper().refreshGuiForContainerChanges();
-			}
+			refreshGuiForContainerChanges();
 		}
 	}
 
+	public void refreshGuiForContainerChanges(){
+		if(getListWrapper() != null){
+			getListWrapper().refreshGuiForContainerChanges();
+		}
+	}
+	
 	public FocObject getFocObject_Master(){
 		FocObject masterFocObject = null;
 		if(getFocData() != null && getFocData() instanceof FObject){
