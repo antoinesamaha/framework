@@ -92,10 +92,12 @@ public class XMLJoin implements FXMLDesc {
 					if(fld != null){
 					  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
 					  
-					  if(type.equals("left")){
-					  	join.setType(SQLJoin.JOIN_TYPE_LEFT);
-					  }else if(type.equals("right")){
-					  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
+					  if(type != null){
+						  if(type.equals("left")){
+						  	join.setType(SQLJoin.JOIN_TYPE_LEFT);
+						  }else if(type.equals("right")){
+						  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
+						  }
 					  }
 					  if(!Utils.isStringEmpty(getWhere())){
 					  	join.setAdditionalWhere(getWhere());
