@@ -475,7 +475,7 @@ public class FocUnitMethodFactory {
 	        }
 	        if(stringBuilder != null){
 	        	try{
-		        	File logFile = new File("C://Users//user//Desktop//memory Log File.txt");
+		        	File logFile = new File("C://foc//log//memory_Log_File.txt");
 		        	FileWriter fileWriter = new FileWriter(logFile);
 		        	fileWriter.write(stringBuilder.toString());
 		        	fileWriter.flush();

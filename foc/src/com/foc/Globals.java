@@ -210,7 +210,7 @@ public class Globals{
   
   public static void logString(String str, boolean withTime) {
   	if(withTime){
-  		str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " : "+ "<" + getSessionID() + ">:" + str;
+  		str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " : ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
   	}
     PrintStream logFile = getLogFile();
     if(logFile != null){ 
@@ -236,7 +236,16 @@ public class Globals{
   	}
   	return sessionID;
   }
-  
+
+  public static String getUsername(){
+  	String username = "no user";
+  	if(			Globals.getApp() != null 
+  			&& 	Globals.getApp().getUser_ForThisSession() != null){
+  		username = Globals.getApp().getUser_ForThisSession().getName();
+  	}
+  	return username;
+  }
+
   public static void logString(String str) {
   	logString(str, ConfigInfo.isLogFileWithTime());
   }
