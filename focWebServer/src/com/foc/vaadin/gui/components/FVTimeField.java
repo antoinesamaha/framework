@@ -12,7 +12,6 @@ public class FVTimeField extends FVTextField {
 
 	public FVTimeField(FProperty property, Attributes attributes) {
 		super(property, attributes);
-		setInputPrompt("00:00 -> 24:59");
 	}
 	
 	@Override
