@@ -203,7 +203,7 @@ public class Globals{
   
   public static SimpleDateFormat getLogFileTimeFormat(){
   	if(dateFormat == null){
-  		dateFormat = new SimpleDateFormat("HH:mm:ss:SSS");
+  		dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss:SSS");
   	}
   	return dateFormat;
   }

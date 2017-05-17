@@ -76,6 +76,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		
 		XMLViewKey xmlViewKey = new XMLViewKey(newFocObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
 		formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newFocObject);
+		formLayout.setFocDataOwner(true);
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {

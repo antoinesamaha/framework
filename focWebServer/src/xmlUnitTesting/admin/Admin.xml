@@ -76,6 +76,11 @@
     <Component_SetValue componentName="MODULES_TABLE|$V{LAST_ITEM_IN_TABLE}|ACCESS" componentValue="Granted + Config"/>
   </Test>
   
+  <Test name="ADD_GROUP_ACCESS_MODULE_NO_CONFIG">
+    <Table_SelectItem tableName="MODULES_TABLE" propertyName="MODULE_NAME" propertyValue="$F{MODULE_NAME_VALUE}" variable="LAST_ITEM_IN_TABLE"/>
+    <Component_SetValue componentName="MODULES_TABLE|$V{LAST_ITEM_IN_TABLE}|ACCESS" componentValue="Granted"/>
+  </Test>  
+  
   <Test name="OPEN_COMPANY">
     <Admin_MenuClick menuCode="COMPANY_TABLE" />
     <Call suiteName="ADMIN" testName="OPEN_COMPANY_TABLE" NAME_VALUE="$F{NAME}" />

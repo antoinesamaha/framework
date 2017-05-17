@@ -3,7 +3,6 @@ package com.foc.vaadin.gui.components;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.xml.sax.Attributes;
 
@@ -13,11 +12,8 @@ import com.foc.desc.field.FMultipleChoiceItem;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.property.FMultipleChoiceString;
 import com.foc.property.FProperty;
-import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.xmlForm.FXML;
-import com.vaadin.event.FieldEvents.BlurEvent;
-import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.ui.AbstractSelect;
 
 @SuppressWarnings("serial")
@@ -35,8 +31,8 @@ public class FVMultipleChoiceStringField extends FVMultipleChoiceComboBox implem
     
     if(attributes != null && attributes.getValue(FXML.ATT_PROMPT) != null){
     	setInputPrompt(attributes.getValue(FXML.ATT_PROMPT));
-    }else{
-    	setInputPrompt("type new values");
+//    }else{
+//    	setInputPrompt("type new values");
     }
     setImmediate(true);
 

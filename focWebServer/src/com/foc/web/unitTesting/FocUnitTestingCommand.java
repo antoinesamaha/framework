@@ -160,6 +160,18 @@ public class FocUnitTestingCommand {
       	}
       }
     }
+  	
+    String layoutName = getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME);
+  	if(layoutName != null){
+	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName);
+	    if (tableWrapper != null) {
+	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+	    	if(centralPanel != null){
+	    		result = (FocXMLLayout) centralPanel; 
+	    	}
+	    }
+  	}
+    
     return result;
   }
   
@@ -241,18 +253,8 @@ public class FocUnitTestingCommand {
    * Simulates a click on the "Apply" button in the validation layout.
    * 
    */
-  protected void validationApply(String tableName) {
+  protected void validationApply() {
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
-  	
-  	if(tableName != null){
-	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
-	    if (tableWrapper != null) {
-	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
-	    	if(centralPanel != null){
-	    		navigationLayout = (FocXMLLayout) centralPanel; 
-	    	}
-	    }
-  	}
   	
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
@@ -275,18 +277,8 @@ public class FocUnitTestingCommand {
     }
   }
   
-  protected void validationSave(String tableName) {
+  protected void validationSave() {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
-    
-  	if(tableName != null){
-	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
-	    if (tableWrapper != null) {
-	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
-	    	if(centralPanel != null){
-	    		navigationLayout = (FocXMLLayout) centralPanel; 
-	    	}
-	    }
-  	}
     
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();

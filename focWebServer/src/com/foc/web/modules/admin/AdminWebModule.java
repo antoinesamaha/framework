@@ -14,6 +14,7 @@ import com.foc.IFocDescDeclaration;
 import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
 import com.foc.access.FocLogLineDesc;
+import com.foc.access.FocLogger;
 import com.foc.admin.ActiveUser;
 import com.foc.admin.ActiveUserDesc;
 import com.foc.admin.DocRightsGroupDesc;
@@ -530,6 +531,15 @@ public class AdminWebModule extends FocWebModule {
       }
     });
 
+    menuItem = systemMenu.pushMenu("ADMIN_CLEAR_LOGGER", "Clear Logger Tree");
+    menuItem.setMenuAction(new IFocMenuItemAction() {
+      
+      @Override
+      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+      	FocLogger.getInstance().dispose();
+      }
+    });
+    
     menuItem = systemMenu.pushMenu("FREE_UNUSED_MEMORY", "Free unused memory");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       

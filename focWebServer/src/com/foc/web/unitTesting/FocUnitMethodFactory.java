@@ -1,17 +1,17 @@
 package com.foc.web.unitTesting;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.foc.Globals;
+import com.foc.access.FocLogger;
 import com.foc.web.unitTesting.methods.FUploadFile_UnitMethod;
 
 public class FocUnitMethodFactory {
 
   private Map<String, IFUnitMethod> methodMap = null;
-  private StringBuilder stringBuilder = null;
   
   private FocUnitMethodFactory() {
 
@@ -24,7 +24,7 @@ public class FocUnitMethodFactory {
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String nextTest = attributes.getValue(FXMLUnit.ATT_CALL_TEST_COMPOSED);
-      	nextTest = nextTest.replace(">", ".");
+      	if(nextTest != null) nextTest = nextTest.replace(">", ".");
         command.logout(nextTest);
       }
     });
@@ -64,7 +64,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_APPLY, new IFUnitMethod() {
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-     		command.validationApply(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
+     		command.validationApply();
       }
     });
     
@@ -72,7 +72,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationSave(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
+        command.validationSave();
       }
     });
 
@@ -447,10 +447,14 @@ public class FocUnitMethodFactory {
         if(endIndex != null && !endIndex.isEmpty()){
         	endAt  = Integer.valueOf(endIndex);
         }
-        
-        boolean withMemoryLog = false;
+
+      	PrintStream perfLogFile = null;
         if(withMemoryLog_Strg != null && !withMemoryLog_Strg.isEmpty() && withMemoryLog_Strg.equalsIgnoreCase("true")){
-        	withMemoryLog = true;
+      		try{
+      			perfLogFile = !Globals.logFile_CheckLogDir() ? new PrintStream(Globals.logFile_GetFileName("PERF_", "log")) : null;
+					}catch (FileNotFoundException e){
+						Globals.logException(e);
+					}        	
         }
 
         if(startAt < 0){
@@ -462,29 +466,37 @@ public class FocUnitMethodFactory {
         }else{
         	StringBuilder stringBuilder = null;
 	        for(int i=startAt; i<=endAt; i++){
-	        	if(withMemoryLog){
+	        	if(perfLogFile != null){
 	        		stringBuilder = logMemory(i);
 	        	}
 	        	String currentVariableName  = variable+i;
 	        	Object currentVariableValue = FocUnitDictionary.getInstance().getXMLVariables().get(currentVariableName);
 	        	if(currentVariableValue == null){
-	        		command.getLogger().addFailure("Index out of bounds : "+i+" "+currentVariableName+" for "+variable);
+//	        		command.getLogger().addFailure("Index out of bounds : "+i+" "+currentVariableName+" for "+variable);
 	        	}
 	        	FocUnitDictionary.getInstance().getXMLVariables().put(variable, currentVariableValue);
 	        	command.callTest();
-	        }
-	        if(stringBuilder != null){
-	        	try{
-		        	File logFile = new File("C://foc//log//memory_Log_File.txt");
-		        	FileWriter fileWriter = new FileWriter(logFile);
-		        	fileWriter.write(stringBuilder.toString());
-		        	fileWriter.flush();
-		        	fileWriter.close();
-	        	}catch(Exception ex){
-	        		Globals.logException(ex);
+	        	if(stringBuilder != null && perfLogFile != null){
+	        		perfLogFile.println(stringBuilder.toString());
+	        		perfLogFile.flush();
 	        	}
 	        }
         }
+        
+      	if(perfLogFile != null){
+      		if(!FocLogger.getInstance().isHasFailure()){
+	      		FocLogger.getInstance().dispose();
+	      		perfLogFile.println("Log Cleared because no failure");
+	      		StringBuilder stringBuilder = logMemory(999);
+	      		perfLogFile.println(stringBuilder.toString());
+	      		perfLogFile.flush();
+      		}else{
+	      		perfLogFile.println("Could not clear Log because of failure");
+      		}
+      		
+      		perfLogFile.close();
+      		perfLogFile = null;
+      	}
       }
     });
     
@@ -564,17 +576,19 @@ public class FocUnitMethodFactory {
   }
   
   private StringBuilder logMemory(int index){
-  	if(stringBuilder == null){
-  		stringBuilder = new StringBuilder();
-  	}
+  	StringBuilder stringBuilder = new StringBuilder();
+  	
+    System.gc();
+    Globals.logMemory("");
+    
+    System.gc();
+    Globals.logMemory("");
+
     System.gc();
     String memoryLog = Globals.logMemory("Memory Size: ");
-
-    stringBuilder.append("Index: " + index);
-    stringBuilder.append("\n");
+  	
+    stringBuilder.append("Index: " + index+" -> ");
     stringBuilder.append(memoryLog);
-    stringBuilder.append("\n");
-    stringBuilder.append("\n");
     
     return stringBuilder;
   }
