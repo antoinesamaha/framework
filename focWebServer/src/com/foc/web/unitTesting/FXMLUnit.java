@@ -15,6 +15,7 @@ public interface FXMLUnit {
   public static final String TAG_SIGN                       = "Sign";
   public static final String TAG_APPLY                      = "Apply";
   public static final String TAG_SAVE                       = "Save";
+  public static final String TAG_PAUSE                      = "Pause";
   public static final String TAG_DEEP_APPLY                 = "DeepApply";
   public static final String TAG_DISCARD                    = "Discard";
   public static final String TAG_PRINT                      = "Print";

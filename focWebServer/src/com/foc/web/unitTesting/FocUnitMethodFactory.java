@@ -75,6 +75,14 @@ public class FocUnitMethodFactory {
         command.validationSave();
       }
     });
+    
+    methodMap.put(FXMLUnit.TAG_PAUSE, new IFUnitMethod() {
+
+      @Override
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      	FocUnitDictionary.getInstance().pause();
+      }
+    });
 
     methodMap.put(FXMLUnit.TAG_SIGN, new IFUnitMethod() {
 

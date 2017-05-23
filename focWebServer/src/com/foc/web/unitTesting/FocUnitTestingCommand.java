@@ -156,14 +156,16 @@ public class FocUnitTestingCommand {
           
           if (panel != null) {
             result = (FocXMLLayout) panel.getCentralPanel();
-          }      		
+          }
       	}
       }
     }
   	
-    String layoutName = getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME);
-  	if(layoutName != null){
-	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName);
+    String fieldName  = "$F{"+FXMLUnit.ATT_LAYOUT_NAME+"}";
+    String layoutName = getAttributes().resolveValue(fieldName);
+//    String layoutName = getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME);
+  	if(layoutName != null && !layoutName.equals(fieldName)){
+	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName, false);
 	    if (tableWrapper != null) {
 	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
 	    	if(centralPanel != null){
@@ -1047,12 +1049,10 @@ public class FocUnitTestingCommand {
     			boolean value = priorityToCaptionProperty == null || priorityToCaptionProperty.equals("true") ? true : false;
     			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
     			component.setValueString(componentValue);
-    			//Hussein
     		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
     			((FVObjectComboBox) component).setValue(null);
 					((FVObjectComboBox) component).setValueString(null);
 					componentValue = null;
-					//Hussein 07-01-2016 to fix the costcode empty father node bug.
     		}else{
     			if(!isAssert){
     				component.setValueString(componentValue);
@@ -1070,6 +1070,8 @@ public class FocUnitTestingCommand {
     				if(isAssert){
     					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
     				}else{
+        			retValue = component.getValueString();
+
     					getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to '" + componentValue + "' value remained = '"+retValue+"'");
     				}
     			}
@@ -1505,11 +1507,26 @@ public class FocUnitTestingCommand {
    * @return the FocXMLGuiComponent
    */
   protected FocXMLGuiComponent findComponent(FocXMLLayout navigationLayout, final String componentName) {
+  	return findComponent(navigationLayout, componentName, true);
+  }
+
+  /**
+   * Gets an FocXMLGuiComponent by name.
+   * 
+   * @param navigationLayout
+   *          Name of the FocXMLLayout to look in.
+   * @param name
+   *          Name of the component.
+   * @return the FocXMLGuiComponent
+   */
+  protected FocXMLGuiComponent findComponent(FocXMLLayout navigationLayout, final String componentName, boolean failIfNotFound) {
   	FocXMLGuiComponent component = (FocXMLGuiComponent) navigationLayout.getComponentByName(componentName);
 
   	if(component == null){
-  		getLogger().addFailure("Could not find component " + componentName + ".");
-  		navigationLayout.debug_PrintAllComponents();
+  		if(failIfNotFound){
+	  		getLogger().addFailure("Could not find component " + componentName + ".");
+	  		navigationLayout.debug_PrintAllComponents();
+  		}
   	}else{
 			AbstractComponent comp = (AbstractComponent) component;
 			

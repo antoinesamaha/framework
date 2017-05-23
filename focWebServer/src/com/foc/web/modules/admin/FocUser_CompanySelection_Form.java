@@ -77,15 +77,16 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
       @Override
       public void propertyModified(FProperty property) {
         FocUser user = (FocUser) getFocData();
-        user.dispose_TitlesList();
-        user.setCurrentTitle(null);
-        if (user.getTitlesList().size() == 1)
-          user.setCurrentTitle((WFTitle) user.getTitlesList().getFocObject(0));
-        FocXMLGuiComponent comp = (FocXMLGuiComponent) getComponentByName("CURRENT_TITLE");
-        if(comp != null){
-        	comp.setFocData(user.getFocProperty(FocUserDesc.FLD_CURRENT_TITLE));
+        if(user != null){
+	        user.dispose_TitlesList();
+	        user.setCurrentTitle(null);
+	        if (user.getTitlesList().size() == 1)
+	          user.setCurrentTitle((WFTitle) user.getTitlesList().getFocObject(0));
+	        FocXMLGuiComponent comp = (FocXMLGuiComponent) getComponentByName("CURRENT_TITLE");
+	        if(comp != null){
+	        	comp.setFocData(user.getFocProperty(FocUserDesc.FLD_CURRENT_TITLE));
+	        }
         }
-
       }
 
       @Override

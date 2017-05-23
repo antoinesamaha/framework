@@ -72,13 +72,20 @@ public class FocUnitTest implements ITestCase {
   		testStartMessage += " " + callerArguments.getString(excluds);
   	}
     FocLogger.getInstance().openNode(testStartMessage);
-      
-    for (int i=0;i<getArrayCommands().size();i++) {
+    
+    FocUnitDictionary.getInstance().stackPush(FocUnitTest.this, 0);
+    
+    for (int i=0;i<getArrayCommands().size() && !FocUnitDictionary.getInstance().isPause(); i++) {
       FocUnitTestingCommand command = getArrayCommands().get(i);
+      FocUnitDictionary.getInstance().stackSetCommand(i);
       command.execute();
     }
     
-    FocLogger.getInstance().closeNode();
+    if(!FocUnitDictionary.getInstance().isPause()){
+    	FocUnitDictionary.getInstance().stackPop();
+    	FocLogger.getInstance().closeNode();
+    }
+    
   }
 
   public FocUnitXMLAttributes getCallerArguments() {

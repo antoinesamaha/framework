@@ -324,7 +324,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 		    FocList list = getSelectionFocList();
 		    if(list != null){
 		    	FocObject obj = list.searchByReference(ref);
-		    	FProperty prop = obj != null ? obj.getFocPropertyByName(getItemCaptionPropertyId().toString()) : null;
+		    	FProperty prop = obj != null ? obj.getFocPropertyForPath(getItemCaptionPropertyId().toString()) : null;
 		    	value = prop != null ? prop.getString() : null;
 		    }
   		}

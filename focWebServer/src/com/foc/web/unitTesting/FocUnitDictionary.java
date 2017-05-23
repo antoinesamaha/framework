@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Stack;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -23,12 +24,16 @@ import com.foc.vaadin.ICentralPanel;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.ui.Component;
 
 public class FocUnitDictionary {
   private Map<String, FocUnitTestingSuite> testSuiteMap = null; 
   private Map<String, Object> xmlVariables              = null;
   
   private FocUnitExpectedNotification expectedNotification = null;  
+
+  private boolean                 pause     = false;
+  private Stack<FocUnitTestLevel> testStack = null;
   
   public static int MODE_CLEAR   = 0;
   public static int MODE_DISPOSE = 1;
@@ -113,6 +118,19 @@ public class FocUnitDictionary {
       xmlVariables.clear();
       xmlVariables = null;
     }
+    
+    if(testStack != null){
+    	Iterator<FocUnitTestLevel> iter = testStack.iterator();
+    	while(iter != null && iter.hasNext()){
+    		FocUnitTestLevel level = iter.next();
+    		if(level != null){
+    			level.dispose();
+    		}
+    	}
+    		
+    	testStack.clear();
+    	testStack = null;
+    }
   }
   
   public Map<String, Object> getXMLVariables(){
@@ -182,20 +200,23 @@ public class FocUnitDictionary {
   }
   
   public void runUnitTest(String suiteName){
-    FocUnitTestingSuite suite = getTestingSuite(suiteName);
+  	//		INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
   	
-//		INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
-		  
-		//VaadinRequest vaadinRequest = VaadinService.getCurrent().getCurrentRequest();
-		//String path = vaadinRequest.getPathInfo();
-		
-		try {
-			Globals.getApp().setIsUnitTest(true);
-		  FocUnitDictionary.getInstance().getTestingSuite(suite.getName()).runSuite();
-		} catch (Exception e) {
-		  Globals.logException(e);
-		  FocUnitDictionary.getInstance().getLogger().addError(e.getMessage());
-		}
+  	//VaadinRequest vaadinRequest = VaadinService.getCurrent().getCurrentRequest();
+  	//String path = vaadinRequest.getPathInfo();
+  	
+    FocUnitTestingSuite suite = getTestingSuite(suiteName);
+    if(suite == null){
+    	FocUnitDictionary.getInstance().getLogger().addError("Test suite not found: "+suiteName);
+    }else{
+			try {
+				Globals.getApp().setIsUnitTest(true);
+			  FocUnitDictionary.getInstance().getTestingSuite(suite.getName()).runSuite();
+			} catch (Exception e) {
+			  Globals.logException(e);
+			  FocUnitDictionary.getInstance().getLogger().addError(e.getMessage());
+			}
+    }
   }
   
   public void continueTestByName(String suiteName, String testName){
@@ -217,5 +238,39 @@ public class FocUnitDictionary {
     XMLViewKey xmlViewKey = new XMLViewKey(FocLogLineDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TREE);
     ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) mainWindow, xmlViewKey, tree);
     mainWindow.changeCentralPanelContent(centralPanel, true);
+  }
+  
+  public void stackPush(FocUnitTest test, int commandIndex){
+  	FocUnitTestLevel level = new FocUnitTestLevel(test, commandIndex);
+  	if(testStack == null){
+  		testStack = new Stack<FocUnitTestLevel>();
+  	}
+  	testStack.push(level);
+  }
+  
+  public void stackSetCommand(int commandIndex){
+  	FocUnitTestLevel level = testStack != null ? testStack.peek() : null;
+  	if(level != null){
+  		level.setCommandIndex(commandIndex);
+  	}
+  }
+  
+  public void stackPop(){
+  	if(testStack != null){
+  		testStack.pop();
+  	}
+  }
+  
+  public void pause(){
+  	pause = true;
+  }
+  
+  public void resume(){
+  	pause = false;
+  	
+  }
+  
+  public boolean isPause(){
+  	return pause;
   }
 }

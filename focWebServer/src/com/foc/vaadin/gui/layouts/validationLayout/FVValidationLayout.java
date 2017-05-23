@@ -548,7 +548,7 @@ public class FVValidationLayout extends HorizontalLayout {
   private void printClickListener(){
   	if(!Globals.getApp().checkSession()){					
 			INavigationWindow nw = getNavigationWindow();
-				saveAndRefreshWithoutGoBack();
+			saveAndRefreshWithoutGoBack();
 			
 			getCentralPanel().copyGuiToMemory();
 			FocDataDictionary dictionary = newFocDataDictionary_ForPrinting();

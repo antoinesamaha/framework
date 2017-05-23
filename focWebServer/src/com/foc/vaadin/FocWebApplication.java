@@ -242,7 +242,9 @@ public abstract class FocWebApplication extends UI {
 		  		}catch(Exception e){
 		  			Globals.logException(e);
 		  		}finally {
-		  			FocUnitDictionary.getInstance().popupLogger(window);
+		  			if(!FocUnitDictionary.getInstance().isPause()){
+		  				FocUnitDictionary.getInstance().popupLogger(window);
+		  			}
 //	  				ConfigInfo.setUnitAllowed(false);//So that if we refresh the url it does not relaunch the unit testing again.
 					}
 				}
