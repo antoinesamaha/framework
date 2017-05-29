@@ -42,6 +42,7 @@ import com.foc.pivot.FPivotBreakdown;
 import com.foc.pivot.FPivotTable;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
+import com.foc.property.FTime;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.tree.FTree;
@@ -866,7 +867,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 						FProperty property = (FProperty) focData;
 						if(			property.hasListeners() 
 								|| 	mapDataPath2ListenerAction_GetListenerAction(guiComponent) != null
-								|| 	(property.getFocField() != null && property.getFocField().getPropertyValidator() != null)
+								|| 	(property.getFocField() != null && property.getFocField().getPropertyValidator() != null
+								||  property instanceof FTime)//We always listen immediately to time in case they type with bad format 
 								){
 							shouldBeImmediate = true;
 						}

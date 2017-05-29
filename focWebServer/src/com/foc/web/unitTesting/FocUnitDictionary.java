@@ -267,7 +267,6 @@ public class FocUnitDictionary {
   
   public void resume(){
   	pause = false;
-  	
   }
   
   public boolean isPause(){

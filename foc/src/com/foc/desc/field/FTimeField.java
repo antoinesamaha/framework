@@ -17,6 +17,7 @@ import com.foc.gui.table.cellControler.AbstractCellControler;
 import com.foc.gui.table.cellControler.TextCellControler;
 import com.foc.property.FProperty;
 import com.foc.property.FTime;
+import com.foc.property.validators.FPropertyValidator;
 
 /**
  * @author 01Barmaja

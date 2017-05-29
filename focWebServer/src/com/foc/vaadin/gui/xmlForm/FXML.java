@@ -248,6 +248,8 @@ public interface FXML {
   public static final String ATT_VIEW_CONTAINER            = "containerWindow"    ;
   public static final String ATT_WRAP_TEXT                 = "wrapText"           ;
   public static final String ATT_AUTOCOMPLETE              = "autoComplete"       ;
+  public static final String ATT_DIRECTION                 = "direction"          ;
+  public static final String VAL_DIRECTION_HORIZONTAL      = "horizontal"         ;
 
   public static final String ATT_TEXT_AREA                 = "textArea"           ;
   public static final String ATT_FORMAT                    = "format"             ;

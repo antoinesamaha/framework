@@ -4,11 +4,13 @@ import org.xml.sax.Attributes;
 
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.FVMultipleChoiceComboBox;
 import com.foc.vaadin.gui.components.FVMultipleChoiceOptionGroup;
 import com.foc.vaadin.gui.components.FVMultipleChoiceOptionGroupPopupView;
+import com.foc.vaadin.gui.components.multipleChoiceOptionGroupHorizontal.FVMultipleChoiceOptionGroupHorizontal;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
@@ -35,7 +37,12 @@ public class FVMultipleChoice implements FocXMLGuiComponentCreator {
 	  	}
 	  	
 	  	if(optionGroup){
-	  		comp = new FVMultipleChoiceOptionGroup(property, attributes);
+	  		String direction = attributes.getValue(FXML.ATT_DIRECTION);
+	  		if(!Utils.isEmail(direction) && direction.toLowerCase().equals(FXML.VAL_DIRECTION_HORIZONTAL)){
+	  			comp = new FVMultipleChoiceOptionGroupHorizontal(property, attributes);
+	  		}else{
+	  			comp = new FVMultipleChoiceOptionGroup(property, attributes);
+	  		}
 	  	}else{
 	  		comp = new FVMultipleChoiceComboBox(property, attributes);
 	  	}

@@ -82,13 +82,12 @@ public class FocUnitXMLAttributes extends FXMLAbstractAttributes {
             }
           }          
           
-          if(result != null) expression = result;
-          else{
+          if(result != null){
+          	expression = result;
+          }else{
             getTest().getSuite().getDictionary().getLogger().addWarning("Could not interpret expression: " + expression + ". Expression will be returned intact.");
           }
-        }
-        
-        else{
+        }else{
           FocUnitDictionary.getInstance().getLogger().addError("Test in FocUnitXMLAttribute is null.");
         }
 

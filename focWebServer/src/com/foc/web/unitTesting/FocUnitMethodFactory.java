@@ -84,6 +84,15 @@ public class FocUnitMethodFactory {
       }
     });
 
+    methodMap.put(FXMLUnit.TAG_BREAKPOINT, new IFUnitMethod() {
+
+      @Override
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      	int breakpoint = 3;
+      	breakpoint++;
+      }
+    });
+    
     methodMap.put(FXMLUnit.TAG_SIGN, new IFUnitMethod() {
 
       @Override

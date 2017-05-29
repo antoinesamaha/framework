@@ -161,10 +161,17 @@ public class FocUnitTestingCommand {
       }
     }
   	
-    String fieldName  = "$F{"+FXMLUnit.ATT_LAYOUT_NAME+"}";
-    String layoutName = getAttributes().resolveValue(fieldName);
-//    String layoutName = getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME);
-  	if(layoutName != null && !layoutName.equals(fieldName)){
+    String layoutName = getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME);
+    if(layoutName == null || layoutName.equals(FXMLUnit.ATT_LAYOUT_NAME)){
+      String fieldName  = "$F{"+FXMLUnit.ATT_LAYOUT_NAME+"}";
+      layoutName = getAttributes().resolveValue(fieldName);
+
+      if(layoutName == null || layoutName.equals(fieldName)){
+      	layoutName = null;
+      }
+    }
+    
+  	if(layoutName != null){
 	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName, false);
 	    if (tableWrapper != null) {
 	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
