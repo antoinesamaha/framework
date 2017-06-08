@@ -84,42 +84,42 @@ public class BusinessEssentialsWebModule extends FocWebModule {
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/Chart_Form.xml", 0, Chart_Form.class.getName());
+      "/xml/com/foc/business/Chart_Form.xml", 0, Chart_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
       PrnLayoutDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/PrnLayout_Table.xml", 0, PrnLayout_Table.class.getName());
+      "/xml/com/foc/business/PrnLayout_Table.xml", 0, PrnLayout_Table.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       BusinessConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/BusinessConfig_Table.xml", 0, null);
+      "/xml/com/foc/business/BusinessConfig_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       BusinessConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/BusinessConfig_Form.xml", 0, BusinessConfig_Form.class.getName());
+      "/xml/com/foc/business/BusinessConfig_Form.xml", 0, BusinessConfig_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       STORAGE_FORMULA,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/FocFormula_Form.xml", 0, FocFormula_Form.class.getName());
+      "/xml/com/foc/business/FocFormula_Form.xml", 0, FocFormula_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       DataModelNodeDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TREE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/business/FocDataModel_Tree.xml", 0, FocDataModel_Tree.class.getName());
+      "/xml/com/foc/business/FocDataModel_Tree.xml", 0, FocDataModel_Tree.class.getName());
 
     //-----------------------------------------------------------------------
     // Calendar
@@ -130,84 +130,84 @@ public class BusinessEssentialsWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/FCalendar_Table.xml", 0, FCalendar_Table.class.getName());
+      "/xml/com/foc/calendar/FCalendar_Table.xml", 0, FCalendar_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FCalendarDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/FCalendar_Form.xml", 0, null);
+      "/xml/com/foc/calendar/FCalendar_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WeekShiftExceptionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WeekShiftException_Table.xml", 0, null);
+      "/xml/com/foc/calendar/WeekShiftException_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WeekShiftExceptionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WeekShiftException_Form.xml", 0, null);
+      "/xml/com/foc/calendar/WeekShiftException_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       HolidayDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/Holiday_Table.xml", 0, null);
+      "/xml/com/foc/calendar/Holiday_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       HolidayDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/Holiday_Form.xml", 0, null);
+      "/xml/com/foc/calendar/Holiday_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WeekShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WeekShift_Table.xml", 0, null);
+      "/xml/com/foc/calendar/WeekShift_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WeekShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WeekShift_Form.xml", 0, null);
+      "/xml/com/foc/calendar/WeekShift_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       DayShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/DayShift_Table.xml", 0, null);
+      "/xml/com/foc/calendar/DayShift_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       DayShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/DayShift_Form.xml", 0, null);
+      "/xml/com/foc/calendar/DayShift_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WorkShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WorkShift_Table.xml", 0, null);
+      "/xml/com/foc/calendar/WorkShift_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WorkShiftDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/calendar/WorkShift_Form.xml", 0, null);
+      "/xml/com/foc/calendar/WorkShift_Form.xml", 0, null);
       
     //-----------------------------------------------------------------------
     // Currency
@@ -218,35 +218,35 @@ public class BusinessEssentialsWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/currency/Currency_Table.xml", 0, null);
+      "/xml/com/foc/currency/Currency_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       CurrencyDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/currency/Currency_Form.xml", 0, null);
+      "/xml/com/foc/currency/Currency_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       Currencies.getFocDesc().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/currency/Currencies_Form.xml", 0, Currencies_Form.class.getName());
+      "/xml/com/foc/currency/Currencies_Form.xml", 0, Currencies_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       DateLineDesc.TABLE_NAME,
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/currency/Dateline_Table.xml", 0, CurrencyDateLine_Table.class.getName());
+      "/xml/com/foc/currency/Dateline_Table.xml", 0, CurrencyDateLine_Table.class.getName());
         
     XMLViewDictionary.getInstance().put(
       DateLineDesc.TABLE_NAME,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/currency/Dateline_Form.xml", 0, CurrencyDateLine_Form.class.getName());
+      "/xml/com/foc/currency/Dateline_Form.xml", 0, CurrencyDateLine_Form.class.getName());
     
     //-----------------------------------------------------------------------
     // Unit
@@ -257,21 +257,21 @@ public class BusinessEssentialsWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/unit/Dimension_Table.xml", 0, Dimension_Table.class.getName());
+      "/xml/com/foc/unit/Dimension_Table.xml", 0, Dimension_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       DimensionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/unit/Dimension_Form.xml", 0, Dimension_Form.class.getName());
+      "/xml/com/foc/unit/Dimension_Form.xml", 0, Dimension_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       STORAGE_UPLOAD_LAYOUT,
       XMLViewKey.TYPE_FORM, 
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/unit/FVUploadLayout_Form.xml", 0, FVUploadLayout_Form.class.getName());
+      "/xml/com/foc/unit/FVUploadLayout_Form.xml", 0, FVUploadLayout_Form.class.getName());
     
     //Adr Book Party
     //--------------
@@ -280,70 +280,70 @@ public class BusinessEssentialsWebModule extends FocWebModule {
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/business/Contact_Table.xml", 0, Contact_Table.class.getName());
+        "/xml/com/foc/business/Contact_Table.xml", 0, Contact_Table.class.getName());
       
       XMLViewDictionary.getInstance().put(
         ContactDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_MOBILE,
-        "/xml/b01/foc/business/Contact_Mobile_Table.xml", 0, Contact_Table.class.getName());
+        "/xml/com/foc/business/Contact_Mobile_Table.xml", 0, Contact_Table.class.getName());
 
       XMLViewDictionary.getInstance().put(
         ContactDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         CTXT_NEW_BUSINESS_CARD,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/business/Contact_NewBusinessCard_Form.xml", 0, Contact_NewBusinessCard_Form.class.getName());
+        "/xml/com/foc/business/Contact_NewBusinessCard_Form.xml", 0, Contact_NewBusinessCard_Form.class.getName());
       
       XMLViewDictionary.getInstance().put(
         ContactDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/business/Contact_Form.xml", 0, Contact_Form.class.getName());
+        "/xml/com/foc/business/Contact_Form.xml", 0, Contact_Form.class.getName());
       
       XMLViewDictionary.getInstance().put(
         ContactDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_MOBILE,
-        "/xml/b01/foc/business/Contact_Mobile_Form.xml", 0, Contact_Form.class.getName());
+        "/xml/com/foc/business/Contact_Mobile_Form.xml", 0, Contact_Form.class.getName());
       
       XMLViewDictionary.getInstance().put(
         AdrBookPartyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/business/AdrBookParty_Form.xml", 0, AdrBookParty_Form.class.getName());
+        "/xml/com/foc/business/AdrBookParty_Form.xml", 0, AdrBookParty_Form.class.getName());
 
       XMLViewDictionary.getInstance().put(
         AdrBookPartyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_SIMPLE,
-        "/xml/b01/foc/business/AdrBookParty_Simple_Form.xml", 0, AdrBookParty_Form.class.getName());
+        "/xml/com/foc/business/AdrBookParty_Simple_Form.xml", 0, AdrBookParty_Form.class.getName());
 
       XMLViewDictionary.getInstance().put(
         AdrBookPartyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_MOBILE,
-        "/xml/b01/foc/business/AdrBookParty_Mobile_Form.xml", 0, AdrBookParty_Form.class.getName());
+        "/xml/com/foc/business/AdrBookParty_Mobile_Form.xml", 0, AdrBookParty_Form.class.getName());
 
       XMLViewDictionary.getInstance().put(
         AdrBookPartyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/business/AdrBookParty_Table.xml", 0, null);
+        "/xml/com/foc/business/AdrBookParty_Table.xml", 0, null);
 
       XMLViewDictionary.getInstance().put(
         AdrBookPartyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_MOBILE,
-        "/xml/b01/foc/business/AdrBookParty_Mobile_Table.xml", 0, null);
+        "/xml/com/foc/business/AdrBookParty_Mobile_Table.xml", 0, null);
     //--------------
     
     XMLViewDictionary.getInstance().putAddClickSpecialHandler(UnitDesc.getInstance().getStorageName(), new IAddClickSpecialHandler() {

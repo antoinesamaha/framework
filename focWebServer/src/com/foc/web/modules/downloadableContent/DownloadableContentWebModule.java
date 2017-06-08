@@ -27,28 +27,28 @@ public class DownloadableContentWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/downloadableContent/DownloadableContent_Table.xml", 0, DownloadableContent_Table.class.getName());
+      "/xml/com/foc/downloadableContent/DownloadableContent_Table.xml", 0, DownloadableContent_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
         DownloadableContentDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE, 
         CTXT_SPECIAL_URL, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/downloadableContent/DownloadableContent_URLEntry_Table.xml", 0, null);
+        "/xml/com/foc/downloadableContent/DownloadableContent_URLEntry_Table.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
     		DownloadableContentDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/downloadableContent/DownloadableContent_Form.xml", 0, null);
+        "/xml/com/foc/downloadableContent/DownloadableContent_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
     		DownloadableContentDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         CTXT_FOREACH_FORM, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/downloadableContent/DownloadableContent_ForEach_Form.xml", 0, DownloadableContent_Form.class.getName());
+        "/xml/com/foc/downloadableContent/DownloadableContent_ForEach_Form.xml", 0, DownloadableContent_Form.class.getName());
   }
 
 	public void menu_Declare(FocWebVaadinWindow mainWindow, FVMenuTree menuTree) {

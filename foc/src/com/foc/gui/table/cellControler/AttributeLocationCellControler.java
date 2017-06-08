@@ -24,14 +24,14 @@ public class AttributeLocationCellControler extends AbstractCellControler{
   }
   
   /* (non-Javadoc)
-   * @see b01.foc.gui.table.editor.CellEditorInterface#getEditor()
+   * @see com.foc.gui.table.editor.CellEditorInterface#getEditor()
    */
   public TableCellEditor getEditor() {
     return editor;
   }
   
   /* (non-Javadoc)
-   * @see b01.foc.gui.table.editor.CellEditorInterface#getRenderer()
+   * @see com.foc.gui.table.editor.CellEditorInterface#getRenderer()
    */
   public TableCellRenderer getRenderer() {
     return renderer;

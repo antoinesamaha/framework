@@ -35,7 +35,7 @@ public class ListFocusLock extends FocusLock {
     //We start by testing if editing because this case is the case of combo boxes in the new added row
     boolean holdFocus = !table.isEditing() && list.isDirectImpactOnDatabase() && !obj.isContentValid(displayMessage);
     int row = list.getRowForObject(obj);
-    //b01.foc.Globals.logString("obj row ="+row+" curr row ="+table.getSelectedRow()+ " hold="+holdFocus);
+    //com.foc.Globals.logString("obj row ="+row+" curr row ="+table.getSelectedRow()+ " hold="+holdFocus);
     if(table.getSelectedRow() != row && row >= 0){
       //holdFocus = !obj.isContentValid(true);
       if(holdFocus){
@@ -46,7 +46,7 @@ public class ListFocusLock extends FocusLock {
   }
 
   /* (non-Javadoc)
-   * @see b01.foc.gui.lock.FocusLock#stopEditing()
+   * @see com.foc.gui.lock.FocusLock#stopEditing()
    */
   public void stopEditing() {
     if(table.isEditing()){

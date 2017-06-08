@@ -43,196 +43,196 @@ public class FabWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/XMLViewDefinition_Table.xml", 0, XMLViewDefinition_Table.class.getName());
+      "/xml/com/fab/XMLViewDefinition_Table.xml", 0, XMLViewDefinition_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			XMLViewDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/XMLViewDefinition_Form.xml", 0, XMLViewDefinition_Form.class.getName());
+      "/xml/com/fab/XMLViewDefinition_Form.xml", 0, XMLViewDefinition_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			PrnLayoutDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/PrnLayoutDefinition_Table.xml", 0, PrnLayoutDefinition_Table.class.getName());
+      "/xml/com/fab/PrnLayoutDefinition_Table.xml", 0, PrnLayoutDefinition_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   		PrnLayoutDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/PrnLayoutDefinition_Form.xml", 0, PrnLayoutDefinition_Form.class.getName());
+      "/xml/com/fab/PrnLayoutDefinition_Form.xml", 0, PrnLayoutDefinition_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			ParameterSheetSelectorDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/ParameterSheetSelector_Table.xml", 0, ParameterSheetSelector_Table.class.getName());
+      "/xml/com/fab/ParameterSheetSelector_Table.xml", 0, ParameterSheetSelector_Table.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       TableDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/TableDefinition_Table.xml", 0, null);
+      "/xml/com/fab/TableDefinition_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       TableDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TREE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/TableDefinition_Tree.xml", 0, null);
+      "/xml/com/fab/TableDefinition_Tree.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
   		TableDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/TableDefinition_Form.xml", 0, FabTableDefinition_Form.class.getName());
+      "/xml/com/fab/TableDefinition_Form.xml", 0, FabTableDefinition_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FieldDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FieldDefinition_Table.xml", 0, null);
+      "/xml/com/fab/FieldDefinition_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FieldDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FieldDefinition_Form.xml", 0, FieldDefinition_Form.class.getName());
+      "/xml/com/fab/FieldDefinition_Form.xml", 0, FieldDefinition_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FabMultipleChoiceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabMultipleChoice_Table.xml", 0, null);
+      "/xml/com/fab/FabMultipleChoice_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabMultipleChoiceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabMultipleChoice_Form.xml", 0, null);
+      "/xml/com/fab/FabMultipleChoice_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabMultiChoiceSetDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabMultiChoiceSet_Table.xml", 0, null);
+      "/xml/com/fab/FabMultiChoiceSet_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabMultiChoiceSetDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabMultiChoiceSet_Form.xml", 0, null);
+      "/xml/com/fab/FabMultiChoiceSet_Form.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
       FabWorkspaceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabWorkspace_Table.xml", 0, null);
+      "/xml/com/fab/FabWorkspace_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabWorkspaceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabWorkspace_Form.xml", 0, null);
+      "/xml/com/fab/FabWorkspace_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabProjectDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabProject_Table.xml", 0, null);
+      "/xml/com/fab/FabProject_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabProjectDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabProject_Form.xml", 0, null);
+      "/xml/com/fab/FabProject_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UndCustTableDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/UndCustTable_Table.xml", 0, null);
+      "/xml/com/fab/UndCustTable_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UndCustTableDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/UndCustTable_Form.xml", 0, null);
+      "/xml/com/fab/UndCustTable_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UndCustFieldDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/UndCustField_Table.xml", 0, null);
+      "/xml/com/fab/UndCustField_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UndCustFieldDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/UndCustField_Form.xml", 0, null);
+      "/xml/com/fab/UndCustField_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FilterDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FilterDefinition_Table.xml", 0, null);
+      "/xml/com/fab/FilterDefinition_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FilterDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FilterDefinition_Form.xml", 0, null);
+      "/xml/com/fab/FilterDefinition_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FilterFieldDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FilterFieldDefinition_Table.xml", 0, null);
+      "/xml/com/fab/FilterFieldDefinition_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FilterFieldDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FilterFieldDefinition_Form.xml", 0, null);
+      "/xml/com/fab/FilterFieldDefinition_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabDictionaryGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabDictionaryGroup_Table.xml", 0, null);
+      "/xml/com/fab/FabDictionaryGroup_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FabDictionaryGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/fab/FabDictionaryGroup_Form.xml", 0, null);
+      "/xml/com/fab/FabDictionaryGroup_Form.xml", 0, null);
   }
 
   public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuItem) {

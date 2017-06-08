@@ -34,7 +34,7 @@ public class PhotoAlbumWebModule extends FocWebModule {
 	public static final String MENU_CODE_DOCUMENT_DASHBOARD = "DOCUMENT_DASHBOARD";
 	
   public PhotoAlbumWebModule() {
-    super(MODULE_NAME, "Attachments");
+    super(MODULE_NAME, "Document Management");
   }
   
   public FocGroup getFocGroup(){
@@ -51,70 +51,70 @@ public class PhotoAlbumWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/DocTypeAccess_Table.xml", 0, DocTypeAccess_Table.class.getName());
+      "/xml/com/foc/photoAlbum/DocTypeAccess_Table.xml", 0, DocTypeAccess_Table.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       PhotoAlbumDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbum_Table.xml", 0, PhotoAlbum_Table.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Table.xml", 0, PhotoAlbum_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
     	DocumentTypeDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/DocumentType_Table.xml", 0, DocumentType_Table.class.getName());
+      "/xml/com/foc/photoAlbum/DocumentType_Table.xml", 0, DocumentType_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
     	DocumentTypeDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/DocumentType_Form.xml", 0, DocumentType_Form.class.getName());
+      "/xml/com/foc/photoAlbum/DocumentType_Form.xml", 0, DocumentType_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       PhotoAlbumDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       CTXT_UNRELATED_ATTACHMENTS,
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbum_UnrelatedAttachments_Table.xml", 0, PhotoAlbum_UnrelatedAttachments_Table.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbum_UnrelatedAttachments_Table.xml", 0, PhotoAlbum_UnrelatedAttachments_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
       PhotoAlbumDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbum_Form.xml", 0, PhotoAlbum_Form.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Form.xml", 0, PhotoAlbum_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       PhotoAlbumAccessDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       CONTEXT_GROUP_ACCESS_RIGHT_SELECTION, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbumAccess_GroupAccessRightSelection_Table.xml", 0, PhotoAlbumAccess_GroupAccessRightSelection_Table.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbumAccess_GroupAccessRightSelection_Table.xml", 0, PhotoAlbumAccess_GroupAccessRightSelection_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
       PhotoAlbumAccessDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbumAccess_Table.xml", 0, PhotoAlbumAccess_Table.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbumAccess_Table.xml", 0, PhotoAlbumAccess_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
     	PhotoAlbumDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       CTXT_ALL_DOCUMENTS, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/PhotoAlbum_AllDocuments_Table.xml", 0, PhotoAlbum_AllDocuments_Table.class.getName());
+      "/xml/com/foc/photoAlbum/PhotoAlbum_AllDocuments_Table.xml", 0, PhotoAlbum_AllDocuments_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
     	STORAGE_NAME_DOCUMENT_DASHBOARD,
       XMLViewKey.TYPE_FORM, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/photoAlbum/DocumentBoard_Form.xml", 0, DocumentBoard_Form.class.getName());
+      "/xml/com/foc/photoAlbum/DocumentBoard_Form.xml", 0, DocumentBoard_Form.class.getName());
   }
 
 	public void menu_Declare(FocWebVaadinWindow mainWindow, FVMenuTree menuTree) {

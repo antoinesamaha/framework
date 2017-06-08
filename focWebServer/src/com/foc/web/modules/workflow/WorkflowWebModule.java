@@ -52,259 +52,259 @@ public class WorkflowWebModule extends FocWebModule {
       XMLViewKey.TYPE_TREE,
       CTXT_DEPARTMENT_SELECTION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/Department_Selection_Tree.xml", 0, Department_Selection_Tree.class.getName());
+      "/xml/com/foc/workflow/Department_Selection_Tree.xml", 0, Department_Selection_Tree.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			STORAGE_NAME_TRANSACTION_FILTER,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/TransactionFilter_Form.xml", 0, TransactionFilter_Form.class.getName());
+      "/xml/com/foc/workflow/TransactionFilter_Form.xml", 0, TransactionFilter_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
       WFLogDesc.WF_LOG_VIEW_KEY,
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFLog_Table.xml", 0, WFLog_Table.class.getName());
+      "/xml/com/foc/workflow/WFLog_Table.xml", 0, WFLog_Table.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       WFLogDesc.WF_LOG_VIEW_KEY,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFLog_Form.xml", 0, WFLog_Form.class.getName());
+      "/xml/com/foc/workflow/WFLog_Form.xml", 0, WFLog_Form.class.getName());
       
   	XMLViewDictionary.getInstance().put(
       WFLogDesc.WF_LOG_VIEW_KEY,
       XMLViewKey.TYPE_TABLE,
       CTXT_WF_COMMENT_LOG,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFLog_Comment_Log_Table.xml", 0, WFLog_Comment_Log_Table.class.getName());
+      "/xml/com/foc/workflow/WFLog_Comment_Log_Table.xml", 0, WFLog_Comment_Log_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   		WFFieldLockStageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFFieldLockStage_Table.xml", 0, WFFieldLockStage_Table.class.getName());
+      "/xml/com/foc/workflow/WFFieldLockStage_Table.xml", 0, WFFieldLockStage_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
       "IWorkflow",
       XMLViewKey.TYPE_FORM,
       CTXT_CANCEL_TRANSACTION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/Workflow_Cancel_Form.xml", 0, Workflow_Cancel_Form.class.getName());
+      "/xml/com/foc/workflow/Workflow_Cancel_Form.xml", 0, Workflow_Cancel_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   		WFFieldLockStageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFFieldLockStage_Form.xml", 0, WFFieldLockStage_Form.class.getName());
+      "/xml/com/foc/workflow/WFFieldLockStage_Form.xml", 0, WFFieldLockStage_Form.class.getName());
       
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionWrapper_Form.xml", 0, WFTransactionWrapper_Form.class.getName());
+      "/xml/com/foc/workflow/WFTransactionWrapper_Form.xml", 0, WFTransactionWrapper_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionWrapper_Table.xml", 0, WFTransactionWrapper_Table.class.getName());
+      "/xml/com/foc/workflow/WFTransactionWrapper_Table.xml", 0, WFTransactionWrapper_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       CTXT_TRANSACTION_HISTORY,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionWrapper_TransactionHistory_Table.xml", 0, WFTransactionWrapper_TransactionHistory_Table.class.getName());
+      "/xml/com/foc/workflow/WFTransactionWrapper_TransactionHistory_Table.xml", 0, WFTransactionWrapper_TransactionHistory_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
       CompanyDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/Company_Table.xml", 0, null);
+      "/xml/com/foc/workflow/Company_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       CompanyDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/Company_Form.xml", 0, Company_Form.class.getName());
+      "/xml/com/foc/workflow/Company_Form.xml", 0, Company_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       CompanyDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CTXT_SAAS,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/Company_Saas_Form.xml", 0, Company_Saas_Form.class.getName());
+      "/xml/com/foc/workflow/Company_Saas_Form.xml", 0, Company_Saas_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
         CompanyDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         CTXT_FIRST_LOGIN,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/workflow/Company_FirstLogin_Form.xml", 0, Company_FirstLogin_Form.class.getName());
+        "/xml/com/foc/workflow/Company_FirstLogin_Form.xml", 0, Company_FirstLogin_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       UserCompanyRightsDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/UserCompanyRights_Table.xml", 0, null);
+      "/xml/com/foc/workflow/UserCompanyRights_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UserCompanyRightsDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/UserCompanyRights_Form.xml", 0, UserCompanyRights_Form.class.getName());
+      "/xml/com/foc/workflow/UserCompanyRights_Form.xml", 0, UserCompanyRights_Form.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       WFSiteDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TREE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFSite_Table.xml", 0, null);
+      "/xml/com/foc/workflow/WFSite_Table.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
       WFSiteDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       CTXT_SITE_SELECTION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFSite_SiteSelection_Table.xml", 0, WFSite_SiteSelection_Table.class.getName());
+      "/xml/com/foc/workflow/WFSite_SiteSelection_Table.xml", 0, WFSite_SiteSelection_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFSiteDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFSite_Form.xml", 0, FocXMLLayout.class.getName());
+      "/xml/com/foc/workflow/WFSite_Form.xml", 0, FocXMLLayout.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFSiteDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       "With Warehouses",
-      "/xml/b01/foc/workflow/WFSite_WithStockWarehouseList_Form.xml", 0, FocXMLLayout.class.getName());
+      "/xml/com/foc/workflow/WFSite_WithStockWarehouseList_Form.xml", 0, FocXMLLayout.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFTitleDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTitle_Table.xml", 0, FocXMLLayout.class.getName());
+      "/xml/com/foc/workflow/WFTitle_Table.xml", 0, FocXMLLayout.class.getName());
     
     XMLViewDictionary.getInstance().put(
       WFTitleDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       CTXT_TITLE_SELECTION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTitle_TitleSelection_Table.xml", 0, WFTitle_TitleSelection_Table.class.getName());
+      "/xml/com/foc/workflow/WFTitle_TitleSelection_Table.xml", 0, WFTitle_TitleSelection_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFOperatorDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFOperator_Table.xml", 0, null);
+      "/xml/com/foc/workflow/WFOperator_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WFOperatorDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFOperator_Form.xml", 0, null);
+      "/xml/com/foc/workflow/WFOperator_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       WFMapDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFMap_Table.xml", 0, WFMap_Table.class.getName());
+      "/xml/com/foc/workflow/WFMap_Table.xml", 0, WFMap_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFMapDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFMap_Form.xml", 0, WFMap_Form.class.getName());
+      "/xml/com/foc/workflow/WFMap_Form.xml", 0, WFMap_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFSignatureDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFSignature_Table.xml", 0, WFSignature_Table.class.getName());
+      "/xml/com/foc/workflow/WFSignature_Table.xml", 0, WFSignature_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFStageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFStage_Table.xml", 0, WFStage_Table.class.getName());
+      "/xml/com/foc/workflow/WFStage_Table.xml", 0, WFStage_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFStageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFStage_Form.xml", 0, WFStage_Form.class.getName());
+      "/xml/com/foc/workflow/WFStage_Form.xml", 0, WFStage_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFTransactionConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionConfig_Table.xml", 0, WFTransactionConfig_Table.class.getName());
+      "/xml/com/foc/workflow/WFTransactionConfig_Table.xml", 0, WFTransactionConfig_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
       WFTransactionConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionConfig_Form.xml", 0, WFTransactionConfig_Form.class.getName());
+      "/xml/com/foc/workflow/WFTransactionConfig_Form.xml", 0, WFTransactionConfig_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       WFTransactionConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/WFTransactionConfig_Form.xml", 0, null);
+      "/xml/com/foc/workflow/WFTransactionConfig_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       RightLevelDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/RightLevel_Table.xml", 0, null);
+      "/xml/com/foc/workflow/RightLevel_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       RightLevelDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/RightLevel_Form.xml", 0, null);
+      "/xml/com/foc/workflow/RightLevel_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UserTransactionRightDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/UserTransactionRight_Table.xml", 0, null);
+      "/xml/com/foc/workflow/UserTransactionRight_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UserTransactionRightDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/workflow/UserTransactionRight_Form.xml", 0, null);
+      "/xml/com/foc/workflow/UserTransactionRight_Form.xml", 0, null);
 
   }
 

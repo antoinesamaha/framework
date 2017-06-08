@@ -29,14 +29,14 @@ public class AccountManagementWebModule extends FocWebModule {
 	      XMLViewKey.TYPE_TABLE,
 	      CTXT_SAAS,
 	      XMLViewKey.VIEW_DEFAULT,
-	      "/xml/b01/foc/admin/FocUser_Saas_Table.xml", 0, FocUser_Saas_Table.class.getName());
+	      "/xml/com/foc/admin/FocUser_Saas_Table.xml", 0, FocUser_Saas_Table.class.getName());
 
 	    XMLViewDictionary.getInstance().put(
 	      FocUserDesc.getInstance().getStorageName(),
 	      XMLViewKey.TYPE_FORM,
 	      CTXT_SAAS,
 	      XMLViewKey.VIEW_DEFAULT,
-	      "/xml/b01/foc/admin/FocUser_Saas_Form.xml", 0, FocUser_Saas_Form.class.getName());
+	      "/xml/com/foc/admin/FocUser_Saas_Form.xml", 0, FocUser_Saas_Form.class.getName());
 	}
 
 	public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuITem) {

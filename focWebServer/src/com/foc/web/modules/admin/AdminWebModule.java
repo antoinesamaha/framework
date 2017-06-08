@@ -101,42 +101,42 @@ public class AdminWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/DocRightsGroup_Table.xml", 0, DocRightsGroup_Table.class.getName());
+      "/xml/com/foc/admin/DocRightsGroup_Table.xml", 0, DocRightsGroup_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   		DocRightsGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/DocRightsGroup_Form.xml", 0, DocRightsGroup_Form.class.getName());
+      "/xml/com/foc/admin/DocRightsGroup_Form.xml", 0, DocRightsGroup_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			DocRightsGroupUsersDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/DocRightsGroupUsers_Table.xml", 0, DocRightsGroupUsers_Table.class.getName());
+      "/xml/com/foc/admin/DocRightsGroupUsers_Table.xml", 0, DocRightsGroupUsers_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			MigrationSourceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/MigrationSource_Table.xml", 0, MigrationSource_Table.class.getName());
+      "/xml/com/foc/admin/MigrationSource_Table.xml", 0, MigrationSource_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   	ActiveUserDesc.getInstance().getStorageName(),
     XMLViewKey.TYPE_TABLE,
     XMLViewKey.CONTEXT_DEFAULT,
     XMLViewKey.VIEW_DEFAULT,
-    "/xml/b01/foc/admin/ActiveUser_Table.xml", 0, ActiveUser_Table.class.getName());
+    "/xml/com/foc/admin/ActiveUser_Table.xml", 0, ActiveUser_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
   	SaaSConfigDesc.getInstance().getStorageName(),
     XMLViewKey.TYPE_FORM,
     XMLViewKey.CONTEXT_DEFAULT,
     XMLViewKey.VIEW_DEFAULT,
-    "/xml/b01/foc/admin/SaaSConfig_Form.xml", 0, SaaSConfig_Form.class.getName());
+    "/xml/com/foc/admin/SaaSConfig_Form.xml", 0, SaaSConfig_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			MigrationSourceDesc.getInstance().getStorageName(),
@@ -144,7 +144,7 @@ public class AdminWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
       true,
-      "/xml/b01/foc/admin/MigrationSource_Form.xml", 0, null);
+      "/xml/com/foc/admin/MigrationSource_Form.xml", 0, null);
   	
   	XMLViewDictionary.getInstance().put(
 			MigrationSourceDesc.getInstance().getStorageName(),
@@ -152,280 +152,280 @@ public class AdminWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
       false,
-      "/xml/b01/foc/admin/MigrationSource_Set_Form.xml", 0, MigrationSource_Set_Form.class.getName());
+      "/xml/com/foc/admin/MigrationSource_Set_Form.xml", 0, MigrationSource_Set_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
 			MigFieldMapDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/MigFieldMap_Table.xml", 0, null);
+      "/xml/com/foc/admin/MigFieldMap_Table.xml", 0, null);
   	
     XMLViewDictionary.getInstance().put(
       "FVERSION",
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/Fversion_Table.xml", 0, null);
+      "/xml/com/foc/admin/Fversion_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       "FVERSION",
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/Fversion_Form.xml", 0, null);
+      "/xml/com/foc/admin/Fversion_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_Table.xml", 0, null);
+      "/xml/com/foc/admin/FocUser_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_Form.xml", 0, FocUser_Form.class.getName());
+      "/xml/com/foc/admin/FocUser_Form.xml", 0, FocUser_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       STORAGE_NAME_MANAGE_ACCOUNT,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/ManageAccount_Form.xml", 0, ManageAccount_Form.class.getName());
+      "/xml/com/foc/admin/ManageAccount_Form.xml", 0, ManageAccount_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_CONTACT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_Contact_Form.xml", 0, FocUser_Form.class.getName());    
+      "/xml/com/foc/admin/FocUser_Contact_Form.xml", 0, FocUser_Form.class.getName());    
     
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_COMPANY_SELECTION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_CompanySelection_Form.xml", 0, FocUser_CompanySelection_Form.class.getName());
+      "/xml/com/foc/admin/FocUser_CompanySelection_Form.xml", 0, FocUser_CompanySelection_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_COMPANY_SELECTION_AR,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_CompanySelection_Form-ar.xml", 0, FocUser_CompanySelection_Form.class.getName());
+      "/xml/com/foc/admin/FocUser_CompanySelection_Form-ar.xml", 0, FocUser_CompanySelection_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_COMPANY_SELECTION,
       VIEW_LIMITED,
-      "/xml/b01/foc/admin/FocUser_CompanySelection_Limited_Form.xml", 0, FocUser_CompanySelection_Form.class.getName());
+      "/xml/com/foc/admin/FocUser_CompanySelection_Limited_Form.xml", 0, FocUser_CompanySelection_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
       FocGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_COMPANY_CONFIGURATION,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocGroup_CompanyConfiguration_Form.xml", 0, FocGroup_CompanyConfiguration_Form.class.getName());
+      "/xml/com/foc/admin/FocGroup_CompanyConfiguration_Form.xml", 0, FocGroup_CompanyConfiguration_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FocGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_GROUP_SELECTOR,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocGroup_Selector_Form.xml", 0, FocGroup_Selector_Form.class.getName());
+      "/xml/com/foc/admin/FocGroup_Selector_Form.xml", 0, FocGroup_Selector_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       FocUserDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       CONTEXT_HOMEPAGE,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocUser_HomePage_Form.xml", 0, FocUser_HomePage_Form.class.getName());
+      "/xml/com/foc/admin/FocUser_HomePage_Form.xml", 0, FocUser_HomePage_Form.class.getName());
   
     XMLViewDictionary.getInstance().put(
       FocGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocGroup_Table.xml", 0, null);
+      "/xml/com/foc/admin/FocGroup_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       FocGroupDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/FocGroup_Form.xml", 0, FocGroup_Form.class.getName());
+      "/xml/com/foc/admin/FocGroup_Form.xml", 0, FocGroup_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
       UserViewDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/UserView_Table.xml", 0, null);
+      "/xml/com/foc/admin/UserView_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       UserViewDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/UserView_Form.xml", 0, null);
+      "/xml/com/foc/admin/UserView_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       ViewConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/ViewConfig_Table.xml", 0, null);
+      "/xml/com/foc/admin/ViewConfig_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       ViewConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/ViewConfig_Form.xml", 0, null);
+      "/xml/com/foc/admin/ViewConfig_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       ColumnsConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/ColumnsConfig_Table.xml", 0, null);
+      "/xml/com/foc/admin/ColumnsConfig_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       ColumnsConfigDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/ColumnsConfig_Form.xml", 0, null);
+      "/xml/com/foc/admin/ColumnsConfig_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MenuRightsDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/MenuRights_Table.xml", 0, null);
+      "/xml/com/foc/admin/MenuRights_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MenuRightsDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/MenuRights_Form.xml", 0, null);
+      "/xml/com/foc/admin/MenuRights_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       LanguageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/Language_Table.xml", 0, null);
+      "/xml/com/foc/admin/Language_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       LanguageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/admin/Language_Form.xml", 0, null);
+      "/xml/com/foc/admin/Language_Form.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
         FocUserDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         CTXT_LOGIN, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/login.xml", 0, FocUser_Login_Form.class.getName());
+        "/xml/com/foc/admin/login.xml", 0, FocUser_Login_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocUserDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         CTXT_LOGIN_AR, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/login-ar.xml", 0, FocUser_Login_Form.class.getName());
+        "/xml/com/foc/admin/login-ar.xml", 0, FocUser_Login_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocUserDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         CTXT_LOGIN, 
         "No Buttons", 
-        "/xml/b01/foc/admin/login_nobuttons.xml", 0, FocUser_Login_Form.class.getName());    
+        "/xml/com/foc/admin/login_nobuttons.xml", 0, FocUser_Login_Form.class.getName());    
     
     XMLViewDictionary.getInstance().put(
         FocMenuItemDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TREE, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/FocMenuItem_Tree.xml", 0, FVMenuTree.class.getName());
+        "/xml/com/foc/admin/FocMenuItem_Tree.xml", 0, FVMenuTree.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocMenuItemDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TREE, 
         CTXT_HISTORY, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/FocMenuItem_History_Tree.xml", 0, FVMenuTree.class.getName());
+        "/xml/com/foc/admin/FocMenuItem_History_Tree.xml", 0, FVMenuTree.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocMenuItemDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TREE, 
         CTXT_GROUP_MENU_RIGHT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/FocMenuItem_GroupMenuRight_Tree.xml", 0, FocMenuItem_GroupMenuRight_Tree.class.getName());
+        "/xml/com/foc/admin/FocMenuItem_GroupMenuRight_Tree.xml", 0, FocMenuItem_GroupMenuRight_Tree.class.getName());
 
     XMLViewDictionary.getInstance().put(
     		STORAGE_HOMEPAGE,
         XMLViewKey.TYPE_FORM, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/HomePage_AfterLogin_Form.xml", 0, HomePage_AfterLogin_Form.class.getName());
+        "/xml/com/foc/admin/HomePage_AfterLogin_Form.xml", 0, HomePage_AfterLogin_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
     		STORAGE_HOMEPAGE,
         XMLViewKey.TYPE_FORM, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_MOBILE, 
-        "/xml/b01/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", 0, HomePage_AfterLogin_Mobile_Form.class.getName());
+        "/xml/com/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", 0, HomePage_AfterLogin_Mobile_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
     		STORAGE_HOMEPAGE,
         XMLViewKey.TYPE_FORM, 
         CONTEXT_BEFORE_LOGIN, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/HomePage_BeforeLogin_Form.xml", 0, HomePage_BeforeLogin_Form.class.getName());
+        "/xml/com/foc/admin/HomePage_BeforeLogin_Form.xml", 0, HomePage_BeforeLogin_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
     		STORAGE_HOMEPAGE,
         XMLViewKey.TYPE_FORM, 
         CONTEXT_BEFORE_LOGIN, 
         XMLViewKey.VIEW_MOBILE, 
-        "/xml/b01/foc/admin/HomePage_BeforeLogin_Mobile_Form.xml", 0, HomePage_BeforeLogin_Form.class.getName());
+        "/xml/com/foc/admin/HomePage_BeforeLogin_Mobile_Form.xml", 0, HomePage_BeforeLogin_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
         FocLogLineDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TREE, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/Log_Table.xml", 0, null);
+        "/xml/com/foc/admin/Log_Table.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
         FocLogLineDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/Log_Table.xml", 0, null);
+        "/xml/com/foc/admin/Log_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
         GroupXMLViewDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/GroupXMLView_Table.xml", 0, GroupXMLView_Table.class.getName());
+        "/xml/com/foc/admin/GroupXMLView_Table.xml", 0, GroupXMLView_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
         GroupXMLViewDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM, 
         XMLViewKey.CONTEXT_DEFAULT, 
         XMLViewKey.VIEW_DEFAULT, 
-        "/xml/b01/foc/admin/GroupXMLView_Form.xml", 0, GroupXMLView_Form.class.getName());
+        "/xml/com/foc/admin/GroupXMLView_Form.xml", 0, GroupXMLView_Form.class.getName());
 
     
     XMLViewDictionary.getInstance().put(
@@ -433,21 +433,21 @@ public class AdminWebModule extends FocWebModule {
       XMLViewKey.TYPE_TREE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
-      "/xml/b01/foc/admin/MenuRights_Tree.xml", 0, null);
+      "/xml/com/foc/admin/MenuRights_Tree.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
   		OPTION_WINDOW_STORAGE,
   		XMLViewKey.TYPE_FORM,
   		XMLViewKey.CONTEXT_DEFAULT,
   		XMLViewKey.VIEW_DEFAULT,
-  		"/xml/b01/foc/admin/OptionDialog_Form.xml", 0, OptionDialog_Form.class.getName());
+  		"/xml/com/foc/admin/OptionDialog_Form.xml", 0, OptionDialog_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
     		RIGHT_PANEL_STORAGE,
     		XMLViewKey.TYPE_TREE,
     		XMLViewKey.CONTEXT_DEFAULT,
     		XMLViewKey.VIEW_DEFAULT,
-    		"/xml/b01/foc/admin/FocRightPanel_Tree.xml", 0, FocRightPanel_Tree.class.getName());
+    		"/xml/com/foc/admin/FocRightPanel_Tree.xml", 0, FocRightPanel_Tree.class.getName());
     
   }
 

@@ -24,56 +24,56 @@ public class MigrationWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigrationSource_Table.xml", 0, null);
+      "/xml/com/foc/migration/MigrationSource_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigrationSourceDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigrationSource_Form.xml", 0, null);
+      "/xml/com/foc/migration/MigrationSource_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigDataBaseDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigDataBase_Table.xml", 0, null);
+      "/xml/com/foc/migration/MigDataBase_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigDataBaseDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigDataBase_Form.xml", 0, null);
+      "/xml/com/foc/migration/MigDataBase_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigDirectoryDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigDirectory_Table.xml", 0, null);
+      "/xml/com/foc/migration/MigDirectory_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigDirectoryDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigDirectory_Form.xml", 0, null);
+      "/xml/com/foc/migration/MigDirectory_Form.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigFieldMapDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigFieldMap_Table.xml", 0, null);
+      "/xml/com/foc/migration/MigFieldMap_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
       MigFieldMapDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/migration/MigFieldMap_Form.xml", 0, null);
+      "/xml/com/foc/migration/MigFieldMap_Form.xml", 0, null);
 
   }
 

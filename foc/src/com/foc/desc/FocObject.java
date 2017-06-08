@@ -1767,7 +1767,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#generalFocActionPerformed(b01.foc.event.FocEvent)
+   * @see com.foc.access.AccessSubject#generalFocActionPerformed(b01.foc.event.FocEvent)
    */
   public void focActionPerformed(FocEvent evt) {
     if (evt != null && evt.getSourceType() == FocEvent.TYPE_ORDER) {
@@ -2071,7 +2071,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   }
   
   /* (non-Javadoc)
-   * @see b01.foc.access.AccessSubject#statusModification(int)
+   * @see com.foc.access.AccessSubject#statusModification(int)
    */
   protected void statusModification(int statusModified) {
     if(statusModified == STATUS_CREATED){
@@ -2101,7 +2101,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#childFocActionPerformed(b01.foc.event.FocEvent)
+   * @see com.foc.access.AccessSubject#childFocActionPerformed(b01.foc.event.FocEvent)
    */
   public void childStatusModification(AccessSubject child) {
     if(child.isModified()){
@@ -2122,7 +2122,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#childStatusUndo(b01.foc.access.AccessSubject)
+   * @see com.foc.access.AccessSubject#childStatusUndo(b01.foc.access.AccessSubject)
    */
   public void childStatusUndo(AccessSubject childSubject) {
   }
@@ -2130,7 +2130,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#childValidated(b01.foc.access.AccessSubject)
+   * @see com.foc.access.AccessSubject#childValidated(b01.foc.access.AccessSubject)
    */
   public void childValidated(AccessSubject childSubject, char initialStatusFlags) {
   }
@@ -2138,7 +2138,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#executeFocAction(b01.foc.event.FocEvent)
+   * @see com.foc.access.AccessSubject#executeFocAction(b01.foc.event.FocEvent)
    */
   
   public boolean commitStatusToDatabase(){
@@ -2198,7 +2198,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#undoStatus()
+   * @see com.foc.access.AccessSubject#undoStatus()
    */
   public void undoStatus() {
     if (this.isModified()) {
@@ -2216,7 +2216,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   /*
    * (non-Javadoc)
    * 
-   * @see b01.foc.access.AccessSubject#doBackup()
+   * @see com.foc.access.AccessSubject#doBackup()
    */  
   public void doBackup(){
     this.backup();

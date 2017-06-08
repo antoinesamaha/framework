@@ -29,49 +29,49 @@ public class NotifierWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/notifier/FocNotification_Table.xml", 0, FocNotification_Table.class.getName());
+      "/xml/com/foc/notifier/FocNotification_Table.xml", 0, FocNotification_Table.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
       DocMsgDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/notifier/DocMsg_Form.xml", 0, DocMsg_Form.class.getName());
+      "/xml/com/foc/notifier/DocMsg_Form.xml", 0, DocMsg_Form.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       FocNotificationEmailTemplateDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/notifier/FocNotificationEmailTemplate_Table.xml", 0, null);
+      "/xml/com/foc/notifier/FocNotificationEmailTemplate_Table.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
       FocNotificationEmailTemplateDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/b01/foc/notifier/FocNotificationEmailTemplate_Form.xml", 0, null);
+      "/xml/com/foc/notifier/FocNotificationEmailTemplate_Form.xml", 0, null);
   
 	  XMLViewDictionary.getInstance().put(
 	    FocNotificationEventConfiguratorDesc.getInstance().getStorageName(),
 	    XMLViewKey.TYPE_TABLE,
 	    XMLViewKey.CONTEXT_DEFAULT,
 	    XMLViewKey.VIEW_DEFAULT,
-	    "/xml/b01/foc/notifier/FocNotificationEvent_Notifier_Table.xml", 0, null);
+	    "/xml/com/foc/notifier/FocNotificationEvent_Notifier_Table.xml", 0, null);
 	  
 	  XMLViewDictionary.getInstance().put(
 	    FocNotificationEmailDesc.getInstance().getStorageName(),
 	    XMLViewKey.TYPE_FORM,
 	    XMLViewKey.CONTEXT_DEFAULT,
 	    XMLViewKey.VIEW_DEFAULT,
-	    "/xml/b01/foc/notifier/FocNotificationEmail_Form.xml", 0, Email_Form.class.getName());
+	    "/xml/com/foc/notifier/FocNotificationEmail_Form.xml", 0, Email_Form.class.getName());
 	  
 //	  XMLViewDictionary.getInstance().put(
 //	    FocNotificationEmailDesc.getInstance().getStorageName(),
 //	    XMLViewKey.TYPE_FORM,
 //	    CTXT_EMAIL_PDF,
 //	    XMLViewKey.VIEW_DEFAULT,
-//	    "/xml/b01/foc/notifier/FocNotificationEmail_EmailPdf_Form.xml", 0, FocNotificationEmail_EmailPdf_Form.class.getName());
+//	    "/xml/com/foc/notifier/FocNotificationEmail_EmailPdf_Form.xml", 0, FocNotificationEmail_EmailPdf_Form.class.getName());
   }
 
   public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuItem) {

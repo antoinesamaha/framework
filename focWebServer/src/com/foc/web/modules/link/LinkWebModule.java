@@ -30,56 +30,56 @@ public class LinkWebModule extends FocWebModule {
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLink_Out_Log_Table.xml", 0, null);
+        "/xml/com/foc/link/FocLink_Out_Log_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
         FocLinkOutBoxDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLink_Out_Log_Form.xml", 0, null);
+        "/xml/com/foc/link/FocLink_Out_Log_Form.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
         FocLinkOutBoxDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         CTXT_POST,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLink_Out_Log_Post_Form.xml", 0, FocLink_Out_Log_Post_Form.class.getName());
+        "/xml/com/foc/link/FocLink_Out_Log_Post_Form.xml", 0, FocLink_Out_Log_Post_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocUserDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         CTXT_POST,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLink_Out_Log_User_Selection_Table.xml", 0, null);
+        "/xml/com/foc/link/FocLink_Out_Log_User_Selection_Table.xml", 0, null);
     
     XMLViewDictionary.getInstance().put(
         FocLinkOutRightsDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLinkOutRights_Table.xml", 0, null);
+        "/xml/com/foc/link/FocLinkOutRights_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
     		FocLinkOutRightsDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLinkOutRights_Form.xml", 0, FocLink_Out_Rights_Form.class.getName());
+        "/xml/com/foc/link/FocLinkOutRights_Form.xml", 0, FocLink_Out_Rights_Form.class.getName());
     
     XMLViewDictionary.getInstance().put(
         FocLinkInRightsDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_TABLE,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLinkInRights_Table.xml", 0, null);
+        "/xml/com/foc/link/FocLinkInRights_Table.xml", 0, null);
 
     XMLViewDictionary.getInstance().put(
     		FocLinkInRightsDesc.getInstance().getStorageName(),
         XMLViewKey.TYPE_FORM,
         XMLViewKey.CONTEXT_DEFAULT,
         XMLViewKey.VIEW_DEFAULT,
-        "/xml/b01/foc/link/FocLinkInRights_Form.xml", 0, null);
+        "/xml/com/foc/link/FocLinkInRights_Form.xml", 0, null);
 		
 	}
 
