@@ -12,6 +12,7 @@ public interface FXMLDesc {
   public static final String ATT_FILTER_ON_FIELD          = "field";
   public static final String ATT_FILTER_CONDITION_PREFIX  = "prefix";
   public static final String ATT_FILTER_CONDITION_CAPTION = "caption";
+  public static final String ATT_FILTER_CONDITION_CAPTION_PROPERTY = "captionProperty";
   public static final String ATT_FILTER_LEVEL             = "level";
   
   public static final String VAL_FILTER_LEVEL_DATABASE   = "db";
@@ -84,11 +85,12 @@ public interface FXMLDesc {
   //-------------------------
   public static final String TAG_JOIN  = "Join";
   
-  public static final String ATT_JOIN_ALIAS = "alias";
-  public static final String ATT_JOIN_TABLE = "table";
-  public static final String ATT_JOIN_ON    = "on";
-  public static final String ATT_JOIN_TYPE  = "type";
-  
+  public static final String ATT_JOIN_ALIAS          = "alias";
+  public static final String ATT_JOIN_TABLE          = "table";
+  public static final String ATT_JOIN_ON             = "on";
+  public static final String ATT_JOIN_TYPE           = "type";
+  public static final String ATT_JOIN_IS_PRIMARY_KEY = "isPrimaryKey";
+ 
   public static final String TAG_JOIN_FIELD   = "JoinField";
   public static final String ATT_JOIN_FLD_SRC = "sourceField";
   public static final String ATT_JOIN_FLD_TAR = "targetField";
@@ -96,5 +98,11 @@ public interface FXMLDesc {
   public static final String ATT_JOIN_WHERE = "where";
   //-------------------------
   
-  //Filter
+  //Group By
+  //-------------------------
+  public static final String TAG_GROUP_BY         = "GroupBy";
+  public static final String TAG_GROUP_FIELD      = "GroupField";
+  
+  public static final String ATT_GROUP_BY_FORMULA = "groupByFormula";
+  //-------------------------
 }

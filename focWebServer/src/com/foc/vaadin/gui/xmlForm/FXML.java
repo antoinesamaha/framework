@@ -120,6 +120,7 @@ public interface FXML {
   public static final String ATT_OPTION_GROUP             = "optionGroup"      ;
   public static final String ATT_COLLAPSING_ALLOWED       = "columnCollapse"   ;
   public static final String ATT_REDIRECT_ENABLED         = "redirectEnabled"  ;
+  public static final String ATT_REDIRECT_CAPTION_PROPERTY= "redirectCaptionProperty";
   public static final String ATT_ADD_ENABLED              = "addEnabled"       ;
   public static final String ATT_TRANSACTION_FILTER_ENABLED   = "transactionFilterEnabled";
   public static final String ATT_TRANSACTION_COLORING_ENABLED = "transactionColoringEnabled";

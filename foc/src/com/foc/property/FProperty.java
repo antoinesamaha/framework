@@ -426,6 +426,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
 	    }
     }
     setSqlStringInternal(str);
+    setModifiedFlag(false);//2017-05-31
     setDesactivateListeners(false);
     setLastModifiedBySetSQLString(true);
   }

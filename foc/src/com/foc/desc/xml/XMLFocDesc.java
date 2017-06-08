@@ -9,16 +9,19 @@ import com.foc.Globals;
 import com.foc.business.workflow.implementation.FocWorkflowDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocDescMap;
+import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocModule;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.join.FocRequestDesc;
 import com.foc.join.TableAlias;
 import com.foc.list.FocList;
+import com.foc.list.FocListGroupBy;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FilterConditionFactory;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.IFocDescForFilter;
+import com.foc.list.filter.ObjectCondition;
 import com.foc.shared.dataStore.AbstractDataStore;
 import com.foc.util.Utils;
 
@@ -67,6 +70,14 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
   	if(filterDesc != null){
   		filterDesc.fillDesc(this, nextFldID());
   	}
+  	
+//  	FocListGroupBy groupBy = getGroupBy();
+//  	if(groupBy != null){
+//  		FocFieldEnum enumer = newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
+//  		while(enumer != null){
+//  			enumer.getFieldCompleteName(this);
+//  		}
+//  	}
   }
   
   //Implementation of the Workflow
@@ -194,6 +205,11 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 						if(cond != null){
 							if(!Utils.isStringEmpty(condition.getCaption())){
 								cond.setFieldLabel(condition.getCaption());
+							}
+							if(!Utils.isStringEmpty(condition.getCaptionProperty())){
+								if(cond instanceof ObjectCondition){
+									((ObjectCondition) cond).setCaptionProperty(condition.getCaptionProperty()); 
+								}
 							}
 							filterDesc.addCondition(cond);
 						}

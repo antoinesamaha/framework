@@ -2912,19 +2912,6 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return error;
 	}
 	
-	private void innerLayout_checkAllSiblinsAndDeleteEmpty(){
-		FocXMLLayout rootLayout   = this;
-		FocXMLLayout parentLayout = rootLayout.findAncestor(FocXMLLayout.class);
-		while(parentLayout != null){
-			parentLayout = rootLayout.findAncestor(FocXMLLayout.class);
-			if(parentLayout != null) rootLayout = parentLayout; 
-		}
-		
-		if(rootLayout != null){
-			rootLayout.innerLayout_RemoveAllEmptyCreatedItems(false);
-		}
-	}
-	
 	private boolean innerLayout_Commit(){
 		return innerLayout_RemoveAllEmptyCreatedItems(true);
 	}

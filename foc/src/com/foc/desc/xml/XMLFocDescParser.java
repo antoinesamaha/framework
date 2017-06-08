@@ -21,6 +21,7 @@ import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FTimeField;
+import com.foc.list.FocListGroupBy;
 import com.foc.list.filter.FocListFilter;
 import com.foc.util.Utils;
 
@@ -32,6 +33,8 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
 	private HashMap<String, XMLJoin> joinMap        = null;//Will remain null if not a join table
 	private XMLJoin                  join           = null;
 	private XMLFilter                xmlFilter      = null;//Will remain null if not a Filter
+
+	private FocListGroupBy           groupBy        = null;
 	
 	public XMLFocDescParser(FocDescDeclaration_XMLBased declaration){
 		this.declaration = declaration;
@@ -96,6 +99,13 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     		XMLRequestField requestField = new XMLRequestField(att);
     		join.addRequestFied(requestField);
     	}
+    } else if(qName.equals(TAG_GROUP_BY)){
+    } else if(qName.equals(TAG_GROUP_FIELD)){
+    	FocListGroupBy groupBy = getGroupBy(true);
+    	if(groupBy != null){
+	    	String fieldName = getString(att, ATT_NAME);
+	    	groupBy.addAtomicExpression(fieldName);
+    	}    	
     } else if(qName.equals(TAG_CHOICE)) {
     	if(lastFieldAdded != null && lastFieldAdded instanceof FMultipleChoiceField){
     		try{
@@ -115,7 +125,14 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	}
     } else {
     	FField fld = addField(uri, localName, qName, att);
-    	if(fld != null) lastFieldAdded = fld;
+    	if(fld != null){
+    		lastFieldAdded = fld;
+    		String groupByFormula = getString(att, ATT_GROUP_BY_FORMULA);
+    		if(!Utils.isStringEmpty(groupByFormula)){
+        	FocListGroupBy groupBy = getGroupBy(true);
+        	groupBy.addField_FormulaSingleText(fld.getID(), fld.getDBName(), groupByFormula);
+    		}
+    	}
     }
   }
 
@@ -332,7 +349,7 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
   	return getBoolean(att, name, false);
   }
   
-  public boolean getBoolean(Attributes att, String name, boolean defaultValue){
+  public static boolean getBoolean(Attributes att, String name, boolean defaultValue){
   	boolean value = defaultValue;
   	String title = att.getValue(name);
   	if(title != null){
@@ -341,7 +358,7 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
   	return value; 
   }
   
-  public int getInt(Attributes att, String name){
+  public static int getInt(Attributes att, String name){
   	int value = 0;
   	String title = att.getValue(name);
   	if(title != null){
@@ -362,4 +379,16 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
 	public XMLFilter getXmlFilter() {
 		return xmlFilter;
 	}
+	
+	public FocListGroupBy getGroupBy(boolean createIfNeeded){
+		if(groupBy == null){
+			groupBy = new FocListGroupBy();
+    	if(xmlFocDesc != null){
+    		xmlFocDesc.setGroupBy(groupBy);
+    	}			
+		}	
+		return groupBy;
+	}
 }
+
+	

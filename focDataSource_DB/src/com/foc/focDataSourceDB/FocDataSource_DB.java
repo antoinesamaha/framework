@@ -658,7 +658,7 @@ public class FocDataSource_DB implements IFocDataSource {
           if(objProp != null){
             objProp.setObject(obj);
           }
-        } 
+        }
       }
     }    
     return filter;

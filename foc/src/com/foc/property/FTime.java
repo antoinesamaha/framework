@@ -91,6 +91,7 @@ public class FTime extends FProperty {
   	
   	try{
 	    if(str != null && str.trim().compareTo("") != 0){
+	    	str = str.replace(".", ":");
     		date = getTimeFormat().parse(str);
 	    }else{
 	    	date = getZeroTime_Copy();

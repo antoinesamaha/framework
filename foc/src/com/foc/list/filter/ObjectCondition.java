@@ -13,7 +13,6 @@ import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FBlobStringField;
-import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
@@ -39,8 +38,8 @@ public class ObjectCondition extends FilterCondition {
   static public final int OPERATION_NOT_EMPTY = 5;
   static public final int OPERATION_IN        = 6;
   
-  private boolean withInList     = false;
-  private int     displayFieldID = FField.NO_FIELD_ID;
+  private boolean withInList      = false;
+  private String  captionProperty = null;
   
   public ObjectCondition(FFieldPath objectFieldPath, String fieldPrefix){
     super(objectFieldPath, fieldPrefix);
@@ -212,9 +211,7 @@ public class ObjectCondition extends FilterCondition {
 	      fullFieldName = fullFieldName + objField.getFocDesc().getRefFieldName();
       }
       
-      if(getProvider() == DBManager.PROVIDER_ORACLE){
-      	fullFieldName = "\"" + fullFieldName + "\"";
-    	}
+    	fullFieldName = DBManager.provider_ConvertFieldName(getProvider(), fullFieldName);
       
       switch(operation){
       case OPERATION_EQUALS:
@@ -315,12 +312,12 @@ public class ObjectCondition extends FilterCondition {
   	setToValue(filter, OPERATION_NONE, null);
   }
 
-	public int getDisplayFieldID() {
-		return displayFieldID;
+	public String getCaptionProperty() {
+		return captionProperty;
 	}
 
-	public void setDisplayFieldID(int displayFieldID) {
-		this.displayFieldID = displayFieldID;
+	public void setCaptionProperty(String captionProperty) {
+		this.captionProperty = captionProperty;
 	}
 	
   @Override
@@ -337,12 +334,13 @@ public class ObjectCondition extends FilterCondition {
       	description = fieldName + " Is Empty";
       	break;
       case OPERATION_EQUALS:
-      	int fieldID = getDisplayFieldID();
-      	
-      	FProperty prop = condObject.getFocProperty(fieldID);
-      	String    val  = prop.getString();
-      	
-      	description = fieldName + " = " + val;
+      	String propertyName = getCaptionProperty();
+
+      	FProperty prop = propertyName != null ? condObject.getFocPropertyByName(propertyName) : null;
+      	if(prop != null){
+      		String    val  = prop.getString();
+      		description = fieldName + " = " + val;
+      	}
       	break;
       case OPERATION_NOT_EMPTY:
       	description = fieldName + " Not Empty";

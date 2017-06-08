@@ -12,7 +12,6 @@ import com.foc.Globals;
 import com.foc.business.company.CompanyDesc;
 import com.foc.db.DBManager;
 import com.foc.db.SQLFilter;
-import com.foc.db.SQLGroupBy;
 import com.foc.db.SQLJoin;
 import com.foc.desc.*;
 import com.foc.desc.field.FBlobStringField;
@@ -33,7 +32,7 @@ public class SQLSelect extends SQLSelectPlain {
 	private ArrayList<FFieldPath> fieldsInSelect      = null;
 	private ArrayList<FFieldPath> pathAccumulation    = null;
 	private ArrayList<FFieldPath> fieldsToSetAsLoaded = null;//This array indicates fields that should be marked as loaded so that we do not reload upon the getFocProperty() in this fillPropertFromResults
-	private SQLGroupBy            sqlGroupBy          = null;
+	private FocListGroupBy        sqlGroupBy          = null;
 	
 	public SQLSelect(FocList initialList, FocDesc focDesc, SQLFilter filter) {
 		super(initialList, focDesc, filter);
@@ -349,11 +348,11 @@ public class SQLSelect extends SQLSelectPlain {
 		return posInSelectForIdentifierField;
   }
 
-	public SQLGroupBy getSqlGroupBy() {
+	public FocListGroupBy getSqlGroupBy() {
 		return sqlGroupBy;
 	}
 
-	public void setSqlGroupBy(SQLGroupBy sqlGroupBy) {
+	public void setSqlGroupBy(FocListGroupBy sqlGroupBy) {
 		this.sqlGroupBy = sqlGroupBy;
 	}
 }

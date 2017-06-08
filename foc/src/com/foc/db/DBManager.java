@@ -172,4 +172,19 @@ public class DBManager {
 	public static boolean provider_TableNamesBetweenSpeachmarks(int provider){
 		return provider == DBManager.PROVIDER_ORACLE || provider == DBManager.PROVIDER_H2; 
 	}
+	
+	public static String provider_ConvertFieldName(int provider, String fieldName){
+		String newFieldName = fieldName;
+	  if(DBManager.provider_TableNamesBetweenSpeachmarks(provider)){
+	  	if(fieldName.contains(".")){
+	  		int idx = fieldName.indexOf(".");
+	  		if(idx > 0){
+	  			newFieldName = fieldName.substring(0, idx+1) +"\""+ fieldName.substring(idx+1) +"\"";
+	  		}
+	  	}else{
+	  		newFieldName = "\"" + fieldName + "\"";
+	  	}
+		}
+	  return newFieldName;
+	}
 }

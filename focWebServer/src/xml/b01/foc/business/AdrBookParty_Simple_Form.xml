@@ -1,3 +1,4 @@
+
 <VerticalLayout spacing="true" captionMargin="0" margin="true" width="-1px">
     <ValidationSettings formTitle="Address Book Company" withApply="true" withAttach="true" withPrint="true" />
 
@@ -12,6 +13,10 @@
 		      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
 		        <GuiField name="INDUSTRY" caption="Industry" width="200px" height="-1px"  />
 		        <GuiField name="COMMENT" caption="Comment" width="300px" height="-1px"  />
+		      </HorizontalLayout>
+		      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
+		        <GuiField name="MOF_REG_NO" caption="MOF Reg. No." width="200px" height="-1px"  />
+		        <GuiField name="INTRODUCTION" caption="Introduction" width="300px" height="-1px"  />
 		      </HorizontalLayout>
 		      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
 		        <GuiField name="MOBILE" caption="Mobile" width="200px " height="-1px"  />

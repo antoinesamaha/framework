@@ -12,7 +12,7 @@ import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
-public class FVRedirectWindow extends Window{
+public class FVRedirectWindow extends Window {
 
 	private FVTextField textFieldSelectedObject = null;	
 	private FVComboBox  comboBoxToSelectFrom    = null;
@@ -30,8 +30,9 @@ public class FVRedirectWindow extends Window{
 	}
 	
 	private void init(){
-		setWidth("-1px");
-		setHeight("200px");
+		setWidth("600px");
+		setHeight("-1px");
+		setCaption("Replace Object references");
 		setModal(true);
 	}
 	
@@ -62,13 +63,14 @@ public class FVRedirectWindow extends Window{
 		buttonsHorizontalLayout.addComponent(getReplaceButton());
 		buttonsHorizontalLayout.addComponent(getCancelButton());
 		
-		FVHorizontalLayout fieldsHorizontalLayout = new FVHorizontalLayout(null);
+		FVVerticalLayout fieldsHorizontalLayout = new FVVerticalLayout(null);
 		fieldsHorizontalLayout.addComponent(getSelectedObjectTextField());
 		fieldsHorizontalLayout.addComponent(getListToSelectFromComboBox());
 
 		FVVerticalLayout mainVerticalLayout = new FVVerticalLayout();
 		mainVerticalLayout.addComponent(fieldsHorizontalLayout);
 		mainVerticalLayout.addComponent(buttonsHorizontalLayout);
+		mainVerticalLayout.setMargin(true);
 		setContent(mainVerticalLayout);
 		
 		FocWebApplication.getInstanceForThread().addWindow(this);
@@ -77,8 +79,9 @@ public class FVRedirectWindow extends Window{
 	private FVComboBox getListToSelectFromComboBox(){
 		if(comboBoxToSelectFrom == null){
 			comboBoxToSelectFrom = new FVComboBox();
+			comboBoxToSelectFrom.setWidth("250px");
 			comboBoxToSelectFrom.setItemCaptionMode(ItemCaptionMode.ITEM);
-			comboBoxToSelectFrom.setCaption("Replace With");
+			comboBoxToSelectFrom.setCaption("New replacement");
 			comboBoxToSelectFrom.addContainerProperty(dataPath, Object.class, "");
 			comboBoxToSelectFrom.setContainerDataSource(listToChooseFrom);
 		}
@@ -88,6 +91,7 @@ public class FVRedirectWindow extends Window{
 	private FVTextField getSelectedObjectTextField(){
 		if(textFieldSelectedObject == null){
 			textFieldSelectedObject = new FVTextField("Selected Object");
+			textFieldSelectedObject.setWidth("250px");
 		}
 		if(selectedObject != null && dataPath != null){
 			FProperty property = selectedObject.getFocPropertyForPath(dataPath);

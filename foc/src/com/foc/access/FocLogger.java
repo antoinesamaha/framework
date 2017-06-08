@@ -95,7 +95,10 @@ public class FocLogger {
     line.setType(type);
     line.setMessage(message);
     line.setFatherObject(currentNode);
+    boolean backup = getLogLineList().isDisableReSortAfterAdd();
+    getLogLineList().setDisableReSortAfterAdd(true);
     getLogLineList().add(line);
+    getLogLineList().setDisableReSortAfterAdd(backup);
     return line;
   }
   

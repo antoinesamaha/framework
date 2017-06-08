@@ -1,21 +1,24 @@
 /*
  * Created on Aug 2009 By Antoine SAMAHA
  */
-package com.foc.db;
+package com.foc.list;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.foc.Globals;
+import com.foc.db.DBManager;
+
 /**
  * @author 01Barmaja
  */
-public class SQLGroupBy {
+public class FocListGroupBy {
 	private ArrayList<String>                     arrayOfAtomicExpressions = null;
 	private String                                groupByExpression        = null;
 	private HashMap<Integer, GroupByFieldFormula> fieldsInFormulas         = null;
 	
-	public SQLGroupBy(){
+	public FocListGroupBy(){
 		fieldsInFormulas = new HashMap<Integer, GroupByFieldFormula>();
 	}
 	
@@ -66,6 +69,15 @@ public class SQLGroupBy {
 	public void addField_Formulas(int fieldName, String formulaFullExpression){
 		GroupByFieldFormula groupByFormula = new GroupByFieldFormula(formulaFullExpression); 
 		fieldsInFormulas.put(fieldName, groupByFormula);
+	}
+
+	public void addField_FormulaSingleText(int fieldID, String fieldName, String formula){
+		if(formula.toUpperCase().equals("LISTAGG")){
+			fieldName = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), fieldName);
+			addField_Formulas(fieldID, formula+"(", ", ', ') WITHIN GROUP (ORDER BY "+fieldName+")");
+		}else{
+			addField_Formulas(fieldID, formula+"(", ")");
+		}
 	}
 	
 	public void addField_Formulas(int fieldName, String formulaPartBefore, String formulaPartAfter){
@@ -131,75 +143,4 @@ public class SQLGroupBy {
 			return ret;
 		}
 	}
-
-	/*
-	private ArrayList<FFieldPath>          fieldsInGroupBy  = null;
-	private ArrayList<GroupByFieldFormula> fieldsInFormulas = null;
-
-	public SQLGroupBy(){
-    fieldsInGroupBy  = new ArrayList<FFieldPath>();
-		fieldsInFormulas = new ArrayList<GroupByFieldFormula>();
-	}
-
-	public void dispose(){
-		if(fieldsInGroupBy != null){
-			for(int i=0; i<fieldsInGroupBy.size(); i++){
-				fieldsInGroupBy.get(i).dispose();
-			}
-			fieldsInGroupBy.clear();
-			fieldsInGroupBy = null;
-		}
-		if(fieldsInFormulas != null){
-			for(int i=0; i<fieldsInFormulas.size(); i++){
-				fieldsInFormulas.get(i).dispose();
-			}
-			fieldsInFormulas.clear();
-			fieldsInFormulas = null;
-		}
-	}
-	
-	public void addField_GroupBy(FFieldPath path){
-		fieldsInGroupBy.add(path);
-	}
-
-	public void addField_Formulas(FFieldPath path, String formulaPartBefore, String formulaPartAfter){
-		GroupByFieldFormula groupByFormula = new GroupByFieldFormula(path, formulaPartBefore, formulaPartAfter); 
-		fieldsInFormulas.add(groupByFormula);
-	}
-	
-	public GroupByFieldFormula getField_Formula(FFieldPath path){
-		
-	}
-	
-	public String buidGroupByExpression(){
-		String exp = null; 
-		if(fieldsInGroupBy.size() > 0){
-			StringBuffer buff = new StringBuffer("GROUP BY (");
-			buff.append(str);
-			buff.append(")");
-		}
-		return exp;
-	}
-	
-	private class GroupByFieldFormula {
-		private FFieldPath fieldPath     = null;
-		private String     formulaBefore = null;
-		private String     formulaAfter  = null;
-		
-		private GroupByFieldFormula(FFieldPath fieldPath, String formulaBefore, String formulaAfter){
-			this.formulaBefore = formulaBefore;
-			this.formulaAfter  = formulaAfter;
-			this.fieldPath     = fieldPath;
-		}
-		
-		public void dispose(){
-			formulaBefore = null;
-			formulaAfter  = null;
-			if(fieldPath != null){
-				fieldPath.dispose();
-				fieldPath = null;
-			}
-		}
-	}
-	*/
 }

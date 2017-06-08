@@ -27,7 +27,6 @@ import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.WorkflowDesc;
 import com.foc.db.SQLFilter;
-import com.foc.db.SQLGroupBy;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
@@ -68,8 +67,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
   private HashMap<FocObject, FocListElement> elements      = null;
   private HashMap<Integer, FocListElement>   elementsByRef = null;
   
-  private SQLFilter  filter     = null;
-  private SQLGroupBy sqlGroupBy = null;
+  private SQLFilter      filter     = null;
+  private FocListGroupBy sqlGroupBy = null;
   private ArrayList<FocListener> listeners = null;
    
   private FAbstractListPanel selectionPanel             = null;
@@ -1793,11 +1792,17 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		}
 	}
 
-	public SQLGroupBy getSqlGroupBy() {
+	public FocListGroupBy getSqlGroupBy() {
+		if(sqlGroupBy == null){
+			FocDesc focDesc = getFocDesc();
+			if(focDesc != null && focDesc.getGroupBy() != null){
+				return focDesc.getGroupBy();
+			}
+		}
 		return sqlGroupBy;
 	}
 
-	public void setSqlGroupBy(SQLGroupBy sqlGroupBy) {
+	public void setSqlGroupBy(FocListGroupBy sqlGroupBy) {
 		this.sqlGroupBy = sqlGroupBy;
 	}
 	

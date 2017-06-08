@@ -60,7 +60,6 @@ import com.foc.business.notifier.FocNotificationManager;
 import com.foc.business.photoAlbum.PhotoAlbumManagmentModule;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
-import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
@@ -326,7 +325,7 @@ public class Application {
     try{
     	String filePrefix = argHash.get(Globals.ARG_LOG_FILE_PREFIX);
     	if(filePrefix == null) filePrefix ="";
-    	logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(Globals.logFile_GetFileName(filePrefix, "log")) : null;
+    	logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(Globals.logFile_GetFileName(filePrefix, "log"), "UTF-8") : null;
     }catch(Exception e){
     	Globals.logException(e);
     }

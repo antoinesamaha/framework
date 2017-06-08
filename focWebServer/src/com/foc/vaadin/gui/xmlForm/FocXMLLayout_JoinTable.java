@@ -34,6 +34,12 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		this.formLayout = formLayout;
 	}
 	
+	protected void refreshJoinTable(){
+		if(getFocList() != null){
+			getFocList().reloadFromDB();
+		}
+	}
+	
 	@Override
 	public ICentralPanel table_OpenItem(String tableName, ITableTree table, FocObject focObject, int viewContainer_Open) {
 		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
@@ -41,7 +47,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newObject.setReference(getOriginalObjectReference(focObject));
 		newObject.load();
 
-		XMLViewKey xmlViewKey = new XMLViewKey(newObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
+		XMLViewKey xmlViewKey = newXMLViewKey(newObject.getThisFocDesc());
 		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newObject);
 		formLayout.setFocDataOwner(true);
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
@@ -58,13 +64,20 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-				if(getFocList() != null){
-					getFocList().reloadFromDB();
-				}
+				refreshJoinTable();
 			}
 		});
 		
 		return formLayout;
+	}
+
+	protected void initAddedObject(FocObject newFocObject){
+		
+	}
+
+	protected XMLViewKey newXMLViewKey(FocDesc focDesc){
+		XMLViewKey xmlViewKey = new XMLViewKey(focDesc.getStorageName(), XMLViewKey.TYPE_FORM);
+		return xmlViewKey;
 	}
 	
 	@Override
@@ -74,7 +87,9 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newFocObject.setCreated(true);
 		newFocObject.setCompany(Globals.getApp().getCurrentCompany());
 		
-		XMLViewKey xmlViewKey = new XMLViewKey(newFocObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
+		initAddedObject(newFocObject);
+		
+		XMLViewKey xmlViewKey = newXMLViewKey(newFocObject.getThisFocDesc());
 		formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newFocObject);
 		formLayout.setFocDataOwner(true);
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
@@ -91,9 +106,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-				if(getFocList() != null){
-					getFocList().reloadFromDB();
-				}
+				refreshJoinTable();
 			}
 		});
 		

@@ -13,6 +13,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
+import com.foc.list.FocListGroupBy;
 import com.foc.util.Utils;
 
 /**
@@ -129,6 +130,11 @@ public class FocRequestDesc {
 		            if(newField instanceof FMultipleChoiceStringField){
 		            	FMultipleChoiceStringField mcsFld = (FMultipleChoiceStringField) newField;
 		            	mcsFld.setChoicesSelection_FieldID(field.getID());
+		            }
+		            String groupByFormula = reqField.getGroupByFormula();
+		            if(!Utils.isStringEmpty(groupByFormula)){
+		            	FocListGroupBy groupBy = focDesc.getGroupBy();
+		            	groupBy.addField_FormulaSingleText(newField.getID(), newField.getDBName(), groupByFormula);
 		            }
 	          	}
 	          } catch (CloneNotSupportedException e) {

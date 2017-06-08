@@ -25,6 +25,7 @@ public class XMLJoin implements FXMLDesc {
 	private String type    = null;
 	private String on      = null;
 	private String where   = null;
+	private boolean isPrimaryKey = false;
 	
 	private String otherAlias = null;
 	private String otherFieldName = null;
@@ -37,11 +38,12 @@ public class XMLJoin implements FXMLDesc {
 	
 	public XMLJoin(XMLFocDescParser focDescParser, Attributes att){
 		this.focDescParser = focDescParser;
-  	table = XMLFocDescParser.getString(att, ATT_JOIN_TABLE);
-  	alias = XMLFocDescParser.getString(att, ATT_JOIN_ALIAS);
-  	on    = XMLFocDescParser.getString(att, ATT_JOIN_ON);
-  	type  = XMLFocDescParser.getString(att, ATT_JOIN_TYPE);
-  	where = XMLFocDescParser.getString(att, ATT_JOIN_WHERE);
+  	table       = XMLFocDescParser.getString(att, ATT_JOIN_TABLE);
+  	alias       = XMLFocDescParser.getString(att, ATT_JOIN_ALIAS);
+  	on          = XMLFocDescParser.getString(att, ATT_JOIN_ON);
+  	type        = XMLFocDescParser.getString(att, ATT_JOIN_TYPE);
+  	where       = XMLFocDescParser.getString(att, ATT_JOIN_WHERE);
+  	isPrimaryKey = XMLFocDescParser.getBoolean(att, ATT_JOIN_IS_PRIMARY_KEY, false);
   	
   	parseOn();
 	}
@@ -130,10 +132,14 @@ public class XMLJoin implements FXMLDesc {
 			    while(fieldEnum != null && fieldEnum.hasNext()){
 			    	FField fld = (FField) fieldEnum.next();
 			    	if(fld != null && fld.isDBResident() && !(fld instanceof FBlobStringField)){
-//			    		int joinFieldID = fld.getID() == FField.REF_FIELD_ID ? FLD_VOUCHER_TRANSACTION_REF : fld.getID();  
-			    		FocRequestField reqFld = new FocRequestField(getFocDesc().nextFldID(), tableAlias, fld.getID());
+			    		int fldID = 0;
+			    		if(isPrimaryKey() && fld.getID() == FField.REF_FIELD_ID){
+			    			fldID = FField.REF_FIELD_ID;
+			    		}else{
+			    			fldID = getFocDesc().nextFldID();
+			    		}
+			    		FocRequestField reqFld = new FocRequestField(fldID, tableAlias, fld.getID());
 			    		if(getFocDesc() != null && getFocDesc().getFocRequestDesc() != null) getFocDesc().getFocRequestDesc().addField(reqFld);
-//			    		focDescParser.getFocRequestDesc().addField(reqFld);
 			    	}
 			    }
 				}else{
@@ -147,6 +153,9 @@ public class XMLJoin implements FXMLDesc {
 							if(getFocDesc() != null && getFocDesc().getFocRequestDesc() != null){
 								FocRequestField reqFld = new FocRequestField(getFocDesc().nextFldID(), tableAlias, fld.getID());
 								getFocDesc().getFocRequestDesc().addField(reqFld);
+								
+				    		String groupByFormula = xmlReqFld.getGroupByFormula();
+				    		reqFld.setGroupByFormula(groupByFormula);
 							}
 						}
 					}
@@ -245,5 +254,9 @@ public class XMLJoin implements FXMLDesc {
 
 	public void setOrder(int order) {
 		this.order = order;
+	}
+
+	public boolean isPrimaryKey() {
+		return isPrimaryKey;
 	}
 }

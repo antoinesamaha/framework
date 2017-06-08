@@ -32,6 +32,7 @@ public class FocUnitDictionary {
   
   private FocUnitExpectedNotification expectedNotification = null;  
 
+  private boolean                 nextTestExist = false;
   private boolean                 pause     = false;
   private Stack<FocUnitTestLevel> testStack = null;
   
@@ -211,6 +212,7 @@ public class FocUnitDictionary {
     }else{
 			try {
 				Globals.getApp().setIsUnitTest(true);
+    		setNextTestExist(false);
 			  FocUnitDictionary.getInstance().getTestingSuite(suite.getName()).runSuite();
 			} catch (Exception e) {
 			  Globals.logException(e);
@@ -272,4 +274,12 @@ public class FocUnitDictionary {
   public boolean isPause(){
   	return pause;
   }
+
+	public boolean isNextTestExist() {
+		return nextTestExist;
+	}
+
+	public void setNextTestExist(boolean nextTestExist) {
+		this.nextTestExist = nextTestExist;
+	}
 }

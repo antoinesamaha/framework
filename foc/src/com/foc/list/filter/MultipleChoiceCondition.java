@@ -218,14 +218,23 @@ public class MultipleChoiceCondition extends FilterCondition{
     if(operation != OPERATION_NONE){
     	String fieldName  = getFieldLabel();
       int value = getValue(filter);
-
-      switch(operation){
-      case OPERATION_EQUALS:
-      	description = fieldName + " = " + value;
-      	break;
-      case OPERATION_DIFFERENT_FROM:
-      	description = fieldName + " <> " + value ;
-      	break;
+      String valueStr = null;
+      
+      if(getFieldPath() != null && getFilterDesc() != null){
+	      FMultipleChoiceField mFld = (FMultipleChoiceField) getFieldPath().getFieldFromDesc(getFilterDesc().getSubjectFocDesc());
+	      FMultipleChoiceItem choiceItem = mFld != null ? mFld.getChoiceItemForKey(value) : null;
+	      valueStr = choiceItem != null ? choiceItem.getTitle() : "";
+      }
+      
+      if(valueStr != null){
+	      switch(operation){
+	      case OPERATION_EQUALS:
+	      	description = fieldName + " = " + valueStr;
+	      	break;
+	      case OPERATION_DIFFERENT_FROM:
+	      	description = fieldName + " <> " + valueStr;
+	      	break;
+	      }
       }
     }
   	

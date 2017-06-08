@@ -24,7 +24,10 @@ public class FocUnitMethodFactory {
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String nextTest = attributes.getValue(FXMLUnit.ATT_CALL_TEST_COMPOSED);
-      	if(nextTest != null) nextTest = nextTest.replace(">", ".");
+      	if(nextTest != null){
+      		nextTest = nextTest.replace(">", ".");
+      		FocUnitDictionary.getInstance().setNextTestExist(true);
+      	}
         command.logout(nextTest);
       }
     });

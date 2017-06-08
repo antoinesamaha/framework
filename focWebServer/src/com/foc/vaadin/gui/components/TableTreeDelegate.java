@@ -1375,7 +1375,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				FocObject selectedObject = focObject;
 				FocList listToChooseFrom = getFocDesc().getFocList(FocList.LOAD_IF_NEEDED);
 				if(selectedObject != null && listToChooseFrom != null && getAttributes() != null && getAttributes().getValue(FXML.ATT_REDIRECT_ENABLED) != null){
-					String dataPath = getAttributes().getValue(FXML.ATT_REDIRECT_ENABLED);
+					String dataPath = getAttributes().getValue(FXML.ATT_REDIRECT_CAPTION_PROPERTY);
 					FVRedirectWindow redirectWindow = new FVRedirectWindow(listToChooseFrom, selectedObject, dataPath);
 					redirectWindow.popup();
 				}

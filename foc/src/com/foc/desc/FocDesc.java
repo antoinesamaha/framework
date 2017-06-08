@@ -83,6 +83,7 @@ import com.foc.list.FocLinkConditionalForeignKey;
 import com.foc.list.FocLinkForeignKey;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
+import com.foc.list.FocListGroupBy;
 import com.foc.list.FocListOrder;
 import com.foc.list.filter.FocDescForFilter;
 import com.foc.plugin.IFocDescPlugIn;
@@ -186,6 +187,8 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   //Used for filtering FocLists by transaction type.
   private static int    FOC_DESC_TRANSACTION_TYPE = AbstractDataStore.TRANSACTION_TYPE_NONE;
   private static String FOC_DESC_GUI_CONTEXT      = IXMLViewConst.CONTEXT_DEFAULT;
+  
+  private FocListGroupBy focListGroupBy = null;
   
   public void dispose(){
     focObjectClass       = null;
@@ -2432,5 +2435,13 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public FocListGroupBy getGroupBy() {
+		return focListGroupBy;
+	}
+
+	public void setGroupBy(FocListGroupBy focListGroupBy) {
+		this.focListGroupBy = focListGroupBy;
 	}
 }

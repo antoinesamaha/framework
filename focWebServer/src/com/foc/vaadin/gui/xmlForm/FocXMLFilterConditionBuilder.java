@@ -10,6 +10,7 @@ import com.foc.list.filter.BooleanCondition;
 import com.foc.list.filter.DateCondition;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FocListFilter;
+import com.foc.list.filter.MultipleChoiceCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
 
@@ -83,17 +84,35 @@ public class FocXMLFilterConditionBuilder {
 					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
 					handler.endElement(null, null, FXML.TAG_FIELD);
+				}else if(condition instanceof MultipleChoiceCondition){
+					//Operation
+					FocXMLAttributes opAttributes = new FocXMLAttributes();
+					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
+					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
+					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
+					handler.endElement(null, null, FXML.TAG_FIELD);
+					
+					opAttributes = new FocXMLAttributes();
+					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_VAL");
+					opAttributes.addAttribute(FXML.ATT_WIDTH, "270px");
+					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP>0)");
+					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
+					handler.endElement(null, null, FXML.TAG_FIELD);
+					
 				}else if(condition instanceof ObjectCondition){
 					String captionProperty = attributes.getValue(FXML.ATT_CAPTION_PROPERTY);
 					//Guessing the adequate captionProperty 
 					if(captionProperty == null){
 						ObjectCondition objCond  = (ObjectCondition)condition;
-						FObjectField    objField = (FObjectField) objCond.getFieldPath().getFieldFromDesc(listFilter.getThisFilterDesc().getSubjectFocDesc());
-						FocDesc fieldDesc = objField.getFocDesc();
-						
-						if(fieldDesc.getFieldByID(FField.FLD_CODE) != null) captionProperty = FField.FNAME_CODE;
-						if(fieldDesc.getFieldByID(FField.FLD_NAME) != null) captionProperty = FField.FNAME_NAME;
-						if(fieldDesc.getFieldByID(FField.FLD_DESCRIPTION) != null) captionProperty = FField.FNAME_DESCRIPTION;
+						captionProperty = objCond.getCaptionProperty();
+						if(captionProperty == null){
+							FObjectField objField = (FObjectField) objCond.getFieldPath().getFieldFromDesc(listFilter.getThisFilterDesc().getSubjectFocDesc());
+							FocDesc fieldDesc = objField.getFocDesc();
+							
+							if(fieldDesc.getFieldByID(FField.FLD_CODE) != null) captionProperty = FField.FNAME_CODE;
+							if(fieldDesc.getFieldByID(FField.FLD_NAME) != null) captionProperty = FField.FNAME_NAME;
+							if(fieldDesc.getFieldByID(FField.FLD_DESCRIPTION) != null) captionProperty = FField.FNAME_DESCRIPTION;
+						}
 					}
 					
 					//Operation
