@@ -107,13 +107,21 @@ public class FocNotificationManager {
     return internalEventNotifierList;
   }
 
-  public void addInternalEventNotifier(int eventID, FocDesc focDesc, String transactionName, IFocNotificationEventManipulator eventManipulator){
+  public FocNotificationEventConfigurator addInternalEventNotifier(int eventID, FocDesc focDesc, String transactionName, IFocNotificationEventManipulator eventManipulator){
     FocList list = getInternalEventNotifierList(true);
     FocNotificationEventConfigurator notifier = (FocNotificationEventConfigurator) list.newEmptyItem();
     notifier.setEvent(eventID);
     notifier.setTableDesc(focDesc);
     notifier.setLocalEventManipulator(eventManipulator);
     list.add(notifier);
+    return notifier;
+  }
+  
+  public void removeInternalEventNotifier(FocNotificationEventConfigurator notifier){
+  	FocList list = getInternalEventNotifierList(false);
+  	if(list != null){
+  		list.remove(notifier);
+  	}
   }
   
   public FocList getEventNotifierList() {

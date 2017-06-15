@@ -208,9 +208,14 @@ public class Globals{
   	return dateFormat;
   }
   
+  private static boolean insideLogString = false;
   public static void logString(String str, boolean withTime) {
   	if(withTime){
-  		str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " : ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  		if(!insideLogString){
+  			insideLogString = true;
+  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " : ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			insideLogString = false;
+  		}
   	}
     PrintStream logFile = getLogFile();
     if(logFile != null){ 

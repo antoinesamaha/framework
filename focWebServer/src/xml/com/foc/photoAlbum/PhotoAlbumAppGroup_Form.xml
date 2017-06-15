@@ -1,0 +1,5 @@
+<VerticalLayout spacing="true" maring="true" width="95%">
+    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="false" />    
+    <GuiField name="DOC_RIGHT" caption="Document access right" width="220px" height="-1px" />
+    <GuiField name="ACCESS_DETACHED_GALLERY" caption="Access detached gallery" width="220px" height="-1px" />
+</VerticalLayout>

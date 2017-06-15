@@ -80,7 +80,6 @@ import com.foc.business.workflow.signing.WFSignatureNeededResult;
 import com.foc.db.DBManager;
 import com.foc.db.SQLFilter;
 import com.foc.desc.field.FBoolField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FInLineObjectField;
@@ -88,6 +87,7 @@ import com.foc.desc.field.FListField;
 import com.foc.desc.field.FNumField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FObjectField121;
+import com.foc.desc.field.FStringField;
 import com.foc.event.FocEvent;
 import com.foc.event.FocListener;
 import com.foc.formula.FocSimpleFormulaContext;
@@ -155,6 +155,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   private static final int FLG_DELETABLE                = 16;
   private static final int FLG_CONTENT_VALID_MESSAGE_ON = 32;
   private static final int FLG_SHARED                   = 64;
+  private static final int FLG_FRESH_COLOR              = 128;
   /*
   private boolean loadedFromDB          = true;
   private boolean isTempReference       = false;
@@ -3612,7 +3613,19 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
       flags = (char)(flags & ~FLG_SHARED);
     }
 	}
+	
+	public boolean isFreshColor() {
+		return (flags & FLG_FRESH_COLOR) != 0;
+	}
 
+	public void setFreshColor(boolean shared) {
+    if(shared){
+      flags = (char)(flags | FLG_FRESH_COLOR);
+    }else{
+      flags = (char)(flags & ~FLG_FRESH_COLOR);
+    }
+	}
+	
 	private static FDummyProperty_String dummyProperty_String = null;
 	public static FDummyProperty_String getDummyProperty_String(){
 		if(dummyProperty_String == null){ 
@@ -4527,16 +4540,16 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	  					(prop.getFocField().getID() == FField.FLD_ORDER
 	  					)){
 	  				//Consider as empty
-	  			}else if(prop instanceof FList){
-	  				FocList focList = ((FList)prop).getList();
-	  				empty = focList == null || focList.size() == 0;
-	  				if(!empty){
-	  					empty = true;
-	  					for(int i=0; i<focList.size() && empty; i++){
-	  						FocObject listItem = focList.getFocObject(i);
-	  						empty = listItem.isEmpty();
-	  					}
-	  				}
+//	  			}else if(prop instanceof FList){
+//	  				FocList focList = ((FList)prop).getList();
+//	  				empty = focList == null || focList.size() == 0;
+//	  				if(!empty){
+//	  					empty = true;
+//	  					for(int i=0; i<focList.size() && empty; i++){
+//	  						FocObject listItem = focList.getFocObject(i);
+//	  						empty = listItem.isEmpty();
+//	  					}
+//	  				}
 	  			}else{
 	  				boolean checkThisProperty = true;
 	  				if(prop instanceof FObject){
@@ -4556,7 +4569,26 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	  		}
 	  	}
   	}
-  	
+ 
+  	enumer = this.newFocFieldEnum(FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
+  	while(empty && enumer != null && enumer.hasNext()){
+  		enumer.nextField();
+  		FProperty prop = enumer.getProperty();
+  		if(prop != null && prop instanceof FList){
+				FocList focList = ((FList)prop).getList();
+				if(focList.isDbResident()){
+					empty = focList == null || focList.size() == 0;
+					if(!empty){
+						empty = true;
+						for(int i=0; i<focList.size() && empty; i++){
+							FocObject listItem = focList.getFocObject(i);
+							empty = listItem.isEmpty();
+						}
+					}
+				}
+  		}
+  	}
+   	
   	return empty;
   }
 }

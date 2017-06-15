@@ -1,12 +1,13 @@
-<VerticalLayout width="100%" >
+<VerticalLayout width="98%" margin="true" captionMargin="0">
     <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-    <HorizontalLayout captionMargin="0">
-      <VerticalLayout>
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <VerticalLayout spacing="true">
         <GuiField name="NAME" caption="Name"  />
         <GuiField name="DESCRIP" caption="Description"  />
         <GuiField name="STARTUP_MENU" caption="Startup Menu"  />
+        <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title"  />
       </VerticalLayout>
-      <VerticalLayout>
+      <VerticalLayout spacing="true">
         <GuiField name="NAME_MODF" caption="Allow Naming Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
         <GuiField name="STATUS_MANUAL_MODF" caption="Allow Status Manual Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
         <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
@@ -23,11 +24,11 @@
         </HorizontalLayout>
       </VerticalLayout>
       
-      <VerticalLayout>
+      <VerticalLayout spacing="true">
         <Button name="MENU_RIGHTS_BUTTON" caption="Menu Rights"/>
       </VerticalLayout>
 
-      <VerticalLayout name="APP_GROUPS_BUTTONS_LAYOUT" >
+      <VerticalLayout name="APP_GROUPS_BUTTONS_LAYOUT" spacing="true">
       </VerticalLayout>
       
     </HorizontalLayout>

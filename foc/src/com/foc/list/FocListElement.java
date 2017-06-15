@@ -11,10 +11,10 @@ import com.foc.property.*;
  * @author 01Barmaja
  */
 public class FocListElement implements Comparable {
-  private FocObject focObject = null;
-  private FBoolean  selected  = null;
-  private boolean   hide_Soft = false;
-  private boolean   hide_Hard = false;
+  private FocObject focObject  = null;
+  private FBoolean  selected   = null;
+  private boolean   hide_Soft  = false;
+  private boolean   hide_Hard  = false;
 
   /**
    * @param focObject

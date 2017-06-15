@@ -10,9 +10,11 @@ import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FBoolField;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FImageField;
 import com.foc.desc.field.FIntField;
+import com.foc.desc.field.FListField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FPasswordField;
@@ -283,4 +285,12 @@ public class FocUserDesc extends FocDesc{
 	public static FocUserDesc getInstance(){
 		return (FocUserDesc) getInstance(DB_TABLE_NAME, FocUserDesc.class);
   }
+	
+	public void addField(FField fld) {
+		if(fld instanceof FListField && fld.getName().startsWith("FUSER_LIST")){
+			int debug = 3;
+			debug++;
+		}
+		super.addField(fld);
+	}
 }

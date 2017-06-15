@@ -365,10 +365,18 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
-	private void reloadClickListener() {
+	public boolean isAutoRefresh(){
+		return getAttributes() != null 
+				&& getAttributes().getValue(FXML.ATT_AUTO_REFRESH) != null
+				&& getAttributes().getValue(FXML.ATT_AUTO_REFRESH).toLowerCase().equals("true");
+	}
+	
+	public void reloadClickListener() {
 		FocList focList = getTableOrTree().getFocList();
 		if(focList != null && !focList.isCollectionBehaviour()){
+			if(isAutoRefresh()) focList.setAutoRefresh(true);
 			focList.reloadFromDB();
+			if(isAutoRefresh()) focList.setAutoRefresh(false);
 			getTableOrTree().getFocDataWrapper().refreshGuiForContainerChanges();
 		}
 	}

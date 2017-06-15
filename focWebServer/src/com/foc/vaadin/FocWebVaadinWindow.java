@@ -1,5 +1,7 @@
 package com.foc.vaadin;
 
+import java.util.ArrayList;
+
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
@@ -88,6 +90,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	private int     format        = 0;
 	private boolean menuBarFilled = false;
 	
+	private ArrayList<NativeButton> buttonArray = null;
+	
 	public FocWebVaadinWindow(){
 		super();
 		fill();
@@ -98,6 +102,31 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		//For the First TAB the situation is different because it comes after the login, and in the login form we have a call for this method.
 		changeCentralPanelIntoGuestHomePage();
 		//--------------------------------
+	}
+	
+	protected void buttonArray_Add(NativeButton button){
+		if(buttonArray == null){
+			buttonArray = new ArrayList<NativeButton>();
+		}
+		buttonArray.add(button);
+		button.addStyleName("foc-f22");
+		button.addStyleName("foc-text-center");
+		button.setWidth("40px");
+	}
+
+	protected void buttonArray_Highlight(NativeButton button){
+		if(buttonArray != null){
+			for(int i=0; i<buttonArray.size(); i++){
+				NativeButton b = buttonArray.get(i);
+				if(b != null){
+					if(b == button){
+						b.addStyleName("foc-textOrange");
+					}else{
+						b.removeStyleName("foc-textOrange");
+					}
+				}
+			}
+		}
 	}
 	
 	public void addButtonsInMenuBar(){
@@ -369,6 +398,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			home.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_HOME));
 			home.addClickListener(new Button.ClickListener() {
 				public void buttonClick(ClickEvent event) {
+					buttonArray_Highlight(null);
 					if(isGuestUser()){
 						changeCentralPanelIntoGuestHomePage();
 					}else{
@@ -381,7 +411,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 //				navigation = newButtonInHeaderBar("Navigation", true);
 				navigation = newButtonInHeaderBar("", true);
 				navigation.setIcon(FontAwesome.TH_LIST);
-				navigation.addStyleName("foc-f22");
+				buttonArray_Add(navigation);
 				navigation.addStyleName("foc-bold");
 
 				if(FocWebApplication.getInstanceForThread().isMobile()){
@@ -390,6 +420,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}
 				navigation.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
+						buttonArray_Highlight((NativeButton) event.getButton());
 		        ICentralPanel centralPanel = newNavigationPanel();
 		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
 					}
@@ -414,6 +445,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				admin.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_SETTINGS));
 				admin.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
+						buttonArray_Highlight(null);
 		        ICentralPanel centralPanel = newAdministratorConsolePanel();
 		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
 					}

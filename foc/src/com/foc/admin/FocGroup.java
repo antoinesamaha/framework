@@ -15,6 +15,7 @@ import java.awt.GridBagConstraints;
 import java.util.Iterator;
 
 import com.foc.Globals;
+import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -535,6 +536,10 @@ public class FocGroup extends FocObject{
     return xmlView;
 	}
 
+  public WFTitle getDefaultTitle(){
+  	return (WFTitle) getPropertyObject(FocGroupDesc.FLD_DEFAULT_TITLE);
+  }
+  
   // ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
   // LIST

@@ -174,6 +174,7 @@ public interface FXML {
   public static final String ATT_ENCAPSULATE          		= "encapsulate"       ;
   public static final String ATT_PROMPT                   = "prompt"            ;
   public static final String ATT_TABINDEX                 = "tabindex"          ;
+  public static final String ATT_AUTO_REFRESH             = "autoRefresh"       ;
   
   public static final String TAG_LABEL                     = "Label"             ;
   public static final String TAG_BUTTON                    = "Button"            ;

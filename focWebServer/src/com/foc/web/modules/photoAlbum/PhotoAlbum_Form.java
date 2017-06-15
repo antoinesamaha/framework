@@ -2,12 +2,15 @@ package com.foc.web.modules.photoAlbum;
 
 import com.foc.business.photoAlbum.PhotoAlbum;
 import com.foc.business.photoAlbum.PhotoAlbumAccess;
+import com.foc.business.photoAlbum.PhotoAlbumConfig;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.vaadin.ui.Component;
 
 @SuppressWarnings("serial")
 public class PhotoAlbum_Form extends FocXMLLayout {
@@ -35,7 +38,20 @@ public class PhotoAlbum_Form extends FocXMLLayout {
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-//		setDownloadIcon();
+		
+    PhotoAlbumConfig config = PhotoAlbumConfig.getInstance();
+    if(config != null && config.isSingleGroup()){		
+			FVVerticalLayout verticalLayout = (FVVerticalLayout) getComponentByName("_ACCESS_GROUPS");
+			if(verticalLayout != null){
+				verticalLayout.setVisible(false);
+			}
+    }
+    if(config != null && !config.isUseKeywords()){		
+			Component compKeyword = getComponentByName("KEYWORD");
+			if(compKeyword != null){
+				compKeyword.setVisible(false);
+			}
+    }
 	}
 	
 //	private void setDownloadIcon() {

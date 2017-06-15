@@ -25,7 +25,7 @@ public class UserXMLViewDesc extends FocDesc {
     super(UserXMLView.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, true);
     addReferenceField();
 
-    FObjectField usefFld = new FObjectField("USER", "User", FLD_USER, true, FocUserDesc.getInstance(), "USER_", FocUserDesc.getInstance(), FocUserDesc.FLD_XML_VIEW_SELECCTION_LIST);
+    FObjectField usefFld = new FObjectField("USER", "User", FLD_USER, true, FocUserDesc.getInstance(), "USER_", this, FocUserDesc.FLD_XML_VIEW_SELECCTION_LIST);
     usefFld.setSelectionList(FocUserDesc.getList(FocList.NONE));
     usefFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);
     usefFld.setDisplayField(FocUserDesc.FLD_NAME);

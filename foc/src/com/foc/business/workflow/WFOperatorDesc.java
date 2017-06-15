@@ -28,8 +28,8 @@ public class WFOperatorDesc extends FocDesc {
 		addReferenceField();
 		
 		FObjectField objFld = new FObjectField("AREA", "Site", FLD_AREA, false, WFSiteDesc.getInstance(), "AREA_", this, WFSiteDesc.FLD_OPERATOR_LIST);
-//		objFld.setSelectionList(WFSiteDesc.getList(FocList.NONE));
-		objFld.setWithList(false);
+		objFld.setSelectionList(WFSiteDesc.getInstance().getFocList(FocList.NONE));
+//		objFld.setWithList(false);
 		objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
 		objFld.setComboBoxCellEditor(WFSiteDesc.FLD_NAME);
 		objFld.setDisplayField(WFSiteDesc.FLD_NAME);

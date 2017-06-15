@@ -871,6 +871,15 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return result;
 	}
 
+	public void removeColumn(String name) {
+		FVTableColumn column = findColumn(name);
+		if(column != null && getVisiblePropertiesArrayList() != null){
+			getVisiblePropertiesArrayList().remove(column);
+			getTreeOrTable().applyFocListAsContainer();
+//			getTreeOrTable().getFocDataWrapper().firePropertySetChangeEvent();
+		}
+	}
+	
 	public FVTableColumn findColumn(String name) {
 		FVTableColumn found = null;
 		ArrayList<FVTableColumn> arrayList = getVisiblePropertiesArrayList();

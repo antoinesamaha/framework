@@ -33,13 +33,12 @@ import com.vaadin.server.FileDownloader;
 import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Embedded;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Upload.SucceededEvent;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.util.FileTypeResolver;
 
 @SuppressWarnings("serial")
@@ -57,7 +56,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
   private double                originalHeight     =   -1;
 	private HorizontalLayout      imageControlLayout ;//Should not be set =null because the super call is setting them and the init after the super call can put them to null 
 	private Attributes            attributes         = null;
-	private Embedded              downloadButton     = null;
+	private Button                downloadButton     = null;
 	
 	public FVImageField(FProperty property, Attributes attributes){
 		super();
@@ -67,7 +66,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 
 		setProperty(property);
 		
-		setSpacing(false);
+//		setSpacing(false);
 	}
 	
 	public void dispose(){
@@ -287,7 +286,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		}
 	}
 	
-	public Embedded getDownloadButton() {
+	public Button getDownloadButton() {
 		return downloadButton;
 	}
 	
@@ -323,18 +322,20 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 
 			  if(isEditable()){
 			    FVUpload_Image uploader = new FVUpload_Image();
+			    uploader.setWidth("100px");
 			    imageControlLayout.addComponent(uploader);
 			    imageControlLayout.setComponentAlignment(uploader, Alignment.TOP_RIGHT);
 			    
 			    uploader.setImageReceiver(this);
 			    
-			    downloadButton = new Embedded("", FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD));
-			    downloadButton.setCaption(null);
-			    downloadButton.setStyleName(BaseTheme.BUTTON_LINK);
+			    downloadButton = new Button("Download");//, FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD));
+			    downloadButton.setWidth("100px");
+//			    downloadButton.setCaption(null);
+//			    downloadButton.setStyleName(BaseTheme.BUTTON_LINK);
 			    downloadButton.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			    downloadButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
 			    imageControlLayout.addComponent(downloadButton);
-			    imageControlLayout.setComponentAlignment(downloadButton, Alignment.TOP_RIGHT);
+			    imageControlLayout.setComponentAlignment(downloadButton, Alignment.TOP_LEFT);
 		  							
 					resource = new GenericFileResource(getFocData());
 					FileDownloader downloader = new FileDownloader(resource);

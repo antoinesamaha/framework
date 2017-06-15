@@ -84,6 +84,7 @@ public class PhotoAlbumDesc extends FocDesc {
     addField(focFld);
     
     FMultipleChoiceStringField multipleChoiceField = new FMultipleChoiceStringField("KEYWORD", "Keyword", FLD_KEYWORD, false, 3);
+    multipleChoiceField.setAllowOutofListSelection(true);
     multipleChoiceField.addChoice(KEYWORD_AFTER_FIX);
     multipleChoiceField.addChoice(KEYWORD_BEFORE_FIX);
     multipleChoiceField.addChoice(KEYWORD_UNDER_PROCESS);

@@ -38,7 +38,7 @@ public class FVMultipleChoice implements FocXMLGuiComponentCreator {
 	  	
 	  	if(optionGroup){
 	  		String direction = attributes.getValue(FXML.ATT_DIRECTION);
-	  		if(!Utils.isEmail(direction) && direction.toLowerCase().equals(FXML.VAL_DIRECTION_HORIZONTAL)){
+	  		if(!Utils.isStringEmpty(direction) && direction.toLowerCase().equals(FXML.VAL_DIRECTION_HORIZONTAL)){
 	  			comp = new FVMultipleChoiceOptionGroupHorizontal(property, attributes);
 	  		}else{
 	  			comp = new FVMultipleChoiceOptionGroup(property, attributes);

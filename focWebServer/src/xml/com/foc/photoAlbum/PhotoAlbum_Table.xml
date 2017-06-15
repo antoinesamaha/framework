@@ -7,8 +7,8 @@
     <TableColumn name="IMAGE_NAME" caption="Document name"></TableColumn>
     <TableColumn name="DESCRIPTION" caption="Description"></TableColumn>
     <TableColumn name="DOCUMENT_TYPE" captionProperty="CAPTION" caption="Document Type"></TableColumn>
-    <TableColumn name="CREATION_USER" captionProperty="NAME" caption="Creation User"></TableColumn>
-    <TableColumn name="TRANSACTION_CODE" caption="Transaction code"></TableColumn>
+    <TableColumn name="CREATION_USER" captionProperty="NAME" caption="Uploaded by"></TableColumn>
+    <!-- TableColumn name="TRANSACTION_CODE" caption="Transaction code" / -->
     <TableColumn name="UPLOAD_DATE" caption="Upload date"></TableColumn>
     <TableColumn name="ALLOWED_GROUPS" caption="Allowed Groups"></TableColumn>
     <TableColumn name="DOWNLOAD" />

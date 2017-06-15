@@ -94,6 +94,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   private static final char FLG_DISABLE_RESORT_AFTER_ADD             = 256;
   private static final char FLG_IS_LOADING                           = 512;
   private static final char FLG_DISABLE_SORT                         = 1024;
+  private static final char FLG_AUTO_REFRESH                         = 2048;
   
   // Image of the real list.
   // It is set to null when modified
@@ -1161,6 +1162,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
         //elements.put(focObj, focListElmt);
         elementHash_Put(focListElmt);
         array_Add(focListElmt);
+        if(isAutoRefresh()){
+        	focObj.setFreshColor(true);
+        }
         if(!isCollectionBehaviour()){
           if(isDirectImpactOnDatabase()){
             focObj.forceControler(true);
@@ -1878,6 +1882,24 @@ public class FocList extends AccessSubject implements IFocList, Container {
   
   public boolean isSortDisabled(){
   	return (flags & FLG_DISABLE_SORT) != 0;
+  }
+
+  public void setAutoRefresh(boolean loaded) {
+    if(loaded){
+      flags = (char)(flags | FLG_AUTO_REFRESH);
+    }else{
+      flags = (char)(flags & ~FLG_AUTO_REFRESH);
+    }
+    if(loaded){
+    	for(int i=0; i<size(); i++){
+    		FocObject elem = getFocObject(i);
+    		elem.setFreshColor(false);
+    	}
+    }
+  }
+  
+  public boolean isAutoRefresh(){
+  	return (flags & FLG_AUTO_REFRESH) != 0;
   }
 
   /**

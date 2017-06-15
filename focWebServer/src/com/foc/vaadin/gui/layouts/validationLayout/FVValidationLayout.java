@@ -37,6 +37,7 @@ import com.foc.business.notifier.DocMsg;
 import com.foc.business.notifier.DocMsgDesc;
 import com.foc.business.notifier.FocPageLink;
 import com.foc.business.notifier.FocPageLinkDesc;
+import com.foc.business.photoAlbum.PhotoAlbumAppGroup;
 import com.foc.business.printing.PrnContext;
 import com.foc.business.printing.PrnLayoutDesc;
 import com.foc.business.printing.ReportFactory;
@@ -1530,6 +1531,10 @@ public class FVValidationLayout extends HorizontalLayout {
     }
     if(focData != null && focData instanceof FocObject){
       applicable = true;
+    }
+    if(applicable){
+	    PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
+	    applicable = group != null && group.isAllowDownload();
     }
     return applicable; 
   }

@@ -3,15 +3,16 @@ package com.foc.web.modules.photoAlbum;
 import java.io.File;
 import java.io.InputStream;
 
-import com.vaadin.data.Container.Filter;
 import com.foc.access.FocDataMap;
 import com.foc.business.photoAlbum.DocumentType;
 import com.foc.business.photoAlbum.DocumentTypeDesc;
 import com.foc.business.photoAlbum.PhotoAlbum;
+import com.foc.business.photoAlbum.PhotoAlbum.PhotoAlbumFileResource;
 import com.foc.business.photoAlbum.PhotoAlbumAccessDesc;
+import com.foc.business.photoAlbum.PhotoAlbumAppGroup;
+import com.foc.business.photoAlbum.PhotoAlbumConfig;
 import com.foc.business.photoAlbum.PhotoAlbumDesc;
 import com.foc.business.photoAlbum.PhotoAlbumListWithFilter;
-import com.foc.business.photoAlbum.PhotoAlbum.PhotoAlbumFileResource;
 import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
@@ -34,6 +35,7 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -51,7 +53,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 
 	public static final String KEY_FILTER_TYPE = "FILTER_TYPE";
 	
-	private FVComboBox   documetnTypeFilterComboBox = null;
+	private FVComboBox   documentTypeFilterComboBox = null;
 	private Button       unrelatedAttachmentsButton = null;
 	private DocumentType filteredType               = null;
 	
@@ -59,9 +61,9 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 	public void dispose() {
 		super.dispose();
 		unrelatedAttachmentsButton = null;
-		if(documetnTypeFilterComboBox != null){
-			documetnTypeFilterComboBox.dispose();
-			documetnTypeFilterComboBox = null;
+		if(documentTypeFilterComboBox != null){
+			documentTypeFilterComboBox.dispose();
+			documentTypeFilterComboBox = null;
 		}
 	}
 	
@@ -98,11 +100,24 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
     if(showUploadButton()){
-    	uploadField();	
+    	addUploadButton();
+    }
+    
+    if(showDetachedGallery()){
+    	//If he cannot upload he cannot assotiate unrelated documents
+    	addUnrelatedAttachmentsButton();
     }
 		
     addPopupMenu_DownAttachment();
     addDocumentTypeFilterComboBox();
+    
+    PhotoAlbumConfig config = PhotoAlbumConfig.getInstance();
+    if(config != null && config.isSingleGroup()){
+			FVTableWrapperLayout treeWrapper = getTableWrapperLayout();
+			if(treeWrapper != null && treeWrapper.getTableTreeDelegate() != null){
+				treeWrapper.getTableTreeDelegate().removeColumn("ALLOWED_GROUPS");
+			}
+    }
   }
 	
 	private void addDocumentTypeFilterComboBox(){
@@ -116,11 +131,11 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 	}
 	
 	private FVComboBox getDocumentTypeComboBox(){
-		if(documetnTypeFilterComboBox == null){
-			documetnTypeFilterComboBox = new FVComboBox();
-			documetnTypeFilterComboBox.setImmediate(true);
-			documetnTypeFilterComboBox.setWidth("300px");
-			documetnTypeFilterComboBox.setInputPrompt(" -Document Type- ");
+		if(documentTypeFilterComboBox == null){
+			documentTypeFilterComboBox = new FVComboBox();
+			documentTypeFilterComboBox.setImmediate(true);
+			documentTypeFilterComboBox.setWidth("300px");
+			documentTypeFilterComboBox.setInputPrompt(" -Document Type- ");
 			FocListWrapper focListWrapper = getTableWrapperLayout() != null && getTableWrapperLayout().getFocDataWrapper() instanceof FocListWrapper ? (FocListWrapper)getTableWrapperLayout().getFocDataWrapper() : null;
 			focListWrapper.setTableTreeDelegate(getTableWrapperLayout().getTableTreeDelegate());
 			FocList documentTypesList = DocumentTypeDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
@@ -128,10 +143,10 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 //				documetnTypeFilterComboBox.addItem(DocumentTypeDesc.SELECT_ALL);
 				for(int i=0; i<documentTypesList.size(); i++){
 					DocumentType documentType = (DocumentType) documentTypesList.getFocObject(i);
-					documetnTypeFilterComboBox.addItem(documentType.getCaption());
+					documentTypeFilterComboBox.addItem(documentType.getCaption());
 				}
 			}
-			documetnTypeFilterComboBox.addValueChangeListener(new Property.ValueChangeListener() {
+			documentTypeFilterComboBox.addValueChangeListener(new Property.ValueChangeListener() {
 				@Override
 				public void valueChange(ValueChangeEvent event) {
 					FocListWrapper focListWrapper = getTableWrapperLayout() != null && getTableWrapperLayout().getFocDataWrapper() instanceof FocListWrapper ? (FocListWrapper)getTableWrapperLayout().getFocDataWrapper() : null;
@@ -153,7 +168,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 				}
 			});
 		}
-		return documetnTypeFilterComboBox;
+		return documentTypeFilterComboBox;
 	}
 	
 	private void addFilterByDocumentTypeAndAccessRights(FocListWrapper focListWrapper){
@@ -195,43 +210,53 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 	}
 	
 	protected boolean showUploadButton(){
-		return true;
+		PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
+		return group != null && group.isAllowUpload();
 	}
-	
+
+	protected boolean showDetachedGallery(){
+		PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
+		return group != null && group.isAllowAccessToDetachedGallery();
+	}
+
 	private FVTableWrapperLayout getTableWrapperLayout(){
 		return (FVTableWrapperLayout) getComponentByName("PHOTO_ALBUM");
 	}
   
-  public void uploadField(){
-    FVUpload_Image uploadImage = new FVUpload_Image();
-    FVTableWrapperLayout bkdnTreeWrapper = getTableWrapperLayout();
-    bkdnTreeWrapper.addHeaderComponent(uploadImage);
-    bkdnTreeWrapper.addHeaderComponent(getUnrelatedAttachmentsButton());
-    FVImageReceiver imageReceiver = new FVImageReceiver() {
-      public void imageReceived(SucceededEvent event, InputStream inputStream) {
-      	addPhotoToAlbum(event.getFilename(), inputStream);
-      }
-    };
-    uploadImage.setImageReceiver(imageReceiver);
+  private void addUploadButton(){
+  	FVTableWrapperLayout tableWrapper = getTableWrapperLayout();
+  	if(tableWrapper != null){
+  		tableWrapper.setSpacing(true);
+	    FVUpload_Image uploadImage = new FVUpload_Image();
+	    tableWrapper.addHeaderComponent_ToLeft(uploadImage);
+	    FVImageReceiver imageReceiver = new FVImageReceiver() {
+	      public void imageReceived(SucceededEvent event, InputStream inputStream) {
+	      	addPhotoToAlbum(event.getFilename(), inputStream);
+	      }
+	    };
+	    uploadImage.setImageReceiver(imageReceiver);
+  	}
   }
   
-  private Button getUnrelatedAttachmentsButton(){
-  	if(unrelatedAttachmentsButton == null){
-  		unrelatedAttachmentsButton = new Button("View Unrelated Attachments", new Button.ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					PhotoAlbumListWithFilter photoAlbumFilter = new PhotoAlbumListWithFilter();
-					photoAlbumFilter.applyFilterOnUnrelatedObjects();
-					photoAlbumFilter.reloadFromDB();
-					XMLViewKey xmlViewKey = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, PhotoAlbumWebModule.CTXT_UNRELATED_ATTACHMENTS, XMLViewKey.VIEW_DEFAULT);
-					PhotoAlbum_UnrelatedAttachments_Table centralPanel = (PhotoAlbum_UnrelatedAttachments_Table) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(getMainWindow(), xmlViewKey, photoAlbumFilter);
-					centralPanel.setAttachmentsList((PhotoAlbumListWithFilter) getFocList());
-					centralPanel.parseXMLAndBuildGui();
-					getMainWindow().changeCentralPanelContent(centralPanel, true);
-				}
-			});
-  	}
-  	return unrelatedAttachmentsButton;
+  private void addUnrelatedAttachmentsButton(){
+		FVTableWrapperLayout tableWrapper = getTableWrapperLayout();
+  	if(tableWrapper != null){
+  		unrelatedAttachmentsButton = new Button("Add From Detached Galery", new Button.ClickListener() {
+  			@Override
+  			public void buttonClick(ClickEvent event) {
+  				PhotoAlbumListWithFilter photoAlbumFilter = new PhotoAlbumListWithFilter();
+  				photoAlbumFilter.applyFilterOnUnrelatedObjects();
+  				photoAlbumFilter.reloadFromDB();
+  				XMLViewKey xmlViewKey = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, PhotoAlbumWebModule.CTXT_UNRELATED_ATTACHMENTS, XMLViewKey.VIEW_DEFAULT);
+  				PhotoAlbum_UnrelatedAttachments_Table centralPanel = (PhotoAlbum_UnrelatedAttachments_Table) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(getMainWindow(), xmlViewKey, photoAlbumFilter);
+  				centralPanel.setAttachmentsList((PhotoAlbumListWithFilter) getFocList());
+  				centralPanel.parseXMLAndBuildGui();
+  				getMainWindow().changeCentralPanelContent(centralPanel, true);
+  			}
+  		});
+  		
+  		tableWrapper.addHeaderComponent_ToLeft(unrelatedAttachmentsButton);
+  	}  		
   }
   
   @Override

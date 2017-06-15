@@ -6,6 +6,9 @@ import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.business.photoAlbum.DocTypeAccessDesc;
 import com.foc.business.photoAlbum.DocumentTypeDesc;
 import com.foc.business.photoAlbum.PhotoAlbumAccessDesc;
+import com.foc.business.photoAlbum.PhotoAlbumAppGroup;
+import com.foc.business.photoAlbum.PhotoAlbumConfig;
+import com.foc.business.photoAlbum.PhotoAlbumConfigDesc;
 import com.foc.business.photoAlbum.PhotoAlbumDesc;
 import com.foc.business.photoAlbum.PhotoAlbumListWithFilter;
 import com.foc.desc.FocObject;
@@ -32,6 +35,7 @@ public class PhotoAlbumWebModule extends FocWebModule {
 	public static final String MENU_CODE_ALL_DOCUMENTS      = "DOCUMENT_TABLE";
 	public static final String MENU_CODE_DOCUMENT_TYPE      = "DOCUMENT_TYPES";
 	public static final String MENU_CODE_DOCUMENT_DASHBOARD = "DOCUMENT_DASHBOARD";
+	public static final String MENU_CODE_CONFIG             = "DOCUMENT_CONFIG";
 	
   public PhotoAlbumWebModule() {
     super(MODULE_NAME, "Document Management");
@@ -46,13 +50,28 @@ public class PhotoAlbumWebModule extends FocWebModule {
 	}
 
   public void declareXMLViewsInDictionary() {
+  	
+  	XMLViewDictionary.getInstance().put(
+  		PhotoAlbumConfigDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_FORM, 
+      XMLViewKey.CONTEXT_DEFAULT, 
+      XMLViewKey.VIEW_DEFAULT, 
+      "/xml/com/foc/photoAlbum/PhotoAlbumConfig_Form.xml", 0, PhotoAlbumConfig_Form.class.getName());
+  	
+  	XMLViewDictionary.getInstance().put(
+  		PhotoAlbumAppGroup.getFocDesc().getStorageName(),
+      XMLViewKey.TYPE_FORM, 
+      XMLViewKey.CONTEXT_DEFAULT, 
+      XMLViewKey.VIEW_DEFAULT, 
+      "/xml/com/foc/photoAlbum/PhotoAlbumAppGroup_Form.xml", 0, PhotoAlbumAppGroup_Form.class.getName());
+  	
   	XMLViewDictionary.getInstance().put(
       DocTypeAccessDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
       "/xml/com/foc/photoAlbum/DocTypeAccess_Table.xml", 0, DocTypeAccess_Table.class.getName());
-  	
+
     XMLViewDictionary.getInstance().put(
       PhotoAlbumDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
@@ -128,6 +147,32 @@ public class PhotoAlbumWebModule extends FocWebModule {
   public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuITem) {
   	FocMenuItem mainMenu = menuTree.pushRootMenu("DOCUMENT_MANAGEMENT", "Document Management");
 
+		if (getFocGroup().getWebModuleRights(MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION) {
+
+	  	FocMenuItem menuItem = mainMenu.pushMenu(MENU_CODE_CONFIG, "Document management configuration");
+	    menuItem.setMenuAction(new IFocMenuItemAction() {
+	    	
+				public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+					INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
+	        XMLViewKey xmlViewKey = new XMLViewKey(PhotoAlbumConfigDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
+	      	ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, PhotoAlbumConfig.getInstance());
+	      	mainWindow.changeCentralPanelContent(centralPanel, true);
+	      }
+				
+	    });
+
+	    if(getFocGroup().getWebModuleRights(MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION){
+		    menuItem = mainMenu.pushMenu(MENU_CODE_DOCUMENT_TYPE, "Document Types");
+		    menuItem.setMenuAction(new IFocMenuItemAction() {
+		      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+		         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
+		         FocList focList = DocumentTypeDesc.getInstance().getFocList();
+		         mainWindow.changeCentralPanelContent_ToTableForFocList(focList);
+		      }
+	      });
+	    }
+		}
+		
   	FocMenuItem menuItem = mainMenu.pushMenu(MENU_CODE_DOCUMENT_DASHBOARD, "Document Dashboard");
     menuItem.setMenuAction(new IFocMenuItemAction() {
     	
@@ -152,17 +197,6 @@ public class PhotoAlbumWebModule extends FocWebModule {
       	mainWindow.changeCentralPanelContent(centralPanel, true);
        }
     });
-    
-    if(getFocGroup().getWebModuleRights(MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION){
-	    menuItem = mainMenu.pushMenu(MENU_CODE_DOCUMENT_TYPE, "Document Types");
-	    menuItem.setMenuAction(new IFocMenuItemAction() {
-	      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
-	         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
-	         FocList focList = DocumentTypeDesc.getInstance().getFocList();
-	         mainWindow.changeCentralPanelContent_ToTableForFocList(focList);
-	      }
-      });
-    }
   }
   
   public static ICentralPanel newAttachmentCentralPanel(INavigationWindow navigationWindow, FocObject focObject){

@@ -7,6 +7,7 @@ import com.foc.business.status.StatusHolderDesc;
 import com.foc.desc.FocObject;
 import com.foc.gui.FColorProvider;
 import com.foc.list.FocList;
+import com.foc.list.FocListElement;
 import com.foc.property.FProperty;
 import com.vaadin.ui.Table;
 
@@ -47,7 +48,18 @@ public class FVTableCellStyleGenerator implements Table.CellStyleGenerator{
 					}
 				}
 				
-				if(tableTreeDelegate.isStatusStyleEnabled()){ 
+				if(tableTreeDelegate.getWrapperLayout() != null && tableTreeDelegate.getWrapperLayout().isAutoRefresh()){
+					FocList focList = getTreeOrTable().getFocList();
+					if(focList != null){
+						FocObject focObject = focList.searchByReference((Integer) itemId);
+						if(focObject != null && focObject.isFreshColor()){
+							style = "notCompletedYet";//We should have a dedicated style.
+							//But this color is good
+						}
+					}
+				}
+				
+				if(tableTreeDelegate.isStatusStyleEnabled()){
 					if(style == null || style.isEmpty()){
 						if(itemId != null){
 							FocList focList = getTreeOrTable().getFocList();

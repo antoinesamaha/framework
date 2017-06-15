@@ -9,6 +9,8 @@ public class PhotoAlbumManagmentModule extends FocModule{
   
   @Override
   public void declareFocObjectsOnce() {
+  	declareFocDescClass(PhotoAlbumConfigDesc.class);
+  	declareFocDescClass(PhotoAlbumAppGroup.class);
     declareFocDescClass(PhotoAlbumDesc.class);
     declareFocDescClass(PhotoAlbumAccessDesc.class);
     declareFocDescClass(DocumentTypeDesc.class);

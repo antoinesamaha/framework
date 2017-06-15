@@ -1,0 +1,6 @@
+<VerticalLayout width="100%" height="-1px" spacing="true" >
+  <ValidationSettings formTitle="Business essentials settings" withApply="true" withAttach="false" withPrint="true" />
+  <GuiField name="USE_SINGLE_GROUP" caption="Single group of users"/>
+  <GuiField name="USE_KEYWORDS" caption="Use Keywords"/>
+</VerticalLayout>
+

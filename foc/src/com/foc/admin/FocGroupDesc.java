@@ -11,6 +11,7 @@
 package com.foc.admin;
 
 import com.foc.Globals;
+import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FStringField;
@@ -49,7 +50,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_GUEST_APPLICABLE           = 15;
   public static final int FLD_STARTUP_MENU               = 16;
   public static final int FLD_ALLOW_REPORT_CREATION      = 17;
-  
+  public static final int FLD_DEFAULT_TITLE              = 18;
   
   public static final int FLD_MENU_RIGHTS_LIST            = 50;
   public static final int FLD_VIEWS_RIGHTS_LIST           = 51;
@@ -95,6 +96,10 @@ public class FocGroupDesc extends FocDesc{
 
     focFld = new FStringField("DESCRIP", "Description", FLD_DESCRIPTION, false, FStringField.DESC_LEN);
     addField(focFld);
+    
+    FObjectField objFld = new FObjectField("DEFAULT_TITLE", "Default title", FLD_DEFAULT_TITLE, WFTitleDesc.getInstance());
+    objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
+    addField(objFld);
     
     focFld = new FStringField("STARTUP_MENU", "Startup Menu", FLD_STARTUP_MENU, false, 150);
     addField(focFld);

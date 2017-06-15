@@ -23,6 +23,7 @@ import com.foc.web.server.session.FocWebSession;
 import com.foc.web.unitTesting.FocUnitDictionary;
 import com.foc.webservice.FocWebService;
 import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.Page;
@@ -30,6 +31,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedHttpSession;
+import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -40,6 +42,7 @@ import com.vaadin.ui.Window;
 @SuppressWarnings("serial")
 @PreserveOnRefresh
 @Theme("focVaadinTheme")
+//@Push(PushMode.MANUAL)
 public abstract class FocWebApplication extends UI {
 
 	private HttpSession httpSession = null;
