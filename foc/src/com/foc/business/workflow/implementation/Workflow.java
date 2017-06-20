@@ -213,6 +213,13 @@ public class Workflow {
 		}
 	}
 
+	public void setSimulation(boolean simul){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		if(workflowDesc != null){
+			getFocObject().setPropertyBoolean(workflowDesc.getFieldID_Simulation(), simul);
+		}
+	}
+
 	public WFStage getCurrentStage(){
 		WorkflowDesc workflowDesc = getWorkflowDesc();
 		if(workflowDesc != null){

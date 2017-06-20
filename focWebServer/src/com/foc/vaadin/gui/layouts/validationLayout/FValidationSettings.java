@@ -19,6 +19,7 @@ public class FValidationSettings {
   public boolean withInternalEmail = true;
   public boolean withViewSelector  = true;
   public boolean withTips          = false;
+  public boolean withStatus        = true;
   public boolean commitData        = true;
   public boolean hasPDFGenerator   = false;
   public boolean hasMSWordGenerator= false;
@@ -161,6 +162,14 @@ public class FValidationSettings {
   	this.withTips = withTips;
   }
 
+  public boolean isWithStatus() {
+  	return withStatus;
+  }
+  
+  public void setWithStatus(boolean withStatus){
+  	this.withStatus= withStatus;
+  }
+  
   public String getTitle() {
     return title != null ? title : "";
   }

@@ -97,6 +97,7 @@ public interface FXML {
   public static final String ATT_WITH_APPLY            		= "withApply"        ;
   public static final String ATT_WITH_SAVE                = "withSave"         ;
   public static final String ATT_WITH_DISCARD          		= "withDiscard"      ;
+  public static final String ATT_WITH_STATUS              = "withStatus"       ;  
   public static final String ATT_DISCARD_LINK          		= "discardLink"      ;
   public static final String ATT_APPLY_LINNK              = "applyLink"        ;
   public static final String ATT_VALUE_COMPUTE_LEVEL      = "computeLevel"     ;

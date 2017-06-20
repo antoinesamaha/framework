@@ -1091,8 +1091,14 @@ public class FVValidationLayout extends HorizontalLayout {
   	
     goBack();
   }
+  
+  public boolean isWithStatus(){
+  	return validationSettings == null || validationSettings.isWithStatus(); 
+  }
+  
   public FVStatusLayout_MenuBar getStatusLayout(boolean createIfNeeded){
-  	if(statusLayout_MenuBar == null && createIfNeeded && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
+  	if(			statusLayout_MenuBar == null && createIfNeeded && isWithStatus() 
+  			&& 	Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
   		
   		if(getCentralPanel() != null && getCentralPanel() instanceof FocXMLLayout){
   			FocXMLLayout xmlLayout = (FocXMLLayout) getCentralPanel();

@@ -1673,6 +1673,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String withApply         = focXmlAttributes.getValue(FXML.ATT_WITH_APPLY);
 				String withSave          = focXmlAttributes.getValue(FXML.ATT_WITH_SAVE);
 				String withDiscard       = focXmlAttributes.getValue(FXML.ATT_WITH_DISCARD);
+				String withStatus        = focXmlAttributes.getValue(FXML.ATT_WITH_STATUS);
 				String discardLink       = focXmlAttributes.getValue(FXML.ATT_DISCARD_LINK);
 				String applyLink         = focXmlAttributes.getValue(FXML.ATT_APPLY_LINNK);
 				String withPrint         = focXmlAttributes.getValue(FXML.ATT_WITH_PRINT);
@@ -1804,12 +1805,16 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				if(withTips != null){
 					if(withTips.equalsIgnoreCase("true")){
 						validationSettings.setWithTips(true);
-					}
-					else{
+					}else{
 						validationSettings.setWithTips(false);
 					}
 				}
 				
+				if(withStatus != null && withStatus.equalsIgnoreCase("false")){
+					validationSettings.setWithStatus(false);
+				}else{
+					validationSettings.setWithStatus(true);
+				}
 
 				addComponentToStack(comp, name, focXmlAttributes);
 			}else if(qName.equals(FXML.TAG_SCREEN_HELP)){
