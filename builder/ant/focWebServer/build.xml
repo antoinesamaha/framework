@@ -35,6 +35,7 @@
 					<pathelement path="${vaadinAddOnJar.EverproTreeGrid}"/>
 					<pathelement path="${vaadinAddOnJar.ContextHelp}"/>
 					<pathelement path="${vaadinAddOnJar.JFreeChartWrapper}"/>
+					<pathelement path="${vaadinAddOn.Network}"/>
 					<pathelement path="${TomcatDir}/${TomcatFile1}"/>
 					<pathelement path="${jFreeChartDir}/${jFreeChartFile1}"/>
 					<pathelement path="${jFreeChartDir}/${jFreeChartFile2}"/>
