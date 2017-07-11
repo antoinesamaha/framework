@@ -6,6 +6,7 @@ import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
+import com.foc.util.Utils;
 
 public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDesc, IWorkflowDesc {
 
@@ -17,6 +18,9 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
   private static final int FLD_SITE_1_SHIFT          = 6;
 
 	private StatusHolderDesc statusHolderDesc = null;
+	
+	private String workflowCode  = null;
+	private String workflowTitle = null;
 	
 	public FocWorkflowDesc(Class focObjectClass, boolean dbResident, String storageName, boolean isKeyUnique) {
 		this(focObjectClass, dbResident, storageName, isKeyUnique, true);
@@ -110,6 +114,9 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 
   @Override
   public String iWorkflow_getTitle() {
+  	if(!Utils.isStringEmpty(workflowTitle)){
+  		return workflowTitle;
+  	}
     return iWorkflow_getDBTitle();
   }
 
@@ -121,5 +128,18 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
   @Override
 	public int iWorkflow_getApprovalMethod() {
   	return WFTransactionConfigDesc.APPROVAL_METHOD_BY_WORKFLOW;
+	}
+
+	public void setWorkflowCode(String workflowCode) {
+		this.workflowCode = workflowCode;
+	}
+
+	public void setWorkflowTitle(String workflowTitle) {
+		this.workflowTitle = workflowTitle;
+	}
+	
+	@Override
+	public String iWorkflow_getDBTitle() {
+		return workflowCode;
 	}
 }

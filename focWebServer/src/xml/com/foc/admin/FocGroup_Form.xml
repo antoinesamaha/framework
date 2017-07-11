@@ -1,4 +1,4 @@
-<VerticalLayout width="98%" margin="true" captionMargin="0">
+<VerticalLayout width="100%" margin="true" captionMargin="0">
     <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
     <HorizontalLayout captionMargin="0" spacing="true">
       <VerticalLayout spacing="true">
@@ -33,8 +33,8 @@
       
     </HorizontalLayout>
     
-    <TabLayout>
-	    <VerticalLayout name="Web Modules">
+    <TabLayout width="100%" margin="true">
+	    <VerticalLayout name="Web Modules" width="100%">
 		    <GuiTable name="MODULES_TABLE" dataPath="GROUP_WEB_MODULE_LIST" width="100%" inLineEditable="true" pageLength="fit" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
 		      <OpenForm containerWindow="same window" />
 		      <TableColumn name="REF" caption="Ref" editable="false" />
@@ -45,7 +45,7 @@
 		    </GuiTable>
 	    </VerticalLayout>
 	    
-	    <VerticalLayout name="Mobile Modules">
+	    <VerticalLayout name="Mobile Modules" width="100%">
 		    <GuiTable name="MOBILE_MODULES_TABLE" dataPath="GROUP_MOBILE_MODULE_LIST" width="100%" inLineEditable="true" height="99%" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
 		      <OpenForm containerWindow="same window" />
 		      <TableColumn name="MODULE_NAME" caption="Module Name" editable="false" />

@@ -127,7 +127,7 @@
 	<property name="vaadinAddOn.GoogleMap_Aid1" value="${vaadinAddOn.Dir}/googleMap/gwt-ajaxloader-1.1.0.jar" />
 	<property name="vaadinAddOn.GoogleMap_Aid2" value="${vaadinAddOn.Dir}/googleMap/gwt-maps-api-3.10.0-alpha-8-SNAPSHOT.jar" />
 
-	<property name="vaadinAddOn.Network" value="${vaadinAddOn.Dir}/visjs-addon-2.0.0.3.jar" />
+	<property name="vaadinAddOn.Network" value="${vaadinAddOn.Dir}/visjs-addon.jar" />
 	
   <!-- JSON -->
   <property name="jsonJAR" value="${vaadinOtherLib.Dir}/json-0.0.20080701.jar" />

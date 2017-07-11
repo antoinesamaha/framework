@@ -1661,6 +1661,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					String captionProperty = dataPath.substring(idOf+1);
 					focXmlAttributes.addAttribute(FXML.ATT_CAPTION_PROPERTY, captionProperty);
 					dataPath = dataPath.substring(0, idOf);
+					focXmlAttributes.addAttribute(FXML.ATT_DATA_PATH, dataPath);
 				}
 			}
 
@@ -2106,7 +2107,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				if(layout != null){
 					layout.parseXMLAndBuildGui();
 					showValidationLayoutForInclude_IfNeeded(layout, layout.getAttributes());
-					layout.setParentLayout(FocXMLLayout.this);//2017-05-04
+//					layout.setParentLayout(FocXMLLayout.this);//2017-05-04
 					String commitStr = layout.getAttributes() != null ? layout.getAttributes().getValue(FXML.ATT_IMPORT_COMMIT_WITH_PARENT) : null;
 					if(commitStr != null && commitStr.toLowerCase().equals("false")){
 						layout.setCommitWithParent(false);

@@ -1055,7 +1055,23 @@ public class FVValidationLayout extends HorizontalLayout {
   	if(!Globals.getApp().checkSession()){
   		FocCentralPanel focCentralPanel = ((AbstractComponent)getCentralPanel()).findAncestor(FocCentralPanel.class);
   		setGoingBackAfterDoneClicked(true);
-	    if(!commit()){
+	    if(!commit() && getCentralPanel() != null){
+	    	//2017-06-29
+	    	//This part is useful in the following case only:
+	    	//1- From a table we open the Form as Popup
+	    	//2- We edit this existing Row and we Apply.
+	    	//In this case the refreshGuiForContainer is not called and thus
+	    	//without these lines we will not see the impact of the changes on the 
+	    	//initial table
+	    	if(getCentralPanel() instanceof FocXMLLayout){
+	    		FocXMLLayout layout = (FocXMLLayout) getCentralPanel();
+	    		if(			layout.getTableTreeThatOpenedThisForm() != null 
+	    				&& 	layout.getTableTreeThatOpenedThisForm().getFocDataWrapper() != null){
+	    			layout.getTableTreeThatOpenedThisForm().getFocDataWrapper().refreshGuiForContainerChanges();
+	    		}
+	    	}
+	    	//-------------------------------
+	    	
 	    	getCentralPanel().goBack(focCentralPanel);
 	    }
   	}

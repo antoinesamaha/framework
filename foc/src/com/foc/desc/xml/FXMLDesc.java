@@ -105,4 +105,12 @@ public interface FXMLDesc {
   
   public static final String ATT_GROUP_BY_FORMULA = "groupByFormula";
   //-------------------------
+  
+  //Group By
+  //-------------------------
+  public static final String TAG_WORKFLOW         = "Workflow";
+  
+  public static final String ATT_WORKFLOW_CODE    = "Code";
+  public static final String ATT_WORKFLOW_TITLE   = "Title";
+  //-------------------------
 }

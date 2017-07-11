@@ -131,7 +131,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 				super.table_DeleteItem(table, focObject);
 			}
 		}
-		focObject.dispose();
+		newObject.dispose();
 	}
 	
 }

@@ -211,6 +211,7 @@ public class FVTableColumn {
     int indexOfSuper = dataPath.indexOf(IFocData.DATA_PATH_SIGN);
     if(captionProp == null && indexOfSuper >= 0){
     	captionProp = dataPath.substring(indexOfSuper+1, dataPath.length());
+    	dataPath = dataPath.substring(0, indexOfSuper);
     }
        
     if (caption == null && dataPath != null && getTableOrTree() != null && getTableOrTree().getFocList() != null) {

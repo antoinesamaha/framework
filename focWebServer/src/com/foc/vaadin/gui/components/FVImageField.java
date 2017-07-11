@@ -188,6 +188,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		refreshImageFromProperty();
 		
 		addComponentAsFirst(embedded);
+		setExpandRatio(embedded, 1);
 		reactToEditable();
 	}
 	
@@ -316,7 +317,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			  imageControlLayout = new HorizontalLayout();
 			  imageControlLayout.setSpacing(true);
 			  imageControlLayout.setWidth("100%");
-			  imageControlLayout.setHeight("100%");
+			  imageControlLayout.setHeight("-1px");
 		    addComponent(imageControlLayout);
 		    setComponentAlignment(imageControlLayout, Alignment.TOP_RIGHT);
 

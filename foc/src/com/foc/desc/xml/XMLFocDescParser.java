@@ -53,7 +53,9 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	xmlFocDesc = declaration.newFocDesc(forcedStorageName);
     	xmlFocDesc.setFocDescParser(this);
     	
+    	//This way of setting a table to workflow is depricated
     	if(getBoolean(att, ATT_WORKFLOW)) xmlFocDesc.initWorkflow();
+    	
     	if(getBoolean(att, ATT_TREE)) xmlFocDesc.setWithObjectTree();
     	boolean dbRes = getBoolean(att, ATT_DB_RESIDENT, true);
     	xmlFocDesc.setDbResident(dbRes);
@@ -70,7 +72,13 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	
     	boolean allowAdaptDataModel = getBoolean(att, ATT_ALLOW_ADAPT_DATA_MODEL, true);
     	xmlFocDesc.setAllowAdaptDataModel(allowAdaptDataModel);
-    	
+    
+    } else if(qName.equals(TAG_WORKFLOW)) {
+    	String workflowCode  = getString(att, ATT_WORKFLOW_CODE);
+    	String workflowTitle = getString(att, ATT_WORKFLOW_TITLE);
+    	xmlFocDesc.initWorkflow();
+    	if(workflowTitle != null) xmlFocDesc.setWorkflowTitle(workflowTitle);
+    	if(workflowCode != null) xmlFocDesc.setWorkflowTitle(workflowCode);
     } else if(qName.equals(TAG_FILTER)) {
     	String onTableName = getString(att, ATT_FILTER_ON_TABLE);
     	if(onTableName != null){
@@ -174,7 +182,11 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     		fld.setKey(isKey(att));
     	}
     } else if (qName.equals(TAG_DESCRIPTION)) {
-    	fld = xmlFocDesc.addDescriptionField();    	
+    	fld = xmlFocDesc.addDescriptionField();  
+    	int size = getSize(att);
+    	if(size > 0){
+    		fld.setSize(size);
+    	}
     } else if (qName.equals(TAG_DATE)) {
     	fld = xmlFocDesc.addDateField();
     } else if (qName.equals(TAG_ORDER)) {

@@ -92,7 +92,7 @@ public class SQLUpdate extends SQLRequest {
 	              	if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) fldName = "\""+fldName+"\"" ;
 		              request.append(fldName + "=");
 		              request.append(prop.getSqlString());
-		              prop.setModifiedFlag(false);//2017-05-31
+		              firstProp.setModifiedFlag(false);//2017-05-31
 		              firstField = false;
 	              }
 	              
