@@ -1,5 +1,7 @@
 package com.foc.desc.xml;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +12,7 @@ import com.foc.business.workflow.implementation.FocWorkflowDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocDescMap;
 import com.foc.desc.FocModule;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.join.FocRequestDesc;
@@ -20,6 +23,8 @@ import com.foc.list.filter.FilterConditionFactory;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.IFocDescForFilter;
 import com.foc.list.filter.ObjectCondition;
+import com.foc.property.FProperty;
+import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.AbstractDataStore;
 import com.foc.util.Utils;
 
@@ -47,6 +52,22 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 	}
 	
 	public void afterXMLParsing(){
+		Method[] declaredMethods = getFocObjectClass().getDeclaredMethods();
+		for(int i=0; i<declaredMethods.length; i++){
+			Method method = declaredMethods[i];
+			if(method.getName().startsWith("propertyChanged_")){
+				String propertyName = method.getName().substring("propertyChanged_".length());
+				if(!Utils.isStringEmpty(propertyName)){
+					FField fld = getFieldByName(propertyName);
+					if(fld != null){
+						Parameter[] params = method.getParameters();
+						if(params.length == 1 && params[0].getType() == FProperty.class){
+							fld.addListener(new PropertyChangedMethodListener(method));
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	@Override
@@ -228,5 +249,32 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 
 	public void setFocDescParser(XMLFocDescParser focDescParser) {
 		this.focDescParser = focDescParser;
+	}
+	
+	public class PropertyChangedMethodListener implements FPropertyListener {
+		private Method method = null;
+		
+		public PropertyChangedMethodListener(Method method){
+			this.method = method;
+		}
+		
+		@Override
+		public void propertyModified(FProperty property) {
+			try{
+				FocObject focObj = property != null ? property.getFocObject() : null;
+				if(focObj != null){
+	        Object[] args = new Object[1];
+	        args[0] = property;
+	        method.invoke(focObj, args);        	
+				}
+			}catch(Exception e){
+				Globals.logException(e);
+			}
+		}
+
+		@Override
+		public void dispose() {
+			method = null;
+		}
 	}
 }
