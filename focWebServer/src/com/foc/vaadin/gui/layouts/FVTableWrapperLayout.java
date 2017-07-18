@@ -1631,6 +1631,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		innerLayout.addComponent((Component) centralPanel);
 		if(centralPanel instanceof FocXMLLayout){
 			((FocXMLLayout)centralPanel).setParentLayout(getFocXMLLayout());
+			//When parent changes the editable status has to be recomputed
+			((FocXMLLayout)centralPanel).refreshEditable();
 		}
 	}
 	

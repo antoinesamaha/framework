@@ -3,6 +3,8 @@
 	<property name="focOfficeLink.prjDir" value="${srcRoot}/${focOfficeLink}"/>
 	<property name="focOfficeLink.srcDir" value="${focOfficeLink.prjDir}/src"/>
 	<property name="focOfficeLink.buildDir" value="${exeRoot}/${appSubDir}/${focOfficeLink}/${buildSubDir}"/>
+	<property name="focOfficeLink.maven" value="${exeRoot}/${focOfficeLink}/maven"/>
+	<property name="focOfficeLink.javadocDir" value="${exeRoot}/javadoc/${focOfficeLink}"/>	
 	<property name="focOfficeLink.classDir" value="${focOfficeLink.buildDir}/${classSubDir}"/>
 	<property name="focOfficeLink.jarDir" value="${focOfficeLink.buildDir}/${jarSubDir}"/>
 	<property name="focOfficeLink.jarFile" value="${focOfficeLink.buildDir}/${jarSubDir}/01b-${focOfficeLink}.jar"/>

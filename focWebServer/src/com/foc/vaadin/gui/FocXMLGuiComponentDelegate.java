@@ -114,7 +114,9 @@ public class FocXMLGuiComponentDelegate {
 	  	//First we check if programatically the FocXMLLayout has been set as not editable
 	    editable = getFocXMLLayout() != null ? getFocXMLLayout().isEditable() : true;
 	    
-	    //check if the Property Value is Locked
+	    //Check if the Property Value is Locked
+	    //1- Either by flag
+	    //2- Or by implementation of getPropertyAccessRight in FocObject
 	  	if(editable){
 		  	IFocData focData = getFocData();
 		  	if(focData instanceof FProperty){

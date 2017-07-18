@@ -135,6 +135,32 @@ public class FocDataDictionary implements IFocDataDictionary {
 			}
 		});
 
+    putParameter("CONVERT_NUMBER_ARABIC_HINDI", new IFocDataResolver() {
+			public Object getValue(IFocData focData, ArrayList<String> arguments) {
+				String value = "";
+
+				try{
+					if(focData != null && arguments != null && arguments.size() == 2){
+						String dataPath = arguments.get(0);
+						
+						FDate prop = (FDate) focData.iFocData_getDataByPath(dataPath);
+						if(prop != null){
+							Date date = (Date) prop.getDate();
+							
+							String format = arguments.get(1);
+							
+							SimpleDateFormat sdf = new SimpleDateFormat(format);
+							value = sdf.format(date);
+						}
+					}
+				}catch(Exception e){
+					Globals.logException(e);
+				}
+				
+				return value;
+			}
+		});
+    
     putParameter("FORMAT_DATE", new IFocDataResolver() {
 			public Object getValue(IFocData focData, ArrayList<String> arguments) {
 				String value = "";

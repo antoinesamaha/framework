@@ -4,6 +4,8 @@
     =====================================================
   -->
 <project name="foc" default="full">
+	<property name="focVersion" value="1.7.1" />
+	
 	<property name="jre" value="true" />
 	<property name="drive_workspace" value="c" />
 	<property name="drive_java" value="c" />
@@ -274,6 +276,7 @@
 		
 		<!-- Copy external Jars in the same ext library making them ready to be copied to web versions-->
 		<!-- This is not needed for the compile -->
+		
     <copy file="${vaadinAddOnJar.DnD}" tofile="${focFramework.packDir}/ext/${vaadinAddOn.DnD}" />
     <copy file="${vaadinJAR1}" tofile="${focFramework.packDir}/ext/${vaadinJAR.FileName1}" />
     <copy file="${vaadinJAR2}" tofile="${focFramework.packDir}/ext/${vaadinJAR.FileName2}" />
@@ -294,6 +297,83 @@
 				excludes="WEB-INF/lib/*.jar"
 			/-->
 	</target>
+
+	<target name="javadocCreate">
+		<javadoc sourcepath="${foc.srcDir}" destdir="${foc.javadocDir}" encoding="UTF-8"/>
+		<javadoc sourcepath="${focAPI.srcDir}" destdir="${focAPI.javadocDir}" encoding="UTF-8"/>
+		<javadoc sourcepath="${focShared.srcDir}" destdir="${focShared.javadocDir}" encoding="UTF-8"/>
+		<javadoc sourcepath="${focWebServer.srcDir}" destdir="${focWebServer.javadocDir}" encoding="UTF-8"/>
+		<javadoc sourcepath="${focDataSource_DB.srcDir}" destdir="${focDataSource_DB.javadocDir}" encoding="UTF-8"/>
+		<javadoc sourcepath="${focOfficeLink.srcDir}" destdir="${focOfficeLink.javadocDir}" encoding="UTF-8"/>			
+		<javadoc sourcepath="${focVaadinTheme.srcDir}" destdir="${focVaadinTheme.javadocDir}" encoding="UTF-8"/>		
+	</target>
+		
+	<target name="javadocMakeJAR">	
+		<javadocMakeJarMacro docDir="${foc.javadocDir}" artifact="foc" />
+		<javadocMakeJarMacro docDir="${focAPI.javadocDir}" artifact="focAPI" />
+		<javadocMakeJarMacro docDir="${focShared.javadocDir}" artifact="focShared" />
+		<javadocMakeJarMacro docDir="${focWebServer.javadocDir}" artifact="focWebServer" />
+		<javadocMakeJarMacro docDir="${focDataSource_DB.javadocDir}" artifact="focDataSource" />
+		<javadocMakeJarMacro docDir="${focOfficeLink.javadocDir}" artifact="focOfficeLink" />
+		<javadocMakeJarMacro docDir="${focVaadinTheme.javadocDir}" artifact="focVaadinTheme" />
+	</target>		
+
+	<target name="javasourceMakeJAR">
+		<javasourceMakeJarMacro srcDir="${foc.srcDir}" artifact="foc" />
+		<javasourceMakeJarMacro srcDir="${focAPI.srcDir}" artifact="focAPI" />
+		<javasourceMakeJarMacro srcDir="${focShared.srcDir}" artifact="focShared" />
+		<javasourceMakeJarMacro srcDir="${focWebServer.srcDir}" artifact="focWebServer" />
+		<javasourceMakeJarMacro srcDir="${focDataSource_DB.srcDir}" artifact="focDataSource" />
+		<javasourceMakeJarMacro srcDir="${focOfficeLink.srcDir}" artifact="focOfficeLink" />
+		<javasourceMakeJarMacro srcDir="${focVaadinTheme.srcDir}" artifact="focVaadinTheme" />
+	</target>
+	
+	<target name="copyPOMFiles">
+		<copy file="foc/pom.xml" tofile="${focFramework.packDir}/foc/foc-${focVersion}.pom" />
+		<copy file="focAPI/pom.xml" tofile="${focFramework.packDir}/focAPI/focAPI-${focVersion}.pom" />
+		<copy file="focDataSource_DB/pom.xml" tofile="${focFramework.packDir}/focDataSource/focDataSource-${focVersion}.pom" />
+		<copy file="focOfficeLink/pom.xml" tofile="${focFramework.packDir}/focOfficeLink/focOfficeLink-${focVersion}.pom" />
+		<copy file="focShared/pom.xml" tofile="${focFramework.packDir}/focShared/focShared-${focVersion}.pom" />
+		<copy file="focVaadinTheme/pom.xml" tofile="${focFramework.packDir}/focVaadinTheme/focVaadinTheme-${focVersion}.pom" />
+		<copy file="focWebServer/pom.xml" tofile="${focFramework.packDir}/focWebServer/focWebServer-${focVersion}.pom" />		
+	</target>
+
+	<target name="copyJARFiles">
+		<copy file="${focFramework.packDir}/jar/foc.jar" tofile="${focFramework.packDir}/foc/foc-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focAPI.jar" tofile="${focFramework.packDir}/focAPI/focAPI-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focDataSource.jar" tofile="${focFramework.packDir}/focDataSource/focDataSource-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focOfficeLink.jar" tofile="${focFramework.packDir}/focOfficeLink/focOfficeLink-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focShared.jar" tofile="${focFramework.packDir}/focShared/focShared-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focVaadinTheme.jar" tofile="${focFramework.packDir}/focVaadinTheme/focVaadinTheme-${focVersion}.jar" />
+		<copy file="${focFramework.packDir}/jar/focWebServer.jar" tofile="${focFramework.packDir}/focWebServer/focWebServer-${focVersion}.jar" />		
+	</target>
+			
+	<target name="mavenGen">
+		<ant target="copyJARFiles" />
+		<ant target="javadocMakeJAR" />
+		<ant target="javasourceMakeJAR" />
+		<ant target="copyPOMFiles" />
+	</target>
+	
+	<macrodef name="javasourceMakeJarMacro">
+		<attribute name="srcDir" default="NOT_SET"/>
+		<attribute name="artifact" default="NOT_SET"/>
+		<sequential>
+		  <jar jarfile="${focFramework.packDir}/@{artifact}/@{artifact}-${focVersion}-sources.jar">
+		    <fileset dir="@{srcDir}" />
+		  </jar>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="javadocMakeJarMacro">
+		<attribute name="docDir" default="NOT_SET"/>
+		<attribute name="artifact" default="NOT_SET"/>
+		<sequential>
+		  <jar jarfile="${focFramework.packDir}/@{artifact}/@{artifact}-${focVersion}-javadoc.jar">
+		    <fileset dir="@{docDir}" />
+		  </jar>
+		</sequential>
+	</macrodef>
 	
 	<!--
 	    =====================================================

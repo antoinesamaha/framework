@@ -3,6 +3,8 @@
 	<property name="focVaadinTheme.prjDir" value="${srcRoot}/focVaadinTheme"/>
 	<property name="focVaadinTheme.srcDir" value="${focVaadinTheme.prjDir}/src"/>
 	<property name="focVaadinTheme.buildDir" value="${exeRoot}/${appSubDir}/${focVaadinTheme}/${buildSubDir}"/>
+	<property name="focVaadinTheme.maven" value="${exeRoot}/${focVaadinTheme}/maven"/>
+	<property name="focVaadinTheme.javadocDir" value="${exeRoot}/javadoc/${focVaadinTheme}"/>	
 	<property name="focVaadinTheme.classDir" value="${focVaadinTheme.buildDir}/${classSubDir}"/>
 	<property name="focVaadinTheme.jarDir" value="${focVaadinTheme.buildDir}/${jarSubDir}"/>
 	<property name="focVaadinTheme.jarFile" value="${focVaadinTheme.buildDir}/${jarSubDir}/01b-${focVaadinTheme}.jar"/>

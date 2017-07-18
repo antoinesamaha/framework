@@ -3,6 +3,8 @@
 	<property name="focAPI.prjDir" value="${srcRoot}/focAPI"/>
 	<property name="focAPI.srcDir" value="${focAPI.prjDir}/src"/>
 	<property name="focAPI.buildDir" value="${exeRoot}/${appSubDir}/${focAPI}/${buildSubDir}"/>
+	<property name="focAPI.maven" value="${exeRoot}/${focAPI}/maven"/>
+	<property name="focAPI.javadocDir" value="${exeRoot}/javadoc/${focAPI}"/>
 	<property name="focAPI.classDir" value="${focAPI.buildDir}/${classSubDir}"/>
 	<property name="focAPI.jarDir" value="${focAPI.buildDir}/${jarSubDir}"/>
 	<property name="focAPI.jarFile" value="${focAPI.buildDir}/${jarSubDir}/01b-${focAPI}.jar"/>

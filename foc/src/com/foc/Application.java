@@ -1254,7 +1254,7 @@ public class Application {
 		  		//Adding the Workflow and LOG Table
 		  		if(focDesc instanceof XMLFocDesc){
 		  			XMLFocDesc xmlFocDesc = (XMLFocDesc) focDesc;
-		  			if(xmlFocDesc.iWorkflow_getWorkflowDesc() != null){
+		  			if(xmlFocDesc.iWorkflow_getWorkflowDesc() != null && !xmlFocDesc.hasJoinNode()){
 		  				FocDescDeclaration_XMLBased_WFLog logDeclaration = new FocDescDeclaration_XMLBased_WFLog(xmlFocDesc);
 		  				logDeclaration.getFocDescription();
 		  				newDeclarations.add(logDeclaration);

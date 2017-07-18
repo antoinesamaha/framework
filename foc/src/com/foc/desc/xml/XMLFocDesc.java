@@ -136,6 +136,14 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
   	return join;
   }
 	
+	//Is we want to check if isJoin() before the FocRequestDesc construction
+	public boolean hasJoinNode(){
+		boolean has = false;
+		Iterator<XMLJoin> iter = focDescParser != null ? focDescParser.newJoinIterator() : null;
+		has = iter != null && iter.hasNext();
+		return has;
+	}
+	
 	public boolean isListInTableEditable(){
 		return listInTableEditable;
 	}

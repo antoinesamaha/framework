@@ -66,10 +66,15 @@ public class WFLogDesc extends FocDesc {
 		objFld.setComboBoxCellEditor(FField.REF_FIELD_ID);
 		objFld.setWithList(false);
 		FReferenceField refFld = (FReferenceField) masterFocDesc.getFieldByID(FField.REF_FIELD_ID);
-		if(refFld.getName() != FField.REF_FIELD_NAME){
-			objFld.setForcedDBName("MASTER_"+refFld.getName());
+		if(refFld != null){
+			if(refFld.getName() != FField.REF_FIELD_NAME){
+				objFld.setForcedDBName("MASTER_"+refFld.getName());
+			}
+			addField(objFld);
+		}else{
+			int debug = 3;
+			debug++;
 		}
-		addField(objFld);
 		
 		FMultipleChoiceField mFld = new FMultipleChoiceField("EVENT_TYPE", "Event Type", FLD_EVENT_TYPE, false, 2);
 		mFld.addChoice(EVENT_NONE, "none");

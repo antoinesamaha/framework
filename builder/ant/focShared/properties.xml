@@ -3,6 +3,8 @@
 	<property name="focShared.prjDir" value="${srcRoot}/focShared"/>
 	<property name="focShared.srcDir" value="${focShared.prjDir}/src"/>
 	<property name="focShared.buildDir" value="${exeRoot}/${appSubDir}/${focShared}/${buildSubDir}"/>
+	<property name="focShared.maven" value="${exeRoot}/${focShared}/maven"/>
+	<property name="focShared.javadocDir" value="${exeRoot}/javadoc/${focShared}"/>	
 	<property name="focShared.classDir" value="${focShared.buildDir}/${classSubDir}"/>
 	<property name="focShared.jarDir" value="${focShared.buildDir}/${jarSubDir}"/>
 	<property name="focShared.jarFile" value="${focShared.buildDir}/${jarSubDir}/01b-${focShared}.jar"/>

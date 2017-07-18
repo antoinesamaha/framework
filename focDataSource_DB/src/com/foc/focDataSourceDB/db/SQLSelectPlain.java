@@ -243,10 +243,10 @@ public class SQLSelectPlain extends SQLRequest {
       if (loadMode == LOAD_IN_EXISTING_LIST) {
         FocConstructor constr = new FocConstructor(focDesc, null, focList.getMasterObject());
         tempObject = constr.newItem();
-//        if(tempObject == null){
-//        	int debug = 2;
-//        	tempObject = constr.newItem();
-//        }
+        if(tempObject == null){
+        	int debug = 2;
+        	tempObject = constr.newItem();
+        }
         tempObject.setDbResident(false);
       }
       
