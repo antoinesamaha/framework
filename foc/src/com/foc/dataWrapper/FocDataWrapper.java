@@ -175,6 +175,11 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     }
   }
   
+  public void removeSiteFilter(){
+    siteFieldID_1 = FField.NO_FIELD_ID;
+    siteFieldID_2 = FField.NO_FIELD_ID;
+  }
+  
   public void refreshGuiForContainerChanges(){
   	refreshGuiForContainerChanges(null);
   }
