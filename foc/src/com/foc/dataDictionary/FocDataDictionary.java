@@ -135,22 +135,42 @@ public class FocDataDictionary implements IFocDataDictionary {
 			}
 		});
 
-    putParameter("CONVERT_NUMBER_ARABIC_HINDI", new IFocDataResolver() {
+    putParameter("TO_ARABIC", new IFocDataResolver() {
 			public Object getValue(IFocData focData, ArrayList<String> arguments) {
 				String value = "";
 
 				try{
-					if(focData != null && arguments != null && arguments.size() == 2){
+					if(focData != null && arguments != null && arguments.size() == 1){
 						String dataPath = arguments.get(0);
 						
-						FDate prop = (FDate) focData.iFocData_getDataByPath(dataPath);
+						FProperty prop = (FProperty) focData.iFocData_getDataByPath(dataPath);
 						if(prop != null){
-							Date date = (Date) prop.getDate();
-							
-							String format = arguments.get(1);
-							
-							SimpleDateFormat sdf = new SimpleDateFormat(format);
-							value = sdf.format(date);
+							String toConvert = prop.getString();
+
+							char[] arabicChars = { '٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩' };
+
+							StringBuilder builder = new StringBuilder();
+
+							for(int i = 0; i < toConvert.length(); i++){
+								char c = toConvert.charAt(i);
+								if(Character.isDigit(c)){
+									if(((int) (c) - 48) >= 0 && ((int) (c) - 48) <= 9){
+										builder.append(arabicChars[(int) (c) - 48]);
+									}else{
+										builder.append(c);
+									}
+								}else{
+									if(c == '('){
+										builder.append(')');
+									}else if(c == ')'){
+										builder.append('(');
+									}else{
+										builder.append(c);
+									}
+								}
+							}
+
+							value = builder.toString();							
 						}
 					}
 				}catch(Exception e){
