@@ -24,11 +24,19 @@ public abstract class FocObjectNetwork<FO extends FocObject> {
 		return network;
 	}
 	
+	public static String getID(String storage, int ref){
+		return storage+"|"+ref;
+	}
+	
 	public static String getID(FocObject object){
-		return object != null ? object.getThisFocDesc().getStorageName()+"|"+object.getReferenceInt() : null;
+		return object != null ? getID(object.getThisFocDesc().getStorageName(),object.getReferenceInt()) : null;
 	}
 	
 	public static Node newNode(FocObject focObject, String caption, String iconName){
 		return new Node(getID(focObject), caption, "VAADIN/themes/fenix/custom/isf/"+iconName);
+	}
+	
+	public static Node newNode(String storage, int ref, String caption, String iconName){
+		return new Node(getID(storage, ref), caption, "VAADIN/themes/fenix/custom/isf/"+iconName);
 	}
 }
