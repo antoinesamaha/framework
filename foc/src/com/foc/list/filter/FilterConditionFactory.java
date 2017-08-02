@@ -28,6 +28,9 @@ public class FilterConditionFactory {
 		case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
 			condition = new ObjectCondition(dateFieldPath, fieldPrefix);
 			break;			
+		case FieldDefinition.SQL_TYPE_ID_INT:
+			condition = new IntegerCondition(dateFieldPath, fieldPrefix);
+			break;			
 		}
 		
 		return condition;

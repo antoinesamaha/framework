@@ -2,6 +2,7 @@ package com.foc.desc.field;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -71,6 +72,11 @@ public class FMultipleChoiceStringField extends FStringField {
 			setChoicesArrayList(arrayList);
 			if(isNeedRefresh()){
 				setNeedRefresh(false);
+			}
+			try{
+				Collections.sort(arrayList);
+			}catch(Exception e){
+				Globals.logException(e);
 			}
 			for(int i=0; i<arrayList.size(); i++){
 				addChoice((String)arrayList.get(i));

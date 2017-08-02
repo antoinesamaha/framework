@@ -8,6 +8,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.business.workflow.WFSiteDesc;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FCompanyField;
@@ -187,6 +188,9 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	if(size > 0){
     		fld.setSize(size);
     	}
+    } else if (qName.equals(TAG_SITE)) {
+    	fld = WFSiteDesc.newSiteField(xmlFocDesc, FField.FNAME_SITE, xmlFocDesc.nextFldID(), FField.NO_FIELD_ID);
+    	xmlFocDesc.addField(fld);
     } else if (qName.equals(TAG_DATE)) {
     	fld = xmlFocDesc.addDateField();
     } else if (qName.equals(TAG_ORDER)) {

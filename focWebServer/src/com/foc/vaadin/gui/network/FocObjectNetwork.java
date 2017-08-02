@@ -13,7 +13,15 @@ public abstract class FocObjectNetwork<FO extends FocObject> {
 	
 	public FocObjectNetwork(FO focObject, FocNetwork 	network){
 		this.focObject = focObject;
-		this.network = network;
+		this.network   = network;
+	}
+	
+	public void dispose(){
+		focObject = null;
+		if(network != null){
+			network.dispose();
+			network = null;
+		}
 	}
 	
 	public FO getFocObject(){
@@ -22,21 +30,5 @@ public abstract class FocObjectNetwork<FO extends FocObject> {
 	
 	public FocNetwork getNetwork(){
 		return network;
-	}
-	
-	public static String getID(String storage, int ref){
-		return storage+"|"+ref;
-	}
-	
-	public static String getID(FocObject object){
-		return object != null ? getID(object.getThisFocDesc().getStorageName(),object.getReferenceInt()) : null;
-	}
-	
-	public static Node newNode(FocObject focObject, String caption, String iconName){
-		return new Node(getID(focObject), caption, "VAADIN/themes/fenix/custom/isf/"+iconName);
-	}
-	
-	public static Node newNode(String storage, int ref, String caption, String iconName){
-		return new Node(getID(storage, ref), caption, "VAADIN/themes/fenix/custom/isf/"+iconName);
 	}
 }

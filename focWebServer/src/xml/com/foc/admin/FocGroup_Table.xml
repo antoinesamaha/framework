@@ -1,4 +1,4 @@
-<VerticalLayout width="100%"  >
+<VerticalLayout width="100%"  margin="true" >
     <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
     <GuiTable title="User Groups" name="TABLE" dataPath="DATAROOT" >
         <OpenForm containerWindow="same window" />

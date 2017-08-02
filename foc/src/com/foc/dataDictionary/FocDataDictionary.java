@@ -481,17 +481,21 @@ public class FocDataDictionary implements IFocDataDictionary {
 	  @Override
     public String handleFieldOrParameter(String expression, char type, int startIndex, int endIndex, String fieldOfParameter, ArrayList<String> args) {
       String keyReplacement = null;
-      
-      Object value = null;
-      if(type == 'P'){
-        value = getValue(focData, fieldOfParameter, args);
-      }else if(focData != null){
-      	value = getValue_WithTableDisplayObjectCall(focData, fieldOfParameter);
-      }
-      if(value instanceof String){
-        keyReplacement = (String) value;
-      }else if(value instanceof Double){
-      	keyReplacement = ((Double) value).toString();
+
+      try{
+	      Object value = null;
+	      if(type == 'P'){
+	        value = getValue(focData, fieldOfParameter, args);
+	      }else if(focData != null){
+	      	value = getValue_WithTableDisplayObjectCall(focData, fieldOfParameter);
+	      }
+	      if(value instanceof String){
+	        keyReplacement = (String) value;
+	      }else if(value instanceof Double){
+	      	keyReplacement = ((Double) value).toString();
+	      }
+      }catch(Exception e){
+      	Globals.logException(e);
       }
       
       if(keyReplacement == null && isReplaceWithEmptyStringWhenUnknown()) keyReplacement = "";

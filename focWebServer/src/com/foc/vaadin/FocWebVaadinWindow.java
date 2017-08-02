@@ -96,7 +96,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		super();
 		fill();
 		fillMainWindow();
-		
+
 		//Case: Guest User opens a 2nd TAB
 		//If we do not have this line, the 2nd tab will open the normal Home. Which we do not want.
 		//For the First TAB the situation is different because it comes after the login, and in the login form we have a call for this method.

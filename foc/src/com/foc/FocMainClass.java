@@ -6,7 +6,6 @@ import com.fab.FabModule;
 import com.fab.parameterSheet.ParameterSheetFactory;
 import com.foc.admin.FocGroup;
 import com.foc.admin.defaultappgroup.DefaultAppGroupDesc;
-import com.foc.bsp.CodeMeterChecker;
 import com.foc.bsp.IProduct;
 import com.foc.business.BusinessModule;
 import com.foc.business.calendar.CalendarModule;
@@ -37,9 +36,12 @@ public class FocMainClass {
 	}
 	
 	public boolean accessContinueInits(){
-		return CodeMeterChecker.allowAccess();//CodeMeterChecker.allowAccess(CCCProduct.ESTIMATION);
+		return true;
 	}
-	
+
+	protected void accessContinueInits2(){
+	}
+
 	protected IProduct newProduct(){
 		return null;
 	}
@@ -50,7 +52,7 @@ public class FocMainClass {
     	boolean noGUI = argsHash.get("IS_SERVER") != null;
     	boolean noLicense = argsHash.get("nol") != null;
     	if(noLicense) ConfigInfo.setWithLicenseBooking(false);
-    	CodeMeterChecker.getInstance(newProduct());
+    	accessContinueInits2();
     	if(accessContinueInits()){
 	      //CodeMeterChecker.getInstance().updateCertifiedTime();    		
     		Locale englishLocale = Locale.ENGLISH;
@@ -58,7 +60,7 @@ public class FocMainClass {
     		BusinessModule.getInstance().setMultiCompany(true);
     		
 	      app = Globals.newApplication(true, true, noGUI ? DisplayManager.GUI_NAVIGATOR_NONE : DisplayManager.GUI_NAVIGATOR_MDI, args);
-	      if(CodeMeterChecker.allowAccess()){
+	      if(accessContinueInits()){
 		      declareModules(app);
 	    	}
     	}
@@ -87,9 +89,6 @@ public class FocMainClass {
 	  try {
     	if(accessContinueInits()){
     		app.entry();
-    		if(CodeMeterChecker.isServer() && Globals.getDisplayManager() != null){
-    			Globals.getDisplayManager().popupMessage("Your system is not protected correctly please contact 01Barmaja!");
-    		}
     		//fillDesktopGraphicalMenu();
     	}
     } catch (Exception e) {

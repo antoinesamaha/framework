@@ -288,15 +288,19 @@ $v-table-header-background-color: #ff0000;
     /*margin: 5px;*/
   }
   
-/*  
+  /*  
   .v-ui > .v-widget {
     overflow-y: visible;
   }
   */
 
   .focMargin {
+    /*
     padding: 3px;
     margin: 3px;
+    */
+    padding: 5px;
+    margin: 0px;
   }
   
   .foc-normal {

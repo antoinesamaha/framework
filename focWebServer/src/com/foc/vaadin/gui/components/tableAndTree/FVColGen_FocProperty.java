@@ -348,7 +348,8 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 							lbl.addStyleName("foc-cellComment-left");
 //							lbl.setLocale(new Locale("ar"));
 							StringBuffer buff = new StringBuffer(ttt.substring(0, maxCharacters));
-							buff.append("...؟");
+//							buff.append("...؟");
+							buff.append("...");
 							lbl.setValue(buff.toString());
 						}else{
 							lbl.addStyleName("foc-cellComment-right");

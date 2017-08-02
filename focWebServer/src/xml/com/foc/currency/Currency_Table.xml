@@ -1,6 +1,6 @@
-<VerticalLayout >
+<VerticalLayout margin="true" width="100%" height="-1px">
   <ValidationSettings formTitle="Currencies" withApply="true" withAttach="true" withPrint="true" />
-  <GuiTable name="CURRENCY_TABLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" checkBox="true" inLineEditable="true" >
+  <GuiTable name="CURRENCY_TABLE" dataPath="DATAROOT" caption="" width="100%" height="300px" checkBox="true" inLineEditable="true" margin="true" >
     <TableColumn name="NAME" caption="Name" />
     <TableColumn name="DESCRIP" caption="Description" />
     <TableColumn name="RATE_MODE" caption="Rate mode" />

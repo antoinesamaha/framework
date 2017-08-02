@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.StringTokenizer;
 
 import com.foc.Globals;
-import com.foc.bsp.ISecuredValue;
 import com.foc.formula.function.Function;
 import com.foc.tree.FNode;
 

@@ -4,11 +4,10 @@ import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.map.WFStageDesc;
 import com.foc.desc.FocDesc;
-import com.foc.desc.field.FBoolField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 

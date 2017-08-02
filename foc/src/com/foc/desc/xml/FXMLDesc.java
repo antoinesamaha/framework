@@ -26,6 +26,7 @@ public interface FXMLDesc {
   public static final String TAG_DATE          = "DATE";
   public static final String TAG_DESCRIPTION   = "DESCRIPTION";
   public static final String TAG_NAME          = "NAME";
+  public static final String TAG_SITE          = "SITE";
   public static final String TAG_ORDER         = "ORDER";
   public static final String TAG_NOT_COMPLETED = "NOT_COMPLETED";
   public static final String TAG_IS_SYSTEM     = "IS_SYSTEM";
