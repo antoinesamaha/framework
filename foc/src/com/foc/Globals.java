@@ -401,13 +401,17 @@ public class Globals{
   public static void setEmailSender(IEMailSender ieMailSender ){
   	emailSender = ieMailSender;
   }
-  
+
   public static void showNotification(String notificationMessage, String description, int notificationType){
+  	showNotification(notificationMessage, description, notificationType, -1);
+  }
+  
+  public static void showNotification(String notificationMessage, String description, int notificationType, int delay){
     if(Globals.getDisplayManager() != null){
       Globals.getDisplayManager().popupMessage(notificationMessage+"-"+description);
     }else if(getIFocNotification() != null){
   		Globals.logString("SHOW_NOTIFICATION:"+notificationMessage+"-"+description);    		
-  		getIFocNotification().showNotification(notificationMessage, description, notificationType);
+  		getIFocNotification().showNotification(notificationMessage, description, notificationType, delay);
     }
   }
   

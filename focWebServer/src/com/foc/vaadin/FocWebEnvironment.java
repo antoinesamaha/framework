@@ -30,7 +30,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Window;
 
-public class FocWebEnvironment implements IFocEnvironment{
+public class FocWebEnvironment implements IFocEnvironment {
 	
 	private String themeName = FocVaadinTheme.THEME_NAME;
 	
@@ -45,6 +45,11 @@ public class FocWebEnvironment implements IFocEnvironment{
 
   @Override
   public void showNotification(String notificationMessage, String description, int notificationType) {
+  	showNotification(notificationMessage, description, notificationType, -1);
+  }
+  
+  @Override
+  public void showNotification(String notificationMessage, String description, int notificationType, int delay) {
   	try{
 	  	if(Globals.getApp() != null && Globals.getApp().isUnitTest() && FocUnitDictionary.getInstance() != null){
 	  		FocUnitDictionary.getInstance().expectedNotification_Occured(notificationMessage, description, notificationType);
@@ -65,7 +70,7 @@ public class FocWebEnvironment implements IFocEnvironment{
 	  				type = Notification.Type.TRAY_NOTIFICATION;
 	  			}
 	  			Notification notification = new Notification(notificationMessage, description, type);
-	  			notification.setDelayMsec(-1);
+	  			notification.setDelayMsec(delay);
 	  			if(Page.getCurrent() != null){
 	  				notification.show(Page.getCurrent());
 	  			}

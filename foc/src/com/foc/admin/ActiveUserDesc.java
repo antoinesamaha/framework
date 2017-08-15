@@ -24,7 +24,8 @@ public class ActiveUserDesc extends FocDesc{
 	public final static int FLD_USER             =  1;
 	public final static int FLD_COMPANY          =  2;
 	public final static int FLD_LAST_HEART_BEAT  =  3;
-	
+	public final static int FLD_SITE             =  4;
+	public final static int FLD_TITLE            =  5;
 
   public static final String DB_TABLE_NAME = "ACTIVE_USER";
   

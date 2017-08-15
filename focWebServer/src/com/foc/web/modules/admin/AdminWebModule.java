@@ -29,6 +29,8 @@ import com.foc.admin.userModuleAccess.UserModuleList;
 import com.foc.business.adrBook.ContactDesc;
 import com.foc.business.company.Company;
 import com.foc.business.multilanguage.LanguageDesc;
+import com.foc.business.workflow.WFSite;
+import com.foc.business.workflow.WFTitle;
 import com.foc.db.migration.MigFieldMapDesc;
 import com.foc.db.migration.MigrationSourceDesc;
 import com.foc.desc.AutoPopulatable;
@@ -512,6 +514,8 @@ public class AdminWebModule extends FocWebModule {
           	FocUser user = app.getFocWebSession().getFocUser();
           	if(user != null){
 	          	Company company = user.getCurrentCompany();
+	          	WFSite  site    = user.getCurrentSite();
+	          	WFTitle title   = user.getCurrentTitle();
 	          	ActiveUser activeUser = (ActiveUser) list.newEmptyItem();
 	          	activeUser.setUserCompany(company);
 	          	activeUser.setUser(user);
