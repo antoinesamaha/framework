@@ -72,7 +72,15 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   	delegateOwner = true;
   	setAttributes(attributes);
   	setFocData(objProperty);
-  	setFilteringMode(FilteringMode.CONTAINS);
+  	
+  	if(			attributes != null 
+  			&& 	attributes.getValue(FXML.ATT_FILTERING_MODE) != null
+  			&& 	attributes.getValue(FXML.ATT_FILTERING_MODE).equals(FXML.VAL_FILTERING_MODE_STARTS_WITH)
+  			){
+  		setFilteringMode(FilteringMode.STARTSWITH);
+  	}else{
+  		setFilteringMode(FilteringMode.CONTAINS);
+  	}
   	init();
   }
   

@@ -1,14 +1,11 @@
 package com.foc.vaadin.gui.components;
 
-import java.nio.charset.CharsetEncoder;
-
 import org.xml.sax.Attributes;
 
-import com.foc.desc.FocObject;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FNumField;
+import com.foc.desc.field.FStringField;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -158,7 +155,7 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 
   @Override
   public void setValue(String newValue) throws ReadOnlyException, Converter.ConversionException {
-    if(getFocData() != null && getFocData() instanceof FProperty && ((FProperty)getFocData()).getAccessRight() == FocObject.PROPERTY_RIGHT_NONE){
+    if(getDelegate() != null && getDelegate().hasNoRight()){// getFocData() != null && getFocData() instanceof FProperty && ((FProperty)getFocData()).getAccessRight() == FocObject.PROPERTY_RIGHT_NONE){
     	super.setValue(FField.NO_RIGHTS_STRING);
     }else{
     	super.setValue(newValue);
@@ -187,8 +184,11 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 	@Override
   public boolean copyGuiToMemory() {
 	  if(focData instanceof FProperty){
-	  	String val = getValue();
-	  	((FProperty)focData).setString(val);
+	  	if(getDelegate() == null || !getDelegate().hasNoRight()){
+		  	String val = getValue();
+		  	((FProperty)focData).setString(val);
+	  	}	  	
+	  	
 //	  	if(true){
 //	  		setDescription(val);
 //	  	}

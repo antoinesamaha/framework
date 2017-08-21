@@ -35,6 +35,13 @@ public class FocXMLGuiComponentDelegate {
     parentComponent = null;
   }
   
+  public boolean hasNoRight(){
+    if(getFocData() != null && getFocData() instanceof FProperty && ((FProperty)getFocData()).getAccessRight() == FocObject.PROPERTY_RIGHT_NONE){
+    	return true;
+    }
+    return false;
+  }
+  
   public String getNameFromAttributes(){
   	String name = null;
   	if(component != null){

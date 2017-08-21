@@ -21,7 +21,8 @@ public interface IFocEnvironment {
   public String      getThemeName();
   public void        setNotificationsEnabled(boolean enabled);
   public void        showNotification(String notificationMessage, String description, int notificationType);
-  public void        showNotification(String notificationMessage, String description, int notificationType, int delay);
+//  public void        showNotification(String notificationMessage, String description, int notificationType, int delay);
+  public void        showNotification(String notificationMessage, String description, int notificationType, int delay, String styleName);
   public void        popup(FocObject focObject, boolean dialog);
   public void        popup(IFocData focData, boolean dialog, String storageName, int type, String context, String view);
   public UserSession getUserSession();

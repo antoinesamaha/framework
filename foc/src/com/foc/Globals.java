@@ -403,15 +403,15 @@ public class Globals{
   }
 
   public static void showNotification(String notificationMessage, String description, int notificationType){
-  	showNotification(notificationMessage, description, notificationType, -1);
+  	showNotification(notificationMessage, description, notificationType, -1, null);
   }
   
-  public static void showNotification(String notificationMessage, String description, int notificationType, int delay){
+  public static void showNotification(String notificationMessage, String description, int notificationType, int delay, String style){
     if(Globals.getDisplayManager() != null){
       Globals.getDisplayManager().popupMessage(notificationMessage+"-"+description);
     }else if(getIFocNotification() != null){
   		Globals.logString("SHOW_NOTIFICATION:"+notificationMessage+"-"+description);    		
-  		getIFocNotification().showNotification(notificationMessage, description, notificationType, delay);
+  		getIFocNotification().showNotification(notificationMessage, description, notificationType, delay, style);
     }
   }
   

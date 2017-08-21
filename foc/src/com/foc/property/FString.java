@@ -9,6 +9,7 @@ import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 
 /**
  * @author Standard
@@ -147,8 +148,11 @@ public class FString extends FProperty implements Cloneable{
   
     Object displayObj = null;
     String realValue = getString();
-    
-    displayObj = realValue;
+    if(hasNoRight()){
+    	displayObj = FField.NO_RIGHTS_STRING;
+    }else{
+    	displayObj = realValue;
+    }
     
     return displayObj;
   }

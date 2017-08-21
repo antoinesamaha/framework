@@ -501,11 +501,15 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   	}
     return getTableDisplayObject(format);
   }
+
+  protected boolean hasNoRight(){
+  	FField fld = getFocField();
+  	return (fld != null && fld.isNoRights()) || getAccessRight() == FocObject.PROPERTY_RIGHT_NONE;
+  }
   
   public Object getTableDisplayObject(Format format) {
   	Object obj = getObject();
-  	FField fld = getFocField();
-  	if(fld != null && fld.isNoRights()){
+  	if(hasNoRight()){ 
   		obj = FField.NO_RIGHTS_STRING;
   	}
     return obj;

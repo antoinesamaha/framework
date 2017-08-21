@@ -17,7 +17,7 @@ public interface FXML {
   public static final String TAG_HTML_TABLE               = "HtmlTable"        ;
   public static final String TAG_TREE                  		= "GuiTree"          ;
   public static final String TAG_TREE_GRID                = "TreeGrid"         ;
-  public static final String TAG_TABLE_GRID               = "TableGrid"         ;
+  public static final String TAG_TABLE_GRID               = "TableGrid"        ;
   public static final String TAG_PIVOT                 		= "GuiPivot"         ;
   public static final String TAG_QR_CODE	                = "QRCode"           ;
   public static final String TAG_BAR_CODE	                = "BarCode"          ;
@@ -253,7 +253,10 @@ public interface FXML {
   public static final String ATT_AUTOCOMPLETE              = "autoComplete"       ;
   public static final String ATT_DIRECTION                 = "direction"          ;
   public static final String VAL_DIRECTION_HORIZONTAL      = "horizontal"         ;
-
+  public static final String ATT_FILTERING_MODE            = "filteringMode"      ;
+  public static final String VAL_FILTERING_MODE_STARTS_WITH= "startsWith"         ;
+  public static final String VAL_FILTERING_MODE_CONTAINS   = "contains"           ;
+  
   public static final String ATT_TEXT_AREA                 = "textArea"           ;
   public static final String ATT_FORMAT                    = "format"             ;
   public static final String ATT_REQUIRED                  = "required"           ;

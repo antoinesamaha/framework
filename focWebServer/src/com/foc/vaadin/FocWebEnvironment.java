@@ -18,6 +18,7 @@ import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.dataStore.IFocDataDictionary;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.windows.optionWindow.IOption;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.admin.AdminWebModule;
@@ -45,11 +46,16 @@ public class FocWebEnvironment implements IFocEnvironment {
 
   @Override
   public void showNotification(String notificationMessage, String description, int notificationType) {
-  	showNotification(notificationMessage, description, notificationType, -1);
+  	showNotification(notificationMessage, description, notificationType, -1, null);
   }
   
+//  @Override
+//  public void showNotification(String notificationMessage, String description, int notificationType, int delay) {
+//  	showNotification(notificationMessage, description, notificationType, delay, null);  	
+//  }
+  
   @Override
-  public void showNotification(String notificationMessage, String description, int notificationType, int delay) {
+  public void showNotification(String notificationMessage, String description, int notificationType, int delay, String styleName) {
   	try{
 	  	if(Globals.getApp() != null && Globals.getApp().isUnitTest() && FocUnitDictionary.getInstance() != null){
 	  		FocUnitDictionary.getInstance().expectedNotification_Occured(notificationMessage, description, notificationType);
@@ -71,6 +77,7 @@ public class FocWebEnvironment implements IFocEnvironment {
 	  			}
 	  			Notification notification = new Notification(notificationMessage, description, type);
 	  			notification.setDelayMsec(delay);
+	  			if(!Utils.isStringEmpty(styleName)) notification.setStyleName(styleName);
 	  			if(Page.getCurrent() != null){
 	  				notification.show(Page.getCurrent());
 	  			}
