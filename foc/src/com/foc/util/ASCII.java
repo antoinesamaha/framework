@@ -4,6 +4,7 @@
 package com.foc.util;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.Random;
 import java.util.StringTokenizer;
 
@@ -247,21 +248,54 @@ public class ASCII {
   }
 	
 	//Not Finished
-	public static String convert_ShrinkName(String in){
-		String out = in;
+	public static String convert_ShrinkName(String in, int limit){
+		String out = "";
 
-		if(out.contains("_")){
-			StringTokenizer tokenizer = new StringTokenizer(out, "_", false);
-			out = "";
-			while(tokenizer.hasMoreTokens()){
-				String token = tokenizer.nextToken();
-				out += token.substring(0,2);
-				token.hashCode();
-			}
-		}else{
+		if(in.length() > limit){
+			StringTokenizer tokenizer = new StringTokenizer(in, "_");
+			int count = tokenizer.countTokens();
 			
+			String[] words = new String[count];
+			int idx = 0;
+			//Fill the words array
+			while(tokenizer.hasMoreTokens()){
+				String tok = tokenizer.nextToken();
+				tok = tok.toLowerCase();
+				String firstChar = tok.substring(0,1).toUpperCase();
+				String otherChar = tok.substring(1,tok.length()).toLowerCase();
+				tok = firstChar+otherChar;
+				words[idx++]=tok;
+			}
+			
+			int deduction = in.length() - (count-1) - limit;
+			if(deduction > 0){
+				int maxManipulatable = 0;
+				for(String w : words){
+					if(w.length() >= 5){
+						maxManipulatable += w.length();
+					}
+				}
+	
+				for(int i=0; i<words.length; i++){
+					String w = words[i];
+					if(w.length() >= 5){
+						double toDeduceHere = ((double)(w.length() * deduction)) / ((double)maxManipulatable);
+						int deduceHere = (int)Math.ceil(toDeduceHere);
+						if(w.length() - deduceHere < 1){
+							Globals.logString("ERROR SHRIKING WORD : "+words[i]);
+						}
+						if(deduceHere > 0){
+							w = w.substring(0, w.length() - deduceHere);
+						}
+						words[i] = w;
+					}
+				}
+			}
+			for(String w : words){
+				out += w;
+			}			
 		}
-
+		
 		return out;
 	}
 }

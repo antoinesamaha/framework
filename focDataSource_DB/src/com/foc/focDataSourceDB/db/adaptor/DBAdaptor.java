@@ -43,6 +43,7 @@ import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 import com.foc.focDataSourceDB.db.util.DBUtil;
 import com.foc.list.FocLink;
+import com.foc.util.ASCII;
 import com.foc.util.Utils;
 
 public class DBAdaptor {
@@ -89,6 +90,14 @@ public class DBAdaptor {
     return altered;		
 	}
 
+	private String adjustedFieldName(String name){
+		String result = ASCII.convert_ShrinkName(name, 30);
+		if(result.length() > 30){
+			result = ASCII.convert_ShrinkName(name, 30);
+		}
+		return result;
+	}
+	
   public boolean adaptDataModel(boolean forceAlterTables, boolean schemaEmpty){
   	alterAllFields = forceAlterTables;
   	DBManager dbManager = Globals.getDBManager(); 
@@ -155,15 +164,14 @@ public class DBAdaptor {
 	    	Globals.getApp().exit(true);
 	    }
 
-	    /*
-	    if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
+//	    if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
 		    iter = Globals.getApp().getFocDescDeclarationIterator();
 		    while(iter != null && iter.hasNext()){
 		    	IFocDescDeclaration focDescDeclaration = iter.next();
 		    	if(focDescDeclaration != null){
 			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
 			    	if(focDesc != null && focDesc.isPersistent()){
-			    		if(focDesc.getStorageName_ForSQL().length() > 25){
+			    		if(focDesc.getStorageName_ForSQL().length() > 30){
 			    			Globals.logString("  --- TABLE:"+focDesc.getStorageName_ForSQL());
 			    		}
 			    		
@@ -172,14 +180,17 @@ public class DBAdaptor {
 			    			FField fld = enumer.nextField();
 			    			String dbName = enumer.getFieldCompleteName(focDesc);
 			    			if(dbName.length() > 30){
-			    				Globals.logString("    - Field:"+focDesc.getStorageName()+"."+dbName);
+//			    				Globals.logString("    - Field:"+focDesc.getStorageName()+"."+dbName);
+//			    				dbName = adjustedFieldName(dbName);
+//			    				Globals.logString("            "+focDesc.getStorageName()+"."+dbName+"    ("+dbName.length()+")");
+			    				String newDBName = adjustedFieldName(dbName);
+			    				Globals.logString(""+focDesc.getStorageName()+","+dbName+","+dbName.length()+","+newDBName+","+newDBName.length());
 			    			}
 			    		}
 			    	}
 		    	}
 		    }
-	    }
-	    */
+//	    }
 	    
 	    //Here we need to compare the contents of the table definition table with the memory table definition
 	    //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx

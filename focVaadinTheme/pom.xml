@@ -29,6 +29,16 @@
         </configuration>
       </plugin>
     </plugins>
+
+		<resources>
+      <resource>
+        <directory>./</directory>
+        <includes>
+          <include>VAADIN/**/*.*</include>
+        </includes>
+      </resource>
+    </resources>    
+    
   </build>
   <dependencies>
   	<dependency>
