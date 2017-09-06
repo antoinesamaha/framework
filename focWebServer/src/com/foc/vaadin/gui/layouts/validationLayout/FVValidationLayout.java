@@ -546,7 +546,7 @@ public class FVValidationLayout extends HorizontalLayout {
   	return printButton;
   }
   
-  private void printClickListener(){
+  public void printClickListener(){
   	if(!Globals.getApp().checkSession()){					
 			INavigationWindow nw = getNavigationWindow();
 			saveAndRefreshWithoutGoBack();
@@ -590,7 +590,7 @@ public class FVValidationLayout extends HorizontalLayout {
 		}
   }
   
-  private void applyBrowserWindowOpenerToPrintButton(AbstractComponent printButton){
+  public void applyBrowserWindowOpenerToPrintButton(AbstractComponent printButton){
   	BrowserWindowOpener opener = null; 
   	if(validationSettings != null && validationSettings.avoidRowBreak()){
   		opener = new BrowserWindowOpener(PrintUI_Break.class);

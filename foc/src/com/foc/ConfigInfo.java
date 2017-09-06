@@ -166,7 +166,9 @@ public class ConfigInfo {
         jdbcUserName  = getProperty(JDBC_USERNAME);
         jdbcPassword  = getProperty(JDBC_PASSWORD);
         jdbcXPassword = getProperty(JDBC_XPASSWORD);
-  
+        Globals.logString("Drivers: "+jdbcDrivers);
+        Globals.logString("URL: "+jdbcURL);
+        
         try{
 	        if( jdbcURL.indexOf("mysql") != -1 ){//MySQL
 	        	//jdbc.url=jdbc:mysql://localhost:3306/marblestone?zeroDateTimeBehavior=convertToNull
@@ -206,6 +208,7 @@ public class ConfigInfo {
         	serverClassName = "com.foc.web.server.FocWebServer";
         }
         focWebServerClassName = serverClassName;
+        Globals.logString("WebServerClass: "+focWebServerClassName);
         
         String cloudClassName = getProperty("cloudStorageClass");
         if(cloudClassName == null){

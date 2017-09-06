@@ -30,7 +30,20 @@ public class PrintUI extends FocWebApplication {
 	  public boolean isPrintUI(){
 	  	return true;
 	  }		
+	  
+	  protected String getContextName(){
+	  	return null;
+	  }
 		
+	  protected String getViewName(){
+	  	String userPrintingViewName = null;
+    	XMLViewKey xmlViewKey = FocWebApplication.getFocWebSession_Static().getViewKeyToPrint();
+      if(xmlViewKey != null){
+      	userPrintingViewName = XMLViewDictionary.getInstance().getUserPrintingView_PriorityTo_Key_UserSelection_Printing(xmlViewKey);
+      }
+      return userPrintingViewName;
+	  }
+	  
 		@Override
 		public FocCentralPanel newWindow() {
 			FocCentralPanel focCentralPanel = new FocCentralPanel();
@@ -38,30 +51,15 @@ public class PrintUI extends FocWebApplication {
 
     	XMLViewKey xmlViewKey = FocWebApplication.getFocWebSession_Static().getViewKeyToPrint();
       if(xmlViewKey != null){
-      	String userPrintingViewName = null;
-
-      	userPrintingViewName = XMLViewDictionary.getInstance().getUserPrintingView_PriorityTo_Key_UserSelection_Printing(xmlViewKey);
-      	/*
-      	if(xmlViewKey.isPrinterFriendly()){
-      		userPrintingViewName = xmlViewKey.getUserView(); 
-      	}else{
-	      	//First we try to see if the user has already selected a default printing view
-		      UserXMLView userXMLView = XMLViewDictionary.getInstance().userViewSelected_findViewForUserAndKey(FocWebApplication.getFocUser(), xmlViewKey);
-		      
-		      if(userXMLView != null){
-		      	userPrintingViewName = userXMLView.getPrintingView();
-		      }
-		      
-	      	//Second we try to see if the context has a VIEW_PRINTING from the system
-		      if(userPrintingViewName == null || userPrintingViewName.isEmpty()){
-		      	userPrintingViewName = XMLViewKey.VIEW_PRINTING;
-		      }
-      	}
-      	*/
+      	String userPrintingViewName = getViewName();
 	      
 	      if(userPrintingViewName != null){
 	      	XMLViewKey printKey = new XMLViewKey(xmlViewKey);
 	      	printKey.setUserView(userPrintingViewName);
+	      	String context = getContextName();
+	      	if(context != null){
+	      		printKey.setContext(context);	
+	      	}
 
 	      	//Init the CentralPanel but do not parse XML because we want to copy some data first
 	      	ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(focCentralPanel, printKey, FocWebApplication.getFocWebSession_Static().getDataToPrint(), false, false, true);
