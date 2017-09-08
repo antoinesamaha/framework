@@ -80,13 +80,19 @@ public class XmlViewFileScanner {
 							tokens.add(token);
 						}
 						
-						if(tokens.size() >= 2 && tokens.size() <= 4){
+						if(tokens.size() >= 2 && tokens.size() <= 5){
 							xmlViewKey.setStorageName(tokens.get(0));
 							if(tokens.get(tokens.size() - 1) != null){
 								xmlViewKey.setType(tokens.get(tokens.size() - 1).toLowerCase());
 							}
 							
-							if(tokens.size() == 4){
+							if(tokens.size() == 5){
+								xmlViewKey.setContext(tokens.get(1));
+								xmlViewKey.setUserView(tokens.get(2));
+								if(tokens.get(3).equals(XMLViewKey.IS_MOBILE_FRIENDLY)){
+									xmlViewKey.setMobileFriendly(true);
+								}
+							}else if(tokens.size() == 4){
 								xmlViewKey.setContext(tokens.get(1));
 								xmlViewKey.setUserView(tokens.get(2));
 							}else if(tokens.size() == 3){

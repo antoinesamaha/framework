@@ -372,10 +372,13 @@ public class FVViewSelector_MenuBar extends MenuBar {
 						if(navigationWindow != null){
 							ICentralPanel newCentralPanel = XMLViewDictionary.getInstance().newCentralPanel_NoAdjustmentToLastSelectedView(navigationWindow, newKey, getCentralPanel().getFocData());
 							if(newCentralPanel != null){
+  							//2017-09-08 To prevent dispose of the FocData while changing views								
+								getCentralPanel().setFocDataOwner(false);
+								//------
 								navigationWindow.goBack(getCentralPanel());// This disposes
 																														// the
 																														// ViewSelector
-								navigationWindow.changeCentralPanelContent(newCentralPanel, false);
+								navigationWindow.changeCentralPanelContent(newCentralPanel, true);
 								centralPanel = newCentralPanel;
 							}
 						}

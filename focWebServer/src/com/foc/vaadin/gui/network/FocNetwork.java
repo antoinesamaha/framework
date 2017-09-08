@@ -19,7 +19,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 	}
 	
 	public void dispose(){
-		
+		if(drawnNodes != null){
+			drawnNodes.clear();
+			drawnNodes = null;
+		}
 	}
 
 	public Node findNode(String id){
@@ -51,13 +54,4 @@ public abstract class FocNetwork extends NetworkDiagram {
 	public String getID(String storage, int ref){
 		return storage+"|"+ref;
 	}
-
-//	public Node addNode(String id, String caption, String iconName) {
-//		Node node = new Node(id, caption, iconName);
-//		super.addNode(node);
-//		drawnNodes.put(id, node);
-//		return node;
-//	}
-
-
 }

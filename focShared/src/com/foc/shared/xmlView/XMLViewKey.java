@@ -11,7 +11,8 @@ public class XMLViewKey implements IXMLViewConst{
   private String  storageName      = null;
   private boolean forNewObjectOnly = false;
   private boolean printerFriendly  = false; 
-
+  private boolean mobileFriendly   = false;
+  
   private String strKey            = null;
   
   public XMLViewKey(){
@@ -101,6 +102,9 @@ public class XMLViewKey implements IXMLViewConst{
   	if(isForNewObjectOnly()){
   		keyString += ";NEW_ONLY";
   	}
+  	if(isMobileFriendly()){
+  		keyString += ";Mobile";
+  	}
   	return keyString;
   }
   
@@ -125,5 +129,13 @@ public class XMLViewKey implements IXMLViewConst{
 
 	public void setPrinterFriendly(boolean printerFriendly) {
 		this.printerFriendly = printerFriendly;
+	}
+
+	public boolean isMobileFriendly() {
+		return mobileFriendly;
+	}
+
+	public void setMobileFriendly(boolean mobileFriendly) {
+		this.mobileFriendly = mobileFriendly;
 	}
 }

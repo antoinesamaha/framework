@@ -21,5 +21,5 @@ public interface IXMLViewConst {
   public static final String VIEW_WORD               = "Word";
   public static final String VIEW_MOBILE             = "Mobile";
   public static final String VIEW_SELECTION          = "Selection";
-
+  public static final String IS_MOBILE_FRIENDLY      = "Mobile";
 }

@@ -232,7 +232,8 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   private XMLView get_Internal(XMLViewKey xmlViewKey, boolean adjustToLastViewSelected, boolean popupMessageIfNotFound){
   	if(adjustToLastViewSelected){
   		if(FocWebApplication.getInstanceForThread().isMobile()){
-  			xmlViewKey.setUserView(XMLViewKey.VIEW_MOBILE);
+//  			xmlViewKey.setUserView(XMLViewKey.VIEW_MOBILE);
+  			xmlViewKey.setMobileFriendly(true);
   			popupMessageIfNotFound = false;
   		}else{
   			adjustKey_ToHaveTheLastSelectedViewByTheUser(xmlViewKey);	
@@ -246,6 +247,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
 //    	}
     	Globals.logString("View "+xmlViewKey.getStringKey()+" not found reverting to default view");
       xmlViewKey.setUserView(XMLViewKey.VIEW_DEFAULT);
+      xmlViewKey.setMobileFriendly(false);
       key = xmlViewKey.builStringKey();
       view = getXmlViewDicMap().get(key);
       if(view == null){
