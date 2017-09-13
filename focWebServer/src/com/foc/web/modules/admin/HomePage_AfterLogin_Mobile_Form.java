@@ -14,11 +14,11 @@ import com.vaadin.ui.Button;
 @SuppressWarnings("serial")
 public class HomePage_AfterLogin_Mobile_Form extends HomePage_AfterLogin_Form{
 
-	private FVVerticalLayout getMobileHomeView(){
+	protected FVVerticalLayout getMobileHomeView(){
 		return (FVVerticalLayout) getComponentByName("MOBILE_HOME_VIEW");
 	}
 	
-	private FVMenuTree getMenuTree(){
+	protected FVMenuTree getMenuTree(){
 		FocWebVaadinWindow focWebVaadinWindow = (FocWebVaadinWindow) getMainWindow();
 		return focWebVaadinWindow != null ? focWebVaadinWindow.getMenuTree(true) : null;
 	}

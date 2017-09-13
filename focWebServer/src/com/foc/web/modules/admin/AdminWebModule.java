@@ -380,12 +380,24 @@ public class AdminWebModule extends FocWebModule {
         XMLViewKey.VIEW_DEFAULT, 
         "/xml/com/foc/admin/HomePage_AfterLogin_Form.xml", 0, HomePage_AfterLogin_Form.class.getName());
 
-    XMLViewDictionary.getInstance().put(
-    		STORAGE_HOMEPAGE,
-        XMLViewKey.TYPE_FORM, 
-        XMLViewKey.CONTEXT_DEFAULT, 
-        XMLViewKey.VIEW_MOBILE, 
-        "/xml/com/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", 0, HomePage_AfterLogin_Mobile_Form.class.getName());
+    XMLViewKey key = new XMLViewKey(STORAGE_HOMEPAGE, XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
+    key.setMobileFriendly(true);
+    XMLView view = new XMLView(key, "/xml/com/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", HomePage_AfterLogin_Mobile_Form.class.getName());
+    XMLViewDictionary.getInstance().put(view);
+    		
+//    XMLViewDictionary.getInstance().put(
+//    		STORAGE_HOMEPAGE,
+//        XMLViewKey.TYPE_FORM, 
+//        XMLViewKey.CONTEXT_DEFAULT, 
+//        XMLViewKey.VIEW_MOBILE, 
+//        "/xml/com/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", 0, HomePage_AfterLogin_Mobile_Form.class.getName());
+    
+//    XMLViewDictionary.getInstance().put(
+//    		STORAGE_HOMEPAGE,
+//        XMLViewKey.TYPE_FORM, 
+//        XMLViewKey.CONTEXT_DEFAULT, 
+//        XMLViewKey.VIEW_MOBILE, 
+//        "/xml/com/foc/admin/HomePage_AfterLogin_Mobile_Form.xml", 0, HomePage_AfterLogin_Mobile_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
     		STORAGE_HOMEPAGE,

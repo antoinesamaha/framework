@@ -1,9 +1,9 @@
-<VerticalLayout name="transactionHeader" spacing="true" >
+<VerticalLayout name="transactionHeader" spacing="true" margin="true">
 		<ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="false" withPdf="false"/>
-    <IncludeXML name="USER_CREDENTIALS" storage="FUSER" context="HomePage" type="form" captionMargin="0"  />        
+    <!-- IncludeXML name="USER_CREDENTIALS" storage="FUSER" context="HomePage" type="form" captionMargin="0"  / -->        
     <!-- <IncludeXML name="MENU_HISTORY" storage="MENU_ITEM" type="tree" captionMargin="0" context="History" /> -->
     <VerticalLayout name="MOBILE_HOME_VIEW">
     </VerticalLayout>
-    <Button name="CLEAR_HISTORY" caption="Clear History" />
+    <!-- Button name="CLEAR_HISTORY" caption="Clear History" / -->
 </VerticalLayout>
 

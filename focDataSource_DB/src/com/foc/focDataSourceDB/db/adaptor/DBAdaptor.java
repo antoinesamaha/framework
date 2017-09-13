@@ -164,7 +164,7 @@ public class DBAdaptor {
 	    	Globals.getApp().exit(true);
 	    }
 
-//	    if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
+	    if(ConfigInfo.isShrinkDBNames()){
 		    iter = Globals.getApp().getFocDescDeclarationIterator();
 		    while(iter != null && iter.hasNext()){
 		    	IFocDescDeclaration focDescDeclaration = iter.next();
@@ -190,7 +190,7 @@ public class DBAdaptor {
 			    	}
 		    	}
 		    }
-//	    }
+	    }
 	    
 	    //Here we need to compare the contents of the table definition table with the memory table definition
 	    //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXx

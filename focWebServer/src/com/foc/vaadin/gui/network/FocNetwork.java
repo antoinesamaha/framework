@@ -1,5 +1,6 @@
 package com.foc.vaadin.gui.network;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.vaadin.visjs.networkDiagram.NetworkDiagram;
@@ -10,12 +11,14 @@ import com.foc.desc.FocObject;
 
 public abstract class FocNetwork extends NetworkDiagram {
 	
-	public HashMap<String, Node> drawnNodes = null;
+	private HashMap<String, Node> drawnNodes = null;
+	private ArrayList<FocObjectNetwork> focObjectNetworks = null;
 	
 	public FocNetwork(Options options){
 		super(options);
 		
 		drawnNodes = new HashMap<String, Node>();
+		focObjectNetworks = new ArrayList<FocObjectNetwork>();
 	}
 	
 	public void dispose(){
@@ -23,8 +26,21 @@ public abstract class FocNetwork extends NetworkDiagram {
 			drawnNodes.clear();
 			drawnNodes = null;
 		}
+		if(focObjectNetworks != null){
+			for(int i=0; i<focObjectNetworks.size(); i++){
+				FocObjectNetwork fon = focObjectNetworks.get(i);
+				fon.dispose();
+			}
+			focObjectNetworks.clear();
+		}
 	}
 
+	public void addFocObjectNetwork(FocObjectNetwork focObjectNetwork){
+		if(focObjectNetworks != null){
+			focObjectNetworks.add(focObjectNetwork);
+		}
+	}
+	
 	public Node findNode(String id){
 		return drawnNodes != null ? drawnNodes.get(id) : null;
 	}

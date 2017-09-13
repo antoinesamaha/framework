@@ -80,6 +80,7 @@ public class ConfigInfo {
   private static String  cloudStorageClassName = null;
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
+  private static boolean shrinkDBNames = false;
   
   private static boolean allowCSVExport          = true;
   private static boolean allowEXCELExport        = true;
@@ -267,6 +268,8 @@ public class ConfigInfo {
         str = getProperty("allowAddInsideComboBox");
         allowAddInsideComboBox = str != null ? str.compareTo("1") == 0 : true;//Default value is true
 
+        str = getProperty("shrinkDBNames");
+        shrinkDBNames = str != null ? str.compareTo("1") == 0 : false;//Default value is false
 
         str = getProperty("allowCSVExport");
         if(str != null && str.compareTo("0") == 0){//Default value is true
@@ -639,5 +642,9 @@ public class ConfigInfo {
 
 	public static void setCreateAdminUserIfNotExist(boolean createAdminUserIfNotExist) {
 		ConfigInfo.createAdminUserIfNotExist = createAdminUserIfNotExist;
+	}
+
+	public static boolean isShrinkDBNames() {
+		return shrinkDBNames;
 	}
 }

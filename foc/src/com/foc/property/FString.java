@@ -10,6 +10,7 @@ import com.foc.IFocEnvironment;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
+import com.vaadin.data.Property.ValueChangeListener;
 
 /**
  * @author Standard
@@ -29,6 +30,24 @@ public class FString extends FProperty implements Cloneable{
     zClone.setString(str);
     return zClone;
   }
+  
+	@Override
+	public void addValueChangeListener(ValueChangeListener listener) {
+		if(getFocObject() != null && getFocObject().getThisFocDesc() != null && getFocObject().getThisFocDesc().getStorageName().equals("OfficialDocumentType") ){
+			int debug = 3;
+			debug++;
+		}
+		super.addValueChangeListener(listener);
+	}
+	
+	@Override
+	public void removeValueChangeListener(ValueChangeListener listener) {
+		if(getFocObject() != null && getFocObject().getThisFocDesc() != null && getFocObject().getThisFocDesc().getStorageName().equals("OfficialDocumentType") ){
+			int debug = 3;
+			debug++;
+		}		
+		super.removeValueChangeListener(listener);
+	}
   
   public boolean isEmpty(){
     return getString() == null || getString().trim().compareTo("") == 0;

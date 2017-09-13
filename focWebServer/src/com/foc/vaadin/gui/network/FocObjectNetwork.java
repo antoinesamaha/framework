@@ -14,14 +14,12 @@ public abstract class FocObjectNetwork<FO extends FocObject> {
 	public FocObjectNetwork(FO focObject, FocNetwork 	network){
 		this.focObject = focObject;
 		this.network   = network;
+		network.addFocObjectNetwork(this);
 	}
 	
 	public void dispose(){
 		focObject = null;
-		if(network != null){
-			network.dispose();
-			network = null;
-		}
+		network   = null;
 	}
 	
 	public FO getFocObject(){

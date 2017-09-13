@@ -1593,8 +1593,9 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 	private void innerLayout_Replace_Internal(ICentralPanel centralPanel) {
 		ICentralPanel previousCentralPanel = innerLayout_GetICentralPanel();
-		if(getFocXMLLayout() != null && previousCentralPanel instanceof FocXMLLayout){
+		if(getFocXMLLayout() != null && previousCentralPanel != null && previousCentralPanel instanceof FocXMLLayout){
 			getFocXMLLayout().childXMLLayoutArray_Remove((FocXMLLayout)previousCentralPanel);
+			previousCentralPanel.dispose();
 		}
 
 		innerLayout.removeAllComponents();

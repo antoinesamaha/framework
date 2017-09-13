@@ -336,6 +336,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   public ICentralPanel newCentralPanel_AfterLogin(){
   	ICentralPanel centralPanel = null;
   	XMLViewKey xmlViewKey = new XMLViewKey(AdminWebModule.STORAGE_HOMEPAGE, XMLViewKey.TYPE_FORM);
+  	if(FocWebApplication.getInstanceForThread().isMobile()){
+  		xmlViewKey.setMobileFriendly(true);
+  	}
   	centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) this, xmlViewKey, null);
     return centralPanel;
   }
@@ -452,7 +455,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				});
 			}
 			
-			if(Globals.isValo()){
+			if(!FocWebApplication.getInstanceForThread().isMobile()){
 				add_NewUserMenuBar();	
 			}else{
 				logout = newButtonInHeaderBar("Log Out", !FocWebApplication.getInstanceForThread().isMobile());

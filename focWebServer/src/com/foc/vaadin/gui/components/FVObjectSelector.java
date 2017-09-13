@@ -15,7 +15,6 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.objectSelectorPopupView.FVObjectSelectorWindow;
 import com.foc.vaadin.gui.xmlForm.FXML;
-import com.foc.vaadin.gui.xmlForm.FocXMLLayout.FocXMLGuiComponentListener;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.AbstractSelect.NewItemHandler;
@@ -64,6 +63,10 @@ public class FVObjectSelector extends FVGearWrapper<FVObjectComboBox> implements
 
   @Override
   public void dispose(){
+  	FVObjectComboBox comboBox = getComboBox(); 
+  	if(comboBox != null){
+  		comboBox.setNewItemHandler(null);
+  	}
     super.dispose();
     attributes = null;
     if(delegate != null){

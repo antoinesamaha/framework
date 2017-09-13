@@ -23,6 +23,12 @@ public class FVTextFieldAutoComplete extends FVMultipleChoiceComboBox implements
     setFilteringMode(FilteringMode.CONTAINS);
   }
 	
+  @Override
+  public void dispose() {
+  	setNewItemHandler(null);
+  	super.dispose();
+  }
+  
 	@Override
   public void addNewItem(String newItemCaption) {
     if(newItemCaption != null){

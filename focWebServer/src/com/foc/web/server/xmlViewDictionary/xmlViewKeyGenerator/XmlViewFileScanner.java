@@ -96,7 +96,13 @@ public class XmlViewFileScanner {
 								xmlViewKey.setContext(tokens.get(1));
 								xmlViewKey.setUserView(tokens.get(2));
 							}else if(tokens.size() == 3){
-								xmlViewKey.setContext(tokens.get(1));
+								String contextToken = tokens.get(1);
+								if(contextToken.equals(XMLViewKey.IS_MOBILE_FRIENDLY)){
+									xmlViewKey.setContext(XMLViewKey.CONTEXT_DEFAULT);
+									xmlViewKey.setMobileFriendly(true);
+								}else{
+									xmlViewKey.setContext(contextToken);
+								}
 								xmlViewKey.setUserView(XMLViewKey.VIEW_DEFAULT);
 							}else{
 								xmlViewKey.setContext(XMLViewKey.CONTEXT_DEFAULT);

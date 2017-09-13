@@ -52,7 +52,13 @@ public class FVMultipleChoiceStringField extends FVMultipleChoiceComboBox implem
     addBlurListener(focus);
     */
   }
-	
+
+  @Override
+  public void dispose() {
+  	setNewItemHandler(null);
+  	super.dispose();
+  }
+  
   /*
   String latestString = null; 
   @Override
