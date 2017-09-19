@@ -42,7 +42,7 @@ public class DBManagerServer {
   //---------------
   
 	public DBManagerServer(){
-		connectionPool = new ConnectionPool(this);
+		connectionPool = new ConnectionPool();
 		Globals.logString("Before Callling the auxPools_LoadFiles");
 		auxPools_LoadFiles();
 	}
@@ -321,7 +321,7 @@ public class DBManagerServer {
   }
   
   public void auxPools_Put(String key, ConnectionCredentials cred){
-  	ConnectionPool pool = new ConnectionPool(this, cred);
+  	ConnectionPool pool = new ConnectionPool(cred);
   	HashMap<String, ConnectionPool> map = auxPools_GetMap(true);
   	if(map != null){
   		map.put(key, pool);

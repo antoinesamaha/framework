@@ -195,9 +195,13 @@ public class FVTabbedLayout extends TabSheet implements FVLayout {
     name         = null;
     type         = null;
     attributes   = null;
-    delegate     = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
     addTabButton = null;
     addTabLayout = null;
+    removeAllComponents();
   }
 
   @Override

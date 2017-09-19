@@ -11,8 +11,8 @@ import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings("serial")
 public class FVMoreLayout extends FVVerticalLayout {
-  private boolean extended         = false;
-  private Button  button           = null;
+  private boolean extended      = false;
+  private Button  button        = null;
   private Attributes attributes = null;
   	
   public FVMoreLayout(Attributes attributes) {
@@ -29,6 +29,13 @@ public class FVMoreLayout extends FVVerticalLayout {
 			}
 		});
   	addComponent(button);
+  }
+  
+  @Override
+  public void dispose(){
+  	button     = null;
+    attributes = null;
+  	super.dispose();
   }
   
   private Button getMoreLayoutButton(){

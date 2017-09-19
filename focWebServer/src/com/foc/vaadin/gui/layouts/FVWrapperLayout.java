@@ -147,8 +147,12 @@ public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiCompon
   
   @Override
   public void dispose(){
-    field    = null;
+  	if(field != null){
+  		field.dispose();
+  		field = null;
+  	}
     caption  = null;
+    removeAllComponents();
   }
 
   @Override

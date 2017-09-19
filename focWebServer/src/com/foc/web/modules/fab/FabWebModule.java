@@ -306,7 +306,7 @@ public class FabWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("FAB_GENERATE_FOCDESC", "Generate FocDesc classes");
+    menuItem = mainMenu.pushMenu("FAB_GENERATE_FOCDESC", "Reverse Engineering");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
 //        INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -314,9 +314,11 @@ public class FabWebModule extends FocWebModule {
 //        XMLViewKey key = new XMLViewKey(PrnLayoutDefinitionDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
 //        ICentralPanel central = XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focList);
 //        mainWindow.changeCentralPanelContent(central, true);
-      	Globals.getApp().getDataSource().command_DataModel2Code();
 //        TableDefinition tableDef = TableDefinition.getTableDefinitionForFocDesc(menuItem.getCode());
 
+      	Globals.getApp().getDataSource().command_DataModel2Code();
+      	
+      	
       }
     });
 

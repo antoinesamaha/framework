@@ -55,7 +55,10 @@ public class FVHTMLLayout extends CustomComponent implements FVLayout {
 		name = null;
 		type = null;
 		attributes = null;
-		delegate = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
 		focXMLLayout = null;
 		customLayout = null;
 		rootVerticalLayout = null;

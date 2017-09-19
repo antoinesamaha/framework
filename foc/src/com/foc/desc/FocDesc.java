@@ -1484,17 +1484,19 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
       focList = getFocList();
     }
     
-    if(mode == FocList.LOAD_IF_NEEDED){
-      focList.loadIfNotLoadedFromDB();      
-    }else if(mode == FocList.FORCE_RELOAD){
-      //focList.removeAll();
-      focList.reloadFromDB();
-    }
+    if(focList != null){
+	    if(mode == FocList.LOAD_IF_NEEDED){
+	      focList.loadIfNotLoadedFromDB();      
+	    }else if(mode == FocList.FORCE_RELOAD){
+	      //focList.removeAll();
+	      focList.reloadFromDB();
+	    }
 
-    if(order != null){
-    	focList.setListOrder(order);
-    }else{
-    	focList.sort();
+	    if(order != null){
+	    	focList.setListOrder(order);
+	    }else{
+	    	focList.sort();
+	    }
     }
     
     return focList;

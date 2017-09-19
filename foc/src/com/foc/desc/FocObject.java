@@ -3718,7 +3718,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		//The condition is because when the object is Created and empty it is not saved => Ref < 0 and we should not reset the status
 		if(!isCreated() || hasRealReference()){
 		//-------------
-			boolean wasModified = isModified();
+			boolean wasModified = isModified() ;//|| isCreated();
 			super.resetStatus();
 			if(wasModified){
 				getThisFocDesc().resetStatusForFocObject(this);

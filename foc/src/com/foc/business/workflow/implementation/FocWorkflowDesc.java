@@ -1,11 +1,19 @@
 package com.foc.business.workflow.implementation;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+
+import com.foc.Globals;
 import com.foc.business.status.IStatusHolderDesc;
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
+import com.foc.list.FocList;
+import com.foc.property.FProperty;
+import com.foc.property.FPropertyListener;
 import com.foc.util.Utils;
 
 public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDesc, IWorkflowDesc {
@@ -21,6 +29,9 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 	
 	private String workflowCode  = null;
 	private String workflowTitle = null;
+	
+	private int nextFldID = 1;
+	private boolean listInTableEditable = false;
 	
 	public FocWorkflowDesc(Class focObjectClass, boolean dbResident, String storageName, boolean isKeyUnique) {
 		this(focObjectClass, dbResident, storageName, isKeyUnique, true);
@@ -142,4 +153,81 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 	public String iWorkflow_getDBTitle() {
 		return workflowCode;
 	}
+	
+	public boolean isListInTableEditable(){
+		return listInTableEditable;
+	}
+	
+	public void setListInTableEditable(boolean inTableEditable){
+		listInTableEditable = inTableEditable;
+	}
+	
+	protected FocList newFocList_Creation(){
+		FocList list = super.newFocList();
+		return list;
+	}
+	
+	public FocList newFocList(){
+		FocList list = newFocList_Creation();
+		afterNewFocList(list);
+		return list;
+	}
+
+	public void afterNewFocList(FocList list){
+		if(list != null){
+			list.setInTableEditable(isListInTableEditable());
+		}
+	}
+
+	@Override
+	public int nextFldID(){
+		return nextFldID++;
+	}
+
+	public void afterXMLParsing(){
+		Method[] declaredMethods = getFocObjectClass().getDeclaredMethods();
+		for(int i=0; i<declaredMethods.length; i++){
+			Method method = declaredMethods[i];
+			if(method.getName().startsWith("propertyChanged_")){
+				String propertyName = method.getName().substring("propertyChanged_".length());
+				if(!Utils.isStringEmpty(propertyName)){
+					FField fld = getFieldByName(propertyName);
+					if(fld != null){
+						Parameter[] params = method.getParameters();
+						if(params.length == 1 && params[0].getType() == FProperty.class){
+							fld.addListener(new PropertyChangedMethodListener(method));
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public class PropertyChangedMethodListener implements FPropertyListener {
+		private Method method = null;
+		
+		public PropertyChangedMethodListener(Method method){
+			this.method = method;
+		}
+		
+		@Override
+		public void propertyModified(FProperty property) {
+			try{
+				FocObject focObj = property != null ? property.getFocObject() : null;
+				if(focObj != null){
+	        Object[] args = new Object[1];
+	        args[0] = property;
+	        method.invoke(focObj, args);        	
+				}
+			}catch(Exception e){
+				Globals.logException(e);
+			}
+		}
+
+		@Override
+		public void dispose() {
+			method = null;
+		}
+	}
+
 }

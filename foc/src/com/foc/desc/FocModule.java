@@ -1,6 +1,7 @@
 package com.foc.desc;
 
 import com.foc.Globals;
+import com.foc.desc.pojo.PojoFileScanner;
 import com.foc.desc.xml.XMLDescFileScanner;
 import com.foc.menu.FMenuList;
 import com.foc.util.Utils;
@@ -29,6 +30,12 @@ public abstract class FocModule {
 	  	XMLDescFileScanner scanner = new XMLDescFileScanner(this, packageName);
 			scanner.scanDirectory();
 			scanner.dispose();
+			
+			Globals.logString("Starting Pojo Scan");
+			PojoFileScanner pojoFileScanner = new PojoFileScanner(this, packageName);
+			pojoFileScanner.scanDirectory();
+			pojoFileScanner.dispose();		
+			Globals.logString("Ending Pojo Scan");
   	}
   }
   

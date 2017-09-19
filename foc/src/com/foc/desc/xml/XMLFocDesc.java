@@ -1,7 +1,5 @@
 package com.foc.desc.xml;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,7 +10,6 @@ import com.foc.business.workflow.implementation.FocWorkflowDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocDescMap;
 import com.foc.desc.FocModule;
-import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.join.FocRequestDesc;
@@ -23,8 +20,6 @@ import com.foc.list.filter.FilterConditionFactory;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.IFocDescForFilter;
 import com.foc.list.filter.ObjectCondition;
-import com.foc.property.FProperty;
-import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.AbstractDataStore;
 import com.foc.util.Utils;
 
@@ -32,47 +27,23 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 
 	private boolean parsed = false;
 	
-	private int nextFldID = 1;
-	
-	boolean listInTableEditable = false;
-	
 	private FocRequestDesc requestDesc = null;//Will remain null if not a join table
 	private FilterDesc     filterDesc  = null;//Will remain null if not a filter 
 	
 	private XMLFocDescParser focDescParser = null;
 	
 	public XMLFocDesc(FocModule module, String storageName, String xmlFullFileName, Class<XMLFocObject> focObjectClass){
-		super(focObjectClass, DB_RESIDENT, storageName, false, false);
+		this(focObjectClass, DB_RESIDENT, storageName, false, false);
 		
 //		parse(xmlFullFileName);
 	}
 	
+	public XMLFocDesc(Class focObjectClass, boolean dbResident, String storageName, boolean isKeyUnique, boolean withWorkfllow) {
+		super(focObjectClass, dbResident, storageName, isKeyUnique, withWorkfllow);
+	}
+	
 	public void dispose(){
 		super.dispose();
-	}
-	
-	public void afterXMLParsing(){
-		Method[] declaredMethods = getFocObjectClass().getDeclaredMethods();
-		for(int i=0; i<declaredMethods.length; i++){
-			Method method = declaredMethods[i];
-			if(method.getName().startsWith("propertyChanged_")){
-				String propertyName = method.getName().substring("propertyChanged_".length());
-				if(!Utils.isStringEmpty(propertyName)){
-					FField fld = getFieldByName(propertyName);
-					if(fld != null){
-						Parameter[] params = method.getParameters();
-						if(params.length == 1 && params[0].getType() == FProperty.class){
-							fld.addListener(new PropertyChangedMethodListener(method));
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	@Override
-	public int nextFldID(){
-		return nextFldID++;
 	}
 	
   protected void afterConstruction_1(){
@@ -142,31 +113,6 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 		Iterator<XMLJoin> iter = focDescParser != null ? focDescParser.newJoinIterator() : null;
 		has = iter != null && iter.hasNext();
 		return has;
-	}
-	
-	public boolean isListInTableEditable(){
-		return listInTableEditable;
-	}
-	
-	public void setListInTableEditable(boolean inTableEditable){
-		listInTableEditable = inTableEditable;
-	}
-	
-	protected FocList newFocList_Creation(){
-		FocList list = super.newFocList();
-		return list;
-	}
-	
-	public FocList newFocList(){
-		FocList list = newFocList_Creation();
-		afterNewFocList(list);
-		return list;
-	}
-
-	public void afterNewFocList(FocList list){
-		if(list != null){
-			list.setInTableEditable(isListInTableEditable());
-		}
 	}
 	
 	public static XMLFocDesc getInstance(String tableName){
@@ -257,32 +203,5 @@ public class XMLFocDesc extends FocWorkflowDesc implements IFocDescForFilter {
 
 	public void setFocDescParser(XMLFocDescParser focDescParser) {
 		this.focDescParser = focDescParser;
-	}
-	
-	public class PropertyChangedMethodListener implements FPropertyListener {
-		private Method method = null;
-		
-		public PropertyChangedMethodListener(Method method){
-			this.method = method;
-		}
-		
-		@Override
-		public void propertyModified(FProperty property) {
-			try{
-				FocObject focObj = property != null ? property.getFocObject() : null;
-				if(focObj != null){
-	        Object[] args = new Object[1];
-	        args[0] = property;
-	        method.invoke(focObj, args);        	
-				}
-			}catch(Exception e){
-				Globals.logException(e);
-			}
-		}
-
-		@Override
-		public void dispose() {
-			method = null;
-		}
 	}
 }

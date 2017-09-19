@@ -759,7 +759,7 @@ public class AdminWebModule extends FocWebModule {
 	    FocMenuItem unitTestingMenuList = mainMenu.pushMenu("UNIT_TEST", "Unit Tests");
 	    
 	    FocUnitDictionary dictionary = FocUnitDictionary.getInstance();
-	    Collection<FocUnitTestingSuite> collection = dictionary.getTestingSuiteMapValues();
+	    Collection<FocUnitTestingSuite> collection = dictionary != null ? dictionary.getTestingSuiteMapValues() : null;
 	    if(collection != null){
 	      Iterator<FocUnitTestingSuite> itr = collection.iterator();
 	        

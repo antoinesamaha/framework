@@ -48,7 +48,11 @@ public class FVVerticalLayout extends DDVerticalLayout implements FVLayout {
     name       = null;
     type       = null;
     attributes = null;
-    delegate   = null;
+		if(delegate != null){
+			delegate.dispose();
+			delegate = null;
+		}    
+		removeAllComponents();
   }
   
   public void addStyleName(String style) {

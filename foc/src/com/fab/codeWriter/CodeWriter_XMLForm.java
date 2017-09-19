@@ -36,7 +36,7 @@ public class CodeWriter_XMLForm extends CodeWriter {
 	
 	@Override
 	public String getPackageName(boolean autoGen) {
-		return null;
+		return super.getPackageName(autoGen)+".gui";
 	}
 	
 	@Override	
@@ -45,7 +45,7 @@ public class CodeWriter_XMLForm extends CodeWriter {
 		
 		CodeWriter_OneFile extWriter = getExternalFileWriter();
 		if(extWriter != null && getTblDef() != null && getTblDef().getFieldDefinitionList() != null){
-			extWriter.printCore("<VerticalLayout margin=\"true\" width=\"95%\">\n");//Open Layout Tag
+			extWriter.printCore("<VerticalLayout captionMargin=\"0\" margin=\"true\" width=\"100%\">\n");//Open Layout Tag
 			extWriter.printCore("\t<ValidationSettings withApply=\"true\" withAttach=\"false\" withPrint=\"true\"/>\n\n");
 			
 			FocList tableFieldDefinitionList = getTblDef().getFieldDefinitionList();

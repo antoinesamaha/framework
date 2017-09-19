@@ -64,23 +64,25 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 			if(map != null){
 				FocList transList = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
 				
-				for(int t=0; t<transList.size(); t++){
-					FocObject focObj   = transList.getFocObject(t);
-					IWorkflow workflow = (IWorkflow) focObj; 
-					WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(map);
-					int titleIndex = result.getTitleIndex();
-					
-					if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
-						WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
-						wrapper.setWorkflow(workflow);
-//					  wrapper.setSignature(result.getSignature());
+				if(transList != null){
+					for(int t=0; t<transList.size(); t++){
+						FocObject focObj   = transList.getFocObject(t);
+						IWorkflow workflow = (IWorkflow) focObj; 
+						WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(map);
+						int titleIndex = result.getTitleIndex();
 						
-						wrapper.setTitle(result.getSignature().getTitle(titleIndex));
-						wrapper.setIsOnBehalfOf(result.isOnBehalfOf());
-						
-	//					wrapper.setTitleIndex(idx);
-	//					wrapper.setSignature(currentSignature);
-						add(wrapper);
+						if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
+							WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
+							wrapper.setWorkflow(workflow);
+	//					  wrapper.setSignature(result.getSignature());
+							
+							wrapper.setTitle(result.getSignature().getTitle(titleIndex));
+							wrapper.setIsOnBehalfOf(result.isOnBehalfOf());
+							
+		//					wrapper.setTitleIndex(idx);
+		//					wrapper.setSignature(currentSignature);
+							add(wrapper);
+						}
 					}
 				}
 			}

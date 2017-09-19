@@ -616,15 +616,19 @@ public class TableDefinition extends FocObject implements CodeWriterConstants {
 		
 		CodeWriter codeWriter = null;
 		
-		codeWriter = cws.getCodeWriter_Const();
-		codeWriter.generateCode();
-		codeWriter = null;
-
-		codeWriter = cws.getCodeWriter_FocDesc();
-		codeWriter.generateCode();
-		codeWriter = null;
+//		codeWriter = cws.getCodeWriter_Const();
+//		codeWriter.generateCode();
+//		codeWriter = null;
+//
+//		codeWriter = cws.getCodeWriter_FocDesc();
+//		codeWriter.generateCode();
+//		codeWriter = null;
+//		
+//		codeWriter = cws.getCodeWriter_FocObject();
+//		codeWriter.generateCode();
+//		codeWriter = null;
 		
-		codeWriter = cws.getCodeWriter_FocObject();
+		codeWriter = cws.getCodeWriter_PojoFocObject();
 		codeWriter.generateCode();
 		codeWriter = null;
 		

@@ -46,6 +46,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 	private FocListWrapper              selectionWrapperList = null; 
 	private ICentralPanel               openedCentralPanel = null;
 	private IObjectSelectWindowListener iObjectSelectWindowListener = null;
+	private ValueChangeListener         valueChangeListener = null;
 	
   public FVObjectComboBox(IFocData objProperty) {
     this(objProperty, (String)null);
@@ -102,8 +103,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   
   private void init(){
   	if(Globals.isValo()){
-	  	addValueChangeListener(new ValueChangeListener() {
-	
+  		
+  		valueChangeListener = new ValueChangeListener() {
 				@Override
 				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 					if(event != null && event.getProperty() != null && event.getProperty().getValue() instanceof Integer){
@@ -141,11 +142,17 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 						}
 					}
 				}
-			});
+			};
+	  	
+	  	addValueChangeListener(valueChangeListener);
   	}
   }
   
 	public void dispose(){
+		if(valueChangeListener != null){
+			removeValueChangeListener(valueChangeListener);
+			valueChangeListener = null;
+		}
     focData = null;
     if(delegate != null){
     	if(delegateOwner) delegate.dispose();

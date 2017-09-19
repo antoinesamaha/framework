@@ -40,5 +40,4 @@ public class FDBlobString extends FDAbstract {
 		intWrt.printCore("    FBlobStringField "+varName+" = new FBlobStringField(\""+fldDef.getName()+"\", \""+fldDef.getTitle()+"\", "+fldDef.getCW_FieldConstanteName()+", "+fldDef.isKey()+", "+fldDef.getLength()+", "+fldDef.getDecimals()+");\n");
 		addFieldDeclarationInFocDesc_Common(codeWriter, fldDef, varName);		
 	}
-
 }

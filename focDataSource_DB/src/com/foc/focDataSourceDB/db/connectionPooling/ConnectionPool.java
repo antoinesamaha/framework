@@ -1,13 +1,16 @@
 package com.foc.focDataSourceDB.db.connectionPooling;
 
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import com.foc.Globals;
+import com.foc.db.DBManager;
 import com.foc.focDataSourceDB.db.DBManagerServer;
 
 public class ConnectionPool {
-	private DBManagerServer              dbManagerServer = null;
 	private ConnectionCredentials        credentials     = null;
 	
 	private ConnectionWrapper            defaultConnectionWrapper = null;
@@ -18,12 +21,11 @@ public class ConnectionPool {
 	public ConnectionPoolThreadLocal threadLocal_Connections = null;
 //	public ThreadLocal<ThreadDBTransactionData> threadLocal_TransactionData = null;
 	
-	public ConnectionPool(DBManagerServer dbManagerServer){
-		this(dbManagerServer, null);
+	public ConnectionPool(){
+		this(null);
 	}
 	
-	public ConnectionPool(DBManagerServer dbManagerServer, ConnectionCredentials credentials){
-		this.dbManagerServer = dbManagerServer;
+	public ConnectionPool(ConnectionCredentials credentials){
 		this.credentials = credentials;
 	
 		threadLocal_Connections = new ConnectionPoolThreadLocal();
@@ -50,7 +52,6 @@ public class ConnectionPool {
 			freeConnections = null;
 		}
 		
-		dbManagerServer = null;
 		if(credentials != null){
 			credentials.dispose();
 			credentials = null;
@@ -111,7 +112,7 @@ public class ConnectionPool {
 	public int getProvider(){
 		return getCredentials() != null ? getCredentials().getProvider() : 0;
 	}
-	
+	/*
 	public DBManagerServer getDbManagerServer() {
 		return dbManagerServer;
 	}
@@ -119,7 +120,7 @@ public class ConnectionPool {
 	public void setDbManagerServer(DBManagerServer dbManagerServer) {
 		this.dbManagerServer = dbManagerServer;
 	}
-
+*/
 	public ConnectionCredentials getCredentials() {
 		if(credentials == null){
 			credentials = new ConnectionCredentials();
@@ -268,6 +269,48 @@ public class ConnectionPool {
 	public String getDBSourceKey(){
 		return getCredentials() != null ? getCredentials().getDbSourceKey() : null;
 	}
+	
+	
+	
+	
+	
+  public Hashtable<String, String> newActualTables(Hashtable<String, String> exeTablesMap){
+  	Hashtable<String, String> allTables = new Hashtable<String, String>();
+    try {
+    	Connection connection = getConnection();
+    	if(connection != null){
+	      DatabaseMetaData dmt = connection.getMetaData();
+	      if (dmt != null) {
+	        ResultSet resultSet = null;
+	        if(getProvider() == DBManager.PROVIDER_ORACLE){
+	        	//Instead of Username we should use the TABLESPACE Name
+	        	resultSet = dmt.getTables(null, getCredentials().getUsername(), null, new String[] { "TABLE" });
+	        }else{
+	        	resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
+	        }
+	        
+	        if (resultSet != null) {
+	          while (resultSet.next()) {
+	            String tableName = resultSet.getString(3);
+	            
+	            Globals.logString(" TABLE : "+resultSet.getString(1)+" | "+resultSet.getString(2)+" | "+resultSet.getString(3));
+	            
+	            //String upperTableName = tableName.toUpperCase();
+	            allTables.put(tableName, tableName);
+	            if(exeTablesMap != null) exeTablesMap.put(tableName, tableName);
+	          }
+	          resultSet.close();
+	        }
+	      }
+    	}
+    } catch (Exception e) {
+      Globals.logException(e);
+    }
+    return allTables;
+  }
+
+	
+	
 	
 	public class ConnectionPoolThreadLocal extends ThreadLocal<ConnectionWrapper> {
 		@Override

@@ -47,8 +47,12 @@ public class FVCustomLayout extends CustomLayout implements FVLayout {
     name       = null;
     type       = null;
     attributes = null;
-    delegate   = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
     xmlLayout  = null;
+    removeAllComponents();
   }
 
   public String getName() {

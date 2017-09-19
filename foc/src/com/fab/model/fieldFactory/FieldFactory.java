@@ -10,7 +10,11 @@ import com.foc.IFocEnvironment;
 @SuppressWarnings("serial")
 public class FieldFactory extends HashMap<Integer, FDAbstract> {
 	
+//	private HashMap<String, FDAbstract> mapByTypeName = null;
+	
 	public FieldFactory(){
+//		mapByTypeName = new HashMap<String, FDAbstract>();
+		
 		put(FieldDefinition.SQL_TYPE_ID_INT, new FDInteger());
 		put(FieldDefinition.SQL_TYPE_ID_CHAR_FIELD, new FDChar());
 		put(FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD, new FDChar());//TODO FDEMail
@@ -26,6 +30,41 @@ public class FieldFactory extends HashMap<Integer, FDAbstract> {
 		put(FieldDefinition.SQL_TYPE_ID_BLOB_STRING, new FDBlobString());
 	}
 
+	@Override
+	public FDAbstract put(Integer key, FDAbstract field) {
+		FDAbstract fld = super.put(key, field);
+//		if(mapByTypeName != null) mapByTypeName.put(field.getFieldTypeName(), field);
+		return fld;
+	}
+	
+//	public IFieldType getFieldType(String typeName){
+//		return mapByTypeName.get(typeName);
+//	}
+	
+	public void addFieldDeclarationInPojo(CodeWriter codeWriter, FieldDefinition fieldDefinition){
+		FDAbstract fieldType = get(fieldDefinition.getSQLType());
+		if(fieldType != null){
+			fieldType.addFieldDeclarationInPojo(codeWriter, fieldDefinition);
+		}else{
+			String message = fieldDefinition.getTableDefinition() != null ? fieldDefinition.getTableDefinition().getName() : "";
+			message += " - "+fieldDefinition.getName() + " Type: " + fieldDefinition.getSQLType();
+			Globals.showNotification("Error", "Could Not find implementation for Field Definition Type : "+message, IFocEnvironment.TYPE_ERROR_MESSAGE);
+			fieldType = get(fieldDefinition.getSQLType());
+		}
+	}	
+	
+	public void addFieldGetterSetterInPojo(CodeWriter codeWriter, FieldDefinition fieldDefinition){
+		FDAbstract fieldType = get(fieldDefinition.getSQLType());
+		if(fieldType != null){
+			fieldType.addGetterSetterInPojo(codeWriter, fieldDefinition);
+		}else{
+			String message = fieldDefinition.getTableDefinition() != null ? fieldDefinition.getTableDefinition().getName() : "";
+			message += " - "+fieldDefinition.getName() + " Type: " + fieldDefinition.getSQLType();
+			Globals.showNotification("Error", "Could Not find implementation for Field Definition Type : "+message, IFocEnvironment.TYPE_ERROR_MESSAGE);
+			fieldType = get(fieldDefinition.getSQLType());
+		}
+	}
+	
 	public void addFieldDeclarationInFocDesc(CodeWriter codeWriter, FieldDefinition fieldDefinition){
 		FDAbstract fieldType = get(fieldDefinition.getSQLType());
 		if(fieldType != null){

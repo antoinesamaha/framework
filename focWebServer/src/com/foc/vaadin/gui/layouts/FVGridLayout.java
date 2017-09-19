@@ -211,7 +211,11 @@ public class FVGridLayout extends DDGridLayout implements FVLayout {
     name       = null;
     type       = null;
     attributes = null;
-    delegate   = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
+    removeAllComponents();
   }
 
   @Override

@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface FocEntity {
 	public String name() default "";
-	public String dbResident() default "true";
-	public boolean tree() default false;
+	public String storageName() default "";
+	public boolean dbResident() default true;
+	public boolean isTree() default false;
 }

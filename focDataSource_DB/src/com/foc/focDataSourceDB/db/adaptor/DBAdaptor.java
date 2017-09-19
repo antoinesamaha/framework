@@ -1,7 +1,5 @@
 package com.foc.focDataSourceDB.db.adaptor;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,11 +8,6 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 
-import com.fab.model.project.FabProject;
-import com.fab.model.project.FabProjectDesc;
-import com.fab.model.project.FabWorkspace;
-import com.fab.model.project.FabWorkspaceDesc;
-import com.fab.model.table.TableDefinition;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
@@ -23,11 +16,9 @@ import com.foc.db.DBIndex;
 import com.foc.db.DBManager;
 import com.foc.db.FocDBException;
 import com.foc.db.SequenceDoesNotExistException;
-import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocModule;
-import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
@@ -265,12 +256,18 @@ public class DBAdaptor {
     	if(DBManagerServer.getInstance() != null){//Logging unused tables
     		Globals.logString("Unused Tables:");
     		
-    		Iterator<String> keyIter = actualTables_fillForOneConnection(DBManagerServer.getInstance().getConnectionPool(null)).keySet().iterator();
-    		while(keyIter != null && keyIter.hasNext()){
-    			String str = keyIter.next();
-    			if(getExeTables().get(str) == null){
-    				Globals.logString("DROP TABLE IF EXISTS "+str+";", false);
-    			}
+    		ConnectionPool connectionPool = DBManagerServer.getInstance().getConnectionPool(null);
+    		if(connectionPool != null){
+	    		Hashtable<String, String> actualTablesMap = connectionPool.newActualTables(getExeTables());
+	    		if(actualTablesMap != null){
+		    		Iterator<String> keyIter = actualTablesMap.keySet().iterator();
+		    		while(keyIter != null && keyIter.hasNext()){
+		    			String str = keyIter.next();
+		    			if(getExeTables().get(str) == null){
+		    				Globals.logString("DROP TABLE IF EXISTS "+str+";", false);
+		    			}
+		    		}
+	    		}
     		}
       }
 
@@ -386,7 +383,7 @@ public class DBAdaptor {
 	  	actualTablesByConnection = new HashMap<String, Hashtable<String, String>>();
 	
 	  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
-	  	Hashtable<String, String> actualTables = actualTables_fillForOneConnection(defaultConnection);
+	  	Hashtable<String, String> actualTables = defaultConnection.newActualTables(getExeTables());//actualTables_fillForOneConnection(defaultConnection);
 	  	actualTablesByConnection.put(null, actualTables);
 	  	
 	  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
@@ -394,7 +391,8 @@ public class DBAdaptor {
 	  		ConnectionPool connectionPool = auxConnIter.next();
 	  		String sourceKey = connectionPool.getDBSourceKey();
 	  		if(connectionPool != null && sourceKey != null){
-	  	  	actualTables = actualTables_fillForOneConnection(connectionPool);
+	  			actualTables = connectionPool.newActualTables(getExeTables());
+//	  	  	actualTables = actualTables_fillForOneConnection(connectionPool);
 	  	  	
 	  	  	actualTablesByConnection.put(sourceKey, actualTables);
 	  		}
@@ -404,7 +402,8 @@ public class DBAdaptor {
   	return actualTablesByConnection;
   }
   
-  private Hashtable<String, String> actualTables_fillForOneConnection(ConnectionPool connectionPool){
+  /*
+  public Hashtable<String, String> actualTables_fillForOneConnection(ConnectionPool connectionPool){
   	Hashtable<String, String> allTables = new Hashtable<String, String>();
     try {
     	Connection connection = connectionPool.getConnection();
@@ -440,6 +439,7 @@ public class DBAdaptor {
     }
     return allTables;
   }
+  */
   
   private void dropColumnConstrains_MSSQL(FocDesc focDesc, String columnName){
   	try{
@@ -759,61 +759,5 @@ public class DBAdaptor {
 
 	public boolean isAlterAllFields() {
 		return alterAllFields;
-	}
-	
-	public String writeCode_FromDataModel(){
-		String error = null;
-		
-		Hashtable allTables = actualTables_fillForOneConnection(DBManagerServer.getInstance().getConnectionPool(null));
-		Iterator tableNames = allTables.values().iterator();
-		while(tableNames != null && tableNames.hasNext()){
-			String tableName = (String) tableNames.next();
-			String nameToSearch = tableName.toUpperCase(); 
-
-			FocDesc focDesc = Globals.getApp().getFocDescByName(nameToSearch);
-			if(/*focDesc == null ||*/tableName.equals("Country")){ 
-				focDesc = new FocDesc(FocObject.class, FocDesc.DB_RESIDENT, tableName, false);
-				SQLTableDetails table = new SQLTableDetails(focDesc, true);//We are also getting the foreign keys
-				table.buildRequest();
-				table.execute();
-				
-				Hashtable<String, FField> actualFields = table.getFieldsHashtable();
-				Hashtable<String, String> foreignKeys  = table.getForeignKeys();
-				Iterator iter = actualFields.values().iterator();
-				int fieldID = 1;
-				while(iter.hasNext()){
-					FField realFld = (FField) iter.next();
-					
-					if(realFld.isAutoIncrement()){//REF Field
-						FField fld = focDesc.addReferenceField();
-						fld.setName(realFld.getDBName());
-					}else{
-						realFld.setId(fieldID);
-						focDesc.addField(realFld);
-						fieldID++;
-					}
-				}
-				
-				TableDefinition tableDef = TableDefinition.getTableDefinitionForFocDesc(focDesc, foreignKeys);
-				tableDef.setPackageName_ServerSide("siren.isf.fenix");
-				
-				FabProject   project   = new FabProject(new FocConstructor(FabProjectDesc.getInstance(), null));
-				FabWorkspace workspace = new FabWorkspace(new FocConstructor(FabWorkspaceDesc.getInstance(), null));
-				
-				workspace.setWorkspacePath("f:/eclipseworkspace_everpro");
-				project.setWorkspace(workspace);
-				project.setProjectPath("fenix/src");
-				tableDef.setProject(project);
-				tableDef.setPackageName_ServerSide("siren.isf.fenix.station");
-				
-				tableDef.setName(tableName);
-				tableDef.setClassName(tableName);
-				tableDef.setCW_ClassName_FocObject(tableName);
-				
-				tableDef.writeCode_ServerCode();
-			}
-		}
-		
-		return error;
 	}
 }

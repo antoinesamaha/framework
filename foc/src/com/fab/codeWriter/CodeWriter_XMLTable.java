@@ -36,7 +36,7 @@ public class CodeWriter_XMLTable extends CodeWriter {
 	
 	@Override
 	public String getPackageName(boolean autoGen) {
-		return null;
+		return super.getPackageName(autoGen)+".gui";
 	}
 	
 	@Override	
@@ -45,7 +45,7 @@ public class CodeWriter_XMLTable extends CodeWriter {
 		
 		CodeWriter_OneFile extWriter = getExternalFileWriter();
 		if(extWriter != null && getTblDef() != null && getTblDef().getFieldDefinitionList() != null){
-			extWriter.printCore("<VerticalLayout>\n");//Open Layout Tag
+			extWriter.printCore("<VerticalLayout captionMargin=\"0\" margin=\"true\" >\n");//Open Layout Tag
 
 			extWriter.printCore("\t<ValidationSettings withApply=\"false\" withAttach=\"false\" withPrint=\"false\"/>\n\n");
 

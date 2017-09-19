@@ -3,6 +3,7 @@ package com.fab.model.fieldFactory;
 import com.fab.codeWriter.CodeWriter;
 import com.fab.codeWriter.CodeWriter_OneFile;
 import com.fab.model.table.FieldDefinition;
+import com.foc.annotations.model.FocField;
 
 public abstract class FDAbstract implements IFieldType {
 
@@ -39,7 +40,36 @@ public abstract class FDAbstract implements IFieldType {
 		intWrt.printCore("  public void set"+varName+"("+getJavaType(fldDef)+" obj){\n");
 		intWrt.printCore("    setProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fldDef.getCW_FieldConstanteName()+", obj);\n");
 		intWrt.printCore("  }\n\n");
-	}	
+	}
+	
+	@Override
+	public void addFieldDeclarationInPojo(CodeWriter codeWriter, FieldDefinition fldDef) {
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+		
+		String fName = "FNAME_"+fldDef.getName();
+		
+		intWrt.printCore("  @FocField(type=\""+getJavaType(fldDef)+"\", size="+fldDef.getLength()+")\n");
+		intWrt.printCore("  public static final String "+fName+" = \""+fldDef.getName()+"\";\n");    
+	}
+	
+	@Override
+	public void addGetterSetterInPojo(CodeWriter codeWriter, FieldDefinition fldDef){
+		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();
+		
+		String fName = "FNAME_"+fldDef.getName();
+		
+		String varName = getGetterSetterMethodsPartialName(fldDef);
+		
+		intWrt.printCore("  public "+getJavaType(fldDef)+" get"+varName+"(){\n");
+		intWrt.printCore("    return ("+getJavaType(fldDef)+") getProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fName+");\n");
+		intWrt.printCore("  }\n\n");
+		
+		intWrt.printCore("  public void set"+varName+"("+getJavaType(fldDef)+" value){\n");
+		intWrt.printCore("    setProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fName+", value);\n");
+		intWrt.printCore("  }\n\n");
+
+//		addGetterSetterInFocObject(codeWriter, fldDef);
+	}
 	
 	public void addDeclarationInFocObjectWebClient(CodeWriter codeWriter, FieldDefinition fldDef) {
 		CodeWriter_OneFile intWrt = codeWriter.getInternalFileWriter();

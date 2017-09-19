@@ -174,7 +174,11 @@ public class FVAbsoluteLayout extends DDAbsoluteLayout implements FVLayout {
     name       = null;
     type       = null;
     attributes = null;
-    delegate   = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
+    removeAllComponents();
   }
 
   @Override

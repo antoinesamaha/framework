@@ -27,7 +27,12 @@ public class CodeWriterSet {
 			codeWriter_FocObject.dispose();
 			codeWriter_FocObject = null;
 		}
-		
+
+		if(codeWriter_PojoFocObject != null){
+			codeWriter_PojoFocObject.dispose();
+			codeWriter_PojoFocObject = null;
+		}
+
 		if(codeWriter_Proxy != null){
 			codeWriter_Proxy.dispose();
 			codeWriter_Proxy = null;
@@ -87,7 +92,13 @@ public class CodeWriterSet {
 		if(codeWriter_XMLForm == null) codeWriter_XMLForm = new CodeWriter_XMLForm(this);
 		return codeWriter_XMLForm;
 	}
-	
+
+	private CodeWriter_PojoFocObject codeWriter_PojoFocObject = null;
+	public CodeWriter_PojoFocObject getCodeWriter_PojoFocObject(){
+		if(codeWriter_PojoFocObject == null) codeWriter_PojoFocObject = new CodeWriter_PojoFocObject(this);
+		return codeWriter_PojoFocObject;
+	}
+
 	private CodeWriter_Proxy codeWriter_Proxy = null;
 	public CodeWriter_Proxy getCodeWriter_Proxy(){
 		if(codeWriter_Proxy == null) codeWriter_Proxy = new CodeWriter_Proxy(this);

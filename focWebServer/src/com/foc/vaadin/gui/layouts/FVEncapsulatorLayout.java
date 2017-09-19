@@ -35,6 +35,7 @@ public class FVEncapsulatorLayout extends HorizontalLayout implements FocXMLGuiC
   @Override
   public void dispose(){
   	dispose_Field();
+  	removeAllComponents();
   }
 
   public void dispose_Field(){

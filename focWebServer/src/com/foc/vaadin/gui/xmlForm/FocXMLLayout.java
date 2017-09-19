@@ -1528,7 +1528,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 			
 			validationLayout = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
-			if(!FocWebApplication.getInstanceForThread().isMobile()){
+//			if(!FocWebApplication.getInstanceForThread().isMobile()){
 				if(Globals.isValo()){
 					INavigationWindow navigationindow = getParentNavigationWindow();
 					
@@ -1545,15 +1545,15 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					addComponentAsFirst(validationLayout);
 					setComponentAlignment(validationLayout, Alignment.MIDDLE_CENTER);
 				}
-			}else{
-				validationLayout.setStyleName("transparent");
-				FVValidationLayout bottomValidationLayout = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
-				addComponent(bottomValidationLayout);
-				setComponentAlignment(bottomValidationLayout, Alignment.BOTTOM_RIGHT);
-				if(bottomValidationLayout.getDeleteButton(false) != null){
-					bottomValidationLayout.getDeleteButton(false).setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
-				}
-			}
+//			}else{
+//				validationLayout.setStyleName("transparent");
+//				FVValidationLayout bottomValidationLayout = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
+//				addComponent(bottomValidationLayout);
+//				setComponentAlignment(bottomValidationLayout, Alignment.BOTTOM_RIGHT);
+//				if(bottomValidationLayout.getDeleteButton(false) != null){
+//					bottomValidationLayout.getDeleteButton(false).setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
+//				}
+//			}
 			// setExpandRatio(validationLayout, 1);
 
 			validationLayout.addValidationListener(this);

@@ -67,6 +67,7 @@ import com.foc.focDataSourceDB.db.SQLSelectFindReferenceForWhereExpression;
 import com.foc.focDataSourceDB.db.SQLSelectJoinRequest;
 import com.foc.focDataSourceDB.db.SQLUpdate;
 import com.foc.focDataSourceDB.db.adaptor.DBAdaptor;
+import com.foc.focDataSourceDB.db.connectionPooling.ConnectionCredentials;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 import com.foc.focDataSourceDB.db.util.DBUtil;
@@ -368,10 +369,12 @@ public class FocDataSource_DB implements IFocDataSource {
     	dbInsert(focObject);
     	focObject.setCreated(false);// Is useless if the command is comming from the Access
                         // Subject Interface
+    	if(focObject.getThisFocDesc() != null) focObject.getThisFocDesc().resetStatusForFocObject(focObject);
     } else if (focObject.isModified()) {
     	dbUpdate(focObject);
     	focObject.setModified(false);// Is useless if the command is comming from the
                           // Access Subject Interface
+    	if(focObject.getThisFocDesc() != null) focObject.getThisFocDesc().resetStatusForFocObject(focObject);
     }
     
     FocNotificationManager.getInstance().threadCumulatingEvents_FireEventsCumulated();
@@ -759,7 +762,18 @@ public class FocDataSource_DB implements IFocDataSource {
 
   @Override
   public String command_DataModel2Code(){
-  	return getDBAdaptor().writeCode_FromDataModel();
+  	return null;
+//  	ConnectionCredentials credentials = new ConnectionCredentials();
+//  	credentials.setDrivers(ConfigInfo.getJdbcDrivers());
+//  	credentials.setUrl(ConfigInfo.getJdbcURL());
+//  	credentials.setUsername(ConfigInfo.getJdbcUserName());
+//  	credentials.setPassword(ConfigInfo.getJdbcPassword());
+////  	credentials.setXpassword(ConfigInfo.getJdbcXPassword());
+//  	
+//  	ConnectionPool pool = new ConnectionPool(credentials);
+////  	DBReverseEngineering reverse = new DBReverseEngineering(pool); 
+//  	
+//  	return getDBAdaptor().writeCode_FromDataModel();
   }
   
 	//-----------------------------------------------------

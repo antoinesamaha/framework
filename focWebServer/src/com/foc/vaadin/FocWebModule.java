@@ -9,6 +9,7 @@ import com.foc.admin.FocGroup;
 import com.foc.admin.FocVersion;
 import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.desc.FocModule;
+import com.foc.desc.pojo.PojoFileScanner;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.util.Utils;
 import com.foc.web.server.xmlViewDictionary.xmlViewKeyGenerator.XmlViewFileScanner;
@@ -87,7 +88,7 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 		this.versionLabel = versionLabel;
 	}
 
-	public void scanGuiPackage(String packageName){
+	public void scanGuiPackage(String packageName){		
 		XmlViewFileScanner xmlViewFileScanner = new XmlViewFileScanner(this, packageName);
 		xmlViewFileScanner.scanPush();
 		xmlViewFileScanner.dispose();

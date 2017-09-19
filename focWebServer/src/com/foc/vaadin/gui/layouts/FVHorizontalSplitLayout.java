@@ -44,9 +44,13 @@ public class FVHorizontalSplitLayout extends DDHorizontalSplitPanel implements F
   @Override
   public void dispose() {
     attributes = null;
-    delegate   = null;
+    if(delegate != null){
+    	delegate.dispose();
+    	delegate = null;
+    }
     name       = null;
     type       = null;
+    removeAllComponents();
   }
 
   @Override

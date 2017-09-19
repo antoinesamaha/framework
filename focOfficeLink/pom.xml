@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.focframework</groupId>
   <artifactId>focOfficeLink</artifactId>
-  <version>1.7.1-SNAPSHOT</version>
+  <version>${foc.version}</version>
   <name>focOfficeLink</name>
   <description>focOfficeLink</description>
   
@@ -34,17 +34,17 @@
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>foc</artifactId>
-  		<version>1.7.1-SNAPSHOT</version>
+  		<version>${foc.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>focAPI</artifactId>
-  		<version>1.7.1-SNAPSHOT</version>
+  		<version>${foc.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>focShared</artifactId>
-  		<version>1.7.1-SNAPSHOT</version>
+  		<version>${foc.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.vaadin</groupId>
@@ -67,4 +67,7 @@
   		<version>3.9</version>
   	</dependency>
   </dependencies>
+  <properties>
+  	<foc.version>1.7.1</foc.version>
+  </properties>
 </project>

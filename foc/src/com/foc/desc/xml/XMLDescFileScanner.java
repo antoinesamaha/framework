@@ -3,7 +3,6 @@ package com.foc.desc.xml;
 import java.util.ArrayList;
 
 import com.foc.Globals;
-import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
 import com.foc.desc.FocObject;
 import com.foc.loader.FocFileLoader;

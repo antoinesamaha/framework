@@ -6,6 +6,8 @@ import com.fab.model.table.FieldDefinition;
 public interface IFieldType {
 	public void addFieldDeclarationInFocDesc(CodeWriter codeWriter, FieldDefinition fldDef);
 	public void addGetterSetterInFocObject(CodeWriter codeWriter, FieldDefinition fldDef);
+	public void addFieldDeclarationInPojo(CodeWriter codeWriter, FieldDefinition fldDef);
+	public void addGetterSetterInPojo(CodeWriter codeWriter, FieldDefinition fldDef);
 	
 	/*
 	public void addDeclarationInFocObjectWebClient(CodeWriter codeWriter, FieldDefinition fldDef);

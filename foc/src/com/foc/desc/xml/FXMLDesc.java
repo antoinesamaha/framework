@@ -1,5 +1,7 @@
 package com.foc.desc.xml;
 
+import com.foc.desc.pojo.fields.IFocFieldType;
+
 public interface FXMLDesc {
   public static final String TAG_TABLE  = "Table";
   public static final String TAG_INDEX  = "Index";
@@ -19,32 +21,32 @@ public interface FXMLDesc {
   public static final String VAL_FILTER_LEVEL_MEMORY     = "mem";
   
   //Fields Predefined
-  public static final String TAG_REF           = "REF";
-  public static final String TAG_CODE          = "CODE";
-  public static final String TAG_COMPANY       = "COMPANY";
-  public static final String TAG_EXTERNAL_CODE = "EXTERNAL_CODE";
-  public static final String TAG_DATE          = "DATE";
-  public static final String TAG_DESCRIPTION   = "DESCRIPTION";
-  public static final String TAG_NAME          = "NAME";
-  public static final String TAG_SITE          = "SITE";
-  public static final String TAG_ORDER         = "ORDER";
-  public static final String TAG_NOT_COMPLETED = "NOT_COMPLETED";
-  public static final String TAG_IS_SYSTEM     = "IS_SYSTEM";
-  public static final String TAG_TREE          = "TREE";
+  public static final String TAG_REF           = IFocFieldType.TYPE_REF;
+  public static final String TAG_CODE          = IFocFieldType.TYPE_CODE;
+  public static final String TAG_COMPANY       = IFocFieldType.TYPE_COMPANY;
+  public static final String TAG_EXTERNAL_CODE = IFocFieldType.TYPE_EXTERNAL_CODE;
+  public static final String TAG_DATE          = IFocFieldType.TYPE_DATE;
+  public static final String TAG_DESCRIPTION   = IFocFieldType.TYPE_DESCRIPTION;
+  public static final String TAG_NAME          = IFocFieldType.TYPE_NAME;
+  public static final String TAG_SITE          = IFocFieldType.TYPE_SITE;
+  public static final String TAG_ORDER         = IFocFieldType.TYPE_ORDER;
+  public static final String TAG_NOT_COMPLETED = IFocFieldType.TYPE_NOT_COMPLETED;
+  public static final String TAG_IS_SYSTEM     = IFocFieldType.TYPE_IS_SYSTEM;
+  public static final String TAG_TREE          = IFocFieldType.TYPE_TREE;
   
   //Field Types
-  public static final String TAG_STRING          = "String";
-  public static final String TAG_INTEGER         = "Integer";
-  public static final String TAG_BOOLEAN         = "Boolean";
-  public static final String TAG_DOUBLE          = "Double";
-  public static final String TAG_DATE_FIELD      = "Date";
-  public static final String TAG_TIME_FIELD      = "Time";
-  public static final String TAG_MULTIPLE_CHOICE = "MultipleChoice";
-  public static final String TAG_MULTIPLE_CHOICE_STRING = "MultipleChoiceString";
-  public static final String TAG_BLOB            = "Blob";
+  public static final String TAG_STRING          = IFocFieldType.TYPE_STRING;
+  public static final String TAG_INTEGER         = IFocFieldType.TYPE_INTEGER;
+  public static final String TAG_BOOLEAN         = IFocFieldType.TYPE_BOOLEAN;
+  public static final String TAG_DOUBLE          = IFocFieldType.TYPE_DOUBLE;
+  public static final String TAG_DATE_FIELD      = IFocFieldType.TYPE_DATE_FIELD;
+  public static final String TAG_TIME_FIELD      = IFocFieldType.TYPE_TIME_FIELD;
+  public static final String TAG_MULTIPLE_CHOICE = IFocFieldType.TYPE_MULTIPLE_CHOICE;
+  public static final String TAG_MULTIPLE_CHOICE_STRING = IFocFieldType.TYPE_MULTIPLE_CHOICE_STRING;
+  public static final String TAG_BLOB            = IFocFieldType.TYPE_BLOB;
+  public static final String TAG_OBJECT          = IFocFieldType.TYPE_OBJECT;
   
   //Object field
-  public static final String TAG_OBJECT           = "Object";
   public static final String ATT_CASCADE          = "cascade";
   public static final String ATT_DETACH           = "detach";
   public static final String ATT_SAVE_ONE_BY_ONE  = "oneByOneSave";

@@ -33,6 +33,9 @@ public class FocXMLGuiComponentDelegate {
     component   = null;
     rootFocData = null;
     parentComponent = null;
+    columnId = null;
+    rowId = null;
+    dataPath = null;
   }
   
   public boolean hasNoRight(){

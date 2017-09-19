@@ -139,15 +139,15 @@ public class CodeWriter_OneFile {
 	
 	public void compile(){
 		if(getFileStream() != null){
-			if(getPackageName() != null){
+			if(getPackageName() != null && getFileExtention() != null && getFileExtention().equals("java")){
 				getFileStream().print("package "+getPackageName()+";\n\n");
-			}
 			
-			Iterator<String> iter = importsMap.values().iterator();
-			while(iter != null && iter.hasNext()){
-				getFileStream().print("import " + iter.next() + ";\n");
+				Iterator<String> iter = importsMap.values().iterator();
+				while(iter != null && iter.hasNext()){
+					getFileStream().print("import " + iter.next() + ";\n");
+				}
+				getFileStream().print("\n");
 			}
-			getFileStream().print("\n");
 			
 			getFileStream().print(coreBuffer);
 		}

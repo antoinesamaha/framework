@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.focframework</groupId>
   <artifactId>focAPI</artifactId>
-  <version>1.7.1-SNAPSHOT</version>
+  <version>${foc.version}</version>
   <name>focAPI</name>
   <description>focAPI</description>
   
@@ -28,6 +28,33 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+	   	</plugin>      
+	   	<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
     </plugins>
   </build>
+  <properties>
+  	<foc.version>1.7.1</foc.version>
+  </properties>
 </project>

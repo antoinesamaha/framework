@@ -81,9 +81,9 @@ public class ConnectionWrapper {
 		return pool;
 	}
 	
-	public DBManagerServer getDBManagerServer(){
-		return getPool() != null ? getPool().getDbManagerServer() : null;
-	}
+//	public DBManagerServer getDBManagerServer(){
+//		return getPool() != null ? getPool().getDbManagerServer() : null;
+//	}
 	
 	public int getProvider(){
 		return getPool() != null ? getPool().getProvider() : 0;
