@@ -1,11 +1,11 @@
 package com.foc.desc.pojo.fields;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
-import com.foc.annotations.model.FocField;
 import com.foc.desc.field.FField;
 
-public interface IFocFieldType {
+public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_REF           = "REF";
   public static final String TYPE_CODE          = "CODE";
   public static final String TYPE_COMPANY       = "COMPANY";
@@ -22,6 +22,7 @@ public interface IFocFieldType {
   //Field Types
   public static final String TYPE_STRING          = "String";
   public static final String TYPE_INTEGER         = "Integer";
+  public static final String TYPE_LONG            = "Long";
   public static final String TYPE_BOOLEAN         = "Boolean";
   public static final String TYPE_DOUBLE          = "Double";
   public static final String TYPE_DATE_FIELD      = "Date";
@@ -29,8 +30,11 @@ public interface IFocFieldType {
   public static final String TYPE_MULTIPLE_CHOICE = "MultipleChoice";
   public static final String TYPE_MULTIPLE_CHOICE_STRING = "MultipleChoiceString";
   public static final String TYPE_BLOB            = "Blob";
+  public static final String TYPE_BLOB_MEDIUM     = "BlobMedium";
+  public static final String TYPE_IMAGE           = "Image";
+  public static final String TYPE_FILE            = "File";
   public static final String TYPE_OBJECT          = "Object";
   
 	public String getTypeName();
-	public FField newFField(Class focObjClass, Field f, FocField fieldAnnotation);
+	public FField newFField(Class focObjClass, Field f, A a);
 }

@@ -1,5 +1,5 @@
-<VerticalLayout >
-  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
+<VerticalLayout margin="true" captionMargin="0">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" />
   <GuiTable name="WFTRANSACTION_WRAPPER_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="false" openEnabled="true" deleteEnabled="false" >
     <TableColumn name="TYPE" caption="Type" />
     <TableColumn name="CODE" caption="Code" link="true"/>

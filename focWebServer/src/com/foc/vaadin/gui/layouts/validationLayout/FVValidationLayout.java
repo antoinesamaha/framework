@@ -1134,7 +1134,7 @@ public class FVValidationLayout extends HorizontalLayout {
   
   
   public FVStageLayout_MenuBar getStageLayout(boolean createIfNeeded){
-  	if(stageLayout_MenuBar == null && createIfNeeded && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
+  	if(stageLayout_MenuBar == null && createIfNeeded && isWithStatus() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
   		ICentralPanel centralPanel = getCentralPanel();
   		if(centralPanel != null && centralPanel instanceof FocXMLLayout){
   			FocXMLLayout xmlLayout = (FocXMLLayout) centralPanel;

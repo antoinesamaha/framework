@@ -1,18 +1,22 @@
 package com.foc.desc.pojo;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
 import com.foc.annotations.model.FocEntity;
-import com.foc.annotations.model.FocField;
+import com.foc.annotations.model.FocWorkflow;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
 import com.foc.desc.field.FField;
 import com.foc.desc.pojo.fields.FocFieldFactory;
 import com.foc.desc.pojo.fields.IFocFieldType;
+import com.foc.desc.pojo.predefinedFields.FocPredefinedFieldFactory;
+import com.foc.desc.pojo.predefinedFields.IFocPredefinedFieldType;
 import com.foc.util.FocAnnotationUtil;
+import com.foc.util.Utils;
 
 public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 
@@ -103,16 +107,48 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
       FocEntity entity = (FocEntity) FocAnnotationUtil.findAnnotation(objClass, FocEntity.class);
       if(entity.isTree()) focDesc.setWithObjectTree();
       
+      FocWorkflow workflow = (FocWorkflow) FocAnnotationUtil.findAnnotation(objClass, FocWorkflow.class);
+      if(workflow != null){
+	    	String workflowCode  = workflow.code();
+	    	String workflowTitle = workflow.title();
+	    	focDesc.initWorkflow();
+	    	
+	    	if(Utils.isStringEmpty(workflowTitle)) workflowTitle = focDesc.getStorageName(); 
+	    	focDesc.setWorkflowTitle(workflowTitle);
+	    	
+	    	if(Utils.isStringEmpty(workflowCode)) workflowCode = focDesc.getStorageName();
+	    	focDesc.setWorkflowCode(workflowCode);
+      }
+      
+      Annotation[] ann = objClass.getAnnotations();
+    	for(Annotation a : ann){
+    		String simpleName = a.annotationType().getSimpleName();
+    		if(simpleName.startsWith("Foc") && simpleName.length() > 3){
+    			String fieldTypeName = simpleName.substring(3);
+	      	IFocPredefinedFieldType fieldType = FocPredefinedFieldFactory.getInstance().get(fieldTypeName);
+	      	if(fieldType != null){
+  	      	FField focField = fieldType.newFField(focDesc, a);
+  	      	focField.setId(focDesc.nextFldID());
+  	      	focDesc.addField(focField);
+	      	}
+    		}
+    	}
+      
       Field[] fields = objClass.getFields();
       for(Field f : fields){
-      	FocField fieldAnnotation = f.getAnnotation(FocField.class);
-      	if(fieldAnnotation != null){
-	      	String fieldTypeName = fieldAnnotation.type();
-	      	IFocFieldType fieldType = FocFieldFactory.getInstance().get(fieldTypeName);
-	      	FField focField = fieldType.newFField(null, f, fieldAnnotation);
-	      	focField.setId(focDesc.nextFldID());
-	      	focDesc.addField(focField);
-//	      	Modifier.isStatic(f.getModifiers());
+      	ann = f.getAnnotations();
+      	for(Annotation a : ann){
+      		String simpleName = a.annotationType().getSimpleName();
+      		if(simpleName.startsWith("Foc") && simpleName.length() > 3){
+      			String fieldTypeName = simpleName.substring(3);
+
+  	      	IFocFieldType fieldType = FocFieldFactory.getInstance().get(fieldTypeName);
+  	      	if(fieldType != null){
+	  	      	FField focField = fieldType.newFField(null, f, a);
+	  	      	focField.setId(focDesc.nextFldID());
+	  	      	focDesc.addField(focField);
+  	      	}
+      		}
       	}
       }
     } catch (Exception e) {

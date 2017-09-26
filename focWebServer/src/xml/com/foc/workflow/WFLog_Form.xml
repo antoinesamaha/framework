@@ -1,7 +1,7 @@
-<VerticalLayout spacing="true" width="100%" captionMargin="0">
-		<ValidationSettings formTitle="Workflow form 1" withApply="true" withAttach="true" withPrint="true" />
+<VerticalLayout spacing="true" width="100%" captionMargin="0" margin="true">
+		<ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" withStatus="false"/>
 		        
-		<HorizontalLayout spacing="false" captionMargin="0">
+		<HorizontalLayout spacing="true" captionMargin="0">
 			<GuiField name="SITE" caption="Site" />
 			<GuiField name="STATUS" caption="Status" />
       <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="Signature Stage" />

@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.foc.Globals;
 import com.foc.admin.FocUser;
+import com.foc.admin.FocUserDesc;
 import com.foc.business.department.Department;
 import com.foc.business.workflow.WFOperator;
 import com.foc.business.workflow.WFSite;
@@ -19,6 +20,7 @@ import com.foc.business.workflow.rights.RightLevel;
 import com.foc.business.workflow.rights.UserTransactionRight;
 import com.foc.business.workflow.signing.SiteStageCouple;
 import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FStringField;
@@ -362,6 +364,21 @@ public class WorkflowDesc {
   public boolean isAllowApprove(){
   	return rightLevel != null ? rightLevel.isAllowApprove() : false; 
   }
+
+	private static void mergeOperatorsArrays(ArrayList<WFOperator> a1, ArrayList<WFOperator> a2){
+		if(a1 != null && a2 != null){
+			for(WFOperator opp2 : a2){
+				boolean doAdd = true;
+				for(WFOperator opp1 : a1){
+					doAdd = !FocObject.equal(opp1.getTitle(), opp2.getTitle()) || !FocObject.equal(opp1.getArea(), opp2.getArea());
+					if(!doAdd) break;
+				}
+				if(doAdd){
+					a1.add(opp2);
+				}
+			}
+		}
+	}
   
 	//Method that returns an Array of internal Class (WFSite, WFStage)
 	public static ArrayList<SiteStageCouple> getSiteStageCoulpeArrayList(IWorkflowDesc workflowDesc){
@@ -369,11 +386,28 @@ public class WorkflowDesc {
 		
 		WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(workflowDesc.iWorkflow_getDBTitle());
 		FocUser user = Globals.getApp().getUser_ForThisSession();
-		ArrayList<WFOperator> titlesAndAreasForUser = user != null ? user.getOperatorsArray_AllAreas(true) : null;
+		ArrayList<WFOperator> titlesAndAreasForUser = new ArrayList<WFOperator>(); 
+		ArrayList<WFOperator> tempTitlesAndAreasForUser = user != null ? user.getOperatorsArray_AllAreas(true) : null;
+		mergeOperatorsArrays(titlesAndAreasForUser, tempTitlesAndAreasForUser);
+		
+		FocList userList = FocUserDesc.getList();
+		if(userList != null){
+			for(int i=0; i<userList.size(); i++){
+				FocUser otherUser = (FocUser) userList.getFocObject(i);
+				if(otherUser != null){
+					FocUser actingAsUser = otherUser.getReplacementUserActingAs();
+					if(FocObject.equal(actingAsUser, user)){
+						ArrayList<WFOperator> byReplacementTitlesAndAreasForUser = otherUser.getOperatorsArray_AllAreas(true);
+						if(byReplacementTitlesAndAreasForUser != null){
+							mergeOperatorsArrays(titlesAndAreasForUser, byReplacementTitlesAndAreasForUser);
+						}
+					}
+				}
+			}
+		}
 		
 		if(map != null && titlesAndAreasForUser != null){
-			for(int i=0; i<titlesAndAreasForUser.size(); i++){
-				WFOperator operator = titlesAndAreasForUser.get(i);
+			for(WFOperator operator : titlesAndAreasForUser){
 				if(operator != null){
 					WFTitle      title      = operator.getTitle();
 					WFSite       area       = operator.getArea();
@@ -396,5 +430,4 @@ public class WorkflowDesc {
 		}
 		return operatorInofrmationsList;
 	}
-
 }

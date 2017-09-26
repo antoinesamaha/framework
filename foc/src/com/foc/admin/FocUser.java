@@ -288,11 +288,24 @@ public class FocUser extends FocObject {
 			FocList operatorList = getOperatorList();
 			for(int i=0; i<operatorList.size() && !has; i++){
 				WFOperator operator = (WFOperator) operatorList.getFocObject(i);
-				if(operator != null && operator.getArea() != null && operator.getArea().equalsRef(area)){
+				if(operator != null && operator.getArea() != null && operator.getTitle() != null){
 					if(FocObject.equal(operator.getTitle(), title) && (operator.getDepartment() == null || operator.getDepartment().equalsRef(department))){
-						has = true;
-					}
+						
+						do{
+							if(operator.getArea().equalsRef(area)){
+								has = true;
+							}
+							area = (WFSite) area.getFatherObject();
+						}while(!has && area != null);
+						
+					}						
 				}
+				
+//				if(operator != null && operator.getArea() != null && operator.getArea().equalsRef(area)){
+//					if(FocObject.equal(operator.getTitle(), title) && (operator.getDepartment() == null || operator.getDepartment().equalsRef(department))){
+//						has = true;
+//					}
+//				}
 			}
 		}
 		return has;

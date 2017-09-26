@@ -16,7 +16,13 @@ public class FocFieldFactory {
 		put(new FTypeString());
 		put(new FTypeTime());
 		put(new FTypeInteger());
+		put(new FTypeLong());
 		put(new FTypeMultipleChoice());
+		put(new FTypeBlob());
+		put(new FTypeBlobMedium());
+		put(new FTypeImage());
+		put(new FTypeFile());
+		put(new FTypeObject());
 /*		
 		put(FieldDefinition.SQL_TYPE_ID_INT, new FDInteger());
 		put(FieldDefinition.SQL_TYPE_ID_CHAR_FIELD, new FDChar());

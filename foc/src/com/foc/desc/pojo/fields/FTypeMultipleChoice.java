@@ -3,27 +3,23 @@ package com.foc.desc.pojo.fields;
 import java.lang.reflect.Field;
 
 import com.foc.annotations.model.FocChoice;
-import com.foc.annotations.model.FocField;
+import com.foc.annotations.model.fields.FocMultipleChoice;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
 
-public class FTypeMultipleChoice extends FocFieldTypAbstract {
+public class FTypeMultipleChoice extends FocFieldTypAbstract<FocMultipleChoice> {
 
 	@Override
 	public String getTypeName() {
 		return TYPE_MULTIPLE_CHOICE;
 	}
 
-	protected int getDefaultSize(){
-		return 4;
-	}
-
 	@Override
-	public FField newFField(Class focObjClass, Field f, FocField fieldAnnotation) {
+	public FField newFField(Class focObjClass, Field f, FocMultipleChoice a) {
 		FMultipleChoiceField focField = null;
-		focField = new FMultipleChoiceField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, getSize(fieldAnnotation));
-		if(fieldAnnotation.choices() != null){
-			for(FocChoice c: fieldAnnotation.choices()){
+		focField = new FMultipleChoiceField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
+		if(a.choices() != null){
+			for(FocChoice c: a.choices()){
 				focField.addChoice(c.id(), c.title());
 			}
 		}

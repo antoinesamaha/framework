@@ -40,9 +40,18 @@ public class CodeWriter_PojoFocObject extends CodeWriter {
 		CodeWriter_Const cw_Const = getCodeWriterSet().getCodeWriter_Const();
 		
 		//-----------------------------------
+		intWriter.addImport("java.sql.Date");
+		intWriter.addImport("java.sql.Time");
 		intWriter.addImport("com.foc.annotations.model.FocChoice");
 		intWriter.addImport("com.foc.annotations.model.FocEntity");
-    intWriter.addImport("com.foc.annotations.model.FocField");
+    intWriter.addImport("com.foc.annotations.model.fields.FocBoolean");
+    intWriter.addImport("com.foc.annotations.model.fields.FocDate");
+    intWriter.addImport("com.foc.annotations.model.fields.FocDouble");
+    intWriter.addImport("com.foc.annotations.model.fields.FocMultipleChoice");
+    intWriter.addImport("com.foc.annotations.model.fields.FocString");
+    intWriter.addImport("com.foc.annotations.model.fields.FocInteger");
+    intWriter.addImport("com.foc.annotations.model.fields.FocObject");
+    intWriter.addImport("com.foc.annotations.model.fields.FocTime");
 		intWriter.addImport("com.foc.desc.FocConstructor");
 		intWriter.addImport("com.foc.desc.pojo.PojoFocObject");
 		intWriter.addImport("com.foc.desc.pojo.PojoFocDesc");

@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface FocWorkflow {
-	public String title();
-	public String code();
+	public String title() default "";
+	public String code() default "";
 }

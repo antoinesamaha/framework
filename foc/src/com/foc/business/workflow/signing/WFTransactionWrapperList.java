@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.foc.Globals;
+import com.foc.admin.FocUser;
 import com.foc.business.department.Department;
+import com.foc.business.workflow.WFOperator;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WorkflowTransactionFactory;
 import com.foc.business.workflow.implementation.IWorkflow;
@@ -43,7 +46,9 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 			Iterator<FocList> iter = originalListMap.values().iterator();
 			while(iter != null && iter.hasNext()){
 				FocList list = iter.next();
-				list.dispose();
+				if(isListOwner(list.getFocDesc())){
+					list.dispose();
+				}
 			}
 			
 			originalListMap.clear();
@@ -55,6 +60,10 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		return false;
 	}
 	
+	private boolean isListOwner(FocDesc focDesc){
+		return focDesc == null || !focDesc.isListInCache();
+	}
+	
 	public void fill(){
 		for(int i=0; i<WorkflowTransactionFactory.getInstance().getFocDescCount(); i++){
 			FocDesc       focDesc      = (FocDesc)       WorkflowTransactionFactory.getInstance().getFocDescAt(i);
@@ -62,7 +71,17 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 
 			WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(workflowDesc.iWorkflow_getDBTitle());
 			if(map != null){
-				FocList transList = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+				FocList transList = null;
+				if(!isListOwner(focDesc)){					
+					transList = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+				}else{
+					ArrayList<SiteStageCouple> siteStageCoupleArrayList = WorkflowDesc.getSiteStageCoulpeArrayList(workflowDesc);
+					String  additionalWhere = buildWhere(workflowDesc, siteStageCoupleArrayList);
+					
+					transList = focDesc.newFocList();
+					transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
+					transList.loadIfNotLoadedFromDB();
+				}
 				
 				if(transList != null){
 					for(int t=0; t<transList.size(); t++){
@@ -84,6 +103,8 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 							add(wrapper);
 						}
 					}
+					
+					originalListMap.put(workflowDesc.iWorkflow_getDBTitle(), transList);
 				}
 			}
 		}
@@ -339,7 +360,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		}
 		return stageField; 
 	}
-	
+
 	private boolean isSiteAReflectingField(IWorkflowDesc workflowDesc){
 		boolean reflecting = false;
 		FObjectField areaField  = getSiteField(workflowDesc);
@@ -356,8 +377,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 			FObjectField areaField  = getSiteField(workflowDesc);
 			FObjectField stageField = getStageField(workflowDesc);
 			
-			for(int i=0; i<siteStageArrayList.size(); i++){
-				SiteStageCouple operatorInofrmation = siteStageArrayList.get(i);
+			for(SiteStageCouple operatorInofrmation : siteStageArrayList){
 				if(operatorInofrmation != null){
 					WFSite  area      = operatorInofrmation.getSite();
 					WFStage prevStage = operatorInofrmation.getStage();
@@ -371,7 +391,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 					if(isSiteAReflectingField(workflowDesc)){//This is the case of all WBSPointerDesc. They are filtered in the memory after the request
 						str += "("+stageField.getDBName()+"="+stageRef+")";
 					}else{
-						str += "("+areaField.getDBName()+"="+area.getReference().getInteger()+" AND "+stageField.getDBName()+"="+stageRef+")";	
+						str += "("+areaField.getDBName()+"="+area.getReferenceInt()+" AND "+stageField.getDBName()+"="+stageRef+")";	
 					}
 				}
 			}

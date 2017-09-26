@@ -56,7 +56,6 @@ import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.IRightPanel;
 import com.foc.vaadin.fields.FocXMLGuiComponentCreator;
 import com.foc.vaadin.gui.FVGUIFactory;
-import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
@@ -231,13 +230,19 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 	public void dispose_ComponentsMap(){
 		if(getComponentMap() != null){
+			ArrayList<FocXMLGuiComponent> toDeleteArray = new ArrayList<FocXMLGuiComponent>(); 
 			Iterator<FocXMLGuiComponent> iter = getComponentMap().values().iterator();
 			if(iter != null){
 				while(iter.hasNext()){
 					FocXMLGuiComponent current = iter.next();
-					current.dispose();
+					toDeleteArray.add(current);
 				}
 			}
+
+			for(FocXMLGuiComponent comp : toDeleteArray){
+				comp.dispose();
+			}
+			
 			compMap.clear();
 			compMap = null;
 		}

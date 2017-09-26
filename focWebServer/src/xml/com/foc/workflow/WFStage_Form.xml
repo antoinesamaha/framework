@@ -1,4 +1,4 @@
-<VerticalLayout spacing="true" >
+<VerticalLayout spacing="true" margin="true">
   <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
   <GuiField name="NAME" caption="Name" width="-1px" height="-1px" />
   <GuiField name="DESCRIP" caption="Description" width="-1px" height="-1px" />

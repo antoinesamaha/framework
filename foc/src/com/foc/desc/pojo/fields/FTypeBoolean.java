@@ -2,12 +2,11 @@ package com.foc.desc.pojo.fields;
 
 import java.lang.reflect.Field;
 
-import com.foc.annotations.model.FocField;
+import com.foc.annotations.model.fields.FocBoolean;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
-import com.foc.desc.field.FStringField;
 
-public class FTypeBoolean extends FocFieldTypAbstract {
+public class FTypeBoolean extends FocFieldTypAbstract<FocBoolean> {
 
 	@Override
 	public String getTypeName() {
@@ -15,9 +14,10 @@ public class FTypeBoolean extends FocFieldTypAbstract {
 	}
 
 	@Override
-	public FField newFField(Class focObjClass, Field f, FocField fieldAnnotation) {
+	public FField newFField(Class focObjClass, Field f, FocBoolean a) {
 		FField focField = null;
 		focField = new FBoolField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
+		focField.setMandatory(a.mandatory());
 		return focField;
 	}
 	

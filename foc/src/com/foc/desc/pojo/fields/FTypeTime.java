@@ -2,12 +2,11 @@ package com.foc.desc.pojo.fields;
 
 import java.lang.reflect.Field;
 
-import com.foc.annotations.model.FocField;
+import com.foc.annotations.model.fields.FocTime;
 import com.foc.desc.field.FField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FTimeField;
 
-public class FTypeTime extends FocFieldTypAbstract {
+public class FTypeTime extends FocFieldTypAbstract<FocTime> {
 
 	@Override
 	public String getTypeName() {
@@ -15,9 +14,10 @@ public class FTypeTime extends FocFieldTypAbstract {
 	}
 
 	@Override
-	public FField newFField(Class focObjClass, Field f, FocField fieldAnnotation) {
+	public FField newFField(Class focObjClass, Field f, FocTime a) {
 		FField focField = null;
 		focField = new FTimeField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
+		focField.setMandatory(a.mandatory());
 		return focField;
 	}
 }

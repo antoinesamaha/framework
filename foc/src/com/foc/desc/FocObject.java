@@ -3997,7 +3997,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					if(neverLockWhateverTheStage){
 						allowModif = true;
 					}else{
-						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null && workflow_NeedsSignatureOfThisUser();//Only the user waiting to sign can edit
+						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null && workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck();//Only the user waiting to sign can edit
 					}
 //						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null || workflow_NeedsSignatureOfThisUser();//Only the user waiting to sign can edit
 				}
@@ -4080,7 +4080,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public FocObject workflow_getProjectWBS(){
 		return null;
 	}
-	
+
+	public boolean workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck(){
+		return workflow_NeedsSignatureOfThisUser_AsTitleIndex(null, false).getTitleIndex() >= 0;
+	}
+
 	public boolean workflow_NeedsSignatureOfThisUser(){
 		return workflow_NeedsSignatureOfThisUser(null);
 	}
@@ -4090,6 +4094,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	}
 	
 	public WFSignatureNeededResult workflow_NeedsSignatureOfThisUser_AsTitleIndex(WFMap map){
+		return workflow_NeedsSignatureOfThisUser_AsTitleIndex(map, true);
+	}
+	
+	public WFSignatureNeededResult workflow_NeedsSignatureOfThisUser_AsTitleIndex(WFMap map, boolean checkIfAllowSignature){
 		WFSignatureNeededResult signatureNeededResult = new WFSignatureNeededResult(-1, false);
 		
 		if(!iStatusHolder_isTransactionCanceled() && workflow_IsWorkflowSubject() && this instanceof IWorkflow){
@@ -4148,9 +4156,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 									boolean hasTitle               = user.hasTitle(currentSite, title, currentDepartment);
 									boolean hasTitle_ByReplacement = user.hasTitle_InActingAs(currentSite, title, currentDepartment);
 									if(hasTitle || hasTitle_ByReplacement){
-										if(((IWorkflow)this).iWorkflow_allowSignature(currentSignature)){
+										if(!checkIfAllowSignature || ((IWorkflow)this).iWorkflow_allowSignature(currentSignature)){
 											signatureNeededResult.setTitleIndex(t);
 											signatureNeededResult.setOnBehalfOf(hasTitle_ByReplacement);
+										}else{
+											signatureNeededResult.setSignature(null);
 										}
 									}
 								}

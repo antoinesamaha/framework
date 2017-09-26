@@ -1094,6 +1094,12 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return foundObj;
   }
   
+  public FocObject searchByPropertyObjectReference(String fieldName, int ref){
+  	FocDesc focDesc = getFocDesc();
+  	FField field = focDesc != null ? focDesc.getFieldByName(fieldName) : null;
+  	return field != null ? searchByPropertyObjectReference(field.getID(), ref) : null;
+  }
+  
   public FocObject searchByPropertyObjectReference(int id, int ref){
     FocObject foundObj = null;
     Iterator iter = elements != null ? elements.keySet().iterator() : null;

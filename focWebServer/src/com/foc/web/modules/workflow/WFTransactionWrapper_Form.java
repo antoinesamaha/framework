@@ -219,6 +219,7 @@ public class WFTransactionWrapper_Form extends FocXMLLayout {
 					copyGuiToMemory();
 					getTransactionWrapper().sign();
 					
+					/*
 					if(getTransactionWrapper().getWorkflow() != null && innerFocXMLLayout != null){
 						String xmlContent = XMLViewDictionary.getInstance().pasrseXmlLayout(innerFocXMLLayout.getFocData(), innerFocXMLLayout.getXMLView(), innerFocXMLLayout.getXMLView().getXmlViewKey());
 						WFLog log = getTransactionWrapper().getWorkflow().iWorkflow_getWorkflow().getLastSignatureEvent(false);
@@ -227,6 +228,7 @@ public class WFTransactionWrapper_Form extends FocXMLLayout {
 							log.validate(true);
 						}
 					}
+					*/
 					
 					gotoNextSlide();
 				}

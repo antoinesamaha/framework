@@ -3,7 +3,7 @@ package com.fab.model.fieldFactory;
 import com.fab.codeWriter.CodeWriter;
 import com.fab.codeWriter.CodeWriter_OneFile;
 import com.fab.model.table.FieldDefinition;
-import com.foc.annotations.model.FocField;
+import com.foc.util.Utils;
 
 public abstract class FDAbstract implements IFieldType {
 
@@ -48,7 +48,26 @@ public abstract class FDAbstract implements IFieldType {
 		
 		String fName = "FNAME_"+fldDef.getName();
 		
-		intWrt.printCore("  @FocField(type=\""+getJavaType(fldDef)+"\", size="+fldDef.getLength()+")\n");
+		String attributes = "";
+		if(fldDef.getLength() > 0){
+			if(attributes.length() > 0) attributes = ", "+attributes;
+			attributes = "size="+fldDef.getLength();
+		}
+		if(fldDef.isMandatory()){
+			if(attributes.length() > 0) attributes = ", "+attributes;
+			attributes = "mandatory="+fldDef.isMandatory();
+		}
+		if(fldDef.getDecimals() > 0){
+			if(attributes.length() > 0) attributes = ", "+attributes;
+			attributes = "decimal="+fldDef.getDecimals();
+		}		
+    if(!Utils.isStringEmpty(fldDef.getFocDescName())){
+			if(attributes.length() > 0) attributes = ", "+attributes;
+			attributes = "table="+fldDef.getFocDescName();
+		}		
+    String typeName = getFocPropertyMethodPartialName(fldDef);
+    if(!typeName.startsWith("Foc")) typeName = "Foc" + typeName;  
+		intWrt.printCore("  @"+typeName+"("+attributes+")\n");
 		intWrt.printCore("  public static final String "+fName+" = \""+fldDef.getName()+"\";\n");    
 	}
 	
@@ -58,7 +77,7 @@ public abstract class FDAbstract implements IFieldType {
 		
 		String fName = "FNAME_"+fldDef.getName();
 		
-		String varName = getGetterSetterMethodsPartialName(fldDef);
+		String varName = fldDef.getName();//getGetterSetterMethodsPartialName(fldDef);
 		
 		intWrt.printCore("  public "+getJavaType(fldDef)+" get"+varName+"(){\n");
 		intWrt.printCore("    return ("+getJavaType(fldDef)+") getProperty"+getFocPropertyMethodPartialName(fldDef)+"("+fName+");\n");
