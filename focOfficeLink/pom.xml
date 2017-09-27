@@ -68,6 +68,6 @@
   	</dependency>
   </dependencies>
   <properties>
-  	<foc.version>1.7.1</foc.version>
+  	<foc.version>1.7.1-SNAPSHOT</foc.version>
   </properties>
 </project>
