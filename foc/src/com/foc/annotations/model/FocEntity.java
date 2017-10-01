@@ -12,5 +12,10 @@ public @interface FocEntity {
 	public String name() default "";
 	public String storageName() default "";
 	public boolean dbResident() default true;
+	public boolean allowAdaptDataModel() default true;
 	public boolean isTree() default false;
+	public FocJoin[] joins() default {};
+	public String filterOnTable() default "";
+	public FocFilterCondition[] filterConditions() default {};
+	public FocGroupByField[] groupByFields() default {};
 }

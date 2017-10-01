@@ -18,6 +18,8 @@ import com.foc.util.Utils;
 
 public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDesc, IWorkflowDesc {
 
+//	public abstract boolean isJoin();
+	
   private static final int FLD_STATUS_SHIFT          = 1;
   private static final int FLD_CREATION_DATE_SHIFT   = 2;
   private static final int FLD_VALIDATION_DATE_SHIFT = 3;
@@ -184,7 +186,11 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 		return nextFldID++;
 	}
 
-	public void afterXMLParsing(){
+	public void afterParsing(){
+		createListenersForPropertyChangedMethods();
+	}
+	
+	private void createListenersForPropertyChangedMethods(){
 		Method[] declaredMethods = getFocObjectClass().getDeclaredMethods();
 		for(int i=0; i<declaredMethods.length; i++){
 			Method method = declaredMethods[i];

@@ -74,8 +74,10 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FObjectField;
-import com.foc.desc.xml.FocDescDeclaration_XMLBased_WFLog;
-import com.foc.desc.xml.XMLFocDesc;
+import com.foc.desc.parsers.pojo.FocDescDeclaration_PojoBased_WFLog;
+import com.foc.desc.parsers.pojo.PojoFocDesc;
+import com.foc.desc.parsers.xml.FocDescDeclaration_XMLBased_WFLog;
+import com.foc.desc.parsers.xml.XMLFocDesc;
 import com.foc.fUnit.FocTestSuite;
 import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
@@ -1256,6 +1258,15 @@ public class Application {
 		  			XMLFocDesc xmlFocDesc = (XMLFocDesc) focDesc;
 		  			if(xmlFocDesc.iWorkflow_getWorkflowDesc() != null && !xmlFocDesc.hasJoinNode()){
 		  				FocDescDeclaration_XMLBased_WFLog logDeclaration = new FocDescDeclaration_XMLBased_WFLog(xmlFocDesc);
+		  				logDeclaration.getFocDescription();
+		  				newDeclarations.add(logDeclaration);
+		  			}
+		  		}
+		  		//Adding the Workflow and LOG Table
+		  		if(focDesc instanceof PojoFocDesc){
+		  			PojoFocDesc pojoFocDesc = (PojoFocDesc) focDesc;
+		  			if(pojoFocDesc.iWorkflow_getWorkflowDesc() != null && !pojoFocDesc.hasJoinNode()){
+		  				FocDescDeclaration_PojoBased_WFLog logDeclaration = new FocDescDeclaration_PojoBased_WFLog(pojoFocDesc);
 		  				logDeclaration.getFocDescription();
 		  				newDeclarations.add(logDeclaration);
 		  			}

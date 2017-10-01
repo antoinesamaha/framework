@@ -231,12 +231,15 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	protected Component newLogoEmbedded(){
 		Link iconLink = new Link();
 //		iconLink.setIcon(new ThemeResource("img/everpro_logo.png"));
+		
 		iconLink.setIcon(new ThemeResource("img/logo.png"));
 		String logoURL = getLogoURL();
 		if(logoURL != null){
 			iconLink.setResource(new ExternalResource(logoURL));
 		}
-		iconLink.setStyleName("everproLogo");
+		
+//		iconLink.setStyleName("everproLogo");
+		iconLink.setStyleName("foc-UpperLogo");
 
 		return iconLink;
 	}

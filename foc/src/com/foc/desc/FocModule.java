@@ -1,8 +1,8 @@
 package com.foc.desc;
 
 import com.foc.Globals;
-import com.foc.desc.pojo.PojoFileScanner;
-import com.foc.desc.xml.XMLDescFileScanner;
+import com.foc.desc.parsers.pojo.PojoFileScanner;
+import com.foc.desc.parsers.xml.XMLDescFileScanner;
 import com.foc.menu.FMenuList;
 import com.foc.util.Utils;
 

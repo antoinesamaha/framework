@@ -675,10 +675,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
     height: 40px;
   }
   */
-  .everproLogo a img {
-    width: 250x;
+  .foc-UpperLogo{
+    width: 250px;
     height: 40px;
   }
+    
+  /*
+  .upperLogo a img {
+    background-image: url("img456/logo.png");
+    background-size: 250px 40px;
+  }
+  */
     
   .v-caption-focNoCaptionMargin {
     display: none;

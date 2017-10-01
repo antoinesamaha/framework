@@ -9,7 +9,7 @@ import com.foc.admin.FocGroup;
 import com.foc.admin.FocVersion;
 import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.desc.FocModule;
-import com.foc.desc.pojo.PojoFileScanner;
+import com.foc.desc.parsers.pojo.PojoFileScanner;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.util.Utils;
 import com.foc.web.server.xmlViewDictionary.xmlViewKeyGenerator.XmlViewFileScanner;

@@ -214,8 +214,14 @@ public class FObjectField extends FField {
   	String name = getForcedDBName();
   	if(name == null){
 	    name = keyPrefix != null ? keyPrefix :"";
-	    name = name + FField.REF_FIELD_NAME;
-  	}
+	    //BAntoineS - 2017-10-01 
+	    if(getFocDesc() != null && !Utils.isStringEmpty(getFocDesc().getRefFieldName())) {
+	    	name = name + getFocDesc().getRefFieldName();
+	    }else{
+		    //EAntoineS - 2017-10-01	    	
+	    	name = name + FField.REF_FIELD_NAME;
+	    }
+	  }
     return name;
   }
   
