@@ -8,11 +8,12 @@ import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 
 public interface ITableTree {
-	public static final int VIEW_CONTAINER_NOT_SET      = -1;
-	public static final int VIEW_CONTAINER_SAME_WINDOW  =  0;
-	public static final int VIEW_CONTAINER_NONE         =  1;
-	public static final int VIEW_CONTAINER_POPUP        =  2;
-	public static final int VIEW_CONTAINER_INNER_LAYOUT =  3;
+	public static final int VIEW_CONTAINER_NOT_SET         = -1;
+	public static final int VIEW_CONTAINER_SAME_WINDOW     =  0;
+	public static final int VIEW_CONTAINER_NONE            =  1;
+	public static final int VIEW_CONTAINER_POPUP           =  2;
+	public static final int VIEW_CONTAINER_INNER_LAYOUT    =  3;
+	public static final int VIEW_CONTAINER_NEW_BROWSER_TAB =  4;
 	
   //public FVTableColumn addColumn(Attributes attribute);
   public FVCheckBox        getEditableCheckBox();

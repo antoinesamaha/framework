@@ -61,6 +61,7 @@ import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.BusinessEssentialsWebModule;
 import com.foc.web.modules.business.FocFormula_Form;
+import com.foc.web.server.session.FocWebSession;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -1784,6 +1785,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 //				getMainWindow().changeCentralPanelContent(panel, true);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
 				getWrapperLayout().innerLayout_Replace(panel);
+			}else if(viewContainer == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
+				FocWebApplication.getFocWebSession_Static().setInitialContectForm(panel);
 			}
 		}
 	}
@@ -1829,6 +1832,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			view = ITableTree.VIEW_CONTAINER_SAME_WINDOW;
 		}else if(attribValue.equals(FXML.VAL_VIEW_CONTAINER__POPUP_WINDOW)){
 			view = ITableTree.VIEW_CONTAINER_POPUP;
+		}else if(attribValue.equals(FXML.VAL_VIEW_CONTAINER__NEW_TAB)){
+			view = ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB;
 		}else if(attribValue.equals(FXML.VAL_VIEW_CONTAINER__INNER_LAYOUT)){
 			view = ITableTree.VIEW_CONTAINER_INNER_LAYOUT;
 			if(wrapperLayout != null){
@@ -1846,6 +1851,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			attrib = FXML.VAL_VIEW_CONTAINER__POPUP_WINDOW;
 		}else if(value == ITableTree.VIEW_CONTAINER_SAME_WINDOW){
 			attrib = FXML.VAL_VIEW_CONTAINER__SAME_WINDOW;
+		}else if(value == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
+			attrib = FXML.VAL_VIEW_CONTAINER__NEW_TAB;			
 		}else if(value == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
 			attrib = FXML.VAL_VIEW_CONTAINER__INNER_LAYOUT;
 		}

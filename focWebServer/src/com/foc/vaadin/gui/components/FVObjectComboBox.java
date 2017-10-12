@@ -3,6 +3,7 @@ package com.foc.vaadin.gui.components;
 import org.xml.sax.Attributes;
 
 import com.fab.gui.xmlView.IAddClickSpecialHandler;
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
@@ -47,6 +48,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 	private ICentralPanel               openedCentralPanel = null;
 	private IObjectSelectWindowListener iObjectSelectWindowListener = null;
 	private ValueChangeListener         valueChangeListener = null;
+//	private boolean                     disableChangeOfValue = false;
 	
   public FVObjectComboBox(IFocData objProperty) {
     this(objProperty, (String)null);
@@ -107,6 +109,9 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   		valueChangeListener = new ValueChangeListener() {
 				@Override
 				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
+//					if(disableChangeOfValue){
+//						copyMemoryToGui();
+//					}else 
 					if(event != null && event.getProperty() != null && event.getProperty().getValue() instanceof Integer){
 						int valueInteger = Integer.valueOf(event.getProperty().getValue()+"");
 						
@@ -380,6 +385,16 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 	@Override
 	public void refreshEditable() {
 		setEnabled(getDelegate() != null ? getDelegate().isEditable() : true);
+	}
+	
+	@Override
+	public void setEnabled(boolean enabled) {
+//			disableChangeOfValue = !enabled;
+		if(ConfigInfo.comboBoxShowDropDownEvenWhenDisabled() && !enabled){
+			FocXMLLayout parentLayout = findAncestor(FocXMLLayout.class);
+			if(parentLayout != null) parentLayout.addFieldToValueChangeListener(this);
+//			setImmediate(true);
+		}else super.setEnabled(enabled);
 	}
 	
 	public FocObject addNewObject(){

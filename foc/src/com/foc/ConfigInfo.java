@@ -647,4 +647,8 @@ public class ConfigInfo {
 	public static boolean isShrinkDBNames() {
 		return shrinkDBNames;
 	}
+	
+	public static boolean comboBoxShowDropDownEvenWhenDisabled(){
+		return true;
+	}
 }

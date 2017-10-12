@@ -13,6 +13,7 @@ import com.foc.business.workflow.WFSite;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedSession;
@@ -27,6 +28,7 @@ public class FocWebSession implements Serializable {
 	private FocDataDictionary dataDictionaly_ToPrint = null;
 	private boolean           exitAfterPrint         = false;
 	private boolean           notificationEnabled    = true;
+	private ICentralPanel     initialContectForm     = null;
 	
 	private HashMap<String, Object> parameterMap = null;
 	
@@ -133,5 +135,13 @@ public class FocWebSession implements Serializable {
 
 	public void setNotificationEnabled(boolean allowPopupException) {
 		this.notificationEnabled = allowPopupException;
+	}
+
+	public ICentralPanel getInitialContectForm() {
+		return initialContectForm;
+	}
+
+	public void setInitialContectForm(ICentralPanel initialContectForm) {
+		this.initialContectForm = initialContectForm;
 	}
 }

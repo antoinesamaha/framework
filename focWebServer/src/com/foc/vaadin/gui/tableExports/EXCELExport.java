@@ -39,14 +39,14 @@ public abstract class EXCELExport
     this.textFile = null;
   }
   
-  private void createFile()
+  public void createFile()
   {
     try
     {
       this.textFile = new File(getFileName() + ".xlsx");
       FileWriter localFileWriter = new FileWriter(this.textFile);
       this.workbook = new XSSFWorkbook();
-      this.sheet = this.workbook.createSheet(getFileName());
+      newSheet(getFileName());
     }
     catch (Exception localException)
     {
@@ -54,13 +54,25 @@ public abstract class EXCELExport
     }
   }
 
+  public void newSheet(String sheetName){
+    try {
+      this.sheet = this.workbook.createSheet(sheetName);
+      rowCount = 0;
+      columnCount = 0;
+      row = null;
+      cell = null;
+    } catch (Exception localException){
+      localException.printStackTrace();
+    }
+  }  
+  
   public void setRightToLeft(boolean r2l){ 
 	  if(this.sheet != null){
 	  	this.sheet.setRightToLeft(r2l);
 	  }
   }
   
-  private void downloadFile()
+  public void downloadFile()
   {
     try
     {

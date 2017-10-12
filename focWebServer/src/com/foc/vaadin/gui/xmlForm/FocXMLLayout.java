@@ -897,7 +897,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
-	private void addFieldToValueChangeListener(FocXMLGuiComponent guiComponent){
+	public void addFieldToValueChangeListener(FocXMLGuiComponent guiComponent){
 		Field fieldToListenTo = guiComponent.getFormField();
 		if(fieldToListenTo != null && fieldToListenTo instanceof AbstractComponent){
 			getValueChangeListener().addField(fieldToListenTo);	
@@ -1092,8 +1092,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public boolean validationCommit(FVValidationLayout validationLayout) {
 		boolean error = copyGuiToMemory();
 		if(!error && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
-			if(!error) error = innerLayout_Commit();
-//			if(!error) innerLayout_checkAllSiblinsAndDeleteEmpty();
+			//We should check all before starting to save
+			if(!error) error = innerLayout_CommitNotEmptyItems(false);
+			
+			
+			if(!error) error = innerLayout_CommitNotEmptyItems(true);
 			if(!error) error = validateDataBeforeCommit(validationLayout);
 		}
 		
@@ -1130,15 +1133,20 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private boolean copyGuiToMemoryForASingleComponent(FocXMLGuiComponent obj) {
 		boolean error = false;
 		if(obj != null && obj.getFocData() instanceof FProperty){
-			FProperty property = (FProperty) obj.getFocData();
-
-			if(property != null){
-				boolean backup = property.isDesactivateListeners();
-				property.setDesactivateListeners(true);
-				error = obj.copyGuiToMemory();
-				property.setDesactivateListeners(backup);
+			if(ConfigInfo.comboBoxShowDropDownEvenWhenDisabled() && !obj.getDelegate().isEditable()){
+				obj.copyMemoryToGui();
+				if(obj.getFormField() != null) obj.getFormField().markAsDirty();
 			}else{
-				error = obj.copyGuiToMemory();
+				FProperty property = (FProperty) obj.getFocData();
+	
+				if(property != null){
+					boolean backup = property.isDesactivateListeners();
+					property.setDesactivateListeners(true);
+					error = obj.copyGuiToMemory();
+					property.setDesactivateListeners(backup);
+				}else{
+					error = obj.copyGuiToMemory();
+				}
 			}
 		}
 		return error;
@@ -2883,7 +2891,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 	
-	private boolean innerLayout_RemoveAllEmptyCreatedItems(boolean withCommit){
+	private boolean innerLayout_CommitNotEmptyItems(boolean withCommit){
 		boolean error = false;
 		
 		//Fill array of FVTableWrapperLayout
@@ -2896,8 +2904,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 		}
 
-		//1- Set empty created items to deleted
-		//2- Commit other cases
+		//Commit Not empty items
 		for(int i=0; i<arrayList.size() && !error; i++){
 			FVTableWrapperLayout tableWrapperLayout = arrayList.get(i);
 			ICentralPanel centralPanel = tableWrapperLayout.innerLayout_GetICentralPanel();
@@ -2906,7 +2913,6 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				if(centralPanel.getFocData() instanceof FocObject){
 					FocObject focObject = (FocObject) centralPanel.getFocData();
 					if(focObject.isEmpty() && focObject.isCreated()){
-//						focObject.setDeleted(true);
 						callCommit = false;
 					}
 				}
@@ -2923,10 +2929,6 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return error;
 	}
 	
-	private boolean innerLayout_Commit(){
-		return innerLayout_RemoveAllEmptyCreatedItems(true);
-	}
-
 	@Override
 	public ICentralPanel getRootCentralPanel() {
 		FocXMLLayout layout = this;

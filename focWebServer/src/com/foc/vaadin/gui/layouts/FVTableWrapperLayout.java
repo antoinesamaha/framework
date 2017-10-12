@@ -515,6 +515,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			valo_AddEmbedded.setStyleName(BaseTheme.BUTTON_LINK);
 			valo_AddEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			valo_AddEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+			valo_AddEmbedded.setDescription("Add");
 			FocXMLGuiComponentStatic.setCaptionMargin_Zero(valo_AddEmbedded);
 
 			valo_AddEmbedded.addClickListener(new MouseEvents.ClickListener() {

@@ -18,6 +18,8 @@ import com.foc.property.FMultipleChoice;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.property.FString;
+import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
@@ -42,6 +44,7 @@ import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
+import com.vaadin.server.BrowserWindowOpener;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.AbstractComponent;
@@ -55,6 +58,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.PopupView.PopupVisibilityEvent;
 import com.vaadin.ui.PopupView.PopupVisibilityListener;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.Runo;
 
@@ -389,6 +393,12 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					button.addClickListener(hyperLinkButtonListener);
 					button.addStyleName("focLinkInTable");
 					objReturned = button;
+					
+					if(getTableTreeDelegate().getViewContainer_ForOpen() == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
+				  	BrowserWindowOpener opener = null; 
+				  	opener = new BrowserWindowOpener(UI.getCurrent().getClass());
+				    opener.extend(button);
+					}
 				}
 			}else{
 				objReturned = property;

@@ -19,6 +19,7 @@ import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.menuStructure.FocMenuItemDesc;
 import com.foc.performance.PerfManager;
+import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.FVIconFactory;
@@ -784,6 +785,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   		  XMLViewKey xmlViewKey = new XMLViewKey(FocUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, AdminWebModule.CTXT_LOGIN, XMLViewKey.VIEW_DEFAULT);
   		  centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, user);
   		}
+  	}else if(path != null && path.toLowerCase().startsWith("/popup/")){
+  		ICentralPanel newCentralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
+      this.changeCentralPanelContent(centralPanel, true);
   	}else if(path != null && path.toLowerCase().endsWith("/downloads")){
   		FocList focList = DownloadableContentDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
       XMLViewKey xmlViewKey = new XMLViewKey(DownloadableContentDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, DownloadableContentWebModule.CTXT_SPECIAL_URL, XMLViewKey.VIEW_DEFAULT);
