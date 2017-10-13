@@ -38,7 +38,7 @@ public class Contact_Form extends FocXMLLayout {
   }
   
   @Override
-  public boolean validationCommit(FVValidationLayout validationLayout) {
+  public boolean validationCheckData(FVValidationLayout validationLayout) {
   	copyGuiToMemory();
     Contact contact = (Contact) getFocData();
     AdrBookParty party = contact.getAdrBookParty();
@@ -51,7 +51,7 @@ public class Contact_Form extends FocXMLLayout {
 
     if (!error) {
       // party.validate(true);
-      error = super.validationCommit(validationLayout);
+      error = super.validationCheckData(validationLayout);
     }
     return error;
   }

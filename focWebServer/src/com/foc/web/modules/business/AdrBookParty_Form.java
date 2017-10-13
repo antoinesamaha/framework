@@ -123,7 +123,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 		}
 	}
 	/*
-	public static boolean validationCommit_OfAdrBook(AdrBookParty adrBookParty, FocXMLLayout layout, FVValidationLayout validationLayout){
+	public static boolean validationCheckData_OfAdrBook(AdrBookParty adrBookParty, FocXMLLayout layout, FVValidationLayout validationLayout){
 		boolean error = false;
 		BusinessConfig config = BusinessConfig.getInstance();
 		if(config != null	&& config.isContactInPartyMandatory()){
@@ -138,7 +138,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 						//Because when saving a FocObject FOC will look for Object Properties and if they are new will save them first.
 						//Since here both FocObjets (Contact and AdrBookParty) are new, we will enter an infinite loop
 //						getAdrBookParty().setDefaultContact(null);
-						error = layout.super.validationCommit(validationLayout);
+						error = layout.super.validationCheckData(validationLayout);
 
 					}
 				}
@@ -150,7 +150,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 					&& adrBookParty.getDefaultContact().getFamilyName().isEmpty()){
 				adrBookParty.getDefaultContact().setDeleted(true);
 				adrBookParty.setDefaultContact(null);
-				//error =  super.validationCommit(validationLayout);
+				//error =  super.validationCheckData(validationLayout);
 			}else if(
 							adrBookParty != null 
 					&& 	adrBookParty.getDefaultContact() != null
@@ -172,7 +172,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 				if(adrBookParty != null && adrBookParty.getDefaultContact() != null){
 					Contact contact = adrBookParty.getDefaultContact();
 					adrBookParty.setDefaultContact(null);
-					error = super.validationCommit(validationLayout);
+					error = super.validationCheckData(validationLayout);
 					if(!error){
 						contact.validate(true);
 						adrBookParty.setDefaultContact(contact);
@@ -185,7 +185,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 	*/
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		boolean error = false;
 		BusinessConfig config = BusinessConfig.getInstance();
 		if(config != null	&& config.isContactInPartyMandatory()){
@@ -200,7 +200,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 						//Because when saving a FocObject FOC will look for Object Properties and if they are new will save them first.
 						//Since here both FocObjets (Contact and AdrBookParty) are new, we will enter an infinite loop
 //						getAdrBookParty().setDefaultContact(null);
-						error = super.validationCommit(validationLayout);
+						error = super.validationCheckData(validationLayout);
 //						if(!error){
 //							contact.validate(true);
 //							getAdrBookParty().setDefaultContact(contact);
@@ -216,7 +216,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 					&& getAdrBookParty().getDefaultContact().getFamilyName().isEmpty()){
 				getAdrBookParty().getDefaultContact().setDeleted(true);
 				getAdrBookParty().setDefaultContact(null);
-				error =  super.validationCommit(validationLayout);
+				error =  super.validationCheckData(validationLayout);
 			}else if(
 							getAdrBookParty() != null 
 					&& 	getAdrBookParty().getDefaultContact() != null
@@ -238,7 +238,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
 				if(getAdrBookParty() != null && getAdrBookParty().getDefaultContact() != null){
 					Contact contact = getAdrBookParty().getDefaultContact();
 					getAdrBookParty().setDefaultContact(null);
-					error = super.validationCommit(validationLayout);
+					error = super.validationCheckData(validationLayout);
 					if(!error){
 						contact.validate(true);
 						getAdrBookParty().setDefaultContact(contact);

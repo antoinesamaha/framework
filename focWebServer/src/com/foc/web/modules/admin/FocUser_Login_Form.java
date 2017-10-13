@@ -110,7 +110,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
   }
   
   private void validateLogin() {
-    validationCommit(null);
+    validationCheckData(null);
     FocUser user = (FocUser) getFocData();
 
     String username = user.getName();

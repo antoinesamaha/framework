@@ -820,16 +820,13 @@ public class FVValidationLayout extends HorizontalLayout {
 //	}
 	
   public boolean commit(){
-//  	if(valo_NotCompletedYet != null){
-//  		valo_NotCompletedYet.copyGuiToMemory();
-//  	}
-//  	return commit(false);
-//  }
-//  
-//  public boolean commit(boolean isFromPdfPrintnig){
+  	return commit(true, true);
+  }
+  
+  public boolean commit(boolean check, boolean commit){
     boolean error = false;
     try{
-    	if(/*isFromPdfPrintnig || */!isObjectLocked()){
+    	if(!isObjectLocked()){
 	    	addTransactionToRecentVisited();
 	    	
 	    	ArrayList<IValidationListener> cloneValidationListeners = new ArrayList<IValidationListener>();
@@ -839,12 +836,19 @@ public class FVValidationLayout extends HorizontalLayout {
 		    	}
 	    	}
 	    	
-	      for(int i=0; i<cloneValidationListeners.size(); i++){
-	        error = error || cloneValidationListeners.get(i).validationCommit(FVValidationLayout.this);
-	      }
-	      for(int i=0; i<cloneValidationListeners.size(); i++){
-	      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
-	      }
+	    	if(check){
+		      for(int i=0; i<cloneValidationListeners.size(); i++){
+		        error = error || cloneValidationListeners.get(i).validationCheckData(FVValidationLayout.this);
+		      }
+	    	}
+	    	if(commit){
+		      for(int i=0; i<cloneValidationListeners.size(); i++){
+		        error = error || cloneValidationListeners.get(i).validationCommit(FVValidationLayout.this);
+		      }
+		      for(int i=0; i<cloneValidationListeners.size(); i++){
+		      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
+		      }
+	    	}
 	      
 	      cloneValidationListeners.clear();
 	      cloneValidationListeners = null;

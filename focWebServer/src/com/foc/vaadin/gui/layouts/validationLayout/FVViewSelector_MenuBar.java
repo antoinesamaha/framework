@@ -307,7 +307,7 @@ public class FVViewSelector_MenuBar extends MenuBar {
 											}
 											
 											@Override
-											public boolean validationCommit(FVValidationLayout validationLayout) {
+											public boolean validationCheckData(FVValidationLayout validationLayout) {
 												FocGroup_Selector_Form form = (FocGroup_Selector_Form) validationLayout.getCentralPanel();
 												group = form.getSelectedGroup();
 												return false;
@@ -320,6 +320,12 @@ public class FVViewSelector_MenuBar extends MenuBar {
 													group.adjustXMLViewRight(xmlViewKey.getStorageName(), xmlViewKey.getContext(), xmlViewKey.getType(), xmlViewKey.getUserView());
 													group.validate(true);
 												}
+											}
+
+											@Override
+											public boolean validationCommit(FVValidationLayout validationLayout) {
+												// TODO Auto-generated method stub
+												return false;
 											}
 										});
 									}

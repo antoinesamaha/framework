@@ -818,7 +818,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				getTable().addValueChangeListener(new Property.ValueChangeListener() {
 					@Override
 					public void valueChange(ValueChangeEvent event) {
-//					  getFocXMLLayout().validationCommit();
+//					  getFocXMLLayout().validationCheckData();
 						Integer refSelected = (Integer) getTable().getValue();
 						int refSelectefInt = refSelected != null ? refSelected.intValue() : 0; 
 						if(lastRefSelected == 0 || (refSelectefInt != lastRefSelected)){
@@ -2578,7 +2578,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		}
 
 		@Override
-		public boolean validationCommit(FVValidationLayout validationLayout) {
+		public boolean validationCheckData(FVValidationLayout validationLayout) {
 			return true;
 		}
 
@@ -2590,6 +2590,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 //					getTable().refreshRowCache();
 //				}
 			}
+		}
+
+		@Override
+		public boolean validationCommit(FVValidationLayout validationLayout) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	};
 	

@@ -452,7 +452,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 					}
 					
 					@Override
-					public boolean validationCommit(FVValidationLayout validationLayout) {
+					public boolean validationCheckData(FVValidationLayout validationLayout) {
 						reloadList();		
 						return false;
 					}
@@ -475,6 +475,12 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 								}
 							}
 						}
+					}
+
+					@Override
+					public boolean validationCommit(FVValidationLayout validationLayout) {
+						// TODO Auto-generated method stub
+						return false;
 					}
 				});
 			}

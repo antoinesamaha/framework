@@ -31,7 +31,7 @@ public class Contact_NewBusinessCard_Form extends FocXMLLayout {
   }
 
   @Override
-  public boolean validationCommit(FVValidationLayout validationLayout) {
+  public boolean validationCheckData(FVValidationLayout validationLayout) {
   	boolean error = false;
   	
   	copyGuiToMemory();
@@ -68,7 +68,7 @@ public class Contact_NewBusinessCard_Form extends FocXMLLayout {
 
     if (!error) {
       // party.validate(true);
-      error = super.validationCommit(validationLayout);
+      error = super.validationCheckData(validationLayout);
     }
     return error;
   }

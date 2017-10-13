@@ -21,7 +21,7 @@ public class CurrencyDateLine_Form extends FocXMLLayout {
 	}
 
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		DateLine     dateLine     = (DateLine) getFocData();
 		DateLineList dateLineList = (DateLineList) dateLine.getFatherSubject();
 		
@@ -38,7 +38,7 @@ public class CurrencyDateLine_Form extends FocXMLLayout {
 		if(error){
 			Globals.showNotification("Date already exists", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
 		}else{
-			error = super.validationCommit(validationLayout);
+			error = super.validationCheckData(validationLayout);
 			dateLineList.sort();
 		}
 		

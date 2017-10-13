@@ -111,7 +111,7 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
   }
   
   @Override
-  public boolean validationCommit(FVValidationLayout validationLayout){
+  public boolean validationCheckData(FVValidationLayout validationLayout){
     copyGuiToMemory();
 		UserSession.getInstanceForThread().copyCredentialsFromUser();    
     FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();
@@ -129,7 +129,7 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
 	    mainLayout.re_parseXMLAndBuildGui();
 //    }
     
-    return super.validationCommit(validationLayout);
+    return super.validationCheckData(validationLayout);
   };
 
   private void changePassword() {

@@ -11,8 +11,8 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 public class FabTableDefinition_Form extends FocXMLLayout {
 	
   @Override
-  public boolean validationCommit(FVValidationLayout validationLayout) {
-  	boolean validation = super.validationCommit(validationLayout);
+  public boolean validationCheckData(FVValidationLayout validationLayout) {
+  	boolean validation = super.validationCheckData(validationLayout);
   	TableDefinition tableDef = (TableDefinition) getFocData();
 
   	if(tableDef != null){

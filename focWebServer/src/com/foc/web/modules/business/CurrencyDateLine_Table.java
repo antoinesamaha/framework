@@ -52,8 +52,8 @@ public class CurrencyDateLine_Table extends FocXMLLayout {
 	}
 
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		
 		DateLineList dateLineList = getDateLineList();
 		dateLineList.copyToListInCache();

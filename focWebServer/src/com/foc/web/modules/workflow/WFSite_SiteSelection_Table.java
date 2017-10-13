@@ -54,8 +54,8 @@ public class WFSite_SiteSelection_Table extends FocXMLLayout {
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		insertRowsAfterSelection();
 		return error;
 	}

@@ -1080,33 +1080,44 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	
 	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout){
 		boolean error = checkMandatoryGuiFieldsAreFilled();
-		
-		if(!error && focData != null){
-			error = focData.iFocData_validate();
+		return error;
+	}
+	
+	@Override
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = copyGuiToMemory();
+		if(!error && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
+			//We should check all before starting to save
+			if(!error) error = innerLayout_CommitOrCheckData(false);
+			if(!error) error = validateDataBeforeCommit(validationLayout);
 		}
 		
-		return error;//true if error
+		//Propagating the Validation Actions to child layouts if linked...
+		for(int i=0; i<childXMLLayoutArray_Size() && !error; i++){
+			FocXMLLayout layout = childXMLLayoutArray_Get(i);
+			if(layout.isCommitWithParent()){
+				error = layout.validationCheckData(validationLayout); 
+			}
+		}
+		
+		return error;
 	}
 	
 	@Override
 	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = copyGuiToMemory();
+		boolean error = false;
 		if(!error && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
-			//We should check all before starting to save
-			if(!error) error = innerLayout_CommitNotEmptyItems(false);
-			
-			
-			if(!error) error = innerLayout_CommitNotEmptyItems(true);
-			if(!error) error = validateDataBeforeCommit(validationLayout);
+			if(!error) error = innerLayout_CommitOrCheckData(true);
+			if(!error && focData != null){
+				error = focData.iFocData_validate();
+			}
 		}
 		
-		if(!error){
-			//Propagating the Validation Actions to child layouts if linked...
-			for(int i=0; i<childXMLLayoutArray_Size(); i++){
-				FocXMLLayout layout = childXMLLayoutArray_Get(i);
-				if(layout.isCommitWithParent()){
-					layout.validationCommit(validationLayout); 
-				}
+		//Propagating the Validation Actions to child layouts if linked...
+		for(int i=0; i<childXMLLayoutArray_Size(); i++){
+			FocXMLLayout layout = childXMLLayoutArray_Get(i);
+			if(layout.isCommitWithParent()){
+				error = layout.validationCommit(validationLayout); 
 			}
 		}
 		
@@ -1426,10 +1437,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 
 	@Override
-	public void goBack(FocCentralPanel focCentralPanel_BeforeValidationCommitIsCalled) {
+	public void goBack(FocCentralPanel focCentralPanel_BeforevalidationCheckDataIsCalled) {
 		FocCentralPanel focCentralPanel = findAncestor(FocCentralPanel.class);
-		if(focCentralPanel == null){//Normally we never get inside these brackets, and even if we do the find should then give null again. Because since 2014-04-25 we have moved the find to before the ValidationCommit listeners. 
-			focCentralPanel = focCentralPanel_BeforeValidationCommitIsCalled;
+		if(focCentralPanel == null){//Normally we never get inside these brackets, and even if we do the find should then give null again. Because since 2014-04-25 we have moved the find to before the validationCheckData listeners. 
+			focCentralPanel = focCentralPanel_BeforevalidationCheckDataIsCalled;
 		}
 //		if(focCentralPanel instanceof FocWebVaadinWindow){
 			FocXMLLayout root = this;
@@ -1532,8 +1543,17 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	  JavaScript.getCurrent().execute("self.close();");
 	}
 	
+	public static final int POSITION_BOTTOM = 0;
+	public static final int POSITION_UP     = 1;
+	public static final int POSITION_RIGHT  = 2;
+	public static final int POSITION_LEFT   = 3;
+	
 	@Override
 	public void showValidationLayout(boolean showBackButton) {
+		showValidationLayout(showBackButton, POSITION_BOTTOM);
+	}
+	
+	public void showValidationLayout(boolean showBackButton, int position) {
 		if(validationSettings != null && getValidationLayoutVisible()){
 			XMLView xmlView = getXMLView();
 			if(xmlView.isHelpFileExist()){
@@ -1551,7 +1571,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 //					if(focWebApplication != null){
 //						focWebApplication.replaceFooterLayout(validationLayout);
 					}else{
-						addComponent(validationLayout);
+						if(position == POSITION_UP){
+							addComponentAsFirst(validationLayout);
+						}else{
+							addComponent(validationLayout);
+						}
 						setComponentAlignment(validationLayout, Alignment.BOTTOM_CENTER);
 					}
 				}else{
@@ -2881,6 +2905,20 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		popupInDialog(FocXMLLayout.this, title, width, height);
 	}
 	
+	private ArrayList<FVTableWrapperLayout> newArrayListOfTableWrapperLayouts(){
+		//Fill array of FVTableWrapperLayout
+		ArrayList<FVTableWrapperLayout> arrayList = new ArrayList<FVTableWrapperLayout>();
+		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
+		while(iter != null && iter.hasNext()){
+			FocXMLGuiComponent comp = iter.next();
+			if(comp instanceof FVTableWrapperLayout){
+				arrayList.add((FVTableWrapperLayout) comp);
+			}
+		}
+
+		return arrayList;
+	}
+	
 	private void innerLayout_AfterConstruction(){
 		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
 		while(iter != null && iter.hasNext()){
@@ -2891,18 +2929,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 	
-	private boolean innerLayout_CommitNotEmptyItems(boolean withCommit){
+	private boolean innerLayout_CommitOrCheckData(boolean commit){
 		boolean error = false;
 		
 		//Fill array of FVTableWrapperLayout
-		ArrayList<FVTableWrapperLayout> arrayList = new ArrayList<FVTableWrapperLayout>();
-		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
-		while(iter != null && iter.hasNext() && !error){
-			FocXMLGuiComponent comp = iter.next();
-			if(comp instanceof FVTableWrapperLayout){
-				arrayList.add((FVTableWrapperLayout) comp);
-			}
-		}
+		ArrayList<FVTableWrapperLayout> arrayList = newArrayListOfTableWrapperLayouts();
 
 		//Commit Not empty items
 		for(int i=0; i<arrayList.size() && !error; i++){
@@ -2916,10 +2947,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 						callCommit = false;
 					}
 				}
-				if(callCommit && withCommit){
-					tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(false);
-					error = centralPanel.getValidationLayout().commit();
-					tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(true);
+				if(callCommit){
+					if(commit){
+					  tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(false);
+						error = centralPanel.getValidationLayout().commit(false, true);
+						tableWrapperLayout.innerLayout_SetEnableAddEmptyItemAfterCommit(true);
+					}else{
+						error = centralPanel.getValidationLayout().commit(true, false);
+					}
 				}
 			}
 		}

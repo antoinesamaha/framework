@@ -51,7 +51,7 @@ public class FocLink_Out_Log_Post_Form extends FocXMLLayout {
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		if(getFocLink_Out_Log() != null && userSelectionLayout != null){
 			FVTableWrapperLayout userSelectionTableWrapperLayout = (FVTableWrapperLayout) getComponentByName("USER_SELECTION_TABLE");
 
@@ -87,6 +87,6 @@ public class FocLink_Out_Log_Post_Form extends FocXMLLayout {
 				}
 			}
 		}
-		return super.validationCommit(validationLayout);
+		return super.validationCheckData(validationLayout);
 	}
 }

@@ -13,9 +13,9 @@ public class PrnLayoutDefinition_Form extends FocXMLLayout{
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 //		getPrnLayoutDefinition().setFileName(getPrnLayoutDefinition())
-		boolean error =  super.validationCommit(validationLayout);
+		boolean error =  super.validationCheckData(validationLayout);
 		ReportFactory.getInstance().loadReportsFromTable();
 		return error;
 	}

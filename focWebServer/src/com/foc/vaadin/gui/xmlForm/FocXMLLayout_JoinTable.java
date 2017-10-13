@@ -58,13 +58,19 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			}
 			
 			@Override
-			public boolean validationCommit(FVValidationLayout validationLayout) {
+			public boolean validationCheckData(FVValidationLayout validationLayout) {
 				return false;
 			}
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
 				refreshJoinTable();
+			}
+
+			@Override
+			public boolean validationCommit(FVValidationLayout validationLayout) {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 		
@@ -100,13 +106,19 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			}
 			
 			@Override
-			public boolean validationCommit(FVValidationLayout validationLayout) {
+			public boolean validationCheckData(FVValidationLayout validationLayout) {
 				return false;
 			}
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
 				refreshJoinTable();
+			}
+
+			@Override
+			public boolean validationCommit(FVValidationLayout validationLayout) {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 		

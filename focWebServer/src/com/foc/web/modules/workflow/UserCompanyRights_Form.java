@@ -31,8 +31,8 @@ public class UserCompanyRights_Form extends FocXMLLayout {
 		return (UserCompanyRights) getFocObject();
 	}
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		if(!error 
 				&& getUserCompanyRights() != null 
 				&& getUserCompanyRights().getCompany() != null 

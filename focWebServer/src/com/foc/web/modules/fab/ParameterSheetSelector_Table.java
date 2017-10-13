@@ -8,8 +8,8 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 public class ParameterSheetSelector_Table extends FocXMLLayout{
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		ParameterSheetSelectorDesc.refreshAllParamSetFieldChoices();
 		return error;
 	};

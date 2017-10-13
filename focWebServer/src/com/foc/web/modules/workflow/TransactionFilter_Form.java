@@ -251,7 +251,7 @@ public class TransactionFilter_Form extends FocXMLLayout{
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		copyExclusionsFrom_GuiToMemory();
 		return false;
 	}

@@ -682,12 +682,18 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			public void validationDiscard(FVValidationLayout validationLayout) {
 			}
 
-			public boolean validationCommit(FVValidationLayout validationLayout) {
+			public boolean validationCheckData(FVValidationLayout validationLayout) {
 				getTableOrTree().getFocDataWrapper().refreshGuiForContainerChanges();
 				return false;
 			}
 
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+			}
+
+			@Override
+			public boolean validationCommit(FVValidationLayout validationLayout) {
+				// TODO Auto-generated method stub
+				return false;
 			}
 		});
 	}
@@ -1578,6 +1584,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			//BAntoineS - Horizontal
 //			addComponentAsFirst(innerLayout);
 			addComponent(innerLayout);
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(innerLayout);
 			//EAntoineS - Horizontal			
 			
 //			addItemClickListenerContent();
@@ -1601,10 +1608,15 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 		innerLayout.removeAllComponents();
 
-		centralPanel.showValidationLayout(false);
+		if(centralPanel instanceof FocXMLLayout){
+			((FocXMLLayout)centralPanel).showValidationLayout(false, FocXMLLayout.POSITION_UP);
+		}else{
+			centralPanel.showValidationLayout(false);
+		}
 		FVValidationLayout vLay = centralPanel.getValidationLayout();
 		if(vLay != null){
 			vLay.addStyleName("foc-white");
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(vLay);
 			vLay.setDeleteButtonVisible(false);
 			Button applyButton = vLay.valo_GetApplyButton(false);
 			vLay.addValidationListener(new IValidationListener() {
@@ -1615,7 +1627,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				}
 				
 				@Override
-				public boolean validationCommit(FVValidationLayout validationLayout) {
+				public boolean validationCheckData(FVValidationLayout validationLayout) {
 					boolean error = false;
 					return error;
 				}
@@ -1626,6 +1638,12 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 						getTableTreeDelegate().addItem(null);
 					}
 					refresh();
+				}
+
+				@Override
+				public boolean validationCommit(FVValidationLayout validationLayout) {
+					// TODO Auto-generated method stub
+					return false;
 				}
 			});
 			if(applyButton != null) applyButton.setVisible(false);

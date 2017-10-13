@@ -7,7 +7,7 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 public class WFFieldLockStage_Table extends FocXMLLayout{
 
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		return super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		return super.validationCheckData(validationLayout);
 	}
 }

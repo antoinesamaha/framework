@@ -14,8 +14,8 @@ public class Dimension_Table extends FocXMLLayout {
 	public FVObjectComboBox comboBox = null;
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		UnitDesc.getList(FocList.FORCE_RELOAD);
     return error;
 	}

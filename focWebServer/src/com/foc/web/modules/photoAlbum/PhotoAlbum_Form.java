@@ -77,9 +77,9 @@ public class PhotoAlbum_Form extends FocXMLLayout {
 //	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		boolean error = false;
-		error = super.validationCommit(validationLayout);
+		error = super.validationCheckData(validationLayout);
 		if(getPhotoAlbum() != null){
 			FocList photoAlbumAccessList = getPhotoAlbum().getPhotoAlbumAccessList();
 			String allowedGroups="";

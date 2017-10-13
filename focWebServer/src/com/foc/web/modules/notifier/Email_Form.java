@@ -79,8 +79,8 @@ public class Email_Form extends FocXMLLayout {
 	  */
   }
 
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		if(!error){
 			sendEmail();
 		}

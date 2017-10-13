@@ -65,8 +65,8 @@ public class WFTitle_TitleSelection_Table extends FocXMLLayout {
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		insertRowsAfterTitleSelection();
 		return error;
 	}

@@ -38,7 +38,7 @@ public class PhotoAlbum_UnrelatedAttachments_Table extends FocXMLLayout{
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		PhotoAlbumListWithFilter attachmentsListWithFilter = getPhotoAlbumListWithFilter();
 		if(attachmentsListWithFilter != null && getUnrelatedAttachmentsList() != null){
 			TableTreeDelegate tableTreeDelegate = getTableTreeDelegate();

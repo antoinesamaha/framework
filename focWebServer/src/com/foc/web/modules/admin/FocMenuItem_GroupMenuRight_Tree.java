@@ -53,8 +53,8 @@ public class FocMenuItem_GroupMenuRight_Tree extends FVMenuTree {
 	}
 	 
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean error = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean error = super.validationCheckData(validationLayout);
 		final ArrayList<MenuAccessRightWeb> accessRightWebTobeDeleted = new ArrayList<MenuAccessRightWeb>();
 		if(!error){
 			for(int i = 0;i<getMenuAccessRightWebList().size();i++){

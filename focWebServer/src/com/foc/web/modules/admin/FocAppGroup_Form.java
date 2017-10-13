@@ -12,8 +12,8 @@ public class FocAppGroup_Form extends FocXMLLayout {
 	}
 	
 	@Override
-	public boolean validationCommit(FVValidationLayout validationLayout) {
-		boolean bool = super.validationCommit(validationLayout);
+	public boolean validationCheckData(FVValidationLayout validationLayout) {
+		boolean bool = super.validationCheckData(validationLayout);
 		if(getAppGroup() != null && getAppGroup().getFocGroup() != null){
 			getAppGroup().getFocGroup().validate(true);
 		}
