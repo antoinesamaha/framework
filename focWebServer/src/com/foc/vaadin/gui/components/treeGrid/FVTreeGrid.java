@@ -457,4 +457,11 @@ public class FVTreeGrid extends EverproTreeGrid implements FocXMLGuiComponent, I
   		}
   	}
   }
+
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+		if(selectedObject != null){
+			select(selectedObject.getReferenceInt());
+		}
+	}
 }

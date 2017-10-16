@@ -304,8 +304,11 @@ public class FVPivotLayout extends FVVerticalLayout implements FocXMLGuiComponen
 
 	@Override
 	public FocObject getSelectedObject() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
 	}
 	
 	@Override

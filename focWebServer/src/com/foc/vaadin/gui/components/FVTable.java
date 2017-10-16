@@ -309,4 +309,11 @@ public class FVTable extends Table implements FocXMLGuiComponent, ITableTree{
 	public FocObject getSelectedObject() {
 		return getTableTreeDelegate().getSelectedObject_ForVaadinTable();
 	}
+
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+		if(getTableTreeDelegate() != null){
+			getTableTreeDelegate().setSelectedObject_ForVaadinTable(selectedObject);
+		}
+	}
 }

@@ -388,6 +388,10 @@ public class FVReport extends FVVerticalLayout implements FocXMLGuiComponent, IT
 	public FocObject getSelectedObject() {
 		return null;
 	}
+
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+	}
 	
 	@Override
 	public void addItemClickListener(ItemClickListener itemClickListener) {

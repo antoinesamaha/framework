@@ -601,4 +601,11 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
 	public FocObject getSelectedObject() {
 		return getTableTreeDelegate().getSelectedObject_ForVaadinTable();
 	}
+	
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+		if(getTableTreeDelegate() != null){
+			getTableTreeDelegate().setSelectedObject_ForVaadinTable(selectedObject);
+		}
+	}
 }

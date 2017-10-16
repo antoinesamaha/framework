@@ -1523,6 +1523,15 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return focObject;
 	}
 	
+	public void setSelectedObject_ForVaadinTable(FocObject selectedObject){
+		Table table = (Table) getTreeOrTable();
+		if(selectedObject != null){
+			if(table != null) table.select(selectedObject.getReferenceInt());
+		}else{
+			if(table != null) table.select(table.getNullSelectionItemId());
+		}
+	}
+	
 	public FocObject getSelectedObject(){
 		FocObject focObject = getTreeOrTable().getSelectedObject();
 		return focObject;
@@ -1713,6 +1722,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 		if(panel != null){
 			int viewContainer = getViewContainer_ForNew();
+			getTreeOrTable().setSelectedObject(null);
 			openFormPanel(panel, viewContainer);
 		}else{
 			// if(!getTreeOrTable().getFocList().isDirectlyEditable()){
@@ -1732,6 +1742,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		if(focObject == null){
 			Globals.showNotification("OPEN comand requires a row selection", "", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
 		}else{
+			if(getTreeOrTable() != null) getTreeOrTable().setSelectedObject(focObject);
 			focObject.backup();
 			fireEvent_Open(focObject);
 			if(getFocXMLLayout() == null){

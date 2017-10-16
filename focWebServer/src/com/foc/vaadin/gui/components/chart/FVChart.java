@@ -274,6 +274,10 @@ public abstract class FVChart extends FVVerticalLayout/*extends Chart */implemen
 	}
 
 	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+	}
+	
+	@Override
 	public void addItemClickListener(ItemClickListener itemClickListener) {
 		
 	}

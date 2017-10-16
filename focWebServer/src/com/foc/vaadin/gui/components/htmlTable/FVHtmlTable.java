@@ -397,6 +397,10 @@ public class FVHtmlTable extends VerticalLayout implements FocXMLGuiComponent, I
 	public FocObject getSelectedObject() {
 		return null;
 	}
+
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+	}
 	
 	@Override
 	public void addItemClickListener(ItemClickListener itemClickListener) {

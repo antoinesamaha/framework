@@ -31,5 +31,6 @@ public interface ITableTree {
   public void              afterAddItem(FocObject fatherObject, FocObject newObject);
   public boolean           setRefreshGuiDisabled(boolean disabled);
   public FocObject         getSelectedObject();
+  public void              setSelectedObject(FocObject selectedObject);
   public void              addItemClickListener(ItemClickListener itemClickListener);
 }

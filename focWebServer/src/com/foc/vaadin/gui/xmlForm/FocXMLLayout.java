@@ -2598,10 +2598,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		if(table != null){
 //			boolean isXmlViewFound = table.getTableTreeDelegate() != null ? XMLViewDictionary.getInstance().isXMLViewFound(table.getTableTreeDelegate().getXmlViewKey_Open()) : false;
 //			if(isXmlViewFound){
-				if(table.getTableTreeDelegate() != null){
-					panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), table.getTableTreeDelegate().getXmlViewKey_Open(), focObject);
-					table.getTableTreeDelegate().openFormPanel(panel, viewContainer_Open);
-				}
+			table.setSelectedObject(focObject);
+			if(table.getTableTreeDelegate() != null){
+				panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), table.getTableTreeDelegate().getXmlViewKey_Open(), focObject);
+				table.getTableTreeDelegate().openFormPanel(panel, viewContainer_Open);
+			}
 //			}else{
 //				if(table.getTableTreeDelegate() != null && table.getTableTreeDelegate().getXmlViewKey_Open() != null){
 //					String message = table.getTableTreeDelegate().getXmlViewKey_Open().getStringKey() + " key not declared, Unable open this view.";

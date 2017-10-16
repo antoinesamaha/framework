@@ -362,4 +362,9 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
 		}
 		return selectedFocObjectList;
 	}
+
+	@Override
+	public void setSelectedObject(FocObject selectedObject) {
+		if(selectedObject != null) select(selectedObject.getReferenceInt());
+	}
 }
