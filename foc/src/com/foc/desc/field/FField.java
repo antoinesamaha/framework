@@ -854,7 +854,7 @@ public abstract class FField implements Cloneable, IFocData {
 
   @Override
   public boolean iFocData_validate() {
-    return true;
+    return false;
   }
 
   @Override

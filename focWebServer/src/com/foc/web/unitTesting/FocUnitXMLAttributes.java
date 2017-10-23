@@ -59,6 +59,22 @@ public class FocUnitXMLAttributes extends FXMLAbstractAttributes {
     this.test = test;
   }
   
+	public void addAttribute(String tag, String value){
+		int idx = getIndex(tag);
+		if(idx >= 0){
+			setAttribute(idx, "", tag, tag, "CDATA", value);
+		}else{
+			addAttribute("", tag, tag, "CDATA", value);
+		}
+	}
+	
+	public void removeAttribute(String tag){
+		int idx = getIndex(tag);
+		if(idx >= 0){
+			removeAttribute(idx);
+		}
+	}
+	
   @Override
   protected String resolveValue(String value) {
     value = FocExpression.parseExpression(value, new IExpressionHandler() {

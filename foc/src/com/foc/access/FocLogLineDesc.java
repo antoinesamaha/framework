@@ -22,6 +22,8 @@ public class FocLogLineDesc extends FocDesc implements FocLogLineConst {
     FMultipleChoiceField mFld = new FMultipleChoiceField("TYPE", "Type", FLD_TYPE, false, 2);
     addField(mFld);
     mFld.addChoice(TYPE_INFO   , "Info"   );
+    mFld.addChoice(TYPE_TEST   , "Test"   );
+    mFld.addChoice(TYPE_COMMAND, "Command");
     mFld.addChoice(TYPE_ERROR  , "Error"  );
     mFld.addChoice(TYPE_WARNING, "Warning");
     mFld.addChoice(TYPE_FAILURE, "Failure");

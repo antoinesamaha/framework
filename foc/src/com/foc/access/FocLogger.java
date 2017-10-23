@@ -40,6 +40,40 @@ public class FocLogger {
     return logLineList;
   }
   
+  public FocLogLine findAncestor(int type){
+  	FocLogLine found = null;
+  	FocLogLine curr = currentNode;
+  	while(curr != null && curr.getType() != type){
+  		curr = (FocLogLine) curr.getFatherObject();
+  	}
+  	if(curr != null && curr.getType() == type) found = curr; 
+  	return found;
+  }
+  
+  public boolean openTest(String message){
+  	boolean error = true;
+  	FocLogLine foundTest = findAncestor(FocLogLine.TYPE_TEST);
+  	if(foundTest == null){
+  		error = false;
+		  FocLogLine line = addTest(message);
+		  line.setFatherObject(currentNode);
+		  currentNode = line;
+  	}
+  	return error;
+  }
+
+  public boolean openCommand(String message){
+  	boolean error = true;
+  	FocLogLine foundCmd = findAncestor(FocLogLine.TYPE_COMMAND);
+  	if(foundCmd == null){
+  		error = false;
+		  FocLogLine line = addCommand(message);
+		  line.setFatherObject(currentNode);
+		  currentNode = line;
+  	}
+  	return error;
+  }
+  
   public void openNode(String message){
 	  //
 	  //use the current node the current FocLogLine 
@@ -48,7 +82,7 @@ public class FocLogger {
 	  line.setFatherObject(currentNode);
 	  currentNode = line;
   }
-  
+
   public void closeNode(){
   	closeNode(null);
   }
@@ -61,6 +95,18 @@ public class FocLogger {
     	//currentNode.setClosed(true);
     }
     currentNode = (FocLogLine) (currentNode != null ? currentNode.getFatherObject() : null);
+  }
+  
+  public FocLogLine addTest(String message) {
+    FocLogLine line = addLogLine(FocLogLine.TYPE_TEST, message);
+    line.setSuccessful(true);
+    return line;
+  }
+  
+  public FocLogLine addCommand(String message) {
+    FocLogLine line = addLogLine(FocLogLine.TYPE_COMMAND, message);
+    line.setSuccessful(true);
+    return line;
   }
   
   public FocLogLine addInfo(String message) {

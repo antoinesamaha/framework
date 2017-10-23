@@ -24,7 +24,6 @@ import com.foc.vaadin.ICentralPanel;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
-import com.vaadin.ui.Component;
 
 public class FocUnitDictionary {
   private Map<String, FocUnitTestingSuite> testSuiteMap = null; 
@@ -143,6 +142,10 @@ public class FocUnitDictionary {
   
   public void putXMLVariable(String key, Object object){
     getXMLVariables().put(key, object);
+  }
+  
+  public Object getXMLVariable(String key){
+    return getXMLVariables() != null ? getXMLVariables().get(key) : null;
   }
     
   private Map<String, FocUnitTestingSuite> getTestingSuiteMap() {

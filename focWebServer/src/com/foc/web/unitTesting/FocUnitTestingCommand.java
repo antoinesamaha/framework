@@ -79,6 +79,24 @@ public class FocUnitTestingCommand {
     attributes = null;
   }
 
+  protected FocUnitDictionary getDictionary() {
+    return getUnitSuite() != null ? getUnitSuite().getDictionary() : null;
+  }
+  
+  public String getLayoutName(){
+  	return getAttributes() != null ? getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME) : null;
+  }
+  
+  public void setLayoutName(String layoutName){
+  	boolean nodeCreated = !getLogger().openCommand("Change Layout : "+layoutName);
+  	if(layoutName != null){
+  		getAttributes().addAttribute(FXMLUnit.ATT_LAYOUT_NAME, layoutName);
+  	}else{
+  		getAttributes().removeAttribute(FXMLUnit.ATT_LAYOUT_NAME);
+  	}
+  	if(nodeCreated) getLogger().closeNode();
+  }
+
   public String getMethodName() {
     return methodName;
   }
@@ -97,6 +115,10 @@ public class FocUnitTestingCommand {
 
   public FocUnitTest getUnitTest() {
     return unitTest;
+  }
+  
+  public void setUnitTest(FocUnitTest unitTest) {
+  	this.unitTest = unitTest;
   }
 
   public FocUnitTestingSuite getUnitSuite() {
@@ -262,7 +284,8 @@ public class FocUnitTestingCommand {
    * Simulates a click on the "Apply" button in the validation layout.
    * 
    */
-  protected void validationApply() {
+  public void validationApply() {
+  	boolean nodeCreated = !getLogger().openCommand("Apply");
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
   	
     if (navigationLayout != null) {
@@ -284,9 +307,21 @@ public class FocUnitTestingCommand {
     } else {
       getLogger().addFailure("Navigation layout not found");
     }
+    
+    if(nodeCreated) getLogger().closeNode();
   }
   
-  protected void validationSave() {
+  public void validationSave(String layoutName) {
+  	boolean nodeCreated = !getLogger().openCommand("Save");
+  	String backup = getLayoutName();
+  	setLayoutName(layoutName);
+  	validationSave();
+  	setLayoutName(backup);
+  	if(nodeCreated) getLogger().closeNode();
+  }
+  
+  public void validationSave() {
+  	boolean nodeCreated = !getLogger().openCommand("Save");
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     
     if (navigationLayout != null) {
@@ -308,6 +343,7 @@ public class FocUnitTestingCommand {
     } else {
       getLogger().addFailure("Navigation layout not found");
     }
+    if(nodeCreated) getLogger().closeNode();
   }
 
   /**
@@ -730,19 +766,24 @@ public class FocUnitTestingCommand {
    *          The value of the property we are looking for.
    */
   public void navigateToAndDoubleClick(String menuCode) {
+  	boolean nodeOpened = !getLogger().openCommand("Navigate to : "+menuCode);
     navigateTo(menuCode);
     menuDoubleClickAction();
+    if(nodeOpened) getLogger().closeNode();
   }
 
   public void navigateToAdminAndDoubleClick(String menuCode) {
+  	boolean nodeOpened = !getLogger().openCommand("Navigate to Admin : "+menuCode);
   	navigateToAdmin(menuCode);
   	menuDoubleClickAction();
+    if(nodeOpened) getLogger().closeNode();
   }
 
   /**
    * MenuTree Double click action 
    */
   private void menuDoubleClickAction(){
+  	boolean nodeOpened = !getLogger().openCommand("Menu Double Click");
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
     
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, "MENU_TREE");
@@ -752,7 +793,8 @@ public class FocUnitTestingCommand {
     MouseEventDetails details = MouseEventDetails.deSerialize(eventString);
 
     ItemClickEvent doubleClickEvent = new ItemClickEvent(treeTable, treeTable.getFocList().getItem(treeTable.getValue()), treeTable.getValue(), "TITLE", details);
-    treeTable.getItemClickListener().itemClick(doubleClickEvent);  	
+    treeTable.getItemClickListener().itemClick(doubleClickEvent);
+    if(nodeOpened) getLogger().closeNode();
   }
   
   /**
@@ -817,6 +859,7 @@ public class FocUnitTestingCommand {
    *          The name of the variable to store the line reference in.
    */
   public int selectItemInTable(String tableName, String propertyName, String propertyValue, String variableName, int ancestor){
+  	boolean nodeCreated = !getLogger().openCommand("Table select where "+propertyName+" = "+propertyValue +" -> "+variableName);
   	int referenceOfSelectedItem = 0;
   	
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
@@ -843,16 +886,17 @@ public class FocUnitTestingCommand {
 	    	//---------------------------------------------------------------------------------------
 	    	
 	    	if (variableName != null && !variableName.isEmpty()) {
-	        getUnitSuite().getDictionary().putXMLVariable(variableName, reference);
+	        getDictionary().putXMLVariable(variableName, reference);
 	        getLogger().addInfo("Storing selected item reference in variable " + variableName + ".");
 		    }	    	
 	    }else {
         getLogger().addFailure("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
       }
+	    if(nodeCreated) getLogger().closeNode();
     }
     return referenceOfSelectedItem;
   }
-
+  
   /**
    * Simulates adding an item in an open table (right-click -> Add). Also stores
    * the id of the created object in a variable.
@@ -864,6 +908,10 @@ public class FocUnitTestingCommand {
    * @param father
    */
   public void addItemInTable(String tableName, String variableName) {
+  	String message = "Table add item : "+tableName;
+  	if(!Utils.isStringEmpty(variableName)) message += " -> "+variableName;
+  	boolean nodeCreated = !getLogger().openCommand(message);
+  	
     String reference = null;
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
@@ -879,13 +927,14 @@ public class FocUnitTestingCommand {
         if (object != null && object.getReference() != null) {
           if (variableName != null && !variableName.isEmpty()) {
             reference = object.getReference().toString();
-            getUnitSuite().getDictionary().putXMLVariable(variableName, reference);
+            getDictionary().putXMLVariable(variableName, reference);
             getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
           }
           table.select(object.getReference().getInteger());
         }
       }
     }
+    if(nodeCreated) getLogger().closeNode();
   }
 
   /**
@@ -893,12 +942,9 @@ public class FocUnitTestingCommand {
    * 
    * @param tableName
    *          The name of the table to add an item in.
-   * @param variableName
-   *          The variable that will contain the id of the created object.
-   * @param father
+   * @param menuCaption
+   *          Menu caption
    */
-  
-  //Hussein
   public void table_RightClick(String tableName, String menuCaption) {
     boolean IsClicked = false;
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
@@ -932,6 +978,13 @@ public class FocUnitTestingCommand {
     }
   }
   
+  public void table_Open(String tableName, String propertyName, String propertyValue) {
+  	boolean nodeCreated = !getLogger().openCommand("Open item in table "+tableName+" where "+propertyName+" = "+propertyValue);
+  	selectItemInTable(tableName, propertyName, propertyValue, null, 0);
+  	openItemInTable(tableName);
+  	if(nodeCreated) getLogger().closeNode();
+  }
+  
   /**
    * Simulates opening the selected item in a table (right-click -> Open).
    * 
@@ -939,6 +992,7 @@ public class FocUnitTestingCommand {
    *          The name of the table to open the item selected in.
    */
   public void openItemInTable(String tableName) {
+  	boolean nodeCreated = !getLogger().openCommand("Table open item : "+tableName);
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
     Table table = (Table) tableWrapper.getTableOrTree();
@@ -954,6 +1008,7 @@ public class FocUnitTestingCommand {
         getLogger().addFailure("No object selected. Could not open in table " + tableName + ".");
       }
     }
+    if(nodeCreated) getLogger().closeNode();
   }
 
   /**
@@ -1010,12 +1065,32 @@ public class FocUnitTestingCommand {
    *          The value to be set (String)
    */
   public void setComponentValue(String componentName, String componentValue, boolean isAssert) {
+  	boolean nodeCreated = !getLogger().openCommand("Set "+componentName+" = "+componentValue);
+  	
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     if(navigationLayout == null){
     	navigationLayout = getCurrentCentralPanel();
     }
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
    	setComponentValue(component, componentName, componentValue, isAssert);
+   	
+   	if(nodeCreated) getLogger().closeNode();
+  }
+  
+  public void setComponentValue(String layoutName, String componentName, String componentValue, boolean isAssert) {
+  	boolean nodeCreated = false;
+  	if(isAssert){
+  		nodeCreated = !getLogger().openCommand("Assert "+componentName+" = "+componentValue);
+  	}else{
+  		nodeCreated = !getLogger().openCommand("Set "+componentName+" = "+componentValue);
+  	}
+  	
+  	String originalLayout = getLayoutName();
+  	setLayoutName(layoutName);
+  	setComponentValue(componentName, componentValue, isAssert);
+  	setLayoutName(originalLayout);
+  	
+   	if(nodeCreated) getLogger().closeNode();
   }
   
   public void AssertComponentEditable(String componentName) {
@@ -1191,27 +1266,43 @@ public class FocUnitTestingCommand {
    * @param variableName
    *          The name of the key that will contain the value in the hash map.
    */
-  public void getComponentValue(String componentName, String variableName) {
+  public String getComponentValue(String componentName, String variableName) {
+  	boolean created = !getLogger().openCommand("Set "+variableName+" = valueof("+componentName+")");
+  	String value = null;
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
-      getUnitSuite().getDictionary().putXMLVariable(variableName, component.getValueString());
+    	value = component.getValueString();
+      getDictionary().putXMLVariable(variableName, value);
       getLogger().addInfo("Adding the value of component " + componentName + " to the variable " + variableName + ".");
     }
+    if(created) getLogger().closeNode();
+    return value;
   }
 
+  public void buttonClick(String layoutName, String buttonName) {
+  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
+  	String backup = getLayoutName();
+  	setLayoutName(layoutName);
+  	buttonClick(buttonName);
+  	setLayoutName(backup);
+  	if(nodeCreated) getLogger().closeNode();
+  }
+  
   /**
    * Simulates a click on a button of a certain name.
    * 
    */
   public void buttonClick(String buttonName) {
+  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVButton button = (FVButton) findComponent(navigationLayout, buttonName);
     if (button != null) {
       button.click();
     } else {
-      getUnitSuite().getDictionary().getLogger().addFailure("Button " + buttonName + " not found.");
+      getDictionary().getLogger().addFailure("Button " + buttonName + " not found.");
     }
+    if(nodeCreated) getLogger().closeNode();
   }
 
   /**
@@ -1406,7 +1497,7 @@ public class FocUnitTestingCommand {
               FocObject object = (FocObject) bannerList.get(i).getCentral().getFocData();
               getLogger().addInfo("Component " + componentName + " with value " + componentValue + "found in banner layout " + bannerLayoutName + ".");
               if (object != null) {
-                getUnitSuite().getDictionary().putXMLVariable(variableName, object.getReference().toString());
+                getDictionary().putXMLVariable(variableName, object.getReference().toString());
                 getLogger().addInfo("Adding component reference to variable " + variableName + ".");
                 break;
               }
@@ -1556,8 +1647,8 @@ public class FocUnitTestingCommand {
    *          Value of the variable
    */
   public void setVariable(String variableName, String variableValue){
-    if(getUnitSuite() != null && getUnitSuite().getDictionary() != null && variableName != null && variableValue != null){
-      getUnitSuite().getDictionary().putXMLVariable(variableName, variableValue);
+    if(getDictionary() != null && variableName != null && variableValue != null){
+      getDictionary().putXMLVariable(variableName, variableValue);
     }
   }
   
@@ -1748,10 +1839,10 @@ public class FocUnitTestingCommand {
     	if(contentButton != null){
     		contentButton.click();
     	}else{
-    		getUnitSuite().getDictionary().getLogger().addFailure("Content Button " + secondButton + " for popup button "+firstButton+" not found.");
+    		getDictionary().getLogger().addFailure("Content Button " + secondButton + " for popup button "+firstButton+" not found.");
     	}
     } else {
-      getUnitSuite().getDictionary().getLogger().addFailure("Popup Button " + firstButton + " not found.");
+      getDictionary().getLogger().addFailure("Popup Button " + firstButton + " not found.");
     }
   }
 

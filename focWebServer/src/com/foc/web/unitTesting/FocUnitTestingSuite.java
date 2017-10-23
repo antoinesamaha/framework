@@ -262,7 +262,7 @@ public class FocUnitTestingSuite {
     this.parsingDone = parsingDone;
   }
   
-  protected FocUnitDictionary getDictionary() {
+  public FocUnitDictionary getDictionary() {
     return dictionary;
   }
 

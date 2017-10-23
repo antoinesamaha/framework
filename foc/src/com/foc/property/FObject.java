@@ -113,6 +113,7 @@ public class FObject extends FProperty implements FPropertyListener{
   		boolean valueModified = copyReferenceFromObject();
       if(valueModified){
         getFocObject().setModified(true);
+        setModifiedFlag(true);//2017-10-18
       }
   	}
   }
@@ -962,5 +963,20 @@ public class FObject extends FProperty implements FPropertyListener{
   protected void setSqlStringInternal(String str) {
     // TODO Auto-generated method stub
     super.setSqlStringInternal(str);
-  }  
+  }
+  
+  @Override
+  public void setModifiedFlag(boolean output) {
+  	if(    getFocField() != null 
+  			&& getFocField().getName() != null
+  			&& getFocField().getName().equals("Address")
+  			&& getFocField().getFocDescParent() != null
+  			&& getFocField().getFocDescParent().getStorageName() != null
+  			&& getFocField().getFocDescParent().getStorageName().equals("MahdarIncidenType")
+  			){
+  		int debug = 3;
+  		debug++;
+  	}
+  	super.setModifiedFlag(output);
+  }
 }

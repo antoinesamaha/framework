@@ -9,7 +9,9 @@ public interface FocLogLineConst {
 	public static final int FLD_SUCCESSFUL = 4;
 
 	public static final int TYPE_INFO      = 0;
-	public static final int TYPE_ERROR     = 1;
-	public static final int TYPE_WARNING   = 2;
-	public static final int TYPE_FAILURE   = 3;
+	public static final int TYPE_TEST      = 1;
+	public static final int TYPE_COMMAND   = 2;
+	public static final int TYPE_ERROR     = 3;
+	public static final int TYPE_WARNING   = 4;
+	public static final int TYPE_FAILURE   = 5;
 }

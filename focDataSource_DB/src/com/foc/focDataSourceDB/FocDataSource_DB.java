@@ -416,7 +416,7 @@ public class FocDataSource_DB implements IFocDataSource {
     	Globals.setMouseComputing(true);
       FocDesc focDesc = focObject.getThisFocDesc();
 
-      if(focDesc != null && focObject.sync_AllowObjectDBModification()){      	
+      if(focDesc != null && focObject.sync_AllowObjectDBModification()){
         SQLUpdate sqlUpdate = new SQLUpdate(focDesc, focObject);
         if(queryFields != null){
         	for(int i=0; i<queryFields.length; i++){
