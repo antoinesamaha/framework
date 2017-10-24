@@ -129,7 +129,21 @@ public class FocMath {
 //  	}
 //  	return v;
 //  }
-  
+
+  public static long parseLong(String str){
+  	long v = 0;
+  	try{
+ 			v = Long.valueOf(str);  			
+  	}catch(Exception e){
+  		try{//When we have a str = 1.0 the Integer.valueOf(str) gives exception
+				Double doubleValue = Double.valueOf(str);
+				v = doubleValue.longValue();
+  		}catch(Exception e2){
+  		}
+  	}
+  	return v;
+  }
+
   public static int parseInteger(String str){
   	int v = 0;
   	try{

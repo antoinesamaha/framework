@@ -182,7 +182,7 @@ public class FVReport extends FVVerticalLayout implements FocXMLGuiComponent, IT
 	}
 
 	@Override
-	public void delete(int ref) {
+	public void delete(long ref) {
 	}
 
 	@Override

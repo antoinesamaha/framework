@@ -10,7 +10,6 @@ import java.util.Iterator;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
-import com.vaadin.data.Container.Hierarchical;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.AccessSubject;
@@ -24,11 +23,11 @@ import com.foc.gui.treeTable.FGTreeInTable;
 import com.foc.gui.treeTable.FTreeTableModel;
 import com.foc.list.FocList;
 import com.foc.list.FocListWithFilter;
-import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.IFocListFilter;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.tree.objectTree.FObjectNode;
+import com.vaadin.data.Container.Hierarchical;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 
@@ -56,7 +55,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   private boolean               automaticlyListenToListEvents = false;
   private Comparator<N>         comparator                    = null;
   private HashMap <O, N>        object2NodeMap                = null; 
-  private HashMap <Integer, N>  ref2NodeMap                   = null;//20150910 - Performance enhancements WBS entry
+  private HashMap <Long, N>     ref2NodeMap                   = null;//20150910 - Performance enhancements WBS entry
   private ListRemoveListener    listRemoveListener            = null;
   private boolean               rootVisible                   = true;
   private boolean               hideCode                      = false;
@@ -211,9 +210,9 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 		return object2NodeMap;
 	}
 
-	private HashMap <Integer, N> getRef2NodeMap(boolean create){
+	private HashMap <Long, N> getRef2NodeMap(boolean create){
 		if(ref2NodeMap == null && create){
-			ref2NodeMap = new HashMap <Integer, N> ();
+			ref2NodeMap = new HashMap <Long, N> ();
 			scan(new TreeScanner<N>(){
 				public void afterChildren(N node) {
 					FTree tree = node.getTree();
@@ -243,7 +242,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 		}
 		
 		//BDebug
-		if(node != null && ((FocObject)node.getObject()).getReference() != null && ((FocObject)node.getObject()).getReference().getInteger() != ((FocObject)obj).getReference().getInteger()){
+		if(node != null && ((FocObject)node.getObject()).getReference() != null && ((FocObject)node.getObject()).getReference().getLong() != ((FocObject)obj).getReference().getLong()){
 			Globals.logString(" FOUND NODE NOT MATCHING !!! !!!");
 		}
 		if(node != null && node.getObject() != obj){
@@ -259,7 +258,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 			Iterator iter = map.keySet().iterator();
 			while(iter != null && iter.hasNext()){
 				FocObject fo = (FocObject) iter.next();
-				Globals.logString("   "+fo.getReference().getInteger()+" hashcode="+fo.hashCode());
+				Globals.logString("   "+fo.getReference().getLong()+" hashcode="+fo.hashCode());
 			}
 		}
 		//EDebug		
@@ -286,12 +285,12 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 	//Temp
 
   public N findNode_UsingMapOnly(int objRef){
-		HashMap <Integer, N> map = getRef2NodeMap(true);
+		HashMap <Long, N> map = getRef2NodeMap(true);
 		N node = map != null ? map.get(objRef) : null;
 		return node;
 	}
 
-  public N findNode(final int objRef){
+  public N findNode(final long objRef){
   	N node = findNode_UsingMapOnly(objRef);
   	
   	if(node == null || (node.getObject() != null && ((FocObject)node.getObject()).getReferenceInt() != objRef)){
@@ -301,12 +300,12 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   	return node;
   }
 
-  public N findNode_FullScan(final int objRef){
+  public N findNode_FullScan(final long objRef){
   	final Object[] foundNode = new Object[1];
   	foundNode[0] = null;
   	scan(new TreeScanner<N>(){
 			public void afterChildren(N node) {
-				if(node.getObject() != null && ((FocObject)node.getObject()).getReference().getInteger() == objRef){
+				if(node.getObject() != null && ((FocObject)node.getObject()).getReference().getLong() == objRef){
 					foundNode[0] = node;
 				}
 			}
@@ -393,7 +392,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 
 	public void putRef2NodeMapping(Object obj, N node){
 		if(obj != null && node != null){
-			HashMap <Integer, N> map = (HashMap <Integer, N>) getRef2NodeMap(false);
+			HashMap <Long, N> map = (HashMap <Long, N>) getRef2NodeMap(false);
 			if(map != null){
 				//BDegbug
 				/*
@@ -686,7 +685,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   	      message.append("This Object is referenced by another object.");
   	      count++;
   	    }else if(!obj.isDeletable()){
-  	      message.append("Object Ref " + obj.getReference().getInteger() + obj.isDeletable() + " cannot be deleted");
+  	      message.append("Object Ref " + obj.getReference().getLong() + obj.isDeletable() + " cannot be deleted");
   	      count++;
   	    }
   	    
@@ -1024,12 +1023,12 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   public Collection<?> getChildren(Object itemId) {
     //FocObject focObj = (FocObject) getItem(itemId);
     FNode node = vaadin_FindNode(itemId);
-    ArrayList<Integer> array = null; 
+    ArrayList<Long> array = null; 
     if(node.getChildCount() > 0 && node.getNodeDepth() < getDepthVisibilityLimit()){
-      array = new ArrayList<Integer>();
+      array = new ArrayList<Long>();
       for(int i=0; i<node.getVisibleChildCount(); i++){
         FNode cNode = node.getVisibleChildAt(i);
-        array.add((((FocObject) cNode.getObject()).getReference().getInteger()));
+        array.add((((FocObject) cNode.getObject()).getReference().getLong()));
       }
     }
     
@@ -1045,7 +1044,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
     FNode node = vaadin_FindNode(itemId);
     FNode fatherNode = node != null ? node.getFatherNode() : null;
     FocObject fathrFocObject = fatherNode != null ? (FocObject) fatherNode.getObject() : null;
-    return (fathrFocObject != null) ? fathrFocObject.getReference().getInteger() : null;
+    return (fathrFocObject != null) ? fathrFocObject.getReference().getLong() : null;
   }
 
   /*
@@ -1068,18 +1067,18 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   */
   
   @Override
-  public Collection<?> rootItemIds() {
-  	ArrayList<Integer> array = new ArrayList<Integer>();
+  public Collection<Long> rootItemIds() {
+  	ArrayList<Long> array = new ArrayList<Long>();
 
   	FocObject obj = getRoot() != null ? (FocObject) getRoot().getObject() : null;
-  	if(obj != null && obj.getReference().getInteger() != 0){
-  		array.add(obj.getReference().getInteger());
+  	if(obj != null && obj.getReference().getLong() != 0){
+  		array.add(obj.getReference().getLong());
   	}else if(getRoot() != null){
   		for(int i=0; i<getRoot().getChildCount(); i++){
   			FNode node = getRoot().getChildAt(i);
   			obj = (FocObject) node.getObject();
   			if(obj != null){
-  				array.add(obj.getReference().getInteger());
+  				array.add(obj.getReference().getLong());
   			}
   		}
   	}
@@ -1088,7 +1087,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   			FocObject childObj = (FocObject) getRoot().getChildAt(i).getObject();
 
   			if(childObj != null){
-  				array.add(childObj.getReference().getInteger());
+  				array.add(childObj.getReference().getLong());
   			}
   		}
   	}
@@ -1149,8 +1148,8 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   public FNode vaadin_FindNode(Object itemId){
     FNode node = null;
     try{
-      Integer integ = (Integer) itemId;
-      node = findNode(integ.intValue());
+      Long integ = (Long) itemId;
+      node = findNode(integ.longValue());
     }catch(Exception e){
       Globals.logException(e);
     }
@@ -1201,7 +1200,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   
   @Override
   public Collection<?> getItemIds() {
-  	final ArrayList<Integer> arrayRefs = new ArrayList<Integer>(); 
+  	final ArrayList<Long> arrayRefs = new ArrayList<Long>(); 
   	
   	scan(new TreeScanner<FNode>() {
 
@@ -1214,7 +1213,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
 				}
 				
 				if(toAdd){
-					int ref = ((FocObject)node.getObject()).getReference().getInteger();
+					long ref = ((FocObject)node.getObject()).getReference().getLong();
 					if(ref != 0){
 						arrayRefs.add(ref);
 					}

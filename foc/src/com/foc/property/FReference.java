@@ -91,13 +91,15 @@ public class FReference extends FProperty {
   public int getInteger() {
     return reference != null ? (int) reference.getLong() : 0;
   }
+  
   public long getLong() {
     return reference != null ? reference.getLong() : 0;
   }
 
-  public void setInteger(int iVal, boolean userEditingEvent, boolean withNotification) {
-  	setLong(iVal, userEditingEvent, withNotification);
-  }
+//  public void setInteger(int iVal, boolean userEditingEvent, boolean withNotification) {
+//  	setLong(iVal, userEditingEvent, withNotification);
+//  }
+  
   public void setLong(long iVal, boolean userEditingEvent, boolean withNotification) {
     if(iVal != reference.getLong()){
       reference.setLong(iVal);
@@ -107,19 +109,23 @@ public class FReference extends FProperty {
     }
   }
 
-  public void setInteger(int iVal, boolean userEditingEvent) {
-  	setLong(iVal, userEditingEvent, true);
-  }
+//  public void setInteger(int iVal, boolean userEditingEvent) {
+//  	setLong(iVal, userEditingEvent, true);
+//  }
   public void setLong(long iVal, boolean userEditingEvent) {
   	setLong(iVal, userEditingEvent, true);
   }
   	
   public void setInteger(int iVal) {
-  	setInteger(iVal, false);
+  	setLong(iVal, false);
   }
   
-  public void setInteger_WithoutNotification(int iVal) {
-  	setInteger(iVal, false, false);
+  public void setLong(long iVal) {
+  	setLong(iVal, false);
+  }
+  
+  public void setLong_WithoutNotification(long iVal) {
+  	setLong(iVal, false, false);
   }
   
   public void addListener(FPropertyListener propListener) {

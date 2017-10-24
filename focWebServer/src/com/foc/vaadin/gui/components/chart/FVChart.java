@@ -222,7 +222,7 @@ public abstract class FVChart extends FVVerticalLayout/*extends Chart */implemen
 	}
 
 	@Override
-	public void delete(int ref) {
+	public void delete(long ref) {
 	}
 
 	@Override

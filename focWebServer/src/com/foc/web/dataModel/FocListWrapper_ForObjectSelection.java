@@ -167,22 +167,22 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
   	return array;
   }
   
-  public int getFocObjectRef_ForTheADDIcon(){
+  public long getFocObjectRef_ForTheADDIcon(){
   	FocDataItem_ForComboBoxActions item4AddAction = getItemForAddAction();
-  	return (item4AddAction != null) ? item4AddAction.getReference().getInteger() : 0;
+  	return (item4AddAction != null) ? item4AddAction.getReference().getLong() : 0;
   }
   
-  public int getFocObjectRef_ForTheREFRESHIcon(){
+  public long getFocObjectRef_ForTheREFRESHIcon(){
   	FocDataItem_ForComboBoxActions item4RefreshAction = getItemForRefreshAction();
-  	return (item4RefreshAction != null) ? item4RefreshAction.getReference().getInteger() : 0;
+  	return (item4RefreshAction != null) ? item4RefreshAction.getReference().getLong() : 0;
   }
   
   @Override
   public Item getItem(Object itemId) {
   	Item item = null;
-  	if(itemId != null && ((Integer)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
+  	if(itemId != null && ((Long)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
   		item = item4AddAction;
-  	}else if(itemId != null && ((Integer)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
+  	}else if(itemId != null && ((Long)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
   		item = item4RefreshAction;
   	}else{
   		item = super.getItem(itemId);
@@ -193,9 +193,9 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
   @Override
   protected FocObject getContainerProperty_GetFocObject(Object itemId){
   	FocObject focObj = null;
-  	if(((Integer)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
+  	if(((Long)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
   		focObj = item4AddAction;
-  	}else if(((Integer)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
+  	}else if(((Long)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
   		focObj = item4RefreshAction;
   	}else{
   		focObj = super.getContainerProperty_GetFocObject(itemId);

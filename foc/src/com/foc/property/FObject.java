@@ -144,7 +144,7 @@ public class FObject extends FProperty implements FPropertyListener{
   }
   
   public boolean isEmpty(){
-    return focObjValue == null && localReference.getInteger() <= 0;
+    return focObjValue == null && localReference.getLong() <= 0;
   }
   
   public void setEmptyValue(){
@@ -214,24 +214,24 @@ public class FObject extends FProperty implements FPropertyListener{
     return localReference != null ? localReference.toString() : "";
   }
 
-  public int getLocalReferenceInt(){
-    return localReference != null ? localReference.getInteger() : 0;
+  public long getLocalReferenceInt(){
+    return localReference != null ? localReference.getLong() : 0;
   }
 
-  public void setLocalReferenceInt_WithoutNotification(int ref){
+  public void setLocalReferenceInt_WithoutNotification(long ref){
     if(localReference != null){
     	boolean listenersActive = localReference.isDesactivateListeners(); 
     	localReference.setDesactivateListeners(true);
-    	localReference.setInteger(ref);
+    	localReference.setLong(ref);
     	localReference.setDesactivateListeners(listenersActive);
     }
   }
   
-  public void setLocalReferenceInt(int ref){
+  public void setLocalReferenceInt(long ref){
     if(localReference != null){
 //    	boolean listenersActive = localReference.isDesactivateListeners(); 
 //    	localReference.setDesactivateListeners(true);
-    	localReference.setInteger(ref);
+    	localReference.setLong(ref);
 //    	localReference.setDesactivateListeners(listenersActive);
     }
   }
@@ -239,8 +239,8 @@ public class FObject extends FProperty implements FPropertyListener{
   private void copyReferenceIntoObject(){
     FReference ref = focObjValue != null ? focObjValue.getReference() : null;
     if(ref != null){
-      int objRefInt   = ref.getInteger();
-      int localRefInt = localReference.getInteger(); 
+      long objRefInt   = ref.getLong();
+      long localRefInt = localReference.getLong(); 
       if(localRefInt != objRefInt){
         ref.setReferenceWithoutNotification(localReference.getReferenceClone());
         focObjValue.setLoadedFromDB(false);
@@ -261,7 +261,7 @@ public class FObject extends FProperty implements FPropertyListener{
     }
         
     if(localReference != null){
-      if((valueObjRef == null && localReference.getInteger() != 0) || (valueObjRef != null && localReference.getInteger() != valueObjRef.getLong())){
+      if((valueObjRef == null && localReference.getLong() != 0) || (valueObjRef != null && localReference.getLong() != valueObjRef.getLong())){
         valueModified = true;
       }
       localReference.setReferenceWithoutNotification(valueObjRef);
@@ -277,7 +277,7 @@ public class FObject extends FProperty implements FPropertyListener{
         focList.loadIfNotLoadedFromDB();
       }
       //Attention
-      FocObject focObjFromList = focList.searchByReference(localReference.getInteger());
+      FocObject focObjFromList = focList.searchByReference(localReference.getLong());
       
       if(focObjFromList == null){
         if(focObjValue != null){
@@ -329,7 +329,7 @@ public class FObject extends FProperty implements FPropertyListener{
 	    localReference.setFocObject(focObjValue);
 	    copyReferenceIntoObject();
 	    FReference objRef = focObjValue.getReference();
-	    if(objRef != null && objRef.getInteger() == 0){
+	    if(objRef != null && objRef.getLong() == 0){
 	      focObjValue.setCreated(true);
 	      if(focObjValue.getMasterObject() != null){
 	        focObjValue.getMasterObject().setModified(true);
@@ -361,7 +361,7 @@ public class FObject extends FProperty implements FPropertyListener{
   	if(createIfNeeded && focObjValue == null){
       //I realy create only if we are not in ALLOW_NULL_VALUE or if the localReference != 0  
       boolean allowNullVal = getNullValueMode() == FObjectField.NULL_VALUE_ALLOWED || getNullValueMode() == FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN;
-      if(!allowNullVal || (localReference != null && localReference.getInteger() != 0)){
+      if(!allowNullVal || (localReference != null && localReference.getLong() != 0)){
         getSimilarObjectFromList();
         if(focObjValue == null && isWithList() && !allowNullVal){
         	//BDebug
@@ -421,9 +421,10 @@ public class FObject extends FProperty implements FPropertyListener{
       try{
       	FObject   objProp             = (FObject) prop;
       	FocObject otherFocObjectValue = (FocObject) objProp.getObject();
-      	int thisRef  = focObjValue != null && focObjValue.getReference() != null ? focObjValue.getReference().getInteger() : localReference.getInteger(); 
-      	int otherRef = otherFocObjectValue != null && otherFocObjectValue.getReference() != null ? otherFocObjectValue.getReference().getInteger() : objProp.getLocalReferenceInt();
-      	compare = thisRef - otherRef;
+      	long thisRef  = focObjValue != null && focObjValue.getReference() != null ? focObjValue.getReference().getLong() : localReference.getLong(); 
+      	long otherRef = otherFocObjectValue != null && otherFocObjectValue.getReference() != null ? otherFocObjectValue.getReference().getLong() : objProp.getLocalReferenceInt();
+      	long diff = thisRef - otherRef;
+      	compare = diff == 0 ? 0 : (diff > 0 ? 1 : -1) ;
       		
       	/*
         String thisTableDisp = (String) this.getTableDisplayObject(null);
@@ -558,7 +559,7 @@ public class FObject extends FProperty implements FPropertyListener{
   public void setObject_WithoutListeners(Object obj) {
   	disposeLocallyConstructedObject(focObjValue);
   	setObject_Encapsulation((FocObject) obj);
-  	int ref = focObjValue != null ? focObjValue.getReference().getInteger() : 0;
+  	long ref = focObjValue != null ? focObjValue.getReference().getLong() : 0;
   	setLocalReferenceInt_WithoutNotification(ref);
   }
   
@@ -625,15 +626,15 @@ public class FObject extends FProperty implements FPropertyListener{
   	  
   	*/
   	FocObject objectBackedUpLocally = isObjectValueLocalyConstructed() ? focObjValue : null;
-    if(focObjValue != obj || (focObjValue == null && obj == null && localReference != null && localReference.getInteger() != 0)){
+    if(focObjValue != obj || (focObjValue == null && obj == null && localReference != null && localReference.getLong() != 0)){
       //The second part of the condition is used for setting the property Object value to null if
       //it has a reference even if it is not loaded into memory yet.(in database but not in memory)
       FocObject newFocObj = (FocObject) obj;
     	boolean objectModifiedButReferenceNotModified = false;
   		if(focObjValue == null){
-  			objectModifiedButReferenceNotModified = newFocObj != null && (getFocDesc() == null || !getFocDesc().getWithReference() || newFocObj.getReference() == null || newFocObj.getReference().getInteger() == 0);
+  			objectModifiedButReferenceNotModified = newFocObj != null && (getFocDesc() == null || !getFocDesc().getWithReference() || newFocObj.getReference() == null || newFocObj.getReference().getLong() == 0);
   		}else if(focObjValue.isCreated()){
-  			objectModifiedButReferenceNotModified = newFocObj == null || newFocObj.getReference().getInteger() == 0;
+  			objectModifiedButReferenceNotModified = newFocObj == null || newFocObj.getReference().getLong() == 0;
   		}
     	//}
     	unplugListenerToReferencePropertyOfObjectValue();
@@ -784,7 +785,7 @@ public class FObject extends FProperty implements FPropertyListener{
   public void copy(FProperty sourceProp){
     FObject sourceObjProp = (FObject)sourceProp;
     if(sourceObjProp != null){
-    	int sourceReference = sourceObjProp.getLocalReferenceInt();
+    	long sourceReference = sourceObjProp.getLocalReferenceInt();
     	 
     	FocList objList = null; 
     			
@@ -921,20 +922,24 @@ public class FObject extends FProperty implements FPropertyListener{
 
   @Override
   public Object getValue() {
-    return localReference != null ? localReference.getInteger() : 0;
+    return localReference != null ? localReference.getLong() : 0;
   }  
   
   @Override
   public void setValue(Object newValue) throws ReadOnlyException, Converter.ConversionException {
-    if(newValue instanceof Integer){
+    if(newValue instanceof Long || newValue instanceof Integer){
     	if(localReference != null){
-    		int newValueInt = ((Integer)newValue).intValue();
-    		if(newValueInt != localReference.getInteger()){
-    			localReference.setInteger(newValueInt);
+    		long newValueInt = 0;
+    		if(newValue instanceof Long){
+    			newValueInt = ((Long)newValue).longValue();
+    		}else{
+    			newValueInt = ((Integer)newValue).intValue();
+    		}
+    		if(newValueInt != localReference.getLong()){
+    			localReference.setLong(newValueInt);
     			reactToLocalReferenceModification_AndNotifyListeners();
     		}
-    	}
-    	else{
+    	}else{
     		Globals.logString("Local reference is null in FObject");
     	}
     }else{

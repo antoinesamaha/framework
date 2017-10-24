@@ -243,7 +243,7 @@ public class FVHtmlTable extends VerticalLayout implements FocXMLGuiComponent, I
 	}
 
 	@Override
-	public void delete(int ref) {
+	public void delete(long ref) {
 		getFocList().removeItem(ref);//remove		
 	}
 

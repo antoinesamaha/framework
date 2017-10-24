@@ -225,7 +225,7 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
   }
 
   @Override
-  public void delete(int ref) {
+  public void delete(long ref) {
   	getFocList().removeItem(ref);
   }
 

@@ -83,7 +83,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 	      	if(!isRefreshGuiDisabled()){
 		        if(evt.getID()==FocEvent.ID_ITEM_ADD || evt.getID() == FocEvent.ID_ITEM_REMOVE) {
 	        		FocObject focObj = (FocObject) evt.getEventSubject();
-	        		int       ref    = focObj != null ? focObj.getReferenceInt() : 0;
+	        		long      ref    = focObj != null ? focObj.getReferenceInt() : 0;
 	        		int       everproEventID = evt.getID()==FocEvent.ID_ITEM_ADD ? EverproItemSetChangeEvent.ADD_EVENT : EverproItemSetChangeEvent.DELETE_EVENT;
 		        	EverproItemSetChangeEvent event = new EverproItemSetChangeEvent((Container)FocDataWrapper.this, everproEventID, (Object)ref);
 		        	refreshGuiForContainerChanges(event);
@@ -402,7 +402,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
           for(int i=0; i<filters.size() && include; i++){
             Filter fltr = filters.get(i);
             if(focObj.getReference() != null){
-            	include = include && fltr.passesFilter(focObj.getReference().getInteger(), focObj);
+            	include = include && fltr.passesFilter(focObj.getReference().getLong(), focObj);
             }
           }
         }
@@ -440,7 +440,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 	      }
       }      
       if(getInitialValue() != null){
-        int initialValueId = getInitialValue().getReference().getInteger();
+        long initialValueId = getInitialValue().getReference().getLong();
         if(list == null || !list.containsId(initialValueId)){
           visibleListElements.add(getInitialValue());
         }
@@ -452,12 +452,12 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     return visibleListElements;
   }
   
-  public boolean containsReference(int ref){
+  public boolean containsReference(long ref){
     boolean contains = false;
     ArrayList<FocObject> arrayList = getVisibleListElements(true);
     for(int i=0; i<arrayList.size() && !contains; i++){
       FocObject obj = arrayList.get(i);
-      contains = (obj != null && obj.getReference() != null && obj.getReference().getInteger() == ref);
+      contains = (obj != null && obj.getReference() != null && obj.getReference().getLong() == ref);
     }
     return contains;
   }
@@ -479,9 +479,9 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   	FocObject obj = null;
     
     if(itemId != null){
-      int ref = ((Integer)itemId).intValue();
+      long ref = ((Long)itemId).longValue();
       
-      if(initialValue != null && initialValue.getReference() != null && initialValue.getReference().getInteger() == ref){
+      if(initialValue != null && initialValue.getReference() != null && initialValue.getReference().getLong() == ref){
         obj = initialValue;
       }
 //      if(obj == null) obj = getFocList().searchByReference(ref);
@@ -527,7 +527,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 
   @Override
   public boolean containsId(Object itemId) {
-    return containsReference((Integer)itemId);
+    return containsReference((long)itemId);
   }
 
   @Override
@@ -573,7 +573,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
-  public class ReferencesCollection implements Collection<Integer> {
+  public class ReferencesCollection implements Collection<Long> {
     private FocDataWrapper dataWrapper = null;
     
     public ReferencesCollection(FocDataWrapper dataWrapper){
@@ -585,12 +585,12 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     }
     
     @Override
-    public boolean add(Integer arg0) {
+    public boolean add(Long arg0) {
       return false;
     }
 
     @Override
-    public boolean addAll(Collection<? extends Integer> arg0) {
+    public boolean addAll(Collection<? extends Long> arg0) {
       return false;
     }
 
@@ -600,7 +600,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 
     @Override
     public boolean contains(Object arg0) {
-      return dataWrapper != null ? dataWrapper.containsReference((Integer)arg0) : false;
+      return dataWrapper != null ? dataWrapper.containsReference((Long)arg0) : false;
     }
 
     @Override
@@ -615,9 +615,9 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public Iterator<Long> iterator() {
       
-      return new Iterator<Integer>() {
+      return new Iterator<Long>() {
         int pos  =  0;
         
         @Override
@@ -626,11 +626,11 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
         }
 
         @Override
-        public Integer next() {
-          int val = 0;
+        public Long next() {
+          long val = 0;
           if(pos >= 0 && pos < size()){
             FocObject obj = getVisibleListElements(true).get(pos);
-            if(obj != null && obj.getReference() != null) val = obj.getReference().getInteger();
+            if(obj != null && obj.getReference() != null) val = obj.getReference().getLong();
           }
           
           pos++;          
@@ -670,9 +670,9 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 
     @Override
     public Object[] toArray() {
-      Integer[] array = new Integer[size()];
+      Long[] array = new Long[size()];
       int i = 0;
-      Iterator<Integer> iter = iterator();
+      Iterator<Long> iter = iterator();
       while(iter!=null && iter.hasNext()){
         array[i++]=iter.next();
       }
@@ -762,7 +762,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     private boolean propertyEqualsValue(FProperty prop){
     	boolean equals = false;
     	if(prop instanceof FObject && propertyValue instanceof FocObject && ((FocObject)propertyValue).getReference() != null){
-    		equals = ((FObject)prop).getLocalReferenceInt() == ((FocObject)propertyValue).getReference().getInteger();
+    		equals = ((FObject)prop).getLocalReferenceInt() == ((FocObject)propertyValue).getReference().getLong();
     	}else if(prop instanceof FMultipleChoice){
     		if(propertyValue instanceof Integer){
     			equals = ((FMultipleChoice)prop).getInteger() == (Integer)propertyValue;

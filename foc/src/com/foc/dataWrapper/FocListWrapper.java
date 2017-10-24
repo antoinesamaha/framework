@@ -81,7 +81,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 
 	@Override
 	public Object firstItemId() {
-		Integer first = null;
+		Long first = null;
 		ArrayList<FocObject> array = getVisibleListElements(true);
 		if(array != null && array.size() > 0){
 			first = array.get(0).getReferenceInt();
@@ -91,7 +91,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 
 	@Override
 	public Object lastItemId() {
-		Integer last = null;
+		Long last = null;
 		ArrayList<FocObject> array = getVisibleListElements(true);
 		if(array != null && array.size() > 0){
 			last = array.get(array.size() - 1).getReferenceInt();
@@ -154,7 +154,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 
 	@Override
 	public List<?> getItemIds(int startIndex, int numberOfItems) {
-		ArrayList<Integer> idsArray = new ArrayList<Integer>();
+		ArrayList<Long> idsArray = new ArrayList<Long>();
 		
 		ArrayList<FocObject> array = getVisibleListElements(true);
 		if(array != null){

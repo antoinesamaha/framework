@@ -52,7 +52,7 @@ public class ReferenceCheckerDelete {
 			FocDesc      focDesc = getReferenceChecker().getFocDesc();
 			FObjectField objFld  = (FObjectField) focDesc.getFieldByID(referenceChecker.getObjectFieldID());
 			if(focDesc != null && objFld != null){
-				int    ref       = obj.getReferenceInt();
+				long   ref       = obj.getReferenceInt();
 				String fiedlName = objFld.getDBName();
 		
 				if(ref > 0 && !Utils.isStringEmpty(fiedlName)){

@@ -858,9 +858,9 @@ public class FocUnitTestingCommand {
    * @param variableName
    *          The name of the variable to store the line reference in.
    */
-  public int selectItemInTable(String tableName, String propertyName, String propertyValue, String variableName, int ancestor){
+  public long selectItemInTable(String tableName, String propertyName, String propertyValue, String variableName, int ancestor){
   	boolean nodeCreated = !getLogger().openCommand("Table select where "+propertyName+" = "+propertyValue +" -> "+variableName);
-  	int referenceOfSelectedItem = 0;
+  	long referenceOfSelectedItem = 0;
   	
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
@@ -870,17 +870,17 @@ public class FocUnitTestingCommand {
     	FocObject object = iTableTree != null ? iTableTree.getTableTreeDelegate().selectByFocProperty(propertyName, propertyValue, ancestor) : null;
   		
 	    if(object != null && object.getReference() != null){
-	    	referenceOfSelectedItem = object.getReference().getInteger();
+	    	referenceOfSelectedItem = object.getReference().getLong();
 	    	String reference = object.getReference().toString();
 
 	    	//If tree table we expand all the parents so that the item becomes visible for selection
 	    	if(iTableTree instanceof FVTreeTable){
 	    		FVTreeTable treeTable = (FVTreeTable) iTableTree;
-	    		Integer ref = object.getReference().getInteger();
-	    		ref = (Integer) treeTable.getParent(ref);
+	    		Long ref = object.getReference().getLong();
+	    		ref = (Long) treeTable.getParent(ref);
 	    		while(ref != null){
 	    			treeTable.setCollapsed(ref, false);
-	    			ref = (Integer) treeTable.getParent(ref);	    			
+	    			ref = (Long) treeTable.getParent(ref);	    			
 	    		}
 	    	}
 	    	//---------------------------------------------------------------------------------------
@@ -920,7 +920,7 @@ public class FocUnitTestingCommand {
       if (table != null) {
         FocObject father = null;
         if (table.getValue() != null) {
-          father = ((ITableTree) table).getFocList().searchByReference((Integer) table.getValue());
+          father = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
         }
         FocObject object = ((ITableTree) table).getTableTreeDelegate().addItem(father);
         getLogger().addInfo("Adding a new item in table " + tableName + ".");
@@ -930,7 +930,7 @@ public class FocUnitTestingCommand {
             getDictionary().putXMLVariable(variableName, reference);
             getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
           }
-          table.select(object.getReference().getInteger());
+          table.select(object.getReference().getLong());
         }
       }
     }
@@ -964,7 +964,7 @@ public class FocUnitTestingCommand {
         Table table = (Table) tableWrapper.getTableOrTree();
         if (table != null && foundMenu != null) {
         	IsClicked = true;
-        	Integer currentSelection = (Integer) table.getValue();
+        	Long currentSelection = (Long) table.getValue();
         	if(currentSelection != null){
 	        	delegate.rightClick_HandleAction(foundMenu, null, currentSelection);
 	        }
@@ -1000,7 +1000,7 @@ public class FocUnitTestingCommand {
     if(table.getValue() == null){
       getLogger().addFailure("No item selected in table : " + tableName + ".");
     }else{
-      FocObject obj = ((ITableTree) table).getFocList().searchByReference((Integer) table.getValue());
+      FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
       if (obj != null) {
         ((ITableTree) table).getTableTreeDelegate().open(obj);
         getLogger().addInfo("Opening selected item in table " + tableName + ".");
@@ -1022,7 +1022,7 @@ public class FocUnitTestingCommand {
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
     Table table = (Table) tableWrapper.getTableOrTree();
 
-    FocObject obj = ((ITableTree) table).getFocList().searchByReference((Integer) table.getValue());
+    FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
     if (obj != null) {
       ((ITableTree) table).getTableTreeDelegate().delete_NoPopupConfirmation(obj);
       getLogger().addInfo("Deleing selected item in table " + tableName + ".");
@@ -1676,7 +1676,7 @@ public class FocUnitTestingCommand {
   			FocObject sourceObject = sourceTableOrTree.getTableTreeDelegate().selectByFocProperty(sourcePropertyName, sourcePropertyValue);
   			
   			if(sourceObject != null){
-  				sourceItemId = sourceObject.getReference().getInteger();
+  				sourceItemId = sourceObject.getReference().getLong();
   			}else{
   				String message = "Could not find source row PROPERTY="+sourcePropertyName+" VALUE="+sourcePropertyValue;
   				getLogger().addFailure(message);
@@ -1690,7 +1690,7 @@ public class FocUnitTestingCommand {
   				FocObject targetObject = targetTableOrTree.getTableTreeDelegate().selectByFocProperty(targetPropertyName, targetPropertyValue);
   				
   				if(targetObject != null){
-  					targetItemId = targetObject.getReference().getInteger();
+  					targetItemId = targetObject.getReference().getLong();
   				}
   			}
   		}

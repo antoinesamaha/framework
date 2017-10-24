@@ -65,7 +65,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   public static final int FORCE_RELOAD   = 2;
   
   private HashMap<FocObject, FocListElement> elements      = null;
-  private HashMap<Integer, FocListElement>   elementsByRef = null;
+  private HashMap<Long, FocListElement>      elementsByRef = null;
   
   private SQLFilter      filter     = null;
   private FocListGroupBy sqlGroupBy = null;
@@ -74,7 +74,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   private FAbstractListPanel selectionPanel             = null;
   private FAbstractListPanel attachedListPanel          = null;//Gets the attached list panel 
   private int                viewIDForSelectionBrowse   =    0;
-  private int                nextTempReference          =    1;
+  private long               nextTempReference          =    1;
   private int                nextOrder                  =    0;
   private FocListOrder       listOrder                  = null;//Priority 1
   private Comparator         orderComparator            = null;//Priority 2 - This one for external unser defined orders
@@ -292,7 +292,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		  		for(int i=0; i<list.size(); i++){
 		  			FocObject site = (FocObject) list.getFocObject(i);
 		  			if(i > 0) cond1.append(",");
-		  			cond1.append(site.getReference().getInteger());
+		  			cond1.append(site.getReference().getLong());
 		  		}
 		  		cond1.append(")");
 	  		}
@@ -304,7 +304,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		  		for(int i=0; i<list.size(); i++){
 		  			FocObject site = (FocObject) list.getFocObject(i);
 		  			if(i > 0) cond2.append(",");
-		  			cond2.append(site.getReference().getInteger());
+		  			cond2.append(site.getReference().getLong());
 		  		}
 		  		cond2.append(")");
 	  		}
@@ -898,7 +898,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
       Iterator iter = elementHash_GetListElementIterator();
       while (iter.hasNext() && elm == null){
         FocListElement currElem = (FocListElement) iter.next();
-        if (currElem.getFocObject().getReference().getInteger() == ref){
+        if (currElem.getFocObject().getReference().getLong() == ref){
           elm = currElem;
         }
       }
@@ -906,7 +906,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return elm;
   }
   
-  public synchronized FocObject searchByReference(int ref){
+  public synchronized FocObject searchByReference(long ref){
     FocListElement elm = elementHash_GetFocListElement(ref);
     //Globals.logString("dans search by reference : "+ (elm == null ? elm==null : elm.getFocObject().getReference().getInteger()));
     //Globals.logString("elements.size : " + elements.size() + "elementsByRef.size : " + elementsByRef.size()); 
@@ -916,7 +916,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
       FocObject searchObject = null;
       while(iter != null && iter.hasNext()){
         searchObject = (FocObject)iter.next();
-        if(searchObject.getReference().getInteger() == ref){
+        if(searchObject.getReference().getLong() == ref){
           object = searchObject;
           break;
         }
@@ -926,7 +926,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return object;
   }
   
-  public FocObject searchByRealReferenceOnly(int ref){
+  public FocObject searchByRealReferenceOnly(long ref){
     FocListElement elm = elementHash_GetFocListElement(ref);
     return elm!= null ? elm.getFocObject() : null;
   }
@@ -1094,13 +1094,13 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return foundObj;
   }
   
-  public FocObject searchByPropertyObjectReference(String fieldName, int ref){
+  public FocObject searchByPropertyObjectReference(String fieldName, long ref){
   	FocDesc focDesc = getFocDesc();
   	FField field = focDesc != null ? focDesc.getFieldByName(fieldName) : null;
   	return field != null ? searchByPropertyObjectReference(field.getID(), ref) : null;
   }
   
-  public FocObject searchByPropertyObjectReference(int id, int ref){
+  public FocObject searchByPropertyObjectReference(int id, long ref){
     FocObject foundObj = null;
     Iterator iter = elements != null ? elements.keySet().iterator() : null;
     while(iter!=null && iter.hasNext() && foundObj == null){
@@ -1137,7 +1137,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return foundObj;
   }
   
-  public void fireItemReferenceModification(FocObject focObj, int newRef){
+  public void fireItemReferenceModification(FocObject focObj, long newRef){
 		fireEvent(focObj, FocEvent.ID_BEFORE_REFERENCE_SET);
   }
   
@@ -1244,14 +1244,14 @@ public class FocList extends AccessSubject implements IFocList, Container {
   
   public void elementHash_RemoveFromReferencesMap(FocObject focObject) {
 		if(elementsByRef != null && focObject != null && focObject.getReference() != null){
-			elementsByRef.remove(focObject.getReference().getInteger());
+			elementsByRef.remove(focObject.getReference().getLong());
 		}
   }
 
   public void elementHash_AddToReferencesMap(FocObject focObject) {
 		if(elementsByRef != null && focObject != null && focObject.getReference() != null){
 			FocListElement element = getFocListElement(focObject);
-			elementsByRef.put(focObject.getReference().getInteger(), element);
+			elementsByRef.put(focObject.getReference().getLong(), element);
 		}
   }
   
@@ -1259,7 +1259,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     FocListElement elemToRemove = elementHash_GetFocListElement(focObj);
     //TEMPREF 2012
     //if(focObj.hasRealReference()){
-      elementsByRef.remove(focObj.getReference().getInteger());
+      elementsByRef.remove(focObj.getReference().getLong());
     //}
     try{
       iter.remove();
@@ -1647,7 +1647,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   private void elementHash_Init(){
   	if(elements == null){
 	    elements = new HashMap<FocObject, FocListElement>();
-	    elementsByRef = new HashMap<Integer, FocListElement>();
+	    elementsByRef = new HashMap<Long, FocListElement>();
   	}
   }
     
@@ -1665,13 +1665,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
         FocListElement elem = (FocListElement) iter.next();
         if(elem != null){
           elem.dispose(isCollectionBehaviour());
-          /*if(isCollectionBehaviour()){
-            elem.disposeLeaveFocObject();      
-          }else{
-            elem.dispose();
-          }*/          
           elem = null;
-          //removeCurrentObjectFromIterator(iter);
         }
       }
       elements.clear();
@@ -1682,29 +1676,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return elements != null ? elements.get(focObj) : null;
   }
 
-//  private FocListElement elementHash_GetFocListElementByRef(FocObject focObj){
-//    if(focObj.hasRealReference()){
-//      return elementsByRef.get(focObj.getReference().getInteger());      
-//    }else{
-//      return  searchByReference(focObj.getReference().getInteger());
-//
-//    }
-//  }
-  
-  private FocListElement elementHash_GetFocListElement(int ref){
+  private FocListElement elementHash_GetFocListElement(long ref){
   	FocListElement elem = elementsByRef != null ? elementsByRef.get(ref) : null;
-  	//ADDING THIS PART CAN CAUSE PERFORMANCE ISSUES
-  	/*
-  	if(elem == null){//Added because of the REF - 1
-  		for(int i=0; i<size(); i++){
-  			FocObject e = getFocObject(i);
-  			int r = e.getReference().getInteger();
-  			if(r == ref){
-  				int debug = 3;
-  			}
-  		}
-  	}
-  	*/
     return elem;
   } 
   
@@ -1734,7 +1707,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     //TEMPREF 2012
     //if (elem.getFocObject().hasRealReference()){
     if(getFocDesc().getWithReference()){
-    	elementsByRef.put(elem.getFocObject().getReference().getInteger(), elem);
+    	elementsByRef.put(elem.getFocObject().getReference().getLong(), elem);
     }
     //}
   }
@@ -1744,7 +1717,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     //printDebug();    
     //Globals.logString("dans elementHash_remove : focObj.hasRealReference = " + focObj.hasRealReference() + "elementByRef.size : "+ elementsByRef.size()+" removing ref="+focObj.getReference().getInteger());
     if(/*focObj.hasRealReference() &&*/ getFocDesc().getWithReference() && elementsByRef != null){//TEMPREF 2012
-      obj = elementsByRef.remove(focObj.getReference().getInteger());
+      obj = elementsByRef.remove(focObj.getReference().getLong());
     }
     //Globals.logString("elementByRef.size : "+ elementsByRef.size() + (obj == null));
     if(elements != null){
@@ -2168,7 +2141,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	public Item getItem(Object itemId) {
 		FocObject obj = null;
 		if(itemId != null){
-			int ref = ((Integer)itemId).intValue();
+			long ref = ((Long)itemId).longValue();
 			obj = searchByReference(ref);
 		}
 		return obj;
@@ -2182,9 +2155,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
 	@Override
 	public Collection<?> getItemIds() {
-	  Collection<Integer> returnedArray = null;
+	  Collection<Long> returnedArray = null;
     if(getFocDesc().isByCompany()){
-      ArrayList<Integer> refsArray = new ArrayList<Integer>();      
+      ArrayList<Long> refsArray = new ArrayList<Long>();      
       Company company = UserSession.getInstanceForThread().getCompany();
 
       int siteFieldID_1 = FField.NO_FIELD_ID;
@@ -2221,7 +2194,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
             add = true;
           }
           
-          if(add) refsArray.add(currentObj.getReference().getInteger());
+          if(add) refsArray.add(currentObj.getReference().getLong());
         }
       }
       returnedArray = refsArray;
@@ -2240,7 +2213,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	public Property getContainerProperty(Object itemId, Object propertyId) {
 		Property property = null;
 		if(itemId != null && propertyId != null){
-			int ref     = ((Integer)itemId).intValue();
+			long ref     = ((Long)itemId).longValue();
 			//int fieldID = ((Integer)propertyId).intValue();
 
 			FocObject obj = searchByReference(ref);
@@ -2306,7 +2279,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	
 	//-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
-	public class ReferencesCollection implements Collection<Integer> {
+	public class ReferencesCollection implements Collection<Long> {
 	  private FocList list = null;
 	  
 	  public ReferencesCollection(FocList list){
@@ -2318,12 +2291,12 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	  }
 	  
     @Override
-    public boolean add(Integer arg0) {
+    public boolean add(Long arg0) {
       return false;
     }
 
     @Override
-    public boolean addAll(Collection<? extends Integer> arg0) {
+    public boolean addAll(Collection<? extends Long> arg0) {
       return false;
     }
 
@@ -2333,7 +2306,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
     @Override
     public boolean contains(Object arg0) {
-      return list != null ? list.searchByReference((Integer)arg0) != null : false;
+      return list != null ? list.searchByReference((Long)arg0) != null : false;
     }
 
     @Override
@@ -2348,8 +2321,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
-      return new Iterator<Integer>() {
+    public Iterator<Long> iterator() {
+      return new Iterator<Long>() {
 
         int pos  =  0;
         
@@ -2365,44 +2338,16 @@ public class FocList extends AccessSubject implements IFocList, Container {
         }
 
         @Override
-        public Integer next() {
-          int val = 0;
+        public Long next() {
+          long val = 0;
           if(pos >= 0 && pos < size()){
             FocObject obj = getFocObject(pos);
-            if(obj != null && obj.getReference() != null) val = obj.getReference().getInteger();
+            if(obj != null && obj.getReference() != null) val = obj.getReference().getLong();
           }
           
           pos++;          
           return val;
         }
-        
-        /*
-        @Override
-        public Integer next() {
-          int val = 0;
-          
-          FocObject obj = null;
-          
-          if(getFocDesc().isByCompany()){
-            Company company = UserSession.getInstanceForThread().getCompany();
-                        
-            while(pos >= 0 && pos < size() && obj == null){
-              FocObject currentObj = getFocObject(pos++);
-              if(currentObj.getCompany() == null || currentObj.getCompany().equalsRef(company)){
-                obj = currentObj;
-              }
-            }
-          }else{
-            if(pos >= 0 && pos < size()){
-              obj = getFocObject(pos++);
-            }
-          }
-            
-          if(obj != null && obj.getReference() != null) val = obj.getReference().getInteger();
-          
-          return val;
-        }
-        */
 
         @Override
         public void remove() {
@@ -2437,9 +2382,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
     @Override
     public Object[] toArray() {
-      Integer[] array = new Integer[size()];
+      Long[] array = new Long[size()];
       int i = 0;
-      Iterator<Integer> iter = iterator();
+      Iterator<Long> iter = iterator();
       while(iter!=null && iter.hasNext()){
         array[i++]=iter.next();
       }
@@ -2470,7 +2415,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 				int equalsIndex = filterExpression.indexOf('=');
 				if(equalsIndex > 0){
 					String refStr = filterExpression.substring(equalsIndex).trim();
-					int ref = FocMath.parseInteger(refStr);
+					long ref = FocMath.parseLong(refStr);
 					treated = ref != 0;
 					if(treated){
 						foundObject = searchByReference(ref);

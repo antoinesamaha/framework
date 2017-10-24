@@ -202,7 +202,7 @@ public class FVTable extends Table implements FocXMLGuiComponent, ITableTree{
   }
 
   @Override
-  public void delete(int ref) {
+  public void delete(long ref) {
     getFocList().removeItem(ref);
   }
 

@@ -20,7 +20,6 @@ import com.foc.vaadin.gui.components.FVObjectComboBox;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.server.Resource;
-import com.vaadin.server.ThemeResource;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
@@ -191,7 +190,7 @@ public class FVColumnEditorRendererConverter {
 					FVObjectComboBox combo = new FVObjectComboBox(oFld, getTableColumn().getCaptionProp());
 					getGridColumn().setEditorField(combo);
 
-					FVAbstractConverter<String, Integer> converter = new FVAbstractConverter<String, Integer>(this) {
+					FVAbstractConverter<String, Long> converter = new FVAbstractConverter<String, Long>(this) {
 
 						private FocList getFocList() {
 							FObjectField oFld = (FObjectField) getTableColumn().getField();
@@ -199,8 +198,8 @@ public class FVColumnEditorRendererConverter {
 							return list;
 						}
 
-						public Integer convertToModel(String value, Class<? extends Integer> targetType, Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
-							Integer foundItem = null;
+						public Long convertToModel(String value, Class<? extends Long> targetType, Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+							Long foundItem = null;
 
 							FocList list = getFocList();
 							if(list != null){
@@ -215,7 +214,7 @@ public class FVColumnEditorRendererConverter {
 							return foundItem;
 						}
 
-						public String convertToPresentation(Integer value, Class<? extends String> targetType, Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
+						public String convertToPresentation(Long value, Class<? extends String> targetType, Locale locale) throws com.vaadin.data.util.converter.Converter.ConversionException {
 							String stirngDisplay = "";
 							if(value == null){
 								if(getTableColumn() != null && getTableColumn().getField() != null && ((FObjectField) getTableColumn().getField()).getNullValueDisplayString() != null){
@@ -253,8 +252,8 @@ public class FVColumnEditorRendererConverter {
 							return stirngDisplay;
 						}
 
-						public Class<Integer> getModelType() {
-							return Integer.class;
+						public Class<Long> getModelType() {
+							return Long.class;
 						}
 
 						public Class<String> getPresentationType() {

@@ -355,7 +355,7 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
   }
 
   @Override
-  public void delete(int ref) {
+  public void delete(long ref) {
     FNode node = getFTree().vaadin_FindNode(ref);
     boolean deleted = getFTree().vaadin_DeleteNode(node);
     if(deleted){
@@ -377,12 +377,12 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
         double value = 0;
         FTree tree = getFTree();
         
-        Collection collects = tree.rootItemIds();
-        Iterator   iter     = collects.iterator();
+        Collection     collects = tree.rootItemIds();
+        Iterator<Long> iter     = collects.iterator();
         while(iter != null && iter.hasNext()){
-        	Integer intObj = (Integer) iter.next();
+        	Long intObj = (Long) iter.next();
         	if(intObj != null){
-        		int ref = intObj.intValue();
+        		long ref = intObj.longValue();
         		FocObject focObject = getFocList().searchByReference(ref);
         		
             IFocData focData = focObject.iFocData_getDataByPath(col.getDataPath());
@@ -432,7 +432,7 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
 					if(node != null){
 						if(node.getObject() != null && (node.getObject() instanceof FocObject)){
 							FocObject obj = (FocObject) node.getObject();
-							int objId = obj.getReference().getInteger();
+							long objId = obj.getReference().getLong();
 							
 							setCollapsed(objId, node.isCollapsed()); 
 						}
@@ -467,7 +467,7 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
 					if(node != null){
 						if(node.getObject() != null && (node.getObject() instanceof FocObject)){
 							FocObject obj = (FocObject) node.getObject();
-							int objId = obj.getReference().getInteger();
+							long objId = obj.getReference().getLong();
 							
 							setCollapsed(objId, !expand);
 						}
@@ -520,7 +520,7 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
 	@Override
 	public void afterAddItem(FocObject fatherObject, FocObject newObject) {
 		if(fatherObject != null && fatherObject.getReference() != null){
-			setCollapsed(fatherObject.getReference().getInteger(), false);
+			setCollapsed(fatherObject.getReference().getLong(), false);
 		}
 	}
 
@@ -572,7 +572,7 @@ public class FVTreeTable extends TreeTable implements FocXMLGuiComponent, ITable
 				public void afterChildren(FNode node) {
 					if(node != null && node.getObject() != null && isLeafLevel(node) && isChildrenAllowedCheckerEnabled()){
 						FocObject focObject = (FocObject) node.getObject();
-						setChildrenAllowed(focObject.getReference().getInteger(), false);
+						setChildrenAllowed(focObject.getReference().getLong(), false);
 					}
 				}
 			});

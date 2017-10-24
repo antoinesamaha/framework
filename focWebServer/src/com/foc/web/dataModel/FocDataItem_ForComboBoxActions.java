@@ -21,8 +21,8 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 	public static final String ACTION_CAPTION_ADD     = "Add New...";
 	public static final String ACTION_CAPTION_REFRESH = "Refresh";
 	
-	public static final int   REF_ADD           = -1000000;
-	public static final int   REF_REFRESH       = -2000000;
+	public static final long   REF_ADD           = -1000000;
+	public static final long   REF_REFRESH       = -2000000;
 	
 	public FocDataItem_ForComboBoxActions(String propertyPath, int actionType){
 		super(new FocDataItem_FocDesc_ForComboBoxActions());

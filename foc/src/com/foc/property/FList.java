@@ -114,7 +114,7 @@ public class FList extends FProperty {
 			        int       targetListForeignObject_Ref = targetListForeignObject.getReference().getInteger();
 			        
 			        FObject   sourceObjProp = (FObject) srcObj.getFocProperty(key);
-			        int       sourceListForeignObject_Ref = sourceObjProp.getLocalReferenceInt();
+			        long      sourceListForeignObject_Ref = sourceObjProp.getLocalReferenceInt();
 			        
 			        //ATTENTION!!! FocObject srcForeignObject        = srcObj.getPropertyObject(key);
 			        

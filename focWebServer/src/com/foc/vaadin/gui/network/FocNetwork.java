@@ -64,10 +64,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 	}
 
 	public String getID(FocObject object){
-		return object != null ? getID(object.getThisFocDesc().getStorageName(),object.getReferenceInt()) : null;
+		return object != null ? getID(object.getThisFocDesc().getStorageName(), object.getReferenceInt()) : null;
 	}
 
-	public String getID(String storage, int ref){
+	public String getID(String storage, long ref){
 		return storage+"|"+ref;
 	}
 }

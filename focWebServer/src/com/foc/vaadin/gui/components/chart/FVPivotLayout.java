@@ -263,7 +263,7 @@ public class FVPivotLayout extends FVVerticalLayout implements FocXMLGuiComponen
 	}
 
 	@Override
-	public void delete(int ref) {
+	public void delete(long ref) {
 	}
 
 	@Override

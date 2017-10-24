@@ -232,7 +232,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					if(focXMLGuiComponentDelegate != null){
 						focXMLGuiComponentDelegate.setColumnId(columnId);
 						if(focObject != null && focObject.getReference() != null){
-							focXMLGuiComponentDelegate.setRowId(focObject.getReference().getInteger());
+							focXMLGuiComponentDelegate.setRowId(focObject.getReference().getLong());
 						}
 					}
 					abstractComponent.setId(column.getDataPath());
@@ -382,7 +382,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					if(componentDelegate != null){
 						componentDelegate.setColumnId(columnId);
 						if(focObject != null && focObject.getReference() != null){
-							componentDelegate.setRowId(focObject.getReference().getInteger());
+							componentDelegate.setRowId(focObject.getReference().getLong());
 						}
 					}
 				}
@@ -483,7 +483,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 
 		ITableTree tableTree = getTreeOrTable();
 		FocList list = tableTree != null ? tableTree.getFocList() : null;
-		FocObject focObject = list != null ? list.searchByReference((Integer) itemId) : null;
+		FocObject focObject = list != null ? list.searchByReference((Long) itemId) : null;
 		FProperty property = focObject != null ? focObject.getFocPropertyForPath(getTableColumn().getDataPath()) : null;
 //		FProperty property = (FProperty) (focObject != null ? focObject.iFocData_getDataByPath(getTableColumn().getDataPath()) : null);
 		FField field = property != null ? property.getFocField() : null;
@@ -507,7 +507,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					if(editable){
 						if(getTableTreeDelegate().getEditingMode() == TableTreeDelegate.MODE_EDITABLE_ON_SELECTION){
 							if(focObject != null && focObject.getReference() != null){
-								editable = getTable().isSelected(focObject.getReference().getInteger());
+								editable = getTable().isSelected(focObject.getReference().getLong());
 							}
 						}else if(getTableTreeDelegate().getEditingMode() == TableTreeDelegate.MODE_EDITABLE){
 

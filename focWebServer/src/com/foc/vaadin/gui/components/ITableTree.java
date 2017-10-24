@@ -22,7 +22,7 @@ public interface ITableTree {
   public FocList           getFocList();
   public FocDataWrapper    getFocDataWrapper();
   public void              open(FocObject focObject);
-  public void              delete(int ref);
+  public void              delete(long ref);
   public FVTableColumn     addColumn(FocXMLAttributes attributes);
   public TableTreeDelegate getTableTreeDelegate();
   public void              applyFocListAsContainer();

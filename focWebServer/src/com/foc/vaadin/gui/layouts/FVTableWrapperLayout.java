@@ -114,7 +114,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private FVViewSelector_MenuBar viewSelector = null;
 
 	private boolean isRefreshEnabled = true;
-	private ArrayList<Integer> excludedDepartmentArray = null;
+	private ArrayList<Long> excludedDepartmentArray = null;
 	private ArrayList<Integer> excludedStatusArray = null;
 	private String codeFrom = null;
 	private String codeTo = null;
@@ -706,7 +706,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 					boolean visible = true;
 
 					ArrayList<Integer> excludedStatusList = excludedStatusArray_get(false);
-					ArrayList<Integer> excludedDepartmentList = excludedDepartmentArray_get(false);
+					ArrayList<Long> excludedDepartmentList = excludedDepartmentArray_get(false);
 
 					FocObject focObject = (FocObject) item;
 
@@ -732,20 +732,20 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 									statusValue = fProperty.getInteger();
 								}
 								for(int i = 0; i < excludedStatusList.size() && visible; i++){
-									int excludedItemId = excludedStatusList.get(i);
+									long excludedItemId = excludedStatusList.get(i);
 									visible = statusValue != excludedItemId;
 								}
 							}
 						}
 						if(excludedDepartmentList != null){
-							int departmentRef = -1;
+							long departmentRef = -1;
 							Department department = focObject.getDepartment();
 							if(department != null && department.getReference() != null){
-								departmentRef = department.getReference().getInteger();
+								departmentRef = department.getReference().getLong();
 
 							}
 							for(int i = 0; i < excludedDepartmentList.size() && visible; i++){
-								int excludedItemId = excludedDepartmentList.get(i);
+								long excludedItemId = excludedDepartmentList.get(i);
 								visible = departmentRef != excludedItemId;
 							}
 						}
@@ -1220,8 +1220,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 							panel.setContent(null);
 							XMLViewKey xmlViewKey = getXmlView_ShowForm().getXmlViewKey();
 
-							Integer itemId = (Integer) event.getItemId();
-							int ref = itemId.intValue();
+							Long itemId = (Long) event.getItemId();
+							long ref = itemId.longValue();
 							FocObject focObject = getTableOrTree().getFocList().searchByReference(ref);
 
 							ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) getWindow(), xmlViewKey, focObject);
@@ -1521,9 +1521,9 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		return excludedStatusArray;
 	}
 
-	public ArrayList<Integer> excludedDepartmentArray_get(boolean create) {
+	public ArrayList<Long> excludedDepartmentArray_get(boolean create) {
 		if(excludedDepartmentArray == null && create){
-			excludedDepartmentArray = new ArrayList<Integer>();
+			excludedDepartmentArray = new ArrayList<Long>();
 		}
 		return excludedDepartmentArray;
 	}

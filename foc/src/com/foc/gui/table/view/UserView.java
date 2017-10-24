@@ -73,7 +73,7 @@ public class UserView extends FocObject{
   	setPropertyObject(UserViewDesc.FLD_VIEW, viewConfig);
   }
   
-  public void setViewConfigRef(int ref){
+  public void setViewConfigRef(long ref){
   	((FObject)getFocProperty(UserViewDesc.FLD_VIEW)).setLocalReferenceInt_WithoutNotification(ref);
   }
   

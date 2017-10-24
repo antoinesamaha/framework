@@ -944,7 +944,41 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   		if(withoutListeners) prop.setDesactivateListeners(oldValue);
   	}
   }
+  
+  public long getPropertyLong(int fieldID){
+  	FProperty prop = getFocProperty(fieldID);  	
+  	return prop != null ? prop.getLong() : 0;
+  }
 
+  public long getPropertyLong(String fieldName){
+  	FField field = getThisFocDesc().getFieldByName(fieldName);  	
+  	return field != null ? getPropertyLong(field.getID()) : 0;
+  }
+  
+  public void setPropertyLong(String fieldName, long val){
+  	FField field = getThisFocDesc().getFieldByName(fieldName);  	
+  	if(field != null){
+  		setPropertyLong(field.getID(), val);
+  	}
+  }
+  
+  public void setPropertyLong(int fieldID, long val){
+  	setPropertyLong(fieldID, val, false);
+  }
+  
+  public void setPropertyLong(int fieldID, long val, boolean withoutListeners){
+  	FProperty prop = getFocProperty(fieldID);  	
+  	if(prop != null){
+  		boolean oldValue = false;
+  		if(withoutListeners){
+  			oldValue = prop.isDesactivateListeners();
+  			prop.setDesactivateListeners(true);
+  		}
+  		prop.setLong(val);
+  		if(withoutListeners) prop.setDesactivateListeners(oldValue);
+  	}
+  }
+  
   public double getPropertyCurrencyRate_DisplayDouble(int fieldID){
   	FCurrRate prop = (FCurrRate) getFocProperty(fieldID);  	
   	return prop != null ? prop.getDouble() : 0;
@@ -2341,9 +2375,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }
   }
 
-  public int getReferenceInt(){
+  public long getReferenceInt(){
   	FReference ref = getReference();
-  	return ref != null ? ref.getInteger() : 0;
+  	return ref != null ? ref.getLong() : 0;
   }
   
   public FReference getReference() {
@@ -2376,7 +2410,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	  //EAntoine
   }
   
-  public void setReference(int ref){
+  public void setReference(long ref){
     FReference refProp = getReference();
 
     if (refProp != null) {
@@ -2385,7 +2419,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     		((FocList)accSubj).fireItemReferenceModification(this, ref);
     	}
     	
-      refProp.setInteger(ref);
+      refProp.setLong(ref);
     }
     
     setTempReference(false);
@@ -2393,10 +2427,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 
   public boolean referenceNeeded() {
     FocDesc focDesc = this.getThisFocDesc();
-    return focDesc != null && focDesc.getWithReference() && getReference().getInteger() == 0;
+    return focDesc != null && focDesc.getWithReference() && getReference().getLong() == 0;
   }
 
-  public boolean setTemporaryReferenceIfNeeded(int ref) {
+  public boolean setTemporaryReferenceIfNeeded(long ref) {
     boolean needed = referenceNeeded(); 
     if (needed) {
       setReference(ref);
@@ -3889,9 +3923,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}else if(o1 != null && o2 == null){
 			compare = 1;
 		}else if(o1 != null && o2 != null){
-			int ref1 = o1.getReferenceInt();
-			int ref2 = o2.getReferenceInt();
-			compare = ref1 - ref2;
+			long ref1 = o1.getReferenceInt();
+			long ref2 = o2.getReferenceInt();
+			long diff = ref1 - ref2;
+			
+			compare = diff == 0 ? 0 : (diff < 0 ? -1 : 1);
 		}
 
 		return compare;

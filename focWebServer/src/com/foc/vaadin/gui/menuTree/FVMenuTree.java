@@ -221,11 +221,11 @@ public class FVMenuTree extends FocXMLLayout {
 				public void itemClick(ItemClickEvent event) {
 					// menuClicked((String) event.getItemId());
 					try {
-						if(getMenuList() == null || getMenuList().searchByReference(((Integer) event.getItemId())) == null){
+						if(getMenuList() == null || getMenuList().searchByReference(((Long) event.getItemId())) == null){
 							int debug = 3;
 							debug++;
 						}
-						FocMenuItem menuItem = (FocMenuItem) getMenuList().searchByReference(((Integer) event.getItemId()).intValue());
+						FocMenuItem menuItem = (FocMenuItem) getMenuList().searchByReference(((Long) event.getItemId()).longValue());
 						if (menuItem != null && menuItem.getMenuAction() != null) {
 							FocCentralPanel window = findAncestor(FocCentralPanel.class);
 							if (window != null) {

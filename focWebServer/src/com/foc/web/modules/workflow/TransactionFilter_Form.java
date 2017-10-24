@@ -169,7 +169,7 @@ public class TransactionFilter_Form extends FocXMLLayout{
 			//We set all to selected then we remove the selection from the lines in the exclusionArray
 			//----------------------------------------------------------------------------------------
 			department_Selection_Tree.getDepartmentSelectionTableTreeDelegate().selectionColumn_selectAll(true);
-			ArrayList<Integer> depArray = getUnselectedDepartmentFilter(false);
+			ArrayList<Long> depArray = getUnselectedDepartmentFilter(false);
 			if(depArray != null){
 				for(int i=0; i<depArray.size(); i++){
 					department_Selection_Tree.getDepartmentSelectionTableTreeDelegate().selectionColumn_setSelectionMemory(depArray.get(i), false);
@@ -183,7 +183,7 @@ public class TransactionFilter_Form extends FocXMLLayout{
 		return tableWrapperLayout != null ? tableWrapperLayout.excludedStatusArray_get(create) : null;
 	}
 
-	public ArrayList<Integer> getUnselectedDepartmentFilter(boolean create){
+	public ArrayList<Long> getUnselectedDepartmentFilter(boolean create){
 		return tableWrapperLayout != null ? tableWrapperLayout.excludedDepartmentArray_get(create) : null;
 	}
 
@@ -211,15 +211,15 @@ public class TransactionFilter_Form extends FocXMLLayout{
 	public void copyExclusionsFrom_GuiToMemory(){
 		TableTreeDelegate departmentSelectionTableTreeDelegate = getDepartmentSelectionTableTreeDelegate();
 		if(departmentSelectionTableTreeDelegate != null && departmentSelectionTableTreeDelegate.getTreeOrTable() != null && departmentSelectionTableTreeDelegate.getTreeOrTable().getFocDataWrapper() != null){
-			ArrayList<Integer> arrayDep = getUnselectedDepartmentFilter(false);
+			ArrayList<Long> arrayDep = getUnselectedDepartmentFilter(false);
 			if(arrayDep != null) arrayDep.clear();
 			
 			ArrayList<Object> selectedArrayList = departmentSelectionTableTreeDelegate.selectionColumn_getSelectedIdArrayList();
 			FocDataWrapper focDataWrapper = departmentSelectionTableTreeDelegate.getTreeOrTable().getFocDataWrapper();
 			for(int i=0; i<focDataWrapper.size(); i++){
 				Department dep = (Department) focDataWrapper.getAt(i);
-				if(selectedArrayList == null || !selectedArrayList.contains(dep.getReference().getInteger())){
-					getUnselectedDepartmentFilter(true).add(dep.getReference().getInteger());
+				if(selectedArrayList == null || !selectedArrayList.contains(dep.getReference().getLong())){
+					getUnselectedDepartmentFilter(true).add(dep.getReference().getLong());
 				}
 			}
 		}

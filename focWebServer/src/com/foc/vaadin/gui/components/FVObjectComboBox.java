@@ -87,16 +87,16 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   	init();
   }
   
-  public int getFocObjectRef_ForTheADDIcon(){
-  	int ref = 0;
+  public long getFocObjectRef_ForTheADDIcon(){
+  	long ref = 0;
   	if(getSelectionWrapperList() != null && getSelectionWrapperList() instanceof FocListWrapper_ForObjectSelection){
   		ref = ((FocListWrapper_ForObjectSelection)getSelectionWrapperList()).getFocObjectRef_ForTheADDIcon();	
   	}
   	return ref;
   }
   
-  public int getFocObjectRef_ForTheREFRESHIcon(){
-  	int ref = 0;
+  public long getFocObjectRef_ForTheREFRESHIcon(){
+  	long ref = 0;
   	if(getSelectionWrapperList() != null && getSelectionWrapperList() instanceof FocListWrapper_ForObjectSelection){
   		ref = ((FocListWrapper_ForObjectSelection)getSelectionWrapperList()).getFocObjectRef_ForTheREFRESHIcon();	
   	}
@@ -112,8 +112,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 //					if(disableChangeOfValue){
 //						copyMemoryToGui();
 //					}else 
-					if(event != null && event.getProperty() != null && event.getProperty().getValue() instanceof Integer){
-						int valueInteger = Integer.valueOf(event.getProperty().getValue()+"");
+					if(event != null && event.getProperty() != null && event.getProperty().getValue() instanceof Long){
+						long valueInteger = Long.valueOf(event.getProperty().getValue()+"");
 						
 //						if(valueString == FocListWrapper_ForObjectSelection.REF_ADD_NEW_ITEM && getMainWindow() != null){
 						if(isSelected(getFocObjectRef_ForTheADDIcon()) && getMainWindow() != null){
@@ -123,8 +123,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 							Object backupValue = getValue();
 							addNewObject();
 							Object newValue = getValue();
-							if(newValue instanceof Integer){
-								int newSeletedValue = (Integer) newValue;
+							if(newValue instanceof Long){
+								long newSeletedValue = (Long) newValue;
 								if(newSeletedValue == FocDataItem_ForComboBoxActions.REF_ADD){
 									setValue(backupValue);
 								}
@@ -138,8 +138,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 //							if(getDelegate() != null && getDelegate().getFocXMLLayout() != null){
 //								getDelegate().getFocXMLLayout().refresh();
 //							}
-							if(event.getProperty() != null && event.getProperty().getValue() != null && event.getProperty().getValue() instanceof Integer){
-								Integer propertyReference = (Integer) event.getProperty().getValue();
+							if(event.getProperty() != null && event.getProperty().getValue() != null && event.getProperty().getValue() instanceof Long){
+								Long propertyReference = (Long) event.getProperty().getValue();
 								if(propertyReference == FocDataItem_ForComboBoxActions.REF_REFRESH){
 									unselect(propertyReference);
 								}
@@ -278,12 +278,14 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   public boolean copyGuiToMemory() {
     if(focData instanceof FProperty){
     	boolean copy = true;
-    	if(getValue() instanceof Integer){
-    		int intValue = (Integer)getValue();
-    		copy = intValue != FocDataItem_ForComboBoxActions.REF_REFRESH && intValue != FocDataItem_ForComboBoxActions.REF_ADD; 
+    	Object value = getValue();
+    	if(    value instanceof Long
+    			|| value instanceof Integer){
+    		long longValue = value instanceof Long ? ((Long)value).longValue() : ((Integer)value).longValue();
+    		copy = longValue != FocDataItem_ForComboBoxActions.REF_REFRESH && longValue != FocDataItem_ForComboBoxActions.REF_ADD;
     	}
     	if(copy){
-    		((FProperty)focData).setValue(getValue());
+    		((FProperty)focData).setValue(value);
     	}
     }
     return false;
@@ -340,7 +342,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   	String value = null;
   	try{
   		if(getValue() != null){
-		  	int ref = (Integer) getValue();
+		  	long ref = (Long) getValue();
 		    FocList list = getSelectionFocList();
 		    if(list != null){
 		    	FocObject obj = list.searchByReference(ref);
@@ -363,7 +365,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
       if(obj == null){
     		select(0);
       }else{
-    		select(obj.getReference().getInteger());
+    		select(obj.getReference().getLong());
       }
     }
   }
@@ -470,7 +472,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 							if(focData != null && focData instanceof FocObject){
 								newFocObject = (FocObject) focData;
 								if(newFocObject != null){
-									int ref = newFocObject.getReference().getInteger();
+									long ref = newFocObject.getReference().getLong();
 									select(ref);
 								}
 							}

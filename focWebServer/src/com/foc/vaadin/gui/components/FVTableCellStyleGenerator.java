@@ -64,7 +64,7 @@ public class FVTableCellStyleGenerator implements Table.CellStyleGenerator{
 						if(itemId != null){
 							FocList focList = getTreeOrTable().getFocList();
 							if(focList != null){
-								FocObject focObject = focList.searchByReference((Integer) itemId);
+								FocObject focObject = focList.searchByReference((Long) itemId);
 								if(focObject != null){
 									if(focObject.isNotCompletedYet()){
 										style = "notCompletedYet";

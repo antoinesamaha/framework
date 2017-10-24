@@ -89,7 +89,7 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
 	          visibleListElements.add(focObj);
 	
 	          if(getFTree() != null && getFTree() instanceof FCriteriaTree){
-	          	FNode node = getFTree().findNode(focObj.getReference().getInteger());
+	          	FNode node = getFTree().findNode(focObj.getReference().getLong());
 		          if(node != null){
 		          	while (node.getFatherNode() != null) {
 		          		node = node.getFatherNode();
@@ -115,7 +115,7 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
 	      }
 	
 	      if (getInitialValue() != null) {
-	        int initialValueId = getInitialValue().getReference().getInteger();
+	        long initialValueId = getInitialValue().getReference().getLong();
 	        if (!list.containsId(initialValueId)) {
 	          visibleListElements.add(getInitialValue());
 	        }
@@ -134,15 +134,20 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
   public Collection<?> getChildren(Object itemId) {
     // FocObject focObj = (FocObject) getItem(itemId);
     FNode node = getFTree().vaadin_FindNode(itemId);
-    ArrayList<Integer> array = null;
+    if(node == null){
+    	int debug = 3;
+    	debug++;
+    	node = getFTree().vaadin_FindNode(itemId);
+    }
+    ArrayList<Long> array = null;
     if (node.getVisibleChildCount() > 0) {
-      array = new ArrayList<Integer>();
+      array = new ArrayList<Long>();
       for (int i = 0; i < node.getVisibleChildCount(); i++) {
         FNode cNode = node.getVisibleChildAt(i);
         FocObject cObject = (FocObject) cNode.getObject();
         if (getVisibleListElements(true).contains(cObject)) {
         	cNode.setIndexInChildrenArray(array.size());        	
-          array.add(cObject.getReference().getInteger());
+          array.add(cObject.getReference().getLong());
         }else{
         	cNode.setIndexInChildrenArray(-1);
         }
@@ -160,20 +165,20 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
 
   @Override
   public Collection<?> rootItemIds() {
-    ArrayList<Integer> array = new ArrayList<Integer>();
+    ArrayList<Long> array = new ArrayList<Long>();
     
 //    if(getFTree().isRootVisible()){
     	FocObject obj = getFTree().getRoot() != null ? (FocObject) getFTree().getRoot().getObject() : null;
-    	if (obj != null && obj.getReference().getInteger() != 0 && getFTree().isRootVisible()) {
+    	if (obj != null && obj.getReference().getLong() != 0 && getFTree().isRootVisible()) {
     		if (getVisibleListElements(true).contains(obj)) {
-    			array.add(obj.getReference().getInteger());
+    			array.add(obj.getReference().getLong());
     		}
     	} else if (getFTree().getRoot() != null) {
     		for (int i = 0; i < getFTree().getRoot().getVisibleChildCount(); i++) {
     			FNode node = getFTree().getRoot().getVisibleChildAt(i);
     			obj = (FocObject) node.getObject();
     			if (obj != null && getVisibleListElements(true).contains(obj)) {
-    				array.add(obj.getReference().getInteger());
+    				array.add(obj.getReference().getLong());
     			}
     		}
     	}
@@ -221,7 +226,7 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
 
   @Override
   public Collection<?> getItemIds() {
-  	  final ArrayList<Integer> arrayRefs = new ArrayList<Integer>();  	
+  	  final ArrayList<Long> arrayRefs = new ArrayList<Long>();  	
 //  	if(arrayRefs == null){
 	    
 	    getFTree().scanVisible(new TreeScanner<FNode>() {
@@ -241,7 +246,7 @@ public class FocTreeWrapper extends FocDataWrapper implements Hierarchical {
 					}
 	
 	        if (toAdd) {
-	          int ref = focObj.getReference().getInteger();
+	          long ref = focObj.getReference().getLong();
 	          if (ref != 0) {
 	            arrayRefs.add(ref);
 	          }

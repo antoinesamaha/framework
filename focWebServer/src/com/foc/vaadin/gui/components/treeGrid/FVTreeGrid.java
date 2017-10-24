@@ -347,7 +347,7 @@ public class FVTreeGrid extends EverproTreeGrid implements FocXMLGuiComponent, I
   }
 
   @Override
-  public void delete(int ref) {
+  public void delete(long ref) {
     FNode node = getFTree().vaadin_FindNode(ref);
     boolean deleted = getFTree().vaadin_DeleteNode(node);
     if(deleted){

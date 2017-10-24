@@ -66,7 +66,7 @@ public class WFSite_SiteSelection_Table extends FocXMLLayout {
 		if(tableWrapper != null && tableWrapper.getTableTreeDelegate() != null && tableWrapper.getTableTreeDelegate().selectionColumn_getSelectedIdArrayList() != null){
 			ArrayList<Object> refList = tableWrapper.getTableTreeDelegate().selectionColumn_getSelectedIdArrayList();
 			for(int i=0; i<refList.size();i++){
-				int id = (Integer) refList.get(i);
+				long id = (Long) refList.get(i);
 				WFSite site = (WFSite) getFocList().searchByReference(id);
 				if(site != null){
 					sitesList.add(site);

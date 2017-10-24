@@ -71,7 +71,7 @@ public class GrpViewRights extends FocObject{
     return (ViewConfig) getPropertyObject(GrpViewRightsDesc.FLD_VIEW_CONFIG);
   }
 
-  public int getViewConfigRef(){
+  public long getViewConfigRef(){
     return ((FObject)getFocProperty(GrpViewRightsDesc.FLD_VIEW_CONFIG)).getLocalReferenceInt();
   }
 

@@ -61,7 +61,6 @@ import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.BusinessEssentialsWebModule;
 import com.foc.web.modules.business.FocFormula_Form;
-import com.foc.web.server.session.FocWebSession;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.data.Container;
 import com.vaadin.data.Container.ItemSetChangeEvent;
@@ -284,7 +283,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				
 				@Override
 				public void nodeCollapse(CollapseEvent event) {
-					int objId = (Integer) event.getItemId();
+					long objId = (Long) event.getItemId();
 					FVTreeTable treeTable = (FVTreeTable) getTreeOrTable();
 					if(treeTable != null && treeTable.getFocTreeWrapper() != null && treeTable.getFocTreeWrapper().getFTree() != null){
 						FNode node = treeTable.getFocTreeWrapper().getFTree().findNode(objId);
@@ -300,11 +299,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				
 				@Override
 				public void nodeExpand(ExpandEvent event) {
-					int objId = 0;
+					long objId = 0;
 					if(event.getItemId() instanceof FReference){
-						objId = ((FReference) event.getItemId()).getInteger();
-					}else if(event.getItemId() instanceof Integer){
-						objId = (Integer) event.getItemId();
+						objId = ((FReference) event.getItemId()).getLong();
+					}else if(event.getItemId() instanceof Long){
+						objId = (Long) event.getItemId();
 					}
 					FVTreeTable treeTable = (FVTreeTable) treeOrTable;					
 					if(treeTable != null && treeTable.getFocTreeWrapper() != null && treeTable.getFocTreeWrapper().getFTree() != null){
@@ -1350,7 +1349,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			@Override
 			public void actionPerformed(FocObject focObject) {
 				if(focObject != null && focObject.getReference() != null && getTable() != null && getTable() instanceof FVTreeTable){
-					int objectRef = focObject.getReference().getInteger();
+					long objectRef = focObject.getReference().getLong();
 					FVTreeTable fvTreeTable = (FVTreeTable) getTable();
 					fvTreeTable.setChildrenAllowed(objectRef, true);
 					fvTreeTable.setChildrenAllowedCheckerEnable(false);
@@ -1516,8 +1515,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		
 		Table table = (Table) getTreeOrTable();
 		Object selected = table.getValue();
-		if(selected instanceof Integer){
-			int ref = ((Integer)selected).intValue();
+		if(selected instanceof Long){
+			int ref = ((Long)selected).intValue();
 			focObject = getTreeOrTable().getFocList().searchByReference(ref);
 		}
 		return focObject;
@@ -1565,7 +1564,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 	
 	public void defaultItemDoubleClickAction(ItemClickEvent event){
-		Integer refIntObj = (Integer) event.getItemId();
+		Long refIntObj = (Long) event.getItemId();
 		//TODO check later
 		//					int ref = refIntObj != null ? refIntObj.intValue() : -1;
 		if(refIntObj != null && isOpenEnabled()){
@@ -1773,7 +1772,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		if(fatherObject == null){
 			Globals.showNotification("No row selected", "Delete command applies on a selected row", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
 		}else if(fatherObject.getReference() != null){
-			int ref = fatherObject.getReference().getInteger();
+			long ref = fatherObject.getReference().getLong();
 			try{
 				getTreeOrTable().delete(ref);
 //			  getTreeOrTable().getFocList().removeItem(ref);
@@ -1935,7 +1934,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		if(action instanceof FVTablePopupMenu){
 			FVTablePopupMenu fvTablePopupMenu = (FVTablePopupMenu) action;
 			if(target != null && getTreeOrTable() != null && getTreeOrTable().getFocList() != null && action instanceof FVTablePopupMenu){
-				FocObject focObject = getTreeOrTable().getFocList().searchByReference((Integer) target);
+				FocObject focObject = getTreeOrTable().getFocList().searchByReference((Long) target);
 				((FVTablePopupMenu) action).actionPerformed(focObject);
 			}else if(target == null && fvTablePopupMenu.getActionId() == ACTION_ADD){
 				fvTablePopupMenu.actionPerformed(getSelectedObject());
@@ -1985,7 +1984,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return selectByFocProperty(fieldName, fieldValue, 0);
 	}
 	
-	public FocObject selectByFocProperty(String fieldName, String fieldValue, int ancestorRef) {//ancestorRef=0 for no ancestor
+	public FocObject selectByFocProperty(String fieldName, String fieldValue, long ancestorRef) {//ancestorRef=0 for no ancestor
 		FocObject obj = null;
 		if(getTreeOrTable() != null){
 			FocDataWrapper dataWrapper = getTreeOrTable() == null ? null : getTreeOrTable().getFocDataWrapper();
@@ -1998,7 +1997,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 				if(iter != null){
 					while(iter.hasNext() && obj == null){
-						FocObject currObj = list.searchByReference((Integer) iter.next());
+						FocObject currObj = list.searchByReference((Long) iter.next());
 						
 						if(currObj != null){
 							Object dataByPathObject = currObj.iFocData_getDataByPath(fieldName);
@@ -2009,9 +2008,9 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 									if(getTable() instanceof TreeTable && ancestorRef != 0){
 										TreeTable treeTable = (TreeTable) getTable();										
 										if (currObj != null) {
-					            Object objectID = currObj.getReference().getInteger();
+					            Object objectID = currObj.getReference().getLong();
 					            while (objectID != null && obj == null) {
-					            	if(ancestorRef == (Integer) objectID ){
+					            	if(ancestorRef == (Long) objectID ){
 					            		obj = currObj;
 					            	}
 					              objectID = treeTable.getParent(objectID);   
@@ -2031,10 +2030,10 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			// fieldValue) : null;
 			if(obj != null && obj.getReference() != null){
 				if(getTreeOrTable() instanceof Table){
-					((Table) getTreeOrTable()).select(obj.getReference().getInteger());
+					((Table) getTreeOrTable()).select(obj.getReference().getLong());
 				}else if(getTreeOrTable() instanceof FVTableGrid){
 					FVTableGrid tableGrid = (FVTableGrid) getTreeOrTable();
-	    		tableGrid.select(obj.getReference().getInteger());
+	    		tableGrid.select(obj.getReference().getLong());
 				}
 			}
 		}
@@ -2054,12 +2053,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	public boolean isSelectedCheckBoxForItem(FocObject focObject) {
 		boolean selected = false;
 		if(focObject != null && focObject.getReference() != null){
-			selected = isSelectedCheckBoxForItem(focObject.getReference().getInteger(), focObject);
+			selected = isSelectedCheckBoxForItem(focObject.getReference().getLong(), focObject);
 		}
 		return selected;
 	}
 
-	public boolean isSelectedCheckBoxForItem(int ref, FocObject focObject) {
+	public boolean isSelectedCheckBoxForItem(long ref, FocObject focObject) {
 		boolean selected = false;
 
 		if(getFocXMLLayout() != null){
@@ -2074,11 +2073,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 	public void setSelectedCheckBoxForItem(FocObject focObject, boolean selected) {
 		if(focObject != null && focObject.getReference() != null){
-			setSelectedCheckBoxForItem(focObject.getReference().getInteger(), selected);
+			setSelectedCheckBoxForItem(focObject.getReference().getLong(), selected);
 		}
 	}
 
-	public void setSelectedCheckBoxForItem(int ref, boolean selected) {
+	public void setSelectedCheckBoxForItem(long ref, boolean selected) {
 		if(getFocXMLLayout() != null){
 			String compName = TableTreeDelegate.newComponentName(getTableName(), String.valueOf(ref), COL_ID_SELECT);
 			FVCheckBox box = (FVCheckBox) getFocXMLLayout().getComponentByName(compName);
@@ -2237,7 +2236,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			FocList list = getTreeOrTable().getFocList();
 			
 			if(list != null){
-				FocObject obj = list.searchByReference((Integer) itemId);
+				FocObject obj = list.searchByReference((Long) itemId);
 				
 				if(obj != null){
 					IFocData focData = obj.iFocData_getDataByPath(col.getDataPath());
@@ -2476,7 +2475,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return selectedRowsId;
 	}
 
-	public void selectionColumn_setSelectionMemory(int ref, boolean selected){
+	public void selectionColumn_setSelectionMemory(long ref, boolean selected){
 		if(selected){
 			ArrayList<Object> arrayList = selectionColumn_getSelectedIdArrayList();
 			if(arrayList != null && !arrayList.contains(ref)){
@@ -2484,12 +2483,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			}
 		}else{
 			if(selectedRowsId != null){
-				selectedRowsId.remove((Integer)ref);
+				selectedRowsId.remove((Long)ref);
 			}
 		}
 	}
 
-	public void selectionColumn_setSelectionGUI(int ref, boolean selected){
+	public void selectionColumn_setSelectionGUI(long ref, boolean selected){
 		String compName = TableTreeDelegate.newComponentName(getTableName(), String.valueOf(ref), COL_ID_SELECT);
 		FVCheckBox box = (FVCheckBox) getFocXMLLayout().getComponentByName(compName);
 		if(box != null){
@@ -2504,7 +2503,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				FocDataWrapper wrapper = getTreeOrTable().getFocDataWrapper();
 				for(int i=0; i<wrapper.size(); i++){
 					FocObject obj = wrapper.getAt(i);
-					int ref = obj.getReference().getInteger();
+					long ref = obj.getReference().getLong();
 					selectionColumn_setSelectionGUI(ref, arrayList.contains(ref));
 				}
 			}
@@ -2532,7 +2531,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			FocDataWrapper wrapper = getTreeOrTable().getFocDataWrapper();
 			for(int i=0; i<wrapper.size(); i++){
 				FocObject obj = wrapper.getAt(i);
-				int objRef = obj.getReference().getInteger();
+				long objRef = obj.getReference().getLong();
 				selectionColumn_setSelectionMemory(objRef, select);			
 			}
 		}
@@ -2710,14 +2709,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 //			public void dispose() {
 //			}
 //  	};
-  	
-  	
   }
 	
 	@Override
 	public void listListenerCall_BeforeObjectReferenceSet(FocObject focObj){
 		if(focObj != null && getFocXMLLayout() != null){
-			int ref = focObj.getReferenceInt();
+			long ref = focObj.getReferenceInt();
 			String tableName = getTableName();
 			String prefix = TableTreeDelegate.newComponentNamePrefix(tableName, String.valueOf(ref));
 			getFocXMLLayout().removeComponentByName_StartWith(prefix);
