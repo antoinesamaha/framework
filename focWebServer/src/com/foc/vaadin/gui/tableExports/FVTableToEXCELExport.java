@@ -22,8 +22,8 @@ public class FVTableToEXCELExport extends FVTableTreeEXCELExport {
 		Collection localCollection = localFocDataWrapper.getItemIds();
 		Iterator localIterator = localCollection.iterator();
 		while ((localIterator != null) && (localIterator.hasNext())){
-			Integer localInteger = (Integer) localIterator.next();
-			FocObject localFocObject = localFocList.searchByReference(localInteger.intValue());
+			Long localInteger = (Long) localIterator.next();
+			FocObject localFocObject = localFocList.searchByReference(localInteger.longValue());
 			if(localFocObject != null){
 				
 				for(int i = 0; i < getColumnCount(); i++){

@@ -892,7 +892,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return elm != null ? elm.getFocObject() : null; 
   }*/
 
-  public FocListElement searchElementByReference(int ref){
+  public FocListElement searchElementByReference(long ref){
     FocListElement elm = elementHash_GetFocListElement(ref);
     if (elm == null){//Attention la recherche peut etre peut transmis dans elementHash_gtFocListElement(ref)
       Iterator iter = elementHash_GetListElementIterator();

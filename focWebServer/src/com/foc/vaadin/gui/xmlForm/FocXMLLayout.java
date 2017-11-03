@@ -2320,8 +2320,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 							event.getProperty().getValue() instanceof Integer &&
 							componentModified != null && 
 							componentModified instanceof FVObjectComboBox &&
-							(((Integer)event.getProperty().getValue()) == ((FVObjectComboBox)componentModified).getFocObjectRef_ForTheADDIcon() || 
-							((Integer)event.getProperty().getValue()) == ((FVObjectComboBox)componentModified).getFocObjectRef_ForTheREFRESHIcon())){
+							(((Long)event.getProperty().getValue()) == ((FVObjectComboBox)componentModified).getFocObjectRef_ForTheADDIcon() || 
+							((Long)event.getProperty().getValue()) == ((FVObjectComboBox)componentModified).getFocObjectRef_ForTheREFRESHIcon())){
 						copyGuiToMemory = false;
 					}
 					if(copyGuiToMemory){

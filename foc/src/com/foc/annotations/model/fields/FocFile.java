@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
 public @interface FocFile {
 	//FileField
 	public String fileNameField() default "";
+	public boolean dbResident() default true;
 }

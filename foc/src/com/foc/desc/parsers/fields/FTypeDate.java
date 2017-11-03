@@ -17,6 +17,7 @@ public class FTypeDate extends FocFieldTypAbstract<FocDate> {
 	public FField newFField(Class focObjClass, Field f, FocDate a) {		
 		FField focField = null;
 		focField = new FDateField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

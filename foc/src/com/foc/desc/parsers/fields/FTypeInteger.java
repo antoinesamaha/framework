@@ -18,6 +18,7 @@ public class FTypeInteger extends FocFieldTypAbstract<FocInteger> {
 		FField focField = null;
 		focField = new FIntField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

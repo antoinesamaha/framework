@@ -266,7 +266,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
   	if(tableColumn.getName().equals("DOWNLOAD")){
   		columnGenerator = new ColumnGenerator() {
   			public Object generateCell(Table source, Object itemId, Object columnId) {
-  				int objId = (Integer) itemId;
+  				long objId = (Long) itemId;
   				FVButton button = new FVButton(tableColumn.getCaption());
   				Resource iconResource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD);
   				button.setStyleName(Runo.BUTTON_LINK);
@@ -283,7 +283,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
   	return columnGenerator;
   }
   
-  private PhotoAlbumFileResource getPhotoAlbumFileResource(int objId){
+  private PhotoAlbumFileResource getPhotoAlbumFileResource(long objId){
   	PhotoAlbum album = (PhotoAlbum) getFocList().searchByReference(objId);
   	PhotoAlbumFileResource resource = album.new PhotoAlbumFileResource(new File(""), album);
   	return resource;

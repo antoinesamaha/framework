@@ -305,7 +305,7 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
 		if(getSelectionModel() instanceof SelectionModel.Single) {
 			Object selected = getSelectedRow();
 			if(selected instanceof Integer){
-				int ref = ((Integer)selected).intValue();
+				long ref = ((Long)selected).longValue();
 				focObject = getFocList().searchByReference(ref);
 			}
 		}
@@ -355,7 +355,7 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
 		List<FocObject> selectedFocObjectList = new ArrayList<FocObject>();
 		if(getFocListWrapper() != null && getFocListWrapper().getFocListFiltered() != null){
 			while(selectedRowsItr.hasNext()){
-				Integer selectedFocObjectRef = (Integer) selectedRowsItr.next();
+				Long selectedFocObjectRef = (Long) selectedRowsItr.next();
 				FocObject focObject = getFocListWrapper().getFocListFiltered().searchByRealReferenceOnly(selectedFocObjectRef);
 				selectedFocObjectList.add(focObject);
 			}

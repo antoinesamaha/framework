@@ -196,7 +196,22 @@ public class FDate extends FProperty {
   public void setSqlStringInternal(String str) {
     try {
       if (str != null && !str.equals("0000-00-00") && str != ""){
-        date = java.sql.Date.valueOf(str.substring(0, 10));
+      	int idx = str.indexOf(" ");
+      	String datteStr = null;
+      	
+      	if(idx > 0){
+      		datteStr = str.substring(0, idx).trim();
+      	}else{
+      		datteStr = str.substring(0, 10).trim();
+      	}
+      	
+      	int zerosToAdd = 4 - datteStr.indexOf("-");
+      	while(zerosToAdd > 0){
+      		datteStr = "0"+datteStr;
+      		zerosToAdd--;
+      	}
+      	
+        date = java.sql.Date.valueOf(datteStr);
       }
     } catch (Exception e) {
       Globals.logException(e);

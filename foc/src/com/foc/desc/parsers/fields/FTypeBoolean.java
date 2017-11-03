@@ -18,6 +18,7 @@ public class FTypeBoolean extends FocFieldTypAbstract<FocBoolean> {
 		FField focField = null;
 		focField = new FBoolField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 	

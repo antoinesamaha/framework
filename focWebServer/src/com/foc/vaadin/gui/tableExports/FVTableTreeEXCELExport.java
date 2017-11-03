@@ -168,7 +168,7 @@ public abstract class FVTableTreeEXCELExport extends EXCELExport {
 					if((localObject1 instanceof Table.ColumnGenerator)){
 						Table.ColumnGenerator localColumnGenerator = (Table.ColumnGenerator) localObject1;
 						if(localColumnGenerator != null){
-							Integer itemID = Integer.valueOf(paramFocObject.getReference().getInteger());
+							Long itemID = Long.valueOf(paramFocObject.getReference().getLong());
 							localObject2 = localColumnGenerator.generateCell(getTableTreeDelegate().getTable(), itemID, paramFVTableColumn.getName());
 							if(localObject2 != null){
 								if((localObject2 instanceof FVMultipleChoiceOptionGroupPopupView)){

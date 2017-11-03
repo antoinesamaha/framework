@@ -10,4 +10,5 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 public @interface FocBlob {
 	public boolean mandatory() default false;
+	public boolean dbResident() default true;
 }

@@ -24,6 +24,7 @@ public class FTypeObject extends FocFieldTypAbstract<FocForeignEntity> {
   	FObjectField focField = new FObjectField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, null);
   	focField.setFocDescStorageName(a.table(), cascade, directlyEditable);
   	focField.setWithList(a.cachedList());
+  	focField.setDBResident(a.dbResident());
   	if(detach && !cascade){
   		focField.setReferenceChecker_PutToZeroWhenReferenceDeleted(true);
   	}else if(detach && cascade){

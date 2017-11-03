@@ -18,6 +18,7 @@ public class FTypeLong extends FocFieldTypAbstract<FocLong> {
 		FField focField = null;
 		focField = new FLongField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

@@ -70,8 +70,8 @@ public class FVTreeDropHandler_ObjectTree implements DropHandler {
 					FObjectTree objectTree = (FObjectTree) focData;
 					setObjectTree(objectTree);
 					if(objectTree != null){
-						targetNode = (FObjectNode) objectTree.findNode(((Integer)targetItemId).intValue());
-						sourceNode = (FObjectNode) objectTree.findNode(objDroped.getReference().getInteger());
+						targetNode = (FObjectNode) objectTree.findNode(((Long)targetItemId).longValue());
+						sourceNode = (FObjectNode) objectTree.findNode(objDroped.getReference().getLong());
 						
 						if(targetNode != null && sourceNode != null && focXMLLayout != null){
 						

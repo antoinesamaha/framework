@@ -18,6 +18,7 @@ public class FTypeTime extends FocFieldTypAbstract<FocTime> {
 		FField focField = null;
 		focField = new FTimeField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 }

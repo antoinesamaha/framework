@@ -169,7 +169,7 @@ public class ExcelSync extends FocObject implements IProgressClass{
 			if(fileReader.isCurrentLineValid()){
 				lineCount++;
 				if(!countingOnly){
-					int            ref       = fileReader.getReference();
+					long           ref       = fileReader.getReference();
 					int            currLevel = fileReader.getLevel();
 					FocListElement elem      = ref > 0 ? targetlist.searchElementByReference(ref) : null;
 					FocObject      node      = elem != null ? elem.getFocObject() : null;

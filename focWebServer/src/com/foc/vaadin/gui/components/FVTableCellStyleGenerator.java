@@ -35,7 +35,7 @@ public class FVTableCellStyleGenerator implements Table.CellStyleGenerator{
 				if(column.isHasStyleForColor()){
 					if(itemId != null){
 						FocList focList = getTreeOrTable().getFocList();
-						FocObject focObject = focList.searchByReference((Integer) itemId);
+						FocObject focObject = focList.searchByReference((Long) itemId);
 						if(focObject != null){
 							FProperty prop = focObject.getFocPropertyForPath(column.getDataPath());
 							if(prop != null){
@@ -51,7 +51,7 @@ public class FVTableCellStyleGenerator implements Table.CellStyleGenerator{
 				if(tableTreeDelegate.getWrapperLayout() != null && tableTreeDelegate.getWrapperLayout().isAutoRefresh()){
 					FocList focList = getTreeOrTable().getFocList();
 					if(focList != null){
-						FocObject focObject = focList.searchByReference((Integer) itemId);
+						FocObject focObject = focList.searchByReference((Long) itemId);
 						if(focObject != null && focObject.isFreshColor()){
 							style = "notCompletedYet";//We should have a dedicated style.
 							//But this color is good

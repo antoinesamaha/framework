@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
 public @interface FocLong {
 	public int size() default 15;
 	public boolean mandatory() default false;
+	public boolean dbResident() default true;
 }

@@ -17,6 +17,7 @@ public class FTypeImage extends FocFieldTypAbstract<FocImage> {
 	public FField newFField(Class focObjClass, Field f, FocImage a) {
 		FField focField = null;
 		focField = new FImageField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, 0, 0);
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

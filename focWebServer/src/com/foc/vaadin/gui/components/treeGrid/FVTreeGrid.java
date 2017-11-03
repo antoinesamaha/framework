@@ -431,8 +431,8 @@ public class FVTreeGrid extends EverproTreeGrid implements FocXMLGuiComponent, I
 		FocObject focObject = null;
 		
 		Object selected = getSelectedRow();
-		if(selected instanceof Integer){
-			int ref = ((Integer)selected).intValue();
+		if(selected instanceof Long){
+			long ref = ((Long)selected).longValue();
 			focObject = getFocList().searchByReference(ref);
 		}
 		return focObject;

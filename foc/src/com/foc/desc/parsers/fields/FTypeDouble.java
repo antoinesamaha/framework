@@ -18,6 +18,7 @@ public class FTypeDouble extends FocFieldTypAbstract<FocDouble> {
 		FField focField = null;
 		focField = new FNumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size(), a.decimal());
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

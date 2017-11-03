@@ -183,7 +183,7 @@ public class FocFormula_Form extends FocXMLLayout {
       FocList list = tempTableTree.getFocList();
       if(list != null){
         if(focObjectRowId != null){
-          result = list.searchByReference((Integer) focObjectRowId);          
+          result = list.searchByReference((Long) focObjectRowId);          
         }
       }
     }

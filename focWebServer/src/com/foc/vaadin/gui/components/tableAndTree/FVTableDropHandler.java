@@ -54,7 +54,7 @@ public abstract class FVTableDropHandler implements DropHandler {
 			AbstractSelectTargetDetails dropData = ((AbstractSelectTargetDetails) dropEvent.getTargetDetails());
 			Object targetItemId = dropData.getItemIdOver();
 			if(targetItemId != null){
-				targetObject = getFocList() != null ? getFocList().searchByReference((Integer) targetItemId) : null;
+				targetObject = getFocList() != null ? getFocList().searchByReference((Long) targetItemId) : null;
 			}
 		}
 		return targetObject;

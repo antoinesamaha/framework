@@ -61,8 +61,8 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
   	super.dispose();
   }
   
-  public int getObjectRef(){
-  	return focObject != null ? focObject.getReference().getInteger() : objRef;
+  public long getObjectRef(){
+  	return focObject != null ? focObject.getReference().getLong() : objRef;
   }
   
   public String getTableName(){

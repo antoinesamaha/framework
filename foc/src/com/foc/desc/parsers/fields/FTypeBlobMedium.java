@@ -18,6 +18,7 @@ public class FTypeBlobMedium extends FocFieldTypAbstract<FocBlobMedium> {
 		FField focField = null;
 		focField = new FBlobMediumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

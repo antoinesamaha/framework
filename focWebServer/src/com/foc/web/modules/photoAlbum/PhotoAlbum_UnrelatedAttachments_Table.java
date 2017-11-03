@@ -46,7 +46,7 @@ public class PhotoAlbum_UnrelatedAttachments_Table extends FocXMLLayout{
 				ArrayList<Object> selectedObjectsRefArrayList = tableTreeDelegate.selectionColumn_getSelectedIdArrayList();
 				if(selectedObjectsRefArrayList != null){
 					for(int i=0; i<selectedObjectsRefArrayList.size(); i++){
-						Integer objectRef = (Integer) selectedObjectsRefArrayList.get(i);
+						Long objectRef = (Long) selectedObjectsRefArrayList.get(i);
 						PhotoAlbum unrelatedAttachment = (PhotoAlbum) getUnrelatedAttachmentsList().searchByReference(objectRef);
 						if(unrelatedAttachment != null){
 							if(getPhotoAlbumListWithFilter() != null){

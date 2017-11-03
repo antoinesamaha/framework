@@ -232,12 +232,12 @@ public class ExcelSyncFileReader {
 		return columnData_REF;
 	}
 	
-	public int getReference(){
-		int ref = 0;
+	public long getReference(){
+		long ref = 0;
 		ColumnData data = getColumnData_REF();
 		if(data != null){
 			String value = sheet.getCellString(currentLine, data.getIndex());
-			ref = FocMath.parseInteger(value);
+			ref = FocMath.parseLong(value);
 		}
 		return ref;
 	}

@@ -17,7 +17,8 @@ public class FTypeFile extends FocFieldTypAbstract<FocFile> {
 	public FField newFField(Class focObjClass, Field f, FocFile a) {
 		FField focField = null;
 		focField = new FCloudStorageField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.fileNameField());
-			return focField;
+		focField.setDBResident(a.dbResident());
+		return focField;
 	}
 
 }

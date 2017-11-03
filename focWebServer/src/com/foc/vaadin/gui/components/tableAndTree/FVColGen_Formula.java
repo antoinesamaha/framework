@@ -20,7 +20,7 @@ public class FVColGen_Formula extends FVColumnGenerator {
 		Object obj = null;
 		if(tableColumn != null && getTreeOrTable() != null){
 			FocList focList = getTreeOrTable().getFocList();
-			FocObject focObject = focList != null ? focList.searchByRealReferenceOnly((Integer) itemId) : null;
+			FocObject focObject = focList != null ? focList.searchByRealReferenceOnly((Long) itemId) : null;
 			if(focObject != null){
 				obj = tableColumn.computeFormula_ForFocObject(focObject);
 				

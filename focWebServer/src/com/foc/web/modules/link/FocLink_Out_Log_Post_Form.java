@@ -66,7 +66,7 @@ public class FocLink_Out_Log_Post_Form extends FocXMLLayout {
 
 					if(detailsList != null && userList != null){
 						for(int i=0; i<selectionArray.size(); i++){
-							Integer userId = (Integer) selectionArray.get(i);
+							Long userId = (Long) selectionArray.get(i);
 
 							if(userId != null){
 								FocUser currentUser = (FocUser) userList.searchByReference(userId);

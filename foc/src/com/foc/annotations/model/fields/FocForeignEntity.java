@@ -19,4 +19,5 @@ public @interface FocForeignEntity {
 	public boolean allowNull() default true;
 	public String listFilterProperty() default "";
 	public String listFilterValue() default "";
+	public boolean dbResident() default true;
 }

@@ -423,8 +423,8 @@ public class FCriteriaTree<N extends FCriteriaNode, O extends FocObject> extends
   public FNode vaadin_FindNode(Object itemId){
     FNode node = null;
     try{
-      Integer integ = (Integer) itemId;
-      node = findNode(integ.intValue());
+      Long integ = (Long) itemId;
+      node = findNode(integ.longValue());
     }catch(Exception e){
       Globals.logException(e);
     }

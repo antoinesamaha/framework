@@ -19,7 +19,7 @@ public class FVColGen_LineNumber extends FVColumnGenerator {
 		FocDataWrapper focDataWrapper = getFocDataWrapper();
 		if(focDataWrapper != null && getTreeOrTable() != null){
 			FocList list = getTreeOrTable().getFocList();
-			FocObject focObject = list != null ? list.searchByReference((Integer) itemId) : null;
+			FocObject focObject = list != null ? list.searchByReference((Long) itemId) : null;
 			value = focDataWrapper.getLineNumberForFocObject(focObject);
 		}
 		return value;

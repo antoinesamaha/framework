@@ -18,6 +18,7 @@ public class FTypeBlob extends FocFieldTypAbstract<FocBlob> {
 		FField focField = null;
 		focField = new FBlobField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

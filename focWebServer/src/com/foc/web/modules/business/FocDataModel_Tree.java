@@ -73,7 +73,7 @@ public class FocDataModel_Tree extends FocXMLLayout {
       @Override
       public void buttonClick(ClickEvent event) {
         FVTreeTable tempTreeTable = (FVTreeTable)getTableTree();
-        Integer selectionReference = (Integer) tempTreeTable.getValue();
+        Long selectionReference = (Long) tempTreeTable.getValue();
         if(selectionReference != null){          
           DataModelNode selectedDataModelNode = (DataModelNode) tempTreeTable.getFocList().searchByReference(selectionReference);
           if(selectedDataModelNode != null){
@@ -90,7 +90,7 @@ public class FocDataModel_Tree extends FocXMLLayout {
       @Override
       public void buttonClick(ClickEvent event) {
         FVTreeTable tempTreeTable = (FVTreeTable)getTableTree();
-        Integer selectionReference = (Integer) tempTreeTable.getValue();
+        Long selectionReference = (Long) tempTreeTable.getValue();
         
         if(selectionReference != null){
           DataModelNode selectedDataModelNode = (DataModelNode) tempTreeTable.getFocList().searchByReference(selectionReference);

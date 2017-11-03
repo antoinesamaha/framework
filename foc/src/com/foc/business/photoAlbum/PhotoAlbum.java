@@ -76,12 +76,12 @@ public class PhotoAlbum extends FocObject{
     return getPropertyString(PhotoAlbumDesc.FLD_TABLE_NAME);
   }
   
-  public void setObjectRef(int objectRef){
-    setPropertyInteger(PhotoAlbumDesc.FLD_OBJECT_REF, objectRef);
+  public void setObjectRef(long objectRef){
+    setPropertyLong(PhotoAlbumDesc.FLD_OBJECT_REF, objectRef);
   }
   
-  public int getObjectRef(){
-    return getPropertyInteger(PhotoAlbumDesc.FLD_OBJECT_REF);
+  public long getObjectRef(){
+    return getPropertyLong(PhotoAlbumDesc.FLD_OBJECT_REF);
   }
   
   public void setUploadDate(Date uploadDate){

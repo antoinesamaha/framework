@@ -10,6 +10,7 @@ import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FIntField;
+import com.foc.desc.field.FLongField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
@@ -59,7 +60,7 @@ public class PhotoAlbumDesc extends FocDesc {
     FStringField tableName = new FStringField(FNAME_TABLE_NAME, "Image Name", FLD_TABLE_NAME, false, 30);
     addField(tableName);
     
-    FIntField tableRef = new FIntField(FNAME_OBJECT_REF, "Ref", FLD_OBJECT_REF, false, FReferenceField.LEN_REFERENCE);
+    FLongField tableRef = new FLongField(FNAME_OBJECT_REF, "Ref", FLD_OBJECT_REF, false, FReferenceField.LEN_REFERENCE);
     addField(tableRef);
     
     FDateField uploadDate = new FDateField("UPLOAD_DATE", "Upload date", FLD_UPLOAD_DATE, false);

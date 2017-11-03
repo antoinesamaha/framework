@@ -258,7 +258,7 @@ public class AdrBookParty_Form extends FocXMLLayout{
   		columnGenerator = new ColumnGenerator() {
   			public Object generateCell(Table source, Object itemId, Object columnId) {
   				FVButton button = null;
-  				int ref = (Integer) itemId;
+  				long ref = (Long) itemId;
   				if(getAdrBookParty().getDefaultContact() == null || getAdrBookParty().getDefaultContact().getReferenceInt() != ref){
 	  				button = new FVButton(tableColumn.getCaption());
 	  				button.addClickListener(new SetDefaultContactListener(ref));
@@ -270,15 +270,15 @@ public class AdrBookParty_Form extends FocXMLLayout{
 		return columnGenerator;
 	}
 	
-	private Contact getContactByRef(int ref){
+	private Contact getContactByRef(long ref){
   	Contact contact = (Contact) ContactDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED).searchByReference(ref);
   	return contact;
   }
 	
 	public class SetDefaultContactListener implements ClickListener {
-  	private int defaultContactRef = 0;
+  	private long defaultContactRef = 0;
   	
-  	public SetDefaultContactListener(int defaultContactRef){
+  	public SetDefaultContactListener(long defaultContactRef){
   		this.defaultContactRef = defaultContactRef;
   	}
   	

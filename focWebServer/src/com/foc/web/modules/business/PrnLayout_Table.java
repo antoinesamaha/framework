@@ -119,7 +119,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 							
 							PrintingAction printingAction = getPrintingAction();
 							if(getFocList() != null && itemId != null && printingAction != null){
-								PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Integer) itemId);
+								PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Long) itemId);
 								if(prnLayout != null){
 									boolean withLogo = false; 
 											
@@ -289,7 +289,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 		public DownloadStream getStream() {
 			DownloadStream downloadStream = null;
 			if(getFocList() != null && selectedItemId != null && getPrintingAction() != null && getPrintingAction().getLauncher() != null){
-				PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Integer) selectedItemId);
+				PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Long) selectedItemId);
 				if(prnLayout != null){
 					
 					if(getPrintLogoCheckBox() != null){

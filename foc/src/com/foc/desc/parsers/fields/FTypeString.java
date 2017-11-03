@@ -18,6 +18,7 @@ public class FTypeString extends FocFieldTypAbstract<FocString> {
 		FField focField = null;
 		focField = new FStringField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setMandatory(a.mandatory());
+		focField.setDBResident(a.dbResident());
 		return focField;
 	}
 

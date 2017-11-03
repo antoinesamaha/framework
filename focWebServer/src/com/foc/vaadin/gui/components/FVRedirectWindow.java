@@ -110,7 +110,7 @@ public class FVRedirectWindow extends Window {
 				public void buttonClick(ClickEvent event) {
 					if(listToChooseFrom != null && getListToSelectFromComboBox() != null && getListToSelectFromComboBox().getValue() instanceof Integer){
 						FocObject focObjectToRedirectFrom = selectedObject;
-						FocObject focObjectToRedirectTo   = listToChooseFrom.searchByReference((Integer) getListToSelectFromComboBox().getValue());
+						FocObject focObjectToRedirectTo   = listToChooseFrom.searchByReference((Long) getListToSelectFromComboBox().getValue());
 						if(focObjectToRedirectFrom != null){
 							focObjectToRedirectFrom.referenceCheck_RedirectToNewFocObject(focObjectToRedirectTo);
 						}

@@ -36,7 +36,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.navigate();
+        command.button_ClickNavigate();
       }
     });
 
@@ -52,7 +52,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.home();
+        command.button_ClickHome();
       }
     });
 
@@ -60,14 +60,14 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.admin();
+        command.button_ClickAdmin();
       }
     });
 
     methodMap.put(FXMLUnit.TAG_APPLY, new IFUnitMethod() {
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-     		command.validationApply();
+     		command.button_ClickApply();
       }
     });
     
@@ -75,7 +75,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationSave();
+        command.button_ClickSave();
       }
     });
     
@@ -108,7 +108,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationDeepApply();
+        command.button_ClickApplyRecursive();
       }
     });
 
@@ -116,7 +116,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationDiscard(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
+        command.button_ClickDiscard(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
 
@@ -124,7 +124,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationPrint();
+        command.button_ClickPrint();
       }
     });
 
@@ -132,7 +132,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationFullScreen();
+        command.button_ClickFullScreen();
       }
     });
 
@@ -140,7 +140,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationAttachImage();
+        command.button_ClickAttachment();
       }
     });
 
@@ -148,7 +148,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationBack();
+        command.button_ClickBack();
       }
     });
 
@@ -156,7 +156,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationMore(attributes.getValue(FXMLUnit.ATT_MORE_CAPTION));
+        command.moreMenu_Select(attributes.getValue(FXMLUnit.ATT_MORE_CAPTION));
       }
     });
 
@@ -164,7 +164,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.validationApprove();
+        command.status_Approve();
       }
     });
 
@@ -196,7 +196,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.navigateTo(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
+        command.menu_Highlight(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
 
@@ -204,7 +204,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.navigateToAdminAndDoubleClick(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
+        command.menuAdmin_Click(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
 
@@ -212,7 +212,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.navigateToAndDoubleClick(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
+        command.menu_Click(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
 
@@ -225,7 +225,7 @@ public class FocUnitMethodFactory {
       	if(ancestorRefString != null){
       		ancestor = Integer.valueOf(ancestorRefString);
       	}
-        command.selectItemInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_PROPERTY_NAME), attributes.getValue(FXMLUnit.ATT_PROPERTY_VALUE), attributes.getValue(FXMLUnit.ATT_VARIABLE), ancestor);
+        command.table_Select(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_PROPERTY_NAME), attributes.getValue(FXMLUnit.ATT_PROPERTY_VALUE), attributes.getValue(FXMLUnit.ATT_VARIABLE), ancestor);
       }
     });
 
@@ -233,7 +233,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.addItemInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
+        command.table_Add(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
     
@@ -241,7 +241,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.openItemInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
+        command.table_Open(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
 
@@ -249,7 +249,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.deleteItemInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
+        command.table_Delete(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
 
@@ -267,7 +267,7 @@ public class FocUnitMethodFactory {
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(value != null){// && !value.startsWith("$F{")
-      		command.componentAssertEnabled(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), Boolean.valueOf(value));
+      		command.component_AssertEnabled(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), Boolean.valueOf(value));
       	}else{
       		command.getLogger().addFailure("Faild Assert value Null");
       	}
@@ -280,7 +280,7 @@ public class FocUnitMethodFactory {
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(value != null && !value.startsWith("$F{")){
-      		command.setComponentValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
+      		command.component_SetValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
       	}
       }
     });
@@ -292,7 +292,7 @@ public class FocUnitMethodFactory {
       	String componentValue = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	
       	if(componentValue != null && !componentValue.startsWith("$F{")){
-      		command.setComponentValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), componentValue, true);
+      		command.component_SetValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), componentValue, true);
       	}
       }
     });
@@ -301,7 +301,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-      	command.AssertComponentEditable(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME));
+      	command.component_AssertEditable(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME));
       }
     });
 
@@ -309,7 +309,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.setComponentValueInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_PRIORITY_TO_CAPTION_PROPERTY));
+        command.componentInTable_SetValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_PRIORITY_TO_CAPTION_PROPERTY));
       }
     });
 
@@ -317,7 +317,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.assertComponentEnabledInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), Boolean.getBoolean(attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE)));
+        command.componentInTable_AssertEnabled(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), Boolean.getBoolean(attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE)));
       }
     });
     
@@ -325,7 +325,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.assertComponentValueInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE));
+        command.componentInTable_AssertValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE));
       }
     });
 
@@ -333,7 +333,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.selectComponentInTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD));
+        command.componentInTable_Select(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD));
       }
     });
 
@@ -358,7 +358,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.getComponentValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
+        command.component_GetValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
 
@@ -366,7 +366,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-      	command.buttonClick(attributes.getValue(FXMLUnit.ATT_NAME));
+      	command.button_Click(attributes.getValue(FXMLUnit.ATT_NAME));
       }
     });
     
@@ -390,7 +390,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.bannerAddNewLine(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME));
+        command.banner_Add(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME));
       }
     });
 
@@ -398,7 +398,9 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.bannerDeleteLineByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX));
+      	String index = attributes.getValue(FXMLUnit.ATT_INDEX);
+      	int idx = index != null ? Integer.parseInt(index) : -1 ;
+        command.banner_DeleteLineByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), idx);
       }
     });
 
@@ -406,7 +408,10 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.bannerDeleteLineByReference(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE));
+      	String refString = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
+      	long ref = Long.valueOf(refString);
+      	
+        command.banner_DeleteLineByReference(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), ref);
       }
     });
 
@@ -416,7 +421,7 @@ public class FocUnitMethodFactory {
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(!value.startsWith("$F{")){
-      		command.setComponentValueInBannerByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
+      		command.componentInBanner_SetValueByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
       	}
       }
     });
@@ -427,7 +432,7 @@ public class FocUnitMethodFactory {
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(!value.startsWith("$F{")){      	
-      		command.setComponentValueInBannerByReference(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value);
+      		command.componentInBanner_SetValueByReference(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value);
       	}
       }
     });
@@ -436,7 +441,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.getComponentValueInBanner(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_VARIABLE));
+        command.componentInBanner_GetValue(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
 
@@ -524,7 +529,7 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.setVariable(attributes.getValue(FXMLUnit.ATT_VARIABLE), attributes.getValue(FXMLUnit.ATT_VALUE));
+        command.variable_Set(attributes.getValue(FXMLUnit.ATT_VARIABLE), attributes.getValue(FXMLUnit.ATT_VALUE));
       }
     });
     
@@ -542,7 +547,7 @@ public class FocUnitMethodFactory {
 			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
 				String boolStr = attributes.getValue(FXMLUnit.ATT_COLLAPSE);
 				boolean bool = boolStr != null ? Boolean.valueOf(boolStr) : true;
-				command.collapseAll(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), bool);//hussein
+				command.tree_CollapseAll(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), bool);//hussein
 			}
 		});
 		
@@ -552,7 +557,7 @@ public class FocUnitMethodFactory {
 			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
 				String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
 	      if(!value.startsWith("$F{")){
-	      	command.setComponentValueInBannerByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, true);//hussein
+	      	command.componentInBanner_SetValueByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, true);//hussein
 	      }
 			}
 		});

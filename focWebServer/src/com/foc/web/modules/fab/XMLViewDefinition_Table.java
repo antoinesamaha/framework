@@ -29,7 +29,7 @@ public class XMLViewDefinition_Table extends FocXMLLayout{
   			public Object generateCell(Table source, Object itemId, Object columnId) {
   				FVButton button = null;
   				if(itemId != null){
-	  				final int objId = (Integer) itemId;
+	  				final long objId = (Long) itemId;
 	  				button = new FVButton(tableColumn.getCaption(), new Button.ClickListener() {
 							
 							@Override

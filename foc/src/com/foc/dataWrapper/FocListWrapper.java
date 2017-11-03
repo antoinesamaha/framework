@@ -104,7 +104,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 		boolean first = false;
 		ArrayList<FocObject> array = getVisibleListElements(true);
 		if(array != null && array.size() > 0){
-			first = array.get(0).getReferenceInt() == ((Integer)itemId).intValue();
+			first = array.get(0).getReferenceInt() == ((Long)itemId).intValue();
 		}
 		return first;
 	}
@@ -114,7 +114,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 		boolean last = false;
 		ArrayList<FocObject> array = getVisibleListElements(true);
 		if(array != null && array.size() > 0){
-			last = array.get(array.size()-1).getReferenceInt() == ((Integer)itemId).intValue();
+			last = array.get(array.size()-1).getReferenceInt() == ((Long)itemId).intValue();
 		}
 		return last;
 	}
@@ -137,7 +137,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 			ArrayList<FocObject> array = getVisibleListElements(true);
 			for(int i=0; i<array.size(); i++){
 				FocObject focObj = array.get(i);
-				if(focObj != null && (Integer)itemId == focObj.getReferenceInt()){
+				if(focObj != null && (Long)itemId == focObj.getReferenceInt()){
 					index = i;
 				}
 			}
