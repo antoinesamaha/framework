@@ -896,6 +896,17 @@ public class FocUnitTestingCommand {
     }
     return referenceOfSelectedItem;
   }
+
+  /**
+   * Simulates adding an item in an open table (right-click -> Add). Also stores
+   * the id of the created object in a variable.
+   * 
+   * @param tableName
+   *          The name of the table to add an item in.
+   */
+  public long table_Add(String tableName) {
+  	return table_Add(tableName, null);
+  }
   
   /**
    * Simulates adding an item in an open table (right-click -> Add). Also stores
@@ -907,7 +918,8 @@ public class FocUnitTestingCommand {
    *          The variable that will contain the id of the created object.
    * @param father
    */
-  public void table_Add(String tableName, String variableName) {
+  public long table_Add(String tableName, String variableName) {
+  	long ref = 0;
   	String message = "Table add item : "+tableName;
   	if(!Utils.isStringEmpty(variableName)) message += " -> "+variableName;
   	boolean nodeCreated = !getLogger().openCommand(message);
@@ -925,6 +937,7 @@ public class FocUnitTestingCommand {
         FocObject object = ((ITableTree) table).getTableTreeDelegate().addItem(father);
         getLogger().addInfo("Adding a new item in table " + tableName + ".");
         if (object != null && object.getReference() != null) {
+        	ref = object.getReference().getLong();
           if (variableName != null && !variableName.isEmpty()) {
             reference = object.getReference().toString();
             getDictionary().putXMLVariable(variableName, reference);
@@ -935,6 +948,7 @@ public class FocUnitTestingCommand {
       }
     }
     if(nodeCreated) getLogger().closeNode();
+    return ref;
   }
 
   /**
@@ -1183,28 +1197,28 @@ public class FocUnitTestingCommand {
    * @param componentValue
    *          The value to set in the field.
    */
-  public void componentInTable_SetValue(String tableName, String objRef, String fieldName, String componentValue, String priorityToCaptionProperty) {
+  public void componentInTable_SetValue(String tableName, long objRef, String fieldName, String componentValue, String priorityToCaptionProperty) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
-    String componentName = TableTreeDelegate.newComponentName(tableName, objRef, fieldName);
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
     	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
     }
   }
   
-  public void componentInTable_AssertValue(String tableName, String objRef, String fieldName, String componentValue) {
+  public void componentInTable_AssertValue(String tableName, long objRef, String fieldName, String componentValue) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
-    String componentName = TableTreeDelegate.newComponentName(tableName, objRef, fieldName);
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
     	setComponentValue(component, componentName, componentValue, true);
     }
   }
   
-  public void componentInTable_AssertEnabled(String tableName, String objRef, String fieldName, boolean assertEnabled) {
-    String componentName = TableTreeDelegate.newComponentName(tableName, objRef, fieldName);
+  public void componentInTable_AssertEnabled(String tableName, long objRef, String fieldName, boolean assertEnabled) {
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
   	component_AssertEnabled(componentName, assertEnabled);
   }
   
@@ -1218,10 +1232,10 @@ public class FocUnitTestingCommand {
    * @param fieldName
    *          The name of the field.
    */
-  public void componentInTable_Select(String tableName, String objRef, String fieldName) {
+  public void componentInTable_Select(String tableName, long objRef, String fieldName) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
-    String componentName = TableTreeDelegate.newComponentName(tableName, objRef, fieldName);
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
     	FVTableWrapperLayout tableWraperLayout = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);

@@ -309,7 +309,9 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.componentInTable_SetValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_PRIORITY_TO_CAPTION_PROPERTY));
+      	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
+      	long ref = Long.valueOf(longRef);
+        command.componentInTable_SetValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_PRIORITY_TO_CAPTION_PROPERTY));
       }
     });
 
@@ -317,7 +319,9 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.componentInTable_AssertEnabled(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), Boolean.getBoolean(attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE)));
+      	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
+      	long ref = Long.valueOf(longRef);
+        command.componentInTable_AssertEnabled(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), Boolean.getBoolean(attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE)));
       }
     });
     
@@ -325,7 +329,9 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.componentInTable_AssertValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE));
+      	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
+      	long ref = Long.valueOf(longRef);
+        command.componentInTable_AssertValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE));
       }
     });
 
@@ -333,7 +339,9 @@ public class FocUnitMethodFactory {
 
       @Override
       public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
-        command.componentInTable_Select(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_TABLE_FIELD));
+      	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
+      	long ref = Long.valueOf(longRef);
+        command.componentInTable_Select(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD));
       }
     });
 

@@ -3,14 +3,18 @@
  */
 package com.foc.list;
 
-import java.awt.Component;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
-import com.foc.Globals;
-import com.foc.desc.*;
-import com.foc.desc.field.*;
-import com.foc.event.*;
-import com.foc.property.*;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
+import com.foc.desc.field.FFieldPath;
+import com.foc.event.FocEvent;
+import com.foc.event.FocListener;
+import com.foc.property.FProperty;
+import com.foc.property.FPropertyListener;
+import com.foc.property.FSmartPropertyListener;
 
 /**
  * @author 01Barmaja
@@ -24,66 +28,6 @@ public class FocListListener {
   private ArrayList listeners = null;
   private ArrayList<ListOperation> operationArray = null;
 
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-  //Operation computing
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-
-  private ArrayList<ListOperation> getOperationArray(boolean create){
-    if(operationArray == null && create){
-      operationArray = new ArrayList<ListOperation>();
-    }
-    return operationArray;
-  }
-  
-  public void addOperation(ListOperation operation){
-    ArrayList<ListOperation> operationArray = getOperationArray(true);
-    operationArray.add(operation);
-  }
-
-  public void computeOperations(){
-    ArrayList operationArray = getOperationArray(false);
-    
-    if(operationArray != null){
-      for(int i=0; i<operationArray.size(); i++){
-        ListOperation sumCol = (ListOperation) operationArray.get(i);
-        sumCol.reset();
-      }    
-      
-      Iterator iter = list.focObjectIterator();
-      while(iter != null && iter.hasNext()){
-        FocObject obj = (FocObject) iter.next();
-        if(obj != null){
-          for(int i=0; i<operationArray.size(); i++){
-            ListOperation sumCol = (ListOperation) operationArray.get(i);
-            sumCol.treatObject(obj);
-          }    
-        }
-      }
-  
-      for(int i=0; i<operationArray.size(); i++){
-        ListOperation sumCol = (ListOperation) operationArray.get(i);
-        sumCol.sendResult();
-      }
-    }
-  }
-  
-  private void disposeOperationArray(){
-    if(operationArray != null){
-      for(int i=0; i<operationArray.size(); i++){
-        ListOperation sumCol = (ListOperation) operationArray.get(i);
-        sumCol.dispose();
-      }
-    }
-  }
-  
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-  //-----------------------------------------------------------
-  
   /**
    * @param list
    * 
@@ -179,9 +123,21 @@ public class FocListListener {
     list = null;
   }
   
+  public FocDesc getFocDesc(){
+  	return getFocList() != null ? getFocList().getFocDesc() : null;
+  }
+  
   public void addProperty(FFieldPath fieldPath){
   	if(fieldPath != null){
   		propertiesToListenTo.add(fieldPath);
+  	}
+  }
+  
+  public void addProperty(String fieldPathString){
+  	FocDesc focDesc = getFocDesc();
+  	if(focDesc != null){
+  		FFieldPath fieldPath = FFieldPath.newFFieldPath(focDesc, fieldPathString);
+  		addProperty(fieldPath);
   	}
   }
   
@@ -318,6 +274,66 @@ public class FocListListener {
       }
     }
   }
+  
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
+  //Operation computing
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
+
+  private ArrayList<ListOperation> getOperationArray(boolean create){
+    if(operationArray == null && create){
+      operationArray = new ArrayList<ListOperation>();
+    }
+    return operationArray;
+  }
+  
+  public void addOperation(ListOperation operation){
+    ArrayList<ListOperation> operationArray = getOperationArray(true);
+    operationArray.add(operation);
+  }
+
+  public void computeOperations(){
+    ArrayList operationArray = getOperationArray(false);
+    
+    if(operationArray != null){
+      for(int i=0; i<operationArray.size(); i++){
+        ListOperation sumCol = (ListOperation) operationArray.get(i);
+        sumCol.reset();
+      }    
+      
+      Iterator iter = list.focObjectIterator();
+      while(iter != null && iter.hasNext()){
+        FocObject obj = (FocObject) iter.next();
+        if(obj != null){
+          for(int i=0; i<operationArray.size(); i++){
+            ListOperation sumCol = (ListOperation) operationArray.get(i);
+            sumCol.treatObject(obj);
+          }    
+        }
+      }
+  
+      for(int i=0; i<operationArray.size(); i++){
+        ListOperation sumCol = (ListOperation) operationArray.get(i);
+        sumCol.sendResult();
+      }
+    }
+  }
+  
+  private void disposeOperationArray(){
+    if(operationArray != null){
+      for(int i=0; i<operationArray.size(); i++){
+        ListOperation sumCol = (ListOperation) operationArray.get(i);
+        sumCol.dispose();
+      }
+    }
+  }
+  
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
+  //-----------------------------------------------------------
 
   public class InternalListListener implements FocListener{
     FocListListener listListener = null;

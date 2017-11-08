@@ -32,6 +32,7 @@ public class FMultipleChoiceStringField extends FStringField {
 	private StringBuffer filterExpressionForChoicesSelect = null;     
 	private ArrayList    choicesArrayList                 = null;
 	private boolean      needRefresh                      = false;
+	private boolean      useSameColumnValues              = false;
 	
 	public FMultipleChoiceStringField(String name, String title, int id, boolean key, int size) {
 		super(name, title, id, key, size);
@@ -256,6 +257,9 @@ public class FMultipleChoiceStringField extends FStringField {
 	}
 
 	public int getChoicesSelection_FieldID() {
+		if(choicesSelection_FieldID == FField.NO_FIELD_ID && isUseSameColumnValues()){
+			choicesSelection_FieldID = getID();
+		}
 		return choicesSelection_FieldID;
 	}
 
@@ -264,10 +268,21 @@ public class FMultipleChoiceStringField extends FStringField {
 	}
 
 	public FocDesc getChoicesSelection_FocDesc() {
+		if(choicesSelection_FocDesc == null && isUseSameColumnValues()){
+			choicesSelection_FocDesc = getFocDescParent();
+		}
 		return choicesSelection_FocDesc;
 	}
 
 	public void setChoicesSelection_FocDesc(FocDesc choicesSelection_FocDesc) {
 		this.choicesSelection_FocDesc = choicesSelection_FocDesc;
+	}
+
+	public boolean isUseSameColumnValues() {
+		return useSameColumnValues;
+	}
+
+	public void setUseSameColumnValues(boolean useSameColumnValues) {
+		this.useSameColumnValues = useSameColumnValues;
 	}
 }

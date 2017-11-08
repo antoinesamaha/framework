@@ -18,6 +18,7 @@ public class FocFieldFactory {
 		put(new FTypeInteger());
 		put(new FTypeLong());
 		put(new FTypeMultipleChoice());
+		put(new FTypeMultipleChoiceString());
 		put(new FTypeBlob());
 		put(new FTypeBlobMedium());
 		put(new FTypeImage());
