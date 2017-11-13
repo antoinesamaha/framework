@@ -580,6 +580,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}		
 		
 		getComponentMap().put(name, (FocXMLGuiComponent) component);
+		if(component != null){
+			((FocXMLGuiComponent) component).getDelegate().setNameInMap(name);
+		}
 		if(component != null && ConfigInfo.isUnitDevMode() && component instanceof AbstractComponent){
 			if(component instanceof FVWrapperLayout){
 				AbstractComponent field = (AbstractComponent) ((FVWrapperLayout) component).getFormField();

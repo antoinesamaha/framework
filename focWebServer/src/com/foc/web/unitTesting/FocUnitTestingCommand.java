@@ -1197,6 +1197,22 @@ public class FocUnitTestingCommand {
    * @param componentValue
    *          The value to set in the field.
    */
+  public void componentInTable_SetValue(String tableName, long objRef, String fieldName, String componentValue) {
+  	componentInTable_SetValue(tableName, objRef, fieldName, componentValue, null); 
+  }
+
+  /**
+   * Simulates setting the value of a component in a table.
+   * 
+   * @param tableName
+   *          The name of the table.
+   * @param objRef
+   *          The reference of the object to change as an integer.
+   * @param fieldName
+   *          The name of the field.
+   * @param componentValue
+   *          The value to set in the field.
+   */
   public void componentInTable_SetValue(String tableName, long objRef, String fieldName, String componentValue, String priorityToCaptionProperty) {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 

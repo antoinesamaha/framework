@@ -6,15 +6,18 @@ import org.xml.sax.Attributes;
 
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.Button.ClickEvent;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public class FVButton extends Button implements FocXMLGuiComponent, Field {//Field implementation only to allow helpContext to work on our FVButtons
@@ -40,6 +43,19 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   	addStyleName("component-margin");
 	}
 
+  private void setUnitTestingRecordingListener(){
+  	if(FocUnitRecorder.isAllowRecording()){
+  		addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					if(getDelegate() != null && !Utils.isStringEmpty(getDelegate().getNameInMap())){
+						FocUnitRecorder.recordLine("cmd.button_Click(\""+getDelegate().getNameInMap()+"\")");
+					}
+				}
+			});
+  	}
+  }
+  
   @Override
   public void setDescription(String description) {
   	super.setDescription(description);

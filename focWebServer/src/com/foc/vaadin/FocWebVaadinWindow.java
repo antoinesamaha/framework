@@ -40,6 +40,7 @@ import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitDictionary;
+import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.ThemeResource;
@@ -83,6 +84,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	private AbsoluteLayout   emptyRightMarginPanel;
   private MenuItem         logoutMenuItem = null;
+  private MenuItem         macroRecordingItem = null;
   
 	public static final int FORMAT_PORTRAIT    = 0;
 	public static final int FORMAT_LANDSCAPE   = 1;
@@ -575,6 +577,25 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					logout(null);
 				}
 			});
+    	
+    	if(FocUnitRecorder.isAllowRecording()){
+    		macroRecordingItem = newUserMenuItem(userMenuItem, "Recod Macro", new MenuBar.Command() {
+    			boolean recording = false;
+    			
+					@Override
+					public void menuSelected(MenuItem selectedItem) {
+						if(recording){
+							recording = false;
+							macroRecordingItem.setText("Start Recoding Macro");
+							FocUnitRecorder.stopRecording();
+						}else{
+							recording = true;
+							macroRecordingItem.setText("Stop Recording Macro");
+							FocUnitRecorder.startRecording();
+						}
+					}
+				});
+    	}
     }
   }
 
