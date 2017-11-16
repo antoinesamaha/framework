@@ -168,13 +168,23 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     		fld.setSize(size);
     	}    	
     } else if (qName.equals(TAG_EXTERNAL_CODE)) {
-    	fld = xmlFocDesc.addExternalCodeField();
-    	int size = getSize(att);
-    	if(size > 0){
-    		fld.setSize(size);
-    	}    	
-    } else if (qName.equals(TAG_NAME)) {
-    	fld = xmlFocDesc.addNameField();
+			fld = xmlFocDesc.addExternalCodeField();
+			int size = getSize(att);
+			if (size > 0) {
+				fld.setSize(size);
+			}
+		} else if (qName.equals(TAG_REVIEW_STATUS)) {
+			// Add Review Status Field
+			fld = xmlFocDesc.addReviewStatusField();
+		} else if (qName.equals(TAG_REVIEW_COMMENT)) {
+			//Add Review Comment Field
+			fld = xmlFocDesc.addReviewCommentField();
+			int size = getSize(att);
+			if (size > 0) {
+				fld.setSize(size);
+			}
+		} else if (qName.equals(TAG_NAME)) {
+			fld = xmlFocDesc.addNameField();
     	int size = getSize(att);
     	if(size > 0){
     		fld.setSize(size);

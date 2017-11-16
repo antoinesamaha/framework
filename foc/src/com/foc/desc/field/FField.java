@@ -123,6 +123,9 @@ public abstract class FField implements Cloneable, IFocData {
   final public static int FLD_DEPARTMENT                = -40;
   final public static int FLD_IS_SYSTEM_OBJECT          = -41;
   final public static int FLD_NOT_COMPLETED_YET         = -42;
+  //Review Fields
+  final public static int FLD_REVIEWSTATUS		          = -43;
+  final public static int FLD_REVIEWCOMMENT             = -44;
   
   final public static int NO_FIELD_ID                   = -99;
   final public static int FLD_SLAVE_LIST_FIRST          = -200;

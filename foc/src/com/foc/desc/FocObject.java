@@ -369,6 +369,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
       if(notCompletedField != null){
       	notCompletedField.newProperty(this);
       }
+      
+      //Review Fields
+      FField reviewStatusField = thisFocDesc.getFieldByID(FField.FLD_REVIEWSTATUS);
+      if(reviewStatusField != null){
+      	reviewStatusField.newProperty(this);
+      }
+      
+      FField reviewCommentField = thisFocDesc.getFieldByID(FField.FLD_REVIEWCOMMENT);
+      if(reviewCommentField != null){
+      	reviewCommentField.newProperty(this);
+      }  
+      //End Review Fields
 
     } catch (Exception e){
       Globals.logException(e);
@@ -3157,6 +3169,28 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public void code_setExternalCode(String code){
   	setPropertyString(FField.FLD_EXTERNAL_CODE, code);
   }
+  
+  //Review Fields
+  public int getReviewStatus(){
+  	return getPropertyInteger(FField.FLD_REVIEWSTATUS);
+  }
+  
+  public String getReviewStatusText(){
+  	return getPropertyString(FField.FLD_REVIEWSTATUS);
+  }
+
+  public void setReviewStatus(int status){
+  	setPropertyInteger(FField.FLD_REVIEWSTATUS, status);
+  }
+  
+  public String getReviewComment(){
+  	return getPropertyString(FField.FLD_REVIEWCOMMENT);
+  }
+
+  public void setReviewComment(String comment){
+  	setPropertyString(FField.FLD_REVIEWCOMMENT, comment);
+  }
+  //End Review Fields
   
   public String code_getCode(){
   	return getPropertyString(FField.FLD_CODE);

@@ -88,6 +88,7 @@ import com.foc.list.FocListOrder;
 import com.foc.list.filter.FocDescForFilter;
 import com.foc.plugin.IFocDescPlugIn;
 import com.foc.property.FList;
+import com.foc.property.FMultipleChoice;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.AbstractDataStore;
@@ -994,6 +995,28 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     }
   	return field;
   }
+  
+  //Review Fields
+  public FMultipleChoiceField addReviewStatusField(){
+  	FMultipleChoiceField field = (FMultipleChoiceField)getFieldByID(FField.FLD_REVIEWSTATUS);
+    if(field == null) {
+    	field = new FMultipleChoiceField("REVIEW_STATUS", "Review Status", FField.FLD_REVIEWSTATUS, false, 2);
+    	field.addChoice(0, "");
+    	field.addChoice(1, "للمراجعة");
+      addField(field);
+    }
+  	return field;
+  }
+  
+  public FStringField addReviewCommentField(){
+  	FStringField field = (FStringField)getFieldByID(FField.FLD_REVIEWCOMMENT);
+    if(field == null) {
+    	field = new FStringField("REVIEW_COMMENT", "Review Comment", FField.FLD_REVIEWCOMMENT, false, 2000);
+      addField(field);
+    }
+  	return field;
+  }
+  //End Review Fields
 
   public FStringField addCodeField(){
   	return addCodeField(true);

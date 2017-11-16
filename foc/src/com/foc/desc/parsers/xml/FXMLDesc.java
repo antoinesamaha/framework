@@ -21,18 +21,20 @@ public interface FXMLDesc {
   public static final String VAL_FILTER_LEVEL_MEMORY     = "mem";
   
   //Fields Predefined
-  public static final String TAG_REF           = IFocFieldType.TYPE_REF;
-  public static final String TAG_CODE          = IFocFieldType.TYPE_CODE;
-  public static final String TAG_COMPANY       = IFocFieldType.TYPE_COMPANY;
-  public static final String TAG_EXTERNAL_CODE = IFocFieldType.TYPE_EXTERNAL_CODE;
-  public static final String TAG_DATE          = IFocFieldType.TYPE_DATE;
-  public static final String TAG_DESCRIPTION   = IFocFieldType.TYPE_DESCRIPTION;
-  public static final String TAG_NAME          = IFocFieldType.TYPE_NAME;
-  public static final String TAG_SITE          = IFocFieldType.TYPE_SITE;
-  public static final String TAG_ORDER         = IFocFieldType.TYPE_ORDER;
-  public static final String TAG_NOT_COMPLETED = IFocFieldType.TYPE_NOT_COMPLETED;
-  public static final String TAG_IS_SYSTEM     = IFocFieldType.TYPE_IS_SYSTEM;
-  public static final String TAG_TREE          = IFocFieldType.TYPE_TREE;
+  public static final String TAG_REF            = IFocFieldType.TYPE_REF;
+  public static final String TAG_CODE           = IFocFieldType.TYPE_CODE;
+  public static final String TAG_COMPANY        = IFocFieldType.TYPE_COMPANY;
+  public static final String TAG_EXTERNAL_CODE  = IFocFieldType.TYPE_EXTERNAL_CODE;
+  public static final String TAG_DATE           = IFocFieldType.TYPE_DATE;
+  public static final String TAG_DESCRIPTION    = IFocFieldType.TYPE_DESCRIPTION;
+  public static final String TAG_NAME           = IFocFieldType.TYPE_NAME;
+  public static final String TAG_SITE           = IFocFieldType.TYPE_SITE;
+  public static final String TAG_ORDER          = IFocFieldType.TYPE_ORDER;
+  public static final String TAG_NOT_COMPLETED  = IFocFieldType.TYPE_NOT_COMPLETED;
+  public static final String TAG_IS_SYSTEM      = IFocFieldType.TYPE_IS_SYSTEM;
+  public static final String TAG_TREE           = IFocFieldType.TYPE_TREE;
+  public static final String TAG_REVIEW_STATUS  = IFocFieldType.TYPE_REVIEW_STATUS;
+  public static final String TAG_REVIEW_COMMENT = IFocFieldType.TYPE_REVIEW_COMMENT;
   
   //Field Types
   public static final String TAG_STRING          = IFocFieldType.TYPE_STRING;
