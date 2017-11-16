@@ -26,6 +26,7 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 
@@ -149,10 +150,15 @@ public class FVMenuTree extends FocXMLLayout {
 	public void clickMenuItem(INavigationWindow iNavigationWindow, String menuCode){ 
   	FocMenuItem menuItem = findMenuItem(menuCode);
   	if(menuItem != null){
+  		recordMenuClick(menuItem);
   		menuItem.getMenuAction().actionPerformed(iNavigationWindow, menuItem, 0);
 			FocUserHistoryList.addHistory(menuCode);
   	}
   }
+	
+	private void recordMenuClick(FocMenuItem menuItem){
+		FocUnitRecorder.recordLine("cmd.menu_Click("+menuItem.getCode()+");");
+	}
 	
 	public void addGuiTree() {
 		/*
@@ -221,16 +227,13 @@ public class FVMenuTree extends FocXMLLayout {
 				public void itemClick(ItemClickEvent event) {
 					// menuClicked((String) event.getItemId());
 					try {
-						if(getMenuList() == null || getMenuList().searchByReference(((Long) event.getItemId())) == null){
-							int debug = 3;
-							debug++;
-						}
 						FocMenuItem menuItem = (FocMenuItem) getMenuList().searchByReference(((Long) event.getItemId()).longValue());
 						if (menuItem != null && menuItem.getMenuAction() != null) {
 							FocCentralPanel window = findAncestor(FocCentralPanel.class);
 							if (window != null) {
 								boolean isActionPerformed = false;
 								if (event.getPropertyId().equals("EXTRA_ACTION_0")) {
+									recordMenuClick(menuItem);
 									menuItem.getMenuAction().actionPerformed(window, menuItem, 1);
 									isActionPerformed = true;
 								}
@@ -245,6 +248,7 @@ public class FVMenuTree extends FocXMLLayout {
 								}
 
 								if (event.getPropertyId().equals("TITLE") && executeAction) {
+									recordMenuClick(menuItem);
 									menuItem.getMenuAction().actionPerformed(window, menuItem, 0);
 									isActionPerformed = true;
 								}

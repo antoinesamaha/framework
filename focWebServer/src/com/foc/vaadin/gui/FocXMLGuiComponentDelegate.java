@@ -20,6 +20,7 @@ public class FocXMLGuiComponentDelegate {
   private IFocData           rootFocData     = null;
   private FocXMLGuiComponent parentComponent = null;
   private boolean            editable        = true;
+  private String             nameInMap       = null;
 
   //These are used in case the component is located in a table.
   private Object columnId = null;
@@ -270,5 +271,13 @@ public class FocXMLGuiComponentDelegate {
 
 	public void setRowId(Object rowId) {
 		this.rowId = rowId;
+	}
+
+	public String getNameInMap() {
+		return nameInMap;
+	}
+
+	public void setNameInMap(String nameInMap) {
+		this.nameInMap = nameInMap;
 	}
 }
