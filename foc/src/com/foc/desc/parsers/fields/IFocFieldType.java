@@ -17,6 +17,7 @@ public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_ORDER          = "ORDER";
   public static final String TYPE_NOT_COMPLETED  = "NOT_COMPLETED";
   public static final String TYPE_IS_SYSTEM      = "IS_SYSTEM";
+  public static final String TYPE_DEPRECATED     = "DEPRECATED";
   public static final String TYPE_TREE           = "TREE";
   public static final String TYPE_REVIEW_STATUS  = "REVIEW_STATUS";
   public static final String TYPE_REVIEW_COMMENT = "REVIEW_COMMENT";

@@ -210,6 +210,8 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	fld = xmlFocDesc.addNotCompletedField();
     } else if (qName.equals(TAG_IS_SYSTEM)){
     	fld = xmlFocDesc.addIsSystemObjectField();
+    } else if (qName.equals(TAG_DEPRECATED)){
+    	fld = xmlFocDesc.addDeprecatedField();
     } else if (qName.equals(TAG_TREE)){
     	FObjectField oFld = xmlFocDesc.setWithObjectTree();  
     	String forcedDBName = getString(att, ATT_FORCED_DB_NAME);
