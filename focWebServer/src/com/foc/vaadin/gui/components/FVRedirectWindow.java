@@ -81,9 +81,10 @@ public class FVRedirectWindow extends Window {
 			comboBoxToSelectFrom = new FVComboBox();
 			comboBoxToSelectFrom.setWidth("250px");
 			comboBoxToSelectFrom.setItemCaptionMode(ItemCaptionMode.ITEM);
-			comboBoxToSelectFrom.setCaption("New replacement");
+			comboBoxToSelectFrom.setCaption("New Replacement");
 			comboBoxToSelectFrom.addContainerProperty(dataPath, Object.class, "");
-			comboBoxToSelectFrom.setContainerDataSource(listToChooseFrom);
+			comboBoxToSelectFrom.setContainerDataSource(listToChooseFrom);			
+			comboBoxToSelectFrom.setItemCaptionPropertyId(dataPath);
 		}
 		return comboBoxToSelectFrom;
 	}
