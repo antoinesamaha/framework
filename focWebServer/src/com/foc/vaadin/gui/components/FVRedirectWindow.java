@@ -109,7 +109,7 @@ public class FVRedirectWindow extends Window {
 			replaceButton = new FVButton("Replace");
 			replaceButton.addClickListener(new ClickListener() {
 				public void buttonClick(ClickEvent event) {
-					if(listToChooseFrom != null && getListToSelectFromComboBox() != null && getListToSelectFromComboBox().getValue() instanceof Integer){
+					if(listToChooseFrom != null && getListToSelectFromComboBox() != null && (Long) getListToSelectFromComboBox().getValue() != null){
 						FocObject focObjectToRedirectFrom = selectedObject;
 						FocObject focObjectToRedirectTo   = listToChooseFrom.searchByReference((Long) getListToSelectFromComboBox().getValue());
 						if(focObjectToRedirectFrom != null){
