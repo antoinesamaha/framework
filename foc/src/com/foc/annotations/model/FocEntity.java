@@ -14,6 +14,7 @@ public @interface FocEntity {
 	public boolean dbResident() default true;
 	public boolean allowAdaptDataModel() default true;
 	public boolean isTree() default false;
+	public boolean hasRevision() default false;
 	public FocJoin[] joins() default {};
 	public String filterOnTable() default "";
 	public FocFilterCondition[] filterConditions() default {};
