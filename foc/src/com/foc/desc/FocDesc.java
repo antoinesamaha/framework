@@ -30,6 +30,7 @@ import com.fab.gui.details.GuiDetails;
 import com.fab.model.table.FieldDefinition;
 import com.fab.model.table.FieldDefinitionDesc;
 import com.fab.model.table.TableDefinition;
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.admin.FocUser;
@@ -892,12 +893,12 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   	return addDeprecatedField("DEPRECATED", "Deprecate");
   }
 
-  public FBoolField addNotCompletedField(String name){
+  public FBoolField addNotCompletedField(){
     FBoolField field = (FBoolField)getFieldByID(FField.FLD_NOT_COMPLETED_YET);
     if(field == null) {
-      field = new FBoolField(name, "Not Completed", FField.FLD_NOT_COMPLETED_YET, false);
+      field = new FBoolField("NOT_COMPLETED", "Not Completed", FField.FLD_NOT_COMPLETED_YET, false);
       addField(field);
-      field.addListener(new FPropertyListener() {
+      /*field.addListener(new FPropertyListener() {
 				@Override
 				public void propertyModified(FProperty property) {
 					int debug = 3;
@@ -906,14 +907,14 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 				@Override
 				public void dispose() {
 				}
-			});
+			});*/
     }
     return field;
   }
   
-  public FBoolField addNotCompletedField(){
+  /*public FBoolField addNotCompletedField(){
   	return addDeprecatedField("NOT_COMPLETED", "Not Completed");
-  }
+  }*/
   
   public boolean hasOrderField(){
     return getFieldByID(FField.FLD_ORDER) != null;
@@ -1002,7 +1003,11 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     if(field == null) {
     	field = new FMultipleChoiceField("REVIEW_STATUS", "Review Status", FField.FLD_REVIEWSTATUS, false, 2);
     	field.addChoice(0, "");
-    	field.addChoice(1, "للمراجعة");
+    	if(ConfigInfo.isArabic()){
+    		field.addChoice(1, "للمراجعة");
+    	}else{
+    		field.addChoice(1, "Review");
+    	}    	
       addField(field);
     }
   	return field;

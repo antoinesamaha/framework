@@ -81,9 +81,10 @@ public class FVRedirectWindow extends Window {
 			comboBoxToSelectFrom = new FVComboBox();
 			comboBoxToSelectFrom.setWidth("250px");
 			comboBoxToSelectFrom.setItemCaptionMode(ItemCaptionMode.ITEM);
-			comboBoxToSelectFrom.setCaption("New replacement");
+			comboBoxToSelectFrom.setCaption("New Replacement");
 			comboBoxToSelectFrom.addContainerProperty(dataPath, Object.class, "");
-			comboBoxToSelectFrom.setContainerDataSource(listToChooseFrom);
+			comboBoxToSelectFrom.setContainerDataSource(listToChooseFrom);			
+			comboBoxToSelectFrom.setItemCaptionPropertyId(dataPath);
 		}
 		return comboBoxToSelectFrom;
 	}
@@ -108,7 +109,7 @@ public class FVRedirectWindow extends Window {
 			replaceButton = new FVButton("Replace");
 			replaceButton.addClickListener(new ClickListener() {
 				public void buttonClick(ClickEvent event) {
-					if(listToChooseFrom != null && getListToSelectFromComboBox() != null && getListToSelectFromComboBox().getValue() instanceof Integer){
+					if(listToChooseFrom != null && getListToSelectFromComboBox() != null && (Long) getListToSelectFromComboBox().getValue() != null){
 						FocObject focObjectToRedirectFrom = selectedObject;
 						FocObject focObjectToRedirectTo   = listToChooseFrom.searchByReference((Long) getListToSelectFromComboBox().getValue());
 						if(focObjectToRedirectFrom != null){

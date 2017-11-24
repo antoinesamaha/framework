@@ -32,6 +32,7 @@ public interface FXMLDesc {
   public static final String TAG_ORDER          = IFocFieldType.TYPE_ORDER;
   public static final String TAG_NOT_COMPLETED  = IFocFieldType.TYPE_NOT_COMPLETED;
   public static final String TAG_IS_SYSTEM      = IFocFieldType.TYPE_IS_SYSTEM;
+  public static final String TAG_DEPRECATED     = IFocFieldType.TYPE_DEPRECATED;
   public static final String TAG_TREE           = IFocFieldType.TYPE_TREE;
   public static final String TAG_REVIEW_STATUS  = IFocFieldType.TYPE_REVIEW_STATUS;
   public static final String TAG_REVIEW_COMMENT = IFocFieldType.TYPE_REVIEW_COMMENT;
