@@ -8,8 +8,7 @@ import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface FocEntity {
-	
+public @interface FocEntity {	
 	public String name() default "";
 	public String storageName() default "";
 	public boolean dbResident() default true;
