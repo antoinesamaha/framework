@@ -339,13 +339,11 @@ public class ObjectCondition extends FilterCondition {
 				description = fieldName + " Is Empty";
 				break;
 			case OPERATION_EQUALS:
-				String propertyName = getCaptionProperty();
-				if (condObject != null) {
-					FProperty prop = propertyName != null ? condObject.getFocPropertyByName(propertyName) : null;
-					if (prop != null) {
-						String val = prop.getString();
-						description = fieldName + " = " + val;
-					}					
+				String propertyName = getCaptionProperty();				
+				FProperty prop = propertyName != null ? condObject.getFocPropertyByName(propertyName) : null;				
+				if (prop != null) {
+					String val = prop.getString();
+					description = fieldName + " = " + val;
 				}
 				break;
 			case OPERATION_NOT_EMPTY:
