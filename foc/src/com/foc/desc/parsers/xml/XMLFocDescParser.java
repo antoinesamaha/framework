@@ -140,7 +140,7 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     		String groupByFormula = getString(att, ATT_GROUP_BY_FORMULA);
     		if(!Utils.isStringEmpty(groupByFormula)){
         	FocListGroupBy groupBy = getGroupBy(true);
-        	groupBy.addField_FormulaSingleText(fld.getID(), fld.getDBName(), groupByFormula);
+        	fld = groupBy.addField_FormulaSingleText(xmlFocDesc, fld, groupByFormula);
     		}
     	}
     }

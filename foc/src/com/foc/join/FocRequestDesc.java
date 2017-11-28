@@ -134,7 +134,7 @@ public class FocRequestDesc {
 		            String groupByFormula = reqField.getGroupByFormula();
 		            if(!Utils.isStringEmpty(groupByFormula)){
 		            	FocListGroupBy groupBy = focDesc.getGroupBy();
-		            	groupBy.addField_FormulaSingleText(newField.getID(), newField.getDBName(), groupByFormula);
+		            	newField = groupBy.addField_FormulaSingleText(focDesc, newField, groupByFormula);
 		            }
 	          	}
 	          } catch (CloneNotSupportedException e) {

@@ -9,6 +9,13 @@ import java.util.Iterator;
 
 import com.foc.Globals;
 import com.foc.db.DBManager;
+import com.foc.desc.FocDesc;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.FIntField;
+import com.foc.desc.field.FNumField;
+import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FReferenceField;
+import com.foc.desc.field.FStringField;
 
 /**
  * @author 01Barmaja
@@ -71,13 +78,35 @@ public class FocListGroupBy {
 		fieldsInFormulas.put(fieldName, groupByFormula);
 	}
 
-	public void addField_FormulaSingleText(int fieldID, String fieldName, String formula){
+//	public void addField_FormulaSingleText(int fieldID, String fieldName, String formula){
+//		addField_FormulaSingleText(null, fieldID, fieldName, formula);
+//	}
+	
+	public FField addField_FormulaSingleText(FocDesc focDesc, FField field, String formula){
+		int fieldID = field.getID();
+		String fieldName = field.getDBName(); 
+		
 		if(formula.toUpperCase().equals("LISTAGG")){
 			fieldName = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), fieldName);
 			addField_Formulas(fieldID, formula+"(", ", ', ') WITHIN GROUP (ORDER BY "+fieldName+")");
+			if(focDesc != null) {
+				if(    field instanceof FNumField       || field instanceof FIntField 
+						|| field instanceof FReferenceField || field instanceof FObjectField) {
+					//AggList will not work if we do not put the result in a string even if the initial field is not a string
+					boolean wasAlreadyAddedToDesc = focDesc.getFieldByID(field.getID()) != null; 
+					if(wasAlreadyAddedToDesc) focDesc.removeField(field);
+					FStringField newFld = new FStringField(field.getDBName(), field.getTitle(), field.getID(), false, 1000);
+					if(wasAlreadyAddedToDesc) focDesc.addField(newFld);
+					field = newFld;
+				}else {
+					//The Agglist needs more size to concat the different values
+					field.setSize(field.getSize() * 20);
+				}
+			}
 		}else{
 			addField_Formulas(fieldID, formula+"(", ")");
 		}
+		return field;
 	}
 	
 	public void addField_Formulas(int fieldName, String formulaPartBefore, String formulaPartAfter){
