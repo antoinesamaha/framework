@@ -19,6 +19,7 @@ public interface IFocPredefinedFieldType<A extends Annotation> {
   public static final String TYPE_TREE           = "TREE";
   public static final String TYPE_REVIEW_STATUS  = "REVIEW_STATUS";
   public static final String TYPE_REVIEW_COMMENT = "REVIEW_COMMENT";
+  public static final String TYPE_DEPRECATED     = "DEPRECATED";
   
 	public String getTypeName();
 	public FField newFField(FocDesc focDesc, A a);
