@@ -17,6 +17,8 @@ public class FocPredefinedFieldFactory {
 		put(new FTypeDATE());
 		put(new FTypeORDER());
 		put(new FTypeNOT_COMPLETED_YET());
+		put(new FTypeDEPRECATED());
+		put(new FTypeIS_SYSTEM());
 	}
 
 	public void put(IFocPredefinedFieldType type) {
