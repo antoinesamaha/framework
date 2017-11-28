@@ -6,6 +6,8 @@ import com.foc.Globals;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FBoolField;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
 import com.foc.property.FObject;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
@@ -61,6 +63,11 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
       FocObject initialObjectSelected = objectProperty.getObject_CreateIfNeeded();
       if(initialObjectSelected != null){
         setInitialValue(initialObjectSelected);
+      }
+      
+      FBoolField depricatedFld = (FBoolField) getFocDesc().getFieldByID(FField.FLD_DEPRECATED_FIELD);
+      if(depricatedFld != null) {
+      	addFilterByPropertyValue(depricatedFld.getName(), false);
       }
     }
 	}
