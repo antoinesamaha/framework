@@ -114,6 +114,10 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
       FocEntity entity = (FocEntity) FocAnnotationUtil.findAnnotation(objClass, FocEntity.class);
       if(entity != null) {
 	      if(entity.isTree()) focDesc.setWithObjectTree();
+	      if(entity.hasRevision()){
+	      	focDesc.setWithObjectTree();
+	      	
+	      }
 	      if(entity.joins() != null) {
 	      	boolean refFieldNotDBResident = false;
 	      	for(FocJoin joinAnn : entity.joins()) {

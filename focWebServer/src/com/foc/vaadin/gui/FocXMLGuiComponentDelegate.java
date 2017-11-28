@@ -96,10 +96,6 @@ public class FocXMLGuiComponentDelegate {
     setDataPath(dataPath);
   }
   
-  public void setEditable(boolean editable){
-  	this.editable = editable;
-  }
-  
   public FocObject getRootFocObject(){
   	FocObject focObject = null;
   	if(rootFocData instanceof FocObject){
@@ -109,6 +105,10 @@ public class FocXMLGuiComponentDelegate {
   		focObject = (FocObject) (mainFocData instanceof FocObject ? mainFocData : null); 
   	}
   	return focObject;
+  }
+  
+  public void setEditable(boolean editable){
+  	this.editable = editable;
   }
   
   public boolean isEditable(){
@@ -122,7 +122,7 @@ public class FocXMLGuiComponentDelegate {
   	//If the Component does not have a Field then it is a palette component and should always be Editable.
   	if(editable){//&& component != null && component.getFormField() != null
 	  	
-	  	//First we check if programatically the FocXMLLayout has been set as not editable
+	  	//First we check if programmatically the FocXMLLayout has been set as not editable
 	    editable = getFocXMLLayout() != null ? getFocXMLLayout().isEditable() : true;
 	    
 	    //Check if the Property Value is Locked
@@ -196,14 +196,6 @@ public class FocXMLGuiComponentDelegate {
     return editable;
   }
   
-  public void setDataPath(String dataPath){
-    this.dataPath = dataPath;
-  }
-
-  public String getDataPath(){
-    return this.dataPath;
-  }
-  
   private boolean isEditable_AttributeFlagCheckOnly(){
 	  boolean    editable   = true;
 	  Attributes attributes = component.getAttributes();
@@ -212,6 +204,29 @@ public class FocXMLGuiComponentDelegate {
 		}
 		return editable;
   }
+  
+  public boolean isShowDescription(){  	
+  	return showDescription_AttributeFlagCheckOnly();   
+  }
+  
+	private boolean showDescription_AttributeFlagCheckOnly() {
+		boolean showDesc = false;
+		Attributes attributes = component.getAttributes();
+		if (attributes != null && attributes.getValue(FXML.ATT_SHOWDESCRIPTION) != null && attributes.getValue(FXML.ATT_SHOWDESCRIPTION).equals("true")) {
+			showDesc = true;
+		}
+		return showDesc;
+	}
+  
+  public void setDataPath(String dataPath){
+    this.dataPath = dataPath;
+  }
+
+  public String getDataPath(){
+    return this.dataPath;
+  }
+  
+  
 
   public IFocData getRootFocData() {
     return rootFocData;

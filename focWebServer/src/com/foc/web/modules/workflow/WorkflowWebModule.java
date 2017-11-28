@@ -66,14 +66,14 @@ public class WorkflowWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/com/foc/workflow/WFLog_Table.xml", 0, WFLog_Table.class.getName());
+      "/xml/com/foc/workflow/WFLog_Table-ar.xml", 0, WFLog_Table.class.getName());
   	
     XMLViewDictionary.getInstance().put(
       WFLogDesc.WF_LOG_VIEW_KEY,
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/com/foc/workflow/WFLog_Form.xml", 0, WFLog_Form.class.getName());
+      "/xml/com/foc/workflow/WFLog_Form-ar.xml", 0, WFLog_Form.class.getName());
       
   	XMLViewDictionary.getInstance().put(
       WFLogDesc.WF_LOG_VIEW_KEY,
@@ -108,7 +108,7 @@ public class WorkflowWebModule extends FocWebModule {
       XMLViewKey.TYPE_FORM,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/com/foc/workflow/WFTransactionWrapper_Form.xml", 0, WFTransactionWrapper_Form.class.getName());
+      "/xml/com/foc/workflow/WFTransactionWrapper_Form-ar.xml", 0, WFTransactionWrapper_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),

@@ -118,6 +118,7 @@ public interface FXML {
   public static final String ATT_REMOVE_ZEROS             = "removeZeros"      ;
   public static final String ATT_SORTING_EXPRESSION       = "sortingExpression";
   public static final String ATT_EDITABLE                 = "editable"         ;
+  public static final String ATT_SHOWDESCRIPTION          = "showDescription"  ;
   public static final String ATT_OPTION_GROUP             = "optionGroup"      ;
   public static final String ATT_COLLAPSING_ALLOWED       = "columnCollapse"   ;
   public static final String ATT_REDIRECT_ENABLED         = "redirectEnabled"  ;

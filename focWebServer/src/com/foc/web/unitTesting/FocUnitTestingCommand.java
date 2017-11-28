@@ -845,6 +845,10 @@ public class FocUnitTestingCommand {
   	}
   }
   
+  public long table_Select(String tableName, String propertyName, String propertyValue){
+  	return table_Select(tableName, propertyName, propertyValue, null, 0);
+  }
+  
   /**
    * Simulates selecting an item in an open table. Also saves the reference of
    * the selected object in a variable.
@@ -992,11 +996,12 @@ public class FocUnitTestingCommand {
     }
   }
   
-  public void table_Open(String tableName, String propertyName, String propertyValue) {
+  public long table_Open(String tableName, String propertyName, String propertyValue) {
   	boolean nodeCreated = !getLogger().openCommand("Open item in table "+tableName+" where "+propertyName+" = "+propertyValue);
-  	table_Select(tableName, propertyName, propertyValue, null, 0);
+  	long ref = table_Select(tableName, propertyName, propertyValue, null, 0);
   	table_Open(tableName);
   	if(nodeCreated) getLogger().closeNode();
+  	return ref;
   }
   
   /**

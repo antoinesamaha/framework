@@ -1,0 +1,12 @@
+<VerticalLayout margin="true" captionMargin="0">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" />
+  <GuiTable name="WFTRANSACTION_WRAPPER_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="false" openEnabled="true" deleteEnabled="false">
+    <TableColumn name="TYPE" caption="النوع" />
+    <TableColumn name="CODE" caption="الرقم التسلسلي" link="true" />
+    <TableColumn name="CURRENT_STAGE" caption="المرحلة" />
+    <TableColumn name="TITLE" captionProperty="NAME" caption="الدور" />
+    <TableColumn name="AREA" caption="المركز" />
+    <TableColumn name="TRANSACTION.WF_COMMENT" caption="الملاحظات" />
+  </GuiTable>
+  <Button name="SIGN_IN_SLIDE_SHOW" caption="Sign in slideshow..." />
+</VerticalLayout>
