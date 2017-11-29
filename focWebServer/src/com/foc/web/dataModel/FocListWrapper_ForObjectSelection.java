@@ -65,10 +65,12 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
         setInitialValue(initialObjectSelected);
       }
       
-      FBoolField depricatedFld = (FBoolField) getFocDesc().getFieldByID(FField.FLD_DEPRECATED_FIELD);
-      if(depricatedFld != null) {
-      	addFilterByPropertyValue(depricatedFld.getName(), false);
-      }
+			if (getFocDesc() != null) {
+				FBoolField depricatedFld = (FBoolField) getFocDesc().getFieldByID(FField.FLD_DEPRECATED_FIELD);
+				if (depricatedFld != null) {
+					addFilterByPropertyValue(depricatedFld.getName(), false);
+				}
+			}
     }
 	}
 	
