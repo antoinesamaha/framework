@@ -1436,7 +1436,7 @@ public class FVValidationLayout extends HorizontalLayout {
   			}else{
   				Button deleteButtton = getDeleteButton(true);
     			if(deleteButtton != null){
-  		    	addComponent(deleteButtton);
+  		    	addComponentAsFirst(deleteButtton);
   		    	setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
     			}  				
   			}
@@ -1690,12 +1690,14 @@ public class FVValidationLayout extends HorizontalLayout {
 				    	ICentralPanel centralPanel = getCentralPanel();
 				    	if(centralPanel instanceof FocXMLLayout){
 				    		FocXMLLayout layout = (FocXMLLayout) centralPanel;
-				    		if(layout.getTableTreeThatOpenedThisForm() != null){
-			    				FocObject focObject = getFocObject();
-			    				if(focObject != null){
+				    		FocObject focObject = getFocObject();
+				    		if(focObject != null){
+				    			if(layout.getTableTreeThatOpenedThisForm() != null){
 				    				layout.getTableTreeThatOpenedThisForm().delete(focObject.getReference().getInteger());
-				    				goBack();
-			    				}
+				    			} else {
+				    				focObject.delete();
+				    			}
+				    			goBack();
 				    		}
 				    	}
 						}else if(optionName.equals("CANCEL")){

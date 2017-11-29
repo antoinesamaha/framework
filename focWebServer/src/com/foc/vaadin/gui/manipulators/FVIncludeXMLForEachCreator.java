@@ -3,6 +3,7 @@ package com.foc.vaadin.gui.manipulators;
 import org.xml.sax.Attributes;
 
 import com.foc.access.FocDataMap;
+import com.foc.dataWrapper.FocListWrapper;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -22,9 +23,8 @@ public class FVIncludeXMLForEachCreator extends FVIncludeXMLCreator {
   	}
     
     FVForEachLayout forEach = null;
-    if(focData instanceof FocList){
-    	FocList list = (FocList) focData;
-    	forEach = new FVForEachLayout(xmlLayout, list, xmlViewKey, attributes);
+    if(focData instanceof FocList || focData instanceof FocListWrapper){
+    	forEach = new FVForEachLayout(xmlLayout, focData, xmlViewKey, attributes);
     }
     FocXMLGuiComponentStatic.setRootFocDataWithDataPath(forEach, rootFocData, dataPathFromRootFocData);
     return forEach;

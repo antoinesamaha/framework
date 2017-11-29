@@ -1,0 +1,20 @@
+<VerticalLayout spacing="true" margin="true" width="80%">
+  <ValidationSettings withAttach="false" withApply="true" withPrint="false" />
+  
+  <VerticalLayout captionMargin="0">
+  <!--
+  	<HorizontalLayout captionMargin="0" spacing="true">
+	    <GuiField name="IMAGE_NAME" caption="Document title" width="350px" />
+	  	<GuiField name="DOCUMENT_TYPE" captionProperty="CAPTION" caption="Document Type" width="150px" />
+	  	<GuiField name="KEYWORD" caption="Keyword" width="150px" />
+	  	<GuiField name="CREATION_USER" captionProperty="NAME" caption="Uploaded by" width="150px" />
+  	  <GuiField name="UPLOAD_DATE" caption="Upload date" width="150px" />
+	  </HorizontalLayout>
+	-->
+	<GuiField name="DESCRIPTION" caption="Description" width="300px" />
+  </VerticalLayout>
+  <GuiField name="IMAGE_CLOUD" width="200px" height="200px" editable="true"/> 
+  <VerticalLayout captionMargin="0" name="_ACCESS_GROUPS">
+  	<IncludeXML name="PHOTO_ALBUM_ACCESS_LIST" dataPath="PHOTO_ALBUM_ACCESS_LIST" storage="PHOTO_ALBUM_ACCESS" context="GROUP_ACCESS_RIGHT_SELECTION" type="table"/>
+  </VerticalLayout>
+</VerticalLayout>

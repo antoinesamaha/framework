@@ -2045,6 +2045,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
     border-radius:5px;*/
   }
 
+  .foc-ImageFieldClickable:HOVER{
+  	cursor: pointer;
+  }
+
   .foc-validationHelpOn{
     background-color: orange;
   }

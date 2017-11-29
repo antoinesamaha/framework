@@ -1,3 +1,4 @@
+
 package com.foc.web.modules.photoAlbum;
 
 import com.foc.Globals;
@@ -80,6 +81,13 @@ public class PhotoAlbumWebModule extends FocWebModule {
       "/xml/com/foc/photoAlbum/PhotoAlbum_Table.xml", 0, PhotoAlbum_Table.class.getName());
     
     XMLViewDictionary.getInstance().put(
+      PhotoAlbumDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_TABLE, 
+      "Thumb", 
+      XMLViewKey.VIEW_DEFAULT, 
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Thumb_Table.xml", 0, PhotoAlbum_Thumb_Table.class.getName());
+    
+    XMLViewDictionary.getInstance().put(
     	DocumentTypeDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       XMLViewKey.CONTEXT_DEFAULT, 
@@ -106,7 +114,21 @@ public class PhotoAlbumWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT, 
       XMLViewKey.VIEW_DEFAULT, 
       "/xml/com/foc/photoAlbum/PhotoAlbum_Form.xml", 0, PhotoAlbum_Form.class.getName());
-    
+
+    XMLViewDictionary.getInstance().put(
+      PhotoAlbumDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_FORM, 
+      "Thumb", 
+      XMLViewKey.VIEW_DEFAULT, 
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Thumb_Form.xml", 0, PhotoAlbum_Thumb_Form.class.getName());
+
+    XMLViewDictionary.getInstance().put(
+      PhotoAlbumDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_FORM, 
+      "Reduced", 
+      XMLViewKey.VIEW_DEFAULT, 
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Reduced_Form.xml", 0, PhotoAlbum_Reduced_Form.class.getName());
+
     XMLViewDictionary.getInstance().put(
       PhotoAlbumAccessDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 

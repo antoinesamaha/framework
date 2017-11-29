@@ -223,18 +223,23 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 		return (FVTableWrapperLayout) getComponentByName("PHOTO_ALBUM");
 	}
   
+	protected FVUpload_Image newUploadButton(){
+	  FVUpload_Image uploadImage = new FVUpload_Image();
+	  FVImageReceiver imageReceiver = new FVImageReceiver() {
+	    public void imageReceived(SucceededEvent event, InputStream inputStream) {
+	    	addPhotoToAlbum(event.getFilename(), inputStream);
+	    }
+	  };
+	  uploadImage.setImageReceiver(imageReceiver);
+	  return uploadImage;
+	}
+	
   private void addUploadButton(){
   	FVTableWrapperLayout tableWrapper = getTableWrapperLayout();
   	if(tableWrapper != null){
   		tableWrapper.setSpacing(true);
-	    FVUpload_Image uploadImage = new FVUpload_Image();
+	    FVUpload_Image uploadImage = newUploadButton();
 	    tableWrapper.addHeaderComponent_ToLeft(uploadImage);
-	    FVImageReceiver imageReceiver = new FVImageReceiver() {
-	      public void imageReceived(SucceededEvent event, InputStream inputStream) {
-	      	addPhotoToAlbum(event.getFilename(), inputStream);
-	      }
-	    };
-	    uploadImage.setImageReceiver(imageReceiver);
   	}
   }
   
@@ -288,7 +293,15 @@ public class PhotoAlbum_Table extends FocXMLLayout {
   	PhotoAlbumFileResource resource = album.new PhotoAlbumFileResource(new File(""), album);
   	return resource;
   }
-    
+
+  public String getFormContextAfterUpload() {
+  	return XMLViewKey.CONTEXT_DEFAULT;
+  }
+  
+  public String getFormViewAfterUpload() {
+  	return XMLViewKey.VIEW_DEFAULT;
+  }
+  
   public void addPhotoToAlbum(String fileName, InputStream inputStream){
     if(inputStream != null){
     	FocWebApplication application = FocWebApplication.getInstanceForThread();
@@ -302,7 +315,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
         if(photoAlbum != null){
         	photoAlbum.setDocumentType(filteredType);
 	        refresh();
-	        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM);
+	        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, getFormContextAfterUpload(), getFormViewAfterUpload());
 	        getMainWindow().changeCentralPanelContent(XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, photoAlbum), true);
         }
       }

@@ -51,6 +51,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 	private FBlobMediumProperty   blobMediumProperty   = null;
 	private GenericFileResource   resource             = null;
 	
+	private boolean               isImage            = false;
 	private boolean               editable           = true;
 	private double                originalWidth      =   -1;
   private double                originalHeight     =   -1;
@@ -97,10 +98,23 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
           int heightInt = Integer.valueOf(height);
           
     	    double ratio = getRatio(getEmbedded(), widthInt, heightInt);
-    	    String newWidth  = Integer.toString((int)(originalWidth * ratio));
-    	    String newHeight = Integer.toString((int)(originalHeight * ratio));
+    	    
+    	    int newWidthInt  = (int)(originalWidth * ratio);
+    	    int newHeightInt = (int)(originalHeight * ratio);
+    	    
+    	    String newWidth  = Integer.toString(newWidthInt);
+    	    String newHeight = Integer.toString(newHeightInt);
+    	    
       	  getEmbedded().setWidth(newWidth+"px");
       	  getEmbedded().setHeight(newHeight+"px");
+      	  
+      	  int fieldWidth = newWidthInt;
+      	  int fieldHeight = newHeightInt;
+      	  if(isEditable()) {
+      	  	fieldHeight += 50;//To keep some space for the buttons
+      	  }
+      	  setWidth(Integer.toString(fieldWidth)+"px");
+      	  setHeight(Integer.toString(fieldHeight)+"px");
   	    }catch(Exception e){
   	      Globals.logException(e);
   	    }
@@ -185,7 +199,8 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		embedded.setImmediate(false);
 		setEmbedded(embedded);
 				
-		refreshImageFromProperty();
+		boolean error = refreshImageFromProperty();
+		setIsImage(!error);
 		
 		addComponentAsFirst(embedded);
 		setExpandRatio(embedded, 1);
@@ -251,11 +266,11 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		refreshImageFromProperty();
 	}
 	
-	public void refreshImageFromProperty(){
-
+	public boolean refreshImageFromProperty(){
 		BufferedImage photo = getBufferedImage();
+		boolean error = photo == null;
 
-		if(photo != null){
+		if(!error){
 			originalHeight = photo.getHeight();
 			originalWidth  = photo.getWidth();
 			setAttributes(getAttributes());
@@ -285,6 +300,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 				embedded.setSource(streamResource);
 			}
 		}
+		return error;
 	}
 	
 	public Button getDownloadButton() {
@@ -370,6 +386,14 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 	
 	public void setBlobMediumProperty(FBlobMediumProperty blobMediumProperty) {
 		this.blobMediumProperty = blobMediumProperty;
+	}
+	
+	public boolean isImage() {
+		return isImage;
+	}
+
+	public void setIsImage(boolean isImage) {
+		this.isImage = isImage;
 	}
 	
 	public Resource getResourceAndSetIcon() {
