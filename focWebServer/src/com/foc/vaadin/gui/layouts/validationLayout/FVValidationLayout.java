@@ -1696,6 +1696,7 @@ public class FVValidationLayout extends HorizontalLayout {
 				    				layout.getTableTreeThatOpenedThisForm().delete(focObject.getReference().getInteger());
 				    			} else {
 				    				focObject.delete();
+//				    				if(getCentralPanel() != null) getCentralPanel().refresh();
 				    			}
 				    			goBack();
 				    		}
