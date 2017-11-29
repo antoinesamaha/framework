@@ -91,7 +91,10 @@ public class PhotoAlbum_Thumb_Table extends PhotoAlbum_Table {
 			}
 			
 			FVUpload_Image uploadButton = newUploadButton();
-			if(uploadButton != null) vLay.addComponent(uploadButton);
+			if(uploadButton != null) {
+				uploadButton.setMaxSizeAllowed(8388608);
+				vLay.addComponent(uploadButton);
+			}
 		}
 	}
 	

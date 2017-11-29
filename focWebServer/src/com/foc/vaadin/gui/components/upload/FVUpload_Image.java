@@ -20,6 +20,8 @@ import com.vaadin.ui.Button.ClickEvent;
 @SuppressWarnings("serial")
 public class FVUpload_Image extends CustomComponent implements Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
 
+	private int maxSizeAllowed = 1048576;
+	
 	private VerticalLayout        root                  = null; // Root element for contained components.
 	private Upload                upload                = null;
 	private String                fileName              = null;
@@ -102,7 +104,7 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 //		root.addComponent(new Label("File " + event.getFilename() + " of type '" + event.getMIMEType() + "' uploaded."));
 		long uploadSize = event.getLength();
 		
-		if(uploadSize < 1048576){
+		if(uploadSize < getMaxSizeAllowed()){
 			Globals.logString("Received: " + fileName);
 			try{
 				byte[] imageInByte = byteArrayOutputStream.toByteArray();
@@ -134,5 +136,13 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 	public void uploadFailed(Upload.FailedEvent event) {
 		// Log the failure on screen.
 		root.addComponent(new Label("Uploading " + event.getFilename() + " of type '" + event.getMIMEType() + "' failed."));
+	}
+
+	public int getMaxSizeAllowed() {
+		return maxSizeAllowed;
+	}
+
+	public void setMaxSizeAllowed(int maxSizeAllowed) {
+		this.maxSizeAllowed = maxSizeAllowed;
 	}
 }
