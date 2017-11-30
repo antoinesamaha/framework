@@ -43,6 +43,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   private static final char FLG_OBJECT_VALUE_LOCALY_CONSTRUCTED =  32;//FOR FObject only
   private static final char FLG_IS_IN_DISPOSE_METHOD            =  64;//FOR FObject only
   private static final char FLG_MANUALY_EDITED                  = 128;//FOR FObject only
+  private static final char FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED = 256;//FOR FObject only
   //private static final char FLG_HIDDEN_MINUS_SIGN               = 256;
   
   //private static final char FLG_VALUE_LOCKED = 8;
@@ -570,6 +571,18 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
       flags = (char)(flags | FLG_OBJECT_VALUE_LOCALY_CONSTRUCTED);
     }else{
       flags = (char)(flags & ~FLG_OBJECT_VALUE_LOCALY_CONSTRUCTED);
+    }
+  }
+  
+  public boolean isBackupValueLocalyConstructed() {
+    return (flags & FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED) != 0;
+  }
+  
+  public void setBackupValueLocalyConstructed(boolean localyConstructed) {
+    if(localyConstructed){
+      flags = (char)(flags | FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED);
+    }else{
+      flags = (char)(flags & ~FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED);
     }
   }
   

@@ -76,21 +76,34 @@ public class FObject extends FProperty implements FPropertyListener{
 	      localReference = null;
 	    }
 	
+	    disposeLocallyConstructedBackup(backupObject);
 	    disposeLocallyConstructedObject(focObjValue);
 	    setObject_Encapsulation(null);
-	    backupObject = null;
 	    
 	    internalFrame         = null;
 	    setDisposeMethod(false);
+	    
+	    backupObject = null;
+	    focObjValue = null;
   	}
   }
   
   private void disposeLocallyConstructedObject(FocObject locallyConstructedObject){
-    if(isObjectValueLocalyConstructed() && locallyConstructedObject != null){
+    if(isObjectValueLocalyConstructed() 
+    		&& locallyConstructedObject != null
+    		&& locallyConstructedObject != backupObject){
       locallyConstructedObject.dispose();
       locallyConstructedObject = null;
     }
     setObjectValueLocalyConstructed(false);
+  }
+  
+  private void disposeLocallyConstructedBackup(FocObject locallyConstructedBackup){
+    if(isBackupValueLocalyConstructed() && locallyConstructedBackup != null){
+      locallyConstructedBackup.dispose();
+      locallyConstructedBackup = null;
+    }
+    setBackupValueLocalyConstructed(false);
   }
   
   public void propertyModified(FProperty property) {
@@ -672,6 +685,7 @@ public class FObject extends FProperty implements FPropertyListener{
 
   public void backup() {
     backupObject = focObjValue;
+    setBackupValueLocalyConstructed(isObjectValueLocalyConstructed());
     //backupLocalSourceList = localSourceList;
   }
 
@@ -679,6 +693,7 @@ public class FObject extends FProperty implements FPropertyListener{
     unplugListenerToReferencePropertyOfObjectValue();
     if(backupObject != focObjValue) disposeLocallyConstructedObject(focObjValue);
     setObject_Encapsulation(backupObject);
+  	setObjectValueLocalyConstructed(isBackupValueLocalyConstructed());
     if(localReference != null){
     	localReference.setFocObject(focObjValue);
     }
