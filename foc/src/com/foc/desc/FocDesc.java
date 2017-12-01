@@ -896,7 +896,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   public FBoolField addNotCompletedField(){
     FBoolField field = (FBoolField)getFieldByID(FField.FLD_NOT_COMPLETED_YET);
     if(field == null) {
-      field = new FBoolField("NOT_COMPLETED", "Not Completed", FField.FLD_NOT_COMPLETED_YET, false);
+      field = new FBoolField(FField.FNAME_NOT_COMPLETED_YET, "Not Completed", FField.FLD_NOT_COMPLETED_YET, false);
       addField(field);
       /*field.addListener(new FPropertyListener() {
 				@Override
