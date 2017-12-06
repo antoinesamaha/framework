@@ -610,14 +610,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			getTableTreeDelegate().setStatusStyleEnabled(getTableTreeDelegate().isTransactionColorEnabled());
 		}
 		if(valo_StatusStyleEmbedded == null && getTableTreeDelegate() != null && getTableTreeDelegate().getFocDesc() != null && getTableTreeDelegate().getFocDesc().statusHodler_IsStatusHolder() && getTableTreeDelegate().isTransactionColorEnabled()){
+			deleteButton = new FVButton("");
 			valo_StatusStyleEmbedded = new Embedded("", FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_PALETTE));
-			valo_StatusStyleEmbedded.setStyleName(BaseTheme.BUTTON_LINK);
+			valo_StatusStyleEmbedded.setCaption(null);
 			valo_StatusStyleEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			valo_StatusStyleEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-			valo_StatusStyleEmbedded.setDescription("Toggle Status Color");
-			
+			valo_StatusStyleEmbedded.setDescription("Toggle Status Color");			
 			valo_StatusStyleEmbedded.addClickListener(new MouseEvents.ClickListener() {
-
 				@Override
 				public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
 					statusStyleClickListener();
