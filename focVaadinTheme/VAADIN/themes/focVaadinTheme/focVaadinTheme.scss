@@ -30,6 +30,7 @@ $v-table-header-background-color: #ff0000;
     font-size: 12px;
   }
 
+
   /*wrap cell content in valo*/
   .v-table-cell-wrapper {
     white-space: normal;
@@ -2231,4 +2232,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
     border-left-width: 4px;
 	  border-left-color: #0c0;
 	}
+		
+	.foc-floatNone{
+	  float:none !important;
+	}
+	
 }

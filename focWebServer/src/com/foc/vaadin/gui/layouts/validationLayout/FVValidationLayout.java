@@ -259,6 +259,9 @@ public class FVValidationLayout extends HorizontalLayout {
       titleLabel.addStyleName("foc-bold");
       titleLabel.addStyleName("foc-text-center");
       titleLabel.addStyleName("noPrint");
+      if(ConfigInfo.isGuiRTL()) {
+        titleLabel.addStyleName("foc-floatNone");
+      }
       titleLabel.setWidth("-1px");
       titleLabel.setHeight("-1px");
     	addComponent(titleLabel);
@@ -1419,7 +1422,7 @@ public class FVValidationLayout extends HorizontalLayout {
 				Component comp = valo_GetNotCompletedYet(true);
 				if(comp != null){
 					addComponent(comp);
-		    	setComponentAlignment(comp, Alignment.BOTTOM_LEFT);
+		    	setComponentAlignment(comp, Alignment.MIDDLE_RIGHT);
 				}
 			}
   		
@@ -2036,17 +2039,6 @@ public class FVValidationLayout extends HorizontalLayout {
   	  		}
   			}
   		}
-//  		valo_NotCompletedYet = new FVCheckBox("Not Completed Yet");
-//  		valo_NotCompletedYet.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-//			valo_NotCompletedYet.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
-			
-//  		valo_NotCompletedYet.addClickListener(new MouseEvents.ClickListener() {
-//				
-//				@Override
-//				public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
-//					deleteButtonClickListener();					
-//				}
-//			});
   	}
   	return valo_NotCompletedYet;
 	}

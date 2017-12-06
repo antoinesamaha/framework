@@ -2,6 +2,7 @@ package com.foc.vaadin.gui;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
@@ -16,6 +17,8 @@ import com.vaadin.ui.AbstractLayout;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Layout;
+import com.vaadin.ui.VerticalLayout;
 
 public class FocXMLGuiComponentStatic {
 	
@@ -196,7 +199,9 @@ public class FocXMLGuiComponentStatic {
         		component.setIcon(icon);
         	}
         }
-        
+        if(!(component instanceof Layout) && ConfigInfo.isGuiRTL()) {
+        	component.addStyleName("foc-floatNone");
+        }
       } catch (Exception e) {
         Globals.logException(e);
       }

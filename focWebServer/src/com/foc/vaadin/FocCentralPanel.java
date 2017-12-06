@@ -9,12 +9,14 @@ import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.vaadin.gui.components.FVPanel;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
@@ -105,6 +107,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	public Window newWrapperWindow(){
 		wrapperWindow = new Window();
 		wrapperWindow.setClosable(false);
+		wrapperWindow.setResizable(true);
 		/*
 		window.addCloseListener(new CloseListener() {
       @Override
@@ -125,7 +128,18 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		wrapperWindow.addStyleName("focCentralPanel");
 		wrapperWindow.center();
 		
+		//ATTENTION-MAN
+//		Panel panel = new Panel("Scroll");
+//		panel.setWidth(width);
+//		panel.setHeight(height);
+//		panel.setContent(this);
+//		if(ConfigInfo.isGuiRTL()) {
+//			centralPanel.addStyleName("foc-floatNone");
+//		}
+//		wrapperWindow.setContent(panel);
+		
 		wrapperWindow.setContent(this);
+		//ATTENTION-MAN
 
 		return wrapperWindow;
 	}

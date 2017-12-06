@@ -61,6 +61,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.RightPanel;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
+import com.foc.vaadin.gui.components.FVPanel;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.FVTreeTable;
 import com.foc.vaadin.gui.components.IPivotGrid;
@@ -96,12 +97,16 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IValidationListener, FocXMLGuiComponent, IXMLAttributeResolver {
+
+	public static final String DEFAULT_DIALOG_WIDTH  = "1300px"; 
+	public static final String DEFAULT_DIALOG_HEIGHT = "700px";
 
 	private XMLView xmlView = null;
 	private int viewRights = GroupXMLViewDesc.ALLOW_CREATION;
@@ -2856,7 +2861,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 	
 	public static void popupInDialog(ICentralPanel contentPanel, String title){
-		popupInDialog(contentPanel, title, "1000px", "500px");
+		popupInDialog(contentPanel, title, DEFAULT_DIALOG_WIDTH, DEFAULT_DIALOG_HEIGHT);
 	}
 	
 	public static void popupInDialog(ICentralPanel contentPanel, String title, String width, String height){
@@ -2865,18 +2870,22 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		centralPanel.changeCentralPanelContent(contentPanel, false);
 		
 		Window optionWindow = centralPanel.newWrapperWindow();
-		
+		optionWindow.setResizable(true);
 		optionWindow.setCaption(title);
 		
 		optionWindow.setWidth(width);
 		optionWindow.setHeight(height);
+		//ATTENTION-MAN
+//		optionWindow.getContent().setWidth(width);
+//		optionWindow.getContent().setHeight(width);
+		//ATTENTION-MAN
 		
 		FocWebApplication.getInstanceForThread().addWindow(optionWindow);
 	}
 	
 	public void popupInDialog(){
-		String width = "1000px";
-	  String height = "500px";
+		String width = DEFAULT_DIALOG_WIDTH;
+	  String height = DEFAULT_DIALOG_HEIGHT;
 	  popupInDialog(null, width, height);
 	}
 	
