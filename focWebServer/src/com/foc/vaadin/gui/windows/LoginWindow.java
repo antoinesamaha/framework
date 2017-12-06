@@ -1,5 +1,6 @@
 package com.foc.vaadin.gui.windows;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUserDesc;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;
@@ -30,7 +31,9 @@ public class LoginWindow extends Window {
   
   public static ICentralPanel getLoginCentralPanel(FocCentralPanel focWindow, String view){
 	  XMLViewKey xmlViewKey = new XMLViewKey(FocUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, AdminWebModule.CTXT_LOGIN, view);
-	  
+//	  if(ConfigInfo.isArabic()) {
+//	  	xmlViewKey.setContext(AdminWebModule.CTXT_LOGIN_AR);
+//	  }
 	  ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(focWindow, xmlViewKey, null);
 	  
 	  return centralPanel;
