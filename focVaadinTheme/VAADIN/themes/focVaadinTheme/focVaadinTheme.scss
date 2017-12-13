@@ -10,6 +10,7 @@ $v-table-header-background-color: #ff0000;
 @import "print_Valo.scss";
 @import "foctheme_valo_fontsColors.scss";
 @import "../valo/valo.scss";
+@import "focRTL.scss";
 
 @mixin focVaadinTheme {
   @include valo;
@@ -2236,5 +2237,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
 	.foc-floatNone{
 	  float:none !important;
 	}
-	
+
+  @if $foc-rtl == 1 {
+	  @include focRTL;
+  }
 }

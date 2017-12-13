@@ -1,0 +1,62 @@
+@mixin focRTL {
+	/* RTL */ 
+	.v-caption .v-captiontext { 
+		float:right;
+	}
+	
+	.v-textfield {
+		text-align: right;
+	}
+	
+	.v-datefield {
+		direction: rtl;
+	}
+	
+	.v-widget {
+		float: right;
+	}
+	
+	.v-textarea {
+		text-align: right;
+		direction: rtl;
+	}
+	
+	.v-textarea-focXMLEditor{
+    text-align: left;
+    direction: ltr;
+	}
+	
+	.v-combobox .v-filterselect {
+		text-align: right;
+		direction: rtl;
+	}
+	
+	.v-filterselect-input {
+		text-align: right;
+		direction: rtl;
+	}
+	
+	input {
+		text-align: start !important;
+		direction: rtl;
+	}
+	
+	.v-filterselect-button {
+		background-color: transparent;
+		margin-right: calc(100% - 36px);
+		border-right: 1px solid #e4e4e4;
+		color: #a3a3a3;
+		direction: ltr !important;
+	}
+	
+	.v-filterselect .v-filterselect-input {
+		padding-right: 2px !important;
+		padding-left: 38px !important;
+	}
+	
+	/*Drop Down List on the right*/
+	.v-filterselect-suggestpopup .gwt-MenuItem, .v-overlay-container .v-filterselect-suggestpopup .gwt-MenuItem	{
+		text-align: right !important;
+		direction: rtl !important;
+	}
+}
