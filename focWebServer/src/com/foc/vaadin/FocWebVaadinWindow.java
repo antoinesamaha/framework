@@ -807,8 +807,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   		  centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, user);
   		}
   	}else if(path != null && path.toLowerCase().startsWith("/popup/")){
-  		ICentralPanel newCentralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
-      this.changeCentralPanelContent(centralPanel, true);
+  		centralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
+//      this.changeCentralPanelContent(newCentralPanel, true);
   	}else if(path != null && path.toLowerCase().endsWith("/downloads")){
   		FocList focList = DownloadableContentDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
       XMLViewKey xmlViewKey = new XMLViewKey(DownloadableContentDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, DownloadableContentWebModule.CTXT_SPECIAL_URL, XMLViewKey.VIEW_DEFAULT);

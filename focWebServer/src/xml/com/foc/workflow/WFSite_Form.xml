@@ -1,16 +1,16 @@
-<VerticalLayout width="100%" >
+<VerticalLayout width="100%" captionMargin="0">
    <ValidationSettings formTitle="Site" withApply="true" withAttach="true" withPrint="true" />
    
-   <HorizontalLayout name="null" width="98%" border="false"  >
-    <VerticalLayout name="null" >
+   <HorizontalLayout width="98%" border="false"  >
+    <VerticalLayout captionMargin="0">
 	    <GuiField name="NAME" caption="Name:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
 	    <GuiField name="DESCRIP" caption="Description:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
 	    <GuiField name="TRANSACTION_PREFIX" captionStyle="f12,bold" caption="Transaction Prefix:" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
 	    <GuiField name="COMPANY" caption="Company:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
 	    <GuiField name="FATHER_NODE>NAME" caption="Parent Site:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
     </VerticalLayout>
-    <VerticalLayout name="null" >
-      <Label name="null" value="Address:" />
+    <VerticalLayout captionMargin="0" >
+      <Label value="Address:" />
       <GuiField name="ADDRESS" caption="" captionPos="left" captionWidth="-1px" width="100%" height="-1px" />
     </VerticalLayout>
    </HorizontalLayout>

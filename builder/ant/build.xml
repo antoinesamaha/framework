@@ -163,7 +163,7 @@
 	<property name="JasperReportFile6" value="commons-beanutils-1.8.2.jar" />
 	<property name="JasperReportFile7" value="commons-digester-2.1.jar" />
 
-  <!-- WEB SERVICES Directory-->
+    <!-- WEB SERVICES Directory-->
 	<property name="WebServicesDir" value="${resources}/webservices" />
 	<property name="wsFile1" value="axis.jar" />
 	<property name="wsFile2" value="commons-logging.jar" />
@@ -192,7 +192,7 @@
 	<property name="POIDir" value="${resources}/jar/poi" />
 	<property name="POIFile1" value="poi.jar" />
 	<property name="POIFile2" value="poi-scratchpad.jar" />
-  <property name="POIFile3" value="poi-ooxml.jar" />
+    <property name="POIFile3" value="poi-ooxml.jar" />
 	<property name="POIFile4" value="ooxml-schemas-1.1.jar" />
 	<property name="POIFile5" value="xmlbeans-2.3.0.jar" />
 	<!--

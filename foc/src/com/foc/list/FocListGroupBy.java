@@ -6,21 +6,28 @@ package com.foc.list;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FNumField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
 import com.foc.desc.field.FStringField;
+import com.foc.property.FProperty;
+import com.foc.property.FPropertyListener;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
  */
 public class FocListGroupBy {
+	private static final String LISTAGG_SEPARATOR = "|";
+	
 	private ArrayList<String>                     arrayOfAtomicExpressions = null;
 	private String                                groupByExpression        = null;
 	private HashMap<Integer, GroupByFieldFormula> fieldsInFormulas         = null;
@@ -86,10 +93,16 @@ public class FocListGroupBy {
 		int fieldID = field.getID();
 		String fieldName = field.getDBName(); 
 		
-		if(formula.toUpperCase().equals("LISTAGG")){
+		if(formula.toUpperCase().startsWith("LISTAGG")) {
 			fieldName = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), fieldName);
-			addField_Formulas(fieldID, formula+"(", ", ', ') WITHIN GROUP (ORDER BY "+fieldName+")");
+			String formulaBefore = "LISTAGG(";
+			String formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+			
+			addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			if(focDesc != null) {
+				FocList selectionList = null;
+				String captionProperty = null;
+				
 				if(    field instanceof FNumField       || field instanceof FIntField 
 						|| field instanceof FReferenceField || field instanceof FObjectField) {
 					//AggList will not work if we do not put the result in a string even if the initial field is not a string
@@ -97,11 +110,17 @@ public class FocListGroupBy {
 					if(wasAlreadyAddedToDesc) focDesc.removeField(field);
 					FStringField newFld = new FStringField(field.getDBName(), field.getTitle(), field.getID(), false, 1000);
 					if(wasAlreadyAddedToDesc) focDesc.addField(newFld);
+					if(field instanceof FObjectField && formula.toUpperCase().length() > 8) {
+						selectionList = ((FObjectField)field).getSelectionList();
+						captionProperty = formula.toUpperCase().substring(8);
+					}
 					field = newFld;
 				}else {
 					//The Agglist needs more size to concat the different values
 					field.setSize(field.getSize() * 20);
 				}
+				
+				field.addListener(new ListAggListener(selectionList, captionProperty));
 			}
 		}else{
 			addField_Formulas(fieldID, formula+"(", ")");
@@ -170,6 +189,71 @@ public class FocListGroupBy {
 				ret = formulaBefore + str + formulaAfter;
 			}
 			return ret;
+		}
+	}
+	
+	private class ListAggListener implements FPropertyListener {
+		
+		protected FocList list = null;
+		protected String  captionProperty = null;
+		
+		//For all other cases than object fields
+		public ListAggListener() {
+			
+		}
+		
+		//For Object fields only
+		public ListAggListener(FocList list, String  captionProperty) {
+			this.list = list;
+			this.captionProperty = captionProperty;
+		}
+		
+		@Override
+		public void propertyModified(FProperty property) {
+			Globals.logString("AGGLIST Listener 1");
+			if(property.isLastModifiedBySetSQLString()) {
+				Globals.logString("AGGLIST Listener 2");
+				ArrayList valuesArray = null;
+				String result = "";
+				StringTokenizer tokzer = new StringTokenizer(property.getString(), LISTAGG_SEPARATOR, false);
+				while(tokzer.hasMoreTokens()) {
+					String token = tokzer.nextToken();
+					Globals.logString("AGGLIST Listener BEfore Token:"+token);
+					if(!Utils.isStringEmpty(token)) {
+						token = token.trim();
+						try {
+							//if Object I want to convert to String
+							if(list != null && !Utils.isStringEmpty(captionProperty)) {
+								long ref = Long.valueOf(token);
+								FocObject focObjectValue = list.searchByReference(ref);
+								FProperty prop = focObjectValue != null ? focObjectValue.getFocPropertyForPath(captionProperty) : null;
+								token = prop != null ? prop.getString() : "";
+							}
+							//----------------
+
+							if(!Utils.isStringEmpty(token)) {
+								Globals.logString("AGGLIST Listener Middle Token:"+token);
+								if(valuesArray == null) valuesArray = new ArrayList();
+								if(!valuesArray.contains(token)) {
+									valuesArray.add(token);
+									
+									if(!result.isEmpty()) result += ", ";
+									result += token;
+									Globals.logString("AGGLIST Listener After Token:"+token+" result="+result);
+								}											
+							}
+						}catch(Exception e) {
+							Globals.logExceptionWithoutPopup(e);
+						}
+					}
+				}
+				property.setLastModifiedBySetSQLString(false);
+				property.setString(result);
+			}
+		}
+			
+		@Override
+		public void dispose() {
 		}
 	}
 }
