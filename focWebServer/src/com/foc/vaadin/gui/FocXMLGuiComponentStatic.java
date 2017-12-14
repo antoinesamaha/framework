@@ -6,7 +6,11 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
+import com.foc.vaadin.gui.components.FVComboBox;
+import com.foc.vaadin.gui.components.FVDateField;
+import com.foc.vaadin.gui.components.FVObjectComboBox;
 import com.foc.vaadin.gui.components.FVTable;
+import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.components.FVTextField;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.event.ShortcutListener;
@@ -199,7 +203,10 @@ public class FocXMLGuiComponentStatic {
         		component.setIcon(icon);
         	}
         }
-        if(!(component instanceof Layout) && ConfigInfo.isGuiRTL()) {
+				if (!(component instanceof Layout) && ConfigInfo.isGuiRTL() 
+						&& !(component instanceof FVTextField) && !(component instanceof FVDateField) 
+						&& !(component instanceof FVComboBox) && !(component instanceof FVTextArea) 
+						&& !(component instanceof FVObjectComboBox)) {
         	component.addStyleName("foc-floatNone");
         }
       } catch (Exception e) {
