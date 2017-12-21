@@ -61,7 +61,6 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.RightPanel;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
-import com.foc.vaadin.gui.components.FVPanel;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.FVTreeTable;
 import com.foc.vaadin.gui.components.IPivotGrid;
@@ -97,8 +96,8 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table.ColumnGenerator;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -2600,24 +2599,52 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		boolean consumed = false;
 		return consumed;
 	}	
+
+	/**
+	 * This method returns the same focObject in standard FocXMLLayout, but allows
+	 * for tables on join object to transform the join FocObject coming from the table
+	 * to the flat FocObject we need to open.
+	 *  
+	 * @param tableName
+	 * @param table
+	 * @param focObject
+	 * @return
+	 */
+	public FocObject table_OpenItem_GetObjectToOpen(String tableName, ITableTree table, FocObject focObject) {
+		return focObject; 
+	}
+
+	public XMLViewKey table_OpenItem_GetXMLViewKey(String tableName, ITableTree table, FocObject focObject) {
+		return table != null && table.getTableTreeDelegate() != null ? table.getTableTreeDelegate().getXmlViewKey_Open() : null;
+	}
+
+	public boolean table_OpenItem_IsFocDataOwner(String tableName, ITableTree table, FocObject focObject) {
+		return false;
+	}
 	
+	public ICentralPanel table_OpenItem_ShowForm(String tableName, ITableTree table, FocObject focObject, XMLViewKey xmlViewKey_Open, int viewContainer_Open) {
+		boolean focDataOwner = table_OpenItem_IsFocDataOwner(tableName, table, focObject); 
+		ICentralPanel panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), xmlViewKey_Open, focObject);
+		if(focDataOwner) panel.setFocDataOwner(focDataOwner);
+		table.getTableTreeDelegate().openFormPanel(panel, viewContainer_Open);
+		return panel;
+	}
+
 	public ICentralPanel table_OpenItem(String tableName, ITableTree table, FocObject focObject, int viewContainer_Open) {
 		ICentralPanel panel = null;
 		if(table != null){
-//			boolean isXmlViewFound = table.getTableTreeDelegate() != null ? XMLViewDictionary.getInstance().isXMLViewFound(table.getTableTreeDelegate().getXmlViewKey_Open()) : false;
-//			if(isXmlViewFound){
 			table.setSelectedObject(focObject);
 			if(table.getTableTreeDelegate() != null){
-				panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), table.getTableTreeDelegate().getXmlViewKey_Open(), focObject);
-				table.getTableTreeDelegate().openFormPanel(panel, viewContainer_Open);
+				focObject = table_OpenItem_GetObjectToOpen(tableName, table, focObject);
+				XMLViewKey xmlViewKey_Open = table_OpenItem_GetXMLViewKey(tableName, table, focObject);
+				
+				if(viewContainer_Open == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB) {
+					FocWebApplication.getFocWebSession_Static().setPrintingData(null, xmlViewKey_Open, focObject, false);
+					UI.getCurrent().getPage().open(UI.getCurrent().getPage().getLocation().getPath(), "_blank");
+				}else {
+					panel = table_OpenItem_ShowForm(tableName, table, focObject, xmlViewKey_Open, viewContainer_Open);
+				}
 			}
-//			}else{
-//				if(table.getTableTreeDelegate() != null && table.getTableTreeDelegate().getXmlViewKey_Open() != null){
-//					String message = table.getTableTreeDelegate().getXmlViewKey_Open().getStringKey() + " key not declared, Unable open this view.";
-//					Globals.logString(message);
-//					Globals.showNotification("", "Unable open this view.", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
-//				}
-//			}
 		}
 		return panel;
 	}

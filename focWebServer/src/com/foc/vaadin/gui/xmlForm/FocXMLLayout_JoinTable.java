@@ -41,15 +41,28 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 	}
 	
 	@Override
-	public ICentralPanel table_OpenItem(String tableName, ITableTree table, FocObject focObject, int viewContainer_Open) {
+	public FocObject table_OpenItem_GetObjectToOpen(String tableName, ITableTree table, FocObject focObject) {
 		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
 		FocObject newObject = (FocObject) constr.newItem();
 		newObject.setReference(getOriginalObjectReference(focObject));
 		newObject.load();
 
-		XMLViewKey xmlViewKey = newXMLViewKey(newObject.getThisFocDesc());
-		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey, newObject);
-		formLayout.setFocDataOwner(true);
+		return newObject;
+	}
+	
+	@Override
+	public XMLViewKey table_OpenItem_GetXMLViewKey(String tableName, ITableTree table, FocObject focObject) {
+		return newXMLViewKey(focObject.getThisFocDesc());
+	}
+	
+	@Override
+	public boolean table_OpenItem_IsFocDataOwner(String tableName, ITableTree table, FocObject focObject) {
+		return true;
+	}
+	
+	@Override
+	public ICentralPanel table_OpenItem_ShowForm(String tableName, ITableTree table, FocObject focObject, XMLViewKey xmlViewKey_Open, int viewContainer_Open) {
+		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey_Open, focObject);
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
@@ -73,7 +86,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 				return false;
 			}
 		});
-		
+
 		return formLayout;
 	}
 

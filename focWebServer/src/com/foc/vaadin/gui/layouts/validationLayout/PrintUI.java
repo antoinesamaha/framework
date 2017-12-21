@@ -76,6 +76,8 @@ public class PrintUI extends FocWebApplication {
 	//	      	((Component)centralPanel).setWidth("750px");
 	//	      	focCentralPanel.setWidth("800px");
 	      	}
+
+	      	FocWebApplication.getFocWebSession_Static().removePrintingData();
 	      }
       }
 			return focCentralPanel;

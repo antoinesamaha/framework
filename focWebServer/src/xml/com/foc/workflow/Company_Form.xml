@@ -1,10 +1,10 @@
-<VerticalLayout width="100%" >
+<VerticalLayout width="100%" margin="true">
    <ValidationSettings formTitle="Company" withApply="true" withAttach="true" withPrint="true" />
    
-   <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="NAME" caption="Name123" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
    <GuiField name="DESCRIP" caption="Description" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
    <GuiField name="VAT_RULE" caption="VAT Rule" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" maskDataFoundError="true"/>
-   <HorizontalLayout>
+   <HorizontalLayout spacing="true">   
        <GuiField name="ADR_BOOK_PARTY_1" dataPath="ADR_BOOK_PARTY" captionProperty="CODE" caption="Address book company" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" immediate="true"/>
        <GuiField name="ADR_BOOK_PARTY_2" dataPath="ADR_BOOK_PARTY" captionProperty="NAME" caption="" captionPos="top" captionWidth="-1px" width="200px" height="-1px" immediate="true"/>
    </HorizontalLayout>

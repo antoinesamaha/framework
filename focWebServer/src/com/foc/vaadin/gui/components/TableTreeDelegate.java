@@ -85,6 +85,7 @@ import com.vaadin.ui.Tree.CollapseListener;
 import com.vaadin.ui.Tree.ExpandEvent;
 import com.vaadin.ui.Tree.ExpandListener;
 import com.vaadin.ui.TreeTable;
+import com.vaadin.ui.UI;
 
 public class TableTreeDelegate implements ITableTreeDelegate {
 
@@ -141,10 +142,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	public static final int SELECTION_MODE_MULTIPLE = 1;
 	public static final int SELECTION_MODE_SINGLE   = 2;
 	
-	public static final int ACTION_NONE   = 0;
-	public static final int ACTION_ADD    = 1;
-	public static final int ACTION_OPEN   = 2;
-	public static final int ACTION_DELETE = 3;
+	public static final int ACTION_NONE         = 0;
+	public static final int ACTION_ADD          = 1;
+	public static final int ACTION_OPEN         = 2;
+	public static final int ACTION_DELETE       = 3;
+	public static final int ACTION_OPEN_NEW_TAB = 4;
 
 	public TableTreeDelegate(ITableTree treeOrTable, Attributes attributes) {
 		this.treeOrTable = treeOrTable;
@@ -1544,6 +1546,16 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			}
 		});
 
+		String applyOpeninNewTab = getAttributes() != null ? getAttributes().getValue(FXML.ATT_OPEN_IN_NEW_TAB_ENABLED) : "";
+		if(!Utils.isStringEmpty(applyOpeninNewTab) && applyOpeninNewTab.trim().toLowerCase().equals("true")) {
+			addPopupMenu(new FVTablePopupMenu(ACTION_OPEN_NEW_TAB, "Open in new Tab") {
+				@Override
+				public void actionPerformed(FocObject focObject) {
+					open(focObject, true);
+				}
+			});
+		}
+		
 		openClickListener = new ItemClickListener() {
 			@Override
 			public void itemClick(ItemClickEvent event) {
@@ -1737,6 +1749,10 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 
 	public ICentralPanel open(FocObject focObject) {
+		return open(focObject, false);
+	}
+	
+	public ICentralPanel open(FocObject focObject, boolean inNewTab) {
 		ICentralPanel centralPanel = null;
 		if(focObject == null){
 			Globals.showNotification("OPEN comand requires a row selection", "", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
@@ -1762,7 +1778,29 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			  
 				openFormPanel(centralPanel, viewContainer_Open);
 			}else{
-				centralPanel = getFocXMLLayout().table_OpenItem(getTableName(), getTreeOrTable(), focObject, viewContainer_Open);
+				int localViewContainer_Open = viewContainer_Open;
+				if(inNewTab) {
+					localViewContainer_Open = ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB;
+				}							
+				centralPanel = getFocXMLLayout().table_OpenItem(getTableName(), getTreeOrTable(), focObject, localViewContainer_Open);
+//					//This is a copy of the content of getFocXMLLayout().table_OpenItem
+//					if(getTreeOrTable() != null && getTreeOrTable() instanceof FVTable) {
+//						ITableTree table = getTreeOrTable();
+//						if(table != null){
+//							table.setSelectedObject(focObject);
+//							if(table.getTableTreeDelegate() != null){
+//								focObject = getFocXMLLayout().table_OpenItem_GetObjectToOpen(tableName, table, focObject);
+//								XMLViewKey xmlViewKey_Open = getFocXMLLayout().table_OpenItem_GetXMlViewKey(tableName, table, focObject);
+//
+//								FocWebApplication.getFocWebSession_Static().setPrintingData(null, xmlViewKey_Open, focObject, false);
+//								UI.getCurrent().getPage().open(UI.getCurrent().getPage().getLocation().getPath(), "_blank");
+//							}
+//						}
+//					}
+//					//---
+//				} else {
+//					centralPanel = getFocXMLLayout().table_OpenItem(getTableName(), getTreeOrTable(), focObject, viewContainer_Open);
+//				}
 			}
 		}
 		return centralPanel;
@@ -1796,7 +1834,6 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_INNER_LAYOUT){
 				getWrapperLayout().innerLayout_Replace(panel);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
-				FocWebApplication.getFocWebSession_Static().setInitialContectForm(panel);
 			}
 		}
 	}

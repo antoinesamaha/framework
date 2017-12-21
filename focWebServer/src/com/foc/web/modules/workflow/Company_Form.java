@@ -14,7 +14,7 @@ public class Company_Form extends FocXMLLayout {
 
 	public Company getCompany(){
     return (Company) getFocData();
-  }
+  }	
   
   @Override
   public void init(com.foc.web.gui.INavigationWindow window, com.foc.web.server.xmlViewDictionary.XMLView xmlView, com.foc.shared.dataStore.IFocData focData) {

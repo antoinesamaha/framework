@@ -130,7 +130,8 @@ public interface FXML {
   public static final String ATT_DUPLICATE_ENABLED        = "duplicateEnabled" ;
   public static final String ATT_STATUS_STYLE_ENABLED     = "statusSyleEnabled";
   public static final String ATT_OPEN_ENABLED             = "openEnabled"      ;
-  public static final String ATT_DOUBLE_CLICK_ENABLED     = "doubleClickEnabled";
+  public static final String ATT_OPEN_IN_NEW_TAB_ENABLED  = "openInNewTabEnabled";
+  public static final String ATT_DOUBLE_CLICK_ENABLED     = "doubleClickEnabled" ;
   public static final String ATT_EXCEL_EXPORT_ENABLED     = "exportEnabled"    ;
   public static final String ATT_DELETE_ENABLED           = "deleteEnabled"    ;
   public static final String ATT_REFRESH_ENABLED          = "refreshEnabled"   ;

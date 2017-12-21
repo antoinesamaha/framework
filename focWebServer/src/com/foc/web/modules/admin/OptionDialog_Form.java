@@ -47,13 +47,17 @@ public class OptionDialog_Form extends FocXMLLayout {
 		label.setValue(optionDialog.getMessage());
 	}
 	
-	public void popup(){
-	  fillMessage();
-	  
+	public void addButtons(){
 		for(int i=0; i<optionDialog.getOptionCount(); i++){
 			FVButton button = addButton(optionDialog.getOptionNameAt(i), optionDialog.getOptionCaptionAt(i), new OptionButtonListener(i));
 			optionDialog.setOptionButtonAt(i, button);
 		}
+	}
+	
+	public Window popup(){
+		Window optionWindow = null;
+	  fillMessage();
+	  addButtons();
 	  
 		if(FocWebApplication.getInstanceForThread().isMobile()){
 			getMainWindow().changeCentralPanelContent(OptionDialog_Form.this, true);
@@ -62,7 +66,7 @@ public class OptionDialog_Form extends FocXMLLayout {
 			centralPanel.fill();
 			centralPanel.changeCentralPanelContent(OptionDialog_Form.this, false);
 			
-			Window optionWindow = centralPanel.newWrapperWindow();
+			optionWindow = centralPanel.newWrapperWindow();
 			
 			optionWindow.setCaption(optionDialog.getTitle());
 			optionWindow.setWidth(optionDialog.getWidth());
@@ -70,6 +74,7 @@ public class OptionDialog_Form extends FocXMLLayout {
 	
 			FocWebApplication.getInstanceForThread().addWindow(optionWindow);
 		}
+		return optionWindow;
 	}
 
 	public OptionDialog getOptionDialog() {

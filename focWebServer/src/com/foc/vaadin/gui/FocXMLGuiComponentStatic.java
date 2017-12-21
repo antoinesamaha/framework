@@ -22,7 +22,6 @@ import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Layout;
-import com.vaadin.ui.VerticalLayout;
 
 public class FocXMLGuiComponentStatic {
 	
@@ -53,10 +52,10 @@ public class FocXMLGuiComponentStatic {
 			  String width = attributes.getValue(FXML.ATT_WIDTH);
 			  if (width != null) {
 			  	component.setWidth(width);
-			  	//hadi 01-Dec-15 when we set table height or width we need to set it to wrapper layout too
+			  	//01-Dec-15 when we set table height or width we need to set it to wrapper layout too
 			  	if(component instanceof FVTable){
 		  		}
-  			  //hadi 01-Dec-15
+  			  //01-Dec-15
 			  }
 			  
 			  String height = attributes.getValue(FXML.ATT_HEIGHT);

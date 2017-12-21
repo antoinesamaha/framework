@@ -9,14 +9,12 @@ import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
-import com.foc.vaadin.gui.components.FVPanel;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Panel;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")

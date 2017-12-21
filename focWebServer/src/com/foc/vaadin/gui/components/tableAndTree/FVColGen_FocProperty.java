@@ -394,11 +394,11 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					button.addStyleName("focLinkInTable");
 					objReturned = button;
 					
-					if(getTableTreeDelegate().getViewContainer_ForOpen() == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
-				  	BrowserWindowOpener opener = null; 
-				  	opener = new BrowserWindowOpener(UI.getCurrent().getClass());
-				    opener.extend(button);
-					}
+//					if(getTableTreeDelegate().getViewContainer_ForOpen() == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
+//				  	BrowserWindowOpener opener = null; 
+//				  	opener = new BrowserWindowOpener(UI.getCurrent().getClass());
+//				    opener.extend(button);
+//					}
 				}
 			}else{
 				objReturned = property;

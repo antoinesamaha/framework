@@ -53,7 +53,6 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.MenuBar;
@@ -740,6 +739,14 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	showMenuBar();  	
   }
   
+  /**
+   * Prepares a new opened tab when user is already logged in  
+   */
+  protected void prepareWindowAfterLogin(){
+		fillMenuBar_AfterLogin();
+		showMenuBar();
+  }
+
   protected void popupLogin(){
   	LoginWindow loginWindow = new LoginWindow();
   	loginWindow.init(FocWebVaadinWindow.this);
@@ -765,6 +772,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		FocWebSession focWebSession = FocWebApplication.getFocWebSession_Static();
     ICentralPanel centralPanel = openPopupForURLIfFound();
     if(centralPanel != null){
+			if(focWebSession == null || focWebSession.getFocUser() == null){
+				prepareWindowBeforeLogin();
+		    changeCentralPanelContent(centralPanel, false);
+			}else{
+				prepareWindowAfterLogin();
+				changeCentralPanelContent(newCentralPanel_AfterLogin(), false);
+				changeCentralPanelContent(centralPanel, true);
+			}
+
+    	/*
     	prepareWindowBeforeLogin();
     	changeCentralPanelContent(centralPanel, false);
     	//This java script call to do a Reload was added as a work around to a bug:
@@ -772,6 +789,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
     	//but when we click the refresh, the scrolls disappear!
     	//So we added this refresh artificially. It is ugly but what can I do :)
     	JavaScript.getCurrent().execute("setTimeout(function() {  window.location.reload(true);}, 1000);");
+    	*/
     }else{
 			
 			if(focWebSession == null || focWebSession.getFocUser() == null){
@@ -781,8 +799,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		    }
 			}else{
 				if(!focWebSession.getUserSession().isLinkPageOnly()){
-					fillMenuBar_AfterLogin();
-					showMenuBar();
+					prepareWindowAfterLogin();
 					changeCentralPanelContent(newCentralPanel_AfterLogin(), false);
 				}
 			}
@@ -796,75 +813,88 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
 	protected ICentralPanel openPopupForURLIfFound(){
-		ICentralPanel centralPanel = null;
-  	String path = getPathInfo();
-  	if(path != null && path.toLowerCase().endsWith("/login")){
-  		if(Globals.getApp().getUser_ForThisSession() == null){
-  		  FocConstructor constr = new FocConstructor(FocUserDesc.getInstance(), null);
-  		  FocUser user = new FocUser(constr);
-  		  user.setDbResident(false);
-  		  XMLViewKey xmlViewKey = new XMLViewKey(FocUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, AdminWebModule.CTXT_LOGIN, XMLViewKey.VIEW_DEFAULT);
-  		  centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, user);
-  		}
-  	}else if(path != null && path.toLowerCase().startsWith("/popup/")){
-  		centralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
-//      this.changeCentralPanelContent(newCentralPanel, true);
-  	}else if(path != null && path.toLowerCase().endsWith("/downloads")){
-  		FocList focList = DownloadableContentDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
-      XMLViewKey xmlViewKey = new XMLViewKey(DownloadableContentDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, DownloadableContentWebModule.CTXT_SPECIAL_URL, XMLViewKey.VIEW_DEFAULT);
-      centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, focList);
-      this.changeCentralPanelContent(centralPanel, true);
-  	}else if(path != null && path.toLowerCase().startsWith("/html:")){
-  		String htmlFileName = path.substring("/html:".length());
-  		
-  	}else if(path != null && !path.isEmpty() && path.length() > 1){
-  		path = path.substring(1);
-  		FocList focPageLinkList = FocPageLinkDesc.getList(FocList.LOAD_IF_NEEDED);
-    	
-    	FocPageLink foundFocPageLink = null;
-    	
-    	for(int i=0; i<focPageLinkList.size() && foundFocPageLink == null; i++){
-    		FocPageLink focPageLink = (FocPageLink) focPageLinkList.getFocObject(i);
-    		if(focPageLink != null){
-    			String dbKey = focPageLink.getKey().trim();
-    			if(path.equals(dbKey)){
-    				foundFocPageLink = focPageLink;
-    			}
-    		}
-    	}
-    	
-    	if(foundFocPageLink != null){
-    		FocDesc desc = Globals.getApp().getFocDescMap_ByFocObjectClassName().get(foundFocPageLink.getFocObjectClassName());
-    			
-  			if(Globals.getApp().getUser_ForThisSession() == null){
-  				FocWebApplication.getInstanceForThread().getFocWebSession().setFocUser(foundFocPageLink.getUser());
-  				FocWebApplication.getInstanceForThread().getFocWebSession().getUserSession().setLinkPageOnly(true);
-  				foundFocPageLink.getUser().setCurrentCompany(foundFocPageLink.getCompany());
-  				foundFocPageLink.getUser().setCurrentSite(foundFocPageLink.getSite());
-  				foundFocPageLink.getUser().setCurrentTitle(foundFocPageLink.getTitle());
-  			}
-  			
-  			FocObject focObject = null;
-  			if(desc != null){
-		    	FocConstructor focConstructor = new FocConstructor(desc, null);
-		    	focObject = focConstructor.newItem();
-		    	focObject.setReference(foundFocPageLink.getTableRefernce());
-		    	focObject.load();
-	  			focObject.lockAllproperties();
-  			}
-	    	
-	  		XMLViewKey xmlViewKey = new XMLViewKey(foundFocPageLink.getViewStorageName(), foundFocPageLink.getViewType(), foundFocPageLink.getViewContext(), foundFocPageLink.getUserView());
+		ICentralPanel centralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
+		FocWebApplication.getFocWebSession_Static().setInitialContectForm(null);
+		if(centralPanel == null) {//Priority to sent ICentralPanel
+			IFocData data = FocWebApplication.getFocWebSession_Static().getDataToPrint();
+			XMLViewKey viewKey = FocWebApplication.getFocWebSession_Static().getViewKeyToPrint();
+			if(data != null ) {
+				centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, viewKey, data);
+				if(centralPanel != null) {
+					centralPanel.setFocDataOwner(FocWebApplication.getFocWebSession_Static().isFocDataOwner_ToPrint());
+				}
+				FocWebApplication.getFocWebSession_Static().removePrintingData();
+			}
+			
+	  	String path = getPathInfo();
+	  	if(path != null && path.toLowerCase().endsWith("/login")){
+	  		if(Globals.getApp().getUser_ForThisSession() == null){
+	  		  FocConstructor constr = new FocConstructor(FocUserDesc.getInstance(), null);
+	  		  FocUser user = new FocUser(constr);
+	  		  user.setDbResident(false);
+	  		  XMLViewKey xmlViewKey = new XMLViewKey(FocUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, AdminWebModule.CTXT_LOGIN, XMLViewKey.VIEW_DEFAULT);
+	  		  centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, user);
+	  		}
+	  	}else if(path != null && path.toLowerCase().startsWith("/popup/")){
+	  		centralPanel = FocWebApplication.getFocWebSession_Static().getInitialContectForm();
+	//      this.changeCentralPanelContent(newCentralPanel, true);
+	  	}else if(path != null && path.toLowerCase().endsWith("/downloads")){
+	  		FocList focList = DownloadableContentDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
+	      XMLViewKey xmlViewKey = new XMLViewKey(DownloadableContentDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE, DownloadableContentWebModule.CTXT_SPECIAL_URL, XMLViewKey.VIEW_DEFAULT);
+	      centralPanel = XMLViewDictionary.getInstance().newCentralPanel(this, xmlViewKey, focList);
+	      this.changeCentralPanelContent(centralPanel, true);
+	  	}else if(path != null && path.toLowerCase().startsWith("/html:")){
+	  		String htmlFileName = path.substring("/html:".length());
 	  		
-	      centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) this, xmlViewKey, focObject, false, false, true, foundFocPageLink.getSerialisation());	      
-	      if(centralPanel != null){
-		      centralPanel.parseXMLAndBuildGui();
-		      if(centralPanel instanceof FocXMLLayout){
-		      	FocXMLLayout lay = (FocXMLLayout) centralPanel;
-		      	lay.setValidationLayoutVisible(false);
+	  	}else if(path != null && !path.isEmpty() && path.length() > 1){
+	  		path = path.substring(1);
+	  		FocList focPageLinkList = FocPageLinkDesc.getList(FocList.LOAD_IF_NEEDED);
+	    	
+	    	FocPageLink foundFocPageLink = null;
+	    	
+	    	for(int i=0; i<focPageLinkList.size() && foundFocPageLink == null; i++){
+	    		FocPageLink focPageLink = (FocPageLink) focPageLinkList.getFocObject(i);
+	    		if(focPageLink != null){
+	    			String dbKey = focPageLink.getKey().trim();
+	    			if(path.equals(dbKey)){
+	    				foundFocPageLink = focPageLink;
+	    			}
+	    		}
+	    	}
+	    	
+	    	if(foundFocPageLink != null){
+	    		FocDesc desc = Globals.getApp().getFocDescMap_ByFocObjectClassName().get(foundFocPageLink.getFocObjectClassName());
+	    			
+	  			if(Globals.getApp().getUser_ForThisSession() == null){
+	  				FocWebApplication.getInstanceForThread().getFocWebSession().setFocUser(foundFocPageLink.getUser());
+	  				FocWebApplication.getInstanceForThread().getFocWebSession().getUserSession().setLinkPageOnly(true);
+	  				foundFocPageLink.getUser().setCurrentCompany(foundFocPageLink.getCompany());
+	  				foundFocPageLink.getUser().setCurrentSite(foundFocPageLink.getSite());
+	  				foundFocPageLink.getUser().setCurrentTitle(foundFocPageLink.getTitle());
+	  			}
+	  			
+	  			FocObject focObject = null;
+	  			if(desc != null){
+			    	FocConstructor focConstructor = new FocConstructor(desc, null);
+			    	focObject = focConstructor.newItem();
+			    	focObject.setReference(foundFocPageLink.getTableRefernce());
+			    	focObject.load();
+		  			focObject.lockAllproperties();
+	  			}
+		    	
+		  		XMLViewKey xmlViewKey = new XMLViewKey(foundFocPageLink.getViewStorageName(), foundFocPageLink.getViewType(), foundFocPageLink.getViewContext(), foundFocPageLink.getUserView());
+		  		
+		      centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) this, xmlViewKey, focObject, false, false, true, foundFocPageLink.getSerialisation());	      
+		      if(centralPanel != null){
+			      centralPanel.parseXMLAndBuildGui();
+			      if(centralPanel instanceof FocXMLLayout){
+			      	FocXMLLayout lay = (FocXMLLayout) centralPanel;
+			      	lay.setValidationLayoutVisible(false);
+			      }
 		      }
-	      }
-  		}
-  	}
+	  		}
+	  	}
+		}
   	return centralPanel;
 	}
 	

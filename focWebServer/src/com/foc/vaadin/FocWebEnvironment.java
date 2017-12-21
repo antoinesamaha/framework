@@ -2,8 +2,6 @@ package com.foc.vaadin;
 
 import java.util.Iterator;
 
-import com.foc.focVaadinTheme.FocVaadinTheme;
-
 import com.fab.gui.xmlView.IXMLViewDictionary;
 import com.foc.Application;
 import com.foc.Globals;
@@ -13,6 +11,7 @@ import com.foc.access.FocLogger;
 import com.foc.admin.UserSession;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocObject;
+import com.foc.focVaadinTheme.FocVaadinTheme;
 import com.foc.list.FocList;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
@@ -77,10 +76,21 @@ public class FocWebEnvironment implements IFocEnvironment {
 	  			}
 	  			Notification notification = new Notification(notificationMessage, description, type);
 	  			notification.setDelayMsec(delay);
+	  			
 	  			if(!Utils.isStringEmpty(styleName)) notification.setStyleName(styleName);
 	  			if(Page.getCurrent() != null){
 	  				notification.show(Page.getCurrent());
 	  			}
+	  			/*
+	  			FancyNotifications fancyNotifications = new FancyNotifications();
+	        fancyNotifications.setPosition(Position.BOTTOM_RIGHT);
+	        
+	  			FancyNotification fancyNotification = new FancyNotification(null, notificationMessage, description);
+          fancyNotification.getTitleLabel().setContentMode(ContentMode.HTML);
+          fancyNotification.getDescriptionLabel().setContentMode(ContentMode.HTML);
+          fancyNotification.addLayoutClickListener(notificationClickEvent -> Page.getCurrent().setLocation("https://github.com/alump/FancyLayouts"));
+          fancyNotifications.showNotification(fancyNotification);
+          */
 	  		}
 	  	}
   	}catch(Exception e){

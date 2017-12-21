@@ -27,6 +27,8 @@ public class FocWebSession implements Serializable {
 	private XMLViewKey        viewKeyToPrint         = null;
 	private FocDataDictionary dataDictionaly_ToPrint = null;
 	private boolean           exitAfterPrint         = false;
+	private boolean           focDataOwner_ToPrint   = false;
+	
 	private boolean           notificationEnabled    = true;
 	private ICentralPanel     initialContectForm     = null;
 	
@@ -90,6 +92,13 @@ public class FocWebSession implements Serializable {
   	this.exitAfterPrint          = exitAfterPrint;
   }
 
+  public void removePrintingData(){
+  	this.dataToPrint             = null;
+  	this.viewKeyToPrint          = null;
+  	this.dataDictionaly_ToPrint  = null;
+  	this.focDataOwner_ToPrint    = false;
+  }
+
 	public IFocData getDataToPrint() {
 		return dataToPrint;
 	}
@@ -143,5 +152,13 @@ public class FocWebSession implements Serializable {
 
 	public void setInitialContectForm(ICentralPanel initialContectForm) {
 		this.initialContectForm = initialContectForm;
+	}
+
+	public boolean isFocDataOwner_ToPrint() {
+		return focDataOwner_ToPrint;
+	}
+
+	public void setFocDataOwner_ToPrint(boolean focDataOwner_ToPrint) {
+		this.focDataOwner_ToPrint = focDataOwner_ToPrint;
 	}
 }
