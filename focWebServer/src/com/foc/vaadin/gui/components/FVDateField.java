@@ -1,6 +1,8 @@
 package com.foc.vaadin.gui.components;
 
+import java.io.IOException;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.xml.sax.Attributes;
 
@@ -13,12 +15,16 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.google.gwt.aria.client.Property;
+import com.vaadin.data.util.converter.Converter.ConversionException;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinResponse;
 import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.DateField;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.PopupDateField;
 
 @SuppressWarnings("serial")
-public class FVDateField extends DateField implements FocXMLGuiComponent {
+public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 	private String name = null;
   
 	private IFocData focData   = null;
@@ -32,6 +38,7 @@ public class FVDateField extends DateField implements FocXMLGuiComponent {
     
     this.setSizeUndefined();
     addStyleName("component-margin");
+//    setDateFormat("dd-MM-yyyy");
   }
 
   @Override
@@ -42,7 +49,35 @@ public class FVDateField extends DateField implements FocXMLGuiComponent {
     	delegate.dispose();
     	delegate = null;
     }
-  }  
+  }
+
+  @Override
+  protected Date handleUnparsableDateString(java.lang.String dateString) throws ConversionException {
+		// Try custom parsing
+  	String fields[] = null;
+  	if(dateString.contains("/")) {
+  		fields = dateString.split("/");
+  	}else if(dateString.contains("-")) {
+  		fields = dateString.split("-");
+  	}else if(dateString.contains(" ")) {
+  		fields = dateString.split(" ");
+  	}
+		
+		if(fields.length >= 3){
+			try{
+				int day = Integer.parseInt(fields[0]);
+				int month = Integer.parseInt(fields[1]) - 1;
+				int year = Integer.parseInt(fields[2]);
+				GregorianCalendar c = new GregorianCalendar(year, month, day);
+				return c.getTime();
+			}catch (NumberFormatException e){
+				throw new ConversionException("Not a number");
+			}
+		}
+
+		// Bad date
+		throw new ConversionException("Your date needs two slashes");
+	}
   
   public String getName() {
     return name;
