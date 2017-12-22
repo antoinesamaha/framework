@@ -17,7 +17,6 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
-import com.vaadin.ui.Button.ClickEvent;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public class FVButton extends Button implements FocXMLGuiComponent, Field {//Field implementation only to allow helpContext to work on our FVButtons
@@ -29,20 +28,33 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   	delegate = new FocXMLGuiComponentDelegate(this);
     setAttributes(attributes);
     addStyleName("component-margin");
+    disableDoubleClick();
   }
   
   public FVButton(String content) {
     super(content);
     delegate = new FocXMLGuiComponentDelegate(this);
     addStyleName("component-margin");
+    disableDoubleClick();
   }
 
   public FVButton(String string, ClickListener clickListener) {
   	super(string, clickListener);
   	delegate = new FocXMLGuiComponentDelegate(this);
   	addStyleName("component-margin");
+  	disableDoubleClick();
 	}
 
+  private void disableDoubleClick() {
+  	setDisableOnClick(true);
+  	addClickListener(new Button.ClickListener() {
+			@Override
+			public void buttonClick(ClickEvent event) {
+				setEnabled(true);
+			}
+		});
+  }
+  
   private void setUnitTestingRecordingListener(){
   	if(FocUnitRecorder.isAllowRecording()){
   		addClickListener(new ClickListener() {
