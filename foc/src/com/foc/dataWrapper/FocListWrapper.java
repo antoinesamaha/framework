@@ -43,6 +43,13 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 	        siteFieldID_1 = workflowDesc.getFieldID_Site_1();
 	        siteFieldID_2 = workflowDesc.getFieldID_Site_2();
 	      }
+	    } 
+	    
+	    if(siteFieldID_1 == FField.NO_FIELD_ID){
+	    	FField siteField = getFocList().getFocDesc().getFieldByName(FField.FNAME_SITE);
+	    	if(siteField != null) {
+	    		siteFieldID_1 = siteField.getID();
+	    	}
 	    }
     }
   }

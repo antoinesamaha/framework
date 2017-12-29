@@ -112,7 +112,7 @@ public class FocListGroupBy {
 					if(wasAlreadyAddedToDesc) focDesc.addField(newFld);
 					if(field instanceof FObjectField && formula.toUpperCase().length() > 8) {
 						selectionList = ((FObjectField)field).getSelectionList();
-						captionProperty = formula.toUpperCase().substring(8);
+						captionProperty = formula.substring(8);
 					}
 					field = newFld;
 				}else {

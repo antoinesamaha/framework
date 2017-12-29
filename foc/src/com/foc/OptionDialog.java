@@ -146,6 +146,14 @@ public abstract class OptionDialog {
 		return guiObject;
 	}
 
+	public Object getOptionDialog_Form() {
+		return optionDialog_Form;
+	}
+
+	public void setOptionDialog_Form(Object optionDialog_Form) {
+		this.optionDialog_Form = optionDialog_Form;
+	}
+	
 	private class Option {
 		String caption = null;
 		String name    = null;
@@ -183,13 +191,5 @@ public abstract class OptionDialog {
 		public void setGuiObject(Object guiObject) {
 			this.guiObject = guiObject;
 		}
-	}
-
-	public Object getOptionDialog_Form() {
-		return optionDialog_Form;
-	}
-
-	public void setOptionDialog_Form(Object optionDialog_Form) {
-		this.optionDialog_Form = optionDialog_Form;
 	}
 }
