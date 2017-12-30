@@ -1030,6 +1030,44 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
+	public void popupMessageForComponent(FocXMLGuiComponent comp) {
+		if(comp != null){
+			IFocData focData = comp.getFocData();
+			if(focData != null && focData instanceof FProperty){
+				FProperty prop = (FProperty) focData;
+				if(prop != null){
+					FField fld = prop.getFocField();
+
+					String caption = comp.getDelegate().getCaptionFromAttributes();
+					if(Utils.isStringEmpty(caption)){
+						caption = fld.getTitle();
+						if(Utils.isStringEmpty(caption)){
+							caption = fld.getName();
+						}
+					}
+					String title   = "Missing Data";
+					String message = "Please enter data for : "+caption;
+					if(isArabic()){
+						title   = "المعلومات ناقصة";
+						message = "يرج ادخال المعلومات الناقصة" + " : " + caption;
+					}
+					
+					OptionDialog dialog = new OptionDialog(title, message) {
+						@Override
+						public boolean executeOption(String optionName) {
+							return false;
+						}
+					};
+					dialog.addOption("OK", isArabic() ? "نعم" : "Ok");
+					if(Globals.getApp().isUnitTest()){
+						FocUnitDictionary.getInstance().getLogger().addInfo("Dialog popup: "+title+" - "+message);
+					}
+					dialog.popup();
+				}
+			}
+		}
+	}
+	
 	public boolean checkMandatoryGuiFieldsAreFilled(){
 		boolean error = false;
 		
@@ -1048,31 +1086,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 						if(fld != null && focObj != null && fld.isMandatory() && !focObj.isDeleted()){
 							boolean valid = focObj.isPropertyDataValid(fld, prop);
 							if(!valid){
-								String caption = comp.getDelegate().getCaptionFromAttributes();
-								if(Utils.isStringEmpty(caption)){
-									caption = fld.getTitle();
-									if(Utils.isStringEmpty(caption)){
-										caption = fld.getName();
-									}
-								}
-								String title   = "Missing Data";
-								String message = "Please enter data for : "+caption;
-								if(isArabic()){
-									title   = "المعلومات ناقصة";
-									message = "يرج ادخال المعلومات الناقصة" + " : " + caption;
-								}
-								
-								OptionDialog dialog = new OptionDialog(title, message) {
-									@Override
-									public boolean executeOption(String optionName) {
-										return false;
-									}
-								};
-								dialog.addOption("OK", isArabic() ? "نعم" : "Ok");
-								if(Globals.getApp().isUnitTest()){
-									FocUnitDictionary.getInstance().getLogger().addInfo("Dialog popup: "+title+" - "+message);
-								}
-								dialog.popup();
+								popupMessageForComponent(comp);
 								error = true;
 								break;
 							}
