@@ -85,7 +85,6 @@ import com.vaadin.ui.Tree.CollapseListener;
 import com.vaadin.ui.Tree.ExpandEvent;
 import com.vaadin.ui.Tree.ExpandListener;
 import com.vaadin.ui.TreeTable;
-import com.vaadin.ui.UI;
 
 public class TableTreeDelegate implements ITableTreeDelegate {
 
@@ -1818,6 +1817,10 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				Globals.logException(e);
 			}
 			refresh_CallContainerItemSetChangeEvent();
+
+			if(getWrapperLayout() != null){
+				getWrapperLayout().addNewEmptyItemIfInnerLayout();
+			}
 		}
 	}
 

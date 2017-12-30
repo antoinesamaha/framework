@@ -210,15 +210,12 @@ public class FocListGroupBy {
 		
 		@Override
 		public void propertyModified(FProperty property) {
-			Globals.logString("AGGLIST Listener 1");
 			if(property.isLastModifiedBySetSQLString()) {
-				Globals.logString("AGGLIST Listener 2");
 				ArrayList valuesArray = null;
 				String result = "";
 				StringTokenizer tokzer = new StringTokenizer(property.getString(), LISTAGG_SEPARATOR, false);
 				while(tokzer.hasMoreTokens()) {
 					String token = tokzer.nextToken();
-					Globals.logString("AGGLIST Listener BEfore Token:"+token);
 					if(!Utils.isStringEmpty(token)) {
 						token = token.trim();
 						try {
@@ -232,14 +229,12 @@ public class FocListGroupBy {
 							//----------------
 
 							if(!Utils.isStringEmpty(token)) {
-								Globals.logString("AGGLIST Listener Middle Token:"+token);
 								if(valuesArray == null) valuesArray = new ArrayList();
 								if(!valuesArray.contains(token)) {
 									valuesArray.add(token);
 									
 									if(!result.isEmpty()) result += ", ";
 									result += token;
-									Globals.logString("AGGLIST Listener After Token:"+token+" result="+result);
 								}											
 							}
 						}catch(Exception e) {
