@@ -62,7 +62,9 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 	
 	@Override
 	public ICentralPanel table_OpenItem_ShowForm(String tableName, ITableTree table, FocObject focObject, XMLViewKey xmlViewKey_Open, int viewContainer_Open) {
+		boolean focDataOwner = table_OpenItem_IsFocDataOwner(tableName, table, focObject);
 		ICentralPanel formLayout = XMLViewDictionary.getInstance().newCentralPanel(getParentNavigationWindow(), xmlViewKey_Open, focObject);
+		if(focDataOwner) formLayout.setFocDataOwner(focDataOwner);
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
