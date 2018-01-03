@@ -165,13 +165,13 @@ public class DBUtil implements IFocDataUtil {
 	}
 	
   //BAntoineS - AUTOINCREMENT
-  private static int getNextOrCurrentSequence(FocDesc focDesc, boolean next) throws FocDBException, SequenceDoesNotExistException, SQLException{
+  private static long getNextOrCurrentSequence(FocDesc focDesc, boolean next) throws FocDBException, SequenceDoesNotExistException, SQLException{
   	//This is oracle specific
   	if(focDesc.getProvider() != DBManager.PROVIDER_ORACLE){
   		throw new FocDBException("Illegal Call of an Oracle Specific fucntion");
   	}
   	
-  	int nextSequence = -1;
+  	long nextSequence = -1;
 		StatementWrapper stm = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
 		String function = next ? "nextval" : "currval";
 		String req = "SELECT "+focDesc.getSequenceName()+"."+function+" from dual";
@@ -180,7 +180,7 @@ public class DBUtil implements IFocDataUtil {
 			stm.execute(req);
 			ResultSet rs = stm.getResultSet();
 			if(rs != null && rs.next()){
-				nextSequence = rs.getInt(1);
+				nextSequence = rs.getLong(1);
 			}
 			if(rs != null) rs.close();
 			DBManagerServer.getInstance().unlockStatement(stm);
@@ -191,7 +191,7 @@ public class DBUtil implements IFocDataUtil {
 		return nextSequence;
   }
 
-  public static int getNextSequence(FocDesc focDesc) throws FocDBException, SequenceDoesNotExistException, SQLException{
+  public static long getNextSequence(FocDesc focDesc) throws FocDBException, SequenceDoesNotExistException, SQLException{
   	return getNextOrCurrentSequence(focDesc, true);
   }
 
@@ -208,7 +208,7 @@ public class DBUtil implements IFocDataUtil {
         if(!callFromInsertWithProviderSpecificTreatment){
         	Globals.logString("!!! Call used in Oracle, but will not work for MySQL!!!");
         }
-      	int ref = 0;
+      	long ref = 0;
       	try{
       		ref = getNextSequence(focDesc);
       		focObject.setReference_WithFocListRefHashMapAdjustment(ref);

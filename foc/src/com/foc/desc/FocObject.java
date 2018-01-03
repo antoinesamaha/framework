@@ -2403,7 +2403,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return referenceProperty;
   }
   
-  public void setReference_WithFocListRefHashMapAdjustment(int ref){
+  public void setReference_WithFocListRefHashMapAdjustment(long ref){
 		//BAntoine - We need to remove from the FocList realReference MAP the temp ref and put the real one.
 		FocList focList = null;
 		Object fatherSubject = getFatherSubject();

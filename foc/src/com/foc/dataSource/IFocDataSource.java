@@ -23,6 +23,7 @@ public interface IFocDataSource {
 	
 	public int           getProvider(String dbSouceKey);
 	
+	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
 	public boolean       command_ExecuteRequest(StringBuffer sqlRequest);
 	public boolean       command_AdaptDataModel_SingleTable(FocDesc focDesc);
 	public boolean       command_AdaptDataModel(boolean forceAlterTables, boolean schemaEmpty);

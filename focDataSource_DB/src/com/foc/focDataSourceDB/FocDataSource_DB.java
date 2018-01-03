@@ -1273,9 +1273,9 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 
 	@Override
-	public boolean command_ExecuteRequest(StringBuffer sqlRequest) {
+	public boolean command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest) {
 		boolean error = true;
-    StatementWrapper stmt = getDBManagerServer().lockStatement();
+    StatementWrapper stmt = getDBManagerServer().lockStatement(dbSourceKey);
     if (stmt != null) {
       try {
       	String req = SQLRequest.adapteRequestToDBProvider(sqlRequest);
@@ -1297,6 +1297,11 @@ public class FocDataSource_DB implements IFocDataSource {
       getDBManagerServer().unlockStatement(stmt);
     }
 		return error;
+	}
+	
+	@Override
+	public boolean command_ExecuteRequest(StringBuffer sqlRequest) {
+		return command_ExecuteRequest(null, sqlRequest);
 	}
 
 	public Application getApp() {
