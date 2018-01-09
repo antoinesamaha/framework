@@ -531,6 +531,8 @@ public class AdminWebModule extends FocWebModule {
 	          	ActiveUser activeUser = (ActiveUser) list.newEmptyItem();
 	          	activeUser.setUserCompany(company);
 	          	activeUser.setUser(user);
+	          	activeUser.setUserSite(site);
+	          	activeUser.setUserTitle(title);
 	          	
 	          	long lastHeartBeat = app.getLastHeartbeatTimestamp();
 	          	Date lastHeartBeatDate = new Date(lastHeartBeat);

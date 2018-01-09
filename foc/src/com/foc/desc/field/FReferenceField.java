@@ -26,7 +26,7 @@ import com.foc.property.FReference;
  */
 public class FReferenceField extends FField {  
   private NumberFormat format  = null;
-  public static final int LEN_REFERENCE = 10; 
+  public static final int LEN_REFERENCE = 11; 
   
   public FReferenceField(String name, String title) {
     super(name, title, FField.REF_FIELD_ID, false, LEN_REFERENCE, 0);

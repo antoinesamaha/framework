@@ -6,12 +6,12 @@ import org.xml.sax.Attributes;
 
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
-import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.web.unitTesting.FocUnitRecorder;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_Button;
 import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
@@ -23,9 +23,11 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   
   private Attributes                 attributes = null;
   private FocXMLGuiComponentDelegate delegate   = null;
+  private UnitTestingRecorder_Button recorder   = null; 
   
   public FVButton(Attributes attributes) {
   	delegate = new FocXMLGuiComponentDelegate(this);
+  	recorder = new UnitTestingRecorder_Button(this);
     setAttributes(attributes);
     addStyleName("component-margin");
     disableDoubleClick();
@@ -34,6 +36,7 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   public FVButton(String content) {
     super(content);
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_Button(this);
     addStyleName("component-margin");
     disableDoubleClick();
   }
@@ -41,6 +44,7 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   public FVButton(String string, ClickListener clickListener) {
   	super(string, clickListener);
   	delegate = new FocXMLGuiComponentDelegate(this);
+  	recorder = new UnitTestingRecorder_Button(this);
   	addStyleName("component-margin");
   	disableDoubleClick();
 	}
@@ -57,14 +61,7 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   
   private void setUnitTestingRecordingListener(){
   	if(FocUnitRecorder.isAllowRecording()){
-  		addClickListener(new ClickListener() {
-				@Override
-				public void buttonClick(ClickEvent event) {
-					if(getDelegate() != null && !Utils.isStringEmpty(getDelegate().getNameInMap())){
-						FocUnitRecorder.recordLine("cmd.button_Click(\""+getDelegate().getNameInMap()+"\")");
-					}
-				}
-			});
+  		UnitTestingRecorder_Button recorder = new UnitTestingRecorder_Button(this);
   	}
   }
   
@@ -127,6 +124,10 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     attributes = null;
     if(delegate != null){
     	delegate.dispose();

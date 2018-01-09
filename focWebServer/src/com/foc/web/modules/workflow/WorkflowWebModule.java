@@ -309,10 +309,11 @@ public class WorkflowWebModule extends FocWebModule {
   }
 
   public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuItem) {
-    FocMenuItem mainMenu = menuTree.pushRootMenu("Workflow", "Workflow");
+  	FocMenuItem companyMenu  = menuTree.pushRootMenu("MNU_COMPANY", "Company structure");
+    FocMenuItem workflowMenu = menuTree.pushRootMenu("MNU_WORKFLOW", "Workflow");
     FocMenuItem menuItem = null;    
     
-    menuItem = mainMenu.pushMenu("COMPANY_TABLE", "Company");
+    menuItem = companyMenu.pushMenu("COMPANY_TABLE", "Company");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -321,7 +322,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
     
-    menuItem = mainMenu.pushMenu("SITE_TABLE", "Site");
+    menuItem = companyMenu.pushMenu("SITE_TABLE", "Site");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -333,7 +334,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("WF_TITLE_TABLE", "Title");
+    menuItem = workflowMenu.pushMenu("WF_TITLE_TABLE", "Title");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -342,7 +343,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("WF_MAP_TABLE", "Workflow Sequence Map");
+    menuItem = workflowMenu.pushMenu("WF_MAP_TABLE", "Workflow Sequence Map");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
          INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -351,7 +352,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("WF_STAGE_TABLE", "Workflow Stage");
+    menuItem = workflowMenu.pushMenu("WF_STAGE_TABLE", "Workflow Stage");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
          INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -360,7 +361,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("WF_TRANSACTION_CONFIG_TABLE", "Transaction Config");
+    menuItem = workflowMenu.pushMenu("WF_TRANSACTION_CONFIG_TABLE", "Transaction Config");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
          INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
@@ -369,7 +370,7 @@ public class WorkflowWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("WF_RIGHT_LEVEL_TABLE", "Right Level");
+    menuItem = workflowMenu.pushMenu("WF_RIGHT_LEVEL_TABLE", "Right Level");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
          INavigationWindow mainWindow = (INavigationWindow) navigationWindow;

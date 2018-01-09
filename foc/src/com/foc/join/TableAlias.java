@@ -15,6 +15,7 @@ public class TableAlias {
   private FocDesc         focDesc   = null;
   private Join            join      = null;
   private ArrayList<Join> joinArray = null;
+  private int             order     = 0;
 
   public TableAlias(String alias, FocDesc desc){
     this.alias = alias;
@@ -64,4 +65,12 @@ public class TableAlias {
   public Join getJoin(int i) {
     return joinArray.get(i);
   }
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
 }

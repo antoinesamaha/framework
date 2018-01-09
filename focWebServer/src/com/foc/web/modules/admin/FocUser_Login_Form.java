@@ -97,7 +97,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
 		  FocUser user = new FocUser(constr);
 		  user.setDbResident(false);
 		
-		  if(ConfigInfo.isForDevelopment() && Globals.getApp().getUser() != null){
+		  if(ConfigInfo.isDevMode() /*&& Globals.getApp().getUser() != null*/){
 		    user.setName(ConfigInfo.getUsername());
 		    String password = ConfigInfo.getPassword();
 		    if(password != null) user.setPassword(password);

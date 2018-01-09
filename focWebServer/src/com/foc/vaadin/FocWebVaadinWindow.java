@@ -381,6 +381,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		return mobileOptionsButton;
 	}
 	
+	protected void executeAutomatedTesting() {
+		
+	}
+	
   public void fillMenuBar_AfterLogin(){
   	if(!isMenuBarFilled()){
   		setMenuBarFilled(true);
@@ -400,7 +404,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				});
   		}
-  		
   		
   		home = newButtonInHeaderBar("", true);//Home
 			home.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_HOME));
@@ -435,6 +438,26 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				});
 			}
 			
+			// Auto-Testing Header Icon
+			if (ConfigInfo.isUnitAllowed()) {
+				NativeButton autoTestingIcon = newButtonInHeaderBar("", true);
+				buttonArray_Add(autoTestingIcon);
+				autoTestingIcon.setIcon(FontAwesome.EXCLAMATION_TRIANGLE);
+				autoTestingIcon.addClickListener(new Button.ClickListener() {
+					public void buttonClick(ClickEvent event) {
+						try {
+							executeAutomatedTesting();
+						} catch (Exception e) {
+							Globals.logException(e);
+						} finally {
+							if (FocUnitDictionary.getInstance() != null) {
+								FocUnitDictionary.getInstance().popupLogger(FocWebVaadinWindow.this);
+							}
+						}
+					}
+				});
+			}
+  	
 			addButtonsInMenuBar();
 			
 			if(!FocWebApplication.getInstanceForThread().isMobile()){
@@ -676,7 +699,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	}
   	dispose_MenuTree();
   }
-
+  
   public void setCompaneyName(String title){
   	if(companyNameLabel != null){
 	  	companyNameLabel.setValue(title);

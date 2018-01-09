@@ -862,6 +862,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return visiblePropertiesArray;
 	}
 	
+	public int getVisibleColumnCount(){
+		int size = 0;
+		if(getVisiblePropertiesArrayList() != null) size = getVisiblePropertiesArrayList().size();
+		return size;
+	}
+	
 	public FVTableColumn getVisibleColumnByIndex(int index){
 		FVTableColumn result = null;
 		

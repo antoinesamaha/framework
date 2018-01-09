@@ -37,16 +37,20 @@ public class SQLSelectJoinRequest extends SQLSelect {
     TableAlias rootAlias = requestDesc.getRootTableAlias();
     request.append(addTableNameSurroundings(rootAlias.getFocDesc().getStorageName_ForSQL())+" "+rootAlias.getAlias());
     
-    Iterator iter = requestDesc.newAliasIterator();
-    while(iter != null && iter.hasNext()){
-      TableAlias alias = (TableAlias) iter.next();
-      if(alias != null && rootAlias != alias){
-      	for(int i=0; i<alias.getJoinCount(); i++){
-	      	Join join = alias.getJoin(i);
-	      	request.append(" ");
-	      	request.append(join.getSQLString());
-      	}
-      }
+    Collection<TableAlias> collec = requestDesc.newAliasArray();
+    if(collec != null) {
+	    for(TableAlias alias : collec) {
+	//    Iterator iter = requestDesc.newAliasIterator();
+	//    while(iter != null && iter.hasNext()){
+	//      TableAlias alias = (TableAlias) iter.next();
+	      if(alias != null && rootAlias != alias){
+	      	for(int i=0; i<alias.getJoinCount(); i++){
+		      	Join join = alias.getJoin(i);
+		      	request.append(" ");
+		      	request.append(join.getSQLString());
+	      	}
+	      }
+	    }
     }
   }
   

@@ -4,6 +4,9 @@
 package com.foc.join;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -101,6 +104,26 @@ public class FocRequestDesc {
 
   public Iterator newAliasIterator(){
     return aliasMap.values().iterator();
+  }
+  
+  public Collection<TableAlias> newAliasArray(){
+  	ArrayList<TableAlias> array = new ArrayList<TableAlias>(); 
+    Iterator iter = newAliasIterator();
+    while(iter != null && iter.hasNext()){
+      TableAlias alias = (TableAlias) iter.next();
+      if(alias != null){
+      	array.add(alias);
+      }
+    }
+    
+  	Collections.sort(array, new Comparator<TableAlias>() {
+			@Override
+			public int compare(TableAlias ta1, TableAlias ta2) {
+				return ta1.getOrder() - ta2.getOrder();
+			}
+		});
+
+    return array;
   }
   
   public void fillFocDesc(FocDesc focDesc){

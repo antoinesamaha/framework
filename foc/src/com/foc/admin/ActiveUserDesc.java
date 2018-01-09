@@ -11,6 +11,8 @@
 package com.foc.admin;
 
 import com.foc.business.company.CompanyDesc;
+import com.foc.business.workflow.WFSiteDesc;
+import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FObjectField;
@@ -42,6 +44,14 @@ public class ActiveUserDesc extends FocDesc{
     
     FDateTimeField dtf = new FDateTimeField("LAST_HEART_BEAT", "Last Heart Beat", FLD_LAST_HEART_BEAT, false);
     addField(dtf);
+    
+  	FObjectField objFld = new FObjectField("SITE", "Site", FLD_SITE, WFSiteDesc.getInstance());
+  	objFld.setWithList(false);
+  	addField(objFld);
+
+  	objFld = new FObjectField("TITLE", "Title", FLD_TITLE, WFTitleDesc.getInstance());
+  	objFld.setWithList(false);
+  	addField(objFld);
   }
   
   public FocList newFocList(){

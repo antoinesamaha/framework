@@ -13,6 +13,8 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.validator.FVStringValidator;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_Button;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_TextField;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
@@ -26,7 +28,8 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   
   private IFocData   focData    = null;
   private Attributes attributes = null;
-  private FocXMLGuiComponentDelegate delegate = null;
+  private FocXMLGuiComponentDelegate delegate    = null;
+  private UnitTestingRecorder_TextField recorder = null;
   
   private boolean callFocus             = true;
   private long    lastTimeFocusListener = 0;
@@ -34,6 +37,7 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   
   public FVTextField(FProperty property, Attributes attributes) {
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_TextField(this);
   	setFocData(property);
   	setAttributes(attributes);
   	if(property != null && property.getFocField() instanceof FStringField){
@@ -54,6 +58,7 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   public FVTextField() {
     super();
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_TextField(this);
     addStyleName("component-margin");
     selectAllContentListener();
   }
@@ -61,11 +66,16 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   public FVTextField(String content) {
     super(content);
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_TextField(this);
     addStyleName("component-margin");
   }
 
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     focData   = null;
     attributes = null;
 		if(delegate != null){

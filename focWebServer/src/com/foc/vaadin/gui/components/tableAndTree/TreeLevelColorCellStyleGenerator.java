@@ -46,7 +46,7 @@ public class TreeLevelColorCellStyleGenerator implements Table.CellStyleGenerato
 		String style = null;
 
 		try{
-			int ref = ((Long)itemId).intValue();
+			long ref = ((Long)itemId).longValue();
 			FTree tree = (FTree) treeWrapper.getFocData();
 			FNode node = tree.findNode(ref);
 			style = getStyle(node);

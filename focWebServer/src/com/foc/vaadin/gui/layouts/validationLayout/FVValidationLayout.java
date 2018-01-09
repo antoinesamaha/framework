@@ -56,6 +56,7 @@ import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.ASCII;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
@@ -66,6 +67,7 @@ import com.foc.vaadin.gui.components.FVCheckBox;
 import com.foc.vaadin.gui.components.FVLabel;
 import com.foc.vaadin.gui.components.menuBar.FVMenuBar;
 import com.foc.vaadin.gui.components.menuBar.FVMenuBarCommand;
+import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.link.FVLinkLayout;
 import com.foc.vaadin.gui.mswordGenerator.FocXmlMSWordParser;
 import com.foc.vaadin.gui.pdfGenerator.FocXmlPDFParser;
@@ -78,6 +80,7 @@ import com.foc.web.modules.business.PrnLayout_Table;
 import com.foc.web.modules.notifier.DocMsg_Form;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.event.MouseEvents;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.event.ShortcutAction.ModifierKey;
@@ -1678,7 +1681,14 @@ public class FVValidationLayout extends HorizontalLayout {
   	return deleteButton;
 	}
   
+  public void deleteButtonClickAction(){
+  	deleteButtonClickListener();
+  }
+  
   private void deleteButtonClickListener(){
+		if(FocUnitRecorder.isRecording()) {
+			FocUnitRecorder.recordLine("cmd.button_ClickDelete();");
+		}
   	FocObject focObj = getFocObject();
   	if(focObj != null){
   		StringBuffer message = focObj.checkDeletionWithMessage();
@@ -1974,6 +1984,9 @@ public class FVValidationLayout extends HorizontalLayout {
 				
 				@Override
 				public void buttonClick(ClickEvent event) {
+					if(FocUnitRecorder.isRecording()) {
+						FocUnitRecorder.recordLine("cmd.button_ClickApply();");
+					}
 					applyButtonClickListener();
 				}
 			});
@@ -2099,12 +2112,29 @@ public class FVValidationLayout extends HorizontalLayout {
 				
 				@Override
 				public void buttonClick(ClickEvent event) {
+					if(FocUnitRecorder.isRecording()) {
+						String innerLayoutName = getInnerLayoutName();	
+						if(!Utils.isStringEmpty(innerLayoutName)) {
+							FocUnitRecorder.recordLine("cmd.button_ClickDiscard("+innerLayoutName+");");
+						}else {						
+							FocUnitRecorder.recordLine("cmd.button_ClickDiscard();");
+						}
+					}
 					discardButtonClickListener();					
 				}
 			});
   	}    
 
   	return valo_DiscardButton;
+  }
+  
+  protected String getInnerLayoutName() {
+		String innerLayoutName = null;
+		FVTableWrapperLayout tableWrapperLayout = FVValidationLayout.this.findAncestor(FVTableWrapperLayout.class);
+		if(tableWrapperLayout != null && tableWrapperLayout.getDelegate() != null && !Utils.isStringEmpty(tableWrapperLayout.getDelegate().getNameInMap())) {
+			innerLayoutName = tableWrapperLayout.getDelegate().getNameInMap();
+		}
+		return innerLayoutName;
   }
   
   public Button valo_GetSaveButton(boolean createIfNeeded){
@@ -2121,6 +2151,14 @@ public class FVValidationLayout extends HorizontalLayout {
 				
 				@Override
 				public void buttonClick(ClickEvent event) {
+					if(FocUnitRecorder.isRecording()) {
+						String innerLayoutName = getInnerLayoutName();
+						if(!Utils.isStringEmpty(innerLayoutName)) {
+							FocUnitRecorder.recordLine("cmd.button_ClickSave("+innerLayoutName+");");
+						}else {
+							FocUnitRecorder.recordLine("cmd.button_ClickSave();");
+						}
+					}
 					saveButtonClickListener();					
 				}
 			});

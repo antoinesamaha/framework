@@ -41,6 +41,14 @@ public class Company extends FocObject {
 		return prop;
   }
 
+  public void copyNameFromAdressBook() {
+  	if(getAdrBookParty() != null) setName(getAdrBookParty().getCode());
+  }
+  
+  public void copyDescriptionFromAdressBook() {
+  	if(getAdrBookParty() != null) setDescription(getAdrBookParty().getName());
+  }
+  
 	public String getName(){
   	return getPropertyString(FField.FLD_NAME);
   }

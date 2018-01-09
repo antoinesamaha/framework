@@ -57,6 +57,7 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Embedded;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Table;
@@ -420,6 +421,34 @@ public class FocUnitTestingCommand {
     }
   }
 
+  /**
+   * Simulates a click on the "Delete" button in the validation layout.
+   * 
+   */
+  protected void button_ClickDelete(String tableName) {
+   	boolean nodeCreated = !getLogger().openCommand("Delete");
+   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+   	
+     if (navigationLayout != null) {
+       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
+
+       if (validationLayout != null) {
+         Embedded delete = validationLayout.valo_GetDeleteEmbedded(false);      		
+         if (delete != null) {
+        	 validationLayout.deleteButtonClickAction();
+         } else {
+           getLogger().addFailure("Delete button not found.");
+         }
+       } else {
+         getLogger().addFailure("Validation layout not found");
+       }
+     } else {
+       getLogger().addFailure("Navigation layout not found");
+     }
+     
+     if(nodeCreated) getLogger().closeNode();
+  }
+  
   /**
    * Simulates a click on the "Print" button in the validation layout.
    * 

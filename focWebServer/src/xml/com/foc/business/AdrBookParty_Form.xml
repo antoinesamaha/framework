@@ -1,9 +1,9 @@
 <VerticalLayout spacing="true" captionMargin="0" margin="true" width="90%">
     <ValidationSettings formTitle="Address Book Company" withApply="true" withAttach="true" withPrint="true" />
 
-		<Label value="Company Info" style="H1"/>    
+	<Label value="Company Info" style="H1"/>    
 
-		<VerticalLayout captionMargin="0" spacing="false">    
+	<VerticalLayout captionMargin="0" spacing="false">    
       <HorizontalLayout spacing="true" width="-1px" captionMargin="0" >
         <GuiField name="CODE" caption="Code" width="150px" height="-1px"  />
         <GuiField name="NAME" caption="Name" width="300px" height="-1px"  />

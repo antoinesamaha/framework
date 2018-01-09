@@ -1,10 +1,12 @@
 <VerticalLayout width="100%"  >
     <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
     <Label value="Current Time:$P{SYSTEM_DATE(dd/MM/yyyy HH:mm:ss)}"/>
-    <GuiTable title="User Groups" name="ACTIVE_USER_TABLE" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="fasle" >
+    <GuiTable title="User Groups" name="ACTIVE_USER_TABLE" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="fasle" sortingExpression="LAST_HEART_BEAT">
         <OpenForm containerWindow="same window" />
         <TableColumn name="USER.NAME" caption="User" />
         <TableColumn name="COMPANY.NAME" caption="Company" />
+        <TableColumn name="SITE>NAME" caption="Site" />
+				<TableColumn name="TITLE>NAME" caption="Title" />
         <TableColumn name="LAST_HEART_BEAT" caption="Last Heart Beat" />
     </GuiTable>
 </VerticalLayout>

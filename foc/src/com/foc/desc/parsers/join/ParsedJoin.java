@@ -104,6 +104,7 @@ public class ParsedJoin implements FXMLDesc {
 		if(tableAlias == null){
 			FocDesc focDesc = getThisFocDesc();
 			tableAlias = new TableAlias(getAlias(), focDesc);
+			tableAlias.setOrder(getOrder());
 			
 			if(!Utils.isStringEmpty(otherAlias) && !Utils.isStringEmpty(otherFieldName) && !Utils.isStringEmpty(thisFieldName)){
 				ParsedJoin otherJoin = getFocDesc().getJoin(otherAlias);

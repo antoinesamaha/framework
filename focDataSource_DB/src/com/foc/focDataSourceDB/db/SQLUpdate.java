@@ -79,7 +79,7 @@ public class SQLUpdate extends SQLRequest {
 		              } else {
 		              	request = new StringBuffer("");
 	                  request.append("UPDATE ");
-	                	if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+	                	if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
 	                		request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
 	                	}else{
 	                		request.append(focDesc.getStorageName_ForSQL());	              	

@@ -182,8 +182,8 @@ public class FVViewSelector_MenuBar extends MenuBar {
 				
 				@Override
 				public void menuSelected(MenuItem selectedItem) {
-					if(getCentralPanel().getXMLView().isSystemView() && !ConfigInfo.isForDevelopment()){
-						Globals.showNotification("Cannot modify system view.", "You can modify a system view.", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
+					if(getCentralPanel().getXMLView().isSystemView() && !ConfigInfo.isDevMode()){
+						Globals.showNotification("Cannot modify system views", "You cannot modify a system view.", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
 					}else{
 						if(centralPanel != null){
 							if(Globals.isValo()){

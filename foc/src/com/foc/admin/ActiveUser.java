@@ -13,6 +13,8 @@ package com.foc.admin;
 import java.sql.Date;
 
 import com.foc.business.company.Company;
+import com.foc.business.workflow.WFSite;
+import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -49,6 +51,22 @@ public class ActiveUser extends FocObject{
   
   public void setUserCompany(Company company){
   	setPropertyObject(ActiveUserDesc.FLD_COMPANY, company);
+  }
+  
+  public WFSite getUserSite(){
+    return (WFSite) getPropertyObject(ActiveUserDesc.FLD_SITE);
+  }
+  
+  public void setUserSite(WFSite site){
+  	setPropertyObject(ActiveUserDesc.FLD_SITE, site);
+  }
+  
+  public WFTitle getUserTitle(){
+    return (WFTitle) getPropertyObject(ActiveUserDesc.FLD_TITLE);
+  }
+  
+  public void setUserTitle(WFTitle site){
+  	setPropertyObject(ActiveUserDesc.FLD_TITLE, site);
   }
   
   public Date getLastHeartBeat(){

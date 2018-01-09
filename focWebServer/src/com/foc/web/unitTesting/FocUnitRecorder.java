@@ -16,6 +16,10 @@ public class FocUnitRecorder {
 		buffer.append("\n");
 	}
 	
+	public static boolean isRecording(){
+		return FocUnitRecorder.getInstance(false) != null;
+	}
+	
 	public static void startRecording(){
 		FocUnitRecorder.getInstance(true);
 	}
