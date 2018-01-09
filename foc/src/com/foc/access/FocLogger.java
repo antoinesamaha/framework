@@ -8,6 +8,8 @@ public class FocLogger {
   private FocLogLineTree logLineTree = null;
   private FocLogLine     currentNode = null;
   private boolean        hasFailure  = false;
+  
+  private boolean        enabled     = true;
 	
   public FocLogger(){
     logLineList = new FocLogLineList();
@@ -56,8 +58,10 @@ public class FocLogger {
   	if(foundTest == null){
   		error = false;
 		  FocLogLine line = addTest(message);
-		  line.setFatherObject(currentNode);
-		  currentNode = line;
+		  if(line != null) {
+			  line.setFatherObject(currentNode);
+			  currentNode = line;
+		  }
   	}
   	return error;
   }
@@ -68,8 +72,10 @@ public class FocLogger {
   	if(foundCmd == null){
   		error = false;
 		  FocLogLine line = addCommand(message);
-		  line.setFatherObject(currentNode);
-		  currentNode = line;
+		  if(line != null) {
+			  line.setFatherObject(currentNode);
+			  currentNode = line;
+		  }
   	}
   	return error;
   }
@@ -78,9 +84,11 @@ public class FocLogger {
 	  //
 	  //use the current node the current FocLogLine 
 	  //addLogLine();
-	  FocLogLine line = addInfo(message);
-	  line.setFatherObject(currentNode);
-	  currentNode = line;
+  	if(isEnabled()) {
+		  FocLogLine line = addInfo(message);
+		  line.setFatherObject(currentNode);
+		  currentNode = line;
+  	}
   }
 
   public void closeNode(){
@@ -88,50 +96,70 @@ public class FocLogger {
   }
   
   public void closeNode(String message){
-    if(message != null && !message.isEmpty()){
-      addInfo(message);
-    }
-    if(currentNode != null){
-    	//currentNode.setClosed(true);
-    }
-    currentNode = (FocLogLine) (currentNode != null ? currentNode.getFatherObject() : null);
+  	if(isEnabled()) {
+	    if(message != null && !message.isEmpty()){
+	      addInfo(message);
+	    }
+	    if(currentNode != null){
+	    	//currentNode.setClosed(true);
+	    }
+	    currentNode = (FocLogLine) (currentNode != null ? currentNode.getFatherObject() : null);
+  	}
   }
   
   public FocLogLine addTest(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_TEST, message);
-    line.setSuccessful(true);
-    return line;
+  	FocLogLine line = null;
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_TEST, message);
+	    line.setSuccessful(true);
+  	}
+	  return line;
   }
   
   public FocLogLine addCommand(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_COMMAND, message);
-    line.setSuccessful(true);
+  	FocLogLine line = null;
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_COMMAND, message);
+	    line.setSuccessful(true);
+  	}
     return line;
   }
   
   public FocLogLine addInfo(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_INFO, message);
-    line.setSuccessful(true);
+  	FocLogLine line = null;
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_INFO, message);
+	    line.setSuccessful(true);
+  	}
     return line;
   }
 
   public FocLogLine addError(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_ERROR, message);
-    line.setSuccessful(false);
-    setHasFailure(true);
+  	FocLogLine line = null; 
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_ERROR, message);
+	    line.setSuccessful(false);
+	    setHasFailure(true);
+  	}
     return line;
   }
   
   public FocLogLine addFailure(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_FAILURE, message);
-    line.setSuccessful(false);
-    setHasFailure(true);
+  	FocLogLine line = null;
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_FAILURE, message);
+	    line.setSuccessful(false);
+	    setHasFailure(true);
+  	}
     return line;
   }
 
   public FocLogLine addWarning(String message) {
-    FocLogLine line = addLogLine(FocLogLine.TYPE_WARNING, message);
-    line.setSuccessful(true);
+  	FocLogLine line = null;
+  	if(isEnabled()) {
+	    line = addLogLine(FocLogLine.TYPE_WARNING, message);
+	    line.setSuccessful(true);
+  	}
     return line;
   }
     
@@ -152,8 +180,8 @@ public class FocLogger {
     for(int i=0; i<getLogLineList().size(); i++){
       FocLogLine logLine = (FocLogLine) getLogLineList().getFocObject(i);
       Globals.logString(logLine.getLogLineString());
-      }
     }
+  }
   
   public static FocLogger getInstance(boolean createIfNeeded) {
     FocLogger logger = null;
@@ -173,6 +201,14 @@ public class FocLogger {
 
 	public void setHasFailure(boolean hasFailure) {
 		this.hasFailure = hasFailure;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
 	}
 }
   

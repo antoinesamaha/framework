@@ -335,12 +335,35 @@ public class FocWebServer implements Serializable {
 	}
 
 	public void removeApplicationsNotRunning(){
-		for(int i=getApplicationCount()-1; i>=0; i--){
-			FocWebApplication app = getApplicationAt(i);
-			if(app.isClosing()){
-				app.dispose();
-				applicationArrayList.remove(app);
+		try {
+			ArrayList<FocWebSession> sessionArray = new ArrayList<FocWebSession>();
+			for(int i=getApplicationCount()-1; i>=0; i--){
+				FocWebApplication app = getApplicationAt(i);
+				if(app.isClosing()){
+					sessionArray.add(app.getFocWebSession());
+					app.dispose();
+					applicationArrayList.remove(app);
+				}
 			}
+	
+			//Check if any of the sessions for which UI is disposed is still used.
+			for(int i=getApplicationCount()-1; i>=0; i--){
+				FocWebApplication app = getApplicationAt(i);
+				if(!app.isClosing()){
+					FocWebSession webSession = app.getFocWebSession();
+					if(sessionArray.contains(webSession)){
+						sessionArray.remove(webSession);
+					}
+				}
+			}
+			
+			//Here all FocWebSession in sessionArray are unused
+			for(FocWebSession sess : sessionArray) {
+				sess.dispose();
+			}
+			sessionArray.clear();
+		}catch(Exception e) {
+			Globals.logException(e);
 		}
 	}
 	

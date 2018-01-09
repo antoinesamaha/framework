@@ -45,6 +45,8 @@ import com.vaadin.ui.Window;
 //@Push(PushMode.MANUAL)
 public abstract class FocWebApplication extends UI {
 
+	public static final String ATT_WEB_SESSION = "FOC_WEB_SESSION";
+	
 	private HttpSession httpSession = null;
 	private boolean isMobile = false;
 	private FocCentralPanel navigationWindow = null;
@@ -338,13 +340,20 @@ public abstract class FocWebApplication extends UI {
 	}
 	
 	public void dispose(){
-		if(validationLayoutBackup != null){
-			validationLayoutBackup.dispose();
-			validationLayoutBackup = null;
+		try {
+			if(validationLayoutBackup != null){
+				validationLayoutBackup.dispose();
+				validationLayoutBackup = null;
+			}
+			if(navigationWindow != null) {
+				navigationWindow.dispose();
+				navigationWindow = null;
+			}
+			httpSession = null;
+			footerLayout = null;
+		}catch(Exception e) {
+			Globals.logExceptionWithoutPopup(e);
 		}
-		navigationWindow = null;
-		httpSession = null;
-		footerLayout = null;
 		//MultiTab
 		/*
 	  if(focWebSession != null){
@@ -393,10 +402,10 @@ public abstract class FocWebApplication extends UI {
   	FocWebSession focWebSession = null;
 
   	if(getHttpSession() != null){
-  		focWebSession = (FocWebSession) getHttpSession().getAttribute("FOC_WEB_SESSION");
+  		focWebSession = (FocWebSession) getHttpSession().getAttribute(ATT_WEB_SESSION);
   	}else{
   		VaadinSession vaadinSession = getSession();
-    	focWebSession = vaadinSession != null ? (FocWebSession) vaadinSession.getAttribute("FOC_WEB_SESSION") : null;
+    	focWebSession = vaadinSession != null ? (FocWebSession) vaadinSession.getAttribute(ATT_WEB_SESSION) : null;
   	}
     return focWebSession;
   }
@@ -405,19 +414,19 @@ public abstract class FocWebApplication extends UI {
   	//MultiTab  	
   	VaadinSession vaadinSession = getSession();
   	if(vaadinSession != null){
-  		vaadinSession.setAttribute("FOC_WEB_SESSION", focSession);
+  		vaadinSession.setAttribute(ATT_WEB_SESSION, focSession);
 //  		WrappedHttpSession wSession = (WrappedHttpSession) vaadinSession.getSession();
 //  		setHttpSession(wSession.getHttpSession());
 //  		setFocWebSession(getHttpSession(), focSession);
   	}else if(getHttpSession() != null){
-  		getHttpSession().setAttribute("FOC_WEB_SESSION", focSession);
+  		getHttpSession().setAttribute(ATT_WEB_SESSION, focSession);
   	}
   }
   
   public void setFocWebSession(HttpSession httpSession, FocWebSession focSession) {
   	setHttpSession(httpSession);
   	if(httpSession != null){
-  		httpSession.setAttribute("FOC_WEB_SESSION", focSession);	
+  		httpSession.setAttribute(ATT_WEB_SESSION, focSession);	
   	}
   }
 
