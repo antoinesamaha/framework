@@ -3478,8 +3478,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     FField fld = desc.getFieldByID(FField.FLD_CODE);
     if(fld != null && fld.isDBResident()){
 //    	StringBuffer buff = new StringBuffer(fld.getName()+" = \""+code_getCode()+"\"");
+    	int filterType = SQLFilter.FILTER_ON_KEY;
+    	WFTransactionConfig transConfig = workflow_getTransactionConfig();
+    	if(transConfig != null && !transConfig.isCodeBySITE()) filterType = SQLFilter.FILTER_ON_KEY_EXCLUDE_SITE;
+    	
     	StringBuffer buff = new StringBuffer();
-    	SQLFilter filter = new SQLFilter(this, SQLFilter.FILTER_ON_KEY);
+    	SQLFilter filter = new SQLFilter(this, filterType);
     	filter.setOwnerOfTemplate(false);
     	filter.addWhereToRequest_WithoutWhere(buff, getThisFocDesc());
     	filter.dispose();

@@ -10,12 +10,16 @@ import java.util.Iterator;
 import com.foc.Globals;
 import com.foc.admin.UserSession;
 import com.foc.business.company.CompanyDesc;
+import com.foc.business.workflow.WFSite;
+import com.foc.business.workflow.WFSiteDesc;
+import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.WorkflowDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
+import com.foc.property.FObject;
 import com.foc.property.FProperty;
 
 /**
@@ -66,12 +70,13 @@ public class SQLFilter {
   */
   //ETOADD  
 
-  public static final int FILTER_ON_NOTHING    = 0;
-  public static final int FILTER_ON_IDENTIFIER = 1;
-  public static final int FILTER_ON_KEY        = 2;
-  public static final int FILTER_ON_ALL        = 3;
-  public static final int FILTER_ON_SELECTED   = 4;
-
+  public static final int FILTER_ON_NOTHING          = 0;
+  public static final int FILTER_ON_IDENTIFIER       = 1;
+  public static final int FILTER_ON_KEY              = 2;
+  public static final int FILTER_ON_ALL              = 3;
+  public static final int FILTER_ON_SELECTED         = 4;
+  public static final int FILTER_ON_KEY_EXCLUDE_SITE = 5;
+  
   public SQLFilter(FocObject focObjTemplate, int filterFields) {
     this.focObjTemplate = focObjTemplate;
     this.filterFields = filterFields;
@@ -242,7 +247,8 @@ public class SQLFilter {
         }
 
         // If the identifier is not added we work on the key fields
-        if (filterFields == FILTER_ON_KEY) {
+        if (filterFields == FILTER_ON_KEY || filterFields == FILTER_ON_KEY_EXCLUDE_SITE) {
+        	boolean excludeSite = filterFields == FILTER_ON_KEY_EXCLUDE_SITE;
           FocFieldEnum enumer = new FocFieldEnum(requestFocDesc, focObjTemplate, FocFieldEnum.CAT_KEY, FocFieldEnum.LEVEL_DB);
           while (enumer.hasNext()) {
             enumer.next();
@@ -250,10 +256,24 @@ public class SQLFilter {
             if(path != null){
               FProperty prop = enumer.getProperty();
               if(prop != null){
-              	boolean errorAdding = addFieldToWhere(requestFocDesc.getProvider(), requestBuffer, enumer.getFieldCompleteName(requestFocDesc), prop.getSqlString(), isFirst, withWhere);
-              	//boolean errorAdding = addFieldToWhere(sql, focObj, enumer.getFieldCompleteName(sql.getFocDesc()), focField.getID(), isFirst);
-              	isFirst = isFirst && errorAdding;
-              	atLeastOneFieldAdded = atLeastOneFieldAdded || !errorAdding;
+              	boolean excludeThisFieldInWhere = false;
+              	
+          	    if(excludeSite && requestFocDesc instanceof IWorkflowDesc){
+          	      WorkflowDesc workflowDesc = ((IWorkflowDesc) requestFocDesc).iWorkflow_getWorkflowDesc();
+          	      if(workflowDesc != null){
+          	        int siteFieldID_1 = workflowDesc.getFieldID_Site_1();
+          	        int siteFieldID_2 = workflowDesc.getFieldID_Site_2();
+          	        excludeThisFieldInWhere = siteFieldID_1 != path.get(0);
+          	        excludeThisFieldInWhere = excludeThisFieldInWhere || siteFieldID_2 == path.get(0);
+          	      }
+          	    } 
+              	
+              	if(!excludeThisFieldInWhere) {
+	              	boolean errorAdding = addFieldToWhere(requestFocDesc.getProvider(), requestBuffer, enumer.getFieldCompleteName(requestFocDesc), prop.getSqlString(), isFirst, withWhere);
+	              	//boolean errorAdding = addFieldToWhere(sql, focObj, enumer.getFieldCompleteName(sql.getFocDesc()), focField.getID(), isFirst);
+	              	isFirst = isFirst && errorAdding;
+	              	atLeastOneFieldAdded = atLeastOneFieldAdded || !errorAdding;
+              	}
               }
             }
             

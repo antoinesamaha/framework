@@ -519,6 +519,10 @@ public class AdminWebModule extends FocWebModule {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
         INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
         
+        if(FocWebServer.getInstance() != null) {
+        	FocWebServer.getInstance().removeApplicationsNotRunning();
+        }
+        
         FocList list = new FocList(new FocLinkSimple(ActiveUserDesc.getInstance()));
         for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
         	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);

@@ -16,14 +16,12 @@ import com.foc.db.DBManager;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.layouts.validationLayout.FVHelpLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
-import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
 import com.foc.web.unitTesting.FocUnitDictionary;
 import com.foc.webservice.FocWebService;
 import com.vaadin.annotations.PreserveOnRefresh;
-import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.DefaultErrorHandler;
 import com.vaadin.server.Page;
@@ -31,7 +29,6 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedHttpSession;
-import com.vaadin.shared.communication.PushMode;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -316,7 +313,7 @@ public abstract class FocWebApplication extends UI {
 				
 			}else{
 				Globals.logString("Table '_initial_saas_config' doesn't exist");
-			}		  				
+			}
 		}
 	}
 	

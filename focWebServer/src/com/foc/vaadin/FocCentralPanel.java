@@ -44,12 +44,14 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	
 	public void dispose(){
 		try {
+			goBackTillFirstPage();
+			ICentralPanel centralPanel = getCentralPanel();
 			super.dispose();
 			dispose_MenuTree();
-			for(ICentralPanel panel : arrayOfCentralComponents) {
-				if(panel != null) panel.dispose();
-			}
 			arrayOfCentralComponents = null;
+			if(centralPanel != null) {
+				centralPanel.dispose();
+			}
 		}catch(Exception e) {
 			Globals.logExceptionWithoutPopup(e);
 		}

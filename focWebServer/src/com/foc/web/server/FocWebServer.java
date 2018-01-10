@@ -340,7 +340,8 @@ public class FocWebServer implements Serializable {
 			for(int i=getApplicationCount()-1; i>=0; i--){
 				FocWebApplication app = getApplicationAt(i);
 				if(app.isClosing()){
-					sessionArray.add(app.getFocWebSession());
+					FocWebSession webSession = app.getFocWebSession();
+					if(webSession != null) sessionArray.add(webSession);
 					app.dispose();
 					applicationArrayList.remove(app);
 				}
@@ -357,9 +358,12 @@ public class FocWebServer implements Serializable {
 				}
 			}
 			
-			//Here all FocWebSession in sessionArray are unused
-			for(FocWebSession sess : sessionArray) {
-				sess.dispose();
+			if(sessionArray != null) {
+				//Here all FocWebSession in sessionArray are unused
+				for(int i=0; i<sessionArray.size(); i++) {
+					FocWebSession sess = sessionArray.get(i); 
+					sess.dispose();
+				}
 			}
 			sessionArray.clear();
 		}catch(Exception e) {
