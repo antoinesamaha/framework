@@ -1,7 +1,6 @@
 package com.foc.vaadin.gui.tableExports;
 
 import com.foc.Globals;
-import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.BlobResource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -11,8 +10,6 @@ import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -55,6 +52,21 @@ public abstract class EXCELExport {
 		}
 	}
 
+	public EXCELSheet bookmark() {
+		EXCELSheet clone = null;
+		try{
+			clone = fSheet != null ? fSheet.clone() : null;
+		}catch (CloneNotSupportedException e){
+			Globals.logExceptionWithoutPopup(e);		
+		}
+		
+		return clone;
+	}
+	
+	public void gotoBookmark(EXCELSheet bookmark) {
+		fSheet = bookmark;
+	}
+	
 	public String getMainSheetName() {
 		return getFileName();
 	}
@@ -130,76 +142,5 @@ public abstract class EXCELExport {
 
 	public void addNewLine() {
 		if(fSheet != null) fSheet.addNewLine();
-	}
-
-	public class EXCELSheet {
-		private String name = null;
-		private XSSFSheet sheet = null;
-		private int rowCount = 0;
-		private int columnCount = 0;
-		private XSSFRow row = null;
-		private XSSFCell cell = null;
-
-		public EXCELSheet(String name, XSSFSheet sheet) {
-			this.sheet = sheet;
-			this.name = name;
-			rowCount = 0;
-			columnCount = 0;
-			row = null;
-			cell = null;
-		}
-
-		public void dispose() {
-			sheet = null;
-			row = null;
-			cell = null;
-		}
-
-		public void addNewLine() {
-			try{
-				if(this.sheet != null){
-					this.row = this.sheet.createRow(this.rowCount++);
-					this.columnCount = 0;
-				}
-			}catch (Exception localException){
-				localException.printStackTrace();
-			}
-		}
-		
-		public void setRightToLeft(boolean r2l) {
-			if(this.sheet != null){
-				this.sheet.setRightToLeft(r2l);
-			}
-		}
-		
-		public void addCellValue(Object paramObject, int paramInt) {
-			String str = "";
-			try{
-				while (paramInt > 0){
-					str = str + " ";
-					paramInt--;
-				}
-				addCellValue("\"" + str + paramObject + "\"");
-			}catch (Exception localException){
-				Globals.logException(localException);
-			}
-		}
-
-		public void addCellValue(Object paramObject) {
-			try{
-				XSSFCell localXSSFCell = this.row.createCell(this.columnCount++);
-				if((paramObject instanceof String)){
-					if(Utils.isNumeric((String) paramObject)){
-						double d = Double.parseDouble((String) paramObject);
-						localXSSFCell.setCellValue(d);
-					}else{
-						localXSSFCell.setCellValue((String) paramObject);
-					}
-				}
-			}catch (Exception localException){
-				Globals.logException(localException);
-			}
-		}
-
 	}
 }
