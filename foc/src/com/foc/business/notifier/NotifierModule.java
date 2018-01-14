@@ -1,7 +1,6 @@
 package com.foc.business.notifier;
 
 import com.foc.admin.FocVersion;
-import com.foc.business.notification.FocNotificationDesc;
 import com.foc.desc.FocModule;
 import com.foc.menu.FMenuList;
 
@@ -23,7 +22,6 @@ public class NotifierModule extends FocModule{
 		declareFocDescClass(FocPageLinkDesc.class);
 		declareFocDescClass(DocMsgContentDesc.class);
 		declareFocDescClass(DocMsgDesc.class);
-		declareFocDescClass(FocNotificationDesc.class);
 	}
 
 	public void addApplicationMenu(FMenuList menuList) {

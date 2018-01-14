@@ -173,7 +173,7 @@ public class IntegerCondition extends FilterCondition {
   	setToValue(filter, operation, firstDate, lastDate, true);
   }
   
-  private void setToValue(FocListFilter filter, int operation, double firstDate, double lastDate, boolean lockConditionAlso){
+  protected void setToValue(FocListFilter filter, int operation, double firstDate, double lastDate, boolean lockConditionAlso){
   	FProperty operatorprop = filter.getFocProperty(getFirstFieldID() + FLD_OPERATOR);
   	operatorprop.setInteger(operation);
   	if(lockConditionAlso){

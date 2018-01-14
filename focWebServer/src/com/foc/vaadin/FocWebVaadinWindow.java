@@ -71,7 +71,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   private NativeButton admin         = null;
   private NativeButton mobileOptionsButton = null;
   private FVHelpButton helpButton    = null;
-  private FSignatureButton pendingSignature = null;
+  private FSignatureButton    pendingSignature  = null;
+//  private FNotificationButton notificatonButton = null;//NOTIF_DEV
   
   private Label        companyNameLabel = null;
 
@@ -466,6 +467,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			
 			pendingSignature = new FSignatureButton(this);
 			adjustButton(pendingSignature, !FocWebApplication.getInstanceForThread().isMobile());
+
+			//NOTIF_DEV
+			/*
+			notificatonButton = new FNotificationButton(this);
+			adjustButton(notificatonButton, !FocWebApplication.getInstanceForThread().isMobile());
+			*/
 
 			if(!FocWebApplication.getInstanceForThread().isMobile() && ConfigInfo.isContextHelpActive()){
 				helpButton = new FVHelpButton(this);//Help

@@ -48,6 +48,8 @@ public interface FXMLDesc {
   public static final String TAG_MULTIPLE_CHOICE_STRING = IFocFieldType.TYPE_MULTIPLE_CHOICE_STRING;
   public static final String TAG_BLOB            = IFocFieldType.TYPE_BLOB;
   public static final String TAG_OBJECT          = "Object";//IFocFieldType.TYPE_FOREIGN_ENTITY;
+  public static final String TAG_TABLE_NAME      = IFocFieldType.TYPE_TABLE_NAME;
+  public static final String TAG_LONG            = IFocFieldType.TYPE_LONG;
   
   //Object field
   public static final String ATT_CASCADE          = "cascade";

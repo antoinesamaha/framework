@@ -11,6 +11,7 @@ public class FilterConditionFactory {
 		
 		switch(field.getFabType()){
 		case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+		case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_FOC_DESC:
 			condition = new StringCondition(dateFieldPath, fieldPrefix); 
 			break;
 		case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
@@ -30,6 +31,9 @@ public class FilterConditionFactory {
 			break;			
 		case FieldDefinition.SQL_TYPE_ID_INT:
 			condition = new IntegerCondition(dateFieldPath, fieldPrefix);
+			break;
+		case FieldDefinition.SQL_TYPE_ID_LONG:
+			condition = new LongCondition(dateFieldPath, fieldPrefix);
 			break;			
 		}
 		

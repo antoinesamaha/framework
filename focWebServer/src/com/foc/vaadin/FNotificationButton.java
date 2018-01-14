@@ -1,7 +1,6 @@
 package com.foc.vaadin;
 
 import com.foc.Globals;
-import com.foc.business.notification.FocNotificationDesc;
 import com.foc.list.FocList;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.vaadin.ui.NativeButton;
@@ -20,8 +19,8 @@ public class FNotificationButton extends NativeButton {
 		addClickListener(new ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-        FocList focList = FocNotificationDesc.getInstance().getFocList();
-        getFocWebVaadinWindow().changeCentralPanelContent_ToTableForFocList(focList);
+//        FocList focList = FChatDesc.getInstance().getFocList();
+//        getFocWebVaadinWindow().changeCentralPanelContent_ToTableForFocList(focList);
 			}
 		});
 		resetIfNeeded(null);
@@ -43,7 +42,7 @@ public class FNotificationButton extends NativeButton {
   private int getNotification_Size(FocList focList){
   	int size = 0;
   	if(focList == null){
-  		focList = FocNotificationDesc.getInstance().getFocList();
+//  		focList = FChatDesc.getInstance().getFocList();
   	}else{
   		size = focList.size();
   	}

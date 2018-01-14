@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 
 import javax.swing.JTextField;
 
+import com.fab.model.table.FieldDefinition;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -29,6 +30,11 @@ public class FLongField extends FField {
     super(name, title, id, key, size, 0);
   }
 
+  @Override
+  public int getFabType() {
+    return FieldDefinition.SQL_TYPE_ID_LONG;
+  }
+  
   public static int SqlType() {
     return Types.BIGINT;
   }

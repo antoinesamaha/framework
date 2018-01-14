@@ -77,7 +77,8 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.PrnLayout_Table;
-import com.foc.web.modules.notifier.DocMsg_Form;
+import com.foc.web.modules.chat.FChatList;
+import com.foc.web.modules.chat.gui.DocMsg_Form;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
@@ -1299,6 +1300,18 @@ public class FVValidationLayout extends HorizontalLayout {
     if(filler != null && (FocWebApplication.getFocUser() == null || !FocWebApplication.getFocUser().isGuest())){
       filler.addMenuItems(this);
       centralPanel.addMoreMenuItems(this);
+    }
+    
+    if(true) {
+    	addMoreItem("Show Chatting", new FVMenuBarCommand() {
+				@Override
+				public void menuSelected(MenuItem selectedItem) {
+					if(getCentralPanel() != null && getCentralPanel().getMainWindow() != null) {
+//						FChatList chatList = new FChatList(getFocObject().getThisFocDesc().getStorageName(), getFocObject().getReferenceInt());
+//		        getCentralPanel().getMainWindow().changeCentralPanelContent_ToTableForFocList(chatList);
+					}
+				}
+			});
     }
     
     MenuBar menuBar = getMenubar(false);

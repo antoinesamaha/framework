@@ -37,6 +37,8 @@ public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_IMAGE           = "Image";
   public static final String TYPE_FILE            = "File";
   public static final String TYPE_FOREIGN_ENTITY  = "ForeignEntity";
+  public static final String TYPE_TABLE_NAME      = "TableName";
+  public static final String TYPE_Reference       = "Reference";
   
 	public String getTypeName();
 	public FField newFField(Class focObjClass, Field f, A a);

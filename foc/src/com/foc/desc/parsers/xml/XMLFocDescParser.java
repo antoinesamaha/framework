@@ -10,8 +10,10 @@ import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FCompanyField;
 import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FDescFieldStringBased;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
+import com.foc.desc.field.FLongField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FNumField;
@@ -252,6 +254,12 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	fld = new FNumField(getName(att), getTitle(att), xmlFocDesc.nextFldID(), isKey(att), getSize(att), getDecimal(att), grouping);
     	((FNumField)fld).setDisplayZeroValues(false);
     	xmlFocDesc.addField(fld);
+    } else if (qName.equals(TAG_LONG)) {
+    	fld = new FLongField(getName(att), getTitle(att), xmlFocDesc.nextFldID(), isKey(att), getSize(att));
+    	xmlFocDesc.addField(fld);    	
+    } else if (qName.equals(TAG_TABLE_NAME)) {
+    	fld = new FDescFieldStringBased(getName(att), getTitle(att), xmlFocDesc.nextFldID(), isKey(att));
+    	xmlFocDesc.addField(fld);    	
     } else if (qName.equals(TAG_BLOB)) {
     	int blobID         = xmlFocDesc.nextFldID();
     	int blobFileNameID = xmlFocDesc.nextFldID();

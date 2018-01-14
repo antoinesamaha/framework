@@ -88,10 +88,12 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 		this.versionLabel = versionLabel;
 	}
 
-	public void scanGuiPackage(String packageName){		
-		XmlViewFileScanner xmlViewFileScanner = new XmlViewFileScanner(this, packageName);
-		xmlViewFileScanner.scanPush();
-		xmlViewFileScanner.dispose();
+	public void scanGuiPackage(String packageName){
+		if(packageName != null) {
+			XmlViewFileScanner xmlViewFileScanner = new XmlViewFileScanner(this, packageName);
+			xmlViewFileScanner.scanPush();
+			xmlViewFileScanner.dispose();
+		}
 	}
 	
 	@Override

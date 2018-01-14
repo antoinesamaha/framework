@@ -1,4 +1,4 @@
-package com.foc.web.modules.notifier;
+package com.foc.web.modules.chat.gui;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;

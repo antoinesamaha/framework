@@ -50,11 +50,11 @@ import com.foc.vaadin.IFocWebModule;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationMore;
 import com.foc.vaadin.gui.layouts.validationLayout.IValidationLayoutMoreMenuFiller;
 import com.foc.web.modules.admin.AdminWebModule;
+import com.foc.web.modules.chat.module.FChatModule;
 import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.modules.fab.FabEndUserWebModule;
 import com.foc.web.modules.fab.FabWebModule;
 import com.foc.web.modules.migration.MigrationWebModule;
-import com.foc.web.modules.notifier.NotifierWebModule;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.session.FocWebSession;
@@ -569,14 +569,13 @@ public class FocWebServer implements Serializable {
     FocWebServer.getInstance().modules_Add(new PhotoAlbumWebModule());
     FocWebServer.getInstance().modules_Add(new DownloadableContentWebModule());
     FocWebServer.getInstance().modules_Add(new WorkflowWebModule());
-    FocWebServer.getInstance().modules_Add(new NotifierWebModule());
     
     //Here we declare the modules that are FocRelated
     //put aboolean that checks if the declaration is done or not.
     //Call this method from getWindow();
   }
   //--------------------------------------------------------
-
+	
   //Application Configurators
   //-------------------------
   public void applicationConfigurators_Add(IApplicationConfigurator configurator){

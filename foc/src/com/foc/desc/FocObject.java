@@ -52,6 +52,7 @@ import com.foc.access.AccessControl;
 import com.foc.access.AccessSubject;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocUser;
+import com.foc.admin.FocUserDesc;
 import com.foc.admin.UserSession;
 import com.foc.api.IFocList;
 import com.foc.api.IFocObject;

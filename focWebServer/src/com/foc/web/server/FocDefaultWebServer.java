@@ -6,11 +6,11 @@ import com.foc.FocMainClass;
 import com.foc.Globals;
 import com.foc.desc.FocModule;
 import com.foc.vaadin.FocWebModule;
+import com.foc.web.modules.chat.module.FChatModule;
 
 @SuppressWarnings("serial")
 public abstract class FocDefaultWebServer extends FocWebServer {
 
-	public abstract void modules();
 	
 	protected FocMainClass newMainClass(){
   	String[] args = { "/IS_SERVER:1", "/nol:1"};
@@ -33,4 +33,9 @@ public abstract class FocDefaultWebServer extends FocWebServer {
     	}
     }
   }
+  
+  public void modules() {
+  	FChatModule chatModule = new FChatModule();
+  	chatModule.declare();
+  };
 }

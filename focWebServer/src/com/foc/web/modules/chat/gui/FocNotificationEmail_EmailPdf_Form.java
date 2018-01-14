@@ -1,4 +1,4 @@
-package com.foc.web.modules.notifier;
+package com.foc.web.modules.chat.gui;
 
 import com.foc.business.config.BusinessConfig;
 import com.foc.shared.dataStore.IFocData;
