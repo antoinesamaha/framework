@@ -1,14 +1,11 @@
 package com.foc.web.modules.photoAlbum;
 
-import com.foc.Globals;
 import com.foc.business.photoAlbum.PhotoAlbum;
 import com.foc.business.photoAlbum.PhotoAlbumDesc;
 import com.foc.business.photoAlbum.PhotoAlbumListWithFilter;
-import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
-import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVImageField;
 import com.foc.vaadin.gui.components.upload.FVUpload_Image;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
@@ -32,6 +29,10 @@ public class PhotoAlbum_Thumb_Table extends PhotoAlbum_Table {
 		super.afterLayoutConstruction();
 		
 		redrawPhotos();
+	}
+	
+	public void dispose() {
+		super.dispose();
 	}
 
 	@Override

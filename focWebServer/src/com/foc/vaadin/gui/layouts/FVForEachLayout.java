@@ -303,7 +303,7 @@ public class FVForEachLayout extends FVVerticalLayout {
   	return enabled;
   }  
 
-  protected void addBannerForFocObject(FocObject focObj){
+  public void addBannerForFocObject(FocObject focObj){
     String userView = getAttributes().getValue(FXML.ATT_VIEW_KEY_VIEW);
     if(userView != null){
     	xmlViewKey.setUserView(userView);
@@ -324,7 +324,15 @@ public class FVForEachLayout extends FVVerticalLayout {
 	    }
 	    bannerContainer.addComponent(bannerLayout);
 	    getBannerList(true).add(bannerLayout);
-	    bannerContainer.addComponent(new FVLine());
+
+      if(			getAttributes() != null 
+      		&& 	getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR) != null
+      		&& 	getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR).toUpperCase().equals("FALSE")
+      		){
+      	
+      } else {
+      	bannerContainer.addComponent(new FVLine());
+      }
     }
   }
 

@@ -77,8 +77,9 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.PrnLayout_Table;
-import com.foc.web.modules.chat.FChatList;
 import com.foc.web.modules.chat.gui.DocMsg_Form;
+import com.foc.web.modules.chat.gui.FChatSlider;
+import com.foc.web.modules.chat.module.FChatModule;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
@@ -107,7 +108,7 @@ public class FVValidationLayout extends HorizontalLayout {
   private FValidationSettings            validationSettings  = null;
 	private ArrayList<IValidationListener> validationListeners = null;
 	private ICentralPanel                  centralPanel        = null;
-  
+	private FChatSlider                    chatSlider          = null;
 //  private FVHorizontalLayout buttonsLayout = null;
 	/*
 	private Button nextContextHelpButton     = null;
@@ -133,7 +134,7 @@ public class FVValidationLayout extends HorizontalLayout {
   private Embedded valo_PrintAndExitEmbedded      = null;
   private Embedded valo_PdfGeneratorEmbedded      = null;
   private Embedded valo_MSWordGeneratorEmbedded   = null;
-  private Embedded valo_AttachImageEmbedded       = null;  
+  private Embedded valo_AttachImageEmbedded       = null;
   private Embedded valo_FullScreenEmbedded        = null;  
   private Embedded valo_SendEmailEmbedded         = null;
   private Embedded valo_PDFPrintEmbedded          = null;
@@ -198,6 +199,11 @@ public class FVValidationLayout extends HorizontalLayout {
   }
   
   public void dispose(){
+  	if(chatSlider != null) {
+  		chatSlider.dispose();
+  		chatSlider = null;
+  	}
+  	
   	if(validationListeners != null){
   		validationListeners.clear();
   		validationListeners = null;
@@ -1302,24 +1308,55 @@ public class FVValidationLayout extends HorizontalLayout {
       centralPanel.addMoreMenuItems(this);
     }
     
-    if(true) {
-    	addMoreItem("Show Chatting", new FVMenuBarCommand() {
-				@Override
-				public void menuSelected(MenuItem selectedItem) {
-					if(getCentralPanel() != null && getCentralPanel().getMainWindow() != null) {
-//						FChatList chatList = new FChatList(getFocObject().getThisFocDesc().getStorageName(), getFocObject().getReferenceInt());
-//		        getCentralPanel().getMainWindow().changeCentralPanelContent_ToTableForFocList(chatList);
-					}
-				}
-			});
-    }
-    
     MenuBar menuBar = getMenubar(false);
     if(menuBar != null && !FocWebApplication.getInstanceForThread().isMobile()){
       addComponent(menuBar);
       
       setComponentAlignment(menuBar, Alignment.MIDDLE_LEFT);
       lastAdded = menuBar;
+    }
+    
+		if(    getFocObject() != null 
+				&& getFocObject().workflow_IsWorkflowSubject()
+				&& FChatModule.userHasChat()
+				&& getCentralPanel() != null 
+				&& getCentralPanel() instanceof FocXMLLayout
+				&& getCentralPanel().getMainWindow() != null) {
+			chatSlider = new FChatSlider((FocXMLLayout)getCentralPanel());
+			chatSlider.build();
+			
+			/*
+			FChatList chatList = new FChatList(getFocObject());
+//			XMLViewKey key = new XMLViewKey(FChat.DBNAME, XMLViewKey.TYPE_TABLE);
+			XMLViewKey key = new XMLViewKey(FChat.DBNAME, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
+			FocXMLLayout table = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(getNavigationWindow(), key, chatList);
+      
+			Panel panel = new Panel();
+			panel.setHeight("500px");
+			panel.addStyleName("foc-chat-layout");
+			panel.setContent(table);
+			
+			SliderPanelBuilder buider = new SliderPanelBuilder(panel, "Chat");
+			buider.expanded(false);
+			buider.mode(SliderMode.BOTTOM);
+			buider.caption("Chat");
+			buider.style(SliderPanelStyles.COLOR_BLUE);
+			buider.tabPosition(SliderTabPosition.BEGINNING);
+			
+  		SliderPanel chatSlider = buider.build();
+
+  		((FocXMLLayout)getCentralPanel()).addComponent(chatSlider);
+  		chatSlider.addListener(new SliderPanelListener() {
+				@Override
+				public void onToggle(boolean expand) {
+					if(expand) {
+						
+					}
+				}
+  		});
+//  		addComponent(valo_GetChatEmbedded(true));
+//      setComponentAlignment(valo_GetChatEmbedded(false), Alignment.BOTTOM_LEFT);
+ */
     }
     
     if(getLinkLayout(true) != null){
@@ -1958,7 +1995,7 @@ public class FVValidationLayout extends HorizontalLayout {
   	}
   	return valo_AttachImageEmbedded;
   }
-  
+
   public Embedded valo_GetFullScreenEmbedded(boolean createIfNeeded){
   	boolean inPopup = true;
   	if(focVaadinMainWindow == null || focVaadinMainWindow instanceof FocWebVaadinWindow){

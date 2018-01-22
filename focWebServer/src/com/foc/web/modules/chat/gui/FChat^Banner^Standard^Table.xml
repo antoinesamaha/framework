@@ -1,0 +1,11 @@
+<VerticalLayout height="-1px" margin="true" width="100%">
+  <ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="true" withNotification="false"/>
+
+  <IncludeXMLForEach name="_ChatTable" dataPath="DATAROOT" storage="FChat" view="Standard" context="Banner" type="form" editable="false" width="100%" separator="false" deleteEnabled="false" openEnabled="false">
+  </IncludeXMLForEach>
+  
+  <HorizontalLayout width="100%">
+    <TextField textArea="true" name="MY_CHAT" width="100%" height="60px" expandRatio="1"/>
+    <Button name="SEND" icon="send" alignment="middle_right"/>
+  </HorizontalLayout>
+</VerticalLayout>

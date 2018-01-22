@@ -35,6 +35,9 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.admin.AdminWebModule;
 import com.foc.web.modules.admin.FocUser_HomePage_Form;
 import com.foc.web.modules.admin.OptionDialog_Form;
+import com.foc.web.modules.chat.join.FChatJoin;
+import com.foc.web.modules.chat.join.gui.FChatJoin_Table;
+import com.foc.web.modules.chat.module.FChatModule;
 import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
@@ -67,6 +70,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   private NativeButton login         = null;
   private NativeButton logout        = null;
   private NativeButton home          = null;
+  private NativeButton chatAlerts    = null;
   private NativeButton navigation    = null;
   private NativeButton admin         = null;
   private NativeButton mobileOptionsButton = null;
@@ -491,7 +495,29 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			}
 			
 			if(!FocWebApplication.getInstanceForThread().isMobile()){
-				add_NewUserMenuBar();	
+				add_NewUserMenuBar();
+
+				if(FChatModule.userHasChat()) {
+					chatAlerts = newButtonInHeaderBar("", true);
+					chatAlerts.setIcon(FontAwesome.BELL);
+					updateChatAlertCount();
+					chatAlerts.addClickListener(new Button.ClickListener() {
+						public void buttonClick(ClickEvent event) {
+							buttonArray_Highlight(null);
+							
+							XMLViewKey key = new XMLViewKey(FChatJoin.DBNAME, XMLViewKey.TYPE_TABLE);
+							FChatJoin_Table table = (FChatJoin_Table) XMLViewDictionary.getInstance().newCentralPanel(FocWebVaadinWindow.this, key, null);
+							FocWebVaadinWindow.this.changeCentralPanelContent(table, true);
+							
+//							if(isGuestUser()){
+//								changeCentralPanelIntoGuestHomePage();
+//							}else{
+//								ICentralPanel centralPanel = newCentralPanel_AfterLogin();
+//				        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
+//							}
+						}
+					});
+				}
 			}else{
 				logout = newButtonInHeaderBar("Log Out", !FocWebApplication.getInstanceForThread().isMobile());
 	    
@@ -1040,4 +1066,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 
+  public void updateChatAlertCount(){
+    String caption = ""; 
+    int count = FChatModule.unreadCount();
+    if(count > 0){
+    	caption = String.valueOf(count);
+    }
+  	chatAlerts.setCaption(caption);
+  }
 }

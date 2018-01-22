@@ -54,7 +54,8 @@ public class ConfigInfo {
   private static String  helpURL              = null;
   private static String  logDir               = null;
   private static boolean rtl                  = false;
-  private static boolean logDetails           = false;
+  private static String  language             = null;
+	private static boolean logDetails           = false;
   private static boolean logDebug             = false;
   private static boolean logConsoleActive     = true;
   private static boolean logDBRequest         = true;
@@ -313,6 +314,8 @@ public class ConfigInfo {
   
         str = getProperty("gui.rtl");
         rtl = str != null ? str.compareTo("1") == 0 : false;
+        
+        language = getProperty("gui.language");
         
         str = getProperty("log.debug");
         logDebug = str != null ? str.compareTo("1") == 0 : false;
@@ -650,5 +653,13 @@ public class ConfigInfo {
 	
 	public static boolean comboBoxShowDropDownEvenWhenDisabled(){
 		return true;
+	}
+	
+  public static String getLanguage() {
+		return language;
+	}
+
+	public static void setLanguage(String language) {
+		ConfigInfo.language = language;
 	}
 }

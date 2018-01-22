@@ -308,15 +308,15 @@ public class DBAdaptor {
   		StatementWrapper stm = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
   		FField indentifyerField = focDesc.getIdentifierField();
   		if(indentifyerField != null && indentifyerField.isDBResident()){
+	  		long maxRef = 0;
   			String refFieldName = indentifyerField.getDBName();
 	  		String req = "SELECT MAX(\""+refFieldName+"\") FROM \""+focDesc.getStorageName_ForSQL()+"\"";
-	
+	  		
 	  		stm = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stm, req);
 	  		
 //	  		if(ConfigInfo.isLogDBRequestActive()) Globals.logString(req);
 //	  		stm.executeQuery(req);
-	  		
-	  		long maxRef = 0;
+
 	  		ResultSet rs = stm != null ? stm.getResultSet() : null;
 	  		while(rs != null && rs.next()){
 	  			maxRef = rs.getLong(1);

@@ -28,6 +28,11 @@ public class PhotoAlbum extends FocObject{
     newFocProperties();
   }
   
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
+	
   /*public void setImage(InputStream inputStream){
   	Globals.getApp().getDataSource().focObject_addBlobFromInputStream(this, PhotoAlbumDesc.FLD_IMAGE, inputStream);
   }

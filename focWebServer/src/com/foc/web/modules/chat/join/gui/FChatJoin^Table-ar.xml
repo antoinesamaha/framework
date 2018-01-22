@@ -1,0 +1,14 @@
+<VerticalLayout captionMargin="0" margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="false" withPrint="false" />
+  <Label value="الرسائل" style="H2,text-center" />
+  <IncludeXML name="FILTER" dataPath="FILTER" storage="FChatJoinFilter" type="form" context="Sumary" />
+  <GuiTable name="_Chatting" dataPath="DATAROOT" width="100%" height="100%" pageLength="10" transactionFilterEnabled="false" transactionColoringEnabled="false" sortingExpression="-C-Date,-C-Time" openInNewTabEnabled="true">
+    <TableColumn name="C-Sender>FULL_NAME" caption="المرسل" link="false" width="-1px"/>
+    <TableColumn name="C-Message" caption="الملاحظة" link="true" expandRatio="1"/>
+    <TableColumn name="C-Date" caption="التاريخ" width="100px"/>
+    <TableColumn name="C-Time" caption="الوقت" width="60px"/>
+    <TableColumn name="C-SubjectType" caption="المعاملة" width="-1px"/>
+    <TableColumn name="C-SubjectSite>NAME" caption="المركز" width="-1px"/>
+    <TableColumn name="C-SubjectCode" caption="الرقم" width="-1px"/>
+  </GuiTable>
+</VerticalLayout>

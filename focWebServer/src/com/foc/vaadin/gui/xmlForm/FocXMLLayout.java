@@ -13,6 +13,10 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
+import org.vaadin.sliderpanel.SliderPanel;
+import org.vaadin.sliderpanel.SliderPanelBuilder;
+import org.vaadin.sliderpanel.client.SliderMode;
+import org.vaadin.sliderpanel.client.SliderTabPosition;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -96,6 +100,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;

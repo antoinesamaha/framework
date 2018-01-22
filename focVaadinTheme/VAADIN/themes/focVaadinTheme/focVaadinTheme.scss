@@ -2241,4 +2241,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
   @if $foc-rtl == 1 {
 	  @include focRTL;
   }
+  
+  /*
+  CHAT SLIDER
+  */
+	.foc-chat-layout{
+  
+    /*GRAY*/
+   	background: #808080;
+  	color: #fff;
+  
+    /*BLUE
+  	background: #197de1;
+    color: #fff;
+    */
+    
+  }
+  
+  .sp-gray {
+    &.v-sliderpanel-content, &.v-sliderpanel-tab {
+      font-size: 17px;
+    }
+  }
 }

@@ -1,0 +1,20 @@
+<VerticalLayout height="-1px" widht="400px" margin="true">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" withNotification="false" viewSelector="false"/>
+
+<!-- 
+  <Label value="Chat message" style="H2"/>
+
+  <GuiField name="Sender>FULL_NAME" caption="Sender" />
+  <GuiField name="Message" caption="Message" editable="false"/>
+  <GuiField name="Date" caption="Date" />
+  <GuiField name="Time" caption="Time" />
+ -->  
+
+	<GuiTable title="Receipients" dataPath="FChatReceiver_LIST" openEnabled="false" refreshEnabled="false" withFilter="false" pageLength="fit" width="100%" height="-1px" editable="false">
+    <TableColumn name="Receiver>FULL_NAME" caption="Receiver" usePopupView="false" immediate="true" />
+    <TableColumn name="Read" caption="Read" width="60px"/>
+    <TableColumn name="ReadDate" caption="Read date" width="95px"/>
+    <TableColumn name="ReadTime" caption="Read time" width="95px"/>
+  </GuiTable>
+  
+</VerticalLayout>

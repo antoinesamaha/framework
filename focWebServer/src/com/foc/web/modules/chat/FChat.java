@@ -8,6 +8,7 @@ import com.foc.Globals;
 import com.foc.access.AccessSubject;
 import com.foc.admin.FocUser;
 import com.foc.annotations.model.FocEntity;
+import com.foc.annotations.model.fields.FocBoolean;
 import com.foc.annotations.model.fields.FocDate;
 import com.foc.annotations.model.fields.FocForeignEntity;
 import com.foc.annotations.model.fields.FocReference;
@@ -24,6 +25,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
 import com.foc.list.FocList;
+import com.foc.web.modules.chat.module.FChatModule;
 
 @SuppressWarnings("serial")
 @FocEntity
@@ -49,7 +51,19 @@ public class FChat extends PojoFocObject {
 
 	@FocReference()
 	public static final String FIELD_SubjectReference = "SubjectReference";
-	
+
+	@FocString(size = 50)
+	public static final String FIELD_SubjectType = "SubjectType";
+
+	@FocForeignEntity(table = "WF_AREA", cascade = false)
+	public static final String FIELD_SubjectSite = "SubjectSite";
+
+	@FocString(size = 20)
+	public static final String FIELD_SubjectCode = "SubjectCode";
+
+	@FocBoolean(dbResident = false)
+	public static final String FIELD_Unread = "Unread";
+
 	public static final String FIELD_ReceiverList = FChatReceiver.DBNAME+"_LIST";
 
 	public FChat(FocConstructor constr) {
@@ -109,6 +123,14 @@ public class FChat extends PojoFocObject {
 	public void setMessage(String value) {
 		setPropertyString(FIELD_Message, value);
 	}
+	
+	public WFSite getSubjectSite() {
+		return (WFSite) getPropertyObject(FIELD_SubjectSite);
+	}
+
+	public void setSubjectSite(WFSite value) {
+		setPropertyObject(FIELD_SubjectSite, value);
+	}
 
 	public String getSubjectTableName() {
 		return getPropertyString(FIELD_SubjectTableName);
@@ -118,6 +140,22 @@ public class FChat extends PojoFocObject {
 		setPropertyString(FIELD_SubjectTableName, value);
 	}
 
+	public String getSubjectType() {
+		return getPropertyString(FIELD_SubjectType);
+	}
+
+	public void setSubjectType(String value) {
+		setPropertyString(FIELD_SubjectType, value);
+	}
+
+	public String getSubjectCode() {
+		return getPropertyString(FIELD_SubjectCode);
+	}
+
+	public void setSubjectCode(String value) {
+		setPropertyString(FIELD_SubjectCode, value);
+	}
+	
 	public long getSubjectReference() {
 		return getPropertyLong(FIELD_SubjectReference);
 	}
@@ -126,13 +164,25 @@ public class FChat extends PojoFocObject {
 		setPropertyLong(FIELD_SubjectReference, value);
 	}
 	
+	public boolean isUnread() {
+		return getPropertyBoolean(FIELD_Unread);
+	}
+	
+	public void setUnread(boolean unread) {
+		setPropertyBoolean(FIELD_Unread, unread);
+	}
+	
   public FocList getReceiverList() {
   	return getPropertyList(FIELD_ReceiverList);
   }
   
 	private void receiversArray_AddUser(ArrayList<FocUser> usersToReceiveArray, FocUser user) {
 		if(usersToReceiveArray != null && user != null) {
-			if(!usersToReceiveArray.contains(user)) usersToReceiveArray.add(user);
+			if(!usersToReceiveArray.contains(user) && getSender() != null && !getSender().equalsRef(user)) {
+				if(FChatModule.userHasChat(user)) {
+					usersToReceiveArray.add(user);
+				}
+			}
 		}
 	}
 	
@@ -143,7 +193,7 @@ public class FChat extends PojoFocObject {
   		FocUser user = operator.getUser();
 
   		if(!user.equalsRef(getSender())) {
-  			receiversArray_AddUser(usersToReceiveArray, getSender()) ;
+  			receiversArray_AddUser(usersToReceiveArray, user) ;
   		}
   	}
 	}
@@ -177,4 +227,33 @@ public class FChat extends PojoFocObject {
   		getReceiverList().add(receiver);
   	}
   }
+  
+  public void markAsRead() {
+  	FocUser sessionUser = Globals.getApp().getUser_ForThisSession();
+  	if(sessionUser != null) {
+	  	FocList receivers = getReceiverList();
+	  	for(int i=0; i<receivers.size(); i++) {
+	  		FChatReceiver receiver = (FChatReceiver) receivers.getFocObject(i);
+	  		if(receiver != null && !receiver.isRead() && sessionUser.equalsRef(receiver.getReceiver())) {
+	  			receiver.setRead(true);
+	  			receiver.validate(true);
+	  		}
+	  	}
+  	}
+  }
+  
+  public void updateUnreadFlag() {
+  	FocUser sessionUser = Globals.getApp().getUser_ForThisSession();
+  	if(sessionUser != null) {
+	  	FocList receivers = getReceiverList();
+	  	for(int i=0; i<receivers.size(); i++) {
+	  		FChatReceiver receiver = (FChatReceiver) receivers.getFocObject(i);
+	  		if(receiver != null && !receiver.isRead() && sessionUser.equalsRef(receiver.getReceiver())) {
+	  			setUnread(true);
+	  		}
+	  	}
+  	}
+  }
+
 }
+

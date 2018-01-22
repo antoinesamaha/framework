@@ -30,12 +30,13 @@
 					<pathelement path="${vaadinJAR2}"/>
 					<pathelement path="${vaadinJAR3}"/>
 					<pathelement path="${vaadinLib1}"/>
-	        <pathelement path="${vaadinAddOnJar.ExpandingTextArea}"/>
+	                <pathelement path="${vaadinAddOnJar.ExpandingTextArea}"/>
 					<pathelement path="${vaadinAddOnJar.DnD}"/>
 					<pathelement path="${vaadinAddOnJar.EverproTreeGrid}"/>
 					<pathelement path="${vaadinAddOnJar.ContextHelp}"/>
 					<pathelement path="${vaadinAddOnJar.JFreeChartWrapper}"/>
 					<pathelement path="${vaadinAddOn.Network}"/>
+					<pathelement path="${vaadinAddOnJar.SliderPanel}"/>
 					<pathelement path="${TomcatDir}/${TomcatFile1}"/>
 					<pathelement path="${jFreeChartDir}/${jFreeChartFile1}"/>
 					<pathelement path="${jFreeChartDir}/${jFreeChartFile2}"/>

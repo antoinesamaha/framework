@@ -1686,6 +1686,16 @@ public class Application {
     return user;
   }
 
+  public String getLanguageForThisSession(){
+  	String language = null;
+  	if(Globals.getApp().isWebServer()){
+  		language = UserSession.getInstanceForThread() != null ? UserSession.getInstanceForThread().getLanguage() : null;
+  	}else{
+  		language = ConfigInfo.getLanguage();
+  	}
+    return language;
+  }
+
   public boolean checkSession(){
   	return checkSession(true);
   }

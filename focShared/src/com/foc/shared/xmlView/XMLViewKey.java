@@ -12,8 +12,9 @@ public class XMLViewKey implements IXMLViewConst{
   private boolean forNewObjectOnly = false;
   private boolean printerFriendly  = false; 
   private boolean mobileFriendly   = false;
+  private String  language         = null;
   
-  private String strKey            = null;
+	private String strKey            = null;
   
   public XMLViewKey(){
   }
@@ -37,6 +38,10 @@ public class XMLViewKey implements IXMLViewConst{
     setType(sourceKey.getType());
     setContext(sourceKey.getContext());
     setUserView(sourceKey.getUserView());
+    setLanguage(sourceKey.getLanguage());
+    setMobileFriendly(sourceKey.isMobileFriendly());
+    setForNewObjectOnly(sourceKey.isForNewObjectOnly());
+    setPrinterFriendly(sourceKey.isPrinterFriendly());
   }
 
   public void dispose(){
@@ -97,6 +102,14 @@ public class XMLViewKey implements IXMLViewConst{
     this.storageName = storageName;
   }
   
+  public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
   public String builStringKey(){
   	String keyString = getStorageName()+";"+getType()+";"+getContext()+";"+getUserView();
   	if(isForNewObjectOnly()){
@@ -104,6 +117,10 @@ public class XMLViewKey implements IXMLViewConst{
   	}
   	if(isMobileFriendly()){
   		keyString += ";Mobile";
+  	}
+  	String lang = getLanguage();
+  	if(lang != null && !lang.isEmpty()) {
+  		keyString += ";"+lang;
   	}
   	return keyString;
   }

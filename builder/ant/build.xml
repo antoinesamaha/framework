@@ -109,6 +109,7 @@
 	<property name="vaadinAddOn.Gantt" value="gantt-addon-0.9.0.jar" />
 	<property name="vaadinAddOn.ContextHelp" value="contexthelp-2.0.1.jar" />
 	<property name="vaadinAddOn.JFreeChartWrapper" value="jfreechartwrapper-3.0.2.jar" />
+	<property name="vaadinAddOn.SliderPanel" value="vaadin-sliderpanel-1.4.2.jar" />
 	
 	<property name="vaadinJAR1" value="${vaadinJAR.Dir}/${vaadinJAR.FileName1}" />
 	<property name="vaadinJAR2" value="${vaadinJAR.Dir}/${vaadinJAR.FileName2}" />
@@ -124,6 +125,7 @@
 	<property name="vaadinAddOnJar.Gantt" value="${vaadinAddOn.Dir}/${vaadinAddOn.Gantt}" />
 	<property name="vaadinAddOnJar.ContextHelp" value="${vaadinAddOn.Dir}/${vaadinAddOn.ContextHelp}" />
 	<property name="vaadinAddOnJar.JFreeChartWrapper" value="${vaadinAddOn.Dir}/${vaadinAddOn.JFreeChartWrapper}" />
+	<property name="vaadinAddOnJar.SliderPanel" value="${vaadinAddOn.Dir}/${vaadinAddOn.SliderPanel}" />
 	
 	<property name="vaadinAddOn.GoogleMap" value="${vaadinAddOn.Dir}/googleMap/googlemaps-1.3.4.jar" />
 	<property name="vaadinAddOn.GoogleMap_Aid1" value="${vaadinAddOn.Dir}/googleMap/gwt-ajaxloader-1.1.0.jar" />
@@ -226,7 +228,7 @@
 	<property name="global.signAlias" value="01Barmaja" />
 	<property name="global.signStorepass" value="01Barmaja10" />
 
-	<property name="obfuscate" value="true" />
+	<property name="obfuscate" value="false" />
 
 	<import file="macros.xml" />
 	<import file="obfuscation.xml" />

@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 import com.fab.codeWriter.CodeWriterConstants;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -14,11 +15,12 @@ public class XmlViewFileScanner {
 
 	//STORAGENAME^CONTEXT^USERVIEW^TYPE.xml
 	
-	private static final String FILE_NAME_SEPERATOR = CodeWriterConstants.XML_VIEW_FILE_NAME_SEPERATOR;
+	private static final String FILE_NAME_SEPERATOR     = CodeWriterConstants.XML_VIEW_FILE_NAME_SEPERATOR;
+	private static final String FILE_LANGUAGE_SEPARATOR = "-";
 	
 	private FocWebModule focWebModule         = null;
 	private String       rootXmlDirectoryPath = null;
-	private String       javaPackage    = null;
+	private String       javaPackage          = null;
 	
 	public XmlViewFileScanner(FocWebModule focWebModule, String javaPackage) {
 		this.javaPackage          = javaPackage;
@@ -42,8 +44,8 @@ public class XmlViewFileScanner {
 		return false;
 	}
 	
-	public Class getJavaClass_WithSimilarName(String xmlFileName){
-		String javaClassName = toJavaClassName(xmlFileName);
+	private Class getJavaClass_WithSimilarName(String xmlFileName, boolean removeLanguage){
+		String javaClassName = toJavaClassName(xmlFileName, removeLanguage);
 		javaClassName        = getJavaPackage() + "." + javaClassName;
 		Class<?> layoutClass = null; 
 		try{
@@ -82,14 +84,21 @@ public class XmlViewFileScanner {
 						
 						if(tokens.size() >= 2 && tokens.size() <= 5){
 							xmlViewKey.setStorageName(tokens.get(0));
-							if(tokens.get(tokens.size() - 1) != null){
-								xmlViewKey.setType(tokens.get(tokens.size() - 1).toLowerCase());
+							String lastToken = tokens.get(tokens.size() - 1);
+							if(lastToken != null){
+								int indexOfDash = lastToken.indexOf("-");
+								if(indexOfDash > 0 && indexOfDash<lastToken.length()) {
+									xmlViewKey.setLanguage(lastToken.substring(indexOfDash+1));
+									lastToken = lastToken.substring(0, indexOfDash);
+								}
+								xmlViewKey.setType(lastToken.toLowerCase());
 							}
 							
 							if(tokens.size() == 5){
 								xmlViewKey.setContext(tokens.get(1));
 								xmlViewKey.setUserView(tokens.get(2));
-								if(tokens.get(3).equals(XMLViewKey.IS_MOBILE_FRIENDLY)){
+								String third = tokens.get(3); 
+								if(third.equals(XMLViewKey.IS_MOBILE_FRIENDLY)){
 									xmlViewKey.setMobileFriendly(true);
 								}
 							}else if(tokens.size() == 4){
@@ -122,7 +131,11 @@ public class XmlViewFileScanner {
 //								}
 //							}
 			        //
-							Class  layoutClass = getJavaClass_WithSimilarName(xmlFileName);
+							
+							Class layoutClass = getJavaClass_WithSimilarName(xmlFileName, false);
+							if(layoutClass == null && !Utils.isStringEmpty(xmlViewKey.getLanguage())) {
+								layoutClass = getJavaClass_WithSimilarName(xmlFileName, true);
+							}
 							String layoutClassName = layoutClass != null ? layoutClass.getName() : null;
 							String xmlFullName = getRootXmlDirectoryPath();
 							if(!xmlFullName.endsWith("/")) xmlFullName += "/";
@@ -136,11 +149,18 @@ public class XmlViewFileScanner {
 		}
 	}
 	
-	private String toJavaClassName(String xmlFileName){
+	private String toJavaClassName(String xmlFileName, boolean removeLanguage){
 		String javaFileName = null;
 		if(xmlFileName != null){
 			javaFileName = xmlFileName.replace(".xml", "");
 			javaFileName = javaFileName.replace(FILE_NAME_SEPERATOR, "_");
+
+			if(removeLanguage) {
+				int indexOfDash = javaFileName.indexOf(FILE_LANGUAGE_SEPARATOR);
+				if(indexOfDash > 0) {
+					javaFileName = javaFileName.substring(0, indexOfDash);
+				}
+			}
 		}
 		return javaFileName;
 	}
@@ -156,50 +176,4 @@ public class XmlViewFileScanner {
 	private String getJavaPackage() {
 		return javaPackage;
 	}
-	
-	/*
-	private void createJavaClassIfNotExists(String fileName){
-		try{
-//			URL url = getClass().getResource(getJavaDirectoryPath());
-//			File rootModuleDirectoryFile = new File(url.toURI());
-//			String fullJavaDirectoryPath = rootModuleDirectoryFile.getPath();
-			String fullJavaDirectoryPath = getJavaPackage();
-			
-			fileName = toJavaClassName(fileName);
-			File directory = new File(fullJavaDirectoryPath);
-			if(!directory.exists()){
-				directory.mkdirs();
-			}
-			
-			File javaClassFile = new File(fullJavaDirectoryPath, fileName);
-			if(!javaClassFile.exists()){
-				javaFocXmlLayoutFileWriter(javaClassFile);
-				boolean isCreated = javaClassFile.createNewFile();
-				Globals.logString(fileName + ".java Object created in " + javaClassFile.getAbsolutePath());
-			}
-		}catch(Exception e){
-			Globals.logException(e);
-		}
-	}
-	
-	private void javaFocXmlLayoutFileWriter(File focXmlLayoutFile){
-		if(focXmlLayoutFile != null){
-			try{
-				String javaClassName = focXmlLayoutFile.getName();
-				if(javaClassName.contains(".java")){
-					javaClassName = javaClassName.replace(".java", "");
-				}
-				FileWriter fileWriter = new FileWriter(focXmlLayoutFile);
-				fileWriter.append("package " + getFocWebModule().getClass().getPackage().getName() + ";\n\n");
-				fileWriter.append("import " + FocXMLLayout.class.getName() + ";\n\n");
-				fileWriter.append("public class " + javaClassName + " extends FocXMLLayout{");
-				fileWriter.append("\n\n}");
-				fileWriter.flush();
-				fileWriter.close();
-			}catch(Exception e){
-				Globals.logException(e);
-			}
-		}
-	}
-	*/
 }

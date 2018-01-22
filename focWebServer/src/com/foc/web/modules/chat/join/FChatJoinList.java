@@ -1,5 +1,6 @@
 package com.foc.web.modules.chat.join;
 
+import com.foc.admin.FocUser;
 import com.foc.list.FocLinkJoinRequest;
 import com.foc.list.FocListWithFilter;
 
@@ -10,10 +11,13 @@ public class FChatJoinList extends FocListWithFilter {
 		super(FChatJoinFilter.getFocDesc(), new FocLinkJoinRequest(FChatJoin.getFocDesc().getFocRequestDesc(false)));
 	}
 	
-	public FChatJoinList(String tableName, long reference) {
+	public FChatJoinList(FocUser receiver) {
 		super(FChatJoinFilter.getFocDesc(), new FocLinkJoinRequest(FChatJoin.getFocDesc().getFocRequestDesc(false)));
 		
+		FChatJoinFilter filter = (FChatJoinFilter) getFocListFilter();
+		filter.filterReceiver(receiver);
+		filter.filterUnread();
+		filter.setActive(true);
 	}
-
 	
 }

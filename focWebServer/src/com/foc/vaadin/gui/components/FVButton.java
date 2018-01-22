@@ -17,6 +17,7 @@ import com.vaadin.data.Validator;
 import com.vaadin.data.Validator.InvalidValueException;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Field;
+import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings({ "serial", "unchecked" })
 public class FVButton extends Button implements FocXMLGuiComponent, Field {//Field implementation only to allow helpContext to work on our FVButtons
@@ -88,6 +89,13 @@ public class FVButton extends Button implements FocXMLGuiComponent, Field {//Fie
   @Override
   public void setAttributes(Attributes attributes) {
     this.attributes = attributes;
+    
+    String linkStyle = attributes != null ? attributes.getValue(FXML.ATT_BUTTON_LINK_STYLE) : null;
+    if(linkStyle != null){
+    	if(linkStyle.toLowerCase().trim().equals("true") || linkStyle.toLowerCase().trim().equals("true")){
+    		setStyleName(BaseTheme.BUTTON_LINK);
+    	}
+    }
     FocXMLGuiComponentStatic.applyAttributes(this, attributes);
     
     String isHTMLCaption = attributes != null ? attributes.getValue(FXML.ATT_IS_HTML) : null;

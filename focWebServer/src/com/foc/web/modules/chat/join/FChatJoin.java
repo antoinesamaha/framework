@@ -18,7 +18,10 @@ import com.foc.desc.parsers.pojo.PojoFocObject;
 					@FocJoinField(sourceFieldName="Time", groupByFormula="MAX"),
 					@FocJoinField(sourceFieldName="Message", groupByFormula="MAX"),
 					@FocJoinField(sourceFieldName="SubjectTableName", groupByFormula="MAX"),
-					@FocJoinField(sourceFieldName="SubjectReference", groupByFormula="MAX")
+					@FocJoinField(sourceFieldName="SubjectReference", groupByFormula="MAX"),
+					@FocJoinField(sourceFieldName="SubjectType", groupByFormula="MAX"),
+					@FocJoinField(sourceFieldName="SubjectSite", groupByFormula="MAX"),
+					@FocJoinField(sourceFieldName="SubjectCode", groupByFormula="MAX")
 			}), 
 			@FocJoin(table = "FChatReceiver", alias = "R", on="C.REF=R.Chat", type="left", fields = { 
 					@FocJoinField(sourceFieldName="REF", groupByFormula="MAX"),
@@ -39,6 +42,8 @@ public class FChatJoin extends PojoFocObject {
 	public static final String FNAME_ChatRef  = "C-REF";
 	public static final String FNAME_Date     = "C-InvestigationDate";
 	public static final String FNAME_ReadDate = "R-ReadDate";	
+	public static final String FNAME_SubjectTableName = "C-SubjectTableName";
+	public static final String FNAME_SubjectReference = "C-SubjectReference";
 	
 	public FChatJoin(FocConstructor constr) {
 		super(constr);
@@ -48,7 +53,15 @@ public class FChatJoin extends PojoFocObject {
 		return ParsedFocDesc.getInstance(DBNAME);
 	}
 	
-	public int getInProcedureReference() {
+	public int getChatReference() {
 		return getPropertyInteger(FNAME_ChatRef);
+	}
+	
+	public String getSubjectTableName() {
+		return getPropertyString(FNAME_SubjectTableName);
+	}
+	
+	public int getSubjectReference() {
+		return getPropertyInteger(FNAME_SubjectReference);
 	}
 }

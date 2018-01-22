@@ -1,0 +1,14 @@
+<HorizontalLayout spacing="true" captionMargin="0" margin="true" height="-1px" width="600px">
+  <ValidationSettings formTitle="بحث" withApply="true" withSave="false" withAttach="false" withPrint="false" viewSelector="false" />
+  <VerticalLayout spacing="true" captionMargin="0" margin="true" height="-1px" width="600px">
+    <ConditionField dataPath="SITE" caption="المركز" captionProperty="NAME" />
+    <ConditionField dataPath="Sender" caption="المرسل" captionProperty="FULL_NAME"/>    
+    <ConditionField dataPath="DATE" caption="التاريخ"/>
+    <ConditionField dataPath="Time" caption="توقيت"/>
+    <ConditionField dataPath="Message" caption="الرسالة"/>    
+    <ConditionField dataPath="Receiver" caption="المتلقي" captionProperty="FULL_NAME"/>    
+    <ConditionField dataPath="Read" caption="مقروء"/>
+    <ConditionField dataPath="ReadDate" caption="تاريخ القراءة"/>
+    <ConditionField dataPath="ReadTime" caption="توقيت القراءة"/>
+  </VerticalLayout>
+</HorizontalLayout>

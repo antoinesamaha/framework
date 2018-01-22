@@ -28,7 +28,11 @@ public class FocXMLFilterConditionBuilder {
 				//Label
 //			<Label value="نوع الحادثة" style="f14,bold,text-bottom" alignment="middle_center" width="130px"/>
 				FocXMLAttributes labelAttributes = new FocXMLAttributes();
-				labelAttributes.addAttribute(FXML.ATT_VALUE, condition.getFieldLabel());
+				String caption = attributes.getValue(FXML.ATT_CAPTION);
+				if(caption == null) {
+					caption = condition.getFieldLabel();
+				}
+				labelAttributes.addAttribute(FXML.ATT_VALUE, caption);
 				labelAttributes.addAttribute(FXML.ATT_STYLE, "f14,bold,text-bottom");
 				labelAttributes.addAttribute(FXML.ATT_ALIGNMENT, "middle_center");
 				labelAttributes.addAttribute(FXML.ATT_WIDTH, "130px");

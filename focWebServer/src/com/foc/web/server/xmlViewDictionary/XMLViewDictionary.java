@@ -23,6 +23,7 @@ import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.ICentralPanel;
@@ -205,6 +206,22 @@ public class XMLViewDictionary implements IXMLViewDictionary {
 		return foundView;
 	}
 	
+	private XMLView get_WithLanguageAttempt(XMLViewKey xmlViewKey){
+		XMLView view = null;
+		if(xmlViewKey != null) {
+	  	String sessionLanguage = Globals.getApp().getLanguageForThisSession();
+	  	if(!Utils.isStringEmpty(sessionLanguage) && Utils.isStringEmpty(xmlViewKey.getLanguage())) {
+	  		XMLViewKey withLanguageXmlViewKey = new XMLViewKey(xmlViewKey);
+	  		withLanguageXmlViewKey.setLanguage(sessionLanguage);
+	  		view = getXmlViewDicMap().get(withLanguageXmlViewKey.builStringKey());
+			}
+	  	if(view == null) {
+	  		view = getXmlViewDicMap().get(xmlViewKey.builStringKey());
+	  	}
+		}
+		return view;
+	}
+	
   public XMLView get(XMLViewKey xmlViewKey){
   	return get_Internal(xmlViewKey, true, false);//Do not display errors
   }
@@ -239,8 +256,8 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   			adjustKey_ToHaveTheLastSelectedViewByTheUser(xmlViewKey);	
   		}
   	}
-    String key = xmlViewKey.builStringKey();
-    XMLView view = getXmlViewDicMap().get(key);
+  	
+  	XMLView view = get_WithLanguageAttempt(xmlViewKey);
     if(view == null){
 //    	if(popupMessageIfNotFound && displayMessage){
 //    		Globals.showNotification("View "+xmlViewKey.getStringKey(), "not found reverting to default view", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
@@ -248,12 +265,11 @@ public class XMLViewDictionary implements IXMLViewDictionary {
     	Globals.logString("View "+xmlViewKey.getStringKey()+" not found reverting to default view");
       xmlViewKey.setUserView(XMLViewKey.VIEW_DEFAULT);
       xmlViewKey.setMobileFriendly(false);
-      key = xmlViewKey.builStringKey();
-      view = getXmlViewDicMap().get(key);
+      view = get_WithLanguageAttempt(xmlViewKey);
+      
       if(view == null){
         xmlViewKey.setUserView(XMLViewKey.VIEW_PRINTING);
-        key = xmlViewKey.builStringKey();
-        view = getXmlViewDicMap().get(key);
+        view = get_WithLanguageAttempt(xmlViewKey);
       }
       if(view == null){
       	if(!xmlViewKey.isForNewObjectOnly()){
@@ -358,10 +374,6 @@ public class XMLViewDictionary implements IXMLViewDictionary {
     
     FocUser userForSession = Globals.getApp().getUser_ForThisSession();
     if(userForSession != null){
-
-    	//NEVER NEVER PUT THIS LINE PLEASE - IT MADE ME LOSE 2 HOURS
-    	//FocGroupDesc.getInstance().getFocList(FocList.NONE).reloadFromDB();
-    	//NEVER NEVER PUT THIS LINE PLEASE
     	int viewsRight = userForSession.getGroup().getViewsRight();
     	
       GroupXMLView xmlView = userForSession != null ? userForSession.findXMLView(xmlViewKey.getStorageName(), xmlViewKey.getContext(), xmlViewKey.getType()) : null;

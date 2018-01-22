@@ -3,6 +3,7 @@ package com.foc.admin;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.business.company.Company;
 import com.foc.business.workflow.WFSite;
@@ -22,7 +23,7 @@ public class UserSession implements Serializable {
   private boolean simulation       = false;
   private HashMap<String, Object> sessionParameters = null;
   
-  public UserSession(){
+	public UserSession(){
   }
 
   public void dispose(){
@@ -171,6 +172,10 @@ public class UserSession implements Serializable {
   public WFTitle getTitle() {
     return title;
   }
+  
+  public String getLanguage() {
+		return ConfigInfo.getLanguage();
+	}
 
   //--------------------------------
   // STATIC THREAD LOCAL

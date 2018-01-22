@@ -1,0 +1,5 @@
+<HorizontalLayout spacing="true" captionMargin="0" margin="false" width="100%" border="false">
+	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="false" />
+	<Button name="CONFIGURE" caption="Search" style="button-dark-01,f22,bold" width="100px" icon="search" />
+	<GuiField name="DESCRIP" style="f14,bold,text-bottom" alignment="middle_center" width="100%" editable="false" expandRatio="1" />
+</HorizontalLayout>

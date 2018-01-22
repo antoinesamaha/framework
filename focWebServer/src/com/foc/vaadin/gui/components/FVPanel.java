@@ -1,6 +1,7 @@
 package com.foc.vaadin.gui.components;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.xml.sax.Attributes;
 
@@ -13,16 +14,19 @@ import com.foc.vaadin.IRightPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
+import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.layouts.FVLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.Panel;
 
 @SuppressWarnings("serial")
-public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent {
+public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent, FVLayout {
 
   private Attributes attributes = null;
   private FocXMLGuiComponentDelegate delegate = null;
@@ -266,5 +270,83 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent 
 	@Override
 	public boolean isRootLayout() {
 		return true;
+	}
+
+	@Override
+	public void addComponent(Component comp, Attributes attributes) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addComponent(Component comp) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setDragDrop(boolean state) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isDragDrop() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Iterator<Component> getComponentIterator() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FocCentralPanel getWindow() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ComponentPosition getPosition(Component comp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setName(String name) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setType(String type) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isXMLLeaf() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void fillXMLNodeContent(XMLBuilder builder) {
+		// TODO Auto-generated method stub
+		
 	}
 }

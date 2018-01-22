@@ -52,7 +52,6 @@ import com.foc.access.AccessControl;
 import com.foc.access.AccessSubject;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocUser;
-import com.foc.admin.FocUserDesc;
 import com.foc.admin.UserSession;
 import com.foc.api.IFocList;
 import com.foc.api.IFocObject;
@@ -2588,6 +2587,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public boolean workflow_IsWorkflowSubject(){
   	return getThisFocDesc() != null && getThisFocDesc().workflow_IsWorkflowSubject();
   }
+  
+  public WFSite workflow_GetSite(){
+  	WFSite site = null;
+  	if(this instanceof IWorkflow && this instanceof IStatusHolder){
+  		IWorkflow     workflow     = (IWorkflow) this;
+  		if(workflow != null && workflow.iWorkflow_getWorkflow() != null){
+  			site = workflow.iWorkflow_getWorkflow().getArea();
+  		}
+  	}
+  	return site;
+  }
+
     
   //IFocDataSource
   /*

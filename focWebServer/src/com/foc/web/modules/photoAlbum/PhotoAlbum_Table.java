@@ -53,17 +53,26 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 
 	public static final String KEY_FILTER_TYPE = "FILTER_TYPE";
 	
-	private FVComboBox   documentTypeFilterComboBox = null;
-	private Button       unrelatedAttachmentsButton = null;
-	private DocumentType filteredType               = null;
+	private IFocData     originalFocDataBeforeWrapper = null;
+	private FVComboBox   documentTypeFilterComboBox   = null;
+	private Button       unrelatedAttachmentsButton   = null;
+	private DocumentType filteredType                 = null;
 	
 	@Override
 	public void dispose() {
+		boolean disposeTheOriginalFocData = false;
+		if(isFocDataOwner()) {
+			disposeTheOriginalFocData = true;
+		}
 		super.dispose();
 		unrelatedAttachmentsButton = null;
 		if(documentTypeFilterComboBox != null){
 			documentTypeFilterComboBox.dispose();
 			documentTypeFilterComboBox = null;
+		}
+		if(disposeTheOriginalFocData && originalFocDataBeforeWrapper != null) {
+			originalFocDataBeforeWrapper.dispose();
+			originalFocDataBeforeWrapper = null;
 		}
 	}
 	
@@ -72,6 +81,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 		FocListWrapper wrapper = null;
 		
 		if(focData != null){
+			originalFocDataBeforeWrapper = focData;
 			Object obj = focData.iFocData_getDataByPath(KEY_FILTER_TYPE);
 			if(obj instanceof DocumentType){
 				filteredType = (DocumentType) obj;

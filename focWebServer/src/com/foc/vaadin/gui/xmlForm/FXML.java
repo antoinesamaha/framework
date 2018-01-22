@@ -178,6 +178,7 @@ public interface FXML {
   public static final String ATT_PROMPT                   = "prompt"            ;
   public static final String ATT_TABINDEX                 = "tabindex"          ;
   public static final String ATT_AUTO_REFRESH             = "autoRefresh"       ;
+  public static final String ATT_BUTTON_LINK_STYLE        = "linkStyle"         ;
   
   public static final String TAG_LABEL                     = "Label"             ;
   public static final String TAG_BUTTON                    = "Button"            ;
@@ -244,6 +245,7 @@ public interface FXML {
   public static final String TAG_VIEW_KEY_NEW              = "NewForm"            ;
   public static final String TAG_INCLUDE_XML               = "IncludeXML"         ;
   public static final String TAG_INCLUDE_XML_FOR_EACH      = "IncludeXMLForEach"  ;
+  public static final String ATT_FOR_EACH_SEPARATOR        = "separator"          ;
   public static final String ATT_VIEW_KEY_STORAGE_NAME     = "storage"            ;
   public static final String ATT_VIEW_KEY_TYPE             = "type"               ;
   public static final String ATT_VIEW_KEY_FOR_NEW          = "forNew"             ;
