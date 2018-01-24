@@ -300,6 +300,24 @@
 			/-->
 	</target>
 
+	<target name="focVaadinTheme">
+		<preparePackDir packDir="${focFramework.packDir}" />
+
+		<addProjectToPack packDir="${focFramework.packDir}" projectDir="${focVaadinTheme.prjDir}" foc-app="foc" web="false" />
+
+		<ant dir="${focVaadinTheme}" antfile="build.xml" target="makeJar" />
+
+		<doObfuscateDir jarDir="${focFramework.buildDir}/jar" />
+
+		<copy file="${focVaadinTheme.jarFile}" tofile="${focFramework.buildDir}/jar/${focVaadinTheme.ojarName}" />
+		
+		<copy todir="${focFramework.packDir}/jar">
+			<fileset dir="${focFramework.buildDir}/jar">
+				<exclude name="01b-*.jar" />
+			</fileset>
+		</copy>
+	</target>
+
 	<target name="javadocCreate">
 		<javadoc sourcepath="${foc.srcDir}" destdir="${foc.javadocDir}" encoding="UTF-8"/>
 		<javadoc sourcepath="${focAPI.srcDir}" destdir="${focAPI.javadocDir}" encoding="UTF-8"/>
