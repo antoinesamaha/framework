@@ -94,6 +94,20 @@ public class FocUserDesc extends FocDesc{
     focCharFld.setMandatory(true);
     focCharFld.setLockValueAfterCreation(true);      
     addField(focCharFld);
+    focCharFld.addListener(new FPropertyListener() {
+			@Override
+			public void propertyModified(FProperty property) {
+				if(property != null) {
+					FocUser user = (FocUser) property.getFocObject();
+					int debug = 3;
+					debug++;
+				}
+			}
+			
+			@Override
+			public void dispose() {
+			}
+		});
 
     focCharFld = new FStringField("FULL_NAME", "Full name", FLD_FULL_NAME, false, LEN_FULL_NAME);
     addField(focCharFld);

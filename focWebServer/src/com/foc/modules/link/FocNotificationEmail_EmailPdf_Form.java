@@ -1,10 +1,9 @@
-package com.foc.web.modules.chat.gui;
+package com.foc.modules.link;
 
 import com.foc.business.config.BusinessConfig;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
-
 
 @SuppressWarnings("serial")
 public class FocNotificationEmail_EmailPdf_Form extends Email_Form {

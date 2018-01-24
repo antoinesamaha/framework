@@ -60,6 +60,7 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	public FocDesc getFocDescription() {
 		if(focDesc == null){
 			focDesc = newFocDesc();
+			focDesc.setModule(getFocModule());
 			PojoFocDesc pojoFocDesc = (PojoFocDesc) focDesc; 
 			readAnnotations(pojoFocDesc);
 			if(pojoFocDesc != null) pojoFocDesc.afterParsing();

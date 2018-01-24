@@ -2242,25 +2242,29 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
 	  @include focRTL;
   }
   
+  .foc-wrap-line{
+    word-wrap: break-word; /* IE  */
+    white-space: -moz-pre-wrap; /* Firefox */
+  }
+  
   /*
   CHAT SLIDER
   */
 	.foc-chat-layout{
-  
-    /*GRAY*/
-   	background: #808080;
-  	color: #fff;
-  
-    /*BLUE
-  	background: #197de1;
-    color: #fff;
-    */
-    
+		border: 2px;
+		border-color: rgb(64, 128, 255);
+		border-color: rgb(255,201,14);
+		border-color: orange;
+		border-style: solid;
   }
-  
-  .sp-gray {
+
+  .foc-slider-tab {
     &.v-sliderpanel-content, &.v-sliderpanel-tab {
-      font-size: 17px;
+      background: rgb(255,201,14);
+      background: orange;
+      color: #000;
+	    font-weight: bold;
+	    font-size: 12px;
     }
   }
 }

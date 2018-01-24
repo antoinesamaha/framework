@@ -1666,7 +1666,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 		FVValidationLayout vLay = centralPanel.getValidationLayout();
 		if(vLay != null){
-			vLay.addStyleName("foc-white");
+			vLay.adjustStyleForInnerLayoutsWithPositionUP();
 			FocXMLGuiComponentStatic.setCaptionMargin_Zero(vLay);
 			vLay.setDeleteButtonVisible(false);
 			Button applyButton = vLay.valo_GetApplyButton(false);

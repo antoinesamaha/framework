@@ -52,6 +52,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.link.FocLinkOutRights;
 import com.foc.list.FocList;
+import com.foc.modules.link.DocMsg_Form;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -77,9 +78,6 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.PrnLayout_Table;
-import com.foc.web.modules.chat.gui.DocMsg_Form;
-import com.foc.web.modules.chat.gui.FChatSlider;
-import com.foc.web.modules.chat.module.FChatModule;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
@@ -100,15 +98,17 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings("serial")
-public class FVValidationLayout extends HorizontalLayout {
-  private FValidationSettings            validationSettings  = null;
-	private ArrayList<IValidationListener> validationListeners = null;
-	private ICentralPanel                  centralPanel        = null;
-	private FChatSlider                    chatSlider          = null;
+public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayout
+  private FValidationSettings            validationSettings   = null;
+	private ArrayList<IValidationListener> validationListeners  = null;
+	private ICentralPanel                  centralPanel         = null;
+//	private ChatSlider                    chatSlider           = null;
+	private HorizontalLayout               mainHorizontalLayout = null;
 //  private FVHorizontalLayout buttonsLayout = null;
 	/*
 	private Button nextContextHelpButton     = null;
@@ -172,16 +172,27 @@ public class FVValidationLayout extends HorizontalLayout {
   
   public FVValidationLayout(INavigationWindow focVaadinMainWindow, ICentralPanel centralPanel, FValidationSettings validationSettings, boolean showBackButton) {
   	super();
-  	setMargin(false);
-  	setSpacing(true);
-  	setCaption(null);
 //  	addStyleName("noPrint");
     this.validationSettings = validationSettings;
   	this.focVaadinMainWindow = focVaadinMainWindow;
   	this.centralPanel = centralPanel;
-    setWidth("100%");
-    setHeight("-1px");
-    setStyleName("foc-validation");
+  	
+  	setMargin(false);
+  	setSpacing(false);
+  	setCaption(null);
+  	setWidth("100%");
+  	setHeight("-1px");
+  	
+  	mainHorizontalLayout = new HorizontalLayout();
+  	addComponent(mainHorizontalLayout);
+  	
+  	mainHorizontalLayout.setMargin(false);
+  	mainHorizontalLayout.setSpacing(true);
+  	mainHorizontalLayout.setCaption(null);
+  	mainHorizontalLayout.setWidth("100%");
+  	mainHorizontalLayout.setHeight("-1px");
+  	mainHorizontalLayout.setStyleName("foc-validation");
+    
     if(Globals.isValo()){
 //    	We get problems when we apply this style
 //    	in trees the scroll bar is hidden so we can't scroll over the tree 
@@ -189,8 +200,9 @@ public class FVValidationLayout extends HorizontalLayout {
     }
     
     if(Globals.isValo()){
-    	addStyleName("foc-footerLayout");
+    	mainHorizontalLayout.addStyleName("foc-footerLayout");
     }
+    mainHorizontalLayout.addStyleName("noPrint");
     addStyleName("noPrint");
     
   	initButtonsLayout(showBackButton);
@@ -199,11 +211,6 @@ public class FVValidationLayout extends HorizontalLayout {
   }
   
   public void dispose(){
-  	if(chatSlider != null) {
-  		chatSlider.dispose();
-  		chatSlider = null;
-  	}
-  	
   	if(validationListeners != null){
   		validationListeners.clear();
   		validationListeners = null;
@@ -237,6 +244,7 @@ public class FVValidationLayout extends HorizontalLayout {
   	focVaadinMainWindow = null;
   	validationSettings = null;
   	
+  	mainHorizontalLayout = null;
 //  	nextContextHelpButton = null;
 //  	exitContextHelpButton = null;
 //  	previousContextHelpButton = null;
@@ -248,14 +256,19 @@ public class FVValidationLayout extends HorizontalLayout {
 //  		helpContextComponentFocusable = null;
 //  	}
 //  }
-//  
+// 
+  
+  public void adjustStyleForInnerLayoutsWithPositionUP() {
+		if(mainHorizontalLayout != null) mainHorizontalLayout.addStyleName("foc-white");
+  }
+  
   public void adjustForSignatureSlideShow(){
-  	if(titleLabel != null) removeComponent(titleLabel);
+  	if(titleLabel != null) mainHorizontalLayout.removeComponent(titleLabel);
   	if(getApplyButton(false) != null){
-  		setComponentAlignment(getApplyButton(false), Alignment.BOTTOM_LEFT);
+  		mainHorizontalLayout.setComponentAlignment(getApplyButton(false), Alignment.BOTTOM_LEFT);
   	}
   	if(getDiscardButton(false) != null){
-  		setComponentAlignment(getDiscardButton(false), Alignment.BOTTOM_LEFT);
+  		mainHorizontalLayout.setComponentAlignment(getDiscardButton(false), Alignment.BOTTOM_LEFT);
   	}
   }
   
@@ -274,9 +287,9 @@ public class FVValidationLayout extends HorizontalLayout {
       }
       titleLabel.setWidth("-1px");
       titleLabel.setHeight("-1px");
-    	addComponent(titleLabel);
-    	setComponentAlignment(titleLabel, Alignment.MIDDLE_CENTER);
-    	setExpandRatio(titleLabel, 1f);
+      mainHorizontalLayout.addComponent(titleLabel);
+      mainHorizontalLayout.setComponentAlignment(titleLabel, Alignment.MIDDLE_CENTER);
+      mainHorizontalLayout.setExpandRatio(titleLabel, 1f);
     return titleLabel;
   }
   
@@ -1140,8 +1153,8 @@ public class FVValidationLayout extends HorizontalLayout {
   				statusLayout_MenuBar = new FVStatusLayout_MenuBar(xmlLayout, focObject);
   				
   				if(statusLayout_MenuBar.getRootMenuItem() != null && statusLayout_MenuBar.getRootMenuItem().getSize() > 0){//If the status bar is empty then do not show it
-					  addComponent(statusLayout_MenuBar);
-					  setComponentAlignment(statusLayout_MenuBar, Alignment.MIDDLE_LEFT);
+  					mainHorizontalLayout.addComponent(statusLayout_MenuBar);
+  					mainHorizontalLayout.setComponentAlignment(statusLayout_MenuBar, Alignment.MIDDLE_LEFT);
   				}
   			}
   		}
@@ -1164,8 +1177,8 @@ public class FVValidationLayout extends HorizontalLayout {
 	  	    		WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(iWorkflowDesc.iWorkflow_getDBTitle());
 	  	    		if(map != null){
 	    					stageLayout_MenuBar = new FVStageLayout_MenuBar(xmlLayout, focObject);
-	    					addComponent(stageLayout_MenuBar);
-	    				  setComponentAlignment(stageLayout_MenuBar, Alignment.MIDDLE_LEFT);
+	    					mainHorizontalLayout.addComponent(stageLayout_MenuBar);
+	    					mainHorizontalLayout.setComponentAlignment(stageLayout_MenuBar, Alignment.MIDDLE_LEFT);
 	  	    		}
 	  	    	}
 	  			}
@@ -1181,29 +1194,29 @@ public class FVValidationLayout extends HorizontalLayout {
       if (validationSettings.isWithPrint() && !FocWebApplication.getInstanceForThread().isMobile()) {
         
       	if(Globals.isValo()){
-      		addComponent(valo_GetPrintEmbedded(true));
+      		mainHorizontalLayout.addComponent(valo_GetPrintEmbedded(true));
       		PrintingAction printingAction = newPrintingAction();
       		if(printingAction != null){
       			printingAction.dispose();
-      			addComponent(valo_GetPDFPrintEmbedded(true));
+      			mainHorizontalLayout.addComponent(valo_GetPDFPrintEmbedded(true));
       		}
       		applyBrowserWindowOpenerToPrintButton(valo_GetPrintEmbedded(false));
-          setComponentAlignment(valo_GetPrintEmbedded(false), Alignment.BOTTOM_LEFT);
+      		mainHorizontalLayout.setComponentAlignment(valo_GetPrintEmbedded(false), Alignment.BOTTOM_LEFT);
       	}else{
-      		addComponent(getPrintButton(true));
+      		mainHorizontalLayout.addComponent(getPrintButton(true));
       		applyBrowserWindowOpenerToPrintButton(getPrintButton(false));
-          setComponentAlignment(getPrintButton(false), Alignment.BOTTOM_LEFT);
+      		mainHorizontalLayout.setComponentAlignment(getPrintButton(false), Alignment.BOTTOM_LEFT);
       	}
         
       	if(getFocData() != null && getFocData() instanceof FocObject && validationSettings.isWithPrintAndExit()){
 	        if(Globals.isValo()){
-	        	addComponent(valo_GetPrintEmbedded(true));
+	        	mainHorizontalLayout.addComponent(valo_GetPrintEmbedded(true));
 		        applyBrowserWindowOpenerToPrintButton(valo_GetPrintEmbedded(false));	        
-		        setComponentAlignment(valo_GetPrintEmbedded(false), Alignment.BOTTOM_LEFT);
+		        mainHorizontalLayout.setComponentAlignment(valo_GetPrintEmbedded(false), Alignment.BOTTOM_LEFT);
 	        }else{
-	        	addComponent(getPrintAndExitButton(true));
+	        	mainHorizontalLayout.addComponent(getPrintAndExitButton(true));
 		        applyBrowserWindowOpenerToPrintButton(getPrintAndExitButton(false));	        
-		        setComponentAlignment(getPrintAndExitButton(false), Alignment.BOTTOM_LEFT);	        	
+		        mainHorizontalLayout.setComponentAlignment(getPrintAndExitButton(false), Alignment.BOTTOM_LEFT);	        	
 	        }
         }
       }
@@ -1211,41 +1224,41 @@ public class FVValidationLayout extends HorizontalLayout {
       if (validationSettings.hasPDFGenerator()) {
       	if(Globals.isValo()){
       		if(valo_GetPdfGeneratorEmbedded(true) != null){
-  	        addComponent(valo_GetPdfGeneratorEmbedded(false));
-  	        setComponentAlignment(valo_GetPdfGeneratorEmbedded(false), Alignment.BOTTOM_LEFT);
+      			mainHorizontalLayout.addComponent(valo_GetPdfGeneratorEmbedded(false));
+      			mainHorizontalLayout.setComponentAlignment(valo_GetPdfGeneratorEmbedded(false), Alignment.BOTTOM_LEFT);
         	}
       	}else{
       		if(getPdfGeneratorButton(true) != null){
-  	        addComponent(getPdfGeneratorButton(true));
-  	        setComponentAlignment(getPdfGeneratorButton(true), Alignment.BOTTOM_LEFT);
+      			mainHorizontalLayout.addComponent(getPdfGeneratorButton(true));
+      			mainHorizontalLayout.setComponentAlignment(getPdfGeneratorButton(true), Alignment.BOTTOM_LEFT);
         	}      		
       	}
       }
 
       if (validationSettings.hasMSWordGenerator()) {
     		if(valo_GetMSWordGeneratorEmbedded(true) != null){
-	        addComponent(valo_GetMSWordGeneratorEmbedded(false));
-	        setComponentAlignment(valo_GetMSWordGeneratorEmbedded(false), Alignment.BOTTOM_LEFT);
+    			mainHorizontalLayout.addComponent(valo_GetMSWordGeneratorEmbedded(false));
+    			mainHorizontalLayout.setComponentAlignment(valo_GetMSWordGeneratorEmbedded(false), Alignment.BOTTOM_LEFT);
       	}
       }
 
       if (validationSettings.isWithAttach() && isAttachementApplicable()) {
       	if(Globals.isValo()){
-      		addComponent(valo_GetAttachEmbedded(true));
-          setComponentAlignment(valo_GetAttachEmbedded(false), Alignment.BOTTOM_LEFT);
+      		mainHorizontalLayout.addComponent(valo_GetAttachEmbedded(true));
+      		mainHorizontalLayout.setComponentAlignment(valo_GetAttachEmbedded(false), Alignment.BOTTOM_LEFT);
       	}else{
-      		addComponent(getAttachButton(true));
-          setComponentAlignment(getAttachButton(false), Alignment.BOTTOM_LEFT);      		
+      		mainHorizontalLayout.addComponent(getAttachButton(true));
+      		mainHorizontalLayout.setComponentAlignment(getAttachButton(false), Alignment.BOTTOM_LEFT);      		
       	}
       }
       
       if (validationSettings.isWithEmail() && !FocWebApplication.getInstanceForThread().isMobile()){
       	if(Globals.isValo()){
-      		addComponent(valo_GetEmailEmbedded(true));
-          setComponentAlignment(valo_GetEmailEmbedded(false), Alignment.BOTTOM_LEFT);
+      		mainHorizontalLayout.addComponent(valo_GetEmailEmbedded(true));
+      		mainHorizontalLayout.setComponentAlignment(valo_GetEmailEmbedded(false), Alignment.BOTTOM_LEFT);
       	}else{
-      		addComponent(getEmailButton(true));
-          setComponentAlignment(getEmailButton(false), Alignment.BOTTOM_LEFT);      		
+      		mainHorizontalLayout.addComponent(getEmailButton(true));
+      		mainHorizontalLayout.setComponentAlignment(getEmailButton(false), Alignment.BOTTOM_LEFT);      		
       	}
       }
       
@@ -1262,14 +1275,14 @@ public class FVValidationLayout extends HorizontalLayout {
     if(Globals.isValo()){
     	Embedded embedded = valo_GetFullScreenEmbedded(true);
     	if(embedded != null){
-		    addComponent(embedded);
-		    setComponentAlignment(embedded, Alignment.BOTTOM_LEFT);
+    		mainHorizontalLayout.addComponent(embedded);
+    		mainHorizontalLayout.setComponentAlignment(embedded, Alignment.BOTTOM_LEFT);
 	    }
     }else{
 	    Button fullScreenButton = getFullScreenButton(true);
 	    if(fullScreenButton != null){
-		    addComponent(fullScreenButton);
-		    setComponentAlignment(fullScreenButton, Alignment.BOTTOM_LEFT);
+	    	mainHorizontalLayout.addComponent(fullScreenButton);
+	    	mainHorizontalLayout.setComponentAlignment(fullScreenButton, Alignment.BOTTOM_LEFT);
 	    }
   	}
     
@@ -1281,9 +1294,9 @@ public class FVValidationLayout extends HorizontalLayout {
   			&& Globals.getApp().getUser_ForThisSession().getGroup() != null
   			&& Globals.getApp().getUser_ForThisSession().getGroup().getViewsRight() < GroupXMLViewDesc.ALLOW_NOTHING){
     	
-    	addComponent(getViewSelector(true));
+    	mainHorizontalLayout.addComponent(getViewSelector(true));
 		  lastAdded = getViewSelector(false);
-		  setComponentAlignment(getViewSelector(false), Alignment.MIDDLE_LEFT);
+		  mainHorizontalLayout.setComponentAlignment(getViewSelector(false), Alignment.MIDDLE_LEFT);
     }
     
     if(getStatusLayout(true) != null){
@@ -1310,12 +1323,12 @@ public class FVValidationLayout extends HorizontalLayout {
     
     MenuBar menuBar = getMenubar(false);
     if(menuBar != null && !FocWebApplication.getInstanceForThread().isMobile()){
-      addComponent(menuBar);
+    	mainHorizontalLayout.addComponent(menuBar);
       
-      setComponentAlignment(menuBar, Alignment.MIDDLE_LEFT);
+    	mainHorizontalLayout.setComponentAlignment(menuBar, Alignment.MIDDLE_LEFT);
       lastAdded = menuBar;
     }
-    
+    /*
 		if(    getFocObject() != null 
 				&& getFocObject().workflow_IsWorkflowSubject()
 				&& FChatModule.userHasChat()
@@ -1323,45 +1336,13 @@ public class FVValidationLayout extends HorizontalLayout {
 				&& getCentralPanel() instanceof FocXMLLayout
 				&& getCentralPanel().getMainWindow() != null) {
 			chatSlider = new FChatSlider((FocXMLLayout)getCentralPanel());
-			chatSlider.build();
-			
-			/*
-			FChatList chatList = new FChatList(getFocObject());
-//			XMLViewKey key = new XMLViewKey(FChat.DBNAME, XMLViewKey.TYPE_TABLE);
-			XMLViewKey key = new XMLViewKey(FChat.DBNAME, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
-			FocXMLLayout table = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(getNavigationWindow(), key, chatList);
-      
-			Panel panel = new Panel();
-			panel.setHeight("500px");
-			panel.addStyleName("foc-chat-layout");
-			panel.setContent(table);
-			
-			SliderPanelBuilder buider = new SliderPanelBuilder(panel, "Chat");
-			buider.expanded(false);
-			buider.mode(SliderMode.BOTTOM);
-			buider.caption("Chat");
-			buider.style(SliderPanelStyles.COLOR_BLUE);
-			buider.tabPosition(SliderTabPosition.BEGINNING);
-			
-  		SliderPanel chatSlider = buider.build();
-
-  		((FocXMLLayout)getCentralPanel()).addComponent(chatSlider);
-  		chatSlider.addListener(new SliderPanelListener() {
-				@Override
-				public void onToggle(boolean expand) {
-					if(expand) {
-						
-					}
-				}
-  		});
-//  		addComponent(valo_GetChatEmbedded(true));
-//      setComponentAlignment(valo_GetChatEmbedded(false), Alignment.BOTTOM_LEFT);
- */
+			chatSlider.build(FVValidationLayout.this);
     }
+    */
     
     if(getLinkLayout(true) != null){
-    	addComponent(getLinkLayout(false));
-    	setComponentAlignment(getLinkLayout(false), Alignment.BOTTOM_LEFT);
+    	mainHorizontalLayout.addComponent(getLinkLayout(false));
+    	mainHorizontalLayout.setComponentAlignment(getLinkLayout(false), Alignment.BOTTOM_LEFT);
     }
 
 //    addHelpButtons();
@@ -1474,8 +1455,8 @@ public class FVValidationLayout extends HorizontalLayout {
 			if(Globals.isValo()){
 				Component comp = valo_GetNotCompletedYet(true);
 				if(comp != null){
-					addComponent(comp);
-		    	setComponentAlignment(comp, Alignment.MIDDLE_RIGHT);
+					mainHorizontalLayout.addComponent(comp);
+					mainHorizontalLayout.setComponentAlignment(comp, Alignment.MIDDLE_RIGHT);
 				}
 			}
   		
@@ -1486,14 +1467,14 @@ public class FVValidationLayout extends HorizontalLayout {
   			if(Globals.isValo()){
 					Embedded deleteButtton = valo_GetDeleteEmbedded(true);
 	  			if(deleteButtton != null){
-			    	addComponent(deleteButtton);
-			    	setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
+	  				mainHorizontalLayout.addComponent(deleteButtton);
+	  				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
 	  			}
   			}else{
   				Button deleteButtton = getDeleteButton(true);
     			if(deleteButtton != null){
-  		    	addComponentAsFirst(deleteButtton);
-  		    	setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
+    				mainHorizontalLayout.addComponentAsFirst(deleteButtton);
+    				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
     			}  				
   			}
   		}
@@ -1516,11 +1497,11 @@ public class FVValidationLayout extends HorizontalLayout {
     }
 
     if(discardOrGoBackButton != null){
-    	addComponent(discardOrGoBackButton);
+    	mainHorizontalLayout.addComponent(discardOrGoBackButton);
     	if(Globals.isValo()){
-    		setComponentAlignment(discardOrGoBackButton, Alignment.MIDDLE_RIGHT);
+    		mainHorizontalLayout.setComponentAlignment(discardOrGoBackButton, Alignment.MIDDLE_RIGHT);
     	}else{
-    		setComponentAlignment(discardOrGoBackButton, Alignment.BOTTOM_RIGHT);
+    		mainHorizontalLayout.setComponentAlignment(discardOrGoBackButton, Alignment.BOTTOM_RIGHT);
     	}
     		
 	    if(titleLabel == null){
@@ -1530,20 +1511,20 @@ public class FVValidationLayout extends HorizontalLayout {
     if (showValidationAndSave) {
     	if(showSave){
     		if(Globals.isValo()){
-    			addComponent(valo_GetSaveButton(true));
-  	    	setComponentAlignment(valo_GetSaveButton(false), Alignment.MIDDLE_LEFT);
+    			mainHorizontalLayout.addComponent(valo_GetSaveButton(true));
+    			mainHorizontalLayout.setComponentAlignment(valo_GetSaveButton(false), Alignment.MIDDLE_LEFT);
     		}else{
-    			addComponent(getSaveButton(true));
-  	    	setComponentAlignment(getSaveButton(false), Alignment.BOTTOM_LEFT);    			
+    			mainHorizontalLayout.addComponent(getSaveButton(true));
+    			mainHorizontalLayout.setComponentAlignment(getSaveButton(false), Alignment.BOTTOM_LEFT);    			
     		}
     	}
 
     	if(Globals.isValo()){
-    		addComponent(valo_GetApplyButton(true));
-      	setComponentAlignment(valo_GetApplyButton(false), Alignment.MIDDLE_LEFT);
+    		mainHorizontalLayout.addComponent(valo_GetApplyButton(true));
+    		mainHorizontalLayout.setComponentAlignment(valo_GetApplyButton(false), Alignment.MIDDLE_LEFT);
     	}else{
-    		addComponent(getApplyButton(true));
-      	setComponentAlignment(getApplyButton(false), Alignment.BOTTOM_LEFT);    		
+    		mainHorizontalLayout.addComponent(getApplyButton(true));
+    		mainHorizontalLayout.setComponentAlignment(getApplyButton(false), Alignment.BOTTOM_LEFT);    		
     	}
     }
   }

@@ -10,6 +10,7 @@ public class XMLFocDesc extends ParsedFocDesc implements IFocDescForFilter {
 	
 	public XMLFocDesc(FocModule module, String storageName, String xmlFullFileName, Class<XMLFocObject> focObjectClass){
 		this(focObjectClass, DB_RESIDENT, storageName, false, false);
+		setModule(module);
 	}
 	
 	public XMLFocDesc(Class focObjectClass, boolean dbResident, String storageName, boolean isKeyUnique, boolean withWorkfllow) {

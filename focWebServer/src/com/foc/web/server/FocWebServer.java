@@ -50,7 +50,6 @@ import com.foc.vaadin.IFocWebModule;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationMore;
 import com.foc.vaadin.gui.layouts.validationLayout.IValidationLayoutMoreMenuFiller;
 import com.foc.web.modules.admin.AdminWebModule;
-import com.foc.web.modules.chat.module.FChatModule;
 import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.modules.fab.FabEndUserWebModule;
 import com.foc.web.modules.fab.FabWebModule;

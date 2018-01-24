@@ -194,6 +194,7 @@ public class FVLabel extends Label implements FocXMLGuiComponent {
   
   public void initLabel() {
   	addStyleName("foc-normal");
+  	addStyleName("foc-wrap-line");
   	setContentMode(ContentMode.HTML);
   	
   	copyMemoryToGui();

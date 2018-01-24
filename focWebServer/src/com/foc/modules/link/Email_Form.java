@@ -1,4 +1,4 @@
-package com.foc.web.modules.chat.gui;
+package com.foc.modules.link;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;

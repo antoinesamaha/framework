@@ -20,7 +20,7 @@ import com.vaadin.ui.Button.ClickEvent;
 @SuppressWarnings("serial")
 public class FVUpload_Image extends CustomComponent implements Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
 
-	private int maxSizeAllowed = 1048576;
+	private int maxSizeAllowed = 6048576;
 	
 	private VerticalLayout        root                  = null; // Root element for contained components.
 	private Upload                upload                = null;
