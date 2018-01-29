@@ -32,6 +32,7 @@ import com.foc.web.dataModel.FocDataItem_ForComboBoxActions;
 import com.foc.web.dataModel.FocListWrapper_ForObjectSelection;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_ObjectComboBox;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
@@ -48,6 +49,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 	private ICentralPanel               openedCentralPanel = null;
 	private IObjectSelectWindowListener iObjectSelectWindowListener = null;
 	private ValueChangeListener         valueChangeListener = null;
+	private UnitTestingRecorder_ObjectComboBox recorder = null;
 //	private boolean                     disableChangeOfValue = false;
 	
   public FVObjectComboBox(IFocData objProperty) {
@@ -61,6 +63,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   }
   
   public FVObjectComboBox(IFocData objProperty, String captionFieldName, Attributes attributes) {
+  	recorder = new UnitTestingRecorder_ObjectComboBox(this);
   	setAttributes(attributes);
     setFocProperty(objProperty, captionFieldName);
     setFilteringMode(FilteringMode.CONTAINS);
@@ -72,6 +75,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   //This is used when no Gear
   public FVObjectComboBox(IFocData objProperty, Attributes attributes) {
   	delegate = new FocXMLGuiComponentDelegate(this);
+  	recorder = new UnitTestingRecorder_ObjectComboBox(this);
   	delegateOwner = true;
   	setAttributes(attributes);
   	setFocData(objProperty);

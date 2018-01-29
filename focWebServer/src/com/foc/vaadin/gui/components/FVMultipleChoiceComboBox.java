@@ -15,6 +15,8 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_MultipleChoice;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_TextField;
 import com.vaadin.data.Container;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.util.IndexedContainer;
@@ -29,10 +31,12 @@ public class FVMultipleChoiceComboBox extends ComboBox implements FocXMLGuiCompo
   private IFocData focData = null;
   private Attributes attributes = null;
   private FocXMLGuiComponentDelegate delegate = null;
-  
+  private UnitTestingRecorder_MultipleChoice recorder = null;
+
   public FVMultipleChoiceComboBox(FProperty property, Attributes attributes) {
   	delegate = new FocXMLGuiComponentDelegate(this);
-    
+  	recorder = new UnitTestingRecorder_MultipleChoice(this);
+  	
   	setFilteringMode(FilteringMode.CONTAINS);
     setFocData(property);
     setAttributes(attributes);
@@ -45,6 +49,10 @@ public class FVMultipleChoiceComboBox extends ComboBox implements FocXMLGuiCompo
 
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     name = null;
     focData = null;
     attributes = null;

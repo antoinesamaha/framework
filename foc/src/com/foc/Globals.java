@@ -115,32 +115,32 @@ public class Globals{
     try{
       File file = new File(path);
       if(file.exists()){
-      	Globals.logString("File Exists :"+path);
+      	Globals.logString("  1-File Exists :"+path);
         in = new FileInputStream(path);  
       }else{
-      	Globals.logString("File Does not Exists :"+path);
+      	Globals.logString("  1-File Does not Exists :"+path);
       }
       if(in == null){
         URL url = Thread.currentThread().getContextClassLoader().getResource(path);
         if(url != null){
-        	Globals.logString("Context loader URL :"+url.toString());
+        	Globals.logString("  2-Context loader URL :"+url.toString());
           in = url.openStream();  
         }else{
-        	Globals.logString("Context loader URL = null");
+        	Globals.logString("  2-Context loader URL = null");
         }
       }
       if(in == null){
-      	Globals.logString("Trying Classs resource");
+      	Globals.logString("  3-Trying Classs resource");
   	    ClassResource resource = new ClassResource(path);
-  	    if(resource.getStream() == null) Globals.logString("The resource.getStream() = null");
+  	    if(resource.getStream() == null) Globals.logString("    The resource.getStream() = null");
   	    in = resource.getStream().getStream();
-  	    if(in == null) Globals.logString("The in = null when using Resource.getStream()");
+  	    if(in == null) Globals.logString("    The in = null when using Resource.getStream()");
       }
 //      if(in == null){
 //      	in = file.getClass().getClassLoader().getResourceAsStream(path);
 //      }
     }catch(Exception e){
-    	Globals.logString("getInputStream EXCEPTION WAS COUGHT");
+    	Globals.logString("  getInputStream EXCEPTION WAS COUGHT");
       logException(e);
     }
     return in;

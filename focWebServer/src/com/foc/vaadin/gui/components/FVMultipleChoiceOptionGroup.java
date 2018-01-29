@@ -11,9 +11,8 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_OptionGroup;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.AbstractSelect;
-import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.OptionGroup;
 
@@ -23,10 +22,12 @@ public class FVMultipleChoiceOptionGroup extends OptionGroup implements FocXMLGu
   private IFocData focData = null;
   private Attributes attributes = null;
   private FocXMLGuiComponentDelegate delegate = null;
-  
+  private UnitTestingRecorder_OptionGroup recorder = null;
+    
   public FVMultipleChoiceOptionGroup(FProperty property, Attributes attributes) {
 //    super(property != null && property.getFocField() != null ? "" : "", new BeanItemContainer(FMultipleChoiceItem.class, ((FMultipleChoiceField)property.getFocField()).getChoicesCollection()));
   	delegate = new FocXMLGuiComponentDelegate(this);
+  	recorder = new UnitTestingRecorder_OptionGroup(this);
   	if(property != null && property.getFocField() != null){
   		setContainerDataSource(new BeanItemContainer(FMultipleChoiceItem.class, ((FMultipleChoiceField)property.getFocField()).getChoicesCollection()));
    	}
@@ -39,6 +40,10 @@ public class FVMultipleChoiceOptionGroup extends OptionGroup implements FocXMLGu
   
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     mfld = null;
     focData = null;
     attributes = null;

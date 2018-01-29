@@ -3,14 +3,12 @@ package com.foc.web.dataModel;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.vaadin.data.Container.Hierarchical;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.tree.FNode;
 import com.foc.tree.FTree;
 import com.foc.tree.TreeScanner;
 import com.foc.tree.criteriaTree.FCriteriaTree;
-import com.vaadin.data.Item;
 
 @SuppressWarnings("serial")
 public class FocPivotWrapper extends FocTreeWrapper {
@@ -181,7 +179,7 @@ public class FocPivotWrapper extends FocTreeWrapper {
 
   @Override
   public Collection<?> getItemIds() {
-  	  final ArrayList<Integer> arrayRefs = new ArrayList<Integer>();  	
+  	  final ArrayList<Long> arrayRefs = new ArrayList<Long>();  	
 //  	if(arrayRefs == null){
 	    
 	    getFTree().scanVisible(new TreeScanner<FNode>() {
@@ -201,7 +199,7 @@ public class FocPivotWrapper extends FocTreeWrapper {
 					}
 	
 	        if (toAdd) {
-	          int ref = focObj.getReference().getInteger();
+	          long ref = focObj.getReference().getLong();
 	          if (ref != 0) {
 	            arrayRefs.add(ref);
 	          }

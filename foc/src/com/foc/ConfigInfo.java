@@ -121,7 +121,7 @@ public class ConfigInfo {
 //        String environment = Globals.getApp().getDefaultEnvironment();
         String homePath = "";//(directory != null && environment != null) ? directory+"/"+environment : "";
         
-        Globals.logString("reading file "+homePath+"properties/config.properties");
+        Globals.logString("A-reading file "+homePath+"properties/config.properties");
         in = Globals.getInputStream(homePath+"/properties/config.properties");
         
 //        if(Globals.getApp().isWithRegistry() && in == null){
@@ -129,19 +129,19 @@ public class ConfigInfo {
 //        }
         
         if( in == null ){
-        	Globals.logString("Trying properties/config.properties");
+        	Globals.logString("B-Trying properties/config.properties");
           in = Globals.getInputStream("properties/config.properties");
         }
         if( in == null ){
-        	Globals.logString("Trying /properties/config.properties");
+        	Globals.logString("C-Trying /properties/config.properties");
           in = Globals.getInputStream("/properties/config.properties");
         }
         if( in == null ){
-        	Globals.logString("Trying ./properties/config.properties");
+        	Globals.logString("D-Trying ./properties/config.properties");
           in = Globals.getInputStream("./properties/config.properties");
         }
         if( in == null ){
-        	Globals.logString("Trying configuration.properties");
+        	Globals.logString("E-Trying configuration.properties");
           in = Globals.getInputStream("configuration.properties");
         }
         
@@ -149,14 +149,14 @@ public class ConfigInfo {
   	      props.load(in);
   	      in.close();
         }else{
-        	Globals.logString("Could not load properties file!");
+        	Globals.logString("--Could not load properties file!");
         	if(Globals.getDisplayManager() != null){
-        		Globals.getDisplayManager().popupMessage("Could not load config file");
+        		Globals.getDisplayManager().popupMessage("--Could not load config file");
         	}
         	
         	String path = ConfigInfo.class.getProtectionDomain().getCodeSource().getLocation().getPath();
         	String decodedPath = URLDecoder.decode(path, "UTF-8");
-        	Globals.logString("This JAR path is:"+decodedPath);
+        	Globals.logString("--This JAR path is:"+decodedPath);
         }
   	      
         String str = null;

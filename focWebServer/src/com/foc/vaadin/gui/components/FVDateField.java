@@ -14,6 +14,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_DateField;
 import com.vaadin.data.util.converter.Converter.ConversionException;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Field;
@@ -26,9 +27,12 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 	private IFocData focData   = null;
 	private Attributes attributes = null;
 	private FocXMLGuiComponentDelegate delegate = null;
+	private UnitTestingRecorder_DateField recorder = null;
 	
   public FVDateField(FProperty property, Attributes attributes) {
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_DateField(this);
+    
     setFocData(property);
     setAttributes(attributes);
     
@@ -39,6 +43,10 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     focData    = null;
     attributes = null;
     if(delegate != null){

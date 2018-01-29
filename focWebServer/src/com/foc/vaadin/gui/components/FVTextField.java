@@ -13,7 +13,6 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.validator.FVStringValidator;
 import com.foc.vaadin.gui.xmlForm.FXML;
-import com.foc.web.unitTesting.recording.UnitTestingRecorder_Button;
 import com.foc.web.unitTesting.recording.UnitTestingRecorder_TextField;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.event.FieldEvents.FocusEvent;
