@@ -1718,7 +1718,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   
   private void deleteButtonClickListener(){
 		if(FocUnitRecorder.isRecording()) {
-			FocUnitRecorder.recordLine("cmd.button_ClickDelete();");
+			FocUnitRecorder.recordLine("button_ClickDelete();");
 		}
   	FocObject focObj = getFocObject();
   	if(focObj != null){
@@ -2016,7 +2016,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 				@Override
 				public void buttonClick(ClickEvent event) {
 					if(FocUnitRecorder.isRecording()) {
-						FocUnitRecorder.recordLine("cmd.button_ClickApply();");
+						FocUnitRecorder.recordLine("button_ClickApply();");
 					}
 					applyButtonClickListener();
 				}
@@ -2146,9 +2146,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 					if(FocUnitRecorder.isRecording()) {
 						String innerLayoutName = getInnerLayoutName();	
 						if(!Utils.isStringEmpty(innerLayoutName)) {
-							FocUnitRecorder.recordLine("cmd.button_ClickDiscard("+innerLayoutName+");");
+							FocUnitRecorder.recordLine("button_ClickDiscard("+innerLayoutName+");");
 						}else {						
-							FocUnitRecorder.recordLine("cmd.button_ClickDiscard();");
+							FocUnitRecorder.recordLine("button_ClickDiscard();");
 						}
 					}
 					discardButtonClickListener();					
@@ -2185,9 +2185,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 					if(FocUnitRecorder.isRecording()) {
 						String innerLayoutName = getInnerLayoutName();
 						if(!Utils.isStringEmpty(innerLayoutName)) {
-							FocUnitRecorder.recordLine("cmd.button_ClickSave("+innerLayoutName+");");
+							FocUnitRecorder.recordLine("button_ClickSave("+innerLayoutName+");");
 						}else {
-							FocUnitRecorder.recordLine("cmd.button_ClickSave();");
+							FocUnitRecorder.recordLine("button_ClickSave();");
 						}
 					}
 					saveButtonClickListener();					

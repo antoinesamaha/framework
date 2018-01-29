@@ -157,7 +157,7 @@ public class FVMenuTree extends FocXMLLayout {
   }
 	
 	private void recordMenuClick(FocMenuItem menuItem){
-		FocUnitRecorder.recordLine("cmd.menu_Click("+menuItem.getCode()+");");
+		FocUnitRecorder.recordLine("menu_Click("+menuItem.getCode()+");");
 	}
 	
 	public void addGuiTree() {

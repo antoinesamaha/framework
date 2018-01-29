@@ -53,9 +53,9 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 				}
 				
 				if(tableName != null) {
-					FocUnitRecorder.recordLine("cmd.componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", "+component.getValueString()+"\", null);");
+					FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", "+component.getValueString()+"\", null);");
 				} else {
-					FocUnitRecorder.recordLine("cmd.component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
+					FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
 				}
 			}
 		}

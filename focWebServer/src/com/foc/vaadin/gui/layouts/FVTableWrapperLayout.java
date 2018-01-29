@@ -457,7 +457,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private void openClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
 			recordTableLineSelection();
-			FocUnitRecorder.recordLine("cmd.table_Open(\""+getDelegate().getNameInMap()+"\");");
+			FocUnitRecorder.recordLine("table_Open(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){
 			FocObject focObject = getTableTreeDelegate().getSelectedObject();
@@ -509,7 +509,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 	private void addItemClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
-			FocUnitRecorder.recordLine("long ref = cmd.table_Add(\""+getDelegate().getNameInMap()+"\");");
+			FocUnitRecorder.recordLine("long ref = table_Add(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){
 			FocObject focObject = getTableTreeDelegate().getSelectedObject();
@@ -588,12 +588,12 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 						FProperty prop = selectedFocObject.getFocPropertyForPath(path);
 						if(prop != null) {
 							recorded = true;
-							FocUnitRecorder.recordLine("cmd.table_Select(\""+getDelegate().getNameInMap()+"\", \""+path+"\", \""+prop.getString()+"\");");
+							FocUnitRecorder.recordLine("table_Select(\""+getDelegate().getNameInMap()+"\", \""+path+"\", \""+prop.getString()+"\");");
 						}
 					}
 				}
 				if(!recorded) {
-					FocUnitRecorder.recordLine("cmd.table_Select(!! COULD NOT DETECT SELECTION PARAMETERS !!);");
+					FocUnitRecorder.recordLine("table_Select(!! COULD NOT DETECT SELECTION PARAMETERS !!);");
 				}
 			}catch(Exception e) {
 				Globals.logException(e);
@@ -604,7 +604,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private void deleteItemClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
 			recordTableLineSelection();
-			FocUnitRecorder.recordLine("cmd.table_Delete(\""+getDelegate().getNameInMap()+"\");");
+			FocUnitRecorder.recordLine("table_Delete(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){
 			FocObject focObject = getTableTreeDelegate().getSelectedObject();

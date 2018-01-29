@@ -3,8 +3,9 @@ package com.foc.web.unitTesting;
 import java.util.ArrayList;
 
 import com.foc.access.FocLogger;
+import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 
-public class FocUnitTest implements ITestCase {
+public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 
   private String                           name  = null;
   private FocUnitTestingSuite              suite = null;
@@ -12,7 +13,22 @@ public class FocUnitTest implements ITestCase {
   private FocUnitXMLAttributes             callerArguments = null;
   
   public FocUnitTest() {
-    
+    this(null, null);
+  }
+
+  public FocUnitTest(String name, FocUnitTestingSuite suite) {
+  	this(name, suite, null);
+  }
+
+  public FocUnitTest(String name, FocUnitTestingSuite suite, ArrayList<FocUnitTestingCommand> arrayCommands) {
+  	super(null, null, new FocXMLAttributes());
+  	//Init Command
+  	setUnitTest(this);
+  	setMethodName(name);
+  	
+    setName(name);
+    setSuite(suite);
+    this.arrayCommands = arrayCommands;
   }
   
   public void dispose(int mode){
@@ -23,12 +39,6 @@ public class FocUnitTest implements ITestCase {
 	    arrayCommands = null;
     }
     callerArguments = null;
-  }
-  
-  public FocUnitTest(String name, FocUnitTestingSuite suite, ArrayList<FocUnitTestingCommand> arrayCommands) {
-    setName(name);
-    setSuite(suite);
-    this.arrayCommands = arrayCommands;
   }
   
   public String getName() {
@@ -63,6 +73,14 @@ public class FocUnitTest implements ITestCase {
     //FocLogger.getInstance().addInfo("Initializing: Test " + this.getName() + " in suite " + this.getSuite().getName() + ".");
   }
 
+  protected void exec() {
+    for (int i=0;i<getArrayCommands().size() && !FocUnitDictionary.getInstance().isPause(); i++) {
+      FocUnitTestingCommand command = getArrayCommands().get(i);
+      FocUnitDictionary.getInstance().stackSetCommand(i);
+      command.execute();
+    }
+  }
+  
   @Override
   public void runTest() {
   	String testStartMessage = "TEST: " + getSuite().getName()+" / "+getName();
@@ -75,11 +93,7 @@ public class FocUnitTest implements ITestCase {
     
     FocUnitDictionary.getInstance().stackPush(FocUnitTest.this, 0);
     
-    for (int i=0;i<getArrayCommands().size() && !FocUnitDictionary.getInstance().isPause(); i++) {
-      FocUnitTestingCommand command = getArrayCommands().get(i);
-      FocUnitDictionary.getInstance().stackSetCommand(i);
-      command.execute();
-    }
+    exec();
     
     if(!FocUnitDictionary.getInstance().isPause()){
     	FocUnitDictionary.getInstance().stackPop();

@@ -30,7 +30,7 @@ public class UnitTestingRecorder_Button implements ClickListener {
 		if(button != null) {
 			FocXMLGuiComponentDelegate delegate = button.getDelegate(); 
 			if(delegate != null && !Utils.isStringEmpty(delegate.getNameInMap())){
-				FocUnitRecorder.recordLine("cmd.button_Click(\""+delegate.getNameInMap()+"\")");
+				FocUnitRecorder.recordLine("button_Click(\""+delegate.getNameInMap()+"\")");
 			}
 		}
 	}
