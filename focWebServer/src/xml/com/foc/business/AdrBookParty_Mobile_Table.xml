@@ -1,4 +1,4 @@
-<VerticalLayout name="null"  >
+<VerticalLayout   >
     <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
     <GuiTable title="Companies address book" name="Address Book Party" dataPath="DATAROOT" width="100%" height="100%"  >
         <OpenForm containerWindow="same window" />

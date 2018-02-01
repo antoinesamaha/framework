@@ -1,15 +1,15 @@
 <VerticalLayout width="100%" >
    <ValidationSettings formTitle="Site" withApply="true" withAttach="true" withPrint="true" />
    
-   <HorizontalLayout name="null" width="98%" border="true"  >
-    <VerticalLayout name="null" >
+   <HorizontalLayout  width="98%" border="true"  >
+    <VerticalLayout  >
 	    <GuiField name="NAME" caption="Name:" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
 	    <GuiField name="DESCRIP" caption="Description:" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
 	    <GuiField name="TRANSACTION_PREFIX" caption="Transaction Prefix:" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
 	    <GuiField name="COMPANY" caption="Company:" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
     </VerticalLayout>
-    <VerticalLayout name="null" >
-      <Label name="null" value="Address:" />
+    <VerticalLayout  >
+      <Label  value="Address:" />
       <GuiField name="ADDRESS" caption="" captionPos="left" captionWidth="-1px" width="100%" height="-1px" />
     </VerticalLayout>
    </HorizontalLayout>

@@ -11,6 +11,8 @@ import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.web.unitTesting.FocUnitRecorder;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_CommonField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 
@@ -25,12 +27,18 @@ public class FocXMLGuiComponentDelegate {
   //These are used in case the component is located in a table.
   private Object columnId = null;
   private Object rowId    = null;
-  
-  public FocXMLGuiComponentDelegate(FocXMLGuiComponent component){
+
+//  private UnitTestingRecorder_CommonField recorder = null;
+
+	public FocXMLGuiComponentDelegate(FocXMLGuiComponent component){
     this.component = component;
   }
   
   public void dispose(){
+//  	if(recorder != null) {
+//  		recorder.dispose();
+//  		recorder = null;
+//  	}
     component   = null;
     rootFocData = null;
     parentComponent = null;
@@ -256,7 +264,9 @@ public class FocXMLGuiComponentDelegate {
     	backupReadOnly = fld.isReadOnly();
     	fld.setReadOnly(false);
     }
+    boolean pause = FocUnitRecorder.pause();
     component.setFocData(data);
+    FocUnitRecorder.resume(pause);
     if(fld != null && backupReadOnly){
     	fld.setReadOnly(backupReadOnly);
     }
@@ -295,4 +305,12 @@ public class FocXMLGuiComponentDelegate {
 	public void setNameInMap(String nameInMap) {
 		this.nameInMap = nameInMap;
 	}
+	
+//  public UnitTestingRecorder_CommonField getRecorder() {
+//		return recorder;
+//	}
+//
+//	public void setRecorder(UnitTestingRecorder_CommonField recorder) {
+//		this.recorder = recorder;
+//	}
 }

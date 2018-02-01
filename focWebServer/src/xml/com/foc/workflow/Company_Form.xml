@@ -14,7 +14,7 @@
    <GuiField name="OFFICIAL_ADDRESS" caption="Official Address" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
    <GuiField name="LOGO" caption="Logo" captionPos="top" captionWidth="-1px" width="400px" height="400px" border = "true"/>
    
-	  <!-- TabLayout name="null">
+	  <!-- TabLayout >
 	    <HorizontalLayout name="Teams and Warehouses">
 	      <GuiTable name="STK_WAREHOUSE_LIST" dataPath="STK_WAREHOUSE_LIST" caption="" width="700px" height="-1px" checkBox="true"  >
 	        <TableColumn name="STK_WAREHOUSE_LIST.NAME" caption="Warehouse" />

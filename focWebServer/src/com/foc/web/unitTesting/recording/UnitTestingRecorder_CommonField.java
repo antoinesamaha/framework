@@ -53,7 +53,7 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 				}
 				
 				if(tableName != null) {
-					FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", "+component.getValueString()+"\", null);");
+					FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
 				} else {
 					FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
 				}

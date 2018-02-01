@@ -8,6 +8,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_CheckBox;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Field;
 
@@ -17,16 +18,19 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
   private IFocData focData = null;
   private Attributes attributes = null;
   private FocXMLGuiComponentDelegate delegate = null;
+  private UnitTestingRecorder_CheckBox recorder = null;
   
   public FVCheckBox() {
     super();
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_CheckBox(this);
     addStyleName("component-margin");
     setImmediate(true);
   }
   
   public FVCheckBox(FProperty property, Attributes attributes) {
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_CheckBox(this);
     setFocData(property);
   	setAttributes(attributes);
   	addStyleName("component-margin");
@@ -36,6 +40,7 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
   public FVCheckBox(String caption, boolean initialState) {
     super(caption, initialState);
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_CheckBox(this);
     addStyleName("component-margin");
     setImmediate(true);
   }
@@ -43,6 +48,7 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
   public FVCheckBox(String caption) {
     super(caption);
     delegate = new FocXMLGuiComponentDelegate(this);
+    recorder = new UnitTestingRecorder_CheckBox(this);
     addStyleName("component-margin");
     setImmediate(true);
   }
@@ -100,6 +106,10 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
   
   @Override
   public void dispose(){
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
     focData    = null;
     attributes = null;
     if(delegate != null){

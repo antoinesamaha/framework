@@ -367,7 +367,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
     if(listWrapper != null){
     	FocObject obj = listWrapper.searchByPropertyValue(getItemCaptionPropertyId().toString(), value);
       if(obj == null){
-    		select(0);
+    		select((long)0);
       }else{
     		select(obj.getReference().getLong());
       }

@@ -13,6 +13,7 @@ import com.foc.Globals;
 import com.foc.OptionDialog;
 import com.foc.access.FocLogger;
 import com.foc.admin.FocUserDesc;
+import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.desc.FocObject;
 import com.foc.menuStructure.FocMenuItemConst;
 import com.foc.saas.manager.SaaSConfigDesc;
@@ -380,6 +381,14 @@ public class FocUnitTestingCommand {
   	}
   }
 
+  /**
+   * Simulates a click on the "Discard" button in the validation layout.
+   * 
+   */
+  protected void button_ClickDiscard() {
+    button_ClickDiscard(null);
+  }
+  
   /**
    * Simulates a click on the "Discard" button in the validation layout.
    * 
@@ -872,6 +881,24 @@ public class FocUnitTestingCommand {
   			getLogger().addFailure("Componet found is not a FVTableWrapperLayout it is a:"+foundComp.getClass().getName());  			
   		}
   	}
+  }
+
+  public int table_Size(String tableName){
+  	int size = -1;
+  	boolean nodeCreated = !getLogger().openCommand("Table "+tableName+" get size");
+  	
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+    if(tableWrapper != null){//The find method will report the right log of failure
+    	FocDataWrapper wrapper = tableWrapper.getFocDataWrapper();
+    	size = wrapper.size();
+    } else {
+      getLogger().addFailure("Could not find table " + tableName);
+    }
+    
+    if(nodeCreated) getLogger().closeNode();
+    
+    return size;
   }
   
   public long table_Select(String tableName, String propertyName, String propertyValue){
@@ -1916,4 +1943,7 @@ public class FocUnitTestingCommand {
     }
   }
 
+  public void notification_Expect(String notificationMessage, String description, String notificationType) {
+  	getDictionary().expectedNotification_Set(notificationMessage, description, notificationType);
+  }
 }

@@ -67,7 +67,6 @@ import com.foc.focDataSourceDB.db.SQLSelectFindReferenceForWhereExpression;
 import com.foc.focDataSourceDB.db.SQLSelectJoinRequest;
 import com.foc.focDataSourceDB.db.SQLUpdate;
 import com.foc.focDataSourceDB.db.adaptor.DBAdaptor;
-import com.foc.focDataSourceDB.db.connectionPooling.ConnectionCredentials;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 import com.foc.focDataSourceDB.db.util.DBUtil;

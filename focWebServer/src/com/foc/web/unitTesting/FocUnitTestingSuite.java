@@ -101,6 +101,10 @@ public class FocUnitTestingSuite {
     }
   }
 
+	public FocUnitTest getTest(String name) {
+		return getTestMap(false).get(name);
+	}
+	
   public void runTestByName(String testName, FocUnitXMLAttributes callerArguments) {
     if (testName != null) {
       Map<String, FocUnitTest> tempTestMap = getTestMap(false);

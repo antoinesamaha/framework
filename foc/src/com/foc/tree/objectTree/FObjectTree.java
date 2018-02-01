@@ -212,8 +212,8 @@ public class FObjectTree<ON extends FObjectNode, OO extends FocObject> extends F
   		fatherNode = findNode(fatherObject);
   		//fatherNode = (ON) findNodeLocally(fatherObject);
       if(fatherNode == null){
-      	if(childObject.getReference().getInteger() == fatherObject.getReference().getInteger()){
-      		Globals.showNotification("DATA Error "+childObject.getThisFocDesc().getStorageName(), childObject.getReference().getInteger()+" is pointing to itself as father!", IFocEnvironment.TYPE_ERROR_MESSAGE);
+      	if(childObject.getReference().getLong() == fatherObject.getReference().getLong()){
+      		Globals.showNotification("DATA Error "+childObject.getThisFocDesc().getStorageName(), childObject.getReference().getLong()+" is pointing to itself as father!", IFocEnvironment.TYPE_ERROR_MESSAGE);
       	}else{
       		fatherNode = addFocObject(fatherObject);
       	}
