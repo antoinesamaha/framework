@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
 
+import com.foc.Globals;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.util.expression.FocExpression;
 import com.foc.util.expression.IExpressionHandler;
@@ -104,7 +105,11 @@ public class FocUnitXMLAttributes extends FXMLAbstractAttributes {
             getTest().getSuite().getDictionary().getLogger().addWarning("Could not interpret expression: " + expression + ". Expression will be returned intact.");
           }
         }else{
-          FocUnitDictionary.getInstance().getLogger().addError("Test in FocUnitXMLAttribute is null.");
+          try{
+						FocUnitDictionary.getInstance().getLogger().addError("Test in FocUnitXMLAttribute is null.");
+					}catch (Exception e){
+						Globals.logException(e);
+					}
         }
 
         return expression;

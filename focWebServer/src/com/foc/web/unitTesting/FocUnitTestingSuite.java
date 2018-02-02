@@ -65,7 +65,7 @@ public class FocUnitTestingSuite {
     }
   }
   
-  public void runSuite() {
+  public void runSuite() throws Exception {
     FocUnitDictionary.getInstance().clear();
     String startingTest = getStartingTest();
     if (startingTest != null && getTestMap(false).get(startingTest) != null) {
@@ -79,7 +79,7 @@ public class FocUnitTestingSuite {
     }
   }
 
-  private void runAllTests() {
+  private void runAllTests() throws Exception {
     if (getTestMap(false) != null) {
       Collection<FocUnitTest> collection = getTestMap(false).values();
 
@@ -105,7 +105,7 @@ public class FocUnitTestingSuite {
 		return getTestMap(false).get(name);
 	}
 	
-  public void runTestByName(String testName, FocUnitXMLAttributes callerArguments) {
+  public void runTestByName(String testName, FocUnitXMLAttributes callerArguments) throws Exception {
     if (testName != null) {
       Map<String, FocUnitTest> tempTestMap = getTestMap(false);
       if (tempTestMap != null) {
@@ -133,11 +133,11 @@ public class FocUnitTestingSuite {
     }
   }
 
-  public void runTestByName(String testName) {
+  public void runTestByName(String testName) throws Exception {
     runTestByName(testName, null);
   }
 
-  private void parseXML_IfNeeded() {
+  private void parseXML_IfNeeded() throws Exception {
     try {
       if (!isParsingDone()) {
         setParsingDone(true);
@@ -198,7 +198,11 @@ public class FocUnitTestingSuite {
           test.addCommand(command);
           FocLogger.getInstance().addInfo("Parsing: Adding method " + command.getMethodName() + " to the test " + test.getName() + ".");
         } else {
-          FocLogger.getInstance().addError("Parsing: Could not find method " + qName + " by name.");
+          try{
+						FocLogger.getInstance().addError("Parsing: Could not find method " + qName + " by name.");
+					}catch (Exception e){
+						Globals.logException(e);
+					}
         }
       }
 
@@ -212,7 +216,11 @@ public class FocUnitTestingSuite {
           FocLogger.getInstance().addInfo("Parsing: Adding test " + test.getName() + " to suite " + FocUnitTestingSuite.this.getName() + ".");
           FocUnitTestingSuite.this.put(test);
         } else {
-          FocLogger.getInstance().addError("Parsing: The created test is empty.");
+          try{
+						FocLogger.getInstance().addError("Parsing: The created test is empty.");
+					}catch (Exception e){
+						Globals.logException(e);
+					}
         }
         FocLogger.getInstance().closeNode("Parsing: Test closing tag encountered.");
       } else if (qName.equalsIgnoreCase(FXMLUnit.TAG_CALL)) {
@@ -239,7 +247,11 @@ public class FocUnitTestingSuite {
   }
 
   public String getStartingTest() {
-    parseXML_IfNeeded();
+    try{
+			parseXML_IfNeeded();
+		}catch (Exception e){
+			Globals.logException(e);
+		}
     return startingTest;
   }
 
@@ -248,7 +260,11 @@ public class FocUnitTestingSuite {
   }
 
   public Map<String, FocUnitTest> getTestMap(boolean createIfNeeded) {
-    parseXML_IfNeeded();
+    try{
+			parseXML_IfNeeded();
+		}catch (Exception e){
+			Globals.logException(e);
+		}
     if (testMap == null && createIfNeeded) {
       testMap = new HashMap<String, FocUnitTest>();
     }

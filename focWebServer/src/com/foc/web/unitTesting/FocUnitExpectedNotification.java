@@ -15,7 +15,7 @@ public class FocUnitExpectedNotification {
 		this.description = description;
 	}
 	
-	public void assertNotification(String notificationMessage, String description, int notificationType){
+	public void assertNotification(String notificationMessage, String description, int notificationType) throws Exception {
 		if(isAssertType() && getNotificationType() != notificationType){
 			FocUnitDictionary.getInstance().getLogger().addError("Error Expected Notification of Type: "+getNotificationType()+" Received: "+notificationType);
 		}else if(isAssertMessage() && !getNotificationMessage().equalsIgnoreCase(notificationMessage)){

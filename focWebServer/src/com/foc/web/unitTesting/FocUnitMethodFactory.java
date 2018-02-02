@@ -22,7 +22,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_LOGOUT, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String nextTest = attributes.getValue(FXMLUnit.ATT_CALL_TEST_COMPOSED);
       	if(nextTest != null){
       		nextTest = nextTest.replace(">", ".");
@@ -35,7 +35,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_NAVIGATE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickNavigate();
       }
     });
@@ -43,7 +43,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_LOGIN, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.login();
       }
     });
@@ -51,7 +51,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_HOME, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickHome();
       }
     });
@@ -59,14 +59,14 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ADMIN, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickAdmin();
       }
     });
 
     methodMap.put(FXMLUnit.TAG_APPLY, new IFUnitMethod() {
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
      		command.button_ClickApply();
       }
     });
@@ -74,7 +74,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SAVE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickSave();
       }
     });
@@ -82,7 +82,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_PAUSE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	FocUnitDictionary.getInstance().pause();
       }
     });
@@ -90,7 +90,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_BREAKPOINT, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	int breakpoint = 3;
       	breakpoint++;
       }
@@ -99,7 +99,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SIGN, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.sign();
       }
     });
@@ -107,7 +107,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_DEEP_APPLY, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickApplyRecursive();
       }
     });
@@ -115,7 +115,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_DISCARD, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickDiscard(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
@@ -123,7 +123,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_PRINT, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickPrint();
       }
     });
@@ -131,7 +131,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_FULL_SCREEN, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickFullScreen();
       }
     });
@@ -139,7 +139,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ATTACH_IMAGE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickAttachment();
       }
     });
@@ -147,7 +147,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_GO_BACK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.button_ClickBack();
       }
     });
@@ -155,7 +155,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_MORE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.moreMenu_Select(attributes.getValue(FXMLUnit.ATT_MORE_CAPTION));
       }
     });
@@ -163,7 +163,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_APPROVE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.status_Approve();
       }
     });
@@ -171,7 +171,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SELECT_VIEW, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.view_Select(attributes.getValue(FXMLUnit.ATT_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_VIEW_NAME));
       }
     });
@@ -179,7 +179,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_GEAR_COMPONENT_ADD, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.gearComponentAdd(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME));
       }
     });
@@ -187,7 +187,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_GEAR_COMPONENT_OPEN, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.gearComponentOpen(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME));
       }
     });
@@ -195,7 +195,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_NAVIGATE_TO, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.menu_Highlight(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
@@ -203,7 +203,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_NAVIGATE_TO_ADMIN_CLICK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.menuAdmin_Click(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
@@ -211,7 +211,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_NAVIGATE_TO_DOUBLE_CLICK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.menu_Click(attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
@@ -219,7 +219,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SELECT_ITEM_IN_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String ancestorRefString = attributes.getValue(FXMLUnit.ATT_ANCESTOR);
       	int ancestor = 0;
       	if(ancestorRefString != null){
@@ -232,7 +232,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ADD_ITEM_IN_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.table_Add(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
@@ -240,7 +240,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_OPEN_ITEM_IN_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.table_Open(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
@@ -248,7 +248,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_DELETE_ITEM_IN_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.table_Delete(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
@@ -256,7 +256,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_TABLE_RIGHT_CLICK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.table_RightClick(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_MENU_CAPTION));
       }
     });
@@ -264,7 +264,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_ENABLED, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(value != null){// && !value.startsWith("$F{")
       		command.component_AssertEnabled(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), Boolean.valueOf(value));
@@ -277,7 +277,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SET_COMPONENT_VALUE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(value != null && !value.startsWith("$F{")){
       		command.component_SetValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
@@ -288,7 +288,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_VALUE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String componentValue = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	
       	if(componentValue != null && !componentValue.startsWith("$F{")){
@@ -300,7 +300,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_EDITABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	command.component_AssertEditable(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME));
       }
     });
@@ -308,7 +308,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SET_COMPONENT_VALUE_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
       	long ref = Long.valueOf(longRef);
         command.componentInTable_SetValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_PRIORITY_TO_CAPTION_PROPERTY));
@@ -318,7 +318,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_ENABLED_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
       	long ref = Long.valueOf(longRef);
         command.componentInTable_AssertEnabled(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), Boolean.getBoolean(attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE)));
@@ -328,7 +328,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_VALUE_TABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
       	long ref = Long.valueOf(longRef);
         command.componentInTable_AssertValue(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE));
@@ -338,7 +338,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SELECT_CELL_FOR_FORMULA, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String longRef = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
       	long ref = Long.valueOf(longRef);
         command.componentInTable_Select(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), ref, attributes.getValue(FXMLUnit.ATT_TABLE_FIELD));
@@ -348,7 +348,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_APPLY_FORMULA, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.applyTheFormula(attributes.getValue(FXMLUnit.ATT_TABLE_NAME));
       }
     });
@@ -356,7 +356,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_REPLACE_ACTIVE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.checkReplaceCheckBoxForTable(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), attributes.getValue(FXMLUnit.ATT_VALUE));
       }
     });
@@ -365,7 +365,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_GET_COMPONENT_VALUE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.component_GetValue(attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
@@ -373,7 +373,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_BUTTON_CLICK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	command.button_Click(attributes.getValue(FXMLUnit.ATT_NAME));
       }
     });
@@ -381,7 +381,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_POPUP_BUTTON_CLICK, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	command.popupButtonClick(attributes.getValue(FXMLUnit.ATT_NAME), attributes.getValue(FXMLUnit.ATT_MENU_CODE));
       }
     });
@@ -389,7 +389,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_NOTIFICATION_EXPECTED, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	FocUnitDictionary.getInstance().expectedNotification_Set(attributes.getValue(FXMLUnit.ATT_NOTIFICATION_MESSAGE), attributes.getValue(FXMLUnit.ATT_NOTIFICATION_DESCRIPTION), attributes.getValue(FXMLUnit.ATT_NOTIFICATION_TYPE));
       }
     });
@@ -397,7 +397,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_BANNER_ADD_LINE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.banner_Add(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME));
       }
     });
@@ -405,7 +405,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_BANNER_DELETE_LINE_IDX, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String index = attributes.getValue(FXMLUnit.ATT_INDEX);
       	int idx = index != null ? Integer.parseInt(index) : -1 ;
         command.banner_DeleteLineByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), idx);
@@ -415,7 +415,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_BANNER_DELETE_LINE_REF, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String refString = attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE);
       	long ref = Long.valueOf(refString);
       	
@@ -426,7 +426,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SET_VALUE_BANNER_IDX, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(!value.startsWith("$F{")){
       		command.componentInBanner_SetValueByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, false);
@@ -437,7 +437,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_SET_VALUE_BANNER_REF, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
       	if(!value.startsWith("$F{")){      	
       		command.componentInBanner_SetValueByReference(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_OBJECT_REFERENCE), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value);
@@ -448,7 +448,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_GET_VALUE_BANNER_REF, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.componentInBanner_GetValue(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE), attributes.getValue(FXMLUnit.ATT_VARIABLE));
       }
     });
@@ -456,7 +456,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_CALL, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	command.callTest();      	
       }
     });
@@ -464,7 +464,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_CALL_FOR, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
       	String variable   = attributes.getValue(FXMLUnit.ATT_VARIABLE);
         String startIndex = attributes.getValue(FXMLUnit.ATT_START_INDEX);
         String endIndex   = attributes.getValue(FXMLUnit.ATT_END_INDEX);
@@ -536,7 +536,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_VARIABLE, new IFUnitMethod() {
 
       @Override
-      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+      public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
         command.variable_Set(attributes.getValue(FXMLUnit.ATT_VARIABLE), attributes.getValue(FXMLUnit.ATT_VALUE));
       }
     });
@@ -544,7 +544,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_DRAG_AND_DROP, new IFUnitMethod() {
 			
 			@Override
-			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
 				command.dragAndDropHighLevel(attributes.getValue(FXMLUnit.ATT_DRAG_AND_DROP_SOURCE), attributes.getValue(FXMLUnit.ATT_DND_SRC_OBJ_PROP_NAME), attributes.getValue(FXMLUnit.ATT_DND_SRC_OBJ_PROP_VALUE), attributes.getValue(FXMLUnit.ATT_DRAG_AND_DROP_TARGET), attributes.getValue(FXMLUnit.ATT_DND_TRG_OBJ_PROP_NAME), attributes.getValue(FXMLUnit.ATT_DND_TRG_OBJ_PROP_VALUE));
 			}
 		});
@@ -552,7 +552,7 @@ public class FocUnitMethodFactory {
     methodMap.put(FXMLUnit.TAG_COLLAPSE_ALL, new IFUnitMethod() {
 			
 			@Override
-			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
 				String boolStr = attributes.getValue(FXMLUnit.ATT_COLLAPSE);
 				boolean bool = boolStr != null ? Boolean.valueOf(boolStr) : true;
 				command.tree_CollapseAll(attributes.getValue(FXMLUnit.ATT_TABLE_NAME), bool);//hussein
@@ -562,7 +562,7 @@ public class FocUnitMethodFactory {
 		methodMap.put(FXMLUnit.TAG_ASSERT_COMPONENT_VALUE_FOR_EACH, new IFUnitMethod() {
 				
 			@Override
-			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
 				String value = attributes.getValue(FXMLUnit.ATT_COMPONENT_VALUE);
 	      if(!value.startsWith("$F{")){
 	      	command.componentInBanner_SetValueByIndex(attributes.getValue(FXMLUnit.ATT_BANNER_LAYOUT_NAME), attributes.getValue(FXMLUnit.ATT_INDEX), attributes.getValue(FXMLUnit.ATT_COMPONENT_NAME), value, true);//hussein
@@ -573,7 +573,7 @@ public class FocUnitMethodFactory {
 		methodMap.put(FXMLUnit.TAG_INIT_SAAS_ACCOUNT, new IFUnitMethod() {
 			
 			@Override
-			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+			public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
 				command.initialiseSaaSAccount();
 			}
 		});

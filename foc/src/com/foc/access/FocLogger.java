@@ -1,5 +1,6 @@
 package com.foc.access;
 
+import com.foc.FocUnitTestFailureException;
 import com.foc.Globals;
 
 public class FocLogger {
@@ -134,7 +135,7 @@ public class FocLogger {
     return line;
   }
 
-  public FocLogLine addError(String message) {
+  public FocLogLine addError(String message) throws Exception {
   	FocLogLine line = null; 
   	if(isEnabled()) {
 	    line = addLogLine(FocLogLine.TYPE_ERROR, message);
@@ -144,7 +145,7 @@ public class FocLogger {
     return line;
   }
   
-  public FocLogLine addFailure(String message) {
+  public FocLogLine addFailure(String message) throws Exception {
   	FocLogLine line = null;
   	if(isEnabled()) {
 	    line = addLogLine(FocLogLine.TYPE_FAILURE, message);
@@ -199,8 +200,11 @@ public class FocLogger {
 		return hasFailure;
 	}
 
-	public void setHasFailure(boolean hasFailure) {
+	public void setHasFailure(boolean hasFailure) throws Exception {
 		this.hasFailure = hasFailure;
+		if(hasFailure) {
+			throw new FocUnitTestFailureException();
+		}
 	}
 
 	public boolean isEnabled() {

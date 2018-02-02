@@ -2,6 +2,7 @@ package com.foc.web.unitTesting;
 
 import java.util.ArrayList;
 
+import com.foc.Globals;
 import com.foc.access.FocLogger;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 
@@ -73,7 +74,7 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
     //FocLogger.getInstance().addInfo("Initializing: Test " + this.getName() + " in suite " + this.getSuite().getName() + ".");
   }
 
-  protected void exec() {
+  protected void exec() throws Exception {
     for (int i=0;i<getArrayCommands().size() && !FocUnitDictionary.getInstance().isPause(); i++) {
       FocUnitTestingCommand command = getArrayCommands().get(i);
       FocUnitDictionary.getInstance().stackSetCommand(i);
@@ -93,7 +94,11 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
     
     FocUnitDictionary.getInstance().stackPush(FocUnitTest.this, 0);
     
-    exec();
+    try{
+			exec();
+		}catch (Exception e){
+			Globals.logException(e);
+		}
     
     if(!FocUnitDictionary.getInstance().isPause()){
     	FocUnitDictionary.getInstance().stackPop();

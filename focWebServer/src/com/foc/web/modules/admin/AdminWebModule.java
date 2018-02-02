@@ -779,7 +779,11 @@ public class AdminWebModule extends FocWebModule {
 	              INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
 	              
               	FocUnitDictionary dictionary = FocUnitDictionary.getInstance();
-              	dictionary.runUnitTest(suite.getName());
+              	try{
+									dictionary.runUnitTest(suite.getName());
+								}catch (Exception e){
+									Globals.logException(e);
+								}
 	
               	dictionary.popupLogger(mainWindow);
 	            }

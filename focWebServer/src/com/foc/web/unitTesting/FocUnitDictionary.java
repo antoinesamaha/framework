@@ -185,7 +185,7 @@ public class FocUnitDictionary {
 		expectedNotification = new FocUnitExpectedNotification(notificationMessage, description, notificationTypeNumber);
   }
   
-  public void expectedNotification_Occured(String notificationMessage, String description, int notificationType){
+  public void expectedNotification_Occured(String notificationMessage, String description, int notificationType) throws Exception {
   	FocUnitExpectedNotification notif = expectedNotification_Get();
   	if(notif == null){
     	getLogger().addFailure("Notification not expected! "+notificationMessage+" : "+description);
@@ -203,7 +203,7 @@ public class FocUnitDictionary {
     return unitDictionary;
   }
   
-  public void runUnitTest(String suiteName){
+  public void runUnitTest(String suiteName) throws Exception {
   	//		INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
   	
   	//VaadinRequest vaadinRequest = VaadinService.getCurrent().getCurrentRequest();
@@ -224,7 +224,7 @@ public class FocUnitDictionary {
     }
   }
   
-  public void continueTestByName(String suiteName, String testName){
+  public void continueTestByName(String suiteName, String testName) throws Exception {
     FocUnitTestingSuite suite = getTestingSuite(suiteName);
 		
 		try {

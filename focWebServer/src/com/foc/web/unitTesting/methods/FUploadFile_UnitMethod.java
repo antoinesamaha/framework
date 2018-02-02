@@ -20,7 +20,7 @@ import com.vaadin.ui.Window;
 
 public class FUploadFile_UnitMethod implements IFUnitMethod {
 	@Override
-	public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) {
+	public void executeMethod(FocUnitTestingCommand command, FocUnitXMLAttributes attributes) throws Exception {
 		if(attributes != null){
 			String filename = attributes.getValue(FXMLUnit.ATT_FILE_NAME);
 			if(filename == null){
