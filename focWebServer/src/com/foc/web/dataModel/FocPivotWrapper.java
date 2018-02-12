@@ -73,7 +73,7 @@ public class FocPivotWrapper extends FocTreeWrapper {
 	      }
 	
 	      if (getInitialValue() != null) {
-	        int initialValueId = getInitialValue().getReference().getInteger();
+	        long initialValueId = getInitialValue().getReference().getLong();
 	        if (!list.containsId(initialValueId)) {
 	          visibleListElements.add(getInitialValue());
 	        }
@@ -92,15 +92,15 @@ public class FocPivotWrapper extends FocTreeWrapper {
   public Collection<?> getChildren(Object itemId) {
     // FocObject focObj = (FocObject) getItem(itemId);
     FNode node = getFTree().vaadin_FindNode(itemId);
-    ArrayList<Integer> array = null;
+    ArrayList<Long> array = null;
     if (node.getVisibleChildCount() > 0) {
-      array = new ArrayList<Integer>();
+      array = new ArrayList<Long>();
       for (int i = 0; i < node.getVisibleChildCount(); i++) {
         FNode cNode = node.getVisibleChildAt(i);
         FocObject cObject = (FocObject) cNode.getObject();
         if (getVisibleListElements(true).contains(cObject)) {
         	cNode.setIndexInChildrenArray(array.size());        	
-          array.add(cObject.getReference().getInteger());
+          array.add(cObject.getReference().getLong());
         }else{
         	cNode.setIndexInChildrenArray(-1);
         }
@@ -118,20 +118,20 @@ public class FocPivotWrapper extends FocTreeWrapper {
 
   @Override
   public Collection<?> rootItemIds() {
-    ArrayList<Integer> array = new ArrayList<Integer>();
+    ArrayList<Long> array = new ArrayList<Long>();
     
 //    if(getFTree().isRootVisible()){
     	FocObject obj = getFTree().getRoot() != null ? (FocObject) getFTree().getRoot().getObject() : null;
     	if (obj != null && obj.getReference().getInteger() != 0 && getFTree().isRootVisible()) {
     		if (getVisibleListElements(true).contains(obj)) {
-    			array.add(obj.getReference().getInteger());
+    			array.add(obj.getReference().getLong());
     		}
     	} else if (getFTree().getRoot() != null) {
     		for (int i = 0; i < getFTree().getRoot().getVisibleChildCount(); i++) {
     			FNode node = getFTree().getRoot().getVisibleChildAt(i);
     			obj = (FocObject) node.getObject();
     			if (obj != null && getVisibleListElements(true).contains(obj)) {
-    				array.add(obj.getReference().getInteger());
+    				array.add(obj.getReference().getLong());
     			}
     		}
     	}

@@ -202,7 +202,7 @@ public class FocLogger {
 
 	public void setHasFailure(boolean hasFailure) throws Exception {
 		this.hasFailure = hasFailure;
-		if(hasFailure) {
+		if(hasFailure && Globals.getApp().isUnitTesting()) {
 			throw new FocUnitTestFailureException();
 		}
 	}
