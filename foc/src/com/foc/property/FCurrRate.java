@@ -26,6 +26,7 @@ public class FCurrRate extends FDouble {
   		setReverse(true);
   		setString(str.substring(1));
   	}else{
+  		setReverse(false);
   		setString(str);	
   	}
   }
