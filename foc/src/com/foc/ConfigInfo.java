@@ -78,6 +78,7 @@ public class ConfigInfo {
   private static boolean adaptDataModelAtStartup = true;
   private static boolean adaptEnabled            = true;
   private static boolean adaptIndexesEnabled     = true;
+  private static boolean adaptConstraints        = true;
   private static String  cloudStorageClassName = null;
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
@@ -309,6 +310,9 @@ public class ConfigInfo {
         str = getProperty("adaptIndexesEnabled");
         adaptIndexesEnabled = str != null ? str.compareTo("1") == 0 : true;
 
+        str = getProperty("adaptConstraints");
+        adaptConstraints = str != null ? str.compareTo("1") == 0 : false;
+        
         str = getProperty("log.details");
         logDetails = str != null ? str.compareTo("1") == 0 : false;
   
@@ -496,6 +500,10 @@ public class ConfigInfo {
   
   public static boolean isAdaptIndexesEnabled() {
     return adaptIndexesEnabled;
+  }
+
+  public static boolean isAdaptConstraints() {
+    return adaptConstraints;
   }
 
   public static boolean isShowStatusColumn() {
