@@ -63,17 +63,19 @@ public class FocListGroupBy {
 		getArrayOfAtomicExpressions(true).add(atomic);
 	}
 	
-	private void buildExpressionFromAtomicArrayOfExpressions(){
+	private void buildExpressionFromAtomicArrayOfExpressions(FocDesc focDesc){
 		ArrayList<String> arr = getArrayOfAtomicExpressions(false);
 		
 		StringBuffer buff = new StringBuffer();
 		if(arr.size() == 1){
-			buff.append(arr.get(0));
+			String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(0)) : arr.get(0);
+			buff.append(fName);
 		}else if(arr.size() > 1){
 			buff.append("concat(");
 			for(int i=0; i<arr.size(); i++){
 				if(i>0) buff.append(",'|',");
-				buff.append(arr.get(i));
+				String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(i)) : arr.get(i);
+				buff.append(fName);
 			}
 			buff.append(")");
 		}
@@ -141,9 +143,9 @@ public class FocListGroupBy {
 	}
 	*/
 
-	public String getGroupByExpression() {
+	public String getGroupByExpression(FocDesc focDesc) {
 		if(groupByExpression == null || groupByExpression.isEmpty()){
-			buildExpressionFromAtomicArrayOfExpressions();
+			buildExpressionFromAtomicArrayOfExpressions(focDesc);
 		}
 		return groupByExpression;
 	}

@@ -167,7 +167,7 @@ public class SQLSelect extends SQLSelectPlain {
       addFrom();
       error = addWhere();
       if(sqlGroupBy != null){
-      	request.append(" GROUP BY ("+sqlGroupBy.getGroupByExpression()+")");
+      	request.append(" GROUP BY ("+sqlGroupBy.getGroupByExpression(focDesc)+")");
       }
     }
     return error;

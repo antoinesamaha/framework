@@ -111,23 +111,23 @@ public class DBAdaptor {
 	    }
 	
 	    //Drop all FFK_ constraints on all Oracle connections
-	    /*
-	  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
-	  	if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE){
-	  		dropConstrains_Oracle(null);	
-	  	}
-	  	
-	  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
-	  	while(auxConnIter != null && auxConnIter.hasNext()){
-	  		ConnectionPool connectionPool = auxConnIter.next();
-	  		if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE){
-		  		String sourceKey = connectionPool.getDBSourceKey();
-		  		if(connectionPool != null && sourceKey != null){
-		  			dropConstrains_Oracle(sourceKey);		
+	    if(ConfigInfo.isAdaptConstraints()) {
+		  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
+		  	if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE){
+		  		dropConstrains_Oracle(null);	
+		  	}
+		  	
+		  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
+		  	while(auxConnIter != null && auxConnIter.hasNext()){
+		  		ConnectionPool connectionPool = auxConnIter.next();
+		  		if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE){
+			  		String sourceKey = connectionPool.getDBSourceKey();
+			  		if(connectionPool != null && sourceKey != null){
+			  			dropConstrains_Oracle(sourceKey);		
+			  		}
 		  		}
-	  		}
-	  	}
-	  	*/
+		  	}
+	    }
 	  	//--------------------------------------------------
 	    
 	    
@@ -233,22 +233,22 @@ public class DBAdaptor {
 
 	    //Oracle Constraints
 	    //------------------
-	    /*
-	    iter = Globals.getApp().getFocDescDeclarationIterator();
-	    while(iter != null && iter.hasNext()){
-	    	IFocDescDeclaration focDescDeclaration = iter.next();
-	    	if(focDescDeclaration != null){
-		    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
-		    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
-		    		try{
-		    			adaptDBTable_Constraints_Oracle(focDesc);
-		        }catch(Exception e){
-		        	Globals.logException(e);
-		    		}
-		    	}
-	      }
+	    if(ConfigInfo.isAdaptConstraints()) {
+		    iter = Globals.getApp().getFocDescDeclarationIterator();
+		    while(iter != null && iter.hasNext()){
+		    	IFocDescDeclaration focDescDeclaration = iter.next();
+		    	if(focDescDeclaration != null){
+			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
+			    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
+			    		try{
+			    			adaptDBTable_Constraints_Oracle(focDesc);
+			        }catch(Exception e){
+			        	Globals.logException(e);
+			    		}
+			    	}
+		      }
+		    }
 	    }
-	    */
 	    //------------------
 	    
 	    //dbManager.endAdaptDataModel();
@@ -515,6 +515,11 @@ public class DBAdaptor {
 		      		constraintName = constraintName.substring(0, constraintName.length()-3);
 		      	}
 		     
+		      	if(constraintName.length() > 30) {
+		      		int fieldNameHashCode = field.getDBName().hashCode();
+		      		constraintName = "FFK_"+tableNameHashCode+"_"+fieldNameHashCode;
+		      	}
+		      	
 			  		FocDesc otherFocDesc = field.getFocDesc();
 			  		if(Utils.isEqual_String(otherFocDesc.getDbSourceKey(), focDesc.getDbSourceKey())){
 				  		FReferenceField refField = (FReferenceField) otherFocDesc.getFieldByID(FField.REF_FIELD_ID); 
