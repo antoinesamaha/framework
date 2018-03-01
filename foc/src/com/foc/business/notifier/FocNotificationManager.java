@@ -3,7 +3,7 @@ package com.foc.business.notifier;
 import java.util.HashMap;
 
 import com.foc.Globals;
-import com.foc.business.notifier.manipulators.IFocNotificationEventManipulator;
+import com.foc.business.notifier.actions.IFocNotifAction;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
@@ -15,9 +15,12 @@ public class FocNotificationManager {
   private HashMap<Long, FocNotificationEventArray> mapOfThreadsSuspendingTheirEvents = null; 
 
   public FocNotificationManager() {
-    setEventNotifierList(FocNotificationEventConfiguratorDesc.getInstance().getFocList());
+    setEventNotifierList(FNotifTrigger.getFocDesc().getFocList());
     
     mapOfThreadsSuspendingTheirEvents = new HashMap<Long, FocNotificationEventArray>();
+    
+    Thread thread = new Thread(new ScheduledThread());
+    thread.start();
   }
 
   public void dispose() {
@@ -81,43 +84,40 @@ public class FocNotificationManager {
   private void scanListOfEventsAndTreat(FocList eventNotifierList, FocNotificationEvent eventFired){
     if(eventNotifierList != null){
       for (int i = 0; i < eventNotifierList.size(); i++) {
-        FocNotificationEventConfigurator notifier = (FocNotificationEventConfigurator) eventNotifierList.getFocObject(i);
-  
-        if (notifier.getEvent() == eventFired.getEventKey()) {
-          
-          IFocNotificationEventManipulator eventManipulator = notifier.getLocalEventManipulator();
-          if(eventManipulator == null){
-            eventManipulator = FocNotificationEventFactory.getInstance().get(eventFired.getEventKey());
-          }
-          
-          if(eventManipulator != null && eventManipulator.shouldTreatEvent(notifier, eventFired)){
-            eventManipulator.treatEvent(notifier, eventFired);
-          }
-          
-        }
+        FNotifTrigger notifier = (FNotifTrigger) eventNotifierList.getFocObject(i);
+        notifier.executeIfSameEvent(eventFired);
+//        if (notifier.getEvent() == eventFired.getEventKey()) {
+//          IFocNotificationEventManipulator eventManipulator = notifier.getLocalEventManipulator();
+//          if(eventManipulator == null){
+//            eventManipulator = FocNotificationEventFactory.getInstance().get(eventFired.getEventKey());
+//          }
+//          if(eventManipulator != null && eventManipulator.shouldTreatEvent(notifier, eventFired)){
+//            eventManipulator.treatEvent(notifier, eventFired);
+//          }
+//        }
       }
     }
   }
   
   private FocList getInternalEventNotifierList(boolean createIfNeeded){
     if(internalEventNotifierList == null && createIfNeeded){
-      internalEventNotifierList = new FocList(new FocLinkSimple(FocNotificationEventConfiguratorDesc.getInstance()));
+      internalEventNotifierList = new FocList(new FocLinkSimple(FNotifTrigger.getFocDesc()));
       internalEventNotifierList.setDbResident(false);
     }
     return internalEventNotifierList;
   }
 
-  public FocNotificationEventConfigurator addInternalEventNotifier(int eventID, FocDesc focDesc, String transactionName, IFocNotificationEventManipulator eventManipulator){
+  public FNotifTrigger addInternalEventNotifier(int eventID, FocDesc focDesc, String transactionName, IFocNotifAction eventAction){
     FocList list = getInternalEventNotifierList(true);
-    FocNotificationEventConfigurator notifier = (FocNotificationEventConfigurator) list.newEmptyItem();
+    FNotifTrigger notifier = (FNotifTrigger) list.newEmptyItem();
     notifier.setEvent(eventID);
     notifier.setTableDesc(focDesc);
-    notifier.setLocalEventManipulator(eventManipulator);
+    notifier.setActionObject(eventAction);
     list.add(notifier);
     return notifier;
   }
   
-  public void removeInternalEventNotifier(FocNotificationEventConfigurator notifier){
+  public void removeInternalEventNotifier(FNotifTrigger notifier){
   	FocList list = getInternalEventNotifierList(false);
   	if(list != null){
   		list.remove(notifier);
@@ -138,5 +138,25 @@ public class FocNotificationManager {
       notificationManager = Globals.getApp().getNotificationManager();
     }
     return notificationManager;
+  }
+  
+  public class ScheduledThread implements Runnable {
+
+		@Override
+		public void run() {
+			FocNotificationEvent event = new FocNotificationEvent(FNotifTrigger.EVT_SCHEDULED, null);
+			
+			while(true) {
+				try {
+		      for (int i = 0; i < eventNotifierList.size(); i++) {
+		        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
+		        trigger.executeIfSameEvent(event);
+		      }
+					Thread.sleep(60000);
+				}catch(Exception e) {
+					Globals.logExceptionWithoutPopup(e);
+				}
+			}
+		}
   }
 }

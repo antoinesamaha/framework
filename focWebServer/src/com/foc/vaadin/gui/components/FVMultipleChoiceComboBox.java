@@ -186,9 +186,14 @@ public class FVMultipleChoiceComboBox extends ComboBox implements FocXMLGuiCompo
   public String getValueString() {
   	String value = null;
 
-  	FMultipleChoiceItem item = (FMultipleChoiceItem) getValue();
-  	if(item != null){
-  		value = item.getTitle();
+  	Object objectValue = getValue();
+  	if(objectValue != null && objectValue instanceof FMultipleChoiceItem) {
+	  	FMultipleChoiceItem item = (FMultipleChoiceItem) getValue();
+	  	if(item != null){
+	  		value = item.getTitle();
+	  	}
+  	} else if(objectValue != null && objectValue instanceof String) {
+  		value = (String) objectValue;
   	}
 
     return value;

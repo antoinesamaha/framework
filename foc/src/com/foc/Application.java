@@ -55,8 +55,9 @@ import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
 import com.foc.business.company.CompanyDesc;
 import com.foc.business.multilanguage.MultiLanguage;
-import com.foc.business.notifier.FocNotificationEventFactory;
 import com.foc.business.notifier.FocNotificationManager;
+import com.foc.business.notifier.actions.FocNotifActionFactory;
+import com.foc.business.notifier.manipulators.FocNotificationEventFactory;
 import com.foc.business.photoAlbum.PhotoAlbumManagmentModule;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
@@ -104,6 +105,7 @@ public class Application {
 	private FocDescMap_ByFocObjectClassName focDescMap_ByFocObjectClassName = null;
 	private FocLogger                       focLogger  = null;//The Logger
 	private FocNotificationEventFactory     focNEF     = null;
+	private FocNotifActionFactory           notifActionFactory = null;
 	private SaaSConfig                appConfiguration = null;        
 	
 	private IFocDataSource   dataSource            = null;
@@ -2028,7 +2030,14 @@ public class Application {
 	public void setFocLogger(FocLogger focLogger) {
 		this.focLogger = focLogger;
 	}
-	
+
+	public FocNotifActionFactory getNotificationActionFactory(boolean create){
+	  if(notifActionFactory == null && create){
+	  	notifActionFactory = new FocNotifActionFactory();
+	  }
+	  return notifActionFactory;
+	}
+
 	public FocNotificationEventFactory getNotificationEventFactory(boolean create){
 	  if(focNEF == null && create){
 	    focNEF = new FocNotificationEventFactory();

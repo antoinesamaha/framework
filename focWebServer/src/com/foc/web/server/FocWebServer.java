@@ -54,6 +54,7 @@ import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.modules.fab.FabEndUserWebModule;
 import com.foc.web.modules.fab.FabWebModule;
 import com.foc.web.modules.migration.MigrationWebModule;
+import com.foc.web.modules.notifier.module.NotifierWebModule;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.session.FocWebSession;
@@ -566,6 +567,7 @@ public class FocWebServer implements Serializable {
     FocWebServer.getInstance().modules_Add(new MigrationWebModule());
     FocWebServer.getInstance().modules_Add(new AccountManagementWebModule());
     FocWebServer.getInstance().modules_Add(new PhotoAlbumWebModule());
+    FocWebServer.getInstance().modules_Add(new NotifierWebModule());
     FocWebServer.getInstance().modules_Add(new DownloadableContentWebModule());
     FocWebServer.getInstance().modules_Add(new WorkflowWebModule());
     

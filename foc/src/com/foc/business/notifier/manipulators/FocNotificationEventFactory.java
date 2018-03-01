@@ -1,13 +1,9 @@
-package com.foc.business.notifier;
+package com.foc.business.notifier.manipulators;
 
 import java.util.HashMap;
 
 import com.foc.Globals;
-import com.foc.business.notifier.manipulators.FocNotificationTableAddManipulator;
-import com.foc.business.notifier.manipulators.FocNotificationTableDeleteManipulator;
-import com.foc.business.notifier.manipulators.FocNotificationTableUpdateManipulator;
-import com.foc.business.notifier.manipulators.FocNotificationUserFromContactManipulator;
-import com.foc.business.notifier.manipulators.IFocNotificationEventManipulator;
+import com.foc.business.notifier.FocNotificationConst;
 
 
 @SuppressWarnings("serial")
@@ -19,7 +15,6 @@ public class FocNotificationEventFactory extends HashMap<Integer, IFocNotificati
     put(FocNotificationConst.EVT_TABLE_DELETE, new FocNotificationTableDeleteManipulator());
     put(FocNotificationConst.EVT_TABLE_UPDATE, new FocNotificationTableUpdateManipulator());
   }
-  
   
   public static FocNotificationEventFactory getInstance(boolean createIfNeeded) {
 

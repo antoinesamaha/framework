@@ -5,24 +5,24 @@ import com.foc.business.notifier.FocNotificationEmail;
 import com.foc.business.notifier.FocNotificationEmailDesc;
 import com.foc.business.notifier.FocNotificationEmailTemplate;
 import com.foc.business.notifier.FocNotificationEvent;
-import com.foc.business.notifier.FocNotificationEventConfigurator;
+import com.foc.business.notifier.FNotifTrigger;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 
 public abstract class AbstractFocNotificationTableAddManipulator implements IFocNotificationEventManipulator {
 
   @Override
-  public void treatEvent(FocNotificationEventConfigurator notifier, FocNotificationEvent event) {
+  public void treatEvent(FNotifTrigger notifier, FocNotificationEvent event) {
     sendEMail(notifier, event);
   }
   
-  private void sendEMail(FocNotificationEventConfigurator notifier, FocNotificationEvent event){
+  private void sendEMail(FNotifTrigger notifier, FocNotificationEvent event){
     FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) notifier.getTemplate();
     FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null), template, event.getEventFocData());
     Globals.popup(email, false);
   }
 
-  protected boolean isSameDBTableAsFocObject(FocNotificationEventConfigurator notifier, FocNotificationEvent event){
+  protected boolean isSameDBTableAsFocObject(FNotifTrigger notifier, FocNotificationEvent event){
     boolean sameTable = false;
 //    FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) notifier.getTemplate();
   

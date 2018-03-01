@@ -1,0 +1,11 @@
+<VerticalLayout captionMargin="0" margin="true" spacing="true" width="98%">
+  <ValidationSettings withApply="true" withAttach="false" withPrint="false" />
+  <Label value="eMail Accounts" style="H2,text-center" />
+  <GuiTable name="eMail Accounts" dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
+    <TableColumn name="Username" caption="Username" expandRatio="1"/>
+    <TableColumn name="Host" caption="Host" width="-1px" />
+    <TableColumn name="Port" caption="Port" width="-1px" />
+    <TableColumn name="Default" caption="Default" width="-1px" />
+    <TableColumn name="EncryptionType" caption="Encryption Type" width="-1px" />
+  </GuiTable>
+</VerticalLayout>

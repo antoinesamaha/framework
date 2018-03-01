@@ -1,5 +1,6 @@
 package com.foc.email;
 
+@Deprecated
 public class EMailAccount {
 
   public static final int ENCRYPTION_TYPE_NONE = 0;

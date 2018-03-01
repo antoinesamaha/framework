@@ -1219,6 +1219,22 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	}
   }
 
+  public FocDesc getPropertyDesc(String fieldName){
+  	FocDesc ret = null;
+  	FField fld = getThisFocDesc() != null ? getThisFocDesc().getFieldByName(fieldName) : null;
+  	if(fld != null) {
+  		ret = getPropertyDesc(fld.getID());
+  	}
+  	return ret;
+  }
+
+  public void setPropertyDesc(String fieldName, FocDesc focDesc){
+  	FField fld = getThisFocDesc() != null ? getThisFocDesc().getFieldByName(fieldName) : null;
+  	if(fld != null) {
+  		setPropertyDesc(fld.getID(), focDesc);
+  	}
+  }
+
   public FocDesc getPropertyDesc(int fieldID){
   	IFDescProperty prop = (IFDescProperty) getFocProperty(fieldID);  	
   	return prop != null ? prop.getSelectedFocDesc() : null;

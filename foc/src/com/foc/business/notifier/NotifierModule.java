@@ -4,7 +4,7 @@ import com.foc.admin.FocVersion;
 import com.foc.desc.FocModule;
 import com.foc.menu.FMenuList;
 
-public class NotifierModule extends FocModule{
+public class NotifierModule extends FocModule {
 	
 	public NotifierModule(){
 	  FocVersion.addVersion("NOTIFIER", "notfier 1.0", 1000);
@@ -16,12 +16,14 @@ public class NotifierModule extends FocModule{
 	
 	@Override
 	public void declareFocObjectsOnce() {
-		declareFocDescClass(FocNotificationEventConfiguratorDesc.class);
+		declareFocDescClass(FNotifTriggerDesc.class);
 		declareFocDescClass(FocNotificationEmailTemplateDesc.class);
 		declareFocDescClass(FocNotificationEmailDesc.class);
 		declareFocDescClass(FocPageLinkDesc.class);
 		declareFocDescClass(DocMsgContentDesc.class);
 		declareFocDescClass(DocMsgDesc.class);
+		
+		scanModelPackage("com.foc.business.notifier");
 	}
 
 	public void addApplicationMenu(FMenuList menuList) {
