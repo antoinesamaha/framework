@@ -14,6 +14,7 @@ public class FocPredefinedFieldFactory {
 		put(new FTypeEXTERNAL_CODE());
 		put(new FTypeDESCRIPTION());
 		put(new FTypeCOMPANY());
+		put(new FTypeSITE());
 		put(new FTypeDATE());
 		put(new FTypeORDER());
 		put(new FTypeNOT_COMPLETED_YET());
