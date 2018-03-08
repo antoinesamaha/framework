@@ -1,4 +1,4 @@
-<VerticalLayout width="100%" >
+<VerticalLayout width="100%" margin="true">
     <ValidationSettings formTitle="Template Form" withApply="true" withAttach="true" withPrint="true" />
     <VerticalLayout width="100%">
      <GuiField name="NAME" caption="Name:" captionPos="left" width="200px" />

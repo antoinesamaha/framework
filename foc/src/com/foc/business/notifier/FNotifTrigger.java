@@ -14,8 +14,8 @@ import com.foc.annotations.model.fields.FocMultipleChoiceString;
 import com.foc.annotations.model.fields.FocTableName;
 import com.foc.annotations.model.fields.FocTime;
 import com.foc.business.calendar.FCalendar;
+import com.foc.business.notifier.actions.FocNotifActionFactory;
 import com.foc.business.notifier.actions.IFocNotifAction;
-import com.foc.business.notifier.manipulators.FocNotificationEventFactory;
 import com.foc.business.notifier.manipulators.IFocNotificationEventManipulator;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -229,7 +229,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	public void execute(FocNotificationEvent eventFired) {
 		IFocNotifAction action = getActionObject();
 		if(action == null) {
-			FocNotificationEventFactory.getInstance().get(getEvent());
+			action = FocNotifActionFactory.getInstance().get(getAction());
 		}
 		if(action != null) {
 			action.execute(this, eventFired);

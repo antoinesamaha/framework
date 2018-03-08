@@ -103,6 +103,7 @@ public class Application {
 	private DataStore                       dataStore  = null;//Contains FocLists and Singleton FocObjects
 	private FocDescMap                      focDescMap = null;//Contains the FocDesc definitions
 	private FocDescMap_ByFocObjectClassName focDescMap_ByFocObjectClassName = null;
+	private HashMap<String, FocDesc>        reportConfigFocDescMap = null;
 	private FocLogger                       focLogger  = null;//The Logger
 	private FocNotificationEventFactory     focNEF     = null;
 	private FocNotifActionFactory           notifActionFactory = null;
@@ -2079,4 +2080,24 @@ public class Application {
 	public boolean isEmptyDatabaseJustCreated(){
 		return (Globals.getApp() != null && Globals.getApp().getDataSource() != null) ? Globals.getApp().getDataSource().isEmptyDatabaseJustCreated() : false;
 	}
+
+	public Iterator<FocDesc> reportConfigFocDesc_Ierator(){
+		Iterator<FocDesc> iterator = null;
+		if(reportConfigFocDescMap != null) {
+			iterator = reportConfigFocDescMap.values().iterator();
+		}
+		return iterator;
+	}
+		
+	public void reportConfigFocDesc_Add(String context, FocDesc focDesc){
+		if(reportConfigFocDescMap == null) {
+			reportConfigFocDescMap = new HashMap<String, FocDesc>();
+		}
+		reportConfigFocDescMap.put(context, focDesc);
+	}
+
+	public FocDesc reportConfigFocDesc_Get(String context){
+		return reportConfigFocDescMap != null ? reportConfigFocDescMap.get(context) : null;
+	}
+
 }

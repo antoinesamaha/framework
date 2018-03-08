@@ -2,6 +2,7 @@ package com.foc.web.modules.notifier.module;
 
 import com.foc.business.notifier.EMailAccount;
 import com.foc.business.notifier.FNotifTriggerDesc;
+import com.foc.business.notifier.FocNotificationEmailDesc;
 import com.foc.business.notifier.FocNotificationEmailTemplateDesc;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
@@ -52,6 +53,15 @@ public class NotifierWebModule extends FocWebModule {
 			}
 		});
 
+		menuItem = mainMenu.pushMenu("MNU_EMAIL", "Email list");
+		menuItem.setMenuAction(new FocMenuItemAbstractAction_WithAddCommand(menuItem, null) {
+			@Override
+			public FocList getFocList() {
+				FocDesc focDesc = FocNotificationEmailDesc.getInstance();
+				return focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+			}
+		});
+		
   }
 	
 }

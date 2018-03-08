@@ -15,7 +15,7 @@ public class FocNotificationManager {
   private HashMap<Long, FocNotificationEventArray> mapOfThreadsSuspendingTheirEvents = null; 
 
   public FocNotificationManager() {
-    setEventNotifierList(FNotifTrigger.getFocDesc().getFocList());
+    setEventNotifierList(FNotifTrigger.getFocDesc().getFocList(FocList.LOAD_IF_NEEDED));
     
     mapOfThreadsSuspendingTheirEvents = new HashMap<Long, FocNotificationEventArray>();
     
@@ -86,15 +86,6 @@ public class FocNotificationManager {
       for (int i = 0; i < eventNotifierList.size(); i++) {
         FNotifTrigger notifier = (FNotifTrigger) eventNotifierList.getFocObject(i);
         notifier.executeIfSameEvent(eventFired);
-//        if (notifier.getEvent() == eventFired.getEventKey()) {
-//          IFocNotificationEventManipulator eventManipulator = notifier.getLocalEventManipulator();
-//          if(eventManipulator == null){
-//            eventManipulator = FocNotificationEventFactory.getInstance().get(eventFired.getEventKey());
-//          }
-//          if(eventManipulator != null && eventManipulator.shouldTreatEvent(notifier, eventFired)){
-//            eventManipulator.treatEvent(notifier, eventFired);
-//          }
-//        }
       }
     }
   }

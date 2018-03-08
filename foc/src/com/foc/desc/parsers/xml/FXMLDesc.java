@@ -82,6 +82,7 @@ public interface FXMLDesc {
   //Table node attributes 
   public static final String ATT_WORKFLOW    = "workflow";
   public static final String ATT_TREE        = "tree";
+  public static final String ATT_REPORT_CONTEXT = "reportContext";
   public static final String ATT_DB_RESIDENT = "dbResident";//Used for fields also
   public static final String ATT_CACHED      = "cached";
   public static final String ATT_DB_SOURCE   = "dbSource";

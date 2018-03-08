@@ -2,6 +2,7 @@
 	<ValidationSettings formTitle="eMail Accounts" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
 
 	<GuiField name="Username" caption="Username" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
+	<GuiField name="Sender" caption="Sender" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />	
 	<GuiField name="Password" caption="Password" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
 	<GuiField name="Host" caption="Host" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
 	<GuiField name="Port" caption="Port" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />

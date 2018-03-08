@@ -1,5 +1,8 @@
 package com.foc.business.printing.gui;
 
+import java.sql.Types;
+
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.access.FocDataMap;
 import com.foc.business.printing.IPrnReportCreator;
@@ -7,7 +10,11 @@ import com.foc.business.printing.PrnContext;
 import com.foc.business.printing.PrnLayoutGuiBrowsePanel_Print;
 import com.foc.business.printing.PrnReportLauncher;
 import com.foc.business.printing.ReportFactory;
+import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.dataModelTree.DataModelNode;
+import com.foc.desc.dataModelTree.DataModelNodeList;
+import com.foc.desc.field.FField;
 import com.foc.shared.dataStore.IFocData;
 
 public abstract class PrintingAction implements IPrnReportCreator{
@@ -98,4 +105,53 @@ public abstract class PrintingAction implements IPrnReportCreator{
 		this.printingContext = printingContext;
 	}
 
+	public void outputFieldsAndParameters() {
+		if(ConfigInfo.isDevMode()){
+		  StringBuffer strBuffer = new StringBuffer();
+		  
+		  printForJasperDevelopers(strBuffer, getLauncher().getParameterDictionaryFocDesc(), false);
+		  printForJasperDevelopers(strBuffer, getLauncher().getFieldDictionaryFocDesc(), false);
+		  System.out.println(strBuffer.toString());
+		}
+	}
+
+	private void printForJasperDevelopers(StringBuffer strBuffer, FocDesc focDesc, boolean isParameter) {
+		if(focDesc != null) {
+			DataModelNodeList fieldList = new DataModelNodeList(focDesc, 2);
+			for(int i=0; fieldList != null && i<fieldList.size(); i++){
+				DataModelNode dataNode = (DataModelNode) fieldList.getFocObject(i);
+				if(true/*dataNode.isSelected()*/){
+					String  name    = dataNode.getFullPath();
+					String  clsname = "";
+					//FocDesc focDesc = dataNode.getFather() != null ? dataNode.getFather().getFocDesc() : null;
+					
+					FField fld = dataNode.getFField();
+					if(fld != null){
+						switch(fld.getSqlType()){
+						case Types.DATE:
+							clsname = "java.lang.String";
+							break;
+						case Types.VARCHAR:
+							clsname = "java.lang.String";
+							break;
+						case Types.DOUBLE:
+							clsname = "java.lang.Number";
+							break;
+						case Types.INTEGER:
+							clsname = "java.lang.Integer";
+							break;
+						}
+					}
+		
+					if(isParameter){
+						strBuffer.append("<parameter name=\""+name+"\" class=\""+clsname+"\" isForPrompting=\"false\"/>");
+					}else{
+						strBuffer.append("<field name=\""+name+"\" class=\""+clsname+"\"/>");
+					}
+					strBuffer.append("\n");
+				}
+				fieldList.dispose();
+			}
+		}
+	}
 }

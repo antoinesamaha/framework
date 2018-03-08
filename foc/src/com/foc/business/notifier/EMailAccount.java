@@ -5,6 +5,7 @@ import com.foc.annotations.model.FocEntity;
 import com.foc.annotations.model.fields.FocBoolean;
 import com.foc.annotations.model.fields.FocInteger;
 import com.foc.annotations.model.fields.FocMultipleChoice;
+import com.foc.annotations.model.fields.FocPassword;
 import com.foc.annotations.model.fields.FocString;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -37,7 +38,7 @@ public class EMailAccount extends PojoFocObject {
 	@FocString(size = 200)
 	public static final String FIELD_Username = "Username";
 	
-	@FocString(size = 200)
+	@FocPassword(size = 200)
 	public static final String FIELD_Password = "Password";
 	
 	@FocString(size = 250)
@@ -53,7 +54,7 @@ public class EMailAccount extends PojoFocObject {
 	public static ParsedFocDesc getFocDesc() {
 		return ParsedFocDesc.getInstance(DBNAME);
 	}
-
+	
 	public int getEncryptionType() {
 		return getPropertyInteger(FIELD_EncryptionType);
 	}
@@ -117,14 +118,7 @@ public class EMailAccount extends PojoFocObject {
   		FocList list = focDesc.getFocList();
   		if(list != null) {
   			list.loadIfNotLoadedFromDB();
-  			if(list.size() > 0) {
-  				for(int i=0; i<list.size() && account == null; i++) {
-  					EMailAccount acc = (EMailAccount) list.getFocObject(i);
-  					if(acc.isDefault()) {
-  						account = acc;
-  					}
-  				}
-  			}
+  			account = (EMailAccount) list.searchByPropertyBooleanValue(FIELD_Default, true);
   		}
   	}
   	return account;

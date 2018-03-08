@@ -200,6 +200,11 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	      		}
 	      	}
 	      }
+	      
+	      String reportContext = entity.reportContext();
+	      if(!Utils.isStringEmpty(reportContext)) {
+	      	focDesc.setReportContext(reportContext);
+	      }
       }
     } catch (Exception e) {
       Globals.logString("Could not load file : " + focDesc.getClass().getName());

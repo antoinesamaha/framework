@@ -127,6 +127,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	private String                      name                  = null;
   private String                      storageName           = "";
   private String                      storageName_ForSQL    = null;
+  private String                      reportContext         = null;
   private String                      title                 = "";
   private FFieldContainer             keyFields             = new FFieldContainer();
   private boolean                     isKeyUnique           = true;
@@ -2474,4 +2475,22 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	public void setGroupBy(FocListGroupBy focListGroupBy) {
 		this.focListGroupBy = focListGroupBy;
 	}
+	
+	public boolean isReport() {
+		return false;
+	}
+
+	public String getReportContext() {
+		return reportContext;
+	}
+
+	public void setReportContext(String reportContext) {
+		this.reportContext = reportContext;
+  	Globals.getApp().reportConfigFocDesc_Add(reportContext, this);
+	}
+	
+	public String getReportMenu() {
+		return "MNU_REPORT_"+reportContext;
+	}
+
 }

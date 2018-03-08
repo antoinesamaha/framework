@@ -1014,6 +1014,12 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return searchByPropertyStringValue(id, strValue, ignoreCase, false);
   }
   
+  public FocObject searchByPropertyBooleanValue(String fieldName, boolean boolValue){
+  	FField fld = getFocDesc() != null ? getFocDesc().getFieldByName(fieldName) : null;
+    FocObject foundObj = fld != null ? searchByPropertyBooleanValue(fld.getID(), boolValue) : null;
+    return foundObj;
+  }
+  
   public FocObject searchByPropertyBooleanValue(int id, boolean boolValue){
     FocObject foundObj = null;
     Iterator iter = elements != null ? elements.keySet().iterator() : null;

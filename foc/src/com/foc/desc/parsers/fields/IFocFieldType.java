@@ -39,6 +39,7 @@ public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_FOREIGN_ENTITY  = "ForeignEntity";
   public static final String TYPE_TABLE_NAME      = "TableName";
   public static final String TYPE_Reference       = "Reference";
+  public static final String TYPE_PASSWORD        = "Password";
   
 	public String getTypeName();
 	public FField newFField(Class focObjClass, Field f, A a);

@@ -1,6 +1,7 @@
 package com.foc.vaadin.gui.menuTree;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -10,12 +11,15 @@ import com.foc.admin.FocUserHistory;
 import com.foc.admin.FocUserHistoryDesc;
 import com.foc.admin.FocUserHistoryList;
 import com.foc.admin.UserSession;
+import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.menuStructure.FocMenuItemDesc;
 import com.foc.menuStructure.FocMenuItemList;
 import com.foc.menuStructure.FocMenuItemTree;
+import com.foc.menuStructure.IFocMenuItemAction;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebModule;
@@ -26,6 +30,7 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
@@ -40,8 +45,8 @@ public class FVMenuTree extends FocXMLLayout {
 	private int treeType = TYPE_HISTORY;
 
 	public static final int TYPE_HISTORY = 0;
-	public static final int TYPE_NORMAL = 1;
-	public static final int TYPE_ADMIN = 2;
+	public static final int TYPE_NORMAL  = 1;
+	public static final int TYPE_ADMIN   = 2;
 
 	public FVMenuTree() {
 	}
@@ -306,13 +311,23 @@ public class FVMenuTree extends FocXMLLayout {
 			if ((isAdminConsole() && module.isAdminConsole()) || (!isAdminConsole() && !module.isAdminConsole()) || (isHistory())) {
 				boolean allow = allowAccessToModule(module.getName());
 				if (allow) {
-					
 					module.menu_FillMenuTree(this, root);
-					
 				}
 			}
 		}
 
+		//Adding reports menu
+		//-------------------
+		FocMenuItem reportMainMenu = pushRootMenu("MNU_REPORTS", "Reports");
+		Iterator<FocDesc> iter = Globals.getApp().reportConfigFocDesc_Ierator();
+		while(iter != null && iter.hasNext()) {
+			FocDesc focDesc = iter.next();
+			
+			FocMenuItem menuItem = reportMainMenu.pushMenu(focDesc.getReportMenu(), focDesc.getReportContext());
+			menuItem.setMenuAction(new ReportMenuItem(focDesc));
+		}
+		//-------------------
+		
 		ArrayList<FocMenuItem> toRemove = new ArrayList<FocMenuItem>();
 
 		FocUserHistory history = null;
@@ -393,6 +408,29 @@ public class FVMenuTree extends FocXMLLayout {
 		if(menuTree != null){
 			menuTree.dispose();
 	  	UserSession.putParameter(USER_SESSION_PARAMETER_MENU_TREE, null);
+		}
+	}
+	
+	public class ReportMenuItem implements IFocMenuItemAction {
+
+		private FocDesc focDesc = null;
+		
+		public ReportMenuItem(FocDesc focDesc) {
+			this.focDesc = focDesc;
+		}
+		
+		@Override
+		public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+			INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
+			
+			if(focDesc != null) {
+				FocList list = focDesc.getFocList();
+				list.loadIfNotLoadedFromDB();
+
+				XMLViewKey key = new XMLViewKey(list.getFocDesc().getStorageName(), XMLViewKey.TYPE_TABLE, "Report", XMLViewKey.VIEW_DEFAULT);
+				FocXMLLayout layout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, list);
+				mainWindow.changeCentralPanelContent(layout, FocCentralPanel.PREVIOUS_KEEP);			
+			}
 		}
 	}
 }

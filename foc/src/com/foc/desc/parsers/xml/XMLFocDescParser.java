@@ -65,6 +65,11 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	boolean cached = getBoolean(att, ATT_CACHED, true);
     	xmlFocDesc.setListInCache(cached);
     	
+    	String reportContext = getString(att, ATT_REPORT_CONTEXT);
+    	if(!Utils.isStringEmpty(reportContext)) {
+    		xmlFocDesc.setReportContext(reportContext);
+    	}
+    	
     	String dbSourceKey = getString(att, ATT_DB_SOURCE);
     	if(!Utils.isStringEmpty(dbSourceKey)){
     		xmlFocDesc.setDbSourceKey(dbSourceKey);

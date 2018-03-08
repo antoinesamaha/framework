@@ -19,4 +19,5 @@ public @interface FocEntity {
 	public String filterOnTable() default "";
 	public FocFilterCondition[] filterConditions() default {};
 	public FocGroupByField[] groupByFields() default {};
+	public String reportContext() default "";
 }

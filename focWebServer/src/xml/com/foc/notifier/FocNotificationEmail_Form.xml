@@ -1,5 +1,5 @@
 <VerticalLayout width="90%" spacing="true" captionMargin="0">
-    <ValidationSettings formTitle="Email Form" withApply="true" applyLink="Send" withAttach="false" withPrint="true" withEmail="false" />
+    <ValidationSettings formTitle="Email Form" withApply="true" withAttach="false" withPrint="true" withEmail="false" /><!--  applyLink="Send" -->
     <Label value="E-Mail" style="H2"/>
     <VerticalLayout width="100%" spacing="true" captionMargin="0">
         <GuiField name="TEMPLATE" caption="Template:" captionPos="left" width="250px" captionStyle="bold,f12"/>

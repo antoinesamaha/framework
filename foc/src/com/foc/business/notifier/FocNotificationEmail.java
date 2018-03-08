@@ -28,7 +28,6 @@ import com.foc.business.printing.PrnLayoutDesc;
 import com.foc.business.printing.gui.PrintingAction;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
-import com.foc.email.EMailAccount;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
 import com.vaadin.ui.JavaScript;
@@ -86,11 +85,11 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
       setText(getTemplate().getText(focData));
       setRecipients(getTemplate().getRecipients(focData));
       setBcc(getTemplate().getBcc(focData));
-      setSender("01barmaja@01barmaja.com");
+//      setSender("01barmaja@01barmaja.com");
     } else {
       setSubject("");
       setText("");
-      setSender("01barmaja@01barmaja.com");
+//      setSender("01barmaja@01barmaja.com");
     }
   }
 
@@ -229,7 +228,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     props.put("mail.transport.protocol", "smtp");
     props.put("mail.smtp.host", emailAccount.getHost());
     props.put("mail.smtp.socketFactory.port", emailAccount.getPort());
-    if (emailAccount.getEncryptionConnectionType() == EMailAccount.ENCRYPTION_TYPE_SSL) {
+    if (emailAccount.getEncryptionType() == EMailAccount.ENCRYPTION_TYPE_SSL) {
       props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
     }
     props.put("mail.smtp.auth", "true");
@@ -253,7 +252,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     try {
       mime.setRecipients(Message.RecipientType.TO, getRecipientsMime());
       mime.setRecipients(Message.RecipientType.BCC, getBccMime());
-      mime.setFrom(new InternetAddress(getSender()));
+      mime.setFrom(new InternetAddress(emailAccount.getSender()));
       mime.setSubject(getSubject());
       mime.setText(getText());
       MimeMultipart mimeMultipart = getMimeMultipart();
