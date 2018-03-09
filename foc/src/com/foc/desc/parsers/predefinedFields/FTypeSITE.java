@@ -15,6 +15,7 @@ public class FTypeSITE extends FocPredefinedFieldTypeAbstract<FocSITE> {
 	@Override
 	public FField newFField(FocDesc focDesc, FocSITE a) {
 		FField fld = WFSiteDesc.newSiteField(focDesc, FField.FNAME_SITE, focDesc.nextFldID(), FField.NO_FIELD_ID);
+		focDesc.addField(fld);
 		return fld;
 	}
 

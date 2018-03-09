@@ -284,13 +284,15 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				
 				@Override
 				public void nodeCollapse(CollapseEvent event) {
-					long objId = (Long) event.getItemId();
-					FVTreeTable treeTable = (FVTreeTable) getTreeOrTable();
-					if(treeTable != null && treeTable.getFocTreeWrapper() != null && treeTable.getFocTreeWrapper().getFTree() != null){
-						FNode node = treeTable.getFocTreeWrapper().getFTree().findNode(objId);
-						
-						if(node != null){
-							node.setCollapsed(true);
+					if(event != null) {
+						long objId = (Long) event.getItemId();
+						FVTreeTable treeTable = (FVTreeTable) getTreeOrTable();
+						if(treeTable != null && treeTable.getFocTreeWrapper() != null && treeTable.getFocTreeWrapper().getFTree() != null){
+							FNode node = treeTable.getFocTreeWrapper().getFTree().findNode(objId);
+							
+							if(node != null){
+								node.setCollapsed(true);
+							}
 						}
 					}
 				}
