@@ -15,6 +15,8 @@ public class FocNotifAction_SendEmail extends FocNotifAction_Abstract {
     if(template != null) {
 	    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null), template, event.getEventFocData());
 	    email.send();
+	    email.setCreated(true);
+	    email.validate(true);
     }		
 	}
 

@@ -8,7 +8,6 @@ import java.util.Properties;
 
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -313,13 +312,13 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   private MimeMultipart getMimeMultipart(){
 		MimeMultipart multipart = new MimeMultipart("related");
 		try {
-			BodyPart messageBodyPart = new MimeBodyPart();
+			MimeBodyPart messageBodyPart = new MimeBodyPart();
 			
 			String htmlText = getText();
 			//If we use this setContent(htmlText, "text/html"); we will lose the text format
 //			messageBodyPart.setContent(htmlText, "text/html");
 			//So to keep text formatted we should use setText(htmlText); method
-			messageBodyPart.setText(htmlText);
+			messageBodyPart.setText(htmlText, "UTF-8");
 			multipart.addBodyPart(messageBodyPart);
 
 			//If the Template comes with a report template we add that template to the attachment
@@ -357,7 +356,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
 				}
 			}
 			
-			//This Creates The noname.txt file
+//      This Creates The noname.txt file
 //			messageBodyPart = new MimeBodyPart();
 //			messageBodyPart.setText(getText());
 //			multipart.addBodyPart(messageBodyPart);
