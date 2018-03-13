@@ -1,4 +1,4 @@
-<VerticalLayout >
+<VerticalLayout captionMargin="0" margin="true" >
   <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" withEmail="false" withSave="false"/>
   <CheckBoxField name="PRINT_LOGO" caption="Print Logo" />
   <GuiTable title="Select the desired printing layout and click the 'Print button'" name="PRN_LAYOUT_TABLE" dataPath="DATAROOT" width="100%" height="100%" openEnabled="false" deleteEnabled="false" addEnabled="true">

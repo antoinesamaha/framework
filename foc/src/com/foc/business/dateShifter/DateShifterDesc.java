@@ -26,9 +26,7 @@ public class DateShifterDesc {
 	public static final int FLD_DAY               = 4;
 	public static final int FLD_DAY_SHIFT         = 5;
 	public static final int FLD_IS_SPECIFIC_DATE  = 6;
-	public static final int FLD_GLOBAL_SHIFT_UNIT = 7;
-	public static final int FLD_GLOBAL_SHIFT      = 8;
-	public static final int FLD_NEXT_FIELD_IDX    = 9;
+	public static final int FLD_NEXT_FIELD_IDX    = 7;
 
 	public static final int YEAR_KEY_CURRENT_YEAR_MINUS_4 = -4;
 	public static final int YEAR_KEY_CURRENT_YEAR_MINUS_3 = -3;
@@ -39,9 +37,6 @@ public class DateShifterDesc {
 	public static final int YEAR_KEY_CURRENT_YEAR_PLUS_2  = 2;
 	public static final int YEAR_KEY_CURRENT_YEAR_PLUS_3  = 3;
 	public static final int YEAR_KEY_CURRENT_YEAR_PLUS_4  = 4;
-	
-	public static final int SHIFT_UNIT_DAY   = 0;
-	public static final int SHIFT_UNIT_MONTH = 1;
 	
 	public static final int MONTH_KEY_CURRENT_MONTH  = 13;
 	
@@ -129,7 +124,7 @@ public class DateShifterDesc {
 			getFocDesc().addField(choiceField);
 			choiceField.addListener(listener);
 			
-			FIntField numField = new FIntField(adjustFieldName("MONTH_SHIFT"), "Month Shift", fieldsShift + FLD_MONTH_SHIFT, false, 2);
+			FIntField numField = new FIntField(adjustFieldName("MONTH_SHIFT"), "Month Shift", fieldsShift + FLD_MONTH_SHIFT, false, 5);
 			getFocDesc().addField(numField);
 			numField.addListener(listener);
 			
@@ -148,8 +143,8 @@ public class DateShifterDesc {
 			bFld.addChoice(IS_SPECIFIC_DATE_TRUE, "Specific Date");
 			getFocDesc().addField(bFld);
 		
-//			numField = new FNumField(adjustFieldName("DAY_SHIFT"), "Day Shift", fieldsShift + FLD_DAY_SHIFT, false, 2, 0);
-//			getFocDesc().addField(numField);
+			numField = new FIntField(adjustFieldName("DAY_SHIFT"), "Day Shift", fieldsShift + FLD_DAY_SHIFT, false, 5);
+			getFocDesc().addField(numField);
 		}
 		
 		return fieldsShift + FLD_NEXT_FIELD_IDX;

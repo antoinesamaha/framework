@@ -71,7 +71,8 @@ public class DateShifter implements IFocData {
 				}
 			}
 			cal.set(Calendar.DAY_OF_MONTH, day);
-			
+			cal.add(Calendar.DATE, getDayShift());
+
 			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
 			getFocObject().setPropertyDate(getDateShifterDesc().getDateFieldID(), sqlDate);
 			Globals.logString("-- Setting the Datefield: "+getFocObject().getThisFocDesc().getFieldByID(getDateShifterDesc().getDateFieldID()).getName()+" Value:"+sqlDate.toString());
@@ -115,6 +116,16 @@ public class DateShifter implements IFocData {
 	public void setDay(int value){
 		if(getFocObject() != null){
 			getFocObject().setPropertyInteger(getFieldsShift() + DateShifterDesc.FLD_DAY, value);
+		}
+	}
+	
+	public int getDayShift(){
+		return getFocObject() != null ? getFocObject().getPropertyInteger(getFieldsShift() + DateShifterDesc.FLD_DAY_SHIFT) : null;
+	}
+	
+	public void setDayShift(int value){
+		if(getFocObject() != null){
+			getFocObject().setPropertyInteger(getFieldsShift() + DateShifterDesc.FLD_DAY_SHIFT, value);
 		}
 	}
 	
