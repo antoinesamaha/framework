@@ -154,12 +154,16 @@ public class FocRequestDesc {
 		            	FMultipleChoiceStringField mcsFld = (FMultipleChoiceStringField) newField;
 		            	mcsFld.setChoicesSelection_FieldID(field.getID());
 		            }
-		            String groupByFormula = reqField.getGroupByFormula();
-		            if(!Utils.isStringEmpty(groupByFormula)){
-		            	FocListGroupBy groupBy = focDesc.getGroupBy();
-		            	newField = groupBy.addField_FormulaSingleText(focDesc, newField, groupByFormula);
-		            }
-	          	}
+								String groupByFormula = reqField.getGroupByFormula();
+								if (!Utils.isStringEmpty(groupByFormula)) {
+									FocListGroupBy groupBy = focDesc.getGroupBy();
+									if (groupBy != null) {
+										newField = groupBy.addField_FormulaSingleText(focDesc, newField, groupByFormula);
+									} else {
+										Globals.logString("Missing Group By expression.");
+									}
+								}
+							}
 	          } catch (CloneNotSupportedException e) {
 	            Globals.logException(e);            
 	          }
