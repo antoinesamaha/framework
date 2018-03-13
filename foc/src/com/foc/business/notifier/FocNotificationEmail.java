@@ -253,8 +253,10 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
       mime.setRecipients(Message.RecipientType.TO, getRecipientsMime());
       mime.setRecipients(Message.RecipientType.BCC, getBccMime());
       mime.setFrom(new InternetAddress(emailAccount.getSender()));
-      mime.setSubject(getSubject());
-      mime.setText(getText());
+      mime.setSubject(getSubject(), "UTF-8");
+      mime.setText(getText(), "UTF-8");
+      Globals.logString("Subject: "+getSubject());
+      Globals.logString("Text: "+getText());
       MimeMultipart mimeMultipart = getMimeMultipart();
 			if(mimeMultipart != null){
 				mime.setContent(mimeMultipart);
