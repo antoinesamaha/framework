@@ -10,20 +10,25 @@ import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
+import com.foc.util.Utils;
 
 public class DateShifterDesc {
 
 	private FocDesc focDesc     = null;
 	private int     shift       = 0;
 	private String  fieldSuffix = "";
+	private String  fieldPrefix = "";
 	private int     dateFieldID = 0;
 	
-	public static final int FLD_YEAR             = 1;
-	public static final int FLD_MONTH            = 2;
-	public static final int FLD_MONTH_SHIFT      = 3;
-	public static final int FLD_DAY              = 4;
-	public static final int FLD_DAY_SHIFT        = 5;
-	public static final int FLD_IS_SPECIFIC_DATE = 6;
+	public static final int FLD_YEAR              = 1;
+	public static final int FLD_MONTH             = 2;
+	public static final int FLD_MONTH_SHIFT       = 3;
+	public static final int FLD_DAY               = 4;
+	public static final int FLD_DAY_SHIFT         = 5;
+	public static final int FLD_IS_SPECIFIC_DATE  = 6;
+	public static final int FLD_GLOBAL_SHIFT_UNIT = 7;
+	public static final int FLD_GLOBAL_SHIFT      = 8;
+	public static final int FLD_NEXT_FIELD_IDX    = 9;
 
 	public static final int YEAR_KEY_CURRENT_YEAR_MINUS_4 = -4;
 	public static final int YEAR_KEY_CURRENT_YEAR_MINUS_3 = -3;
@@ -35,6 +40,9 @@ public class DateShifterDesc {
 	public static final int YEAR_KEY_CURRENT_YEAR_PLUS_3  = 3;
 	public static final int YEAR_KEY_CURRENT_YEAR_PLUS_4  = 4;
 	
+	public static final int SHIFT_UNIT_DAY   = 0;
+	public static final int SHIFT_UNIT_MONTH = 1;
+	
 	public static final int MONTH_KEY_CURRENT_MONTH  = 13;
 	
 	public static final int DAY_KEY_CURRENT_DAY_OF_MONTH = 0;
@@ -44,8 +52,13 @@ public class DateShifterDesc {
 	public static final int IS_SPECIFIC_DATE_TRUE  = 1;
 	
 	public DateShifterDesc(FocDesc focDesc, int shift, String suffix, int dateFieldID) {
+		this(focDesc, shift, null, suffix, dateFieldID);
+	}
+	
+	public DateShifterDesc(FocDesc focDesc, int shift, String prefix, String suffix, int dateFieldID) {
 		this.focDesc     = focDesc;
 		this.shift       = shift;
+		this.fieldPrefix = prefix;
 		this.fieldSuffix = suffix;
 		this.dateFieldID = dateFieldID;
 	}
@@ -54,16 +67,19 @@ public class DateShifterDesc {
 		focDesc = null;
 	}
 
-	private String adjustFieldName(String fieldName){
-		if(fieldSuffix != null && !fieldSuffix.isEmpty()){
+	public String adjustFieldName(String fieldName){
+		if(!Utils.isStringEmpty(fieldPrefix)){
+			fieldName = fieldPrefix+"_"+fieldName;
+		}
+		if(!Utils.isStringEmpty(fieldSuffix)){
 			fieldName = fieldName.concat("_" + fieldSuffix);
 		}
 		return fieldName;
 	}
 	
-	public void addFields(){
+	public int addFields(){
+		int fieldsShift = getFieldsShift();
 		if(getFocDesc() != null){
-			int fieldsShift = getFieldsShift();
 			FPropertyListener listener = new FPropertyListener(){
 
 				@Override
@@ -135,6 +151,8 @@ public class DateShifterDesc {
 //			numField = new FNumField(adjustFieldName("DAY_SHIFT"), "Day Shift", fieldsShift + FLD_DAY_SHIFT, false, 2, 0);
 //			getFocDesc().addField(numField);
 		}
+		
+		return fieldsShift + FLD_NEXT_FIELD_IDX;
 	}
 	
 	private FocDesc getFocDesc(){

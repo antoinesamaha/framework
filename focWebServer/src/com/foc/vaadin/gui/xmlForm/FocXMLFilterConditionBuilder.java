@@ -51,19 +51,44 @@ public class FocXMLFilterConditionBuilder {
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
 					handler.endElement(null, null, FXML.TAG_FIELD);
 					
+					String firstDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=1,"+prefix+"_OP=3)";
+					
 					opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_FDATE");
 					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP=0,"+prefix+"_OP=1,"+prefix+"_OP=3)");
+					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
 					handler.endElement(null, null, FXML.TAG_FIELD);
+
+					opAttributes = new FocXMLAttributes();
+					opAttributes.addAttribute(FXML.ATT_NAME, getButtonName_ForFirstDateShifterButton(condition));
+					opAttributes.addAttribute(FXML.ATT_ICON, "edit");
+					opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
+					opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
+					opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
+					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
+					handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
+					handler.endElement(null, null, FXML.TAG_FIELD);
 	
+					String lastDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=2)";
+					
 					opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_LDATE");
 					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP=0,"+prefix+"_OP=2)");
+					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
 					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);				
+					handler.endElement(null, null, FXML.TAG_FIELD);			
+					
+					opAttributes = new FocXMLAttributes();
+				  opAttributes.addAttribute(FXML.ATT_NAME, getButtonName_ForLastDateShifterButton(condition));
+					opAttributes.addAttribute(FXML.ATT_ICON, "edit");
+					opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
+					opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
+					opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
+					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
+					handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
+					handler.endElement(null, null, FXML.TAG_FIELD);
+					
 				}else if(condition instanceof StringCondition){
 //				<GuiField name="TypeDisplay_OP" width="120px" height="-1px" />
 //				<GuiField name="TypeDisplay_TXT" width="270px" height="-1px" visibleWhen="TypeDisplay_OP>0" />
@@ -140,5 +165,12 @@ public class FocXMLFilterConditionBuilder {
 			Globals.logException(e);
 		}
 	}
-	
+
+	public static String getButtonName_ForFirstDateShifterButton(FilterCondition filterCondition) {
+		return filterCondition != null ? filterCondition.getFieldPrefix()+"_FButton" : null;
+	}
+
+	public static String getButtonName_ForLastDateShifterButton(FilterCondition filterCondition) {
+		return filterCondition != null ? filterCondition.getFieldPrefix()+"_LButton" : null;
+	}
 }

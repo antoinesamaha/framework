@@ -11,6 +11,8 @@ import com.foc.admin.FocUserHistory;
 import com.foc.admin.FocUserHistoryDesc;
 import com.foc.admin.FocUserHistoryList;
 import com.foc.admin.UserSession;
+import com.foc.business.printing.PrnContext;
+import com.foc.business.printing.ReportFactory;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
@@ -322,8 +324,9 @@ public class FVMenuTree extends FocXMLLayout {
 		Iterator<FocDesc> iter = Globals.getApp().reportConfigFocDesc_Ierator();
 		while(iter != null && iter.hasNext()) {
 			FocDesc focDesc = iter.next();
-			
-			FocMenuItem menuItem = reportMainMenu.pushMenu(focDesc.getReportMenu(), focDesc.getReportContext());
+
+			PrnContext context = ReportFactory.getInstance().findContext(focDesc.getReportContext());
+			FocMenuItem menuItem = reportMainMenu.pushMenu(focDesc.getReportMenu(), context.getName());
 			menuItem.setMenuAction(new ReportMenuItem(focDesc));
 		}
 		//-------------------

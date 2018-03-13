@@ -86,9 +86,14 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   	return put(storageName, type, context, userView, false, xmlFileName, xmlReference, javaClassName);  	
   }
   	
-  public XMLView put(String storageName, int type, String context, String userView, boolean forNewObjectOnly, String xmlFileName, int xmlReference, String javaClassName){    
+  public XMLView put(String storageName, int type, String context, String userView, boolean forNewObjectOnly, String xmlFileName, int xmlReference, String javaClassName){
+  	return put(storageName, type, context, userView, forNewObjectOnly, null, xmlFileName, xmlReference, javaClassName);
+  }
+  	
+  public XMLView put(String storageName, int type, String context, String userView, boolean forNewObjectOnly, String language, String xmlFileName, int xmlReference, String javaClassName){    
   	XMLViewKey xmlViewkey = new XMLViewKey(storageName, type, context, userView);
   	xmlViewkey.setForNewObjectOnly(forNewObjectOnly);
+  	xmlViewkey.setLanguage(language);
     XMLView xmlViewClass = new XMLView(xmlViewkey, xmlFileName, javaClassName);
     
     String key = xmlViewkey.builStringKey();

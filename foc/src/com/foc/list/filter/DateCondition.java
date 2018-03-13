@@ -14,6 +14,8 @@ import java.text.SimpleDateFormat;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.business.dateShifter.DateShifter;
+import com.foc.business.dateShifter.DateShifterDesc;
 import com.foc.db.DBManager;
 import com.foc.desc.*;
 import com.foc.desc.field.FDateField;
@@ -46,6 +48,9 @@ public class DateCondition extends FilterCondition {
   public static final int OPERATOR_LESS_THAN = 2;
   public static final int OPERATOR_EQUALS = 3;
   public static final int OPERATOR_INDIFERENT= 4;
+  
+  private DateShifterDesc firstDateShifterDesc = null;
+  private DateShifterDesc lastDateShifterDesc  = null;
   
   public DateCondition(FFieldPath dateFieldPath, String fieldPrefix){
     super(dateFieldPath, fieldPrefix);
@@ -278,6 +283,8 @@ public class DateCondition extends FilterCondition {
   }
 
   public int fillDesc(FocDesc focDesc, int firstID){
+  	int nextIdx = firstID;
+  	
     setFirstFieldID(firstID);
     
     if(focDesc != null){
@@ -299,17 +306,34 @@ public class DateCondition extends FilterCondition {
       multipleChoice.setSortItems(false);
       focDesc.addField(multipleChoice);
       multipleChoice.addListener(colorListener);
-      
-      FDateField dateField = new FDateField(getFieldPrefix()+"_FDATE", "First date", firstID + FLD_FIRST_DATE, false);
+
+      int firstDateFLD = firstID + FLD_FIRST_DATE;
+      FDateField dateField = new FDateField(getFieldPrefix()+"_FDATE", "First date", firstDateFLD, false);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
       
-      dateField = new FDateField(getFieldPrefix()+"_LDATE", "Last date", firstID + FLD_LAST_DATE, false);
+      int lastDateFLD = firstID + FLD_LAST_DATE;
+      dateField = new FDateField(getFieldPrefix()+"_LDATE", "Last date", lastDateFLD, false);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
+
+      IFocDescForFilter focDescForFilter = (IFocDescForFilter) focDesc;
+      FilterDesc filterDesc = focDescForFilter != null ? focDescForFilter.getFilterDesc() : null;
+      
+      firstDateShifterDesc = new DateShifterDesc(focDesc, firstID + FLD_OPERATOR + 1, getFieldPrefix()+"_F_", null, firstDateFLD);
+      nextIdx = firstDateShifterDesc.addFields();
+      if(filterDesc != null) {
+      	filterDesc.putDateShifterDesc(firstDateShifterDesc.getFieldsShift(), firstDateShifterDesc);
+      }
+      	
+      lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD);
+      nextIdx = lastDateShifterDesc.addFields();
+      if(filterDesc != null) {
+      	filterDesc.putDateShifterDesc(lastDateShifterDesc.getFieldsShift(), firstDateShifterDesc);
+      }
     }
     
-    return firstID + FLD_OPERATOR + 1;
+    return nextIdx;//firstID + FLD_OPERATOR + 1;
   }
 
   FGComboBox combo = null;
@@ -430,4 +454,26 @@ public class DateCondition extends FilterCondition {
   	
   	return description;
   }
+  
+  public void computeDatesFromShifters(FocListFilter filter) {
+  	DateShifter dateShifter = new DateShifter(filter, firstDateShifterDesc);
+  	if(dateShifter != null) {
+	  	dateShifter.adjustDate();
+	  	dateShifter.dispose();
+  	}
+  	
+  	dateShifter = new DateShifter(filter, lastDateShifterDesc);
+  	if(dateShifter != null) {
+	  	dateShifter.adjustDate();
+	  	dateShifter.dispose();
+  	}
+  }
+
+	public DateShifterDesc getFirstDateShifterDesc() {
+		return firstDateShifterDesc;
+	}
+
+	public DateShifterDesc getLastDateShifterDesc() {
+		return lastDateShifterDesc;
+	}
 }

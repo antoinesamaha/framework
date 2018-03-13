@@ -49,6 +49,11 @@ public abstract class FilterCondition {
     this.fieldPath = FFieldPath.newFieldPath(fieldID);
   }
   
+  public void dispose() {
+    filterDesc = null;
+    fieldPath  = null;
+  }
+  
   public String getDbSourceKey(){
   	return filterDesc != null ? filterDesc.getDbSourceKey() : null;
   }

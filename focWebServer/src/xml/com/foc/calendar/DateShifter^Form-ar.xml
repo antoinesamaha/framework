@@ -1,0 +1,17 @@
+<VerticalLayout width="1000px" margin="true" captionMargin="0" height="-1px">
+    <ValidationSettings formTitle="Day Shift" withApply="true" withAttach="false" withPrint="false" />
+	  <HorizontalLayout spacing="true" captionMargin="0" width="-1px" height="-1px">
+	    
+	    <GuiField name="YEAR" caption="Year" width="160px" height="-1px" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <Label value="/" style="f14,bold" alignment="bottom_left" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <GuiField name="MONTH_SHIFT" caption="+/-" width="40px" height="-1px" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <GuiField name="MONTH" caption="Month" width="160px" height="-1px" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <Label value="/" style="f14,bold" alignment="bottom_left" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <GuiField name="DAY" caption="Day of month" width="200px" height="-1px" visibleWhenX="IS_SPECIFIC_DATE=0"/>
+	    <GuiField name="IS_SPECIFIC_DATE" caption="Specific Date" width="-1px" height="-1px" alignment="bottom_right" />    
+	    <Label value="Date:" style="f16,bold" alignment="bottom_right"/>
+	    
+	    <!-- Label value="=" style="f14,bold" alignment="bottom_left" visibleWhen="IS_SPECIFIC_DATE=0"/>
+	    <GuiField name="DATE_1" caption="Date" width="-1px" height="-1px" / -->
+	  </HorizontalLayout>
+</VerticalLayout>

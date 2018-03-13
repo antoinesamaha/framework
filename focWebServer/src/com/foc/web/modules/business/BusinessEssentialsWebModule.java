@@ -208,7 +208,22 @@ public class BusinessEssentialsWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
       "/xml/com/foc/calendar/WorkShift_Form.xml", 0, null);
-      
+
+    XMLViewDictionary.getInstance().put(
+      "DateShifter",
+      XMLViewKey.TYPE_FORM,
+      XMLViewKey.CONTEXT_DEFAULT,
+      XMLViewKey.VIEW_DEFAULT,
+      "/xml/com/foc/calendar/DateShifter^Form.xml", 0, DateShifter_Form.class.getName());
+
+    XMLViewDictionary.getInstance().put(
+      "DateShifter",
+      XMLViewKey.TYPE_FORM,
+      XMLViewKey.CONTEXT_DEFAULT,
+      XMLViewKey.VIEW_DEFAULT,
+      false, "ar",
+      "/xml/com/foc/calendar/DateShifter^Form-ar.xml", 0, DateShifter_Form.class.getName());
+    
     //-----------------------------------------------------------------------
     // Currency
     //-----------------------------------------------------------------------

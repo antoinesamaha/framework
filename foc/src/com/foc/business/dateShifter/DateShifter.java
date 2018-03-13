@@ -6,8 +6,9 @@ import java.util.Date;
 import com.foc.Globals;
 import com.foc.business.calendar.FCalendar;
 import com.foc.desc.FocObject;
+import com.foc.shared.dataStore.IFocData;
 
-public class DateShifter {
+public class DateShifter implements IFocData {
 
 	private DateShifterDesc dateShifterDesc = null;
 	private FocObject focObject = null;
@@ -73,6 +74,7 @@ public class DateShifter {
 			
 			java.sql.Date sqlDate = new java.sql.Date(cal.getTime().getTime());
 			getFocObject().setPropertyDate(getDateShifterDesc().getDateFieldID(), sqlDate);
+			Globals.logString("-- Setting the Datefield: "+getFocObject().getThisFocDesc().getFieldByID(getDateShifterDesc().getDateFieldID()).getName()+" Value:"+sqlDate.toString());
 		}
 	}
 	
@@ -150,5 +152,29 @@ public class DateShifter {
 
 	public DateShifterDesc getDateShifterDesc() {
 		return dateShifterDesc;
+	}
+
+	@Override
+	public boolean iFocData_isValid() {
+		return true;
+	}
+
+	@Override
+	public boolean iFocData_validate() {
+		return false;
+	}
+
+	@Override
+	public void iFocData_cancel() {
+	}
+
+	@Override
+	public IFocData iFocData_getDataByPath(String path) {
+		return (getFocObject() != null && getDateShifterDesc() != null) ? getFocObject().iFocData_getDataByPath(getDateShifterDesc().adjustFieldName(path)) : null;
+	}
+
+	@Override
+	public Object iFocData_getValue() {
+		return null;
 	}
 }

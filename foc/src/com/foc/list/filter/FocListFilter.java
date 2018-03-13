@@ -9,9 +9,12 @@ package com.foc.list.filter;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.foc.ConfigInfo;
+import com.foc.business.dateShifter.DateShifter;
+import com.foc.business.dateShifter.IDateShifterHolder;
 import com.foc.db.SQLFilter;
 import com.foc.db.SQLJoin;
 import com.foc.desc.FocConstructor;
@@ -33,7 +36,7 @@ import com.foc.util.Utils;
 /**
  * @author 01Barmaja
  */
-public abstract class FocListFilter extends FocObject implements IFocListFilter {  
+public abstract class FocListFilter extends FocObject implements IFocListFilter, IDateShifterHolder {  
   public static final int LEVEL_MEMORY   = 1;
   public static final int LEVEL_DATABASE = 2;
   public static final int LEVEL_DATABASE_AND_MEMORY = 3;
@@ -53,6 +56,8 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
   public static final int VIEW_DETAIL_FOR_DB_RESIDENT = 1;
   
   private ArrayList<FocListFilterListener> listeners = null;
+
+  private HashMap<Integer, DateShifter> dateShifterMap = null;
   
   public FocListFilter(FocConstructor constr){
     super(constr);
@@ -86,6 +91,17 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
       validationPanel.dispose();
       validationPanel = null;
     }
+    
+    if(dateShifterMap != null) {
+    	Iterator iter = dateShifterMap.values().iterator();
+    	while(iter != null && iter.hasNext()) {
+    		DateShifter shifter = (DateShifter) iter.next();
+    		shifter.dispose();
+    	}
+    	dateShifterMap.clear();
+    	dateShifterMap = null;
+    }
+    
     super.dispose();
   }
   
@@ -665,4 +681,21 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter 
       focListFilterListener.visibleArrayReset();
     }
   }
+
+  @Override
+  public DateShifter getDateShifter(int shifter) {
+  	DateShifter dateShifter = null;
+  	if(dateShifterMap == null) {
+  		dateShifterMap = new HashMap<Integer, DateShifter>();
+  	}
+  	
+  	if(dateShifterMap != null) {
+  		dateShifter = dateShifterMap.get(shifter);
+  		if(dateShifter == null) {
+  			dateShifter = new DateShifter(this, getThisFilterDesc().getDateShifterDesc(shifter));
+  			dateShifterMap.put(shifter, dateShifter);
+  		}
+  	}
+  	return dateShifter;
+  };
 }
