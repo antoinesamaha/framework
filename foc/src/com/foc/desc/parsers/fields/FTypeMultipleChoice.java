@@ -19,6 +19,7 @@ public class FTypeMultipleChoice extends FocFieldTypAbstract<FocMultipleChoice> 
 		FMultipleChoiceField focField = null;
 		focField = new FMultipleChoiceField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setDBResident(a.dbResident());
+		focField.setMandatory(a.mandatory());
 		if(a.choices() != null){
 			for(FocChoice c: a.choices()){
 				focField.addChoice(c.id(), c.title());

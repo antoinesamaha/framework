@@ -41,7 +41,7 @@ public class FBoolField extends FIntField {
   	 */
   	String creation = null; 
   	if(getProvider() == Globals.getDBManager().PROVIDER_MSSQL){
-  		creation = " " + name + " BIT";
+  		creation = " [" + name + "] BIT";
   	}else if(getProvider()== DBManager.PROVIDER_ORACLE){
   		creation = " \"" + name + "\" INT";
   	}else{
