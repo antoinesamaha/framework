@@ -14,6 +14,7 @@ import com.foc.business.printing.PrnLayout;
 import com.foc.business.printing.PrnLayoutDefinition;
 import com.foc.business.printing.PrnLayoutDefinitionDesc;
 import com.foc.business.printing.gui.PrintingAction;
+import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -128,11 +129,15 @@ public class PrnLayout_Table extends FocXMLLayout{
 									}
 									
 									FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getGeneralEmailTemplate();
-									FocNotificationEmail email = new FocNotificationEmail(template, printingAction.getObjectToPrint());
-									
+							    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null));
+									email.init(template, printingAction.getObjectToPrint());
 									prnLayout.attachToEmail(email, printingAction, withLogo);
+									email.fill();
+							    email.send();
+							    email.setCreated(true);
+							    email.validate(true);
 									
-									Globals.popup(email, false, FocNotificationEmailDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
+//									Globals.popup(email, false, FocNotificationEmailDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
 								}
 							}
 						}

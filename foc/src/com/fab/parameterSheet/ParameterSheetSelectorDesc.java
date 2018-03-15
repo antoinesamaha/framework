@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FStringField;
+import com.foc.desc.field.FDescFieldStringBased;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.list.FocList;
@@ -29,12 +30,12 @@ public class ParameterSheetSelectorDesc extends FocDesc {
 		focFld = new FStringField("PARAM_SET_NAME", "Param set name", FLD_PARAM_SET_NAME, true, 50);
 		addField(focFld);
 		
-		focFld = new FMultipleChoiceStringField("TABLE_NAME", "Table name", FLD_TABLE_NAME, false, 50);
+		focFld = new FDescFieldStringBased("TABLE_NAME", "Table name", FLD_TABLE_NAME, false);
 		addField(focFld);
 	}
 	
 	protected void afterConstruction(){
-		FMultipleChoiceStringField descFld = (FMultipleChoiceStringField)getFieldByID(ParameterSheetSelectorDesc.FLD_TABLE_NAME);
+		FDescFieldStringBased descFld = (FDescFieldStringBased)getFieldByID(ParameterSheetSelectorDesc.FLD_TABLE_NAME);
 		if(descFld != null){
 			descFld.fillWithAllDeclaredFocDesc();
 		}
@@ -73,10 +74,10 @@ public class ParameterSheetSelectorDesc extends FocDesc {
   // oooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
 	
-	private static ArrayList<FMultipleChoiceStringField> fieldArray = null;
-	public static void addStringBasedField(FMultipleChoiceStringField fieldToAdd){
+	private static ArrayList<FDescFieldStringBased> fieldArray = null;
+	public static void addStringBasedField(FDescFieldStringBased fieldToAdd){
 		if(fieldArray == null){
-			fieldArray = new ArrayList<FMultipleChoiceStringField>();
+			fieldArray = new ArrayList<FDescFieldStringBased>();
 		}
 		fieldArray.add(fieldToAdd);
 	}
@@ -84,7 +85,7 @@ public class ParameterSheetSelectorDesc extends FocDesc {
 	public static void refreshAllParamSetFieldChoices(){
 		if(fieldArray != null){
 			for(int i=0; i<fieldArray.size(); i++){
-				FMultipleChoiceStringField field = fieldArray.get(i);
+				FDescFieldStringBased field = fieldArray.get(i);
 				if(field != null){
 					field.re_fillWithParamSetFocDesc();
 				}

@@ -7,6 +7,7 @@ import com.foc.desc.field.FDescFieldStringBased;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.parsers.pojo.PojoFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
+import com.foc.util.Utils;
 
 public class FNotifTriggerDesc extends PojoFocDesc implements FocNotificationConst {
    
@@ -27,6 +28,23 @@ public class FNotifTriggerDesc extends PojoFocDesc implements FocNotificationCon
     }
     
     FDescFieldStringBased descField = (FDescFieldStringBased) getFieldByName(FNotifTrigger.FIELD_TABLE_NAME);
+    descField.fillWithAllDeclaredFocDesc();
+    
+    descField = (FDescFieldStringBased) getFieldByName(FNotifTrigger.FIELD_ReportTableName);
+    descField.setTableNameFilter(new FDescFieldStringBased.ITableNameFilter() {
+			@Override
+			public boolean includeFocDesc(FocDesc focDesc) {
+				boolean included = false;
+				if(!Utils.isStringEmpty(focDesc.getReportContext())) {
+					included = true;
+				}
+				return included;
+			}
+			
+			@Override
+			public void dispose() {
+			}
+		});
     descField.fillWithAllDeclaredFocDesc();
   }
   

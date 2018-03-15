@@ -11,6 +11,7 @@ import com.foc.annotations.model.fields.FocDate;
 import com.foc.annotations.model.fields.FocForeignEntity;
 import com.foc.annotations.model.fields.FocMultipleChoice;
 import com.foc.annotations.model.fields.FocMultipleChoiceString;
+import com.foc.annotations.model.fields.FocReference;
 import com.foc.annotations.model.fields.FocTableName;
 import com.foc.annotations.model.fields.FocTime;
 import com.foc.business.calendar.FCalendar;
@@ -19,8 +20,12 @@ import com.foc.business.notifier.actions.IFocNotifAction;
 import com.foc.business.notifier.manipulators.IFocNotificationEventManipulator;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
+import com.foc.list.FocList;
+import com.foc.util.Utils;
 
 @FocEntity
 @SuppressWarnings("serial")
@@ -55,9 +60,6 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	})
 	public static final String FIELD_Event = "Event";
 
-	@FocForeignEntity(table = "NOTIF_EMAIL_TEMPLATE")
-	public static final String FIELD_NOTIF_EMAIL_TEMPLATE = "NOTIF_EMAIL_TEMPLATE";
-
 	@FocTableName()
 	public static final String FIELD_TABLE_NAME = "TABLE_NAME";
 
@@ -81,6 +83,21 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 			@FocChoice(id=ACTION_EXECUTE_REPORT, title="Execute report")
 	})
 	public static final String FIELD_Action = "Action";
+
+	@FocForeignEntity(table = "NOTIF_EMAIL_TEMPLATE")
+	public static final String FIELD_NOTIF_EMAIL_TEMPLATE = "NOTIF_EMAIL_TEMPLATE";
+	
+	@FocTableName(size = 200)
+	public static final String FIELD_ReportTableName = "ReportTableName";
+
+	@FocForeignEntity(dbResident=false)
+	public static final String FIELD_ReportConfiguration = "ReportConfiguration";
+
+	@FocReference()
+	public static final String FIELD_ReportReference = "ReportReference";
+	
+	@FocMultipleChoiceString(size = 200)
+	public static final String FIELD_ReportLayout = "ReportLayout";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -98,6 +115,21 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
     this.localEventManipulator = localEventManipulator;
   }
 
+  @Override
+  public FocList getObjectPropertySelectionList(int fieldID) {
+  	FocList list = null;
+  	FField field = getThisFocDesc() != null ? getThisFocDesc().getFieldByName(FIELD_ReportConfiguration) : null;
+  	if(field != null && field.getID() == fieldID) {
+  		FocDesc focDesc = getReportConfigFocDesc();
+			if(focDesc != null) {
+				list = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+			}
+  	}else{
+  		list = super.getObjectPropertySelectionList(fieldID);
+  	}
+  	return list;
+  }
+  
 	public String getTransaction() {
 		return getPropertyString(FIELD_Transaction);
 	}
@@ -268,5 +300,46 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 			FCalendar.rollTheCalendar_Day(cal);
 			setNextDate(new Date(cal.getTime().getTime()));
 		}
+	}
+	
+	public FocDesc getReportConfigFocDesc() {
+		FocDesc focDesc = null;
+		String storageName = getReportTableName();
+		if(!Utils.isStringEmpty(storageName)) {
+			focDesc = Globals.getApp().getFocDescByName(storageName);
+		}
+		return focDesc;
+	}
+		
+	public String getReportTableName() {
+		return getPropertyString(FIELD_ReportTableName);
+	}
+
+	public void setReportTableName(String value) {
+		setPropertyString(FIELD_ReportTableName, value);
+	}
+
+	public long getReportReference() {
+		return getPropertyLong(FIELD_ReportReference);
+	}
+
+	public void setReportReference(long value) {
+		setPropertyLong(FIELD_ReportReference, value);
+	}
+
+	public String getReportLayout() {
+		return getPropertyString(FIELD_ReportLayout);
+	}
+
+	public void setReportLayout(String value) {
+		setPropertyString(FIELD_ReportLayout, value);
+	}
+
+	public FocObject getReportConfiguration() {
+		return getPropertyObject(FIELD_ReportConfiguration);
+	}
+
+	public void setReportConfiguration(FocObject value) {
+		setPropertyObject(FIELD_ReportConfiguration, value);
 	}
 }

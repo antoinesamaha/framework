@@ -136,44 +136,6 @@ public class FMultipleChoiceStringField extends FStringField {
   	getChoicesArray().clear();
   }
   
-  public void fillWithAllDeclaredFocDesc(){
-  	FabStatic.addStringBasedField(this);
-  	re_fillWithAllDeclaredFocDesc();
-	}
-
-  public void re_fillWithAllDeclaredFocDesc(){
-  	removeAllChoices();
-		Iterator<IFocDescDeclaration> iter = Globals.getApp().getFocDescDeclarationIterator();
-		while(iter != null && iter.hasNext()){
-			IFocDescDeclaration declaration = iter.next();
-			if(declaration != null){
-				FocDesc focDesc = declaration.getFocDescription();
-				if(focDesc != null){
-					String focDescName = focDesc.getStorageName();
-					addChoice(focDescName);
-				}
-			}
-		}
-	}
-  
-  public void fillWithParamSetFocDesc(){
-  	ParameterSheetSelectorDesc.addStringBasedField(this);
-  	re_fillWithParamSetFocDesc();
-  }
-  
-  public void re_fillWithParamSetFocDesc(){
-  	removeAllChoices();
-  	addChoice("");
-  	FocList paramSetSelectorList = ParameterSheetSelectorDesc.getList(FocList.LOAD_IF_NEEDED);
-  	Iterator iter = paramSetSelectorList.focObjectIterator();
-  	while(iter != null && iter.hasNext()){
-  		ParameterSheetSelector selector = (ParameterSheetSelector) iter.next();
-  		if(selector != null){
-				addChoice(selector.getTableName());
-			}
-		}
-  }
-
   public Component getGuiComponent(FProperty prop){
   	//Iterator<FMultipleChoiceItem> choices = this.getChoicesIterator();
   	refreshChoicesArray();

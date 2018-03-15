@@ -441,14 +441,17 @@ public class FocDataDictionary implements IFocDataDictionary {
 			
 			IFocDataResolver fethcer = dataMap.get(key);
 			if(fethcer != null){
-				value = fethcer.getValue(focData, arguments);
-				
-				if(pathPart != null && value != null && value instanceof IFocData){
-					IFocData newFocData = (IFocData) value;
+				try {
+					value = fethcer.getValue(focData, arguments);
 					
-					value = getValue_WithTableDisplayObjectCall(newFocData, pathPart);
+					if(pathPart != null && value != null && value instanceof IFocData){
+						IFocData newFocData = (IFocData) value;
+						
+						value = getValue_WithTableDisplayObjectCall(newFocData, pathPart);
+					}
+				}catch(Exception e) {
+					Globals.logException(e);
 				}
-				
 			}else{
 				if(!isLocalDataDictionary()){
 					Globals.logString("Data resolver Not found for key : "+key);

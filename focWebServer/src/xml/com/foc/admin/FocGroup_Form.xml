@@ -14,6 +14,7 @@
         <GuiField name="FX_RTE_MODIF" caption="Allow Currency rates modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" maskDataFoundError="true" />
         <GuiField name ="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
         <GuiField name ="ALLOW_IMPORT" caption="Allow Imports" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
+        <GuiField name ="REPORT_ACCESS" caption="Allow report access" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
         <GuiField name ="ALLOW_REPORT_CREATION" caption="Allow report creation" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
         
         <GuiField name ="LINK_OUT_RIGHTS" captionProperty="NAME" caption="Link Out Rights" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />

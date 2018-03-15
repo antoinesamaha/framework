@@ -2,13 +2,13 @@ package com.fab;
 
 import java.util.ArrayList;
 
-import com.foc.desc.field.FMultipleChoiceStringField;
+import com.foc.desc.field.FDescFieldStringBased;
 
 public class FabStatic {
-	private static ArrayList<FMultipleChoiceStringField> fieldArray = null;
-	public static void addStringBasedField(FMultipleChoiceStringField fieldToAdd){
+	private static ArrayList<FDescFieldStringBased> fieldArray = null;
+	public static void addStringBasedField(FDescFieldStringBased fieldToAdd){
 		if(fieldArray == null){
-			fieldArray = new ArrayList<FMultipleChoiceStringField>();
+			fieldArray = new ArrayList<FDescFieldStringBased>();
 		}
 		fieldArray.add(fieldToAdd);
 	}
@@ -16,7 +16,7 @@ public class FabStatic {
 	public static void refreshAllTableFieldChoices(){
 		if(fieldArray != null){
 			for(int i=0; i<fieldArray.size(); i++){
-				FMultipleChoiceStringField field = fieldArray.get(i);
+				FDescFieldStringBased field = fieldArray.get(i);
 				if(field != null){
 					field.re_fillWithAllDeclaredFocDesc();
 				}

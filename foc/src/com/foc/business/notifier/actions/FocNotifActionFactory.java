@@ -10,6 +10,7 @@ public class FocNotifActionFactory extends HashMap<Integer, IFocNotifAction>{
   
   public FocNotifActionFactory(){
     put(FNotifTrigger.ACTION_SEND_EMAIL, new FocNotifAction_SendEmail());
+    put(FNotifTrigger.ACTION_EXECUTE_REPORT, new FocNotifAction_SendReportByEmail());
   }
   
   public static FocNotifActionFactory getInstance(boolean createIfNeeded) {

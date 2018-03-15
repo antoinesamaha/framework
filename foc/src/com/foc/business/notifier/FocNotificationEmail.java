@@ -68,7 +68,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     init(template, focData);
   }
   
-  private void init(FocNotificationEmailTemplate template, IFocData focData){
+  public void init(FocNotificationEmailTemplate template, IFocData focData){
     setTemplate(template);
     setEmailFocData(focData);
     adjustTemplate();

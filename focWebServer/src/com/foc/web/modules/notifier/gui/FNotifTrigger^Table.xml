@@ -1,4 +1,4 @@
-<VerticalLayout captionMargin="0" margin="true" spacing="true" width="98%">
+<VerticalLayout captionMargin="0" margin="true" spacing="true">
   <ValidationSettings withApply="true" withAttach="false" withPrint="false" />
   <Label value="Event to Action configuration" style="H2,text-center" />
   <GuiTable dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">

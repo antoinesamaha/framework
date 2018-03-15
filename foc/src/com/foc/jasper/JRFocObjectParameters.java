@@ -74,32 +74,36 @@ public class JRFocObjectParameters extends HashMap<String, Object>{
 	public Object get(Object key) {
 		Globals.logString("JRFocObjectParameters.get( "+key+" )");
 		Object retObj = super.get(key);
-		if(retObj == null && focObject != null){
-	    FFieldPath fieldPath = FAttributeLocationProperty.newFieldPath(false, (String)key, focObject.getThisFocDesc());
-	    if(fieldPath != null && fieldPath.size() > 0 && fieldPath.get(0) != FField.NO_FIELD_ID){
-		    FProperty  prop = fieldPath.getPropertyFromObject(focObject);
-		    if(prop != null){
-//		    	retObj = prop.getObject();
-		    	if(prop.getObject() != null && prop.getObject() instanceof String){//&& prop instanceof FBlobStringProperty
-		    		String val = String.valueOf(prop.getObject());
-	    			retObj = Utils.htmlToText(val);
-	    		}else{
-	    			retObj = prop.getObject();
-	    		}
-		    }else{
-		    	FField    fld   = fieldPath.getFieldFromDesc(focObject.getThisFocDesc());
-		    	FProperty prop2 = fld != null ? fld.newProperty(null) : null;
-		    	if(prop2 != null){
-			    	retObj = prop2.getObject();
-			    	prop2.dispose();
-		    	}
+		try {
+			if(retObj == null && focObject != null){
+		    FFieldPath fieldPath = FAttributeLocationProperty.newFieldPath(false, (String)key, focObject.getThisFocDesc());
+		    if(fieldPath != null && fieldPath.size() > 0 && fieldPath.get(0) != FField.NO_FIELD_ID){
+			    FProperty  prop = fieldPath.getPropertyFromObject(focObject);
+			    if(prop != null){
+	//		    	retObj = prop.getObject();
+			    	if(prop.getObject() != null && prop.getObject() instanceof String){//&& prop instanceof FBlobStringProperty
+			    		String val = String.valueOf(prop.getObject());
+		    			retObj = Utils.htmlToText(val);
+		    		}else{
+		    			retObj = prop.getObject();
+		    		}
+			    }else{
+			    	FField    fld   = fieldPath.getFieldFromDesc(focObject.getThisFocDesc());
+			    	FProperty prop2 = fld != null ? fld.newProperty(null) : null;
+			    	if(prop2 != null){
+				    	retObj = prop2.getObject();
+				    	prop2.dispose();
+			    	}
+			    }
 		    }
-	    }
-	    if(retObj == null){
-	    	IFocDataResolver focDataResolver = FocDataDictionary.getInstance().getParameter(key+"");
-	    	retObj = focDataResolver != null ? focDataResolver.getValue(null, null) : null;
-	    }
-		}		
+		    if(retObj == null){
+		    	IFocDataResolver focDataResolver = FocDataDictionary.getInstance().getParameter(key+"");
+		    	retObj = focDataResolver != null ? focDataResolver.getValue(null, null) : null;
+		    }
+			}
+		}catch(Exception e) {
+			Globals.logException(e);
+		}
 		return retObj;
 	}
 
