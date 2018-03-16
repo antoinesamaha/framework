@@ -61,6 +61,8 @@ public abstract class FField implements Cloneable, IFocData {
   private String  defaultStringValue = null;
   private boolean noRights = false;
   
+  private FField  joinOriginalField = null;
+  
   private ArrayList<FPropertyListener>              listeners  = null;
   private ArrayList<FPropertyModificationControler> modificationControlers = null;
 
@@ -875,4 +877,10 @@ public abstract class FField implements Cloneable, IFocData {
     return null;
   }  
   //--------------------------------------------------------	
+	public FField getJoinOriginalField() {
+		return joinOriginalField;
+	}
+	public void setJoinOriginalField(FField joinOriginalField) {
+		this.joinOriginalField = joinOriginalField;
+	}
 }

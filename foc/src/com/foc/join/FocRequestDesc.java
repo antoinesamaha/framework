@@ -141,6 +141,7 @@ public class FocRequestDesc {
 	          		Globals.showNotification("Field Not Found", "Could not find field:"+reqField.getId(), IFocEnvironment.TYPE_ERROR_MESSAGE);
 	          	}else{
 		            newField = (FField) field.cloneWithoutListeners();
+			          newField.setJoinOriginalField(field);
 		           	newField.setName(reqField.getTableAlias().getAlias()+"."+field.getName());
 		            if(newField instanceof FObjectField){
 		              FObjectField newObjField = (FObjectField) newField;

@@ -12,6 +12,7 @@ import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FNumField;
@@ -104,13 +105,19 @@ public class FocListGroupBy {
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
 				formulaBefore = "LISTAGG(";
 				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+				addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_MSSQL) {
-//			,STUFF((SELECT ',' + Number FROM ContactPhones FOR XML PATH ('')), 1, 1, '') 
-				formulaBefore = "STUFF((SELECT ',' + ";
-				formulaAfter  = " FROM ContactPhones FOR XML PATH ('')), 1, 1, '')";
+//			,STUFF((SELECT ',' + Number FROM ContactPhones FOR XML PATH ('')), 1, 1, '')
+				FField originalField = field;
+				if(field.getJoinOriginalField() != null) originalField = field.getJoinOriginalField();
+				if(originalField != null && originalField.getFocDescParent() != null && !Utils.isStringEmpty(originalField.getFocDescParent().getStorageName_ForSQL())) {
+					fieldName = originalField.getDBName();
+					formulaBefore = "STUFF((SELECT ',' + ";
+					formulaAfter  = " FROM "+originalField.getFocDescParent().getStorageName_ForSQL()+" FOR XML PATH ('')), 1, 1, '')";
+					addField_Formulas(fieldID, formulaBefore + fieldName + formulaAfter);
+	  		}
 			}
 			
-			addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			if(focDesc != null) {
 				FocList selectionList = null;
 				String captionProperty = null;
@@ -134,6 +141,12 @@ public class FocListGroupBy {
 				
 				field.addListener(new ListAggListener(selectionList, captionProperty));
 			}
+		}else if(   formula.toUpperCase().startsWith("MAX") 
+				     && focDesc.getProvider() == DBManager.PROVIDER_MSSQL
+				     && field instanceof FBoolField){
+			String formulaBefore = "MAX(CAST(";
+			String formulaAfter  = " AS tinyint))";
+      addField_Formulas(fieldID, formulaBefore, formulaAfter);
 		}else{
 			addField_Formulas(fieldID, formula+"(", ")");
 		}
