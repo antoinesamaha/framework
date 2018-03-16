@@ -320,14 +320,21 @@ public class FVMenuTree extends FocXMLLayout {
 
 		//Adding reports menu
 		//-------------------
-		FocMenuItem reportMainMenu = pushRootMenu("MNU_REPORTS", "Reports");
-		Iterator<FocDesc> iter = Globals.getApp().reportConfigFocDesc_Ierator();
-		while(iter != null && iter.hasNext()) {
-			FocDesc focDesc = iter.next();
-
-			PrnContext context = ReportFactory.getInstance().findContext(focDesc.getReportContext());
-			FocMenuItem menuItem = reportMainMenu.pushMenu(focDesc.getReportMenu(), context.getName());
-			menuItem.setMenuAction(new ReportMenuItem(focDesc));
+		if(getFocGroup() != null && getFocGroup().allowReportAccess()) {
+			String caption = "Reports";
+		  if(ConfigInfo.isGuiRTL()){
+		  	caption = "تقارير";
+		  }
+		  
+			FocMenuItem reportMainMenu = pushRootMenu("MNU_REPORTS", caption);
+			Iterator<FocDesc> iter = Globals.getApp().reportConfigFocDesc_Ierator();
+			while(iter != null && iter.hasNext()) {
+				FocDesc focDesc = iter.next();
+	
+				PrnContext context = ReportFactory.getInstance().findContext(focDesc.getReportContext());
+				FocMenuItem menuItem = reportMainMenu.pushMenu(focDesc.getReportMenu(), context.getName());
+				menuItem.setMenuAction(new ReportMenuItem(focDesc));
+			}
 		}
 		//-------------------
 		
