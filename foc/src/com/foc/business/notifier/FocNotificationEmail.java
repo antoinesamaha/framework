@@ -79,7 +79,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   }
   
   public void adjustTemplate(){
-    if (getTemplate() != null && getEmailFocData() != null) {
+    if (getTemplate() != null) {
       setSubject(getTemplate().getSubject(focData));
       setText(getTemplate().getText(focData));
       setRecipients(getTemplate().getRecipients(focData));

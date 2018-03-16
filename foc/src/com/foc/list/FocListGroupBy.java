@@ -97,8 +97,18 @@ public class FocListGroupBy {
 		
 		if(formula.toUpperCase().startsWith("LISTAGG")) {
 			fieldName = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), fieldName);
-			String formulaBefore = "LISTAGG(";
-			String formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+			
+			String formulaBefore = "";
+			String formulaAfter  = "";
+			
+			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
+				formulaBefore = "LISTAGG(";
+				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_MSSQL) {
+//			,STUFF((SELECT ',' + Number FROM ContactPhones FOR XML PATH ('')), 1, 1, '') 
+				formulaBefore = "STUFF((SELECT ',' + ";
+				formulaAfter  = " FROM ContactPhones FOR XML PATH ('')), 1, 1, '')";
+			}
 			
 			addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			if(focDesc != null) {

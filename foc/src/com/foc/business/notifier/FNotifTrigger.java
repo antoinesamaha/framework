@@ -25,6 +25,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
 import com.foc.list.FocList;
+import com.foc.property.FObject;
 import com.foc.util.Utils;
 
 @FocEntity
@@ -341,5 +342,23 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
 	public void setReportConfiguration(FocObject value) {
 		setPropertyObject(FIELD_ReportConfiguration, value);
+	}
+
+	public void setReportConfigurationRef(long value) {
+		FObject objProp = (FObject) getFocPropertyByName(FIELD_ReportConfiguration);
+		objProp.setLocalReferenceInt_WithoutNotification(value);
+	}
+	
+	public long getReportConfigurationRef() {
+		FObject objProp = (FObject) getFocPropertyByName(FIELD_ReportConfiguration);
+		return objProp.getLocalReferenceInt();
+	}
+
+	public void copyReportConfig_Ref2Object() {
+		setReportConfigurationRef(getReportReference()); 
+	}
+	
+	public void copyReportConfig_Object2Ref() {
+		setReportReference(getReportConfigurationRef());
 	}
 }

@@ -8,6 +8,7 @@ import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.FVComboBox;
 import com.foc.vaadin.gui.components.FVDateField;
+import com.foc.vaadin.gui.components.FVMultipleChoiceComboBox;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
 import com.foc.vaadin.gui.components.FVTable;
 import com.foc.vaadin.gui.components.FVTextArea;
@@ -205,7 +206,7 @@ public class FocXMLGuiComponentStatic {
 				if (!(component instanceof Layout) && ConfigInfo.isGuiRTL() 
 						&& !(component instanceof FVTextField) && !(component instanceof FVDateField) 
 						&& !(component instanceof FVComboBox) && !(component instanceof FVTextArea) 
-						&& !(component instanceof FVObjectComboBox)) {
+						&& !(component instanceof FVObjectComboBox) && !(component instanceof FVMultipleChoiceComboBox)) {
         	component.addStyleName("foc-floatNone");
         }
       } catch (Exception e) {

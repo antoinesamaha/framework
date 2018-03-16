@@ -109,25 +109,27 @@ public class FocFieldEnum implements Iterator {
     if (fields == null) {
       fields = new ArrayList<IterElem>();
     }
-    if (category == CAT_REF && focDesc.getWithReference()) {
-      // If the category is reference and the ref field exists
-      // then, there is only one field.
-      // This is why we check the index == 0
-      FField field = focDesc.getFieldByID(FField.REF_FIELD_ID);
-      addElement(field);
-    } else if (category == CAT_REF || category == CAT_KEY) {
-      // If we are looking for keys we check the next key field
-      for (int i = 0; i < focDesc.getKeyFieldsSize(); i++) {
-        FField field = focDesc.getKeyFieldAt(i);
-        addElement(field);
-      }
-    } else {
-      // If we are looking for all the fields
-      for (int i = 0; i < focDesc.getFieldsSize(); i++) {
-        FField field = focDesc.getFieldAt(i);
-        addElement(field);
-      }
-    }
+//    if(focDesc != null) {
+	    if (category == CAT_REF && focDesc.getWithReference()) {
+	      // If the category is reference and the ref field exists
+	      // then, there is only one field.
+	      // This is why we check the index == 0
+	      FField field = focDesc.getFieldByID(FField.REF_FIELD_ID);
+	      addElement(field);
+	    } else if (category == CAT_REF || category == CAT_KEY) {
+	      // If we are looking for keys we check the next key field
+	      for (int i = 0; i < focDesc.getKeyFieldsSize(); i++) {
+	        FField field = focDesc.getKeyFieldAt(i);
+	        addElement(field);
+	      }
+	    } else {
+	      // If we are looking for all the fields
+	      for (int i = 0; i < focDesc.getFieldsSize(); i++) {
+	        FField field = focDesc.getFieldAt(i);
+	        addElement(field);
+	      }
+	    }
+//    }
   }
 
   public FocFieldEnum(FocDesc focDesc, FocObject focObj, ArrayList<IterElem> fields, FFieldPath currentFieldPath, int category, int level) {
