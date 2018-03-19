@@ -43,8 +43,8 @@ public class DateShifterDesc {
 	public static final int DAY_KEY_CURRENT_DAY_OF_MONTH = 0;
 	public static final int DAY_KEY_END_OF_MONTH         = 32;
 	
-	public static final int IS_SPECIFIC_DATE_FALSE = 0;
-	public static final int IS_SPECIFIC_DATE_TRUE  = 1;
+	public static final int SHIFTER_NOT_ACTIVE = 0;
+	public static final int SHIFTER_ACTIVE     = 1;
 	
 	public DateShifterDesc(FocDesc focDesc, int shift, String suffix, int dateFieldID) {
 		this(focDesc, shift, null, suffix, dateFieldID);
@@ -80,7 +80,7 @@ public class DateShifterDesc {
 				@Override
 				public void propertyModified(FProperty property) {
 					FocObject focObj = property != null ? property.getFocObject() : null;
-					if(focObj != null){
+					if(focObj != null && focObj.isDbResident() && focObj.getThisFocDesc().isDbResident()){
 						IDateShifterHolder iDateShifterHolder = (IDateShifterHolder) focObj;
 						DateShifter        dateShifter        = iDateShifterHolder.getDateShifter(getFieldsShift());
 						dateShifter.adjustDate();
@@ -138,9 +138,9 @@ public class DateShifterDesc {
 			getFocDesc().addField(choiceField);
 			choiceField.addListener(listener);
 			
-			FMultipleChoiceField bFld = new FMultipleChoiceField(adjustFieldName("IS_SPECIFIC_DATE"), "Specific Date", fieldsShift + FLD_IS_SPECIFIC_DATE, false, 2);
-			bFld.addChoice(IS_SPECIFIC_DATE_FALSE, "Use Date Shifter");
-			bFld.addChoice(IS_SPECIFIC_DATE_TRUE, "Specific Date");
+			FMultipleChoiceField bFld = new FMultipleChoiceField(adjustFieldName("USE_SHIFTER"), "Activate Shifter", fieldsShift + FLD_IS_SPECIFIC_DATE, false, 2);
+			bFld.addChoice(SHIFTER_ACTIVE, "Use Date Shifter");
+			bFld.addChoice(SHIFTER_NOT_ACTIVE, "Specific Date");
 			getFocDesc().addField(bFld);
 		
 			numField = new FIntField(adjustFieldName("DAY_SHIFT"), "Day Shift", fieldsShift + FLD_DAY_SHIFT, false, 5);
