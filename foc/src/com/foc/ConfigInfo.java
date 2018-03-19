@@ -93,10 +93,10 @@ public class ConfigInfo {
     
   private static Properties props = null; 
   
-  private static String getProperty(String property){
-  	String val = Globals.getApp() != null ? Globals.getApp().getCommandLineArgument(property) : null;
+  public static String getProperty(String key){
+  	String val = Globals.getApp() != null ? Globals.getApp().getCommandLineArgument(key) : null;
   	if(val == null || val.isEmpty()){
-  		val = props != null ? props.getProperty(property) : null;
+  		val = props != null ? props.getProperty(key) : null;
   	}
   	
   	return val;
