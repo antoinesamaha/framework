@@ -24,7 +24,7 @@ public class DateShifter implements IFocData {
 	}
 	
 	public void adjustDate(){
-		if(!isSpecificDate()){
+		if(isUseShifter()){
 			//Cal will hold the Date
 			Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
 			
@@ -129,17 +129,17 @@ public class DateShifter implements IFocData {
 		}
 	}
 	
-	public boolean isSpecificDate(){
+	public boolean isUseShifter(){
 		boolean specific = false;
 		if(getFocObject() != null){
-			specific = getFocObject().getPropertyInteger(getFieldsShift() + DateShifterDesc.FLD_IS_SPECIFIC_DATE) == 1;		
+			specific = getFocObject().getPropertyInteger(getFieldsShift() + DateShifterDesc.USE_SHIFTER) == 1;		
 		}
 		return specific;
 	}
 	
-	public void setSpecificDate(boolean value){
+	public void setUseShifter(boolean value){
 		if(getFocObject() != null){
-			getFocObject().setPropertyBoolean(getFieldsShift() + DateShifterDesc.FLD_IS_SPECIFIC_DATE, value);
+			getFocObject().setPropertyBoolean(getFieldsShift() + DateShifterDesc.USE_SHIFTER, value);
 		}
 	}
 	

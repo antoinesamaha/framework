@@ -25,7 +25,7 @@ public class DateShifterDesc {
 	public static final int FLD_MONTH_SHIFT       = 3;
 	public static final int FLD_DAY               = 4;
 	public static final int FLD_DAY_SHIFT         = 5;
-	public static final int FLD_IS_SPECIFIC_DATE  = 6;
+	public static final int USE_SHIFTER  = 6;
 	public static final int FLD_NEXT_FIELD_IDX    = 7;
 
 	public static final int YEAR_KEY_CURRENT_YEAR_MINUS_4 = -4;
@@ -138,7 +138,7 @@ public class DateShifterDesc {
 			getFocDesc().addField(choiceField);
 			choiceField.addListener(listener);
 			
-			FMultipleChoiceField bFld = new FMultipleChoiceField(adjustFieldName("USE_SHIFTER"), "Activate Shifter", fieldsShift + FLD_IS_SPECIFIC_DATE, false, 2);
+			FMultipleChoiceField bFld = new FMultipleChoiceField(adjustFieldName("USE_SHIFTER"), "Activate Shifter", fieldsShift + USE_SHIFTER, false, 2);
 			bFld.addChoice(SHIFTER_ACTIVE, "Use Date Shifter");
 			bFld.addChoice(SHIFTER_NOT_ACTIVE, "Specific Date");
 			getFocDesc().addField(bFld);

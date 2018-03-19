@@ -16,7 +16,7 @@ public class NotifierModule extends FocModule {
 	
 	@Override
 	public void declareFocObjectsOnce() {
-		declareFocDescClass(FNotifTriggerDesc.class);
+//		declareFocDescClass(FNotifTriggerDesc.class);
 		declareFocDescClass(FocNotificationEmailTemplateDesc.class);
 		declareFocDescClass(FocNotificationEmailDesc.class);
 		declareFocDescClass(FocPageLinkDesc.class);
