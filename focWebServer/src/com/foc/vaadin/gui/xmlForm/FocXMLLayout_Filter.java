@@ -69,7 +69,7 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 
 	private void adjustDateButton(FVButton button, DateShifter dateShifter) {
   	if(button != null) {
-    	if(!getFilter().isDbResident()) {
+    	if(!getFilter().isDbResident() || !getFilter().getThisFocDesc().isDbResident()) {
     		button.setVisible(false);
     	}else {
     		button.addClickListener(new DateButtonCickListener(dateShifter));
