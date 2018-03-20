@@ -19,7 +19,7 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
 
 	private FocObject focObject = null;
 	private String    tableName = null;
-	private int       objRef    = 0;
+	private long      objRef    = 0;
 	
   public PhotoAlbumListWithFilter() {
     super(PhotoAlbumFilterDesc.getInstance(), new FocLinkSimple(PhotoAlbumDesc.getInstance()));
@@ -30,11 +30,10 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
     order.setReverted(true);
     setListOrder(order);
   }
-  
+
   public PhotoAlbumListWithFilter(String tableName, int objRef) {
     this();
-    this.objRef    = objRef;
-    this.tableName = tableName;
+    setPhotoSubject(tableName, objRef); 
     applyFilterOnTableName(tableName);
     applyFilterOnObjectReference(objRef);
   }
@@ -43,8 +42,7 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
   	this();
   	this.focObject = focObject;
   	if(focObject != null && focObject.hasRealReference()){
-      this.objRef    = focObject.getReference().getInteger();
-      this.tableName = focObject.getThisFocDesc().getStorageName();
+  	  setPhotoSubject(focObject.getThisFocDesc().getStorageName(), focObject.getReference().getInteger());
       applyFilterOnTableName(focObject.getThisFocDesc().getStorageName());
       applyFilterOnObjectReference(focObject.getReference().getInteger());
   	}
@@ -59,6 +57,11 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
   
   public void dispose(){
   	super.dispose();
+  }
+
+  public void setPhotoSubject(String tableName, long objRef) {
+    this.objRef    = objRef;
+    this.tableName = tableName;
   }
   
   public long getObjectRef(){

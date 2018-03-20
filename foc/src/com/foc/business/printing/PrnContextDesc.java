@@ -15,7 +15,7 @@ public class PrnContextDesc extends FocDesc {
 	
 	public static final String DB_TABLE_NAME = "PRN_CONTEXT";
 	
-	public static final int LEN_CONTEXT_DB_NAME = 30;
+	public static final int LEN_CONTEXT_DB_NAME = 60;
   
 	public PrnContextDesc(){
 		super(PrnContext.class, FocDesc.NOT_DB_RESIDENT, DB_TABLE_NAME, true);
@@ -23,7 +23,8 @@ public class PrnContextDesc extends FocDesc {
 		setGuiDetailsPanelClass(PrnContextGuiDetailsPanel.class);
 		addReferenceField();
 		
-		addNameField();
+		FField fld = addNameField();
+		fld.setSize(100);
 		addDescriptionField();
 		
 		FStringField cFld = new FStringField("DB_NAME", "Database Name", FLD_DB_NAME, false, LEN_CONTEXT_DB_NAME);
