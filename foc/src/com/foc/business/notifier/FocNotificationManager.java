@@ -139,11 +139,11 @@ public class FocNotificationManager {
 			
 			while(true) {
 				try {
+					Thread.sleep(60000);
 		      for (int i = 0; i < eventNotifierList.size(); i++) {
 		        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
 		        trigger.executeIfSameEvent(event);
 		      }
-					Thread.sleep(60000);
 				}catch(Exception e) {
 					Globals.logExceptionWithoutPopup(e);
 				}
