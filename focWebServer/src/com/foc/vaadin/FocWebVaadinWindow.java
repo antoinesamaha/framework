@@ -1,6 +1,7 @@
 package com.foc.vaadin;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -94,7 +95,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	private int     format        = 0;
 	private boolean menuBarFilled = false;
 	
-	private ArrayList<NativeButton> buttonArray = null;
+	private HashMap<String, NativeButton> menuBarIconsMap = null;
 	
 	public FocWebVaadinWindow(){
 		super();
@@ -108,20 +109,28 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		//--------------------------------
 	}
 	
-	protected void buttonArray_Add(NativeButton button){
-		if(buttonArray == null){
-			buttonArray = new ArrayList<NativeButton>();
+	protected void menuBarIcons_Add(String menuItem, NativeButton button){
+		if(menuBarIconsMap == null){
+			menuBarIconsMap = new HashMap<String, NativeButton>();
 		}
-		buttonArray.add(button);
+		menuBarIconsMap.put(menuItem, button);
 		button.addStyleName("foc-f22");
 		button.addStyleName("foc-text-center");
 		button.setWidth("40px");
 	}
-
-	protected void buttonArray_Highlight(NativeButton button){
-		if(buttonArray != null){
-			for(int i=0; i<buttonArray.size(); i++){
-				NativeButton b = buttonArray.get(i);
+	
+	public void menuBarIcons_Highlight(String menuItem){
+		if(menuBarIconsMap != null){
+			NativeButton button = menuItem != null ? menuBarIconsMap.get(menuItem) : null;
+			menuBarIcons_Highlight(button);
+		}
+	}
+	
+	public void menuBarIcons_Highlight(NativeButton button){
+		if(menuBarIconsMap != null){
+			Iterator<NativeButton> iter = menuBarIconsMap.values().iterator();
+			while(iter != null && iter.hasNext()){
+				NativeButton b = iter.next();
 				if(b != null){
 					if(b == button){
 						b.addStyleName("foc-textOrange");
@@ -411,7 +420,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			home.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_HOME));
 			home.addClickListener(new Button.ClickListener() {
 				public void buttonClick(ClickEvent event) {
-					buttonArray_Highlight(null);
+					menuBarIcons_Highlight((NativeButton)null);
 					if(isGuestUser()){
 						changeCentralPanelIntoGuestHomePage();
 					}else{
@@ -424,7 +433,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 //				navigation = newButtonInHeaderBar("Navigation", true);
 				navigation = newButtonInHeaderBar("", true);
 				navigation.setIcon(FontAwesome.TH_LIST);
-				buttonArray_Add(navigation);
+				menuBarIcons_Add("_NAVIGATION_", navigation);
 				navigation.addStyleName("foc-bold");
 
 				if(FocWebApplication.getInstanceForThread().isMobile()){
@@ -433,7 +442,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}
 				navigation.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
-						buttonArray_Highlight((NativeButton) event.getButton());
+						menuBarIcons_Highlight((NativeButton) event.getButton());
 		        ICentralPanel centralPanel = newNavigationPanel();
 		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
 					}
@@ -443,7 +452,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			// Auto-Testing Header Icon
 			if (ConfigInfo.isUnitAllowed()) {
 				NativeButton autoTestingIcon = newButtonInHeaderBar("", true);
-				buttonArray_Add(autoTestingIcon);
+				menuBarIcons_Add("_UNIT_", autoTestingIcon);
 				autoTestingIcon.setIcon(FontAwesome.EXCLAMATION_TRIANGLE);
 				autoTestingIcon.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
@@ -484,7 +493,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				admin.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_SETTINGS));
 				admin.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
-						buttonArray_Highlight(null);
+						menuBarIcons_Highlight((NativeButton)null);
 		        ICentralPanel centralPanel = newAdministratorConsolePanel();
 		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
 					}

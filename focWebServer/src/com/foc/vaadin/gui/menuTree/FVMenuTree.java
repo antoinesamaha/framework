@@ -25,6 +25,7 @@ import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebModule;
+import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.IFocWebModule;
 import com.foc.vaadin.gui.components.FVTreeTable;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
@@ -36,6 +37,7 @@ import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.ui.NativeButton;
 
 @SuppressWarnings("serial")
 public class FVMenuTree extends FocXMLLayout {
@@ -158,6 +160,9 @@ public class FVMenuTree extends FocXMLLayout {
   	FocMenuItem menuItem = findMenuItem(menuCode);
   	if(menuItem != null){
   		recordMenuClick(menuItem);
+  		if(iNavigationWindow instanceof FocWebVaadinWindow) {
+  			((FocWebVaadinWindow) iNavigationWindow).menuBarIcons_Highlight(menuCode);
+  		}
   		menuItem.getMenuAction().actionPerformed(iNavigationWindow, menuItem, 0);
 			FocUserHistoryList.addHistory(menuCode);
   	}
@@ -256,6 +261,9 @@ public class FVMenuTree extends FocXMLLayout {
 
 								if (event.getPropertyId().equals("TITLE") && executeAction) {
 									recordMenuClick(menuItem);
+						  		if(window instanceof FocWebVaadinWindow) {
+						  			((FocWebVaadinWindow) window).menuBarIcons_Highlight(menuItem.getCode());
+						  		}
 									menuItem.getMenuAction().actionPerformed(window, menuItem, 0);
 									isActionPerformed = true;
 								}
