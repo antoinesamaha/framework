@@ -32,6 +32,10 @@ public class IntegerCondition extends FilterCondition {
   private static final int FLD_LAST_VALUE = 2;
   private static final int FLD_OPERATOR = 3;
 
+  public static final String FNAME_OP   = "_OP";
+  public static final String FNAME_FVAL = "_FVAL";
+  public static final String FNAME_LVAL = "_LVAL";
+  
   //Make the constansts public and add operator_equals
   /*private static final int OPERATOR_BETWEEN = 0;
   private static final int OPERATOR_GREATER_THAN = 1;
@@ -200,7 +204,7 @@ public class IntegerCondition extends FilterCondition {
     
     if(focDesc != null){
     	FPropertyListener colorListener = new ColorPropertyListener(this, firstID + FLD_OPERATOR);
-      FMultipleChoiceField multipleChoice = new FMultipleChoiceField(getFieldPrefix()+"_OP", "Operation", firstID + FLD_OPERATOR, false, 1);
+      FMultipleChoiceField multipleChoice = new FMultipleChoiceField(getFieldPrefix()+FNAME_OP, "Operation", firstID + FLD_OPERATOR, false, 1);
       multipleChoice.addChoice(OPERATOR_INDIFERENT, "None ");
       multipleChoice.addChoice(OPERATOR_BETWEEN, "Between");
       multipleChoice.addChoice(OPERATOR_GREATER_THAN, " >= ");
@@ -210,11 +214,11 @@ public class IntegerCondition extends FilterCondition {
       focDesc.addField(multipleChoice);
       multipleChoice.addListener(colorListener);
       
-      FIntField dateField = new FIntField(getFieldPrefix()+"_FVAL", "First value", firstID + FLD_FIRST_VALUE, false, 10);
+      FIntField dateField = new FIntField(getFieldPrefix()+FNAME_FVAL, "First value", firstID + FLD_FIRST_VALUE, false, 10);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
       
-      dateField = new FIntField(getFieldPrefix()+"_LVAL", "Last value", firstID + FLD_LAST_VALUE, false, 10);
+      dateField = new FIntField(getFieldPrefix()+FNAME_LVAL, "Last value", firstID + FLD_LAST_VALUE, false, 10);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
     }
