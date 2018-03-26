@@ -14,7 +14,6 @@ import com.foc.web.modules.business.DateShifter_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 
 public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXMLLayout {
@@ -24,7 +23,7 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 	protected String getFilteredTableGuiName() {
 		return "_TABLE";
 	}
-
+	
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
@@ -69,9 +68,7 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 
 	private void adjustDateButton(FVButton button, DateShifter dateShifter) {
   	if(button != null) {
-    	if(!getFilter().isDbResident() || !getFilter().getThisFocDesc().isDbResident()) {
-    		button.setVisible(false);
-    	}else {
+    	if(getFilter().isDbResident() && getFilter().getThisFocDesc().isDbResident()) {
     		button.addClickListener(new DateButtonCickListener(dateShifter));
     	}
   	}
@@ -104,7 +101,7 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 				lay = lay.getParentLayout();
 			}
 			if (lay != null) {
-				localTableWrapper = (FVTableWrapperLayout) lay.getComponentByName("_MAHADER_TABLE");
+				localTableWrapper = (FVTableWrapperLayout) lay.getComponentByName(getFilteredTableGuiName());
 			}
 		}
 		return localTableWrapper;

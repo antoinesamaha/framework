@@ -19,6 +19,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FNumField;
 import com.foc.formula.FocSimpleFormulaContext;
 import com.foc.formula.Formula;
+import com.foc.list.FocList;
 import com.foc.property.FDate;
 import com.foc.property.FMultipleChoice;
 import com.foc.property.FProperty;
@@ -388,6 +389,26 @@ public class FocDataDictionary implements IFocDataDictionary {
     		return value;
     	}
     });
+    
+    putParameter("DB_RESIDENT", new IFocDataResolver() {
+    	public Object getValue(IFocData focData, ArrayList<String> arguments) {
+    		String value = "false";
+    		
+    		if(focData instanceof FocDataMap) focData = ((FocDataMap)focData).getMainFocData();
+    		
+    		if(focData instanceof FocObject) {
+    			if(((FocObject)focData).isDbResident() && ((FocObject)focData).getThisFocDesc().isDbResident()){
+    				value = "true";
+    			}
+    		}else if(focData instanceof FocList) {
+    			if(((FocList)focData).isDbResident() && ((FocList)focData).getFocDesc().isDbResident()) {
+    				value = "true";
+    			}
+    		}
+    		
+    		return value;
+    	}
+    });
 	}
 	
 	public void dispose(){
@@ -450,6 +471,11 @@ public class FocDataDictionary implements IFocDataDictionary {
 						value = getValue_WithTableDisplayObjectCall(newFocData, pathPart);
 					}
 				}catch(Exception e) {
+					if(key != null) {
+						Globals.logString("Exception while fetching key : "+key+" !");
+					}else {
+						Globals.logString("Exception while fetching NULL Key!");
+					}
 					Globals.logException(e);
 				}
 			}else{

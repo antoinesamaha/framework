@@ -52,6 +52,7 @@ public class FocXMLFilterConditionBuilder {
 					handler.endElement(null, null, FXML.TAG_FIELD);
 					
 					String firstDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=1,"+prefix+"_OP=3)";
+					String firstDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+firstDateVisibleWhen+")";
 					
 					opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_FDATE");
@@ -67,13 +68,14 @@ public class FocXMLFilterConditionBuilder {
 						opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
 						opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
 						opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
-						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
+						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateButtonVisibleWhen);
 						handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
 						handler.endElement(null, null, FXML.TAG_FIELD);
 					}
 	
 					String lastDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=2)";
-					
+					String lastDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+lastDateVisibleWhen+")";
+
 					opAttributes = new FocXMLAttributes();
 					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_LDATE");
 					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
@@ -88,7 +90,7 @@ public class FocXMLFilterConditionBuilder {
 						opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
 						opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
 						opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
-						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
+						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateButtonVisibleWhen);
 						handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
 						handler.endElement(null, null, FXML.TAG_FIELD);
 					}
