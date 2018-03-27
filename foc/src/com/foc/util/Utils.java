@@ -85,6 +85,15 @@ public class Utils {
 		return result;
 	}
 
+	public static long parseLong(String text, long defaultValue){
+		long result = defaultValue;
+		try{
+			result = Long.valueOf(text);
+		}catch(NumberFormatException e){
+		}
+		return result;		
+	}
+
 	public static int parseInteger(String text, int defaultValue){
 		int result = defaultValue;
 		try{

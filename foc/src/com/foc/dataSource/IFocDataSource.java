@@ -30,6 +30,7 @@ public interface IFocDataSource {
 	public boolean       command_executeRequestForModulesSP(String spFileName);
 	public ArrayList     command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression);
 	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest);
+	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns);
 	public boolean       command_Replace(FocDesc desc, int fieldID, String originalValue, String newValue);
 	public boolean       command_CheckTables();
 	

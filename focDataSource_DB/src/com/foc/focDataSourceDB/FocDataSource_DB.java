@@ -908,6 +908,44 @@ public class FocDataSource_DB implements IFocDataSource {
 		return array;
 	}
 	
+	@Override
+	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns){
+		ArrayList<String[]> array = new ArrayList();
+		
+		boolean error = true;
+	  StatementWrapper stmt = getDBManagerServer().lockStatement();
+	  if (stmt != null) {
+	    try {
+	    	String req = SQLRequest.adapteRequestToDBProvider(sqlRequest);
+	      if(ConfigInfo.isLogDBRequestActive()){
+	      	Globals.logString(req);
+	      }
+	      
+	      ResultSet resSet = stmt.executeQuery(req);
+	      while(resSet.next()){
+	      	String[] row = new String[nbrColumns];
+	      	for(int c=1; c<=nbrColumns; c++) {
+	      		String value = resSet.getString(c);
+	      		row[c-1] = value;
+	      	}
+	      	array.add(row);
+	      }
+	      if(resSet != null) resSet.close();
+	      
+	      error = false;
+	    } catch (Exception e) {
+	    	error = true;
+	      Globals.logString(e.getMessage());
+	      Globals.logExceptionWithoutPopup(e);
+	      
+	      getDBManagerServer().unlockStatement(stmt);
+	      Globals.logString("Exception is thrown again ->...");        
+	    }
+	    getDBManagerServer().unlockStatement(stmt);
+	  }
+	
+		return array;
+	}	
 	//-----------------------------------------------------
 	//-----------------------------------------------------
 	// command_CheckTables
