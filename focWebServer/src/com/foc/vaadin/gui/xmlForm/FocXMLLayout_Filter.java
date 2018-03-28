@@ -18,7 +18,7 @@ import com.vaadin.ui.Component;
 
 public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXMLLayout {
 
-	private FVTableWrapperLayout tableWrapperLayout = null;
+	private FVTableWrapperLayout tableWrapperLayout   = null;
 	
 	protected String getFilteredTableGuiName() {
 		return "_TABLE";
@@ -27,37 +27,43 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-		adjustPopupButtons_VisibilityAndListeners();
+		adjustPopupButtonsListeners();
 	}
 	
-	protected void adjustPopupButtons_VisibilityAndListeners() {
-		//Hiding the Dates shifters when the filter is not db residen 
-    FilterDesc filterDesc = getFilter().getThisFilterDesc();
-    if(filterDesc != null){
-	  	for(int i=0; i<filterDesc.getConditionCount(); i++){
-	      FilterCondition cond = filterDesc.getConditionAt(i);
-	      if(cond != null && cond instanceof DateCondition){
-	      	DateCondition dateCondition = (DateCondition)cond;
-	      	
-	      	DateShifter firstDateShifter = getFilter().getDateShifter(dateCondition.getFirstDateShifterDesc().getFieldsShift());
-	      	DateShifter lastDateShifter = getFilter().getDateShifter(dateCondition.getLastDateShifterDesc().getFieldsShift());
-	      	
-	      	String buttonName = FocXMLFilterConditionBuilder.getButtonName_ForFirstDateShifterButton(cond);
-	      	Component comp = getComponentByName(buttonName);
-	      	if(comp != null && comp instanceof FVButton) {
-	      		FVButton button = (FVButton) comp;
-	      		adjustDateButton(button, firstDateShifter);
-	      	}
-	      	
-	      	buttonName = FocXMLFilterConditionBuilder.getButtonName_ForLastDateShifterButton(cond);
-	      	comp = getComponentByName(buttonName);
-	      	if(comp != null && comp instanceof FVButton) {
-	      		FVButton button = (FVButton) comp;
-	      		adjustDateButton(button, lastDateShifter);
-	      	}
-	      }
+	protected void adjustPopupButtonsListeners() {
+  	if(getFilter() != null && getFilter().isDbResident() && getFilter().getThisFocDesc().isDbResident()) {
+			//Hiding the Dates shifters when the filter is not db residen 
+	    FilterDesc filterDesc = getFilter().getThisFilterDesc();
+	    if(filterDesc != null){
+		  	for(int i=0; i<filterDesc.getConditionCount(); i++){
+		      FilterCondition cond = filterDesc.getConditionAt(i);
+		      if(cond != null && cond instanceof DateCondition){
+		      	DateCondition dateCondition = (DateCondition)cond;
+		      	
+		      	DateShifter firstDateShifter = getFilter().getDateShifter(dateCondition.getFirstDateShifterDesc().getFieldsShift());
+		      	DateShifter lastDateShifter = getFilter().getDateShifter(dateCondition.getLastDateShifterDesc().getFieldsShift());
+		      	
+		      	String buttonName = FocXMLFilterConditionBuilder.getButtonName_ForFirstDateShifterButton(cond);
+		      	Component comp = getComponentByName(buttonName);
+		      	if(comp != null && comp instanceof FVButton) {
+		      		FVButton button = (FVButton) comp;
+		        	if(button != null) {
+		        		button.addClickListener(new DateButtonCickListener(firstDateShifter));
+		        	}
+		      	}
+		      	
+		      	buttonName = FocXMLFilterConditionBuilder.getButtonName_ForLastDateShifterButton(cond);
+		      	comp = getComponentByName(buttonName);
+		      	if(comp != null && comp instanceof FVButton) {
+		      		FVButton button = (FVButton) comp;
+		        	if(button != null) {
+		        		button.addClickListener(new DateButtonCickListener(lastDateShifter));
+		        	}
+		      	}
+		      }
+		    }
 	    }
-    }
+  	}
 	}
 
 	@Override
@@ -66,14 +72,6 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 		tableWrapperLayout = null;
 	}
 
-	private void adjustDateButton(FVButton button, DateShifter dateShifter) {
-  	if(button != null) {
-    	if(getFilter().isDbResident() && getFilter().getThisFocDesc().isDbResident()) {
-    		button.addClickListener(new DateButtonCickListener(dateShifter));
-    	}
-  	}
-	}
-	
 	public F getFilter() {
 		return (F) getFocObject();
 	}

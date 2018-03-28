@@ -158,6 +158,18 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
   	
   	setDescription(description);
   }
+
+  public void adjustDatesAccordingToShifters() {
+	  if(dateShifterMap != null) {
+	  	Iterator iter = dateShifterMap.values().iterator();
+	  	while(iter != null && iter.hasNext()) {
+	  		DateShifter shifter = (DateShifter) iter.next();
+	  		if(shifter != null) {
+	  			shifter.adjustDate();
+	  		}
+	  	}
+	  }
+  }
   
   // ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
