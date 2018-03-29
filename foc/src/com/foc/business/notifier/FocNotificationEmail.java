@@ -234,9 +234,11 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     props.put("mail.smtp.port", emailAccount.getPort());//Try 25
 
     //Outgoing server (SMTP) 25, 587, or 2587 (to connect using STARTTLS), or 465 or 2465 (to connect using TLS Wrapper).
-    if(emailAccount.getPort() == 25 || emailAccount.getPort() == 587 || emailAccount.getPort() == 2587){
-    	props.put("mail.smtp.starttls.enable", "true");
-    	props.put("mail.smtp.starttls.required", "true");
+    if (emailAccount.getEncryptionType() != EMailAccount.ENCRYPTION_TYPE_NONE) {
+	    if(emailAccount.getPort() == 25 || emailAccount.getPort() == 587 || emailAccount.getPort() == 2587){
+	    	props.put("mail.smtp.starttls.enable", "true");
+	    	props.put("mail.smtp.starttls.required", "true");
+	    }
     }
     // Get the default Session object.
     Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
@@ -421,3 +423,43 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
 		this.iFocNotificationEmailLaunchStatus = iFocNotificationEmailLaunchStatus;
 	}
 }
+
+     /*
+     EMailAccount emailAccount = new EMailAccount();
+     emailAccount.setHost("192.168.1.6");
+     emailAccount.setPort(25);//25v 465
+     emailAccount.setEncryptionConnectionType(EMailAccount.ENCRYPTION_TYPE_NONE);
+     emailAccount.setUsername("analysisroom.bey");
+     emailAccount.setPassword("123");
+   
+     Properties props = new Properties();
+     props.put("mail.transport.protocol", "smtp");
+     props.put("mail.smtp.host", emailAccount.getHost());
+     props.put("mail.smtp.port", emailAccount.getPort());//Try 25
+     
+     props.put("mail.debug", "true");
+     props.put("mail.smtp.auth", "true");
+     Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+       protected PasswordAuthentication getPasswordAuthentication() {
+         PasswordAuthentication pwa = new PasswordAuthentication(emailAccount.getUsername(), emailAccount.getPassword());
+         return pwa;
+       }
+     });
+     MimeMessage mime = new MimeMessage(session);
+     try {
+       InternetAddress[] recepients = {new InternetAddress("antoine.samaha@01barmaja.com")};
+       mime.setRecipients(Message.RecipientType.TO, recepients);
+       mime.setFrom(new InternetAddress("analysisroom.bey@isf.gov.lb"));
+       mime.setSubject("Fenix Testing email sending");
+       mime.setText("This Email was sent by Antoine SAMAHA programmatically");
+     } catch (AddressException e) {
+       Globals.logException(e);
+     } catch (MessagingException e) {
+       Globals.logException(e);
+     }
+     try{
+       Transport.send(mime);
+     }catch (MessagingException e){
+       Globals.logException(e);
+     }
+     */

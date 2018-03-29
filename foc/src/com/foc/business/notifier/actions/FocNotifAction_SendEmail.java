@@ -13,7 +13,7 @@ public class FocNotifAction_SendEmail extends FocNotifAction_Abstract {
 	public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
     FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) notifier.getTemplate();
     if(template != null) {
-	    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null), template, event.getEventFocData());
+	    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null), template, event != null ?event.getEventFocData() : null);
 	    email.send();
 	    email.setCreated(true);
 	    email.validate(true);
