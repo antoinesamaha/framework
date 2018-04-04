@@ -26,6 +26,7 @@ public class FocNotifAction_SendReportByEmail extends FocNotifAction_Abstract {
 	
 				PrintingAction printingAction = reportConfig.getThisFocDesc().newPrintingAction();
 				printingAction.setObjectToPrint(reportConfig);
+				printingAction.setLaunchedAutomatically(true);
 				printingAction.initLauncher();
 				
 		    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null));
@@ -35,6 +36,7 @@ public class FocNotifAction_SendReportByEmail extends FocNotifAction_Abstract {
 		    email.send();
 		    email.setCreated(true);
 		    email.validate(true);
+		    printingAction.setLaunchedAutomatically(false);
     	}
     }		
 	}

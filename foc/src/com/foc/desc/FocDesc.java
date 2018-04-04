@@ -273,7 +273,9 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     this.n2nLink = link;
     this.propertyArrayLength = 0;
 
-    Globals.getApp().getFocDescMap().put(storageName, focDesc_getTransactionType(), this);
+    if(Globals.getApp() != null) {
+    	Globals.getApp().getFocDescMap().put(storageName, focDesc_getTransactionType(), this);
+    }
     if(focObjectClass != null){
     	String className = focObjectClass.getName();
     	if(className == null || className.isEmpty()){

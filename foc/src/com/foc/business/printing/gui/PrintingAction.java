@@ -19,10 +19,11 @@ import com.foc.shared.dataStore.IFocData;
 
 public abstract class PrintingAction implements IPrnReportCreator{
 
-	private boolean           objectToPrint_Owner = false;
-	private IFocData          objectToPrint       = null;
-	private String            printingContext     = null;
-	private PrnReportLauncher launcher            = null;
+	private boolean           objectToPrint_Owner   = false;
+	private IFocData          objectToPrint         = null;
+	private String            printingContext       = null;
+	private PrnReportLauncher launcher              = null;
+	private boolean           launchedAutomatically = false;
 	
 	public PrintingAction() {
 	}
@@ -153,5 +154,13 @@ public abstract class PrintingAction implements IPrnReportCreator{
 				fieldList.dispose();
 			}
 		}
+	}
+
+	public boolean isLaunchedAutomatically() {
+		return launchedAutomatically;
+	}
+
+	public void setLaunchedAutomatically(boolean launchedAutomatically) {
+		this.launchedAutomatically = launchedAutomatically;
 	}
 }

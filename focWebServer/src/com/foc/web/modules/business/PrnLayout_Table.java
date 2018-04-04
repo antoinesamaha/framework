@@ -301,6 +301,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 					  boolean withLogo = getPrintLogoCheckBox().getValue();
 					  getPrintingAction().getLauncher().setWithLogo(withLogo);
 					}
+					getPrintingAction().setLaunchedAutomatically(false);
 					
 					byte[] bytes = null;
 					if(wordDoc){
