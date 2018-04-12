@@ -48,10 +48,12 @@ public class SQLCreateIndex extends SQLRequest {
         if(field != null){
           if (!firstField) request.append(",");
           if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) request.append("[");
-          if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) request.append("\"");
+          if(    focDesc.getProvider() == DBManager.PROVIDER_ORACLE
+          		|| focDesc.getProvider() == DBManager.PROVIDER_H2) request.append("\"");
           request.append(field.getDBName());
           if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) request.append("]");
-          if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) request.append("\"");
+          if(    focDesc.getProvider() == DBManager.PROVIDER_ORACLE
+          		|| focDesc.getProvider() == DBManager.PROVIDER_H2) request.append("\"");
           firstField = false;
         }
         

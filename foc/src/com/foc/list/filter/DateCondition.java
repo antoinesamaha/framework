@@ -204,13 +204,13 @@ public class DateCondition extends FilterCondition {
 	    }else if(provider == DBManager.PROVIDER_ORACLE){
 //	    	fieldName = "\""+fieldName+"\"";
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
-	        buffer.append(fieldName + ">= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
+	        buffer.append("TRUNC(" + fieldName + ") >= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
 	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append(fieldName + "<= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')");
+	        buffer.append("TRUNC(" + fieldName + ") <= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')");
 	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append(fieldName + " >= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy') AND "+fieldName + "<= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')" );
+	        buffer.append("TRUNC(" + fieldName + ") >= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy') AND "+fieldName + "<= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')" );
 	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append(fieldName + " = TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
+	        buffer.append("TRUNC(" + fieldName + ") = TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
 	      }
 	    }else if(provider == DBManager.PROVIDER_H2){
 	      if (op == OPERATOR_GREATER_THAN){
@@ -329,7 +329,7 @@ public class DateCondition extends FilterCondition {
       lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD);
       nextIdx = lastDateShifterDesc.addFields();
       if(filterDesc != null) {
-      	filterDesc.putDateShifterDesc(lastDateShifterDesc.getFieldsShift(), firstDateShifterDesc);
+      	filterDesc.putDateShifterDesc(lastDateShifterDesc.getFieldsShift(), lastDateShifterDesc);
       }
     }
     

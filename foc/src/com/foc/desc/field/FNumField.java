@@ -71,6 +71,8 @@ public class FNumField extends FField {
       return " \"" + name + "\" NUMERIC" + "(" + getSize() + "," + getDecimals() + ")";
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
     	return " " + name + " [float]";
+    }else if (getProvider()== DBManager.PROVIDER_H2){
+    	return " \"" + name + "\" DOUBLE" ;
     }else{
       return " " + name + " DOUBLE" ;//+ "(" + getSize() + "," + getDecimals() + ")";
     }

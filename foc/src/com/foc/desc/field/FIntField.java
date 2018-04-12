@@ -56,6 +56,8 @@ public class FIntField extends FField {
       return " \"" + name + "\" NUMBER("+ getSize()+")";
     }else if(getProvider()== DBManager.PROVIDER_MSSQL){
     	return " [" + name + "] INT" ;
+    }else if(getProvider()== DBManager.PROVIDER_H2){
+    	return " \"" + name + "\" INT" ;
     }else{
       return " " + name + " INT" ;//+ "(" + getSize() + ")";
     }

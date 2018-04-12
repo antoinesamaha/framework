@@ -837,7 +837,8 @@ public abstract class FField implements Cloneable, IFocData {
   		}else{
   			fieldNameString = "["+ fieldNameString +"]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
   		}
-  	}else if(provider == DBManager.PROVIDER_ORACLE){
+  	}else if(  provider == DBManager.PROVIDER_ORACLE
+  			    || provider == DBManager.PROVIDER_H2){
 			int dotIndex = fieldNameString.indexOf('.');
 			if(dotIndex > 0){//If there is a dot we put the " after the .
 				String initial = fieldNameString;
