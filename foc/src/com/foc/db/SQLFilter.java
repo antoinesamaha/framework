@@ -263,7 +263,7 @@ public class SQLFilter {
           	      if(workflowDesc != null){
           	        int siteFieldID_1 = workflowDesc.getFieldID_Site_1();
           	        int siteFieldID_2 = workflowDesc.getFieldID_Site_2();
-          	        excludeThisFieldInWhere = siteFieldID_1 != path.get(0);
+          	        excludeThisFieldInWhere = siteFieldID_1 == path.get(0);
           	        excludeThisFieldInWhere = excludeThisFieldInWhere || siteFieldID_2 == path.get(0);
           	      }
           	    } 
