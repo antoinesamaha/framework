@@ -50,5 +50,20 @@ public class FocNotificationEvent {
   	}
   	return iFocObjectPlugIn;
   }
-  
+
+  public FocObject getEventFocObject(){
+  	FocObject focObject = null;
+  	IFocData iFocData = getEventFocData();
+  	if(iFocData != null){
+  		if(iFocData instanceof FocDataMap){
+  			FocDataMap focDataMap = (FocDataMap) iFocData;
+  			iFocData = focDataMap.getMainFocData();
+  		}
+	  	if(iFocData instanceof FocObject){
+	  		focObject = (FocObject) iFocData;
+	  	}
+  	}
+  	return focObject;
+  }
+
 }

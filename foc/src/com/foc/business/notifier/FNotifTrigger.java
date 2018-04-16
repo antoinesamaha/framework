@@ -12,6 +12,7 @@ import com.foc.annotations.model.fields.FocForeignEntity;
 import com.foc.annotations.model.fields.FocMultipleChoice;
 import com.foc.annotations.model.fields.FocMultipleChoiceString;
 import com.foc.annotations.model.fields.FocReference;
+import com.foc.annotations.model.fields.FocString;
 import com.foc.annotations.model.fields.FocTableName;
 import com.foc.annotations.model.fields.FocTime;
 import com.foc.business.calendar.FCalendar;
@@ -24,6 +25,8 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
+import com.foc.formula.FocSimpleFormulaContext;
+import com.foc.formula.Formula;
 import com.foc.list.FocList;
 import com.foc.property.FObject;
 import com.foc.util.Utils;
@@ -99,6 +102,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	@FocMultipleChoiceString(size = 200)
 	public static final String FIELD_ReportLayout = "ReportLayout";
+	
+	@FocString(size = 500)
+	public static final String FIELD_AdditionalCondition = "AdditionalCondition";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -210,6 +216,21 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	public void setActionObject(IFocNotifAction action) {
 		this.action = action;
 	}
+	
+	public boolean evaluateAdditionalCondition(FocNotificationEvent event) {
+		boolean additionalConditionValue = true;
+		if(event != null && event.getEventFocObject() != null) {
+			String additionalCondition = getAdditionalCondition();
+			if(!Utils.isStringEmpty(additionalCondition)) {
+				Formula formula = new Formula(additionalCondition);
+				FocSimpleFormulaContext simpleFormulaContext = new FocSimpleFormulaContext(formula);
+				additionalConditionValue = simpleFormulaContext.computeBooleanValue(event.getEventFocObject());
+				simpleFormulaContext.dispose();
+				formula.dispose();
+			}
+		}
+		return additionalConditionValue; 
+	}
 
   private boolean isSameDBTableAsFocObject(FocNotificationEvent event){
     boolean sameTable = false;
@@ -241,6 +262,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 					case EVT_TABLE_DELETE:
 					case EVT_TABLE_UPDATE:
 						match = isSameDBTableAsFocObject(eventFired);
+						if(match) {
+							match = evaluateAdditionalCondition(eventFired); 
+						}
 						break;
 					case EVT_SCHEDULED:
 				  	if(FCalendar.compareDatesRegardlessOfTime(getNextDate(), Globals.getApp().getSystemDate()) <= 0) {
@@ -360,5 +384,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	public void copyReportConfig_Object2Ref() {
 		setReportReference(getReportConfigurationRef());
+	}
+
+	public String getAdditionalCondition() {
+		return getPropertyString(FIELD_AdditionalCondition);
+	}
+
+	public void setAdditionalCondition(String value) {
+		setPropertyString(FIELD_AdditionalCondition, value);
 	}
 }

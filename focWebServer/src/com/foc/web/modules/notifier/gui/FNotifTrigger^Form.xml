@@ -7,6 +7,7 @@
 			<GuiField name="Event" caption="Event" captionStyle="f16,bold,text-left" width="380px" />
 			<GuiField name="Transaction" caption="Transaction" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
 			<GuiField name="TABLE_NAME" caption="Table Name" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
+	  	<GuiField name="AdditionalCondition" caption="Additional Condition" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
 			<GuiField name="Frequency" caption="Frequency" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Event=8"/>
 			<GuiField name="NextDate" caption="Next Date" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Event=8"/>
 			<GuiField name="NextTime" caption="Next Time" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Event=8"/>
