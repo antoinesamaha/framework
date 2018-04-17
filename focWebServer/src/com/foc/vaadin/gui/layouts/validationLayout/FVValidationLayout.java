@@ -2205,6 +2205,21 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		this.goingBackAfterDoneClicked = goingBackDoneClicked;
 	}
   
+	public int getHorizontalComponentCount() {
+		return mainHorizontalLayout != null ? mainHorizontalLayout.getComponentCount() : 0;
+	}
+	
+	public Component getHorizontalComponentAt(int i) {
+		return mainHorizontalLayout != null ? mainHorizontalLayout.getComponent(i) : null;
+	}
+	
+	public void addHorizontalComponentAt(Component comp, int index) {
+		if(mainHorizontalLayout != null) {
+			mainHorizontalLayout.addComponent(comp, index);
+			mainHorizontalLayout.setComponentAlignment(comp, Alignment.MIDDLE_RIGHT);
+		}
+	}
+	
   /*
   private HelpContextComponentFocusable getHelpContextComponentFocusable(boolean createIfNeeded){
   	if(helpContextComponentFocusable == null && createIfNeeded){
