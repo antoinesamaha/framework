@@ -37,6 +37,7 @@ public class ObjectCondition extends FilterCondition {
 	static public final int OPERATION_EMPTY = 4;
 	static public final int OPERATION_NOT_EMPTY = 5;
 	static public final int OPERATION_IN = 6;
+	static public final int OPERATION_DIFFERENT_THEN = 7;
 
 	private boolean withInList = false;
 	private String captionProperty = null;
@@ -150,6 +151,16 @@ public class ObjectCondition extends FilterCondition {
 					include = itemObject.getReference().getInteger() == condObject.getReference().getInteger();
 				}
 				break;
+			case OPERATION_DIFFERENT_THEN:
+				include = false;
+				if (condObject != null && itemObject == null) {
+					include = true;
+				}else if (condObject == null && itemObject != null) {
+					include = true;
+				} else if (condObject != null && itemObject != null) {
+					include = itemObject.getReference().getInteger() != condObject.getReference().getInteger();
+				}
+				break;
 			case OPERATION_EMPTY:
 				include = itemObject == null;
 				break;
@@ -220,6 +231,11 @@ public class ObjectCondition extends FilterCondition {
 				buffer.append(fullFieldName + "=" + refValue);
 			}
 				break;
+			case OPERATION_DIFFERENT_THEN: {
+				int refValue = (condObject == null) ? 0 : condObject.getReference().getInteger();
+				buffer.append(fullFieldName + "!=" + refValue);
+			}
+				break;
 			case OPERATION_EMPTY:
 				buffer.append(fullFieldName + "=0 ");
 				break;
@@ -246,11 +262,13 @@ public class ObjectCondition extends FilterCondition {
 			if (ConfigInfo.isArabic()) {
 				multipleChoice.addChoice(OPERATION_NONE, "لا شرط");
 				multipleChoice.addChoice(OPERATION_EQUALS, "=");
+				multipleChoice.addChoice(OPERATION_DIFFERENT_THEN, "لايساوي");
 				multipleChoice.addChoice(OPERATION_EMPTY, "فارغ");
 				multipleChoice.addChoice(OPERATION_NOT_EMPTY, "غير فارغ");
 			} else {
 				multipleChoice.addChoice(OPERATION_NONE, "None");
-				multipleChoice.addChoice(OPERATION_EQUALS, "Equals");
+				multipleChoice.addChoice(OPERATION_EQUALS, "=");
+				multipleChoice.addChoice(OPERATION_DIFFERENT_THEN, "<>");
 				multipleChoice.addChoice(OPERATION_EMPTY, "Empty");
 				multipleChoice.addChoice(OPERATION_NOT_EMPTY, "Not Empty");
 			}
@@ -339,12 +357,14 @@ public class ObjectCondition extends FilterCondition {
 				description = fieldName + " Is Empty";
 				break;
 			case OPERATION_EQUALS:
+			case OPERATION_DIFFERENT_THEN:
 				String propertyName = getCaptionProperty();
 				if (condObject != null) {
 					FProperty prop = propertyName != null ? condObject.getFocPropertyByName(propertyName) : null;
 					if (prop != null) {
 						String val = prop.getString();
-						description = fieldName + " = " + val;
+						if(operation == OPERATION_EQUALS) description = fieldName + " = " + val;
+						else description = fieldName + " <> " + val;
 					}
 				}
 				break;
