@@ -7,6 +7,7 @@ import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.map.WFStage;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
+import com.foc.property.FObject;
 
 public class WFLog extends FocObject {
 	
@@ -15,6 +16,11 @@ public class WFLog extends FocObject {
 		newFocProperties();
 	}
 
+	public void setLogSubjectReference(long ref) {
+		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
+		if(prop != null) prop.setLocalReferenceInt(ref);
+	}
+	
 	public void setEventType(int type){
 		setPropertyMultiChoice(WFLogDesc.FLD_EVENT_TYPE, type);
 	}

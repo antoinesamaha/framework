@@ -95,7 +95,7 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
   public int getFLD_CREATION_USER() {
     return iWorkflow_getFieldIDShift() + WorkflowDesc.FLD_LAST_RESERVED + FLD_CREATION_USER_SHIFT;
   }
-
+  
   //-----------------
   //IWorkflowDesc
   //-----------------

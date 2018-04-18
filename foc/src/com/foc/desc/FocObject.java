@@ -1118,7 +1118,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   		prop.setObject(obj);
   	}
   }
-  
+
   public BufferedImage getPropertyImage(int fieldID){
   	FImageProperty prop = (FImageProperty) getFocProperty(fieldID);  	
   	return prop != null ? (BufferedImage) prop.getImageValue() : null;

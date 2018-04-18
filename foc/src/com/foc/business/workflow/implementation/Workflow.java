@@ -21,11 +21,17 @@ import com.foc.business.workflow.map.WFStage;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.business.workflow.report.SignatureReportLine;
 import com.foc.business.workflow.report.SignatureReportLineDesc;
+import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FDateTimeField;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.FListField;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
+import com.foc.property.FObject;
+import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 
 public class Workflow {
@@ -54,6 +60,18 @@ public class Workflow {
 	
 	public WorkflowDesc getWorkflowDesc(){
 		return getIWorkflowDesc().iWorkflow_getWorkflowDesc();
+	}
+	
+	public FocDesc getWFLogDesc() {
+		FocDesc logFocDesc = null;
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		if(workflowDesc != null && getFocDesc() != null){
+			FListField listField = (FListField) getFocDesc().getFieldByID(workflowDesc.getFieldID_LogList());
+			if(listField != null) {
+				logFocDesc = listField.getFocDesc();
+			}
+		}
+		return logFocDesc;
 	}
 	
 	public void addLogLine(int eventType, WFTitle title, boolean onBehalfOf, WFStage prevStage, WFStage nextStage, String comment){
@@ -87,21 +105,73 @@ public class Workflow {
 		}
 		addLogLine(event);
 	}
-	
-	public void addLogLine(int event){
-		//setArea(workflow.iWorkflow_getComputedSite());
-		FocList focList = getLogList();
-		if(focList != null){
-			WFLog   log     = (WFLog) focList.newEmptyItem();
-			
+
+	private void fillLogLine(WFLog log, int event){
+		if(log != null){
 			log.setEventType(event);
 			
 			if(log != null){
 				log.setUser(Globals.getApp().getUser_ForThisSession());
 				if(log.getUser() == null){
-					
 				}
 				log.setDateTime(Globals.getDBManager().getCurrentTimeStamp_AsTime());
+			}
+
+			if(event == WFLogDesc.EVENT_MODIFICATION || event == WFLogDesc.EVENT_CREATION) {
+				updateLastModified(log.getUser(), log.getDateTime());
+			}
+		}
+	}
+
+	public void addLogLine(int event){
+		//setArea(workflow.iWorkflow_getComputedSite());
+		FocList focList = getLogList();
+		if(focList != null){
+			WFLog   log     = (WFLog) focList.newEmptyItem();
+			fillLogLine(log, event);
+		}
+	}
+
+	public void insertLogLine(int event) {
+		FocDesc logFocDesc = getWFLogDesc();
+		FocObject focObj = getFocObject();
+		if(logFocDesc != null && focObj != null && focObj.hasRealReference()) {
+			FocConstructor constr = new FocConstructor(logFocDesc, null); 
+			WFLog log = (WFLog) constr.newItem();
+			if(log != null) {
+				log.setCreated(true);
+				log.setLogSubjectReference(getFocObject().getReferenceInt());
+				fillLogLine(log, event);
+				log.validate(false);
+			}
+		} else {
+			Globals.logString("Internal Exception: Could not insert log line");
+		}
+	}
+
+	public void updateLastModified(FocUser user, Date dateTime) {
+		if(getWorkflowDesc() != null && getFocObject() != null) {
+			long ref = getFocObject().getReferenceInt();
+			if(ref > 0) {
+				FocDesc focDesc = getFocDesc();
+				long userRef = user != null ? user.getReferenceInt() : 0;
+				
+				setLastModifDate(dateTime);
+				setLastModifUserRef(userRef);
+	
+				FDateTimeField lastModifDateFld = (FDateTimeField) focDesc.getFieldByID(getWorkflowDesc().getFieldID_LastModificationDate());
+				FField lastModifUserFld = focDesc.getFieldByID(getWorkflowDesc().getFieldID_LastModificationUser());
+				
+				if(lastModifDateFld != null && lastModifUserFld != null) {
+					StringBuffer buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+					buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
+					buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+getLastModifDateSQLString()+" ");
+					buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+					Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+				}
+			}else {
+				setLastModifDate(dateTime);
+				setLastModifUser(user);
 			}
 		}
 	}
@@ -271,6 +341,38 @@ public class Workflow {
 			setLastComment(getComment());
 			setComment("");
 		//}
+	}
+
+	public FocUser getLastModifUser(){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		return (FocUser) getFocObject().getPropertyObject(workflowDesc.getFieldID_LastModificationUser());
+	}
+	
+	public void setLastModifUser(FocUser user){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		getFocObject().setPropertyObject(workflowDesc.getFieldID_LastModificationUser(), user);
+	}
+	
+	public void setLastModifUserRef(long ref){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		FObject objProp = (FObject) getFocObject().getFocProperty(workflowDesc.getFieldID_LastModificationUser());
+		objProp.setLocalReferenceInt(ref);
+	}
+	
+	public Date getLastModifDate(){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		return getFocObject().getPropertyDate(workflowDesc.getFieldID_LastModificationDate());
+	}
+
+	public void setLastModifDate(Date date){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		getFocObject().setPropertyDate_WithoutListeners(workflowDesc.getFieldID_LastModificationDate(), date);
+	}
+
+	public String getLastModifDateSQLString(){
+		WorkflowDesc workflowDesc = getWorkflowDesc();
+		FProperty prop = getFocObject().getFocProperty(workflowDesc.getFieldID_LastModificationDate());
+		return prop != null ? prop.getSqlString() : null;
 	}
 
 	public String getAllSignatures(){

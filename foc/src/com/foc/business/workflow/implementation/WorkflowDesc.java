@@ -1,5 +1,6 @@
 package com.foc.business.workflow.implementation;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,6 +24,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FListField;
 import com.foc.desc.field.FMultipleChoiceStringField;
@@ -41,10 +43,12 @@ public class WorkflowDesc {
 	public static final int FLD_LAST_COMMENT     = 7;
 	public static final int FLD_COMMENT          = 8;
 	public static final int FLD_SIMULATION       = 9;
+	public static final int FLD_LAST_MODIF_DATE  = 10;
+	public static final int FLD_LAST_MODIF_USER  = 11;
 
-	public static final int FLD_TITLE_FIRST      = 10;
+	public static final int FLD_TITLE_FIRST      = 20;
 	
-	public static final int FLD_HIDE_FIRST       = 20;
+	public static final int FLD_HIDE_FIRST       = 30;
 	
 	public static final int FLD_LAST_RESERVED    = 50;
 	
@@ -136,6 +140,23 @@ public class WorkflowDesc {
 		if(getFocDesc().getFieldByID(fldID+FLD_COMMENT) == null){
 			FStringField cFld = new FStringField("WF_COMMENT", "Comment", fldID+FLD_COMMENT, false, WFLogDesc.LEN_FLD_COMMENT);
 			getFocDesc().addField(cFld);
+		}
+		
+		if(getFocDesc().getFieldByID(fldID+FLD_LAST_MODIF_DATE) == null){
+			FDateTimeField focFld = new FDateTimeField("LAST_MODIF_DATE", "Last modification", fldID+FLD_LAST_MODIF_DATE, false);
+	    focFld.setAllwaysLocked(true);
+	    focFld.setTimeRelevant(true);
+	    getFocDesc().addField(focFld);
+		}
+
+		if(getFocDesc().getFieldByID(fldID+FLD_LAST_MODIF_USER) == null){
+	    FObjectField fObjectFld = new FObjectField("LAST_MODIF_USER", "Last Modification User", fldID+FLD_LAST_MODIF_USER, false, FocUser.getFocDesc(), "LAST_MODIF_USER_");
+	    fObjectFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);
+	    fObjectFld.setDisplayField(FocUserDesc.FLD_NAME);
+	    fObjectFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
+	    fObjectFld.setSelectionList(FocUserDesc.getList(FocList.NONE));
+	    fObjectFld.setAllwaysLocked(true);
+	    getFocDesc().addField(fObjectFld);
 		}
 
 		WFSignatureDesc.addTitleFields(getFocDesc(), fldID+FLD_TITLE_FIRST);
@@ -231,7 +252,15 @@ public class WorkflowDesc {
 	public int getFieldID_Simulation(){
 		return workflowDesc.iWorkflow_getFieldIDShift() + FLD_SIMULATION;
 	}
+	
+	public int getFieldID_LastModificationDate(){
+		return workflowDesc.iWorkflow_getFieldIDShift() + FLD_LAST_MODIF_DATE;
+	}
 
+	public int getFieldID_LastModificationUser(){
+		return workflowDesc.iWorkflow_getFieldIDShift() + FLD_LAST_MODIF_USER;
+	}
+	
 	public int getFieldID_Title(int idx){
 		return workflowDesc.iWorkflow_getFieldIDShift() + FLD_TITLE_FIRST + idx;
 	}

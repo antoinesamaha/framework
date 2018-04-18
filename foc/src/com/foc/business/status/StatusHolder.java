@@ -101,7 +101,7 @@ public class StatusHolder {
 	public void setCreationUser(FocUser user){
 		focObject.setPropertyObject(getFocDesc().getFLD_CREATION_USER(), user); 
 	}
-
+	
   public boolean resetStatusToProposal(){
   	boolean ok = getStatus() != StatusHolderDesc.STATUS_PROPOSAL;
   	if(ok){

@@ -81,7 +81,7 @@ public class StatusHolderDesc {
 	    focFld.setReflectingField(reflectionFields);
 	    focDesc.addField(focFld);
 		}
-    
+
 		if(focDesc.getFieldByID(iStatusHolderDesc.getFLD_VALIDATION_DATE()) == null){
 			FDateTimeField focFld = new FDateTimeField("VALIDATION_DATE", "Approval Date", iStatusHolderDesc.getFLD_VALIDATION_DATE(), false);
 	    focFld.setAllwaysLocked(true);
