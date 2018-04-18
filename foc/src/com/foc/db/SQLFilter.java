@@ -10,8 +10,6 @@ import java.util.Iterator;
 import com.foc.Globals;
 import com.foc.admin.UserSession;
 import com.foc.business.company.CompanyDesc;
-import com.foc.business.workflow.WFSite;
-import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.WorkflowDesc;
 import com.foc.desc.FocDesc;
@@ -19,7 +17,6 @@ import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
-import com.foc.property.FObject;
 import com.foc.property.FProperty;
 
 /**
@@ -366,7 +363,8 @@ public class SQLFilter {
         requestBuffer.append(")");
         atLeastOneFieldAdded = true;
         
-        if(requestFocDesc.workflow_IsWorkflowSubject() && !UserSession.getInstanceForThread().isSimulation()){
+        if(requestFocDesc.workflow_IsWorkflowSubject() && 
+        		(UserSession.getInstanceForThread() == null || !UserSession.getInstanceForThread().isSimulation())){
         	requestBuffer.append("and(");
           fieldName = WorkflowDesc.FNAME_SIMULATION;
           if(hasJoinMap() && !fieldName.contains(".")){
