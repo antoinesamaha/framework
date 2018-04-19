@@ -426,7 +426,7 @@ public class DateCondition extends FilterCondition {
   	
   	int op = getOperator(filter);
   	Date firstDate = getFirstDate(filter);
-  	Date lastDate = getFirstDate(filter);
+  	Date lastDate = getLastDate(filter);
   	
   	op = adjustTheOperation(op, firstDate, lastDate);
   	if (op != OPERATOR_INDIFERENT){
