@@ -42,7 +42,9 @@ import com.foc.business.printing.PrnContext;
 import com.foc.business.printing.PrnLayoutDesc;
 import com.foc.business.printing.ReportFactory;
 import com.foc.business.printing.gui.PrintingAction;
+import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.map.WFMap;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.dataDictionary.FocDataDictionary;
@@ -69,6 +71,7 @@ import com.foc.vaadin.gui.components.FVLabel;
 import com.foc.vaadin.gui.components.menuBar.FVMenuBar;
 import com.foc.vaadin.gui.components.menuBar.FVMenuBarCommand;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
+import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.layouts.link.FVLinkLayout;
 import com.foc.vaadin.gui.mswordGenerator.FocXmlMSWordParser;
 import com.foc.vaadin.gui.pdfGenerator.FocXmlPDFParser;
@@ -79,6 +82,8 @@ import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.business.PrnLayout_Table;
 import com.foc.web.modules.photoAlbum.PhotoAlbumWebModule;
+import com.foc.web.modules.workflow.WFConsole_Form;
+import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.event.MouseEvents;
@@ -155,6 +160,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   private FVStageLayout      stageLayout     = null;
 //  private FVStageLayout_ComboBox stageLayout_ComboBox = null;
   private FVStageLayout_MenuBar  stageLayout_MenuBar = null;
+  private FVStageLayout_Button   stageLayout_Button  = null;
   private FVViewSelector_MenuBar viewSelector        = null;
   private FVLinkLayout           linkLayout          = null;
   
@@ -164,6 +170,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   
   private FVMenuBar moreMenuBar = null;
   private boolean askForConfirmationForExit_Forced = false;
+  private WFConsole_Form worflowConsole = null;
+  private FocXMLLayout   logLayout      = null;
 //  private HelpContextComponentFocusable helpContextComponentFocusable = null;
   
   private boolean helpOn = false;
@@ -228,6 +236,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	if(stageLayout_MenuBar != null){
   		stageLayout_MenuBar.dispose();
   		stageLayout_MenuBar = null;
+  	}
+  	if(stageLayout_Button != null){
+  		stageLayout_Button.dispose();
+  		stageLayout_Button = null;
   	}
 //  	dispose_HelpContextComponentFocusable();
 //	  buttonsLayout     = null;
@@ -1162,7 +1174,32 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	return statusLayout_MenuBar;
   }
   
-  
+  public FVStageLayout_Button getStageLayout(boolean createIfNeeded){
+  	if(stageLayout_Button == null && createIfNeeded && isWithStatus() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
+  		ICentralPanel centralPanel = getCentralPanel();
+  		if(centralPanel != null && centralPanel instanceof FocXMLLayout){
+  			FocXMLLayout xmlLayout = (FocXMLLayout) centralPanel;
+  			FocObject focObject = xmlLayout.getFocObject();
+	  		if(focObject != null){
+	  			if(focObject.workflow_IsWorkflowSubject()){
+	  	    	FocDesc focDesc = focObject.getThisFocDesc();
+	  	    	if(focDesc != null && focDesc instanceof IWorkflowDesc){
+	  	    		IWorkflowDesc iWorkflowDesc = (IWorkflowDesc) focDesc;
+	  	    		WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(iWorkflowDesc.iWorkflow_getDBTitle());
+	  	    		if(map != null){
+	    					stageLayout_Button = new FVStageLayout_Button(xmlLayout, focObject);
+	    					mainHorizontalLayout.addComponent(stageLayout_Button);
+	    					mainHorizontalLayout.setComponentAlignment(stageLayout_Button, Alignment.MIDDLE_LEFT);
+	  	    		}
+	  	    	}
+	  			}
+	  		}
+  		}
+  	}
+  	return stageLayout_Button;
+  }
+
+  /*
   public FVStageLayout_MenuBar getStageLayout(boolean createIfNeeded){
   	if(stageLayout_MenuBar == null && createIfNeeded && isWithStatus() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
   		ICentralPanel centralPanel = getCentralPanel();
@@ -1187,6 +1224,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	}
   	return stageLayout_MenuBar;
   }
+  */
   
   private void initButtonsLayout(boolean showBackButton) {
     if(validationSettings != null){
@@ -2331,4 +2369,62 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		this.helpOn = helpOn;
 	}
 	*/
+	
+	private void setLogLayoutInWorkflowConsole() {
+		WFConsole_Form console   = getWorkflowConsole(false);
+		FocXMLLayout   logLayout = getLogLayout(false); 
+		if(console != null && logLayout != null) {
+			console.setLogLayout(logLayout);
+		}
+	}
+	
+	private WFConsole_Form getWorkflowConsole(boolean createIfNull) {
+		if(worflowConsole == null && getFocData() instanceof IWorkflow && createIfNull) {
+			XMLViewKey   key = new XMLViewKey(WorkflowWebModule.STORAGE_NAME_WORKFLOW_CONSOLE, XMLViewKey.TYPE_FORM);
+			worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) getWindow(), key, getFocData());
+			
+			worflowConsole.setWidth("100%");
+			addComponentAsFirst(worflowConsole);
+			setComponentAlignment(worflowConsole, Alignment.BOTTOM_LEFT);
+		
+			worflowConsole.addStyleName("foc-footerLayout");
+			setLogLayoutInWorkflowConsole();
+		}
+		return worflowConsole;
+	}
+			
+	private FocXMLLayout getLogLayout(boolean createIfNull) {
+		if(logLayout == null && getFocData() instanceof IWorkflow && createIfNull) {
+			FocWebVaadinWindow mainWindow = (FocWebVaadinWindow) getFocVaadinMainWindow();
+			FVVerticalLayout mainVerticalLayout = mainWindow != null ? mainWindow.getCentralPanelWrapper() : null;
+			if(mainVerticalLayout != null) {
+				XMLViewKey key = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
+				logLayout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, getFocData());
+				mainVerticalLayout.addComponent(logLayout);
+			}
+			setLogLayoutInWorkflowConsole();
+		}
+		
+		return logLayout;
+	}
+	
+	public void setVisible_WorkflowConsole(boolean show) {
+		WFConsole_Form console = getWorkflowConsole(show);
+		if(console != null) console.setVisible(show);
+	}
+
+	public boolean isVisible_WorkflowConsole() {
+		WFConsole_Form console = getWorkflowConsole(false);
+		return console != null ? console.isVisible() : false;
+	}
+
+	public void setVisible_LogLayout(boolean show) {
+		FocXMLLayout logLayout = getLogLayout(show);
+		if(logLayout != null) logLayout.setVisible(show);
+	}
+	
+	public boolean isVisible_LogLayout() {
+		FocXMLLayout logLayout = getLogLayout(false);
+		return logLayout != null ? logLayout.isVisible() : false;
+	}
 }

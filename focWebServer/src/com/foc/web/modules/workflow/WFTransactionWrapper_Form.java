@@ -25,6 +25,7 @@ import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVCommentLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
+import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.data.Property.ValueChangeEvent;
@@ -113,16 +114,24 @@ public class WFTransactionWrapper_Form extends FocXMLLayout {
 	
 	@Override
 	public void showValidationLayout(boolean showBackButton) {
-		super.showValidationLayout(showBackButton);
 		
+		if(innerFocXMLLayout != null) {
+			FValidationSettings settings = innerFocXMLLayout.getValidationSettings(true);
+			getValidationSettings(true).copy(settings);
+		} 
+		
+		super.showValidationLayout(showBackButton);
+
 		FVValidationLayout validationLayout = getValidationLayout();
 		if(validationLayout != null){
 			FVHorizontalLayout horizontalLayout = newSlideShowControlPanelToValidationLayout();
 //			horizontalLayout.setWidth("100%");
-			validationLayout.addComponent(horizontalLayout);
+			validationLayout.addComponentAsFirst(horizontalLayout);
 			validationLayout.setComponentAlignment(horizontalLayout, Alignment.BOTTOM_LEFT);
 			validationLayout.setExpandRatio(horizontalLayout, 1);
-
+			
+			horizontalLayout.addStyleName("foc-footerLayout");
+			
 			validationLayout.adjustForSignatureSlideShow();
 
 			validationLayout.addValidationListener(innerFocXMLLayout);

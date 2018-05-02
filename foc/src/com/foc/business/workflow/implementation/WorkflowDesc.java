@@ -1,6 +1,5 @@
 package com.foc.business.workflow.implementation;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,10 +24,10 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FDateTimeField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FListField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;

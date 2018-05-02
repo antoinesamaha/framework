@@ -28,7 +28,11 @@ public class WFLog extends FocObject {
 	public int getEventType(){
 		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_TYPE);
 	}
-	
+
+	public String getEventTypeTitle(){
+		return getPropertyMultiChoiceTitle(WFLogDesc.FLD_EVENT_TYPE);
+	}
+
 	public void setUser(FocUser user){
 		setPropertyObject(WFLogDesc.FLD_USER, user);
 	}

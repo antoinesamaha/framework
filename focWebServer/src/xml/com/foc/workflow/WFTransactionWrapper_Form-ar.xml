@@ -1,0 +1,4 @@
+<VerticalLayout name="ROOTLAYOUT">
+	<ValidationSettings formTitle="" withApply="true"	withAttach="false" withPrint="true" withDiscard="false" viewSelector="false" withEmail="false" withInternalEmail="false" printAndExit="false"/>
+	<Label name="LAST_COMMENT" />
+</VerticalLayout>

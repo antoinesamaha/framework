@@ -1197,7 +1197,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public int getPropertyMultiChoice(int fieldID){
   	return getPropertyInteger(fieldID);
   }
-
+  
   public void setPropertyMultiChoice(int fieldID, int choice){
   	setPropertyInteger(fieldID, choice);
   }
@@ -1207,6 +1207,16 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     mc.setString(choice);
   }
 
+  public String getPropertyMultiChoiceTitle(int fieldID){
+  	FMultipleChoice mc = (FMultipleChoice) getFocProperty(fieldID);
+  	return mc != null ? mc.getString() : null;
+  }
+  
+  public String getPropertyMultiChoiceTitle(String fieldName){
+  	FMultipleChoice mc = (FMultipleChoice) getFocPropertyByName(fieldName);
+  	return mc != null ? mc.getString() : null;
+  }
+  
   public Color getPropertyColor(int fieldID){
   	FColorProperty prop = (FColorProperty) getFocProperty(fieldID);  	
   	return prop != null ? prop.getColor() : null;

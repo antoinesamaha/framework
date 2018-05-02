@@ -13,10 +13,6 @@ import java.util.Stack;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.vaadin.sliderpanel.SliderPanel;
-import org.vaadin.sliderpanel.SliderPanelBuilder;
-import org.vaadin.sliderpanel.client.SliderMode;
-import org.vaadin.sliderpanel.client.SliderTabPosition;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
@@ -100,7 +96,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Table.ColumnGenerator;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -1620,6 +1615,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			// setExpandRatio(validationLayout, 1);
 
 			validationLayout.addValidationListener(this);
+			
 			//Adding a default tip for tables
 			/*
 			if(getXMLView() != null && getXMLView().getXmlViewKey() != null && (getXMLView().getXmlViewKey().getType() == IXMLViewConst.TYPE_TABLE || getXMLView().getXmlViewKey().getType() == IXMLViewConst.TYPE_TREE)){
@@ -1741,6 +1737,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String discardLink       = focXmlAttributes.getValue(FXML.ATT_DISCARD_LINK);
 				String applyLink         = focXmlAttributes.getValue(FXML.ATT_APPLY_LINNK);
 				String withPrint         = focXmlAttributes.getValue(FXML.ATT_WITH_PRINT);
+				String withLog           = focXmlAttributes.getValue(FXML.ATT_WITH_LOG);
 				String withAttach        = focXmlAttributes.getValue(FXML.ATT_WITH_ATTACH);
 				String withEmail         = focXmlAttributes.getValue(FXML.ATT_WITH_EMAIL);
 				String withInternalEmail = focXmlAttributes.getValue(FXML.ATT_WITH_INTERNAL_EMAIL);
@@ -1815,6 +1812,15 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 						validationSettings.setWithPrint(true);
 					}else{
 						validationSettings.setWithPrint(false);
+					}
+				}
+				
+				if(withLog != null){
+					withLog = withLog.trim().toLowerCase();
+					if(withLog.equals("true") || withLog.equals("1")){
+						validationSettings.setWithLog(true);
+					}else{
+						validationSettings.setWithLog(false);
 					}
 				}
 				

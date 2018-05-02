@@ -31,15 +31,17 @@ public class WFLogDesc extends FocDesc {
 	public static final int FLD_COMMENT          = 10;
 	public static final int FLD_SIGNED_TRANSACTION_XML = 11;
 	
-	public static final int EVENT_NONE           = 0;
-	public static final int EVENT_SIGNATURE      = 1;
-	public static final int EVENT_CREATION       = 2;
-	public static final int EVENT_CANCELLATION   = 3;
-	public static final int EVENT_MODIFICATION   = 4;
-	public static final int EVENT_APPROVED       = 5;
-	public static final int EVENT_CLOSED         = 6;
-	public static final int EVENT_UNDO_SIGNATURE = 7;
-	public static final int EVENT_CUSTOM         = 8;
+	public static final int EVENT_NONE            = 0;
+	public static final int EVENT_SIGNATURE       = 1;
+	public static final int EVENT_CREATION        = 2;
+	public static final int EVENT_CANCELLATION    = 3;
+	public static final int EVENT_MODIFICATION    = 4;
+	public static final int EVENT_APPROVED        = 5;
+	public static final int EVENT_CLOSED          = 6;
+	public static final int EVENT_UNDO_SIGNATURE  = 7;
+	public static final int EVENT_CUSTOM          = 8;
+	public static final int EVENT_COMMENT         = 9;
+	public static final int EVENT_REJECT          = 10;
 	
 	public static final int LEN_FLD_COMMENT      = 400;
 	
@@ -86,6 +88,8 @@ public class WFLogDesc extends FocDesc {
 		mFld.addChoice(EVENT_CLOSED, "Closure");
 		mFld.addChoice(EVENT_UNDO_SIGNATURE, "Undo Signature");
 		mFld.addChoice(EVENT_CUSTOM, "Custom");
+		mFld.addChoice(EVENT_COMMENT, "Comment");
+		mFld.addChoice(EVENT_REJECT, "Reject");
 		addField(mFld);
 
     FDateTimeField dateTimeFld = new FDateTimeField("DATE_TIME", "Date|Time", FLD_DATE_TIME, false);

@@ -33,6 +33,7 @@ import com.foc.list.FocListElement;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.util.Utils;
 
 public class Workflow {
 	private IWorkflow workflow = null;
@@ -132,7 +133,12 @@ public class Workflow {
 		}
 	}
 
-	public void insertLogLine(int event) {
+	public long insertLogLine(int event) {
+		return insertLogLine(event, null);
+	}
+	
+	public long insertLogLine(int event, String comment) {
+		long ref = 0;
 		FocDesc logFocDesc = getWFLogDesc();
 		FocObject focObj = getFocObject();
 		if(logFocDesc != null && focObj != null && focObj.hasRealReference()) {
@@ -142,11 +148,15 @@ public class Workflow {
 				log.setCreated(true);
 				log.setLogSubjectReference(getFocObject().getReferenceInt());
 				fillLogLine(log, event);
+				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
 				log.validate(false);
+				ref = log.getReferenceInt();
+				log.dispose();
 			}
 		} else {
 			Globals.logString("Internal Exception: Could not insert log line");
 		}
+		return ref;
 	}
 
 	public void updateLastModified(FocUser user, Date dateTime) {
@@ -556,22 +566,30 @@ public class Workflow {
 	}
 	
 	public void sign(){
+		sign(null);
+	}
+	
+	public void sign(String comment){
 		WFSignature currentSignature = nextSignature();
 		if(currentSignature != null){
 			int idx = currentSignature.getTitleIndex_ForUserAndArea(getArea());
 			if(idx >= 0){
-				sign(currentSignature, idx, false);
+				sign(currentSignature, idx, false, comment);
 			}
 		}
 	}
 
 	public void sign(WFSignature signature, int titleIndex, boolean onBehalfOf){
+		sign(signature, titleIndex, onBehalfOf, "");
+	}
+	
+	public void sign(WFSignature signature, int titleIndex, boolean onBehalfOf, String comment){
 		IWorkflow iworkflow = (IWorkflow) getFocObject();
 		if(signature != null && titleIndex >=0 && signature.getTitle(titleIndex) != null){
 			boolean moveToNextSignature_BecauseLastTitleToSign = titleIndex + 1 >= WFSignatureDesc.FLD_TITLE_COUNT || signature.getTitle(titleIndex + 1) == null;
 			if(iworkflow.iWorkflow_allowSignature(signature)){
 				iworkflow.iWorkflow_getWorkflow().setHide(titleIndex, false);
-				addLogLine(WFLogDesc.EVENT_SIGNATURE, signature.getTitle(titleIndex), onBehalfOf, signature.getPreviousStage(), signature.getTargetStage(), getComment());
+				addLogLine(WFLogDesc.EVENT_SIGNATURE, signature.getTitle(titleIndex), onBehalfOf, signature.getPreviousStage(), signature.getTargetStage(), comment);
 				addSignatureToAllSignatures(Globals.getApp().getUser_ForThisSession(), signature.getTitle(titleIndex), Globals.getApp().getSystemDate());
 				
 				if(moveToNextSignature_BecauseLastTitleToSign){
@@ -639,10 +657,10 @@ public class Workflow {
 	}
 	
 	public void undoSignaturesTo(WFLog targetWFLog){
-		undoAllSignatures(targetWFLog);
+		undoAllSignatures(targetWFLog, "");
 	}
 	
-	private void undoAllSignatures(WFLog targetWFLog){
+	private void undoAllSignatures(WFLog targetWFLog, String comment){
 		FocList logList = getLogList();
 		WFStage stage = null;
 		if(logList != null){
@@ -665,29 +683,17 @@ public class Workflow {
 		setCurrentStage(stage);
 		resetStatusToProposal();		
 		getFocObject().validate(true);
+		insertLogLine(WFLogDesc.EVENT_REJECT, comment != null ? comment : "");
 	}
 	
 	public void undoAllSignatures(){
-		undoAllSignatures(null);
+		undoAllSignatures(null, "");
 	}
-	
-//	public void undoAllSignatures(){
-//		FocList logList = getLogList();
-//		if(logList != null){
-//			logList.loadIfNotLoadedFromDB();
-//			for(int i=0; i<logList.size(); i++){
-//				WFLog log = (WFLog) logList.getFocObject(i);
-//				if(log.getEventType() == WFLogDesc.EVENT_SIGNATURE){
-//					log.setEventUndone(true);
-//				}
-//			}
-//			logList.validate(true);
-//		}
-//		setCurrentStage(null);
-//		resetStatusToProposal();		
-//		getFocObject().validate(true);
-//	}
-	
+
+	public void undoAllSignatures(String comment){
+		undoAllSignatures(null, comment);
+	}
+
   private void resetStatusToProposal(){
   	IFocData focData = getFocObject();
   	if(focData != null && focData instanceof IStatusHolder){

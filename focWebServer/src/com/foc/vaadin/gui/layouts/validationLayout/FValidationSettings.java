@@ -13,6 +13,7 @@ public class FValidationSettings {
   public boolean withSave          = true;
   public boolean withDiscard       = false;
   public boolean withPrint         = false;
+  public boolean withLog           = false;
   public boolean withPrintAndExit  = false;
   public boolean withAttach        = true;
   public boolean withEmail         = false;
@@ -34,6 +35,29 @@ public class FValidationSettings {
   
   public void dispose(){
   	
+  }
+  
+  public void copy(FValidationSettings s) {
+    withValidationLayout = s.withValidationLayout;
+    title             = s.title;
+    withApply         = s.withApply;
+    discardLink       = s.discardLink;
+    applyLink         = s.applyLink;
+    computeLevel      = s.computeLevel;
+    withSave          = s.withSave;
+    withDiscard       = s.withDiscard;
+    withPrint         = s.withPrint;
+    withPrintAndExit  = s.withPrintAndExit;
+    withAttach        = s.withAttach;
+    withEmail         = s.withEmail;
+    withInternalEmail = s.withInternalEmail;
+    withViewSelector  = s.withViewSelector;
+    withTips          = s.withTips;
+    withStatus        = s.withStatus;
+    commitData        = s.commitData;
+    hasPDFGenerator   = s.hasPDFGenerator;
+    hasMSWordGenerator= s.hasMSWordGenerator;
+    avoidRowBreak     = s.avoidRowBreak;
   }
   
 //  public boolean isPrintAndExit(){
@@ -88,6 +112,10 @@ public class FValidationSettings {
     return withPrint;
   }
   
+  public boolean isWithLog() {
+    return withLog;
+  }
+  
   public boolean hasPDFGenerator(){
   	return hasPDFGenerator;
   }
@@ -104,6 +132,10 @@ public class FValidationSettings {
 
   public void setWithPrint(boolean withPrint) {
     this.withPrint = withPrint;
+  }
+  
+  public void setWithLog(boolean withLog) {
+    this.withLog = withLog;
   }
   
   public void setAvoidRowBreak(boolean avoidRowBreak) {

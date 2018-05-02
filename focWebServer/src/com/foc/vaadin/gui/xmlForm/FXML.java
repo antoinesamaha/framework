@@ -110,6 +110,7 @@ public interface FXML {
   public static final String ATT_WITH_EMAIL_SEND_ICON     = "withSendIcon"     ;
   public static final String ATT_WITH_INTERNAL_EMAIL      = "withInternalEmail";
   public static final String ATT_WITH_TIPS            		= "withTips"         ;
+  public static final String ATT_WITH_LOG                 = "withLog"          ;
   public static final String ATT_TREE_TABLE_PAGE_LENGTH		= "pageLength"       ;
   public static final String ATT_IN_LINE_EDITABLE      		= "inLineEditable"   ;
   public static final String ATT_ENABLE_DOWNLOAD       		= "enableDownload"   ;

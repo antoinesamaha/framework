@@ -39,6 +39,7 @@ public class WorkflowWebModule extends FocWebModule {
 	public static final String CTXT_TITLE_SELECTION            = "TITLE_SELECTION";
 	public static final String CTXT_SAAS                       = "Saas";
 	public static final String STORAGE_NAME_TRANSACTION_FILTER = "TRANSACTION_FILTER";
+	public static final String STORAGE_NAME_WORKFLOW_CONSOLE   = "WFConsole";
 	public static final String MODULE_NAME                     = "SITES_AND_WORKFLOW";
 	
   public WorkflowWebModule(){
@@ -88,6 +89,35 @@ public class WorkflowWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
       "/xml/com/foc/workflow/WFFieldLockStage_Table.xml", 0, WFFieldLockStage_Table.class.getName());
+  	
+  	XMLViewDictionary.getInstance().put(
+      WFLogDesc.WF_LOG_VIEW_KEY,
+      XMLViewKey.TYPE_TABLE,
+      "Banner",
+      XMLViewKey.VIEW_DEFAULT,
+      "/xml/com/foc/workflow/WFLog_Banner_Standard_Table.xml", 0, WFLog_Banner_Standard_Table.class.getName());
+  	
+  	XMLViewDictionary.getInstance().put(
+      WFLogDesc.WF_LOG_VIEW_KEY,
+      XMLViewKey.TYPE_FORM,
+      "Banner",
+      XMLViewKey.VIEW_DEFAULT,
+      "/xml/com/foc/workflow/WFLog_Banner_Standard_Form.xml", 0, WFLog_Banner_Standard_Form.class.getName());
+
+  	XMLViewDictionary.getInstance().put(
+  		STORAGE_NAME_WORKFLOW_CONSOLE,
+      XMLViewKey.TYPE_FORM,
+      XMLViewKey.CONTEXT_DEFAULT,
+      XMLViewKey.VIEW_DEFAULT,
+      "/xml/com/foc/workflow/WFConsole_Form.xml", 0, WFConsole_Form.class.getName());
+
+  	XMLViewDictionary.getInstance().put(
+  		STORAGE_NAME_WORKFLOW_CONSOLE,
+      XMLViewKey.TYPE_FORM,
+      XMLViewKey.CONTEXT_DEFAULT,
+      XMLViewKey.VIEW_DEFAULT,
+      false,"ar",
+      "/xml/com/foc/workflow/WFConsole_Form-ar.xml", 0, WFConsole_Form.class.getName());
   	
   	XMLViewDictionary.getInstance().put(
       "IWorkflow",

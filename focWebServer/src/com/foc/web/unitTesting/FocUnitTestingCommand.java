@@ -42,7 +42,7 @@ import com.foc.vaadin.gui.layouts.FVForEachLayout.DeleteButtonForEach;
 import com.foc.vaadin.gui.layouts.FVForEachLayout.FVBannerLayout;
 import com.foc.vaadin.gui.layouts.FVMoreLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
-import com.foc.vaadin.gui.layouts.validationLayout.FVStageLayout_MenuBar;
+import com.foc.vaadin.gui.layouts.validationLayout.FVStageLayout_Button;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_MenuBar;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVViewSelector_MenuBar;
@@ -1872,7 +1872,7 @@ public class FocUnitTestingCommand {
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
       if (validationLayout != null) {
-      	FVStageLayout_MenuBar stageLayout = validationLayout.getStageLayout(false);
+      	FVStageLayout_Button stageLayout = validationLayout.getStageLayout(false);
       	if(stageLayout != null){
       		stageLayout.sign(null);
       	}

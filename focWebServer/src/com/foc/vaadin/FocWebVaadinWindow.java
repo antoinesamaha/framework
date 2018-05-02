@@ -326,7 +326,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}else{
 					centerHeaderLayout.addComponent(nBut);
 				}
-					centerHeaderLayout.setComponentAlignment(nBut, Alignment.TOP_LEFT);
+				centerHeaderLayout.setComponentAlignment(nBut, Alignment.TOP_LEFT);
 			}
 		}
 	}

@@ -99,6 +99,10 @@
     background: #A9A9A9;
   }
   
+  .foc-lightgray {
+    background: rgb(204, 204, 204);
+  }
+  
   .foc-white {
     background: white;
   }
@@ -134,5 +138,23 @@
   
   .foc-text-airblue {
     color: rgb(157, 195, 218);
+  }
+  
+	.foc-orange-bubble{
+		border: 1px;
+		margin: 5px;
+		padding: 5px;
+		border-radius: 5px;
+		border-color: orange;
+		border-style: solid;
+  }
+  
+  .foc-blue-bubble{
+		border: 1px;
+		margin: 5px;
+		padding: 5px;
+		border-radius: 5px;
+		border-color: blue;
+		border-style: solid;
   }
   

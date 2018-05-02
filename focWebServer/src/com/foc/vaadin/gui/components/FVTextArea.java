@@ -74,6 +74,10 @@ public class FVTextArea extends TextArea implements FocXMLGuiComponent {
 		if (attributes.getValue("cols") != null) {
 			setColumns(Integer.parseInt(attributes.getValue("cols")));
 		}
+		
+    if(attributes != null && attributes.getValue(FXML.ATT_PROMPT) != null){
+    	setInputPrompt(attributes.getValue(FXML.ATT_PROMPT));
+    }
 	}
 
 	@Override
