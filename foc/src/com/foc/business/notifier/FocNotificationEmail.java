@@ -131,7 +131,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   	return getPropertyString(FLD_CC);
   }
   
-  public InternetAddress[] getccMime() {
+  public InternetAddress[] getCCMime() {
     InternetAddress[] internetArray = null;
     String cc = getcc();
 
@@ -158,8 +158,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     return getPropertyString(FLD_BCC);
   }
   
-
-  public InternetAddress[] getBccMime() {
+  public InternetAddress[] getBCCMime() {
     InternetAddress[] internetArray = null;
     String bcc = getBcc();
 
@@ -252,7 +251,8 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     MimeMessage mime = new MimeMessage(session);
     try {
       mime.setRecipients(Message.RecipientType.TO, getRecipientsMime());
-      mime.setRecipients(Message.RecipientType.BCC, getBccMime());
+      mime.setRecipients(Message.RecipientType.BCC, getBCCMime());
+      mime.setRecipients(Message.RecipientType.CC, getCCMime());
       mime.setFrom(new InternetAddress(emailAccount.getSender()));
       mime.setSubject(getSubject(), "UTF-8");
       mime.setText(getText(), "UTF-8");
