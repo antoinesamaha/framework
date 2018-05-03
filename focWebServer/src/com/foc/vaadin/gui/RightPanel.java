@@ -236,6 +236,7 @@ public class RightPanel extends AbsoluteLayout implements IRightPanel {
   	if(fileName != null && !fileName.isEmpty()){
   		title += " file: "+fileName;
   	}
+  	Globals.logString("XML before new XMLEditor="+xmlString);
   	XMLEditor xmlEditor = new XMLEditor(view, title, xmlString);
   	FocWebApplication.getInstanceForThread().addWindow(xmlEditor);
   }

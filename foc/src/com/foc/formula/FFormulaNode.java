@@ -388,14 +388,16 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 					}
 					if(numberOfOpenParentethese == 0){
 						if(token.equals(FunctionFactory.ARGUMENT_SEPARATOR)){
-							if(operand.length() > 0){
+							String operandNotNull = operand.length() > 0 ? String.valueOf(operand) : ""; 
+//							if(operand.length() > 0){
 								FFormulaNode childNode = (FFormulaNode) addChild(getNextUniqueChildTitle());
 								if(childNode != null){
-									childNode.setExpression(String.valueOf(operand));
+//									childNode.setExpression(String.valueOf(operand));
+									childNode.setExpression(operandNotNull);
 									childNode.growNode();
 									operand = new StringBuffer();
 								}
-							}
+//							}
 						}else{
 							operand.append(token);
 						}

@@ -124,6 +124,7 @@ public class XMLView {
 	  		XMLViewDefinition xmlViewDef = getXmlviewDefinition();
 	  		String xml = xmlViewDef.getXML();
 	      try {
+	      	Globals.logString("XML before new ByteArray="+xml);
 	        inputStream = new ByteArrayInputStream(xml.getBytes("UTF-8"));
 	      } catch (UnsupportedEncodingException e) {
 	        Globals.logException(e);
@@ -174,7 +175,7 @@ public class XMLView {
 	  String xmlContent = "";
 	  InputStream xmlFileStream = getXMLStream_ForView();
 	  if(xmlFileStream != null){
-	    Scanner xmlFileScfanner = new Scanner(xmlFileStream).useDelimiter("\n");
+	    Scanner xmlFileScfanner = new Scanner(xmlFileStream, "UTF-8").useDelimiter("\n");
 	    while(xmlFileScfanner.hasNext()){
 	      xmlContent += xmlFileScfanner.next() + "\n";
 	    }

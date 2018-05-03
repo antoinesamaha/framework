@@ -189,6 +189,7 @@ public class FVViewSelector_MenuBar extends MenuBar {
 							if(Globals.isValo()){
 								String xmlContent = (centralPanel != null && centralPanel.getXMLView() != null) ? centralPanel.getXMLView().getXMLString() : "";
 								if(xmlContent != null){
+									Globals.logString("XML Before popup0"+xmlContent);
 									RightPanel.popupXmlEditor(getCentralPanel().getXMLView(), xmlContent);
 								}
 							}else{

@@ -1,6 +1,10 @@
 package com.foc.vaadin.xmleditor;
 
+import com.foc.Globals;
 import com.foc.vaadin.ICentralPanel;
+import com.foc.vaadin.gui.components.FVTextArea;
+import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
+import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
@@ -14,9 +18,9 @@ import com.vaadin.ui.Window;
 public class XMLEditor extends Window {
   private XMLView       xmlView      = null;
   
-  private VerticalLayout layout;
-  private HorizontalLayout buttonLayout;
-  private TextArea editor;
+  private FVVerticalLayout layout;
+  private FVHorizontalLayout buttonLayout;
+  private FVTextArea editor;
   private Button save;
   private Button cancel;
   
@@ -26,18 +30,19 @@ public class XMLEditor extends Window {
   
   public XMLEditor(XMLView xmlView, String title, String xml) {
     setXMLView(xmlView);
-    layout = new VerticalLayout();
-    buttonLayout = new HorizontalLayout();
+    layout = new FVVerticalLayout();
+    buttonLayout = new FVHorizontalLayout(null);
 //    buttonLayout.setMargin(true, false, false, false);
     buttonLayout.setSpacing(true);
     
     setCaption(title);
-    
-    editor = new TextArea(title);
+
+    editor = new FVTextArea(null, null);
 //    editor.setRows(40);
 //    editor.setColumns(80);
     editor.setWidth("100%");
     editor.setHeight("100%");
+    Globals.logString("XML before editor.setValue()="+xml);
     editor.setValue(xml);
     editor.addStyleName("focXMLEditor");
     
