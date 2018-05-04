@@ -121,6 +121,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	private   boolean      logActive           = false;
 	private   boolean      listInCache         = true ;
 	private   boolean      allowAdaptDataModel = true ;
+	private   boolean      siteRestrictionAccess = true;//User from Site A cannot see items of Site B
     
 	private FocModule                   module                = null;
 	
@@ -2495,4 +2496,12 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		return "MNU_REPORT_"+reportContext;
 	}
 
+	public boolean isSiteRestrictionAccess() {
+		return siteRestrictionAccess;
+	}
+
+	public void setSiteRestrictionAccess(boolean siteRestrictionAccess) {
+		this.siteRestrictionAccess = siteRestrictionAccess;
+	}
+	
 }
