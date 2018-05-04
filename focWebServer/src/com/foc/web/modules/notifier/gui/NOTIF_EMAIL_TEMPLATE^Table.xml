@@ -4,7 +4,7 @@
         <OpenForm containerWindow="same window" />
         <TableColumn name="NAME" caption="Name" width="-1px"/>
         <TableColumn name="SYSTEM_TEMPLATE" caption="System" width="-1px"/>
-        <TableColumn name="RECIPIENTS" caption="Recipients" width="-1px"/>
+        <TableColumn name="RECIPIENTS" caption="Recipients" width="250px"/>
         <TableColumn name="SUBJECT" caption="Subject" expandRatio="0.5"/>
         <TableColumn name="TEXT" caption="Text" expandRatio="0.5"/>
     </GuiTable>

@@ -2,10 +2,11 @@
     <ValidationSettings formTitle="Template Form" withApply="true" withAttach="true" withPrint="true" />
     <VerticalLayout width="100%">
      <GuiField name="NAME" caption="Name:" captionPos="left" width="200px" />
-     <GuiField name="RECIPIENTS" caption="To:" captionPos="left" width="200px" />
-     <GuiField name="BCC" caption="Bcc:" captionPos="left" width="200px" />
-     <GuiField name="SUBJECT" caption="Subject:" captionPos="left" width="400px" />
-     <GuiField name="LAYOUT_FILE" caption="Layout File Name:" captionPos="left" width="400px" />
-     <GuiField name="TEXT" textArea="true" width="100%" height="300px" />
+     <GuiField name="RECIPIENTS" caption="To:" captionPos="left" width="100%" />
+     <GuiField name="CC" caption="CC:" captionPos="left" width="100%" />
+     <GuiField name="BCC" caption="Bcc:" captionPos="left" width="100%" />
+     <GuiField name="SUBJECT" caption="Subject:" captionPos="left" width="100%" />
+     <!-- GuiField name="LAYOUT_FILE" caption="Layout File Name:" captionPos="left" width="100%" / -->
+     <GuiField name="TEXT" textArea="true" width="100%" height="100%" />
     </VerticalLayout> 
 </VerticalLayout>

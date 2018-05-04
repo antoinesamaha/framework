@@ -18,16 +18,16 @@ public class FocNotificationEmailDesc extends FocDesc implements FocNotification
     focFld = new FStringField("SENDER", "Sender", FLD_SENDER, false, 200);
     addField(focFld);
     
-    focFld = new FStringField("RECIPIENTS", "Recipients", FLD_RECIPIENTS, false, 500);
+    focFld = new FStringField("RECIPIENTS", "Recipients", FLD_RECIPIENTS, false, 1000);
     addField(focFld);
     
-    focFld = new FStringField("BCC", "Bcc", FLD_BCC, false, 500);
+    focFld = new FStringField("BCC", "Bcc", FLD_BCC, false, 1000);
     addField(focFld);
     
-    focFld = new FStringField("CC", "cc", FLD_CC, false, 500);
+    focFld = new FStringField("CC", "cc", FLD_CC, false, 1000);
     addField(focFld);
     
-    focFld = new FStringField("SUBJECT", "Subject", FLD_SUBJECT, false, 200);
+    focFld = new FStringField("SUBJECT", "Subject", FLD_SUBJECT, false, 1000);
     addField(focFld);
     
     focFld = new FStringField("TEXT", "Text", FLD_TEXT, false, 4000);
