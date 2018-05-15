@@ -19,6 +19,7 @@ public class FilterDesc {
   private FocDesc                    subjectFocDesc  = null;
   private ArrayList<FilterCondition> conditionList   = null;
   private int                        nbrOfGuiColumns = 1   ;
+//  private boolean                    hasOneMemoryOnlyConditionAtLeast = false; 
   
   private HashMap<Integer, DateShifterDesc> dateShifterDescMap = null; 
   
@@ -74,6 +75,7 @@ public class FilterDesc {
     ArrayList<FilterCondition> condLst = getConditionList(true);
     condLst.add(cond);
     cond.setFilterDesc(this);
+//    if(cond.isMemoryOnly()) hasOneMemoryOnlyConditionAtLeast = true;
   }
 
   public int getConditionCount(){
@@ -147,4 +149,8 @@ public class FilterDesc {
 		}
 		return dateShifterDesc;
 	}
+
+//	public boolean isHasOneMemoryOnlyConditionAtLeast() {
+//		return hasOneMemoryOnlyConditionAtLeast;
+//	}
 }

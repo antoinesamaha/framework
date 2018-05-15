@@ -99,6 +99,8 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     		xmlFilter.setFilterLevel(FocListFilter.LEVEL_DATABASE);	
     	}else if(filterLevelStr.equals(FXMLDesc.VAL_FILTER_LEVEL_MEMORY)){
     		xmlFilter.setFilterLevel(FocListFilter.LEVEL_MEMORY);
+    	}else if(filterLevelStr.equals(FXMLDesc.VAL_FILTER_LEVEL_DATABASE_AND_MEMORY)){
+    		xmlFilter.setFilterLevel(FocListFilter.LEVEL_DATABASE_AND_MEMORY);
     	}
     	if(xmlFilter != null) xmlFocDesc.setParsedFilter(xmlFilter);
     } else if(qName.equals(TAG_FILTER_CONDITION)){
@@ -401,14 +403,18 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
   }
   
   public static int getInt(Attributes att, String name){
-  	int value = 0;
+  	return getInt(att, name, 0); 
+  }
+
+  public static int getInt(Attributes att, String name, int defaultValue){
+  	int value = defaultValue;
   	String title = att.getValue(name);
   	if(title != null){
   		value = Integer.valueOf(title);
   	}
   	return value; 
   }
-  
+    
   public static String getString(Attributes att, String name){
   	String title = att.getValue(name);
   	return title; 

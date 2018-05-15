@@ -23,6 +23,7 @@ import com.foc.performance.PerfManager;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
+import com.foc.vaadin.broadcast.BroadcastNotifyer;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.FVButton;
@@ -59,6 +60,7 @@ import com.vaadin.ui.Link;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+
 import com.vaadin.ui.NativeButton;
 
 @SuppressWarnings("serial")
@@ -75,7 +77,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   private FVHelpButton helpButton    = null;
   private FSignatureButton    pendingSignature  = null;
 //  private FNotificationButton notificatonButton = null;//NOTIF_DEV
-  
+	private BroadcastNotifyer broadcastNotifyer = null;
+
   private Label        companyNameLabel = null;
 
 	private HorizontalLayout centerHeaderLayout    = null;
@@ -269,6 +272,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			menuBar_User = null;
 		}
 		logoutMenuItem = null;
+		broadcastNotifyer_Dispose();
 	}
 	
 	public void hideMenuBar(){
@@ -356,6 +360,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   		xmlViewKey.setMobileFriendly(true);
   	}
   	centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) this, xmlViewKey, null);
+  	broadcastNotifyer_Init();
     return centralPanel;
   }
 
@@ -1069,6 +1074,20 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				});
 	    }
+		}
+	}
+
+	public void broadcastNotifyer_Init() {
+		if (broadcastNotifyer == null) {
+			broadcastNotifyer = new BroadcastNotifyer();
+			broadcastNotifyer.init();
+		}
+	}
+
+	public void broadcastNotifyer_Dispose() {
+		if (broadcastNotifyer != null) {
+			broadcastNotifyer.dispose();
+			broadcastNotifyer = null;
 		}
 	}
 

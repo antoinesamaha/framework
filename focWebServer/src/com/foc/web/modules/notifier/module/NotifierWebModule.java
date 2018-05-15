@@ -1,5 +1,6 @@
 package com.foc.web.modules.notifier.module;
 
+import com.foc.business.notifier.BroadcastMessage;
 import com.foc.business.notifier.EMailAccount;
 import com.foc.business.notifier.FNotifTriggerDesc;
 import com.foc.business.notifier.FocNotificationEmailDesc;
@@ -31,6 +32,15 @@ public class NotifierWebModule extends FocWebModule {
 			@Override
 			public FocList getFocList() {
 				FocDesc focDesc = EMailAccount.getFocDesc();
+				return focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+			}
+		});
+
+		menuItem = mainMenu.pushMenu("MNU_NOTIF_BROADCAST_MESSAGE", "Broadcast Messages");
+		menuItem.setMenuAction(new FocMenuItemAbstractAction_WithAddCommand(menuItem, null) {
+			@Override
+			public FocList getFocList() {
+				FocDesc focDesc = BroadcastMessage.getFocDesc();
 				return focDesc.getFocList(FocList.LOAD_IF_NEEDED);
 			}
 		});

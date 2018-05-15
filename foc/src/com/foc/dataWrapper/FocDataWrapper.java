@@ -409,6 +409,12 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
       }
     }
     
+    //This allows to take into account Memory level filters
+    if(include) {
+    	FocList list = getFocList();
+    	include = list.includeObject_ByListFilter(focObj);
+    }
+    
     return include;
   }
   

@@ -15,10 +15,12 @@ public interface FXMLDesc {
   public static final String ATT_FILTER_CONDITION_PREFIX  = "prefix";
   public static final String ATT_FILTER_CONDITION_CAPTION = "caption";
   public static final String ATT_FILTER_CONDITION_CAPTION_PROPERTY = "captionProperty";
+  public static final String ATT_FILTER_CONDITION_MEMORY_ONLY = "memoryOnly";
   public static final String ATT_FILTER_LEVEL             = "level";
   
   public static final String VAL_FILTER_LEVEL_DATABASE   = "db";
   public static final String VAL_FILTER_LEVEL_MEMORY     = "mem";
+  public static final String VAL_FILTER_LEVEL_DATABASE_AND_MEMORY = "db-mem";
   
   //Fields Predefined
   public static final String TAG_REF            = IFocFieldType.TYPE_REF;

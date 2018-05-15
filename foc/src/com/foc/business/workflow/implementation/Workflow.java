@@ -21,6 +21,7 @@ import com.foc.business.workflow.map.WFStage;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.business.workflow.report.SignatureReportLine;
 import com.foc.business.workflow.report.SignatureReportLineDesc;
+import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -173,10 +174,18 @@ public class Workflow {
 				FField lastModifUserFld = focDesc.getFieldByID(getWorkflowDesc().getFieldID_LastModificationUser());
 				
 				if(lastModifDateFld != null && lastModifUserFld != null) {
-					StringBuffer buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
-					buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
-					buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+getLastModifDateSQLString()+" ");
-					buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+					StringBuffer buffer = null;
+					if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
+						buffer = new StringBuffer("UPDATE " + focDesc.getStorageName_ForSQL() + " ");
+						buffer.append("set "+lastModifUserFld.getDBName()+" = "+userRef+" ");
+						buffer.append(", "+lastModifDateFld.getDBName()+" = "+getLastModifDateSQLString()+" ");
+						buffer.append(" where "+focDesc.getRefFieldName()+" = "+ref+" ");						
+					} else {
+						buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+						buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
+						buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+getLastModifDateSQLString()+" ");
+						buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+					}					
 					Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
 				}
 			}else {

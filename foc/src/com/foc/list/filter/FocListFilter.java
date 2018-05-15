@@ -231,19 +231,27 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
   
   public boolean includeObject(FocObject focObject){
     boolean include = true;
-    if(getFilterLevel() != LEVEL_DATABASE && isActive()){
-    	include = includeObject_ScanConditionsAndCheckThem(focObject);
+    if(isActive()) {
+	    if(getFilterLevel() == LEVEL_MEMORY){
+	    	include = includeObject_ScanConditionsAndCheckThem(focObject, false);
+	    } else if(getFilterLevel() == LEVEL_DATABASE_AND_MEMORY) {
+	    	include = includeObject_ScanConditionsAndCheckThem(focObject, true);
+//	    } else if(getFilterLevel() == LEVEL_DATABASE && getThisFilterDesc() != null && getThisFilterDesc().isHasOneMemoryOnlyConditionAtLeast()){
+//	    	include = includeObject_ScanConditionsAndCheckThem(focObject, true);
+	    }
     }
     return include;
   }
   
-  public boolean includeObject_ScanConditionsAndCheckThem(FocObject focObject){
+  private boolean includeObject_ScanConditionsAndCheckThem(FocObject focObject, boolean checkConditionLevel){
     boolean include = true;
     FilterDesc filterDesc = getThisFilterDesc();
     if(filterDesc != null){
       for(int i=0; i<filterDesc.getConditionCount() && include; i++){
         FilterCondition cond = filterDesc.getConditionAt(i);
-        include = cond.includeObject(this, focObject);
+        if(!checkConditionLevel || cond.getLevel() != FocListFilter.LEVEL_DATABASE) {
+        	include = cond.includeObject(this, focObject);
+        }
       }
     }
     return include;  	
@@ -280,7 +288,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
     for(int i=0; i<filterDesc.getConditionCount(); i++){
       FilterCondition cond = filterDesc.getConditionAt(i);
       SQLJoin lastJoin = null; 
-      StringBuffer condWhere = cond.buildSQLWhere(this, cond.getDBFieldName());
+      StringBuffer condWhere = (cond.getLevel() != FocListFilter.LEVEL_MEMORY) ? cond.buildSQLWhere(this, cond.getDBFieldName()) : null;
       if(condWhere != null && condWhere.length() > 0){
       	shouldColorRed = true;
         FFieldPath condFieldPath = cond.getFieldPath();
@@ -390,9 +398,11 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
     FilterDesc filterDesc = getThisFilterDesc();
     for(int i=0; i<filterDesc.getConditionCount(); i++){
       FilterCondition cond = filterDesc.getConditionAt(i);
-      StringBuffer condWhere = cond.buildSQLWhere(this, cond.getDBFieldName());
-      if(condWhere != null && condWhere.length() > 0){
-      	active = true;
+      if(cond.getLevel() != FocListFilter.LEVEL_MEMORY) {
+	      StringBuffer condWhere = cond.buildSQLWhere(this, cond.getDBFieldName());
+	      if(condWhere != null && condWhere.length() > 0){
+	      	active = true;
+	      }
       }
     }
     return active;

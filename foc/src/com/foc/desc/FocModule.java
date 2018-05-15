@@ -31,7 +31,7 @@ public abstract class FocModule {
 			scanner.scanDirectory();
 			scanner.dispose();
 			
-			Globals.logString("Starting Pojo Scan");
+			Globals.logString("Starting Pojo Scan : "+packageName);
 			PojoFileScanner pojoFileScanner = new PojoFileScanner(this, packageName);
 			pojoFileScanner.scanDirectory();
 			pojoFileScanner.dispose();		

@@ -106,6 +106,7 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
 						FFieldPath fieldPath = FFieldPath.newFFieldPath(subjectFocDesc, condition.getFieldPath());
 						FilterCondition cond = FilterConditionFactory.newConditionForField(fld, fieldPath, condition.getPrefix());
 						if(cond != null){
+							cond.setLevel(condition.getLevel());
 							if(!Utils.isStringEmpty(condition.getCaption())){
 								cond.setFieldLabel(condition.getCaption());
 							}

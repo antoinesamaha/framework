@@ -20,6 +20,7 @@ public abstract class FilterCondition {
   private int        firstFieldID = 0;
   private String     fieldLabel   = null;
   private boolean    display      = true;
+  private int        level        = FocListFilter.LEVEL_DATABASE;
   
   public abstract int          fillDesc(FocDesc focDesc, int startID);
   public abstract void         fillProperties(FocObject focFatherObject);
@@ -120,10 +121,20 @@ public abstract class FilterCondition {
   public void setFieldLabel(String fieldLabel) {
     this.fieldLabel = fieldLabel;
   }
+  
 	public boolean isDisplay() {
 		return display;
 	}
+	
 	public void setDisplay(boolean display) {
 		this.display = display;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }

@@ -104,22 +104,29 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     return getPropertyString(FLD_RECIPIENTS);
   }
 
-  public InternetAddress[] getRecipientsMime() {
+  public InternetAddress[] convertStringToInternetAddress(String recipients) {
     InternetAddress[] internetArray = null;
-    String recipients = getRecipients();
     if (recipients != null && !recipients.equals("") && !recipients.isEmpty()) {
       String[] recipientArray = recipients.split(",");
       internetArray = new InternetAddress[recipientArray.length];
 
       for (int i = 0; i < recipientArray.length; i++) {
         try {
-          internetArray[i] = new InternetAddress(recipientArray[i]);
+        	String address = recipientArray[i] != null ? recipientArray[i].trim() : "";
+        	if(!Utils.isStringEmpty(address)) {
+        		internetArray[i] = new InternetAddress(address);
+        	}
         } catch (AddressException e) {
           e.printStackTrace();
         }
       }
     }
 
+    return internetArray;
+  }
+
+  public InternetAddress[] getRecipientsMime() {
+    InternetAddress[] internetArray = convertStringToInternetAddress(getRecipients());
     return internetArray;
   }
 
@@ -132,21 +139,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   }
   
   public InternetAddress[] getCCMime() {
-    InternetAddress[] internetArray = null;
-    String cc = getcc();
-
-    if (cc != null && !cc.equals("") && !cc.isEmpty()) {
-      String[] ccArray = cc.split(",");
-      internetArray = new InternetAddress[ccArray.length];
-
-      for (int i = 0; i < ccArray.length; i++) {
-        try {
-          internetArray[i] = new InternetAddress(ccArray[i]);
-        } catch (AddressException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    InternetAddress[] internetArray = convertStringToInternetAddress(getcc());
     return internetArray;
   }
 
@@ -159,21 +152,7 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   }
   
   public InternetAddress[] getBCCMime() {
-    InternetAddress[] internetArray = null;
-    String bcc = getBcc();
-
-    if (bcc != null && !bcc.equals("") && !bcc.isEmpty()) {
-      String[] bccArray = bcc.split(",");
-      internetArray = new InternetAddress[bccArray.length];
-
-      for (int i = 0; i < bccArray.length; i++) {
-        try {
-          internetArray[i] = new InternetAddress(bccArray[i]);
-        } catch (AddressException e) {
-          e.printStackTrace();
-        }
-      }
-    }
+    InternetAddress[] internetArray = convertStringToInternetAddress(getBcc());
     return internetArray;
   }
 

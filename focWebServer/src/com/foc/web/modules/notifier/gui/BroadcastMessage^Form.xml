@@ -1,0 +1,8 @@
+<VerticalLayout margin="true" width="700px" captionMargin="0" spacing="true" height="-1px">
+	<ValidationSettings formTitle="eMail Accounts" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
+
+	<GuiField name="User>FULL_NAME" caption="Username" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
+	<GuiField name="DATE" caption="Date" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />	
+	<GuiField name="Time" caption="Time" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
+	<GuiField name="Message" caption="Message" captionPos="right" captionStyle="f16,bold,text-left" width="380px" captionWidth="100px" />
+</VerticalLayout>

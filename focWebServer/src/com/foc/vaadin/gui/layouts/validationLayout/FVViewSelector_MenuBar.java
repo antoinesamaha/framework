@@ -1,5 +1,7 @@
 package com.foc.vaadin.gui.layouts.validationLayout;
 
+import java.util.HashMap;
+
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
@@ -169,9 +171,13 @@ public class FVViewSelector_MenuBar extends MenuBar {
 			arrayOfViews = XMLViewDictionary.getInstance().getXmlViews(xmlViewKey, false);
 		}
 
+		HashMap<String, String> addedOnes = new HashMap<String, String>();//When there are multi language the naes of view are similar
 		for(int i = 0; i < arrayOfViews.length; i++){
 			String viewString = arrayOfViews[i];
-			addNewMenuItem(viewString);
+			if(addedOnes.get(viewString) == null) {
+				addNewMenuItem(viewString);
+				addedOnes.put(viewString, viewString);
+			}
 		}
 	}
 
