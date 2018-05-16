@@ -23,7 +23,12 @@ public class FVRichTextArea extends RichTextArea implements FocXMLGuiComponent {
     delegate = new FocXMLGuiComponentDelegate(this);
     setFocData(property);
     setAttributes(attributes);
-    addStyleName("no-toolbar");
+    
+    if(			attributes == null 
+    		|| 	attributes.getValue(FXML.ATT_TEXT_AREA_TOOLBAR) == null 
+    		||  !attributes.getValue(FXML.ATT_TEXT_AREA_TOOLBAR).trim().toLowerCase().equals("true")) {
+    	addStyleName("no-toolbar");
+    }
     addStyleName("component-margin");
   }
 

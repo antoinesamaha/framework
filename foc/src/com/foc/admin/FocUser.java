@@ -188,6 +188,7 @@ public class FocUser extends FocObject {
   private FocList buildCompanyList(){
     companyList = new FocList(new FocLinkSimple(CompanyDesc.getInstance()));
     companyList.setCollectionBehaviour(true);
+    companyList.setDbResident(false);
     
     FocList companyRightsList = getCompanyRightsList();
     if(companyRightsList != null){
@@ -212,6 +213,7 @@ public class FocUser extends FocObject {
 		if(sitesList == null){
 			sitesList = new FocList(new FocLinkSimple(WFSiteDesc.getInstance()));
 			sitesList.setCollectionBehaviour(true);
+			sitesList.setDbResident(false);
 
 			Company company = getCurrentCompany();
 			if(company != null){
@@ -235,7 +237,8 @@ public class FocUser extends FocObject {
 		if(titlesList == null){
 			titlesList = new FocList(new FocLinkSimple(WFTitleDesc.getInstance()));
 			titlesList.setCollectionBehaviour(true);
-
+			titlesList.setDbResident(false);
+			
 			WFSite site = getCurrentSite();
 			while(site != null){
 				FocList operatorList = site.getOperatorList();
@@ -262,6 +265,7 @@ public class FocUser extends FocObject {
 		if(operatorsList == null){
 			operatorsList = new FocList(new FocLinkSimple(WFTitleDesc.getInstance()));
 			operatorsList.setCollectionBehaviour(true);
+			operatorsList.setDbResident(false);
 
 			WFSite site = getCurrentSite();
 			while(site != null){

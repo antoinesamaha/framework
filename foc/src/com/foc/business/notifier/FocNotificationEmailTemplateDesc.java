@@ -4,6 +4,7 @@ import com.foc.business.printing.PrnLayoutDesc;
 import com.foc.desc.AutoPopulatable;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FStringField;
+import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
@@ -45,7 +46,10 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
     
     focFld = new FStringField("LAYOUT_FILE", "File", FLD_PRN_FILE_NAME, false, PrnLayoutDesc.LEN_LAYOUT_FILE_NAME);
 		addField(focFld);
-    
+
+    focFld = new FBoolField("FORMAT", "Html", FLD_HTML, false);
+		addField(focFld);
+		
     addIsSystemObjectField();
   }
   

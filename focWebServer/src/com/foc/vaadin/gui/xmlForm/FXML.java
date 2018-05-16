@@ -262,6 +262,7 @@ public interface FXML {
   public static final String VAL_FILTERING_MODE_STARTS_WITH= "startsWith"         ;
   public static final String VAL_FILTERING_MODE_CONTAINS   = "contains"           ;
   
+  public static final String ATT_TEXT_AREA_TOOLBAR         = "toolbar"            ;
   public static final String ATT_TEXT_AREA                 = "textArea"           ;
   public static final String ATT_FORMAT                    = "format"             ;
   public static final String ATT_REQUIRED                  = "required"           ;

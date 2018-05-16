@@ -21,6 +21,10 @@ public class FocNotificationEmailTemplate extends FocObject implements FocNotifi
     setPropertyString(FLD_TEMPLATE_NAME, name);
   }
 
+  public boolean isHTML(){
+    return getPropertyBoolean(FLD_HTML);
+  }
+  
   public String getSubject(){
     return getPropertyString(FLD_SUBJECT);
   }

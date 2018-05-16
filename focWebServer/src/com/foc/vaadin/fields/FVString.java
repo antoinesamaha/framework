@@ -8,6 +8,7 @@ import com.foc.util.FocMath;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.FVExpandingTextAreaPopupView;
+import com.foc.vaadin.gui.components.FVRichTextArea;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.components.FVTextField;
 import com.foc.vaadin.gui.components.FVTextFieldAutoComplete;
@@ -28,6 +29,7 @@ public class FVString implements FocXMLGuiComponentCreator {
     
     boolean autoComplete    = false;
     boolean useTextArea     = false;
+    boolean useRichTextArea = false;
     boolean wrapText        = false;
     int     nbrOfRowsInWrap = 0;
     
@@ -42,6 +44,10 @@ public class FVString implements FocXMLGuiComponentCreator {
     	
     	if(txtAreaValue != null && txtAreaValue.toLowerCase().equals("true")){
     		useTextArea = true;
+    	}
+    	
+    	if(txtAreaValue != null && txtAreaValue.toLowerCase().equals("rich")) {
+    		useRichTextArea = true;
     	}
     	
     	if(wraptextValue != null){
@@ -59,10 +65,12 @@ public class FVString implements FocXMLGuiComponentCreator {
     
     if(autoComplete){
     	comp = new FVTextFieldAutoComplete((FProperty) focData, attributes);
-    } else if (useTextArea || wrapText) {
+    } else if (useRichTextArea || useTextArea || wrapText) {
     	if(wrapText){
 //    		comp = new FVExpandingTextArea(property, attributes);
     		comp = new FVExpandingTextAreaPopupView(property, attributes);
+    	}else if(useRichTextArea) {
+    		comp = new FVRichTextArea(property, attributes);
     	}else{
     		comp = new FVTextArea(property, attributes);    		
     	}

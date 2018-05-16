@@ -229,18 +229,29 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
 
     MimeMessage mime = new MimeMessage(session);
     try {
+    	boolean html = false;
+    	if(getTemplate() != null) html = getTemplate().isHTML(); 
+    			
+    	if(html) mime.setHeader("Content-Type", "text/html");
+    	
       mime.setRecipients(Message.RecipientType.TO, getRecipientsMime());
       mime.setRecipients(Message.RecipientType.BCC, getBCCMime());
       mime.setRecipients(Message.RecipientType.CC, getCCMime());
       mime.setFrom(new InternetAddress(emailAccount.getSender()));
       mime.setSubject(getSubject(), "UTF-8");
+      
       mime.setText(getText(), "UTF-8");
       Globals.logString("Subject: "+getSubject());
       Globals.logString("Text: "+getText());
-      MimeMultipart mimeMultipart = getMimeMultipart();
-			if(mimeMultipart != null){
-				mime.setContent(mimeMultipart);
-			}
+      
+      if(html) {
+      	mime.setContent(getText(), "text/html; charset=UTF-8");
+      } else {
+        MimeMultipart mimeMultipart = getMimeMultipart();
+  			if(mimeMultipart != null){
+  				mime.setContent(mimeMultipart);
+  			}
+      }
 			
     } catch (AddressException e) {
       Globals.logException(e);
@@ -251,6 +262,37 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
     return mime;
   }
 
+  /*
+   try {
+   
+   mime.setHeader("Content-Type", "text/html");
+   
+   mime.setRecipients(Message.RecipientType.TO, getRecipientsMime());
+   mime.setRecipients(Message.RecipientType.BCC, getBCCMime());
+   mime.setRecipients(Message.RecipientType.CC, getCCMime());
+   mime.setFrom(new InternetAddress(emailAccount.getSender()));
+   mime.setSubject(getSubject(), "UTF-8");
+
+   //mime.setText(getText(), "UTF-8");
+
+   // Globals.logString("Subject: "+getSubject());
+   // Globals.logString("Text: "+getText());
+
+   mime.setContent(getText(), "text/html; charset=UTF-8");
+
+   //MimeMultipart mimeMultipart = getMimeMultipart();
+   //if (mimeMultipart != null) {
+    //mime.setContent(mimeMultipart);
+    //mime.setContent(mimeMultipart, "text/html; charset=UTF-8");
+   //}
+   
+  } catch (AddressException e) {
+   Globals.logException(e);
+  } catch (MessagingException e) {
+   Globals.logException(e);
+  }
+   */
+  
   public void send() {
     try {
     	if(ConfigInfo.isUseLocalEmailClientForNotification()){

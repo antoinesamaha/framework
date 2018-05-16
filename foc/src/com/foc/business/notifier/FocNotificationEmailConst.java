@@ -9,4 +9,5 @@ public interface FocNotificationEmailConst {
   public static final int FLD_TEMPLATE_NAME   = 6;
   public static final int FLD_CC              = 7;
   public static final int FLD_PRN_FILE_NAME   = 8;
+  public static final int FLD_HTML            = 9;
 }
