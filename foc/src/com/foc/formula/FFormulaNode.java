@@ -3,6 +3,8 @@ package com.foc.formula;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.foc.Globals;
 import com.foc.formula.function.Function;
@@ -123,17 +125,22 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 		return isValueDouble(getExpression());
 	}
 	
+	private static final String regExp = "[\\x00-\\x20]*[+-]?(((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*";
+	private static final Pattern pattern = Pattern.compile(regExp);
+	
 	private boolean isValueDouble(String value){
-		boolean isDouble = false;
-		if(value != null){
-			isDouble = true;
-			try{
-				Double.valueOf(value);
-			}catch(NumberFormatException e){
-				isDouble = false;
-			}
-		}
-		return isDouble;
+	    Matcher m = pattern.matcher(value);
+	    return m.matches();
+//		boolean isDouble = false;
+//		if(value != null){
+//			isDouble = true;
+//			try{
+//				Double.valueOf(value);
+//			}catch(NumberFormatException e){
+//				isDouble = false;
+//			}
+//		}
+//		return isDouble;
 	}
 	
 	private boolean isValueBoolean(String value){
