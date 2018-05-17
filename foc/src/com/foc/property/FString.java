@@ -69,19 +69,20 @@ public class FString extends FProperty implements Cloneable{
     if(doSetString(str)){
       this.str = str;
       
-      if(getFocField() != null && this.str.length() > getFocField().getSize() && getFocField().getSize() > 0){
-
-    		if(			getFocField().isDBResident()
-    				&& 	getFocObject() != null 
-    				&& 	getFocObject().getThisFocDesc() != null
-    				&& 	getFocObject().getThisFocDesc().isDbResident()){
-	      	String storageName = getFocObject() != null && getFocObject().getThisFocDesc() != null ? getFocObject().getThisFocDesc().getStorageName() : "";
-	      	String message = "Data Will be truncated : "+storageName+"."+getFocField().getName()+" Size = "+this.str.length()+" > Max = "+getFocField().getSize() + "Value="+this.str;
-	      	
-	      	Globals.showNotification("Text Truncated", message, IFocEnvironment.TYPE_WARNING_MESSAGE);
-	      	
-	      	Globals.logString("!!! "+message);
-    		}
+      if(			getFocField() != null 
+      		&& 	this.str.length() > getFocField().getSize() 
+      		&&  getFocField().getSize() > 0
+      		&&  getFocField().isDBResident()
+      		&&  getFocObject() != null
+      		&&  getFocObject().getThisFocDesc() != null
+      		&& 	getFocObject().getThisFocDesc().isDbResident()
+      		&& !getFocObject().getThisFocDesc().isJoin()){
+      	String storageName = getFocObject() != null && getFocObject().getThisFocDesc() != null ? getFocObject().getThisFocDesc().getStorageName() : "";
+      	String message = "Data Will be truncated : "+storageName+"."+getFocField().getName()+" Size = "+this.str.length()+" > Max = "+getFocField().getSize() + "Value="+this.str;
+      	
+      	Globals.showNotification("Text Truncated", message, IFocEnvironment.TYPE_WARNING_MESSAGE);
+      	
+      	Globals.logString("!!! "+message);
       	
       	this.str = this.str.substring(0, getFocField().getSize()); 
       }
