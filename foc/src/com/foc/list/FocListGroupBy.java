@@ -127,7 +127,7 @@ public class FocListGroupBy {
 					//AggList will not work if we do not put the result in a string even if the initial field is not a string
 					boolean wasAlreadyAddedToDesc = focDesc.getFieldByID(field.getID()) != null; 
 					if(wasAlreadyAddedToDesc) focDesc.removeField(field);
-					FStringField newFld = new FStringField(field.getDBName(), field.getTitle(), field.getID(), false, 1000);
+					FStringField newFld = new FStringField(field.getDBName(), field.getTitle(), field.getID(), false, 10000);
 					if(wasAlreadyAddedToDesc) focDesc.addField(newFld);
 					if(field instanceof FObjectField && formula.toUpperCase().length() > 8) {
 						selectionList = ((FObjectField)field).getSelectionList();
