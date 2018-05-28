@@ -109,4 +109,5 @@ public class WFTransactionWrapperDesc extends FocDesc {
   public static FocDesc getInstance() {
     return getInstance(DB_TABLE_NAME, WFTransactionWrapperDesc.class);    
   }
+  
 }

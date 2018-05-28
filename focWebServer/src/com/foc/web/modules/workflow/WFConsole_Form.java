@@ -11,10 +11,12 @@ import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
+import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.FVForEachLayout;
+import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
@@ -22,7 +24,8 @@ import com.foc.web.server.xmlViewDictionary.XMLView;
 @SuppressWarnings("serial")
 public class WFConsole_Form extends FocXMLLayout {
 	
-	private FocXMLLayout logLayout = null;
+	private FocXMLLayout  logLayout    = null;
+	private ICentralPanel centralPanel = null;
 
 	@Override
 	public void init(INavigationWindow window, XMLView xmlView, IFocData focData) {
@@ -35,6 +38,33 @@ public class WFConsole_Form extends FocXMLLayout {
 		logLayout = null;
 	}
 	
+	public ICentralPanel getFocXMLLayout() {
+		return centralPanel;
+	}
+
+	public void setFocXMLLayout(ICentralPanel centralPanel) {
+		this.centralPanel = centralPanel;
+		adjustButtonsVisibility();
+	}
+
+	private WFTransactionWrapper_Form getTransactionWrapperForm() {
+		return (centralPanel instanceof WFTransactionWrapper_Form) ? (WFTransactionWrapper_Form) centralPanel : null; 
+	}
+
+	protected void applyForm() {
+		if(centralPanel != null) {
+			FVValidationLayout vLay = centralPanel.getValidationLayout();
+			if(vLay != null) vLay.apply();
+		}
+	}
+	
+	protected void gotoNextSlide() {
+		WFTransactionWrapper_Form transForm = getTransactionWrapperForm();
+		if(transForm != null) {
+			transForm.gotoNextSlide();
+		}
+	}
+
 	public Workflow getWorkflow() {
 		IWorkflow focObj = (IWorkflow) getFocObject();
 		return focObj != null ? focObj.iWorkflow_getWorkflow() : null;
@@ -48,18 +78,28 @@ public class WFConsole_Form extends FocXMLLayout {
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-		FocObject focObj = getFocObject();
 		
 		FVTextArea textArea = getTextArea();
 		if(textArea != null) {
 			textArea.setEnabled(true);
 		}
+		adjustButtonsVisibility();
+	}
+	
+	public void adjustButtonsVisibility() {
+		FocObject focObj = getFocObject();
+		
 		FVButton signButton   = getSignButton();
 		FVButton rejectButton = getRejectButton();
 		FVButton undoButton   = getUndoMySigButton();
+		FVButton nextButton   = getNextButton();
 		
 		if(undoButton != null) {
 			undoButton.setVisible(focObj != null && focObj.workflow_IsLastSignatureDoneByThisUser(true));
+		}
+		
+		if(nextButton != null) {
+			nextButton.setVisible(getTransactionWrapperForm() != null);
 		}
 		
 		if(focObj != null && signButton != null) {
@@ -97,6 +137,10 @@ public class WFConsole_Form extends FocXMLLayout {
 		return (FVButton) getComponentByName("UNDO_MY_SIG");
 	}
 	
+	public FVButton getNextButton() {
+		return (FVButton) getComponentByName("NEXT");
+	}
+
 	public String getCommentWritten() {
 		FVTextArea txtArea = getTextArea();
 		return txtArea != null ? txtArea.getValue() : "";
@@ -146,6 +190,8 @@ public class WFConsole_Form extends FocXMLLayout {
 			workflow.sign(getCommentWritten());
 		}
 		setCommentWritten("");
+		gotoNextSlide();
+		
 //			workflow.sign(getSignature(), getTitleIndex());
 	}
 
@@ -166,6 +212,27 @@ public class WFConsole_Form extends FocXMLLayout {
 		Globals.popupDialog(optionDialog);
 	}	
 
+	public void button_UNDO_MY_SIG_Clicked(FVButtonClickEvent evt){
+		OptionDialog optionDialog = new OptionDialog("Alert!", "Are you sure you want to reject all previous signatures! This will take the transaction back to the beginning of the workflow.") {
+			@Override
+			public boolean executeOption(String option) {
+				if(option.equals("YES")){
+					Workflow  workflow  = getWorkflow();
+					if(workflow != null) workflow.undoAllSignatures();
+					if(getValidationLayout() != null) getValidationLayout().apply();
+				}
+				return false;
+			}
+		};
+		optionDialog.addOption("YES", "YES undo all signatures");
+		optionDialog.addOption("CANCEL", "Cancel");
+		Globals.popupDialog(optionDialog);
+	}
+
+	public void button_NEXT_Clicked(FVButtonClickEvent evt){
+		gotoNextSlide();
+	}
+	
 	public FocXMLLayout getLogLayout() {
 		return logLayout;
 	}

@@ -25,17 +25,7 @@ public class FVStageLayout_Button extends Button {
 		addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
-				FVValidationLayout vLayout = getValidationLayout();
-				if(vLayout != null) {
-					vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
-					vLayout.setVisible_WorkflowConsole(!vLayout.isVisible_WorkflowConsole());
-					
-					if(vLayout.isVisible_WorkflowConsole()) {
-						setIcon(FontAwesome.ARROW_DOWN);
-					} else {
-						setIcon(FontAwesome.ARROW_UP);
-					}
-				}
+				buttonClicked();
 			}
 		});
 	}
@@ -49,6 +39,20 @@ public class FVStageLayout_Button extends Button {
 	public void dispose(){
 		xmlLayout = null;
 		focObject = null;
+	}
+
+	public void buttonClicked() {
+		FVValidationLayout vLayout = getValidationLayout();
+		if(vLayout != null) {
+			vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
+			vLayout.setVisible_WorkflowConsole(!vLayout.isVisible_WorkflowConsole());
+			
+			if(vLayout.isVisible_WorkflowConsole()) {
+				setIcon(FontAwesome.ARROW_DOWN);
+			} else {
+				setIcon(FontAwesome.ARROW_UP);
+			}
+		}
 	}
 	
 	public FVValidationLayout getValidationLayout() {

@@ -29,7 +29,6 @@ public class WFTransactionWrapper extends FocObject {
 //		signature = null;
 	}
 
-	
 	public String getTransactionType(){
 		return getPropertyString(WFTransactionWrapperDesc.FLD_TRANSACTION_TYPE);
 	}

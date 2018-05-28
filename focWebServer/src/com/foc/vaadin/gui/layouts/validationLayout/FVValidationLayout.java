@@ -47,6 +47,7 @@ import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.map.WFMap;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
+import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -1181,6 +1182,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   			FocXMLLayout xmlLayout = (FocXMLLayout) centralPanel;
   			FocObject focObject = xmlLayout.getFocObject();
 	  		if(focObject != null){
+	  			if(focObject instanceof WFTransactionWrapper) {
+	  				focObject = ((WFTransactionWrapper) focObject).getFocObject();
+	  			}
+	  			
 	  			if(focObject.workflow_IsWorkflowSubject()){
 	  	    	FocDesc focDesc = focObject.getThisFocDesc();
 	  	    	if(focDesc != null && focDesc instanceof IWorkflowDesc){
@@ -2377,15 +2382,26 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 			console.setLogLayout(logLayout);
 		}
 	}
+
+	private FocObject getWorkflowFocObject() {
+		FocObject focObj = getFocObject();
+		if(focObj != null && focObj instanceof WFTransactionWrapper) {
+			focObj = ((WFTransactionWrapper)focObj).getFocObject();
+		}
+		return focObj;
+	}
 	
 	private WFConsole_Form getWorkflowConsole(boolean createIfNull) {
-		if(worflowConsole == null && getFocData() instanceof IWorkflow && createIfNull) {
+		FocObject focObj = getWorkflowFocObject();
+		if(worflowConsole == null && focObj instanceof IWorkflow && createIfNull) {
 			XMLViewKey   key = new XMLViewKey(WorkflowWebModule.STORAGE_NAME_WORKFLOW_CONSOLE, XMLViewKey.TYPE_FORM);
-			worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) getWindow(), key, getFocData());
+			worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) getWindow(), key, focObj);
 			
 			worflowConsole.setWidth("100%");
 			addComponentAsFirst(worflowConsole);
 			setComponentAlignment(worflowConsole, Alignment.BOTTOM_LEFT);
+			
+			worflowConsole.setFocXMLLayout(getCentralPanel());
 		
 			worflowConsole.addStyleName("foc-footerLayout");
 			setLogLayoutInWorkflowConsole();
@@ -2394,12 +2410,13 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	}
 			
 	private FocXMLLayout getLogLayout(boolean createIfNull) {
-		if(logLayout == null && getFocData() instanceof IWorkflow && createIfNull) {
+		FocObject focObj = getWorkflowFocObject() ;
+		if(logLayout == null && focObj instanceof IWorkflow && createIfNull) {
 			FocWebVaadinWindow mainWindow = (FocWebVaadinWindow) getFocVaadinMainWindow();
 			FVVerticalLayout mainVerticalLayout = mainWindow != null ? mainWindow.getCentralPanelWrapper() : null;
 			if(mainVerticalLayout != null) {
 				XMLViewKey key = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
-				logLayout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, getFocData());
+				logLayout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focObj);
 				mainVerticalLayout.addComponent(logLayout);
 			}
 			setLogLayoutInWorkflowConsole();

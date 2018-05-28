@@ -23,6 +23,7 @@ import com.foc.vaadin.gui.components.FVLabel;
 import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVCommentLayout;
+import com.foc.vaadin.gui.layouts.validationLayout.FVStageLayout_Button;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
@@ -124,6 +125,10 @@ public class WFTransactionWrapper_Form extends FocXMLLayout {
 
 		FVValidationLayout validationLayout = getValidationLayout();
 		if(validationLayout != null){
+			FVStageLayout_Button stageButton = validationLayout.getStageLayout(false);
+			if(stageButton != null) stageButton.buttonClicked();
+			
+			/*
 			FVHorizontalLayout horizontalLayout = newSlideShowControlPanelToValidationLayout();
 //			horizontalLayout.setWidth("100%");
 			validationLayout.addComponentAsFirst(horizontalLayout);
@@ -135,7 +140,8 @@ public class WFTransactionWrapper_Form extends FocXMLLayout {
 			validationLayout.adjustForSignatureSlideShow();
 
 			validationLayout.addValidationListener(innerFocXMLLayout);
-		}		
+			*/
+		}	
 	}
 	
 	private XMLViewKey buildXmlViewKey(Workflow workflow){
