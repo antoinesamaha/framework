@@ -605,7 +605,6 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 
 	public void setAddEnabled(boolean enabled){
 		addEnabled = enabled;
-		
 	}
 	
 	public void setDuplicateEnabled(boolean enabled){

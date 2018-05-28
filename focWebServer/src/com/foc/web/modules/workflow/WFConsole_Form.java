@@ -7,9 +7,11 @@ import com.foc.business.workflow.implementation.WFLog;
 import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.business.workflow.signing.WFSignatureNeededResult;
+import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
+import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.FVForEachLayout;
@@ -46,14 +48,53 @@ public class WFConsole_Form extends FocXMLLayout {
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
+		FocObject focObj = getFocObject();
+		
 		FVTextArea textArea = getTextArea();
 		if(textArea != null) {
 			textArea.setEnabled(true);
+		}
+		FVButton signButton   = getSignButton();
+		FVButton rejectButton = getRejectButton();
+		FVButton undoButton   = getUndoMySigButton();
+		
+		if(undoButton != null) {
+			undoButton.setVisible(focObj != null && focObj.workflow_IsLastSignatureDoneByThisUser(true));
+		}
+		
+		if(focObj != null && signButton != null) {
+			WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+			if(result != null && result.getTitleIndex() >= 0){
+				if(result.isOnBehalfOf()){
+					signButton.setCaption(isArabic() ? "امضاء بالنيابة" : "Sign PP");
+					signButton.setDescription(isArabic() ? "امضاء بالنيابة وبصفة " + result.getTitle() : "Sign per procurationement as "+result.getTitle());
+				}else{
+					signButton.setCaption(isArabic() ? "امضاء" : "Sign");
+					signButton.setDescription(isArabic() ? "امضاء وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
+				}
+				signButton.setVisible(true);
+				rejectButton.setVisible(true);
+			} else {
+				signButton.setVisible(false);
+				rejectButton.setVisible(false);
+			}
 		}
 	}
 	
 	public FVTextArea getTextArea() {
 		return (FVTextArea) getComponentByName("MY_COMMENT");
+	}
+	
+	public FVButton getSignButton() {
+		return (FVButton) getComponentByName("SIGN");
+	}
+	
+	public FVButton getRejectButton() {
+		return (FVButton) getComponentByName("REJECT");
+	}
+	
+	public FVButton getUndoMySigButton() {
+		return (FVButton) getComponentByName("UNDO_MY_SIG");
 	}
 	
 	public String getCommentWritten() {

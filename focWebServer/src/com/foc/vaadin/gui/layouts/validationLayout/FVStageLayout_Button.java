@@ -21,7 +21,7 @@ public class FVStageLayout_Button extends Button {
 		this.focObject = focObject;
 		this.xmlLayout = xmlLayout;
 		init();
-		setIcon(FontAwesome.COMMENT_O);
+		setIcon(FontAwesome.ARROW_UP);
 		addClickListener(new Button.ClickListener() {
 			@Override
 			public void buttonClick(ClickEvent event) {
@@ -29,6 +29,12 @@ public class FVStageLayout_Button extends Button {
 				if(vLayout != null) {
 					vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
 					vLayout.setVisible_WorkflowConsole(!vLayout.isVisible_WorkflowConsole());
+					
+					if(vLayout.isVisible_WorkflowConsole()) {
+						setIcon(FontAwesome.ARROW_DOWN);
+					} else {
+						setIcon(FontAwesome.ARROW_UP);
+					}
 				}
 			}
 		});
@@ -158,7 +164,7 @@ public class FVStageLayout_Button extends Button {
 	}
 	
 	private void selectCurrentStage(){
-		setCaption("WF Stage: "+getCurrentStageName());
+		setCaption("Stage: "+getCurrentStageName());
 	}
 	
 	private String getCurrentStageName(){

@@ -1577,7 +1577,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void showValidationLayout(boolean showBackButton, int position) {
 		if(validationSettings != null && getValidationLayoutVisible()){
 			XMLView xmlView = getXMLView();
-			if(xmlView.isHelpFileExist()){
+			if(xmlView != null && xmlView.isHelpFileExist()){
 				validationSettings.setWithTips(true);
 			}
 			
@@ -2945,8 +2945,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		Component rootComp = getRootComponent();
 		if(rootComp instanceof FocXMLGuiComponent){
 			FocXMLGuiComponent guiComp = (FocXMLGuiComponent) rootComp;
-			String w = guiComp.getAttributes().getValue(FXML.ATT_WIDTH);
-			String h = guiComp.getAttributes().getValue(FXML.ATT_HEIGHT);
+			String w = null;
+			String h = null;
+			if(guiComp.getAttributes() != null) {
+				w = guiComp.getAttributes().getValue(FXML.ATT_WIDTH);
+				h = guiComp.getAttributes().getValue(FXML.ATT_HEIGHT);
+			}
 			
 			if(w != null && !w.endsWith("%")) width = w;
 			if(h != null && !h.endsWith("%")){

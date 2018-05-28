@@ -336,7 +336,10 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   	return newCentralPanel(mainWindow, xmlViewKey, focData, true, false, true);
   }
 
-  private XMLView getView_AdaptIfTheObjectIsCreated(XMLViewKey xmlViewKey, boolean adjustViewToLastSelectedByUser, boolean allowAdaptViewIfFocObjectIsCreated, IFocData focData){
+  private XMLView getView(XMLViewKey xmlViewKey, 
+  		                    boolean    adjustViewToLastSelectedByUser, 
+  		                    boolean    allowAdaptViewIfFocObjectIsCreated, 
+  		                    IFocData   focData){
   	XMLView view = null;
   	if(xmlViewKey != null){
   		//We start by checking if we are opening a Form with a created FocObject
@@ -408,7 +411,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
       allowAdaptViewIfFocObjectIsCreated = false;
     }
     
-  	XMLView view = getView_AdaptIfTheObjectIsCreated(xmlViewKey, adjustViewToLastSelectedByUser, allowAdaptViewIfFocObjectIsCreated, focData);
+  	XMLView view = getView(xmlViewKey, adjustViewToLastSelectedByUser, allowAdaptViewIfFocObjectIsCreated, focData);
     ICentralPanel centralPanel = null;
     
     //For Debug Only

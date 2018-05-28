@@ -5,6 +5,7 @@
 	  <HorizontalLayout captionMargin="0" width="100%" spacing="true">
 		  <Button name="SIGN" caption="امضاء" icon="check_circle" description="Sign" style="f17,bold,text-white" width="100%"/>
 		  <Button name="REJECT" caption="اعادة" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
+		  <Button name="UNDO_MY_SIG" caption="عودة عن الامضاء" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
 		</HorizontalLayout>
 	</VerticalLayout>
 </HorizontalLayout>

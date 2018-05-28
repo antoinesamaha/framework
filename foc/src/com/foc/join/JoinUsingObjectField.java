@@ -8,6 +8,7 @@ import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 
 /**
  * @author 01Barmaja
@@ -52,6 +53,10 @@ public class JoinUsingObjectField extends Join{
           	}
           }
         }else{
+        	if(tarDesc.getFieldByID(objectFieldID) instanceof FStringField) {
+        		int debug = 3;
+        		debug++;
+        	}
           FObjectField objField = (FObjectField)tarDesc.getFieldByID(objectFieldID);
 
           if(srcDesc.getWithReference() && objField != null){
