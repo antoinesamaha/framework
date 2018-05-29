@@ -2,7 +2,6 @@ package com.foc.web.modules.admin;
 
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.foc.ConfigInfo;
 import com.foc.OptionDialog;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
@@ -47,6 +46,7 @@ public class OptionDialog_Form extends FocXMLLayout {
 		FVLabel label = (FVLabel) getComponentByName("MESSAGE_LABEL");
 		if(isRTL()) {
 			label.addStyleName("foc-text-right");
+			label.addStyleName("rightToLeft");
 		}
 		label.setValue(optionDialog.getMessage());
 	}

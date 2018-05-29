@@ -1,9 +1,9 @@
 <VerticalLayout name="MAIN_LAYOUT" spacing="true" captionMargin="0" margin="true" width="100%" height="100%">
-    <VerticalLayout name="MAIN_LAYOUT" spacing="true" captionMargin="0" margin="true" alignment="middle_center" width="-1px" height="-1px">
-    	<Label value="" name="MESSAGE_LABEL"/>
-    	<VerticalLayout name="_COMPONENTS_LAYOUT" captionMargin="0" spacing="true">
-    	</VerticalLayout>
-    	<HorizontalLayout name="OPTION_DIALOG_WINDOW" spacing="true" captionMargin="0" margin="true">
-    	</HorizontalLayout>
+  <VerticalLayout name="MAIN_LAYOUT" spacing="true" captionMargin="0" margin="true" alignment="middle_center" width="-1px" height="-1px">
+    <Label value="" name="MESSAGE_LABEL" />
+    <VerticalLayout name="_COMPONENTS_LAYOUT" captionMargin="0" spacing="true">
     </VerticalLayout>
+    <HorizontalLayout name="OPTION_DIALOG_WINDOW" spacing="true" captionMargin="0" margin="true">
+    </HorizontalLayout>
+  </VerticalLayout>
 </VerticalLayout>
