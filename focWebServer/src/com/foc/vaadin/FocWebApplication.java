@@ -43,6 +43,7 @@ import com.vaadin.ui.Window;
 public abstract class FocWebApplication extends UI {
 
 	public static final String ATT_WEB_SESSION = "FOC_WEB_SESSION";
+	public static final String URL_PARAMETER_KEY_UNIT_SUITE = "unitsuite";
 	
 	private HttpSession httpSession = null;
 	private boolean isMobile = false;
@@ -227,9 +228,9 @@ public abstract class FocWebApplication extends UI {
 	    //Make sure the environment allows unit testing			
 			if(ConfigInfo.isUnitAllowed() && uri.getHost().equals("localhost")){
 //		  String path = getNavigationWindow().getPathInfo();
-		  	if(path != null && path.toLowerCase().startsWith("unitsuite:")){
+		  	if(path != null && path.toLowerCase().startsWith(URL_PARAMETER_KEY_UNIT_SUITE+":")){
 		  		INavigationWindow window = getNavigationWindow();
-		  		String suiteName = path.substring("unitsuite:".length());
+		  		String suiteName = path.substring((URL_PARAMETER_KEY_UNIT_SUITE+":").length());
 		  		boolean keepTestingTrue = false;
 		  		try{
 		  			int indexOfSuperior = suiteName.indexOf(".");

@@ -622,12 +622,16 @@ public class Workflow {
 	}
 	
 	public void undoLastSignature(){
-		WFLog 	lastSignatureLog 	= getLastSignatureEvent(true);
+		undoLastSignature("");
+	}
+	
+	public void undoLastSignature(String writtenComment){
+		WFLog lastSignatureLog = getLastSignatureEvent(true);
 		if(lastSignatureLog != null){
 			lastSignatureLog.setEventUndone(true);
 			lastSignatureLog.validate(true);
 			setCurrentStage(lastSignatureLog.getPreviousStage());
-			addLogLine(WFLogDesc.EVENT_UNDO_SIGNATURE, lastSignatureLog.getTitle(), lastSignatureLog.isOnBehalfOf(), lastSignatureLog.getPreviousStage(), lastSignatureLog.getTargetStage(), "");
+			addLogLine(WFLogDesc.EVENT_UNDO_SIGNATURE, lastSignatureLog.getTitle(), lastSignatureLog.isOnBehalfOf(), lastSignatureLog.getPreviousStage(), lastSignatureLog.getTargetStage(), writtenComment);
 			
 			IWorkflow iworkflow = (IWorkflow) getFocObject();
 			for(int i=0; i<WFSignatureDesc.FLD_TITLE_COUNT; i++){

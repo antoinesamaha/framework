@@ -454,25 +454,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				});
 			}
 			
-			// Auto-Testing Header Icon
-			if (ConfigInfo.isUnitAllowed()) {
-				NativeButton autoTestingIcon = newButtonInHeaderBar("", true);
-				menuBarIcons_Add("_UNIT_", autoTestingIcon);
-				autoTestingIcon.setIcon(FontAwesome.EXCLAMATION_TRIANGLE);
-				autoTestingIcon.addClickListener(new Button.ClickListener() {
-					public void buttonClick(ClickEvent event) {
-						try {
-							executeAutomatedTesting();
-						} catch (Exception e) {
-							Globals.logException(e);
-						} finally {
-							if (FocUnitDictionary.getInstance() != null) {
-								FocUnitDictionary.getInstance().popupLogger(FocWebVaadinWindow.this);
-							}
-						}
-					}
-				});
-			}
+			addUnitTestingButtonIfAllowed();
   	
 			addButtonsInMenuBar();
 			
@@ -672,9 +654,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  	getFocWebApplication().logout(FocWebVaadinWindow.this);
 	  	String location = getUI().getPage().getLocation().toString();
 	  	if(!Utils.isStringEmpty(unitTest) && !Utils.isStringEmpty(location)){
-	  		int index = location.indexOf("unitsuite");
+	  		int index = location.indexOf(FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE);
 	  		if(index > 0){
-	  			location = location.substring(0, index)+"unitsuite:"+unitTest;
+	  			location = location.substring(0, index)+FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE+":"+unitTest;
 	  		}
 	  	}
 	  	getUI().getPage().setLocation( location );
@@ -803,7 +785,31 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-  	showMenuBar();  	
+  	showMenuBar();
+
+  	addUnitTestingButtonIfAllowed();
+  }
+  
+  public void addUnitTestingButtonIfAllowed() {
+		// Auto-Testing Header Icon
+		if (ConfigInfo.isUnitAllowed()) {
+			NativeButton autoTestingIcon = newButtonInHeaderBar("", true);
+			menuBarIcons_Add("_UNIT_", autoTestingIcon);
+			autoTestingIcon.setIcon(FontAwesome.EXCLAMATION_TRIANGLE);
+			autoTestingIcon.addClickListener(new Button.ClickListener() {
+				public void buttonClick(ClickEvent event) {
+					try {
+						executeAutomatedTesting();
+					} catch (Exception e) {
+						Globals.logException(e);
+					} finally {
+						if (FocUnitDictionary.getInstance() != null) {
+							FocUnitDictionary.getInstance().popupLogger(FocWebVaadinWindow.this);
+						}
+					}
+				}
+			});
+		}
   }
   
   /**

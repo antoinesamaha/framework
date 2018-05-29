@@ -1,6 +1,7 @@
 package com.foc.web.modules.workflow;
 
 import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.WFLog;
@@ -58,11 +59,14 @@ public class WFConsole_Form extends FocXMLLayout {
 		}
 	}
 	
-	protected void gotoNextSlide() {
+	protected boolean gotoNextSlide() {
+		boolean error = true;
 		WFTransactionWrapper_Form transForm = getTransactionWrapperForm();
 		if(transForm != null) {
+			error = false;
 			transForm.gotoNextSlide();
 		}
+		return error;
 	}
 
 	public Workflow getWorkflow() {
@@ -152,14 +156,19 @@ public class WFConsole_Form extends FocXMLLayout {
 			txtArea.setValue(comment);
 		}
 	}
+	
+	private void popupCommentsAreEmptyMessage() {
+		String notificationMessage = "Please type a message";
+		if(isArabic()) notificationMessage = "يرجى ادخال الملاحظات";
+		Globals.showNotification(notificationMessage, "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	}
 
 	public void button_SEND_COMMENT_Clicked(FVButtonClickEvent evt){
 		FocList  list     = getLogList();
 		Workflow workflow = getWorkflow();
 		
-		FVTextArea textArea = getTextArea();
-		if(list != null && textArea != null) {
-			String message = textArea.getValue();
+		if(list != null) {
+			String message = getCommentWritten();
 			if(!Utils.isStringEmpty(message)) {
 				long refLogline = workflow.insertLogLine(WFLogDesc.EVENT_COMMENT, message);
 				list.reloadFromDB();
@@ -176,6 +185,8 @@ public class WFConsole_Form extends FocXMLLayout {
 	        	setCommentWritten("");
 					}
 				}
+			} else {
+				popupCommentsAreEmptyMessage();
 			}
 		}
 	}
@@ -190,42 +201,76 @@ public class WFConsole_Form extends FocXMLLayout {
 			workflow.sign(getCommentWritten());
 		}
 		setCommentWritten("");
-		gotoNextSlide();
+		if(gotoNextSlide()) {
+			applyForm();
+		}
 		
 //			workflow.sign(getSignature(), getTitleIndex());
 	}
 
 	public void button_REJECT_Clicked(FVButtonClickEvent evt){
-		OptionDialog optionDialog = new OptionDialog("Alert!", "Are you sure you want to reject all previous signatures! This will take the transaction back to the beginning of the workflow.") {
-			@Override
-			public boolean executeOption(String option) {
-				if(option.equals("YES")){
-					Workflow  workflow  = getWorkflow();
-					if(workflow != null) workflow.undoAllSignatures();
-					if(getValidationLayout() != null) getValidationLayout().apply();
-				}
-				return false;
+		String commentWritten = getCommentWritten();
+		if(!Utils.isStringEmpty(commentWritten)) {
+			String message = "Are you sure you want to reject all previous signatures! "
+	                   + "This will take the transaction back to the beginning of the workflow.";
+			String title = "Alert!";
+			String yesCaption = "YES undo all signatures";
+			String cancelCaption = "Cancel";
+			if(isArabic()) {
+				message = "هل تريد فعلا الغاء كل الامضاآت السابقة واعادة المعاملة الى البدأ؟";
+				title = "تنبيه"+"!";
+				yesCaption = "نعم اريد الغاء الامضاآت";
+				cancelCaption = "لا اريد";
 			}
-		};
-		optionDialog.addOption("YES", "YES undo all signatures");
-		optionDialog.addOption("CANCEL", "Cancel");
-		Globals.popupDialog(optionDialog);
+	
+			OptionDialog optionDialog = new OptionDialog(title, message) {
+				@Override
+				public boolean executeOption(String option) {
+					if(option.equals("YES")){
+						Workflow  workflow  = getWorkflow();
+						if(workflow != null) workflow.undoAllSignatures(getCommentWritten());
+						if(gotoNextSlide()) {
+							applyForm();
+						}
+					}
+					return false;
+				}
+			};
+			optionDialog.addOption("YES", yesCaption);
+			optionDialog.addOption("CANCEL", cancelCaption);
+			Globals.popupDialog(optionDialog);
+		} else {
+			popupCommentsAreEmptyMessage();
+		}
 	}	
 
 	public void button_UNDO_MY_SIG_Clicked(FVButtonClickEvent evt){
-		OptionDialog optionDialog = new OptionDialog("Alert!", "Are you sure you want to reject all previous signatures! This will take the transaction back to the beginning of the workflow.") {
+		String message = "Are you sure you want to undo your signature?";
+		String title = "Alert!";
+		String yesCaption = "YES undo my last signature";
+		String cancelCaption = "Cancel";
+		if(isArabic()) {
+			message = "هل تريد فعلا الغاء امضاأك الاخير؟";
+			title = "تنبيه"+"!";
+			yesCaption = "نعم اريد الغاء امضائي الاخير";
+			cancelCaption = "لا اريد";
+		}
+		
+		OptionDialog optionDialog = new OptionDialog(title, message) {
 			@Override
 			public boolean executeOption(String option) {
 				if(option.equals("YES")){
 					Workflow  workflow  = getWorkflow();
-					if(workflow != null) workflow.undoAllSignatures();
-					if(getValidationLayout() != null) getValidationLayout().apply();
+					if(workflow != null) workflow.undoLastSignature(getCommentWritten());
+					if(gotoNextSlide()) {
+						applyForm();
+					}
 				}
 				return false;
 			}
 		};
-		optionDialog.addOption("YES", "YES undo all signatures");
-		optionDialog.addOption("CANCEL", "Cancel");
+		optionDialog.addOption("YES", yesCaption);
+		optionDialog.addOption("CANCEL", cancelCaption);
 		Globals.popupDialog(optionDialog);
 	}
 
