@@ -1,0 +1,13 @@
+<VerticalLayout margin="true" captionMargin="0" spacing="true" width="720px" height="-1px">
+		<!-- ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" / -->
+
+    <ValidationSettings formTitle="الغاء" withApply="true" withStatus="false" withSave="false" withAttach="false" withPrint="false" viewSelector="false"/>
+    
+	  <Label value="سبب الالغاء" style="bold,f16,text-right" width="100%"/>  
+	  <GuiField name="WF_CANCEL_REASON" textArea="true" captionStyle="f16,bold,text-left" width="700px" height="100px" />
+
+    <!-- HorizontalLayout spacing="true" margin="true">			
+			<Button name="YES_CANCEL_TRANSACTION" caption="Yes, Cancel"  />
+			<Button name="NO_DONT_CANCEL" caption="Do Not Cancel"  />
+		</HorizontalLayout -->
+</VerticalLayout>

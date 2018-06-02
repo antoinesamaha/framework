@@ -1,32 +1,48 @@
 package com.foc.web.modules.workflow;
 
+import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.desc.FocObject;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_ComboBox;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_MenuBar;
+import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class Workflow_Cancel_Form extends FocXMLLayout{
 
-	protected FVStatusLayout_MenuBar   fvStatusLayout_ComboBox = null;
-	protected FVStatusLayout            fvStatusLayout         = null;
-	protected WFTransactionWrapper_Form transactionWrapperForm = null;
+	protected FVStatusLayout_MenuBar    fvStatusLayout_ComboBox = null;
+	protected FVStatusLayout            fvStatusLayout          = null;
+	protected WFTransactionWrapper_Form transactionWrapperForm  = null;
+	private   FocXMLLayout              focXMLLayout            = null;	
 	
-	/*public FVStatusLayout getStatusLayout(){
-		return fvStatusLayout;
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		fvStatusLayout_ComboBox = null;
+		fvStatusLayout          = null;
+		transactionWrapperForm  = null;
+		focXMLLayout            = null;
 	}
 	
-	public void setStatusLayout(FVStatusLayout fvStatusLayout){
-		this.fvStatusLayout = fvStatusLayout;
-	}*/
-	
+	public FocXMLLayout getFocXMLLayout() {
+		return focXMLLayout;
+	}
+
+	public void setFocXMLLayout(FocXMLLayout focXMLLayout) {
+		this.focXMLLayout = focXMLLayout;
+	}
+
 	public FVStatusLayout_MenuBar getStatusLayout(){
 		return fvStatusLayout_ComboBox;
 	}
@@ -43,6 +59,7 @@ public class Workflow_Cancel_Form extends FocXMLLayout{
 		return getIWorkflow().iWorkflow_getWorkflow();
 	}
 	
+	/*
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
@@ -53,24 +70,36 @@ public class Workflow_Cancel_Form extends FocXMLLayout{
 	public void addCancelListener(){
 	  FVButton cancelTransaction = (FVButton) getComponentByName("YES_CANCEL_TRANSACTION");
 	  
-	  cancelTransaction.addClickListener(new ClickListener() {
-		  public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
-		  	copyGuiToMemory();
-		  	cancelTransactionExecution();
-		  	goBack(null);
-		  }
-	  });	
+	  if(cancelTransaction != null) {
+		  cancelTransaction.addClickListener(new ClickListener() {
+			  public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
+			  	copyGuiToMemory();
+			  	cancelTransactionExecution();
+			  	goBack(null);
+			  }
+		  });	
+	  }
 	}
 	
 	public void addDoNotCancelListener(){
 	  FVButton dontCancel = (FVButton) getComponentByName("NO_DONT_CANCEL");
 	  
-	  dontCancel.addClickListener(new ClickListener() {
-		  public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
-		  	goBack(null);
-		  }
-	  });	
+	  if(dontCancel != null) {
+		  dontCancel.addClickListener(new ClickListener() {
+			  public void buttonClick(com.vaadin.ui.Button.ClickEvent event) {
+			  	goBack(null);
+			  }
+		  });
+	  }
 	}
+	public WFTransactionWrapper_Form getTransactionWrapperForm() {
+		return transactionWrapperForm;
+	}
+	
+	public void setTransactionWrapperForm(WFTransactionWrapper_Form transactionWrapperForm) {
+		this.transactionWrapperForm = transactionWrapperForm;
+	}
+	*/
 	
   public void cancelTransactionExecution(){
   	FocObject focObj = getFocObject();
@@ -84,16 +113,52 @@ public class Workflow_Cancel_Form extends FocXMLLayout{
   	if(getStatusLayout() != null){
   		getStatusLayout().cancelTransaction();
   	}
-  	if(getTransactionWrapperForm() != null){
-  		getTransactionWrapperForm().gotoNextSlide();
-  	}
+//  	if(getTransactionWrapperForm() != null){
+//  		getTransactionWrapperForm().gotoNextSlide();
+//  	}
   }
 
-	public WFTransactionWrapper_Form getTransactionWrapperForm() {
-		return transactionWrapperForm;
+	@Override
+	public void showValidationLayout(boolean showBackButton, int position) {
+		super.showValidationLayout(showBackButton, position);
+		FVValidationLayout vLay = getValidationLayout();
+		if(vLay != null) {
+			vLay.addValidationListener(new IValidationListener() {
+				
+				@Override
+				public void validationDiscard(FVValidationLayout validationLayout) {
+				}
+				
+				@Override
+				public boolean validationCommit(FVValidationLayout validationLayout) {
+					return false;
+				}
+				
+				@Override
+				public boolean validationCheckData(FVValidationLayout validationLayout) {
+					boolean error = false;
+					Workflow portalComplaint = getWorkflow();
+					if(portalComplaint != null) {
+						error = Utils.isStringEmpty(portalComplaint.getCancelReason());
+						if(error) {
+							Globals.showNotification("يرجى ادخال سبب الالغاء", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+						} else {
+							cancelTransactionExecution();
+//							PortalCompStatus status = PortalCompStatusDesc.getInstance().findStatusByID(PortalCompStatus.STATUS_CANCELLED);
+//							portalComplaint.setComplaintStatus(status);
+						}
+					}
+					return error;
+				}
+				
+				@Override
+				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+			  	if(getFocXMLLayout() != null) {
+			  		getFocXMLLayout().goBack(null);
+			  	}
+				}
+			});
+		}
 	}
 
-	public void setTransactionWrapperForm(WFTransactionWrapper_Form transactionWrapperForm) {
-		this.transactionWrapperForm = transactionWrapperForm;
-	}
 }

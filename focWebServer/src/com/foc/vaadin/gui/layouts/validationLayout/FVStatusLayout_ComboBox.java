@@ -276,7 +276,7 @@ public class FVStatusLayout_ComboBox extends ComboBox implements com.vaadin.data
 	  	XMLViewKey xmlKey = new XMLViewKey("IWorkflow", XMLViewKey.TYPE_FORM, WorkflowWebModule.CTXT_CANCEL_TRANSACTION, XMLViewKey.VIEW_DEFAULT);
 			Workflow_Cancel_Form centralPanel = (Workflow_Cancel_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(mainWindow, xmlKey, (IFocData) iworkflow);
 //			centralPanel.setStatusLayout(statusLayout);hadi_13
-			centralPanel.setTransactionWrapperForm(transactionWrapperForm);
+//			centralPanel.setTransactionWrapperForm(transactionWrapperForm);
 			centralPanel.parseXMLAndBuildGui();
 			
 			FocCentralPanel centralWindow = new FocCentralPanel();

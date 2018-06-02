@@ -125,7 +125,14 @@ public class WorkflowWebModule extends FocWebModule {
       CTXT_CANCEL_TRANSACTION,
       XMLViewKey.VIEW_DEFAULT,
       "/xml/com/foc/workflow/Workflow_Cancel_Form.xml", 0, Workflow_Cancel_Form.class.getName());
-  	
+
+  	XMLViewDictionary.getInstance().put(
+      "IWorkflow",
+      XMLViewKey.TYPE_FORM,
+      CTXT_CANCEL_TRANSACTION,
+      XMLViewKey.VIEW_DEFAULT, false, "ar",
+      "/xml/com/foc/workflow/Workflow_Cancel_Form-ar.xml", 0, Workflow_Cancel_Form.class.getName());
+
   	XMLViewDictionary.getInstance().put(
   		WFFieldLockStageDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_FORM,

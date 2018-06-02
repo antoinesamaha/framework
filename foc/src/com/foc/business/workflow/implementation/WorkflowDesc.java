@@ -25,7 +25,6 @@ import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FListField;
-import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
@@ -52,7 +51,8 @@ public class WorkflowDesc {
 	public static final int FLD_LAST_RESERVED    = 50;
 	
   //This is not an actual field or property it is simply interpreted by the focDesc upon getFocDataByPath
-	public static String FNAME_SIGNATURE = "SIGNATURE";
+	public static String FNAME_SIGNATURE     = "SIGNATURE";
+	public static String FNAME_CANCEL_REASON = "WF_CANCEL_REASON";
 	
 	private IWorkflowDesc                workflowDesc  = null;
 	private HashMap<Integer, RightLevel> rightLevelMap = null;//Site ref to rightLevelMAP
@@ -125,8 +125,9 @@ public class WorkflowDesc {
 		}
 
 		if(getFocDesc().getFieldByID(fldID+FLD_CANCEL_REASON) == null){
-			FMultipleChoiceStringField cFld = new FMultipleChoiceStringField("WF_CANCEL_REASON", "Cancel reason", fldID+FLD_CANCEL_REASON, false, 100);
-			cFld.setChoicesAreFromSameColumn(getFocDesc());
+//			FMultipleChoiceStringField cFld = new FMultipleChoiceStringField("WF_CANCEL_REASON", "Cancel reason", fldID+FLD_CANCEL_REASON, false, 100);
+//			cFld.setChoicesAreFromSameColumn(getFocDesc());
+			FStringField cFld = new FStringField(FNAME_CANCEL_REASON, "Cancel reason", fldID+FLD_CANCEL_REASON, false, 500);
 			getFocDesc().addField(cFld);
 		}
 		

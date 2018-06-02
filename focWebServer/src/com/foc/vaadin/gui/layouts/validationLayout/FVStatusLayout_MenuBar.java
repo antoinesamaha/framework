@@ -22,7 +22,6 @@ import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.modules.workflow.Workflow_Cancel_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.MenuBar;
-import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
 public class FVStatusLayout_MenuBar extends MenuBar {
@@ -208,14 +207,19 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void cancel() {
-		popupCancel(getWindow(), FVStatusLayout_MenuBar.this, getFocObject(), null);
+		popupCancel(getWindow(), FVStatusLayout_MenuBar.this, getFocObject(), xmlLayout);
 	}
 
-	public static void popupCancel(FocCentralPanel mainWindow, FVStatusLayout_MenuBar statusLayout_MenuBar, FocObject focObject, WFTransactionWrapper_Form transactionWrapperForm) {
+	public static void popupCancel(FocCentralPanel mainWindow, FVStatusLayout_MenuBar statusLayout_MenuBar, FocObject focObject, FocXMLLayout focXMLLayout) {
 		if(focObject != null && focObject.getThisFocDesc() instanceof IWorkflowDesc){
-
-			IWorkflow iworkflow = (IWorkflow) focObject;
-
+			XMLViewKey key = new XMLViewKey("IWorkflow", XMLViewKey.TYPE_FORM, WorkflowWebModule.CTXT_CANCEL_TRANSACTION, XMLViewKey.VIEW_DEFAULT);
+			Workflow_Cancel_Form centralPanel = (Workflow_Cancel_Form) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focObject);
+			if(centralPanel != null) {
+				centralPanel.popupInDialog();
+				centralPanel.setFocXMLLayout(focXMLLayout);
+			}
+			
+			/*
 			XMLViewKey xmlKey = new XMLViewKey("IWorkflow", XMLViewKey.TYPE_FORM, WorkflowWebModule.CTXT_CANCEL_TRANSACTION, XMLViewKey.VIEW_DEFAULT);
 			Workflow_Cancel_Form centralPanel = (Workflow_Cancel_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(mainWindow, xmlKey, (IFocData) iworkflow);
 			centralPanel.setStatusLayout(statusLayout_MenuBar);
@@ -232,6 +236,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 			window.setPositionX(200);
 			window.setPositionY(100);
 			FocWebApplication.getInstanceForThread().addWindow(window);
+			*/
 		}
 	}
 
