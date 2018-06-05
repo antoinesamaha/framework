@@ -12,14 +12,15 @@ public class FilterConditionFactory {
 		switch(field.getFabType()){
 		case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
 		case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_FOC_DESC:
+		case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:
 			condition = new StringCondition(dateFieldPath, fieldPrefix); 
-			break;
+			break;			
 		case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
 			condition = new BooleanCondition(dateFieldPath, fieldPrefix);
 			break;
 		case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE:
 			condition = new MultipleChoiceCondition(dateFieldPath, fieldPrefix);
-			break;
+			break;		
 		case FieldDefinition.SQL_TYPE_ID_DATE:
 			condition = new DateCondition(dateFieldPath, fieldPrefix);
 			break;
