@@ -282,6 +282,7 @@ public class StringCondition extends FilterCondition {
       	try{
 					charField = (FStringField) field.clone();
 					((FMultipleChoiceStringField)charField).setChoicesSelection_FieldID( ((FMultipleChoiceStringField)field).getChoicesSelection_FieldID());
+					((FMultipleChoiceStringField)charField).setAllowOutofListSelection(true);
 					charField.setName(getFieldPrefix()+"_TXT");
 					charField.setId(firstID + FLD_CONDITION_TEXT);
 					charField.setMandatory(false);
