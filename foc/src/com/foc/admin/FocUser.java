@@ -299,7 +299,7 @@ public class FocUser extends FocObject {
 							if(operator.getArea().equalsRef(area)){
 								has = true;
 							}
-							area = (WFSite) area.getFatherObject();
+							area = area != null ? (WFSite) area.getFatherObject() : null;
 						}while(!has && area != null);
 						
 					}						

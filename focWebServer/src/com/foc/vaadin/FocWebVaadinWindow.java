@@ -758,7 +758,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   public FSignatureButton getPendingSignatureButton(){
     return pendingSignature;
   }
-  
+
+  public void refreshPendingSignatureCount() {
+		FSignatureButton nativeButton = getPendingSignatureButton();
+		if(nativeButton != null) nativeButton.reset(null);
+  }
+
   public void resetPendingSignatureButtonCaption(WFTransactionWrapperList transactionWrapperList){
   	FSignatureButton nativeButton = getPendingSignatureButton();
   	if(nativeButton != null){
