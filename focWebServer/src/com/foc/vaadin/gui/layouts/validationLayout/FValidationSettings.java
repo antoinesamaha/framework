@@ -21,6 +21,7 @@ public class FValidationSettings {
   public boolean withViewSelector  = true;
   public boolean withTips          = false;
   public boolean withStatus        = true;
+  public boolean withStage         = true;
   public boolean commitData        = true;
   public boolean hasPDFGenerator   = false;
   public boolean hasMSWordGenerator= false;
@@ -202,7 +203,15 @@ public class FValidationSettings {
   	this.withStatus= withStatus;
   }
   
-  public String getTitle() {
+  public boolean isWithStage() {
+		return withStage;
+	}
+
+	public void setWithStage(boolean withStage) {
+		this.withStage = withStage;
+	}
+
+	public String getTitle() {
     return title != null ? title : "";
   }
 

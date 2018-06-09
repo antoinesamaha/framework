@@ -1610,6 +1610,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return userProp != null ? (FocUser) userProp.getObject_CreateIfNeeded() : null;
   }
 
+  @Deprecated
   public FPanel popup() {
     FPanel pan = newDetailsPanel(FocObject.DEFAULT_VIEW_ID);
     Globals.getDisplayManager().changePanel(pan);

@@ -1734,6 +1734,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String withSave          = focXmlAttributes.getValue(FXML.ATT_WITH_SAVE);
 				String withDiscard       = focXmlAttributes.getValue(FXML.ATT_WITH_DISCARD);
 				String withStatus        = focXmlAttributes.getValue(FXML.ATT_WITH_STATUS);
+				String withStage         = focXmlAttributes.getValue(FXML.ATT_WITH_STAGE);
 				String discardLink       = focXmlAttributes.getValue(FXML.ATT_DISCARD_LINK);
 				String applyLink         = focXmlAttributes.getValue(FXML.ATT_APPLY_LINNK);
 				String withPrint         = focXmlAttributes.getValue(FXML.ATT_WITH_PRINT);
@@ -1884,6 +1885,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					validationSettings.setWithStatus(false);
 				}else{
 					validationSettings.setWithStatus(true);
+				}
+				
+				if(withStage != null && withStage.equalsIgnoreCase("false")){
+					validationSettings.setWithStage(false);
+				}else{
+					validationSettings.setWithStage(true);
 				}
 
 				addComponentToStack(comp, name, focXmlAttributes);
@@ -3054,4 +3061,19 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void setCommitWithParent(boolean commitWithParent) {
 		this.commitWithParent = commitWithParent;
 	}
+	
+/**
+ * You can override this method  	
+ * @return
+ */
+	public String beforeSigning() {
+		String error = null;
+		
+		return error;
+	}
+	
+	public void afterSigning() {
+		
+	}
+	
 }

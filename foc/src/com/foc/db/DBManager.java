@@ -170,7 +170,13 @@ public class DBManager {
 	// ------------------------------------------------
 	
 	public static boolean provider_TableNamesBetweenSpeachmarks(int provider){
-		return provider == DBManager.PROVIDER_ORACLE || provider == DBManager.PROVIDER_H2; 
+		return provider == DBManager.PROVIDER_ORACLE 
+				|| provider == DBManager.PROVIDER_H2; 
+	}
+	
+	public static boolean provider_FieldNamesBetweenSpeachmarks(int provider){
+		return provider == DBManager.PROVIDER_ORACLE 
+				|| provider == DBManager.PROVIDER_H2; 
 	}
 	
 	public static String provider_ConvertFieldName(int provider, String fieldName){
