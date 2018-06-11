@@ -89,7 +89,7 @@ public class SQLUpdate extends SQLRequest {
 	              	
 	              	String fldName = enumer.getFieldCompleteName(focDesc);
 	              	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ; 
-	              	if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) fldName = "\""+fldName+"\"" ;
+	              	if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())) fldName = "\""+fldName+"\"" ;
 		              request.append(fldName + "=");
 		              request.append(prop.getSqlString());
 		              firstProp.setModifiedFlag(false);//2017-05-31

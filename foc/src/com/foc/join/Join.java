@@ -76,7 +76,7 @@ public abstract class Join {
   		break;
   	}
   	
-  	if(targetTableAlias.getFocDesc().getProvider() == DBManager.PROVIDER_ORACLE){
+  	if(DBManager.provider_FieldNamesBetweenSpeachmarks(targetTableAlias.getFocDesc().getProvider())){
   		str.append("\""+targetTableAlias.getFocDesc().getStorageName_ForSQL()+"\"");
   	}else{
   		str.append(targetTableAlias.getFocDesc().getStorageName_ForSQL());

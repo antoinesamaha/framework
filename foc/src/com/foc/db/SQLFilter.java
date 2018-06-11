@@ -188,7 +188,8 @@ public class SQLFilter {
       }
       
       String fieldName = fldName;
-      if(provider == DBManager.PROVIDER_ORACLE) fieldName = "\""+fieldName+"\"";
+      if(    provider == DBManager.PROVIDER_ORACLE
+      		|| provider == DBManager.PROVIDER_H2) fieldName = "\""+fieldName+"\"";
       if(hasJoinMap() && !fieldName.contains(".")){
       	fieldName = getJoinMap().getMainTableAlias()+"."+fldName; 
       }

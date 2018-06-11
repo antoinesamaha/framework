@@ -194,15 +194,28 @@ public class WFConsole_Form extends FocXMLLayout {
 	public void button_SIGN_Clicked(FVButtonClickEvent evt){
 		Workflow  workflow  = getWorkflow();
 		
-		WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
-		if(result != null){
-			workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), getCommentWritten());
-		}else{
-			workflow.sign(getCommentWritten());
+		String error = null;
+		FocXMLLayout xmlLayout = getFocXMLLayout() instanceof FocXMLLayout ? (FocXMLLayout) getFocXMLLayout() : null;
+		if(xmlLayout != null) {
+			xmlLayout.copyGuiToMemory();
+			error = xmlLayout.beforeSigning();
 		}
-		setCommentWritten("");
-		if(gotoNextSlide()) {
-			applyForm();
+		
+		if(Utils.isStringEmpty(error)) {
+			WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
+			if(result != null){
+				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), getCommentWritten());
+			}else{
+				workflow.sign(getCommentWritten());
+			}
+			setCommentWritten("");
+			if(xmlLayout != null) xmlLayout.afterSigning();
+			
+			if(gotoNextSlide()) {
+				applyForm();
+			}
+		} else {
+			Globals.showNotification(error, "", IFocEnvironment.TYPE_WARNING_MESSAGE);
 		}
 		
 //			workflow.sign(getSignature(), getTitleIndex());

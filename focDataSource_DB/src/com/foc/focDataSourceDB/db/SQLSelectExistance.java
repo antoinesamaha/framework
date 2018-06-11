@@ -39,7 +39,7 @@ public class SQLSelectExistance extends SQLSelect {
     	request.append("count(*)");
 //    }
  		request.append(" FROM ");
- 		if(getFocDesc().getProvider() == DBManager.PROVIDER_ORACLE){
+ 		if(DBManager.provider_TableNamesBetweenSpeachmarks(getFocDesc().getProvider())){
  			request.append("\""+getFocDesc().getStorageName_ForSQL()+"\"");
  		}else{
  			request.append(getFocDesc().getStorageName_ForSQL());

@@ -65,7 +65,7 @@ public class SQLInsert extends SQLRequest {
           String fieldCompleteName = enumer.getFieldCompleteName(focDesc);
           if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL){
           	fieldCompleteName = "["+fieldCompleteName+"]" ;
-          }else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+          }else if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())){
           	fieldCompleteName = "\""+fieldCompleteName+"\"" ;
           }
           request.append(fieldCompleteName);

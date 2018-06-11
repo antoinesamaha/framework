@@ -48,6 +48,7 @@ import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVViewSelector_MenuBar;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.admin.FocUser_HomePage_Form;
+import com.foc.web.modules.workflow.WFConsole_Form;
 import com.foc.web.server.FocWebServer;
 import com.foc.webservice.FocWebService;
 import com.vaadin.event.DataBoundTransferable;
@@ -1872,11 +1873,31 @@ public class FocUnitTestingCommand {
     if (navigationLayout != null) {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
       if (validationLayout != null) {
-      	FVStageLayout_Button stageLayout = validationLayout.getStageLayout(false);
-      	if(stageLayout != null){
-      		stageLayout.sign(null);
+      	if(!validationLayout.isVisible_WorkflowConsole()) {
+      		FVStageLayout_Button stage = validationLayout.getStageLayout(false);
+      		if(stage != null && stage.isVisible()) stage.click();
       	}
+      	if(validationLayout.isVisible_WorkflowConsole()) {
+      		WFConsole_Form console = validationLayout.getWorkflowConsole_ForUnitTesting();
+      		if(console != null && console.isVisible() && console.getComponentByName("SIGN") != null && console.getComponentByName("SIGN").isVisible()) {
+      			console.button_SIGN_Clicked(null);
+      			getLogger().addInfo("Sign button Clicked");
+      		} else {
+      			getLogger().addFailure("Console not found");
+      		}
+      	} else {
+      		getLogger().addFailure("Console not visible");
+      	}
+      	
+//      	FVStageLayout_Button stageLayout = validationLayout.getStageLayout(false);
+//      	if(stageLayout != null){
+//      		stageLayout.sign(null);
+//      	}
+      } else {
+      	getLogger().addFailure("Validation Layout not found");
       }
+    } else {
+    	getLogger().addFailure("Navigation Layout not found");
     }
   }
 

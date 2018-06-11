@@ -85,7 +85,7 @@ public class FocLinkForeignKey extends FocLink {
           }
           //------------------------
           
-          if(getSlaveDesc().getProvider() == DBManager.PROVIDER_ORACLE && foreignKeyName != null){
+          if(DBManager.provider_FieldNamesBetweenSpeachmarks(getSlaveDesc().getProvider()) && foreignKeyName != null){
           	foreignKeyName = "\""+foreignKeyName+"\"";
           }
           

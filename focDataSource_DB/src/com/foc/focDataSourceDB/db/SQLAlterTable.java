@@ -65,7 +65,7 @@ public class SQLAlterTable extends SQLRequest {
         break;
       case DROP:
         request.append(" DROP COLUMN ");
-        if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+        if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())){
         	request.append("\""+fieldNameToDrop+"\"");
         }else{
         	request.append(fieldNameToDrop);

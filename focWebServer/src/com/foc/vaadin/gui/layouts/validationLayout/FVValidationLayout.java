@@ -1155,6 +1155,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	return validationSettings == null || validationSettings.isWithStatus(); 
   }
   
+  public boolean isWithStage(){
+  	return validationSettings == null || validationSettings.isWithStage(); 
+  }
+  
   public FVStatusLayout_MenuBar getStatusLayout(boolean createIfNeeded){
   	if(			statusLayout_MenuBar == null && createIfNeeded && isWithStatus() 
   			&& 	Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
@@ -1176,7 +1180,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   }
   
   public FVStageLayout_Button getStageLayout(boolean createIfNeeded){
-  	if(stageLayout_Button == null && createIfNeeded && isWithStatus() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
+  	if(stageLayout_Button == null && createIfNeeded && isWithStage() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest()){
   		ICentralPanel centralPanel = getCentralPanel();
   		if(centralPanel != null && centralPanel instanceof FocXMLLayout){
   			FocXMLLayout xmlLayout = (FocXMLLayout) centralPanel;
@@ -2389,6 +2393,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 			focObj = ((WFTransactionWrapper)focObj).getFocObject();
 		}
 		return focObj;
+	}
+	
+	public WFConsole_Form getWorkflowConsole_ForUnitTesting() {
+		return worflowConsole;
 	}
 	
 	private WFConsole_Form getWorkflowConsole(boolean createIfNull) {

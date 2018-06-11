@@ -33,6 +33,10 @@ public class FocConstructor {
     init(focDesc, null, masterObject);
   }
   
+  public FocConstructor(FocDesc focDesc){
+    init(focDesc, null, null);
+  }
+  
   public void dispose(){
     focDesc = null;
     identifierValue = null;

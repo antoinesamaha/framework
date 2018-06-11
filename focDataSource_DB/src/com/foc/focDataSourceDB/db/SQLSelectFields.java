@@ -53,7 +53,7 @@ public class SQLSelectFields extends SQLRequest {
           request.append(",");
         }
         String fieldName = field.getDBName(); 
-        if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+        if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())){
         	fieldName = "\""+fieldName+"\"";
         }
         request.append(fieldName);

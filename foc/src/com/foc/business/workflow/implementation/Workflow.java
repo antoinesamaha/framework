@@ -606,7 +606,6 @@ public class Workflow {
 					if(targetStage.isApprovalStage() && getFocObject() instanceof IStatusHolder){
 						IStatusHolder statusHolder = (IStatusHolder) getFocObject();
 						statusHolder.getStatusHolder().setStatusToValidated();
-						
 					}
 					setCurrentStage(targetStage);
 					moveComment2LastComment();
