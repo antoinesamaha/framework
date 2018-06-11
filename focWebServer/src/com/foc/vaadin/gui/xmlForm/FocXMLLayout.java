@@ -2648,9 +2648,16 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 	
 	public ICentralPanel table_OpenItem_ShowForm(String tableName, ITableTree table, FocObject focObject, XMLViewKey xmlViewKey_Open, int viewContainer_Open) {
-		boolean focDataOwner = table_OpenItem_IsFocDataOwner(tableName, table, focObject); 
-		ICentralPanel panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), xmlViewKey_Open, focObject);
-		if(focDataOwner) panel.setFocDataOwner(focDataOwner);
+		boolean focDataOwner = table_OpenItem_IsFocDataOwner(tableName, table, focObject);
+		ICentralPanel panel = null;
+		try {
+			panel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) getMainWindow(), xmlViewKey_Open, focObject);
+		} catch (Exception ex) {
+			panel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey_Open, focObject);
+		}
+		if (focDataOwner) {
+			panel.setFocDataOwner(focDataOwner);
+		}
 		table.getTableTreeDelegate().openFormPanel(panel, viewContainer_Open);
 		return panel;
 	}
