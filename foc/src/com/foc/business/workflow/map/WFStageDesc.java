@@ -4,6 +4,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 
@@ -20,7 +21,8 @@ public class WFStageDesc extends FocDesc {
 		setGuiDetailsPanelClass(WFStageGuiDetailsPanel.class);
 		addReferenceField();
 		
-		addNameField();
+		FStringField nameField = addNameField();
+		nameField.setSize(200);
 		addDescriptionField();
 		
 		FBoolField bFld = new FBoolField("IS_APPROVAL", "In Approval", FLD_IS_APPROVAL, false);

@@ -72,6 +72,7 @@ public class ConfigInfo {
   private static boolean performanceActive    = false;
   private static boolean withLicenseBooking   = true;
   private static boolean showFullScreenButton = false;
+  private static boolean showSignatureButton  = true;
   private static String  codeProjectPath      = null;
   private static String  focDataServletURL    = null;
   private static String  focWebServerClassName = null;
@@ -266,6 +267,9 @@ public class ConfigInfo {
 
         str = getProperty("showFullScreenButton");
         showFullScreenButton = str != null ? str.compareTo("1") == 0 : false;//Default value is false showFullScreenButton
+
+        str = getProperty("showSignatureButton");
+        showSignatureButton = str != null ? str.compareTo("0") != 0 && !str.trim().toLowerCase().equals("false") : true;//Default value is true
 
         str = getProperty("allowAddInsideComboBox");
         allowAddInsideComboBox = str != null ? str.compareTo("1") == 0 : true;//Default value is true
@@ -669,5 +673,9 @@ public class ConfigInfo {
 
 	public static void setLanguage(String language) {
 		ConfigInfo.language = language;
+	}
+
+	public static boolean isShowSignatureButton() {
+		return showSignatureButton;
 	}
 }

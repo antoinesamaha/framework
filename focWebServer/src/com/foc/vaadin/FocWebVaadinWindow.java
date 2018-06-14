@@ -60,7 +60,6 @@ import com.vaadin.ui.Link;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
-
 import com.vaadin.ui.NativeButton;
 
 @SuppressWarnings("serial")
@@ -462,9 +461,11 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				addCompanyNameLabel();
 			}
 			
-			pendingSignature = new FSignatureButton(this);
-			adjustButton(pendingSignature, !FocWebApplication.getInstanceForThread().isMobile());
-
+			if(ConfigInfo.isShowSignatureButton()) {
+				pendingSignature = new FSignatureButton(this);
+				adjustButton(pendingSignature, !FocWebApplication.getInstanceForThread().isMobile());
+			}
+			
 			//NOTIF_DEV
 			/*
 			notificatonButton = new FNotificationButton(this);
@@ -774,6 +775,18 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	}
   }
   
+  protected int buttonTitleWithSigntureIndicator(FVButton menuButton, FocDesc focDesc) { 
+		String buttonTitle = menuButton.getCaption();
+		int count = WFTransactionWrapperList.getCountOfPendingSignatures(focDesc);
+		if(count > 0) {
+			buttonTitle += " - " + count;
+			menuButton.removeStyleName("foc-orange");
+			menuButton.addStyleName("foc-orange");
+		}
+		menuButton.setCaption(buttonTitle);
+		return count;
+  }
+	
   public NativeButton getAdminButton(){
     return admin;
   }

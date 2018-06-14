@@ -80,7 +80,9 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 		if(getMainWindow() != null && getMainWindow() instanceof FocWebVaadinWindow){
 			FocWebVaadinWindow focWebVaadinWindow = (FocWebVaadinWindow) getMainWindow();
 			FSignatureButton nativeButton = focWebVaadinWindow.getPendingSignatureButton();
-			nativeButton.reset(getWFTransactionWrapperList());
+			if(nativeButton != null) {
+				nativeButton.reset(getWFTransactionWrapperList());
+			}
 		}
 	}
 	

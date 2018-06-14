@@ -168,11 +168,11 @@ public class FVStageLayout_Button extends Button {
 	}
 	
 	private void selectCurrentStage(){
-		setCaption("Stage: "+getCurrentStageName());
+		setCaption(getCurrentStageName());
 	}
 	
 	private String getCurrentStageName(){
-		String  currentStageName = "Unsigned";
+		String  currentStageName = "Comment";
 		WFStage stage = getCurrentStage();
 		if(stage != null){
 			currentStageName = stage.getName();

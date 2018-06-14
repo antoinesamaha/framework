@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.foc.Globals;
-import com.foc.admin.FocUser;
 import com.foc.business.department.Department;
-import com.foc.business.workflow.WFOperator;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WorkflowTransactionFactory;
 import com.foc.business.workflow.implementation.IWorkflow;
@@ -64,36 +61,43 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		return focDesc == null || !focDesc.isListInCache();
 	}
 	
-	public void fill(){
-		for(int i=0; i<WorkflowTransactionFactory.getInstance().getFocDescCount(); i++){
-			FocDesc       focDesc      = (FocDesc)       WorkflowTransactionFactory.getInstance().getFocDescAt(i);
-			IWorkflowDesc workflowDesc = (IWorkflowDesc) WorkflowTransactionFactory.getInstance().getIWorkflowDesc(i);
+	private FocList getTransactionList(FocDesc focDesc) {
+		FocList       transList    = null;
+		IWorkflowDesc workflowDesc = (focDesc instanceof IWorkflowDesc) ? (IWorkflowDesc) focDesc : null;
+
+		if(!isListOwner(focDesc)){					
+			transList = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
+		}else{
+			ArrayList<SiteStageCouple> siteStageCoupleArrayList = WorkflowDesc.getSiteStageCoulpeArrayList(workflowDesc);
+			String  additionalWhere = buildWhere(workflowDesc, siteStageCoupleArrayList);
+			
+			transList = focDesc.newFocList();
+			transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
+			transList.loadIfNotLoadedFromDB();
+		}
+
+		return transList;
+	}
+	
+	private int countOrAddTransactionsToWraper(FocList transList, boolean addToWrapper) {
+		int count = 0;
+		if(transList != null && transList.getFocDesc() instanceof IWorkflowDesc){
+			IWorkflowDesc workflowDesc = (IWorkflowDesc) transList.getFocDesc();
 
 			WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(workflowDesc.iWorkflow_getDBTitle());
 			if(map != null){
-				FocList transList = null;
-				if(!isListOwner(focDesc)){					
-					transList = focDesc.getFocList(FocList.LOAD_IF_NEEDED);
-				}else{
-					ArrayList<SiteStageCouple> siteStageCoupleArrayList = WorkflowDesc.getSiteStageCoulpeArrayList(workflowDesc);
-					String  additionalWhere = buildWhere(workflowDesc, siteStageCoupleArrayList);
-					
-					transList = focDesc.newFocList();
-					transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
-					transList.loadIfNotLoadedFromDB();
-				}
 				
-				if(transList != null){
-					for(int t=0; t<transList.size(); t++){
-						FocObject focObj   = transList.getFocObject(t);
-						IWorkflow workflow = (IWorkflow) focObj; 
-						WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(map);
-						int titleIndex = result.getTitleIndex();
-						
-						if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
+				for(int t=0; t<transList.size(); t++){
+					FocObject focObj   = transList.getFocObject(t);
+					IWorkflow workflow = (IWorkflow) focObj; 
+					WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(map);
+					int titleIndex = result.getTitleIndex();
+					
+					if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
+						if(addToWrapper) {
 							WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
 							wrapper.setWorkflow(workflow);
-	//					  wrapper.setSignature(result.getSignature());
+		//					  wrapper.setSignature(result.getSignature());
 							
 							wrapper.setTitle(result.getSignature().getTitle(titleIndex));
 							wrapper.setIsOnBehalfOf(result.isOnBehalfOf());
@@ -102,8 +106,34 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		//					wrapper.setSignature(currentSignature);
 							add(wrapper);
 						}
+						count++;
 					}
-					
+				}
+			}
+		}
+		return count; 
+	}
+	
+	private int getCountOfPendingSignaturesForFocDesc(FocDesc focDesc) {
+		int count = 0;
+		FocList transList = getTransactionList(focDesc); 
+		if(transList != null) {
+			count = countOrAddTransactionsToWraper(transList, false);
+		}
+		return count;
+	}
+	
+	public void fill(){
+		for(int i=0; i<WorkflowTransactionFactory.getInstance().getFocDescCount(); i++){
+			FocDesc       focDesc      = (FocDesc)       WorkflowTransactionFactory.getInstance().getFocDescAt(i);
+			IWorkflowDesc workflowDesc = (IWorkflowDesc) WorkflowTransactionFactory.getInstance().getIWorkflowDesc(i);
+
+			WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(workflowDesc.iWorkflow_getDBTitle());
+			if(map != null){
+				FocList transList = getTransactionList(focDesc); 
+				
+				if(transList != null){
+					countOrAddTransactionsToWraper(transList, true);
 					originalListMap.put(workflowDesc.iWorkflow_getDBTitle(), transList);
 				}
 			}
@@ -419,4 +449,13 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 	private ArrayList<Integer> getVisibleArray(){
 		return getFocListFilter().getVisibleArray();
 	}
+
+	public static int getCountOfPendingSignatures(FocDesc focDesc) {
+		int count = 0;
+		WFTransactionWrapperList transactionWrapperList = new WFTransactionWrapperList();
+		count = transactionWrapperList.getCountOfPendingSignaturesForFocDesc(focDesc);
+		transactionWrapperList.dispose();
+		return count;
+	}
+
 }
