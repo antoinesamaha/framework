@@ -53,6 +53,7 @@ public class WorkflowDesc {
   //This is not an actual field or property it is simply interpreted by the focDesc upon getFocDataByPath
 	public static String FNAME_SIGNATURE     = "SIGNATURE";
 	public static String FNAME_CANCEL_REASON = "WF_CANCEL_REASON";
+	public static String FNAME_CURRENT_STAGE = "WF_CURRENT_STAGE";
 	
 	private IWorkflowDesc                workflowDesc  = null;
 	private HashMap<Integer, RightLevel> rightLevelMap = null;//Site ref to rightLevelMAP
@@ -102,7 +103,7 @@ public class WorkflowDesc {
 		int fldID = workflowDesc.iWorkflow_getFieldIDShift();
 
 		if(getFocDesc().getFieldByID(fldID+FLD_CURRENT_STAGE) == null){
-			FObjectField objFld = new FObjectField("WF_CURRENT_STAGE", "Workflow|Stage", fldID+FLD_CURRENT_STAGE, false, WFStageDesc.getInstance(), "WF_CURRENT_STAGE_");
+			FObjectField objFld = new FObjectField(FNAME_CURRENT_STAGE, "Workflow|Stage", fldID+FLD_CURRENT_STAGE, false, WFStageDesc.getInstance(), "WF_CURRENT_STAGE_");
 			objFld.setSelectionList(WFStageDesc.getList(FocList.NONE));
 			objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
 			objFld.setDisplayField(WFStageDesc.FLD_NAME);

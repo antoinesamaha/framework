@@ -326,10 +326,17 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
 //    }
 //  }
   
+  public void setSortingComparator(FocListOrderFocObject comparator){
+   	if(listOrder != null) listOrder.dispose();
+    listOrder = comparator;
+  }
+  
   public void setSortingExpression(String sortingExpression){
     if(getFocList() != null){
-    	if(listOrder != null) listOrder.dispose();
-    	listOrder = FocListOrderFocObject.newFocListOrder_ForExpression(getFocList().getFocDesc(), sortingExpression, true);
+    	FocListOrderFocObject newListOrder = FocListOrderFocObject.newFocListOrder_ForExpression(getFocList().getFocDesc(), sortingExpression, true);
+    	setSortingComparator(newListOrder);
+//    	if(listOrder != null) listOrder.dispose();
+//    	listOrder = FocListOrderFocObject.newFocListOrder_ForExpression(getFocList().getFocDesc(), sortingExpression, true);
     }
   }
   

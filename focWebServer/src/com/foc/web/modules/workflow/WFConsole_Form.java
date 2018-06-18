@@ -25,8 +25,9 @@ import com.foc.web.server.xmlViewDictionary.XMLView;
 @SuppressWarnings("serial")
 public class WFConsole_Form extends FocXMLLayout {
 	
-	private FocXMLLayout  logLayout    = null;
-	private ICentralPanel centralPanel = null;
+	private FocXMLLayout  logLayout     = null ;
+	private ICentralPanel centralPanel  = null ;
+	private boolean       forceHideSignCancel = false;
 
 	@Override
 	public void init(INavigationWindow window, XMLView xmlView, IFocData focData) {
@@ -110,14 +111,14 @@ public class WFConsole_Form extends FocXMLLayout {
 			WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
 			if(result != null && result.getTitleIndex() >= 0){
 				if(result.isOnBehalfOf()){
-					signButton.setCaption(isArabic() ? "امضاء بالنيابة" : "Sign PP");
-					signButton.setDescription(isArabic() ? "امضاء بالنيابة وبصفة " + result.getTitle() : "Sign per procurationement as "+result.getTitle());
+					signButton.setCaption(isArabic() ? "موافقة بالنيابة" : "Sign PP");
+					signButton.setDescription(isArabic() ? "موافقة بالنيابة وبصفة " + result.getTitle() : "Sign per procurationement as "+result.getTitle());
 				}else{
-					signButton.setCaption(isArabic() ? "امضاء" : "Sign");
-					signButton.setDescription(isArabic() ? "امضاء وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
+					signButton.setCaption(isArabic() ? "موافقة" : "Sign");
+					signButton.setDescription(isArabic() ? "موافقة وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
 				}
-				signButton.setVisible(true);
-				rejectButton.setVisible(true);
+				signButton.setVisible(!isForceHideSignCancel());
+				rejectButton.setVisible(!isForceHideSignCancel());
 			} else {
 				signButton.setVisible(false);
 				rejectButton.setVisible(false);
@@ -230,9 +231,9 @@ public class WFConsole_Form extends FocXMLLayout {
 			String yesCaption = "YES undo all signatures";
 			String cancelCaption = "Cancel";
 			if(isArabic()) {
-				message = "هل تريد فعلا الغاء كل الامضاآت السابقة واعادة المعاملة الى البدأ؟";
+				message = "هل تريد فعلا الغاء كل الموافقات السابقة واعادة المعاملة الى البدأ؟";
 				title = "تنبيه"+"!";
-				yesCaption = "نعم اريد الغاء الامضاآت";
+				yesCaption = "نعم اريد الغاء الموافقات";
 				cancelCaption = "لا اريد";
 			}
 	
@@ -263,9 +264,9 @@ public class WFConsole_Form extends FocXMLLayout {
 		String yesCaption = "YES undo my last signature";
 		String cancelCaption = "Cancel";
 		if(isArabic()) {
-			message = "هل تريد فعلا الغاء امضاأك الاخير؟";
+			message = "هل تريد فعلا الغاء موافقتك الاخيرة؟";
 			title = "تنبيه"+"!";
-			yesCaption = "نعم اريد الغاء امضائي الاخير";
+			yesCaption = "نعم اريد الغاء موافقتي الاخيرة";
 			cancelCaption = "لا اريد";
 		}
 		
@@ -297,6 +298,15 @@ public class WFConsole_Form extends FocXMLLayout {
 
 	public void setLogLayout(FocXMLLayout logLayout) {
 		this.logLayout = logLayout;
+	}
+
+	public boolean isForceHideSignCancel() {
+		return forceHideSignCancel;
+	}
+
+	public void setForceHideSignCancel(boolean forceHideSignCancel) {
+		this.forceHideSignCancel = forceHideSignCancel;
+		adjustButtonsVisibility();
 	}
 
 }

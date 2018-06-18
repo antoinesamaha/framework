@@ -2395,7 +2395,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		return focObj;
 	}
 	
-	public WFConsole_Form getWorkflowConsole_ForUnitTesting() {
+	public WFConsole_Form getWorkflowConsole() {
 		return worflowConsole;
 	}
 	

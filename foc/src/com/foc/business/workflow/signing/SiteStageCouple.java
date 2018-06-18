@@ -16,6 +16,12 @@ public class SiteStageCouple{
 		this.department = department;
 	}
 	
+	public void dispose() {
+		site = null;
+		stage = null;
+		department = null;
+	}
+	
 	public WFSite getSite(){
 		return site;
 	}

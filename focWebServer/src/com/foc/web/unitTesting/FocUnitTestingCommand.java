@@ -1878,7 +1878,7 @@ public class FocUnitTestingCommand {
       		if(stage != null && stage.isVisible()) stage.click();
       	}
       	if(validationLayout.isVisible_WorkflowConsole()) {
-      		WFConsole_Form console = validationLayout.getWorkflowConsole_ForUnitTesting();
+      		WFConsole_Form console = validationLayout.getWorkflowConsole();
       		if(console != null && console.isVisible() && console.getComponentByName("SIGN") != null && console.getComponentByName("SIGN").isVisible()) {
       			console.button_SIGN_Clicked(null);
       			getLogger().addInfo("Sign button Clicked");
