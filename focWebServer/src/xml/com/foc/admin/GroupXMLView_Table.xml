@@ -1,7 +1,7 @@
 <VerticalLayout captionMargin="0" margin="true">
     <ValidationSettings withApply="true" />
-    <GuiTable title="Invoices" name="INVOICE" dataPath="DATAROOT" width="100%" height="99%" duplicateEnabled="true">
-	    <TableColumn name="GROUP" captionProperty="NAME" caption="Group" />
+    <GuiTable title="View rights" name="INVOICE" dataPath="DATAROOT" width="100%" height="99%" duplicateEnabled="true" inLineEditable="true">
+	    <TableColumn name="GROUP" captionProperty="NAME" caption="Group" editable="false"/>
 	    <TableColumn name="STORAGE_NAME" caption="Storage" />
 	    <TableColumn name="CONTEXT" caption="Context" />
 	    <TableColumn name="TYPE" caption="Type" />

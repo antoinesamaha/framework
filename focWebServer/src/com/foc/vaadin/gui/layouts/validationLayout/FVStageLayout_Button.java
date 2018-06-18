@@ -1,5 +1,6 @@
 package com.foc.vaadin.gui.layouts.validationLayout;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
 import com.foc.business.workflow.implementation.IWorkflow;
@@ -41,6 +42,10 @@ public class FVStageLayout_Button extends Button {
 		focObject = null;
 	}
 
+	public boolean isArabic(){
+		return ConfigInfo.isArabic();
+	}
+	
 	public void buttonClicked() {
 		FVValidationLayout vLayout = getValidationLayout();
 		if(vLayout != null) {
@@ -172,7 +177,7 @@ public class FVStageLayout_Button extends Button {
 	}
 	
 	private String getCurrentStageName(){
-		String  currentStageName = "Comment";
+		String  currentStageName = isArabic() ? "ملاحظات" : "Comment";
 		WFStage stage = getCurrentStage();
 		if(stage != null){
 			currentStageName = stage.getName();
