@@ -14,4 +14,6 @@ public interface FocNotificationConst {
   public static final int EVT_TRANSACTION_CLOSE        = 6;
   public static final int EVT_TRANSACTION_CANCEL       = 7;
   public static final int EVT_SCHEDULED                = 8;
+  public static final int EVT_TRANSACTION_SIGN         = 9;
+  public static final int EVT_TRANSACTION_UNSIGN       =10;
 }

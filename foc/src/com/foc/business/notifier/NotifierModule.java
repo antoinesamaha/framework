@@ -7,7 +7,7 @@ import com.foc.menu.FMenuList;
 public class NotifierModule extends FocModule {
 	
 	public NotifierModule(){
-	  FocVersion.addVersion("NOTIFIER", "notfier 1.0", 1000);
+	  FocVersion.addVersion("NOTIFIER", "notfier 1.0", 1001);
 	}
 	
 	public void dispose(){

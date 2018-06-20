@@ -17,10 +17,12 @@ import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.FVForEachLayout;
+import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.vaadin.ui.Alignment;
 
 @SuppressWarnings("serial")
 public class WFConsole_Form extends FocXMLLayout {
@@ -123,6 +125,18 @@ public class WFConsole_Form extends FocXMLLayout {
 				signButton.setVisible(false);
 				rejectButton.setVisible(false);
 			}
+		}
+		
+		//When Arabic and the 3 buttons are visible make the undo my signature bigger 
+		if(isArabic() && undoButton != null && signButton != null && rejectButton != null
+				&& undoButton.isVisible() && signButton.isVisible() && rejectButton.isVisible()) {
+			FVHorizontalLayout hLay = (FVHorizontalLayout) getComponentByName("_BUTTONS_HORIZONTAL_LAYOUT");
+			hLay.setComponentAlignment(signButton, Alignment.BOTTOM_RIGHT);
+			signButton.setWidth("-1px");
+			hLay.setComponentAlignment(rejectButton, Alignment.BOTTOM_RIGHT);
+			rejectButton.setWidth("-1px");
+			hLay.setComponentAlignment(undoButton, Alignment.BOTTOM_RIGHT);
+			hLay.setExpandRatio(undoButton, 1);
 		}
 	}
 	

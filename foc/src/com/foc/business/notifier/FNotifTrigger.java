@@ -19,6 +19,7 @@ import com.foc.business.calendar.FCalendar;
 import com.foc.business.notifier.actions.FocNotifActionFactory;
 import com.foc.business.notifier.actions.IFocNotifAction;
 import com.foc.business.notifier.manipulators.IFocNotificationEventManipulator;
+import com.foc.business.workflow.map.WFStage;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -60,13 +61,18 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 			@FocChoice(id=EVT_TRANSACTION_APPROVE, title="Transaction Approve"),
 			@FocChoice(id=EVT_TRANSACTION_CLOSE, title="Transaction Close"),
 			@FocChoice(id=EVT_TRANSACTION_CANCEL, title="Traansaction Cancel"),
-			@FocChoice(id=EVT_SCHEDULED, title="Scheduled")
+			@FocChoice(id=EVT_SCHEDULED, title="Scheduled"),
+			@FocChoice(id=EVT_TRANSACTION_SIGN, title="Sign"),
+			@FocChoice(id=EVT_TRANSACTION_UNSIGN, title="Unsign")
 	})
 	public static final String FIELD_Event = "Event";
 
 	@FocTableName()
 	public static final String FIELD_TABLE_NAME = "TABLE_NAME";
 
+	@FocForeignEntity(table = "WF_STAGE")
+	public static final String FIELD_WFStage = "WFStage";
+	
 	@FocMultipleChoice(size = 5, choices = {
 			@FocChoice(id=FREQUENCY_ONE_TIME, title="One time"),
 			@FocChoice(id=FREQUENCY_DAILY, title="Daily")
@@ -252,7 +258,32 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
     }
     return sameTable;
   }
+
+  private boolean isSameTransactionAndStage(FocNotificationEvent event){
+    boolean sameTable = false;
+//    FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) notifier.getTemplate();
   
+    if (		event != null 
+    		&& 	event.getEventFocData() != null 
+    		&& 	event.getEventFocData().iFocData_getDataByPath("EVT_TRANSACTION") != null
+    		&& 	event.getEventFocData().iFocData_getDataByPath("EVT_STAGE") != null) {
+    	String evtTrans = (String) event.getEventFocData().iFocData_getDataByPath("EVT_TRANSACTION").iFocData_getValue();
+    	String evtStage = (String) event.getEventFocData().iFocData_getDataByPath("EVT_STAGE").iFocData_getValue();
+    	  
+      String  transaction = getTransaction();
+      WFStage stage       = getWFStage();
+      
+      if (!Utils.isStringEmpty(evtTrans) && evtTrans.equals(transaction)) {
+      	if(stage == null) {
+      		sameTable = true;
+      	} else if (stage.getName().equals(evtStage)) {
+      		sameTable = true;
+      	}
+      }
+    }
+    return sameTable;
+  }
+
 	public boolean isEventMatch(FocNotificationEvent eventFired) {
 		boolean match = false;
 		if(eventFired != null) {
@@ -262,6 +293,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 					case EVT_TABLE_DELETE:
 					case EVT_TABLE_UPDATE:
 						match = isSameDBTableAsFocObject(eventFired);
+						if(match) {
+							match = evaluateAdditionalCondition(eventFired); 
+						}
+						break;
+					case EVT_TRANSACTION_SIGN:
+					case EVT_TRANSACTION_UNSIGN:						
+						match = isSameTransactionAndStage(eventFired);
 						if(match) {
 							match = evaluateAdditionalCondition(eventFired); 
 						}
@@ -392,5 +430,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
 	public void setAdditionalCondition(String value) {
 		setPropertyString(FIELD_AdditionalCondition, value);
+	}
+
+	public WFStage getWFStage() {
+		return (WFStage) getPropertyObject(FIELD_WFStage);
+	}
+
+	public void setWFStage(WFStage value) {
+		setPropertyObject(FIELD_WFStage, value);
 	}
 }

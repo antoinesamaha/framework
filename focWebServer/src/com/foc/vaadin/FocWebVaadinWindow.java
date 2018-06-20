@@ -1,5 +1,6 @@
 package com.foc.vaadin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -1117,7 +1118,62 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			broadcastNotifyer = null;
 		}
 	}
+	
+	private ArrayList<ButtonWithPendingSignature> buttonsWithSignatureArray = null;
+	
+	public void refreshAllSignatureCounts() {
+		if(buttonsWithSignatureArray != null) {
+			for(int i=0; i<buttonsWithSignatureArray.size(); i++) {
+				ButtonWithPendingSignature button = buttonsWithSignatureArray.get(i);
+				if(button != null) {
+					button.refreshCaptionAndStyle();
+				}
+			}
+		}
+	}
 
+	public class ButtonWithPendingSignature extends FVButton {
+		private int     styleIndex          = 0;
+		private FocDesc focDescForSigntures = null;
+		private String  rawCaption          = "";
+		
+		public ButtonWithPendingSignature(String rawCaption, int styleIndex, FocDesc focDescForSigntures) {
+			super(rawCaption);
+			this.rawCaption = rawCaption;
+			this.styleIndex = styleIndex;
+			this.focDescForSigntures = focDescForSigntures;
+			refreshCaptionAndStyle();
+			
+			if(buttonsWithSignatureArray == null) buttonsWithSignatureArray = new ArrayList<ButtonWithPendingSignature>();
+			buttonsWithSignatureArray.add(this);
+		}
+		
+		public void dispose() {
+			if(buttonsWithSignatureArray != null) {
+				buttonsWithSignatureArray.remove(this);
+		  }
+			super.dispose();
+			focDescForSigntures = null;
+		}
+		
+		public void refreshCaptionAndStyle() {
+			int count = 0;
+			String caption = rawCaption;
+			if(focDescForSigntures != null) count = WFTransactionWrapperList.getCountOfPendingSignatures(focDescForSigntures);
+
+			if(count > 0) caption += " - "+count;
+			
+			setCaption(caption);
+			if(count > 0) {
+				removeStyleName(FocXMLGuiComponentStatic.getButtonStyleForIndex(styleIndex));
+				addStyleName("foc-button-orange");
+			} else {
+				removeStyleName("foc-button-orange");
+				addStyleName(FocXMLGuiComponentStatic.getButtonStyleForIndex(styleIndex));
+			}
+		}
+	}
+	
 //  public void updateChatAlertCount(){
 //    String caption = ""; 
 //    int count = FChatModule.unreadCount();

@@ -1528,6 +1528,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
     color: white;
     background: grey;
   }
+
+  .v-table-cell-content-red {
+    color: white;
+    background: red;
+  }
   
   .v-table-cell-content-highlight {
     color: black;
@@ -1541,6 +1546,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
   
   .v-table-cell-content-normal {
     color: black;
+  }
+
+  .v-table-cell-content-blue {
+    color: white;
+    background: blue;
   }
   
   /*

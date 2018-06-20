@@ -5,8 +5,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.foc.Globals;
+import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
 import com.foc.business.adrBook.AdrBookParty;
+import com.foc.business.notifier.FocNotificationConst;
+import com.foc.business.notifier.FocNotificationEvent;
+import com.foc.business.notifier.FocNotificationManager;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.status.StatusHolderDesc;
@@ -617,6 +621,12 @@ public class Workflow {
 				}
 			}			
 			getFocObject().validate(true);
+
+			//Triggering the signature Event 
+		  FocDataMap focDataMap = new FocDataMap(getFocObject());
+  		focDataMap.putString("EVT_TRANSACTION", getIWorkflowDesc().iWorkflow_getDBTitle());
+  		focDataMap.putString("EVT_STAGE", getCurrentStage() != null ? getCurrentStage().getName() : "");
+      FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_TRANSACTION_SIGN, focDataMap));
 		}
 	}
 	
@@ -636,6 +646,12 @@ public class Workflow {
 			for(int i=0; i<WFSignatureDesc.FLD_TITLE_COUNT; i++){
 				iworkflow.iWorkflow_getWorkflow().setHide(i, false);
 			}
+			
+			//Triggering the signature Event 
+		  FocDataMap focDataMap = new FocDataMap(getFocObject());
+  		focDataMap.putString("EVT_TRANSACTION", getIWorkflowDesc().iWorkflow_getDBTitle());
+  		focDataMap.putString("EVT_STAGE", getCurrentStage() != null ? getCurrentStage().getName() : "");
+      FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_TRANSACTION_UNSIGN, focDataMap));
 		}
 	}
 	
