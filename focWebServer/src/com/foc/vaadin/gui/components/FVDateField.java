@@ -67,7 +67,7 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
   		fields = dateString.split(" ");
   	}
 		
-		if(fields.length >= 3){
+		if(fields != null && fields.length >= 3){
 			try{
 				int day = Integer.parseInt(fields[0]);
 				int month = Integer.parseInt(fields[1]) - 1;
