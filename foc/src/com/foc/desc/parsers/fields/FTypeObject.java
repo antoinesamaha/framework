@@ -49,7 +49,12 @@ public class FTypeObject extends FocFieldTypAbstract<FocForeignEntity> {
   	if(!Utils.isStringEmpty(filterValue)){
   		focField.setSelectionFilter_Propertyvalue(filterValue);
   	}
-		
+
+  	String filterExpresion = a.listFilterExpression();
+  	if(!Utils.isStringEmpty(filterExpresion)){
+  		focField.setSelectionFilterExpression(filterExpresion);
+  	}
+
 		return focField;
 	}
 
