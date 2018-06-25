@@ -308,7 +308,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 				  	if(FCalendar.compareDatesRegardlessOfTime(getNextDate(), Globals.getApp().getSystemDate()) <= 0) {
 				  		if(FCalendar.compareTimesRegardlessOfDates(getNextTime(), Globals.getApp().getSystemDate()) <= 0) {
 				  			match = true;
-				  			reschedule();
+//				  			reschedule();
 				  		}
 				  	}
 						break;
@@ -333,7 +333,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	public void executeIfSameEvent(FocNotificationEvent eventFired) {
 		if(isEventMatch(eventFired)) {
-			execute(eventFired);
+			try {
+				execute(eventFired);
+				reschedule();
+				validate(false);
+			}catch(Exception e) {
+				Globals.logException(e);
+			}
 		}
 	}
 	
@@ -345,24 +351,29 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	  return eventManipulator; 
 	}
 	
-	public void reschedule() {
-		Date startingDate = getNextDate();
-		Time startingTime = getNextTime();
-		
-		if(FCalendar.isDateZero(startingDate)) {
-			startingDate = Globals.getApp().getSystemDate();
+	public boolean reschedule() {
+		boolean error = true;
+		if(getEvent() == EVT_SCHEDULED) {
+			error = false;
+			Date startingDate = getNextDate();
+			Time startingTime = getNextTime();
+			
+			if(FCalendar.isDateZero(startingDate)) {
+				startingDate = Globals.getApp().getSystemDate();
+			}
+	//		if(startingTime == null || startingTime.getTime() == 0) {
+	//			startingTime = new Time();
+	//		}
+			
+			int frequency = getFrequency();
+			if(frequency == FREQUENCY_DAILY) {
+				Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
+				cal.setTime(Globals.getApp().getSystemDate());
+				FCalendar.rollTheCalendar_Day(cal);
+				setNextDate(new Date(cal.getTime().getTime()));
+			}
 		}
-//		if(startingTime == null || startingTime.getTime() == 0) {
-//			startingTime = new Time();
-//		}
-		
-		int frequency = getFrequency();
-		if(frequency == FREQUENCY_DAILY) {
-			Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
-			cal.setTime(Globals.getApp().getSystemDate());
-			FCalendar.rollTheCalendar_Day(cal);
-			setNextDate(new Date(cal.getTime().getTime()));
-		}
+		return error;
 	}
 	
 	public FocDesc getReportConfigFocDesc() {
