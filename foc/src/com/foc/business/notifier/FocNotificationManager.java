@@ -19,8 +19,8 @@ public class FocNotificationManager {
     
     mapOfThreadsSuspendingTheirEvents = new HashMap<Long, FocNotificationEventArray>();
     
-    Thread thread = new Thread(new ScheduledThread());
-    thread.start();
+//    Thread thread = new Thread(new ScheduledThread());
+//    thread.start();
   }
 
   public void dispose() {
@@ -129,25 +129,5 @@ public class FocNotificationManager {
       notificationManager = Globals.getApp().getNotificationManager();
     }
     return notificationManager;
-  }
-  
-  public class ScheduledThread implements Runnable {
-
-		@Override
-		public void run() {
-			FocNotificationEvent event = new FocNotificationEvent(FNotifTrigger.EVT_SCHEDULED, null);
-			
-			while(true) {
-				try {
-					Thread.sleep(60000);
-		      for (int i = 0; i < eventNotifierList.size(); i++) {
-		        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
-		        trigger.executeIfSameEvent(event);
-		      }
-				}catch(Exception e) {
-					Globals.logExceptionWithoutPopup(e);
-				}
-			}
-		}
   }
 }

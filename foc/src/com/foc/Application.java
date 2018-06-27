@@ -82,6 +82,8 @@ import com.foc.desc.parsers.xml.XMLFocDesc;
 import com.foc.fUnit.FocTestSuite;
 import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
+import com.foc.log.FocLogEvent;
+import com.foc.log.FocLogListener;
 import com.foc.menu.FMenu;
 import com.foc.menu.FMenuItem;
 import com.foc.menu.FMenuList;
@@ -158,6 +160,8 @@ public class Application {
   
   private RootGarbageClass rgc = null;
   private FocTestSuite focTestSuite = null;
+  
+  private ArrayList<FocLogListener> logListenerArray = null;
   
   public static final int LOGIN_WAITING = 1;
   public static final int LOGIN_VALID   = 2;
@@ -2100,4 +2104,23 @@ public class Application {
 		return reportConfigFocDescMap != null ? reportConfigFocDescMap.get(context) : null;
 	}
 
+	public void addLogListener(FocLogListener logListener) {
+		if(logListener != null) {
+			if(logListenerArray == null) {
+				logListenerArray = new ArrayList<FocLogListener>();
+			}
+			logListenerArray.add(logListener);
+		}
+	}
+	
+	public void logListenerNotification(FocLogEvent event) {
+		if(logListenerArray != null) {
+			for(int i=0; i<logListenerArray.size(); i++) {
+				FocLogListener listener = logListenerArray.get(i);
+				if(listener != null) {
+					listener.addLogEvent(event);
+				}
+			}
+		}
+	}
 }

@@ -567,7 +567,7 @@ public class AdminWebModule extends FocWebModule {
       
       @Override
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
-        INavigationWindow mainWindow = (INavigationWindow) navigationWindow;      
+//        INavigationWindow mainWindow = (INavigationWindow) navigationWindow;      
         
         String beforeMessage = Globals.logMemory("Before freeing ");
 

@@ -13,6 +13,7 @@ import com.foc.annotations.model.FocJoin;
 import com.foc.annotations.model.FocWorkflow;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.parsers.fields.FocFieldFactory;
 import com.foc.desc.parsers.fields.IFocFieldType;
@@ -183,23 +184,18 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	    		}
 	    	}
 	      
+	    	//We also check fields from super classes
 	      Field[] fields = objClass.getFields();
-	      for(Field f : fields){
-	      	ann = f.getAnnotations();
-	      	for(Annotation a : ann){
-	      		String simpleName = a.annotationType().getSimpleName();
-	      		if(simpleName.startsWith("Foc") && simpleName.length() > 3){
-	      			String fieldTypeName = simpleName.substring(3);
-	
-	  	      	IFocFieldType fieldType = FocFieldFactory.getInstance().get(fieldTypeName);
-	  	      	if(fieldType != null){
-		  	      	FField focField = fieldType.newFField(null, f, a);
-		  	      	focField.setId(focDesc.nextFldID());
-		  	      	focDesc.addField(focField);
-	  	      	}
-	      		}
-	      	}
+	      readFieldArray(fields);
+
+	    	/*
+	    	Class<?> currentClass = objClass;
+	      while (currentClass != null && currentClass != FocObject.class && currentClass != Object.class) {
+		      Field[] fields = currentClass.getFields();
+		      readFieldArray(fields);
+		      currentClass = currentClass.getSuperclass();
 	      }
+	      */
 	      
 	      String reportContext = entity.reportContext();
 	      if(!Utils.isStringEmpty(reportContext)) {
@@ -211,4 +207,24 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
       Globals.logException(e);
     }
 	}
+
+	private void readFieldArray(Field[] fields) {
+	  for(Field f : fields){
+	  	Annotation[] ann = f.getAnnotations();
+	  	for(Annotation a : ann){
+	  		String simpleName = a.annotationType().getSimpleName();
+	  		if(simpleName.startsWith("Foc") && simpleName.length() > 3){
+	  			String fieldTypeName = simpleName.substring(3);
+	
+	      	IFocFieldType fieldType = FocFieldFactory.getInstance().get(fieldTypeName);
+	      	if(fieldType != null){
+		      	FField focField = fieldType.newFField(null, f, a);
+		      	focField.setId(focDesc.nextFldID());
+		      	focDesc.addField(focField);
+	      	}
+	  		}
+	  	}
+	  }
+	}
+
 }

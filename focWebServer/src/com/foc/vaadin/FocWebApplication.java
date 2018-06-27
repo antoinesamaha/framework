@@ -44,6 +44,8 @@ public abstract class FocWebApplication extends UI {
 
 	public static final String ATT_WEB_SESSION = "FOC_WEB_SESSION";
 	public static final String URL_PARAMETER_KEY_UNIT_SUITE = "unitsuite";
+
+	private FocWebSession focSession_ForNonVaadinAndHTTP = null;
 	
 	private HttpSession httpSession = null;
 	private boolean isMobile = false;
@@ -403,7 +405,7 @@ public abstract class FocWebApplication extends UI {
   		focWebSession = (FocWebSession) getHttpSession().getAttribute(ATT_WEB_SESSION);
   	}else{
   		VaadinSession vaadinSession = getSession();
-    	focWebSession = vaadinSession != null ? (FocWebSession) vaadinSession.getAttribute(ATT_WEB_SESSION) : null;
+    	focWebSession = vaadinSession != null ? (FocWebSession) vaadinSession.getAttribute(ATT_WEB_SESSION) : focSession_ForNonVaadinAndHTTP;
   	}
     return focWebSession;
   }
@@ -418,6 +420,8 @@ public abstract class FocWebApplication extends UI {
 //  		setFocWebSession(getHttpSession(), focSession);
   	}else if(getHttpSession() != null){
   		getHttpSession().setAttribute(ATT_WEB_SESSION, focSession);
+  	} else {
+  		focSession_ForNonVaadinAndHTTP = focSession;
   	}
   }
   
@@ -427,7 +431,7 @@ public abstract class FocWebApplication extends UI {
   		httpSession.setAttribute(ATT_WEB_SESSION, focSession);	
   	}
   }
-
+  
   private synchronized void startApplicationServer(){
   	FocWebServer server = null;
 

@@ -7,9 +7,10 @@ import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.map.WFStage;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
+import com.foc.log.FocLogEvent;
 import com.foc.property.FObject;
 
-public class WFLog extends FocObject {
+public class WFLog extends FocObject implements FocLogEvent {
 	
 	public WFLog(FocConstructor constr){
 		super(constr);
@@ -82,7 +83,6 @@ public class WFLog extends FocObject {
 		return getPropertyString(WFLogDesc.FLD_COMMENT);
 	}
 	
-	
 	public void setPreviousStage(WFStage stage){
 		setPropertyObject(WFLogDesc.FLD_PREVIOUS_STAGE, stage);
 	}
@@ -114,4 +114,64 @@ public class WFLog extends FocObject {
   public void setSignedTransactionXML(String xmlContent){
     setPropertyString(WFLogDesc.FLD_SIGNED_TRANSACTION_XML, xmlContent);
   }
+
+	@Override
+	public String logEvent_GetEntityName() {
+		return workflow_getTransactionTitle();
+	}
+
+	@Override
+	public long logEvent_GetEntityReference() {
+		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
+		long ref = prop != null ? prop.getLocalReferenceInt() : null;
+		return ref;
+	}
+
+	@Override
+	public String logEvent_GetEntityCompanyName() {
+		FocObject master = getMasterObject();
+		String compName = master != null && master.getCompany() != null ? master.getCompany().getName() : null;   
+		return compName;
+	}
+
+	@Override
+	public String logEvent_GetEntitySiteName() {
+		FocObject master = getMasterObject();
+		String compName = master != null && master.workflow_GetSite() != null ? master.workflow_GetSite().getName() : null;   
+		return compName;
+	}
+
+	@Override
+	public String logEvent_GetEntityCode() {
+		FocObject master = getMasterObject();
+		String code = master != null && master.code_getCode() != null ? master.code_getCode() : null;   
+		return code;
+	}
+
+	@Override
+	public Date logEvent_GetEntityDate() {
+		FocObject master = getMasterObject();
+		return master != null ? master.getDate() : null;   
+	}
+
+	@Override
+	public int logEvent_GetEventType() {
+		return getEventType();
+	}
+
+	@Override
+	public String logEvent_GetUsername() {
+		FocUser user = getUser();
+		return user != null ? user.getFullName() : "";
+	}
+
+	@Override
+	public java.util.Date logEvent_GetDateTime() {
+		return getDateTime();
+	}
+
+	@Override
+	public String logEvent_GetSQLRequests() {
+		return null;
+	}
 }

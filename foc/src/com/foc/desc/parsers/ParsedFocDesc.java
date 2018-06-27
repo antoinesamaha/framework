@@ -52,10 +52,10 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
 		return 2000;
 	}
 
-	@Override
-	public String iWorkflow_getDBTitle() {
-		return getStorageName();
-	}
+//	@Override
+//	public String iWorkflow_getDBTitle() {
+//		return getStorageName();
+//	}
 
 	@Override
 	public String iWorkflow_getCodePrefix() {

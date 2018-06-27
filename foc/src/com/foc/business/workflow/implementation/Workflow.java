@@ -100,6 +100,7 @@ public class Workflow {
 			
 		}
 		log.validate(true);
+		if(Globals.getApp() != null) Globals.getApp().logListenerNotification(log);
 	}
 	
 	public void addLogLine(){
@@ -156,6 +157,7 @@ public class Workflow {
 				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
 				log.validate(false);
 				ref = log.getReferenceInt();
+				if(Globals.getApp() != null) Globals.getApp().logListenerNotification(log);
 				log.dispose();
 			}
 		} else {
@@ -211,6 +213,7 @@ public class Workflow {
 		log.setDateTime(Globals.getDBManager().getCurrentTimeStamp_AsTime());
 		log.setDescription(description);
 		log.validate(true);
+		if(Globals.getApp() != null) Globals.getApp().logListenerNotification(log);
 	}
 	
 	public WFLog getSignatureAt(int index){

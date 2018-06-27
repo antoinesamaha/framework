@@ -258,8 +258,8 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				}
 				afterGoBack();
 			}else{
-				if(ConfigInfo.isLogMemoryUsage() && newCentralPanel != null && newCentralPanel.getXMLView() != null){
-					logMemory("Entry", newCentralPanel.getXMLView().getXmlViewKey());
+				if(newCentralPanel != null && newCentralPanel.getXMLView() != null){
+					logMemory("Entry to", newCentralPanel.getXMLView().getXmlViewKey());
 				}
 
 				removeGuiCentralComponent(currentCentralPanelContent);
@@ -429,15 +429,16 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 			if(Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null){
 				userForThisSession = Globals.getApp().getUser_ForThisSession().getName();
 			}
-			String message = exitEntry+"From View > User: " + userForThisSession +", XmlViewKey: " + key.getStringKey();
-			Globals.logMemoryNewThread(message);
+			String message = exitEntry+" View " + key.getStringKey() + " User: " + userForThisSession;
+			Globals.logString(message);//Here we write who entered a exited what form
+			Globals.logMemoryNewThread("");//Here we write every 10min minimum the memory log
 		}
 	}
 	
 	@Override
 	public void goBack(ICentralPanel iCentralPanelToRemove){
 		XMLViewKey exitingKey = null;
-		if(ConfigInfo.isLogMemoryUsage() && iCentralPanelToRemove != null && iCentralPanelToRemove.getXMLView() != null){
+		if(iCentralPanelToRemove != null && iCentralPanelToRemove.getXMLView() != null){
 			exitingKey = iCentralPanelToRemove.getXMLView().getXmlViewKey();
 		}
 		changeCentralPanelContent(iCentralPanelToRemove, null, false);
@@ -445,7 +446,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		afterGoBack();
 		
 		if(exitingKey != null){
-			logMemory("Exit", exitingKey);
+			logMemory("Exit from ", exitingKey);
 		}
 	}
 

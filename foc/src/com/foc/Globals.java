@@ -279,16 +279,21 @@ public class Globals{
     NumberFormat _numFmt = NumberFormat.getNumberInstance();
     _numFmt.format(total);
     
-    str = str+"Used = "+ _numFmt.format(total) + " - " + _numFmt.format(free) + " = "+_numFmt.format(used); 
+    str = str+" Used = "+ _numFmt.format(total) + " - " + _numFmt.format(free) + " = "+_numFmt.format(used); 
     logString(str);
     return str;
   }
   
+  private static long lastMemoryCheck = 0;
   public static void logMemoryNewThread(String str){
   	if(ConfigInfo.isLogMemoryUsage() && str != null){
-  		MemoryLogRunnable runnable = new MemoryLogRunnable(str);
-	  	Thread t = new Thread(runnable);
-	  	t.start();
+  		long nowTime = System.currentTimeMillis();
+  		if(lastMemoryCheck == 0 || nowTime - lastMemoryCheck > 10 * 60 * 1000) {
+  			lastMemoryCheck = nowTime;
+	  		MemoryLogRunnable runnable = new MemoryLogRunnable(str);
+		  	Thread t = new Thread(runnable);
+		  	t.start();
+  		}
   	}
   }
   
@@ -495,8 +500,8 @@ public class Globals{
 				if(message != null){
 					//Thread.sleep(1000);//20150822
 					System.gc();//20150822
-					String memoryMeasures = Globals.logMemory("");
-					Globals.logString("MEMORY LOG : "+message+" > "+memoryMeasures);
+					String memoryMeasures = Globals.logMemory("MEMORY LOG: ");
+//					Globals.logString("MEMORY LOG : "+message+" > "+memoryMeasures);
 				}
 			}catch (Exception e){
 				Globals.logException(e);//20150822

@@ -18,6 +18,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.property.FProperty;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -351,18 +352,20 @@ public class SQLFilter {
         	fieldName = getJoinMap().getMainTableAlias()+"."+fieldName; 
         }
       	String expression = CompanyDesc.getCompanyFilter_IfNeeded(fieldName, companyField.isMandatory());
-        if(atLeastOneFieldAdded){
-        	requestBuffer.append(" and (");
-        }else{
-        	if(withWhere){
-        		requestBuffer.append(" WHERE (");
-        	}else{
-        		requestBuffer.append(" (");
-        	}
-        }
-        requestBuffer.append(expression);
-        requestBuffer.append(")");
-        atLeastOneFieldAdded = true;
+      	if(!Utils.isStringEmpty(expression)) {
+	        if(atLeastOneFieldAdded){
+	        	requestBuffer.append(" and (");
+	        }else{
+	        	if(withWhere){
+	        		requestBuffer.append(" WHERE (");
+	        	}else{
+	        		requestBuffer.append(" (");
+	        	}
+	        }
+	        requestBuffer.append(expression);
+	        requestBuffer.append(")");
+	        atLeastOneFieldAdded = true;
+      	}        
         
         if(requestFocDesc.workflow_IsWorkflowSubject() && 
         		(UserSession.getInstanceForThread() == null || !UserSession.getInstanceForThread().isSimulation())){

@@ -41,12 +41,14 @@ import com.foc.saas.manager.SaaSConfig;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocMobileModule;
+import com.foc.vaadin.FocThreadWithSession;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.FocWebModule;
 import com.foc.vaadin.IApplicationConfigurator;
 import com.foc.vaadin.IFocMobileModule;
 import com.foc.vaadin.IFocWebModule;
+import com.foc.vaadin.NotificationScheduledThread;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationMore;
 import com.foc.vaadin.gui.layouts.validationLayout.IValidationLayoutMoreMenuFiller;
 import com.foc.web.modules.admin.AdminWebModule;
@@ -102,6 +104,9 @@ public class FocWebServer implements Serializable {
 		}
 
 		declareModules_IfNeeded();
+		
+		FocThreadWithSession scheduledBatchThread = new FocThreadWithSession(FocWebApplication.getInstanceForThread(), this, new NotificationScheduledThread());
+		scheduledBatchThread.start();
 		
 		if(SaaSConfig.getInstance() != null){
 			SaaSConfig.getInstance().adaptUserRights();

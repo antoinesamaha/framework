@@ -599,7 +599,7 @@ public class FObjectField extends FField {
 		if(!Utils.isStringEmpty(storageName) && getFocDesc() == null){
 			FocDesc focDesc = Globals.getApp().getFocDescByName(storageName);
 			if(focDesc == null){
-				Globals.showNotification("Table FocDesc No Found", "TableName:"+storageName, IFocEnvironment.TYPE_ERROR_MESSAGE);
+				Globals.showNotification("Table FocDesc Not Found", "TableName:"+storageName, IFocEnvironment.TYPE_ERROR_MESSAGE);
 				focDesc = Globals.getApp().getFocDescByName(storageName);
 			}else{
 				setFocDesc(focDesc);

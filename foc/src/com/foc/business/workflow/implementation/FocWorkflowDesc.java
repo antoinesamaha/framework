@@ -1,5 +1,6 @@
 package com.foc.business.workflow.implementation;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 
@@ -120,11 +121,6 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
     return workflowDesc;
   }
 
-//  @Override
-//  public String iWorkflow_getDBTitle() {
-//    return "CheckDeposit";
-//  }
-
   @Override
   public String iWorkflow_getTitle() {
   	if(!Utils.isStringEmpty(workflowTitle)){
@@ -153,6 +149,9 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 	
 	@Override
 	public String iWorkflow_getDBTitle() {
+		if(Utils.isStringEmpty(workflowCode)) {
+			return getStorageName();
+		}
 		return workflowCode;
 	}
 	
@@ -191,22 +190,28 @@ public abstract class FocWorkflowDesc extends FocDesc implements IStatusHolderDe
 	}
 	
 	private void createListenersForPropertyChangedMethods(){
-		Method[] declaredMethods = getFocObjectClass().getDeclaredMethods();
-		for(int i=0; i<declaredMethods.length; i++){
-			Method method = declaredMethods[i];
-			if(method.getName().startsWith("propertyChanged_")){
-				String propertyName = method.getName().substring("propertyChanged_".length());
-				if(!Utils.isStringEmpty(propertyName)){
-					FField fld = getFieldByName(propertyName);
-					if(fld != null){
-						Parameter[] params = method.getParameters();
-						if(params.length == 1 && params[0].getType() == FProperty.class){
-							fld.addListener(new PropertyChangedMethodListener(method));
-						}
-					}
-				}
-			}
-		}
+		int level = 0;
+  	Class<?> currentClass = getFocObjectClass();
+    while (currentClass != null && currentClass != FocObject.class && currentClass != Object.class) {
+  		Method[] declaredMethods = currentClass.getDeclaredMethods();
+  		for(int i=0; i<declaredMethods.length; i++){
+  			Method method = declaredMethods[i];
+  			if(method.getName().startsWith("propertyChanged_")){
+  				String propertyName = method.getName().substring("propertyChanged_".length());
+  				if(!Utils.isStringEmpty(propertyName)){
+  					FField fld = getFieldByName(propertyName);
+  					if(fld != null){
+  						Parameter[] params = method.getParameters();
+  						if(params.length == 1 && params[0].getType() == FProperty.class){
+  							fld.addListener(new PropertyChangedMethodListener(method));
+  						}
+  					}
+  				}
+  			}
+  		}
+      currentClass = currentClass.getSuperclass();
+      level++;
+    }
 	}
 	
 	public class PropertyChangedMethodListener implements FPropertyListener {
