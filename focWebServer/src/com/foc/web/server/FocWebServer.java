@@ -104,10 +104,7 @@ public class FocWebServer implements Serializable {
 		}
 
 		declareModules_IfNeeded();
-		
-		FocThreadWithSession scheduledBatchThread = new FocThreadWithSession(FocWebApplication.getInstanceForThread(), this, new NotificationScheduledThread());
-		scheduledBatchThread.start();
-		
+				
 		if(SaaSConfig.getInstance() != null){
 			SaaSConfig.getInstance().adaptUserRights();
 		}
@@ -227,6 +224,9 @@ public class FocWebServer implements Serializable {
 		fillDataDictionaryWithApplicationParameters();
 		
 		setReady(true);
+
+		FocThreadWithSession scheduledBatchThread = new FocThreadWithSession(FocWebApplication.getInstanceForThread(), this, new NotificationScheduledThread());
+		scheduledBatchThread.start();
 
 		/*
 		Binding binding = new Binding();
