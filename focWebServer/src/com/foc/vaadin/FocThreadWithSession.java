@@ -2,6 +2,8 @@ package com.foc.vaadin;
 
 import java.lang.reflect.Constructor;
 
+import org.apache.tools.ant.taskdefs.Sleep;
+
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.web.server.FocWebServer;
@@ -28,6 +30,15 @@ public class FocThreadWithSession extends Thread {
 	}
 	
 	public void run() {
+		try{
+			sleep(120000);
+			while(!webServer.isReady()) {
+				sleep(10000);
+			}
+		}catch (InterruptedException e){
+			Globals.logException(e);
+		}
+		
 		initSession();
 		
 		if(runnable != null) runnable.run();
