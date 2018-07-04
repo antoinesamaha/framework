@@ -1077,18 +1077,22 @@ public class FocUnitTestingCommand {
   	boolean nodeCreated = !getLogger().openCommand("Table open item : "+tableName);
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
-    Table table = (Table) tableWrapper.getTableOrTree();
-
-    if(table.getValue() == null){
-      getLogger().addFailure("No item selected in table : " + tableName + ".");
-    }else{
-      FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
-      if (obj != null) {
-        ((ITableTree) table).getTableTreeDelegate().open(obj);
-        getLogger().addInfo("Opening selected item in table " + tableName + ".");
-      } else {
-        getLogger().addFailure("No object selected. Could not open in table " + tableName + ".");
-      }
+    if(tableWrapper == null) {
+    	getLogger().addFailure("Table "+tableName+" not found");
+    } else {
+	    Table table = (Table) tableWrapper.getTableOrTree();
+	
+	    if(table.getValue() == null){
+	      getLogger().addFailure("No item selected in table : " + tableName + ".");
+	    }else{
+	      FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
+	      if (obj != null) {
+	        ((ITableTree) table).getTableTreeDelegate().open(obj);
+	        getLogger().addInfo("Opening selected item in table " + tableName + ".");
+	      } else {
+	        getLogger().addFailure("No object selected. Could not open in table " + tableName + ".");
+	      }
+	    }
     }
     if(nodeCreated) getLogger().closeNode();
   }
