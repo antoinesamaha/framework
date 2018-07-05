@@ -19,6 +19,7 @@ import com.foc.property.FBlobMediumProperty;
 import com.foc.property.FCloudStorageProperty;
 import com.foc.property.FImageProperty;
 import com.foc.property.FProperty;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -244,6 +245,10 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 	@Override
 	public void imageReceived(SucceededEvent event, InputStream image) {
 		if(cloudStorageProperty != null){
+			if(event != null && !Utils.isStringEmpty(event.getFilename())) {
+				cloudStorageProperty.setFileNameInProperty(event.getFilename());
+				cloudStorageProperty.generateKey();
+			}
 			cloudStorageProperty.setObject(image);
 		}else{
 			BufferedImage bufferedImage = null;
