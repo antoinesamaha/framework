@@ -2,6 +2,7 @@ package com.foc.api;
 
 import java.sql.Date;
 
+//Interface for FocObject 
 public interface IFocObject {
   public String     iFocObject_getPropertyString(String fieldName);
   public void       iFocObject_setPropertyString(String fieldName, String value);
