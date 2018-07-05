@@ -4110,7 +4110,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					if(neverLockWhateverTheStage){
 						allowModif = true;
 					}else{
-						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null && workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck();//Only the user waiting to sign can edit
+						WFMap map = workflow_getTransactionConfig().getWorkflowMap();
+						allowModif =	 workflow.iWorkflow_getWorkflow().getCurrentStage() == null 
+												&& (    workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck()/*Only the user waiting to sign can edit*/
+												     || (map.getTitleInitialEdit() != null && map.getTitleInitialEdit().equals(Globals.getApp().getCurrentTitle()))
+												   );
 					}
 //						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null || workflow_NeedsSignatureOfThisUser();//Only the user waiting to sign can edit
 				}
