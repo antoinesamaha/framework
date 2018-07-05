@@ -61,7 +61,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		return focDesc == null || !focDesc.isListInCache();
 	}
 	
-	private FocList getTransactionList(FocDesc focDesc) {
+	public FocList getTransactionList(FocDesc focDesc) {
 		FocList       transList    = null;
 		IWorkflowDesc workflowDesc = (focDesc instanceof IWorkflowDesc) ? (IWorkflowDesc) focDesc : null;
 
@@ -96,6 +96,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 					if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
 						if(addToWrapper) {
 							WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
+							wrapper.setCreated(false);//If we keep it created then when the user opens a wrapper form and clacels it gets removed from the foclist
 							wrapper.setWorkflow(workflow);
 		//					  wrapper.setSignature(result.getSignature());
 							
@@ -123,6 +124,17 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		}
 		return count;
 	}
+
+	public void fillWrapperListForFocDesc(FocDesc focDesc) {
+		if(focDesc != null && focDesc instanceof IWorkflowDesc) {
+			FocList transList = getTransactionList(focDesc);
+			
+			if(transList != null){
+				countOrAddTransactionsToWraper(transList, true);
+				originalListMap.put(((IWorkflowDesc)focDesc).iWorkflow_getDBTitle(), transList);
+			}
+		}
+	}
 	
 	public void fill(){
 		for(int i=0; i<WorkflowTransactionFactory.getInstance().getFocDescCount(); i++){
@@ -131,12 +143,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 
 			WFMap map = WFTransactionConfigDesc.getMap_ForTransaction(workflowDesc.iWorkflow_getDBTitle());
 			if(map != null){
-				FocList transList = getTransactionList(focDesc); 
-				
-				if(transList != null){
-					countOrAddTransactionsToWraper(transList, true);
-					originalListMap.put(workflowDesc.iWorkflow_getDBTitle(), transList);
-				}
+				fillWrapperListForFocDesc(focDesc); 
 			}
 		}
 			
@@ -451,6 +458,11 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		return getFocListFilter().getVisibleArray();
 	}
 
+	@Override
+	public synchronized void remove(FocObject focObj) {
+		super.remove(focObj);
+	}
+	
 	public static int getCountOfPendingSignatures(FocDesc focDesc) {
 		int count = 0;
 		WFTransactionWrapperList transactionWrapperList = new WFTransactionWrapperList();

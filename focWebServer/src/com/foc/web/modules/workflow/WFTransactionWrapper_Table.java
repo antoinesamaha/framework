@@ -3,15 +3,20 @@ package com.foc.web.modules.workflow;
 import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.business.workflow.signing.WFTransactionWrapperList;
 import com.foc.desc.FocObject;
+import com.foc.list.FocList;
 import com.foc.vaadin.FSignatureButton;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.web.gui.INavigationWindow;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.ColumnGenerator;
 
 @SuppressWarnings("serial")
 public class WFTransactionWrapper_Table extends FocXMLLayout{
@@ -107,6 +112,62 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 			if(getTableWrapperLayout() != null && getTableWrapperLayout().getTableTreeDelegate() != null){
 				getTableWrapperLayout().getTableTreeDelegate().open(wfTransactionWrapper);
 			}
+		}
+	}
+	
+	@Override
+	public ColumnGenerator table_getGeneratedColumn(String tableName, final FVTableColumn tableColumn) {
+		ColumnGenerator columnGenerator = null;
+		if (    tableColumn != null 
+				&&  tableColumn.getName() != null 
+				&&  tableColumn.getName().equals("SIGN")) {
+			
+			columnGenerator = new ColumnGenerator() {
+				@Override
+				public Object generateCell(Table source, Object itemId, Object columnId) {
+					long objId = (Long) itemId;
+					
+					FocList list = getFocList();
+					WFTransactionWrapper transaction = (WFTransactionWrapper) list.searchByReference(objId);
+					
+					if (transaction != null) {
+						SignButton button = new SignButton(transaction);
+						return button;
+					}
+					
+					return null;
+				}
+			};
+			
+		}
+
+		return columnGenerator;
+	}
+
+	public class SignButton extends FVButton {
+
+		private WFTransactionWrapper wrapper = null;
+		
+		public SignButton(WFTransactionWrapper wrapper) {
+			super("مواققة");
+			this.wrapper = wrapper;
+			setWidth("100%");
+			addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					wrapper.sign();
+					refresh();
+					INavigationWindow window = getMainWindow();
+					if(window != null && window instanceof FocWebVaadinWindow) {
+						((FocWebVaadinWindow)window).refreshAllSignatureCounts();
+					}
+				}
+			});
+		}
+		
+		public void dispose() {
+			super.dispose();
+			wrapper = null;
 		}
 	}
 }

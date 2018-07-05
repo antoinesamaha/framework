@@ -38,7 +38,7 @@ public class WFTransactionWrapperDesc extends FocDesc {
 		cFld = new FStringField("CODE", "Code", FLD_TRANSACTION_CODE, false, 20);
 		addField(cFld);
 
-		cFld = new FStringField("DESCRIPTION", "Description", FLD_TRANSACTION_DESCRIPTION, false, 80);
+		cFld = new FStringField("DESCRIPTION", "Description", FLD_TRANSACTION_DESCRIPTION, false, 1000);
 		addField(cFld);
 
 		FObjectField oFld = new FObjectField("CURRENT_STAGE", "Current Stage", FLD_TRANSACTION_CURRENT_STAGE, WFStageDesc.getInstance());
