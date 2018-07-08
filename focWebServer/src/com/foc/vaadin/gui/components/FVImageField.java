@@ -179,33 +179,54 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
     return embedded;
   }
   
+  private void adjustDownloadButtonVisibility(FProperty property) {
+		if(property != null && property.getFocField() != null){
+			boolean visible = false;
+			if(property instanceof FCloudStorageProperty) {
+				visible = !property.getFocObject().isCreated() && ((FCloudStorageProperty)property).doesFileExist();
+			}else if(property instanceof FImageProperty){
+				visible = true;
+			}else if(property instanceof FBlobMediumProperty){
+				visible = false;
+			}	
+			if(downloadButton != null) downloadButton.setVisible(visible);
+		}
+  }
+  
 	public void setProperty(FProperty property){
 		if(property != null && property.getFocField() != null){
 			if(property instanceof FCloudStorageProperty){
 				setCloudStorageProperty((FCloudStorageProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(true);
 			}else if(property instanceof FImageProperty){
 				this.setImageProperty((FImageProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(true);
 			}else if(property instanceof FBlobMediumProperty){
 				this.setBlobMediumProperty((FBlobMediumProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(false);				
 			}	
 		}
+		
+		adjustDownloadButtonVisibility(property);
+		
 		if(resource != null){
 			resource.setProperty(property);
 		}
 		
-		embedded = new Image();
-		embedded.setImmediate(false);
-		setEmbedded(embedded);
-				
-		boolean error = refreshImageFromProperty();
-		setIsImage(!error);
-		
-		addComponentAsFirst(embedded);
-		setExpandRatio(embedded, 1);
-		reactToEditable();
+		boolean showImage = true;
+		String showImgStr = getAttributes() != null ? getAttributes().getValue(FXML.ATT_SHOW_IMAGE) : "true";
+		if(showImgStr != null && (showImgStr.trim().toLowerCase().equals("false") || showImgStr.trim().toLowerCase().equals("0"))) {
+			showImage = false;
+		}
+		if(showImage) {
+			embedded = new Image();
+			embedded.setImmediate(false);
+			setEmbedded(embedded);
+					
+			boolean error = refreshImageFromProperty();
+			setIsImage(!error);
+			
+			addComponentAsFirst(embedded);
+			setExpandRatio(embedded, 1);
+			reactToEditable();
+		}
 	}
 	
 	public BufferedImage getBufferedImage(){
@@ -302,7 +323,9 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 				String timestamp = df.format(new Date(System.currentTimeMillis()));
 				streamResource.setFilename("FileName-"+timestamp+".jpg");
 
-				embedded.setSource(streamResource);
+				if(embedded != null) {
+					embedded.setSource(streamResource);
+				}
 			}
 		}
 		return error;

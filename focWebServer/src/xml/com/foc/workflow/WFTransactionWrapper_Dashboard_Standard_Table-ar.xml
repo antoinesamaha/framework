@@ -2,11 +2,11 @@
   <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="false" />
   <Label value="$P{H2_TITLE}" style="H2,text-center" />
   <GuiTable name="WFTRANSACTION_WRAPPER_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="false" openEnabled="true" deleteEnabled="false">
-    <TableColumn name="TYPE" caption="Type" />
+    <TableColumn name="TYPE" caption="النوع" />
     <TableColumn name="DESCRIPTION" caption="تفاصيل" link="false" expandRatio="1"/>
     <!-- TableColumn name="CURRENT_STAGE" caption="الوضع" / -->
-    <TableColumn name="REJECT" caption="Reject" width="100px" />
-    <TableColumn name="SIGN" caption="Sign" width="100px" />
+    <TableColumn name="REJECT" caption="رفض" width="100px" />
+    <TableColumn name="SIGN" caption="موافقة" width="100px" />
     <!--
     <TableColumn name="CODE" caption="Code" link="true" />
     <TableColumn name="ON_BEHALF_OF" caption="On Behalf" />

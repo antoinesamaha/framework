@@ -160,7 +160,14 @@ public class WorkflowWebModule extends FocWebModule {
       "Dashboard",
       XMLViewKey.VIEW_DEFAULT,
       "/xml/com/foc/workflow/WFTransactionWrapper_Dashboard_Standard_Table.xml", 0, WFTransactionWrapper_Dashboard_Standard_Table.class.getName());
-    
+
+    XMLViewDictionary.getInstance().put(
+  		WFTransactionWrapperDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_TABLE,
+      "Dashboard",
+      XMLViewKey.VIEW_DEFAULT,false,"ar",
+      "/xml/com/foc/workflow/WFTransactionWrapper_Dashboard_Standard_Table-ar.xml", 0, WFTransactionWrapper_Dashboard_Standard_Table.class.getName());
+
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE,

@@ -217,12 +217,10 @@ public class WFConsole_Form extends FocXMLLayout {
 		}
 		
 		if(Utils.isStringEmpty(error)) {
-			WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
-			if(result != null){
-				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), getCommentWritten());
-			}else{
-				workflow.sign(getCommentWritten());
+			if(getFocObject() != null) {
+				getFocObject().workflow_SignIfAllowed(getCommentWritten());
 			}
+			
 			setCommentWritten("");
 			if(xmlLayout != null) xmlLayout.afterSigning();
 			

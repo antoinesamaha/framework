@@ -143,13 +143,15 @@ public class WFTransactionWrapper extends FocObject {
 	
 	public void sign(){
 		IWorkflow iworkflow = getWorkflow();
-		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
-		
-		WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
-		if(result != null){
-			workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf());
-		}else{
-			workflow.sign();
+		if(iworkflow != null) {
+			Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
+			
+			WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
+			if(result != null){
+				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf());
+			}else{
+				workflow.sign();
+			}
 		}
 //		workflow.sign(getSignature(), getTitleIndex());
 	}

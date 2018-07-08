@@ -268,6 +268,9 @@ public interface FXML {
   public static final String ATT_FORMAT                    = "format"             ;
   public static final String ATT_REQUIRED                  = "required"           ;
   
+  //Image Field
+  public static final String ATT_SHOW_IMAGE                = "showImage"          ;
+  
   public static final String VAL_VIEW_KEY_TYPE__FORM       = IXMLViewConst.TYPE_NAME_FORM;
   public static final String VAL_VIEW_KEY_TYPE__TABLE      = IXMLViewConst.TYPE_NAME_TABLE;
   public static final String VAL_VIEW_KEY_TYPE__TREE       = IXMLViewConst.TYPE_NAME_TREE;

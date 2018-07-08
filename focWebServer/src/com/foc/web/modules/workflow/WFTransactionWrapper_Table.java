@@ -4,6 +4,7 @@ import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.business.workflow.signing.WFTransactionWrapperList;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
+import com.foc.util.Utils;
 import com.foc.vaadin.FSignatureButton;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
@@ -11,10 +12,13 @@ import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.FontIcon;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 
@@ -118,10 +122,9 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 	@Override
 	public ColumnGenerator table_getGeneratedColumn(String tableName, final FVTableColumn tableColumn) {
 		ColumnGenerator columnGenerator = null;
-		if (    tableColumn != null 
-				&&  tableColumn.getName() != null 
-				&&  tableColumn.getName().equals("SIGN")) {
-			
+		if (     tableColumn != null 
+				&&   tableColumn.getName() != null
+				&&  (tableColumn.getName().equals("SIGN") || tableColumn.getName().equals("REJECT"))) {
 			columnGenerator = new ColumnGenerator() {
 				@Override
 				public Object generateCell(Table source, Object itemId, Object columnId) {
@@ -131,36 +134,55 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 					WFTransactionWrapper transaction = (WFTransactionWrapper) list.searchByReference(objId);
 					
 					if (transaction != null) {
-						SignButton button = new SignButton(transaction);
+						boolean isReject = columnId.equals("REJECT");
+						SignRejectButton button = new SignRejectButton(transaction, isReject);
 						return button;
 					}
 					
 					return null;
 				}
 			};
-			
 		}
 
 		return columnGenerator;
 	}
 
-	public class SignButton extends FVButton {
+	protected void rejectAllClicked(WFTransactionWrapper wrapper) {
+		if(wrapper != null) wrapper.undoAllSignatures();
+	}
+	
+	protected void signClicked(WFTransactionWrapper wrapper) {
+		if(wrapper != null) wrapper.sign();
+	}
+	
+	protected void refreshAfterButtonClick() {
+	}
+	
+	public class SignRejectButton extends FVButton {
 
 		private WFTransactionWrapper wrapper = null;
+		private boolean reject = false;
 		
-		public SignButton(WFTransactionWrapper wrapper) {
-			super("مواققة");
+		public SignRejectButton(WFTransactionWrapper wrapper, boolean isReject) {
+			super(" مواققة ");
+			reject = isReject;
+			if(isReject) { 
+				setCaption(" رفض ");
+				setIcon(FontAwesome.TIMES);
+			} else {
+				setIcon(FontAwesome.CHECK_CIRCLE);
+			}
 			this.wrapper = wrapper;
 			setWidth("100%");
 			addClickListener(new ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
-					wrapper.sign();
-					refresh();
-					INavigationWindow window = getMainWindow();
-					if(window != null && window instanceof FocWebVaadinWindow) {
-						((FocWebVaadinWindow)window).refreshAllSignatureCounts();
+					if(reject) {
+						rejectAllClicked(wrapper);
+					} else {
+						signClicked(wrapper);
 					}
+					refresh();
 				}
 			});
 		}

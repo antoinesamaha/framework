@@ -4305,6 +4305,19 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		return signatureNeededResult;
 	}
 
+	public void workflow_SignIfAllowed(String comment) {
+		if(workflow_IsWorkflowSubject() && this instanceof IWorkflow){
+			Workflow workflow = ((IWorkflow)this).iWorkflow_getWorkflow();
+			
+			WFSignatureNeededResult result = workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+			if(result != null){
+				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), comment);
+			}else{
+				workflow.sign(comment);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @param stage
