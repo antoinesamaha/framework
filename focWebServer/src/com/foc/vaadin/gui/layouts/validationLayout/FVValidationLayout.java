@@ -887,6 +887,14 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		      for(int i=0; i<cloneValidationListeners.size(); i++){
 		      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
 		      }
+		      
+		      WFConsole_Form console = getWorkflowConsole(false);
+		      if(console != null) {
+						String message = console.getCommentWritten();
+						if(message != null && !message.trim().isEmpty()) {
+							console.button_SEND_COMMENT_Clicked(null);
+						}
+		      }
 	    	}
 	      
 	      cloneValidationListeners.clear();
