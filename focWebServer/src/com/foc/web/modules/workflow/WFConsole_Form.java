@@ -207,6 +207,10 @@ public class WFConsole_Form extends FocXMLLayout {
 	}
 
 	public void button_SIGN_Clicked(FVButtonClickEvent evt){
+		button_SIGN_Clicked(getCommentWritten());
+	}
+	
+	public void button_SIGN_Clicked(String comment){
 		Workflow  workflow  = getWorkflow();
 		
 		String error = null;
@@ -218,7 +222,7 @@ public class WFConsole_Form extends FocXMLLayout {
 		
 		if(Utils.isStringEmpty(error)) {
 			if(getFocObject() != null) {
-				getFocObject().workflow_SignIfAllowed(getCommentWritten());
+				getFocObject().workflow_SignIfAllowed(comment);
 			}
 			
 			setCommentWritten("");
@@ -288,6 +292,7 @@ public class WFConsole_Form extends FocXMLLayout {
 				if(option.equals("YES")){
 					Workflow  workflow  = getWorkflow();
 					if(workflow != null) workflow.undoLastSignature(getCommentWritten());
+//					copyMemoryToGui();
 					if(gotoNextSlide()) {
 						applyForm();
 					}

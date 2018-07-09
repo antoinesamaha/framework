@@ -1,6 +1,6 @@
 <VerticalLayout captionMargin="0" margin="false" width="100%" style="lightgray">
     <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
     
-    <IncludeXMLForEach name="_BannerTable" dataPath="DATAROOT" storage="WF_LOG" view="Standard" context="Banner" type="form" editable="false" width="100%" separator="false" deleteEnabled="false" openEnabled="false" filterExpression="OR(EVENT_TYPE=1,NOT(IS_EMPTY(COMMENT)))" >
+    <IncludeXMLForEach name="_BannerTable" dataPath="DATAROOT" storage="WF_LOG" view="Standard" context="Banner" type="form" editable="false" width="100%" separator="false" deleteEnabled="false" openEnabled="false" filterExpression="OR(AND(EVENT_TYPE=1,EVENT_UNDONE=false),NOT(IS_EMPTY(COMMENT)))" >
     </IncludeXMLForEach>        
 </VerticalLayout>

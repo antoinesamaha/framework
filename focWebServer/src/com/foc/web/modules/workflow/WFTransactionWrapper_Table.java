@@ -4,7 +4,6 @@ import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.business.workflow.signing.WFTransactionWrapperList;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
-import com.foc.util.Utils;
 import com.foc.vaadin.FSignatureButton;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
@@ -12,13 +11,10 @@ import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
-import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.foc.web.gui.INavigationWindow;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.server.FontIcon;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.Table.ColumnGenerator;
 
@@ -152,7 +148,22 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 	}
 	
 	protected void signClicked(WFTransactionWrapper wrapper) {
+		
+		
+		
+		
 		if(wrapper != null) wrapper.sign();
+		
+		
+//		XMLViewKey key = new XMLViewKey(PortalComplaint.DBNAME, XMLViewKey.TYPE_FORM, "TransferComplaint", XMLViewKey.VIEW_DEFAULT);
+//		PortalComplaint_TransferComplaint_Standard_Form transferComplaintForm = (PortalComplaint_TransferComplaint_Standard_Form) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, this);
+//		if(transferComplaintForm != null) {
+//			transferComplaintForm.setOpenedFromInComplaintForm(openedFromInComplaintForm);
+//			transferComplaintForm.popupInDialog();
+//		}
+
+		
+		
 	}
 	
 	protected void refreshAfterButtonClick() {

@@ -25,6 +25,7 @@ import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVGearWrapper.PopupLinkButton;
 import com.foc.vaadin.gui.components.FVMultipleChoiceOptionGroupPopupView;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
@@ -1197,7 +1198,6 @@ public class FocUnitTestingCommand {
     }
 	}
   
-  
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, String priorityToCaptionProperty) throws Exception {
   	return setComponentValue(component, compNameForTheMessage, componentValue, false, priorityToCaptionProperty);
   }
@@ -1884,7 +1884,7 @@ public class FocUnitTestingCommand {
       	if(validationLayout.isVisible_WorkflowConsole()) {
       		WFConsole_Form console = validationLayout.getWorkflowConsole();
       		if(console != null && console.isVisible() && console.getComponentByName("SIGN") != null && console.getComponentByName("SIGN").isVisible()) {
-      			console.button_SIGN_Clicked(null);
+      			console.button_SIGN_Clicked((FVButtonClickEvent)null);
       			getLogger().addInfo("Sign button Clicked");
       		} else {
       			getLogger().addFailure("Console not found");
