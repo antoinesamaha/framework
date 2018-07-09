@@ -168,4 +168,10 @@ public class WFTransactionWrapper extends FocObject {
 		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
 		workflow.undoAllSignatures();
 	}
+	
+	public void undoAllSignatures(String comment){
+		IWorkflow iworkflow = getWorkflow();
+		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
+		workflow.undoAllSignatures(comment);
+	}
 }

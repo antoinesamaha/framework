@@ -1,9 +1,11 @@
 package com.foc.web.modules.workflow;
 
 import com.foc.business.workflow.signing.WFTransactionWrapper;
+import com.foc.business.workflow.signing.WFTransactionWrapperDesc;
 import com.foc.business.workflow.signing.WFTransactionWrapperList;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
+import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FSignatureButton;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
@@ -12,6 +14,7 @@ import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -144,26 +147,23 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 	}
 
 	protected void rejectAllClicked(WFTransactionWrapper wrapper) {
-		if(wrapper != null) wrapper.undoAllSignatures();
+//		if(wrapper != null) wrapper.undoAllSignatures();
+		XMLViewKey key = new XMLViewKey(WFTransactionWrapperDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, "Comment", XMLViewKey.VIEW_DEFAULT);
+		WFTransactionWrapper_Comment_Standard_Form transferComplaintForm = (WFTransactionWrapper_Comment_Standard_Form) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, wrapper);
+		if(transferComplaintForm != null) {
+			transferComplaintForm.setIsSigning(false);
+			transferComplaintForm.popupInDialog();
+		}
 	}
 	
 	protected void signClicked(WFTransactionWrapper wrapper) {
-		
-		
-		
-		
-		if(wrapper != null) wrapper.sign();
-		
-		
-//		XMLViewKey key = new XMLViewKey(PortalComplaint.DBNAME, XMLViewKey.TYPE_FORM, "TransferComplaint", XMLViewKey.VIEW_DEFAULT);
-//		PortalComplaint_TransferComplaint_Standard_Form transferComplaintForm = (PortalComplaint_TransferComplaint_Standard_Form) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, this);
-//		if(transferComplaintForm != null) {
-//			transferComplaintForm.setOpenedFromInComplaintForm(openedFromInComplaintForm);
-//			transferComplaintForm.popupInDialog();
-//		}
-
-		
-		
+//		if(wrapper != null) wrapper.sign();
+		XMLViewKey key = new XMLViewKey(WFTransactionWrapperDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, "Comment", XMLViewKey.VIEW_DEFAULT);
+		WFTransactionWrapper_Comment_Standard_Form transferComplaintForm = (WFTransactionWrapper_Comment_Standard_Form) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, wrapper);
+		if(transferComplaintForm != null) {
+			transferComplaintForm.setIsSigning(true);
+			transferComplaintForm.popupInDialog();
+		}
 	}
 	
 	protected void refreshAfterButtonClick() {
@@ -193,7 +193,7 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 					} else {
 						signClicked(wrapper);
 					}
-					refresh();
+//					refresh();
 				}
 			});
 		}

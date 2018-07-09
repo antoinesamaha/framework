@@ -146,6 +146,20 @@ public class WorkflowWebModule extends FocWebModule {
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
       "/xml/com/foc/workflow/WFTransactionWrapper_Form-ar.xml", 0, WFTransactionWrapper_Form.class.getName());
+    
+    XMLViewDictionary.getInstance().put(
+  		WFTransactionWrapperDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_FORM,
+      "Comment",
+      XMLViewKey.VIEW_DEFAULT,false,"ar",
+      "/xml/com/foc/workflow/WFTransactionWrapper^Comment^Standard^Form-ar.xml", 0, WFTransactionWrapper_Comment_Standard_Form.class.getName());
+    
+    XMLViewDictionary.getInstance().put(
+  		WFTransactionWrapperDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_FORM,
+      "Comment",
+      XMLViewKey.VIEW_DEFAULT,
+      "/xml/com/foc/workflow/WFTransactionWrapper^Comment^Standard^Form.xml", 0, WFTransactionWrapper_Comment_Standard_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
   		WFTransactionWrapperDesc.getInstance().getStorageName(),

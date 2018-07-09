@@ -171,6 +171,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   
   private FVMenuBar moreMenuBar = null;
   private boolean askForConfirmationForExit_Forced = false;
+  private boolean exitWithoutPrompt = false;
   private WFConsole_Form worflowConsole = null;
   private FocXMLLayout   logLayout      = null;
 //  private HelpContextComponentFocusable helpContextComponentFocusable = null;
@@ -1130,7 +1131,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
   public void cancel(){
   	if(!Globals.getApp().checkSession()){
-			if(isAskForConfirmationForExit() && !isObjectLocked()){
+			if(isExitWithoutPrompt()) {//Default false
+				cancel_ExecutionWithoutPrompt();
+			}else if(isAskForConfirmationForExit() && !isObjectLocked()){
 				confirmBeforeExit();
 			}else{
 				cancel_ExecutionWithoutPrompt();
@@ -2459,5 +2462,13 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	public boolean isVisible_LogLayout() {
 		FocXMLLayout logLayout = getLogLayout(false);
 		return logLayout != null ? logLayout.isVisible() : false;
+	}
+
+	public boolean isExitWithoutPrompt() {
+		return exitWithoutPrompt;
+	}
+
+	public void setExitWithoutPrompt(boolean exitWithoutPrompt) {
+		this.exitWithoutPrompt = exitWithoutPrompt;
 	}
 }
