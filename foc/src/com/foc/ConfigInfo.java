@@ -84,6 +84,7 @@ public class ConfigInfo {
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
   private static boolean shrinkDBNames = false;
+  private static boolean showStageNameOnValidationLayoutButton = true;
   
   private static boolean allowCSVExport          = true;
   private static boolean allowEXCELExport        = true;
@@ -338,6 +339,9 @@ public class ConfigInfo {
         if(str != null && !str.isEmpty()){
         	StatusHolderDesc.PRINTED_LABEL_FOR_PROPOSAL = str;
         }
+        
+        str = getProperty("foc.showStageNameOnValidationLayoutButton");
+        showStageNameOnValidationLayoutButton = str != null ? str.compareTo("1") == 0 : true;     
         
         userName          = getProperty("userLogin");
         password          = getProperty("password");
@@ -677,5 +681,13 @@ public class ConfigInfo {
 
 	public static boolean isShowSignatureButton() {
 		return showSignatureButton;
+	}
+
+	public static boolean isShowStageNameOnValidationLayoutButton() {
+		return showStageNameOnValidationLayoutButton;
+	}
+
+	public static void setShowStageNameOnValidationLayoutButton(boolean showStageNameOnValidationLayoutButton) {
+		ConfigInfo.showStageNameOnValidationLayoutButton = showStageNameOnValidationLayoutButton;
 	}
 }

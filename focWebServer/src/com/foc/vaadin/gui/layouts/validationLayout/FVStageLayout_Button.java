@@ -177,10 +177,16 @@ public class FVStageLayout_Button extends Button {
 	}
 	
 	private String getCurrentStageName(){
-		String  currentStageName = isArabic() ? "ملاحظات" : "Comment";
-		WFStage stage = getCurrentStage();
-		if(stage != null){
-			currentStageName = stage.getName();
+		String currentStageName = isArabic() ? "ملاحظات" : "Comment";
+		if(ConfigInfo.isShowStageNameOnValidationLayoutButton()) {
+				WFStage stage = getCurrentStage();
+				if(stage != null){
+					currentStageName = stage.getName();
+				}
+		} else {
+			if(getFocObject().workflow_NeedsSignatureOfThisUser()) {
+				currentStageName = isArabic() ? "موافقة" : "Signature";
+			}
 		}
 		return currentStageName;
 	}

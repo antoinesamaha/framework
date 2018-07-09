@@ -1,5 +1,6 @@
 package com.foc.business.workflow.implementation;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.business.workflow.WFTitleDesc;
@@ -79,17 +80,17 @@ public class WFLogDesc extends FocDesc {
 		}
 		
 		FMultipleChoiceField mFld = new FMultipleChoiceField("EVENT_TYPE", "Event Type", FLD_EVENT_TYPE, false, 2);
-		mFld.addChoice(EVENT_NONE, "none");
-		mFld.addChoice(EVENT_SIGNATURE, "Signature");
-		mFld.addChoice(EVENT_CANCELLATION, "Cancellation");
-		mFld.addChoice(EVENT_MODIFICATION, "Modification");
-		mFld.addChoice(EVENT_CREATION, "Creation");
-		mFld.addChoice(EVENT_APPROVED, "Approval");
-		mFld.addChoice(EVENT_CLOSED, "Closure");
-		mFld.addChoice(EVENT_UNDO_SIGNATURE, "Undo Signature");
-		mFld.addChoice(EVENT_CUSTOM, "Custom");
-		mFld.addChoice(EVENT_COMMENT, "Comment");
-		mFld.addChoice(EVENT_REJECT, "Reject");
+		mFld.addChoice(EVENT_NONE, ConfigInfo.isArabic() ? "-" : "none");
+		mFld.addChoice(EVENT_SIGNATURE, ConfigInfo.isArabic() ? "موافقة" : "Signature");
+		mFld.addChoice(EVENT_CANCELLATION, ConfigInfo.isArabic() ? "الغاء" : "Cancellation");
+		mFld.addChoice(EVENT_MODIFICATION, ConfigInfo.isArabic() ? "تعديل" : "Modification");
+		mFld.addChoice(EVENT_CREATION, ConfigInfo.isArabic() ? "ادخال" : "Creation");
+		mFld.addChoice(EVENT_APPROVED, ConfigInfo.isArabic() ? "تصديق" : "Approval");
+		mFld.addChoice(EVENT_CLOSED, ConfigInfo.isArabic() ? "ختم" : "Closure");
+		mFld.addChoice(EVENT_UNDO_SIGNATURE, ConfigInfo.isArabic() ? "الغاء الموافقة" : "Undo Signature");
+		mFld.addChoice(EVENT_CUSTOM, ConfigInfo.isArabic() ? "Custom" : "Custom");
+		mFld.addChoice(EVENT_COMMENT, ConfigInfo.isArabic() ? "ملاحظة" : "Comment");
+		mFld.addChoice(EVENT_REJECT, ConfigInfo.isArabic() ? "الغاء الموافقات السابقة" : "Reject");
 		addField(mFld);
 
     FDateTimeField dateTimeFld = new FDateTimeField("DATE_TIME", "Date|Time", FLD_DATE_TIME, false);
