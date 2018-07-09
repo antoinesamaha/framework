@@ -24,9 +24,9 @@ public class WFLog_Banner_Standard_Form extends FocXMLLayout {
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-		Component comp = getComponentByName("MESSAGE");
-		if(comp != null) {
-			comp.addStyleName("fenix-them-bubble");
-		}
+//		Component comp = getComponentByName("MESSAGE");
+//		if(comp != null) {
+//			comp.addStyleName("fenix-them-bubble");
+//		}
 	}
 }
