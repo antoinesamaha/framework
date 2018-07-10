@@ -1683,7 +1683,20 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   }
 	
 	public void confirmBeforeExit(){
-		OptionDialog dialog = new OptionDialog("Confirmation", "Do you want to confirm the changes you made?") {
+		String title       = "Confirmation";
+		String description = "Do you want to confirm the changes you made?";
+		String saveCaption    = "Save & Exit";
+		String discardCaption = "Discard changes";
+		String cancelCaption  = "Cancel";
+		if(ConfigInfo.isArabic()) {
+			title       = "تنبيه";
+			description = "هل تريد حفظ التعديلات؟";
+			saveCaption    = "حفظ التعديلات";
+			discardCaption = "الغاء التعديلات";
+			cancelCaption  = "الغاء";
+		}
+		
+		OptionDialog dialog = new OptionDialog(title, description) {
 			@Override
 			public boolean executeOption(String optionName) {
 				if(optionName != null){
@@ -1698,9 +1711,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 				return false;
 			}
 		};
-		dialog.addOption("SAVE_EXIT", "Save & Exit");
-		dialog.addOption("DISCARD", "Discard changes");
-		dialog.addOption("CANCEL", "Cancel");
+		dialog.addOption("SAVE_EXIT", saveCaption);
+		dialog.addOption("DISCARD", discardCaption);
+		dialog.addOption("CANCEL", cancelCaption);
 		dialog.setWidth("400px");
 		dialog.setHeight("200px");
 		Globals.popupDialog(dialog);
