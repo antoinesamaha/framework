@@ -179,6 +179,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   private boolean helpOn = false;
   
   private boolean goingBackAfterDoneClicked = false;
+  private boolean forceHideSignCancel = false;
   
   public FVValidationLayout(INavigationWindow focVaadinMainWindow, ICentralPanel centralPanel, FValidationSettings validationSettings, boolean showBackButton) {
   	super();
@@ -1671,7 +1672,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	public boolean isAskForConfirmationForExit() {
 		IFocData focData = getFocData();
 		boolean askForConfirmation = isAskForConfirmationForExit_Forced();
-		if(!askForConfirmation && focData != null && focData instanceof AccessSubject && getValidationSettings().isWithApply()
+		if(		 !askForConfirmation 
+				&& focData != null 
+				&& focData instanceof AccessSubject 
+				&& getValidationSettings().isWithApply()
 				&& (getCentralPanel() == null || getCentralPanel().isRootLayout())){//If not root, internal we do not want to ask for confirmation
 			askForConfirmation = ((AccessSubject) getFocData()).needValidationWithPropagation();
 		}
@@ -2416,6 +2420,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 			XMLViewKey   key = new XMLViewKey(WorkflowWebModule.STORAGE_NAME_WORKFLOW_CONSOLE, XMLViewKey.TYPE_FORM);
 			worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) getWindow(), key, focObj);
 			
+			worflowConsole.setForceHideSignCancel(isForceHideSignCancel());
 			worflowConsole.setWidth("100%");
 			addComponentAsFirst(worflowConsole);
 			setComponentAlignment(worflowConsole, Alignment.BOTTOM_LEFT);
@@ -2470,5 +2475,13 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
 	public void setExitWithoutPrompt(boolean exitWithoutPrompt) {
 		this.exitWithoutPrompt = exitWithoutPrompt;
+	}
+
+	public boolean isForceHideSignCancel() {
+		return forceHideSignCancel;
+	}
+
+	public void setForceHideSignCancel(boolean forceHideSignCancel) {
+		this.forceHideSignCancel = forceHideSignCancel;
 	}
 }

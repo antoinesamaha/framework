@@ -184,7 +184,7 @@ public class FVStageLayout_Button extends Button {
 					currentStageName = stage.getName();
 				}
 		} else {
-			if(getFocObject().workflow_NeedsSignatureOfThisUser()) {
+			if(getFocObject().workflow_NeedsSignatureOfThisUser() && getValidationLayout() != null && !getValidationLayout().isForceHideSignCancel()) {
 				currentStageName = isArabic() ? "موافقة" : "Signature";
 			}
 		}
