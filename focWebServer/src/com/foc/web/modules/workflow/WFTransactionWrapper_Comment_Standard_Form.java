@@ -1,7 +1,10 @@
 package com.foc.web.modules.workflow;
 
+import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.desc.FocObject;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
@@ -53,7 +56,10 @@ public class WFTransactionWrapper_Comment_Standard_Form extends FocXMLLayout {
 				
 				@Override
 				public boolean validationCheckData(FVValidationLayout validationLayout) {
-					boolean error = false;
+					boolean error = !isSign() && Utils.isStringEmpty(getWrittenComment());
+					if(error) {
+						Globals.showNotification("يرجى ادخال الملاحظة", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+					}
 					return error;
 				}
 				
