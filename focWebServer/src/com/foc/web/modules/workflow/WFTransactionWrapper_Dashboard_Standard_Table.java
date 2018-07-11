@@ -21,6 +21,7 @@ import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransactionWrapper_Table {
 	
 	private	WFTransactionWrapperList wrapperList = null;
+	private boolean filterAdded = false;
 	
 	@Override
 	public void init(INavigationWindow window, XMLView xmlView, IFocData focData) {
@@ -46,9 +47,19 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 		reloadTransactionWrapperList();
 	}
 	
+	protected void addFilter() {
+		
+	}
+	
 	protected void reloadTransactionWrapperList() {
 		if(wrapperList != null) {
 			wrapperList.removeAll();
+			
+			if(!isFilterAdded()) {
+				addFilter();
+				setFilterAdded(true);
+			}
+			
 			FocDataDictionary dictionary = getFocDataDictionary(false);
 			if(dictionary != null) {
 				int index = 1;
@@ -117,6 +128,14 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 		*/
 		
 		return centralPanel;
+	}
+
+	public boolean isFilterAdded() {
+		return filterAdded;
+	}
+
+	public void setFilterAdded(boolean filterAdded) {
+		this.filterAdded = filterAdded;
 	}
 
 }

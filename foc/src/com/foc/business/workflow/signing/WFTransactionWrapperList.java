@@ -28,6 +28,7 @@ import com.foc.list.FocListWithFilter;
 public class WFTransactionWrapperList extends FocListWithFilter{
 
 	private HashMap<String, FocList> originalListMap = null;
+	private Filter                   additionalFilterForSignatures          = null;
 	
 	public WFTransactionWrapperList(){
 		super(WFTransWrapperFilterDesc.getInstance(), new FocLinkSimple(WFTransactionWrapperDesc.getInstance()));
@@ -57,6 +58,14 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		return false;
 	}
 	
+	public Filter getAdditionalFilterForSignature() {
+		return additionalFilterForSignatures;
+	}
+
+	public void setAdditionalFilterForSignature(Filter filter) {
+		this.additionalFilterForSignatures = filter;
+	}
+
 	private boolean isListOwner(FocDesc focDesc){
 		return focDesc == null || !focDesc.isListInCache();
 	}
@@ -94,20 +103,22 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 					int titleIndex = result.getTitleIndex();
 					
 					if(titleIndex >= 0 && !workflow.iWorkflow_getWorkflow().isHide(titleIndex)){
-						if(addToWrapper) {
-							WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
-							wrapper.setCreated(false);//If we keep it created then when the user opens a wrapper form and clacels it gets removed from the foclist
-							wrapper.setWorkflow(workflow);
-		//					  wrapper.setSignature(result.getSignature());
-							
-							wrapper.setTitle(result.getSignature().getTitle(titleIndex));
-							wrapper.setIsOnBehalfOf(result.isOnBehalfOf());
-							
-		//					wrapper.setTitleIndex(idx);
-		//					wrapper.setSignature(currentSignature);
-							add(wrapper);
+						if(additionalFilterForSignatures == null || additionalFilterForSignatures.passesFilter(focObj.getReferenceInt(), focObj)){
+							if(addToWrapper) {
+								WFTransactionWrapper wrapper = (WFTransactionWrapper) newEmptyItem();
+								wrapper.setCreated(false);//If we keep it created then when the user opens a wrapper form and clacels it gets removed from the foclist
+								wrapper.setWorkflow(workflow);
+			//					  wrapper.setSignature(result.getSignature());
+								
+								wrapper.setTitle(result.getSignature().getTitle(titleIndex));
+								wrapper.setIsOnBehalfOf(result.isOnBehalfOf());
+								
+			//					wrapper.setTitleIndex(idx);
+			//					wrapper.setSignature(currentSignature);
+								add(wrapper);
+							}
+							count++;
 						}
-						count++;
 					}
 				}
 			}
@@ -470,5 +481,4 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		transactionWrapperList.dispose();
 		return count;
 	}
-
 }

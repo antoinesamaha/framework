@@ -712,6 +712,7 @@ public class Workflow {
 			logList.validate(true);
 		}
 		setCurrentStage(stage);
+		setCancelReason(comment != null ? comment : "");
 		resetStatusToProposal();		
 		getFocObject().validate(true);
 		insertLogLine(WFLogDesc.EVENT_REJECT, comment != null ? comment : "");

@@ -4,6 +4,7 @@
       <VerticalLayout spacing="true">
         <GuiField name="NAME" caption="Name"  />
         <GuiField name="DESCRIP" caption="Description"  />
+        <GuiField name="DASHBOARD_CONTEXT" caption="Dashboard context"  />
         <GuiField name="STARTUP_MENU" caption="Startup Menu"  />
         <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title"  />
       </VerticalLayout>
