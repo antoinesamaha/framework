@@ -12,6 +12,7 @@ import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
+import com.foc.vaadin.gui.components.TableTreeDelegate;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -135,6 +136,8 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 					if (transaction != null) {
 						boolean isReject = columnId.equals("REJECT");
 						SignRejectButton button = new SignRejectButton(transaction, isReject);
+						String compName = TableTreeDelegate.newComponentName("WFTRANSACTION_WRAPPER_TABLE", String.valueOf(objId), tableColumn.getName());
+						putComponent(compName, button);
 						return button;
 					}
 					

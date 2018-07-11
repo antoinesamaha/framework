@@ -200,13 +200,18 @@ public class FocUnitTestingCommand {
     }
     
   	if(layoutName != null){
-	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName, false);
-	    if (tableWrapper != null) {
-	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
-	    	if(centralPanel != null){
-	    		result = (FocXMLLayout) centralPanel; 
-	    	}
-	    }
+  		Component layoutComponent = (Component) findComponent(result, layoutName, false);
+  		if(layoutComponent instanceof FVTableWrapperLayout) {
+		    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) layoutComponent;
+		    if (tableWrapper != null) {
+		    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+		    	if(centralPanel != null){
+		    		result = (FocXMLLayout) centralPanel; 
+		    	}
+		    }
+  		} else {
+  			result = (FocXMLLayout) layoutComponent;
+  		}
   	}
     
     return result;
@@ -1976,5 +1981,12 @@ public class FocUnitTestingCommand {
 
   public void notification_Expect(String notificationMessage, String description, String notificationType) {
   	getDictionary().expectedNotification_Set(notificationMessage, description, notificationType);
+  }
+  
+  public void notification_CheckOccured() throws Exception {
+  	FocUnitExpectedNotification pendingNotif = getDictionary().expectedNotification_Get();
+  	if(pendingNotif != null) {
+  		getDictionary().getLogger().addFailure("Expected Notification Did Not Occure");
+  	}
   }
 }

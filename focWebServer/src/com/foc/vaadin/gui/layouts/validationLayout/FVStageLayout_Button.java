@@ -33,8 +33,8 @@ public class FVStageLayout_Button extends Button {
 	
 	private void init(){
 		setImmediate(true);
+		adjustButtonsCaption();
 //		addMenuBarItems();
-		selectCurrentStage();
 	}
 	
 	public void dispose(){
@@ -42,6 +42,10 @@ public class FVStageLayout_Button extends Button {
 		focObject = null;
 	}
 
+	public void adjustButtonsCaption() {
+		selectCurrentStage();
+	}
+	
 	public boolean isArabic(){
 		return ConfigInfo.isArabic();
 	}
@@ -184,7 +188,7 @@ public class FVStageLayout_Button extends Button {
 					currentStageName = stage.getName();
 				}
 		} else {
-			if(getFocObject().workflow_NeedsSignatureOfThisUser() && getValidationLayout() != null && !getValidationLayout().isForceHideSignCancel()) {
+			if(getFocObject().workflow_NeedsSignatureOfThisUser() && (getValidationLayout() == null || !getValidationLayout().isForceHideSignCancel())) {
 				currentStageName = isArabic() ? "موافقة" : "Signature";
 			}
 		}

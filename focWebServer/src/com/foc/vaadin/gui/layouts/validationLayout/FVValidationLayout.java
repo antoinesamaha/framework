@@ -2496,5 +2496,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
 	public void setForceHideSignCancel(boolean forceHideSignCancel) {
 		this.forceHideSignCancel = forceHideSignCancel;
+		FVStageLayout_Button stageLayout = getStageLayout(false);
+		if(stageLayout != null) {
+			stageLayout.adjustButtonsCaption();
+		}
 	}
 }
