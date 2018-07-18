@@ -1735,8 +1735,9 @@ public class FocUnitTestingCommand {
 
   	if(component == null){
   		if(failIfNotFound){
+  			Globals.logString("Could not find component " + componentName + ".");
+  			navigationLayout.debug_PrintAllComponents();
 	  		getLogger().addFailure("Could not find component " + componentName + ".");
-	  		navigationLayout.debug_PrintAllComponents();
   		}
   	}else{
 			AbstractComponent comp = (AbstractComponent) component;

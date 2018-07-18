@@ -432,6 +432,8 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_WORD);
 		}else if(getCloudStorageProperty().getFileName().endsWith(".ppt") || getCloudStorageProperty().getFileName().endsWith(".pptx")){
 			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_PPT);
+		}else if(getCloudStorageProperty().getFileName().endsWith(".pdf")){
+			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_ADOBE);
 		}else{
 			resource = FVIconFactory.getInstance().getFVIcon(FVIconFactory.ICON_NOTE);
 		}

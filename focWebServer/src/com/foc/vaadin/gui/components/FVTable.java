@@ -4,6 +4,7 @@ import java.text.Format;
 
 import org.xml.sax.Attributes;
 
+import com.foc.Globals;
 import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocDesc;
@@ -34,6 +35,9 @@ public class FVTable extends Table implements FocXMLGuiComponent, ITableTree{
   	getTableTreeDelegate(attributes);
   	delegate = new FocXMLGuiComponentDelegate(this);
     init(attributes);
+//    if(Globals.getApp().isUnitTest()) {
+//    	setCacheRate(1000);
+//    }
 //    addStyleName(ValoTheme.TABLE_COMPACT);
   }
     

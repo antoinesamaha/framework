@@ -1,0 +1,17 @@
+<VerticalLayout captionMargin="0" height="98%" margin="true">
+  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withPrint="false" />
+  <!-- VerticalLayout name="UPLOAD_IMAGE_LAYOUT" width="200px" height="30px" left="20px">
+  </VerticalLayout -->  
+  <!-- Label value="المستندات المرفقة" style="H2,f16,text-center" width="100%"/ -->
+  <GuiTable name="PHOTO_ALBUM" dataPath="DATAROOT" captionMargin="0" width="100%" height="-1px" addEnabled="false" inLineEditable="false" openEnabled="false">
+    <!-- TableColumn name="IMAGE_CLOUD" caption="المستند" editable="false" / -->
+    <TableColumn name="IMAGE_NAME" caption="اسم المستند" />
+    <!-- TableColumn name="DESCRIPTION" caption="الوصف" / -->
+    <!-- TableColumn name="DOCUMENT_TYPE" captionProperty="CAPTION" caption="Document Type"></TableColumn>
+    <TableColumn name="CREATION_USER" captionProperty="NAME" caption="Uploaded by"></TableColumn -->
+    <!-- TableColumn name="TRANSACTION_CODE" caption="Transaction code" / -->
+    <!-- TableColumn name="UPLOAD_DATE" caption="Upload date"></TableColumn>
+    <TableColumn name="ALLOWED_GROUPS" caption="Allowed Groups"></TableColumn -->
+    <TableColumn name="DOWNLOAD" caption="تنزيل"/>
+  </GuiTable>
+</VerticalLayout>

@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.vaadin.gui.FVIconFactory;
@@ -40,7 +41,11 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 		// Create the Upload component.
 		upload = new Upload(null, this);
 		upload.setImmediate(true);
-		upload.setButtonCaption("Upload");//To hide the default ugly button we should set this to null
+		if(ConfigInfo.isArabic()) {
+			upload.setButtonCaption("تحميل");//To hide the default ugly button we should set this to null
+		} else {
+			upload.setButtonCaption("Upload");//To hide the default ugly button we should set this to null
+		}
 		
 		// Use a custom button caption instead of plain "Upload".
 		//upload.setButtonCaption(null);

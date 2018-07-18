@@ -130,6 +130,27 @@ public class PhotoAlbumWebModule extends FocWebModule {
       "/xml/com/foc/photoAlbum/PhotoAlbum_Reduced_Form.xml", 0, PhotoAlbum_Reduced_Form.class.getName());
 
     XMLViewDictionary.getInstance().put(
+      PhotoAlbumDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_TABLE, 
+      XMLViewKey.CONTEXT_DEFAULT, 
+      "Simple", 
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Main_Simple_Table.xml", 0, PhotoAlbum_Main_Simple_Table.class.getName());
+
+    XMLViewDictionary.getInstance().put(
+      PhotoAlbumDesc.getInstance().getStorageName(),
+      XMLViewKey.TYPE_TABLE, 
+      XMLViewKey.CONTEXT_DEFAULT, 
+      "Simple", false, "ar", 
+      "/xml/com/foc/photoAlbum/PhotoAlbum_Main_Simple_Table-ar.xml", 0, PhotoAlbum_Main_Simple_Table.class.getName());
+  
+//    XMLViewDictionary.getInstance().put(
+//      PhotoAlbumDesc.getInstance().getStorageName(),
+//      XMLViewKey.TYPE_FORM, 
+//      XMLViewKey.CONTEXT_DEFAULT, 
+//      "Simple", 
+//      "/xml/com/foc/photoAlbum/PhotoAlbum_Main_Simple_Form.xml", 0, PhotoAlbum_Form.class.getName());
+    
+    XMLViewDictionary.getInstance().put(
       PhotoAlbumAccessDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TABLE, 
       CONTEXT_GROUP_ACCESS_RIGHT_SELECTION, 

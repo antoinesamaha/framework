@@ -21,7 +21,7 @@
 	  <VerticalLayout captionMargin="0" spacing="true" width="450px">
 	    <!-- Label value="Selected Groups" style="H2" width="100%" / -->
 		  <TableGrid title="Group Rights" name="SELECTED_GROUPS_LIST_TABLE" dataPath="DATAROOT" height="100%" width="100%" addEnabled="false" deleteEnabled="false" alignment="right" refreshEnabled="false" gridSelectionMode="Multi">
-			   <TableColumn name="DOC_RIGHTS_GROUP" captionProperty="NAME" caption="Group" editable="false"/>
+			   <TableColumn name="DOC_RIGHTS_GROUP>NAME" caption="Group" editable="false"/>
 			   <TableColumn name="ACCESS_RIGHT" caption="Right" editable="true"/>
 		  </TableGrid>
 		</VerticalLayout>

@@ -44,7 +44,8 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-		reloadTransactionWrapperList();
+		//The reload here is not needed since we have a reload in the refresh
+//		reloadTransactionWrapperList();
 	}
 	
 	protected void addFilter() {
