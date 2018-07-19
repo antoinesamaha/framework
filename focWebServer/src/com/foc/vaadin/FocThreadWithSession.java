@@ -2,8 +2,6 @@ package com.foc.vaadin;
 
 import java.lang.reflect.Constructor;
 
-import org.apache.tools.ant.taskdefs.Sleep;
-
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.web.server.FocWebServer;
@@ -39,43 +37,44 @@ public class FocThreadWithSession extends Thread {
 			Globals.logException(e);
 		}
 		
-		initSession();
-		
-		if(runnable != null) runnable.run();
+		if(!initSession() && runnable != null) {
+			runnable.run();
+		}
 	}
 
-	public void initSession() {
+	public boolean initSession() {
+		boolean error = false;
+		
 		if(webServer != null) {
-			
 			FocWebApplication webApplication = null; 
 			FocWebSession     webSession     = null;
-			
-			if (webApplication == null) {
+
+			FocUser batchUser = FocUser.findUser(BATCH_USER);
+			if(batchUser != null) {
 				try {
 					Class cls = Class.forName(classNameFocWebApplication);
 					Class[] param = new Class[0];
 					Constructor constr = cls.getConstructor(param);
 					Object[] argsNew = new Object[0];
-
+	
 					webApplication = (FocWebApplication) constr.newInstance(argsNew);
 					FocWebApplication.setInstanceForThread(webApplication);
 					webApplication.setData(webServer);
 				} catch (Exception e) {
 					Globals.logException(e);
 				}
-
+	
 				webSession = new FocWebSession(null);//null beccause there is not httpsession
 				
 				webApplication.setFocWebSession(webSession);
 				webServer.addApplication(webApplication);
-				
-				FocUser batchUser = FocUser.findUser(BATCH_USER);
-				if(batchUser != null) {
-					webSession.setFocUser(batchUser);
-				} else {
-					Globals.logString(" ERROR : Could not find batch user:"+BATCH_USER);
-				}
+			
+				webSession.setFocUser(batchUser);
+			} else {
+				error = true;
+				Globals.logString(" ERROR : Could not find batch user:"+BATCH_USER);
 			}
 		}
+		return error;
 	}
 }
