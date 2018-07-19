@@ -108,19 +108,23 @@ public class WFConsole_Form extends FocXMLLayout {
 		if(nextButton != null) {
 			nextButton.setVisible(getTransactionWrapperForm() != null);
 		}
+
+		if(focObj != null && rejectButton != null) {
+			rejectButton.setCaption(focObj.workflow_GetRejectButtonCaption(false));
+		}
 		
 		if(focObj != null && signButton != null) {
 			WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
 			if(result != null && result.getTitleIndex() >= 0){
 				if(result.isOnBehalfOf()){
-					signButton.setCaption(isArabic() ? "موافقة بالنيابة" : "Sign PP");
+					signButton.setCaption(focObj.workflow_GetSignButtonCaption(true));
 					signButton.setDescription(isArabic() ? "موافقة بالنيابة وبصفة " + result.getTitle() : "Sign per procurationement as "+result.getTitle());
 				}else{
-					signButton.setCaption(isArabic() ? "موافقة" : "Sign");
+					signButton.setCaption(focObj.workflow_GetSignButtonCaption(false));
 					signButton.setDescription(isArabic() ? "موافقة وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
 				}
 				signButton.setVisible(!isForceHideSignCancel());
-				rejectButton.setVisible(!isForceHideSignCancel());
+				rejectButton.setVisible(!isForceHideSignCancel() && getWorkflow() != null && getWorkflow().getCurrentStage() != null);
 			} else {
 				signButton.setVisible(false);
 				rejectButton.setVisible(false);

@@ -118,7 +118,7 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 			}
 		}
 	}
-	
+		
 	@Override
 	public ColumnGenerator table_getGeneratedColumn(String tableName, final FVTableColumn tableColumn) {
 		ColumnGenerator columnGenerator = null;
@@ -135,10 +135,12 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 					
 					if (transaction != null) {
 						boolean isReject = columnId.equals("REJECT");
-						SignRejectButton button = new SignRejectButton(transaction, isReject);
-						String compName = TableTreeDelegate.newComponentName("WFTRANSACTION_WRAPPER_TABLE", String.valueOf(objId), tableColumn.getName());
-						putComponent(compName, button);
-						return button;
+						if(!isReject || rejectButton_IsVisible(transaction)) {
+							SignRejectButton button = new SignRejectButton(transaction, isReject);
+							String compName = TableTreeDelegate.newComponentName("WFTRANSACTION_WRAPPER_TABLE", String.valueOf(objId), tableColumn.getName());
+							putComponent(compName, button);
+							return button;
+						}
 					}
 					
 					return null;
@@ -172,16 +174,23 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 	protected void refreshAfterButtonClick() {
 	}
 	
+	protected boolean rejectButton_IsVisible(WFTransactionWrapper transaction) {
+		return transaction != null
+				&& transaction.getWorkflow() != null
+				&& transaction.getWorkflow().iWorkflow_getWorkflow() != null
+				&& transaction.getWorkflow().iWorkflow_getWorkflow().getCurrentStage() != null;
+	}
+	
 	public class SignRejectButton extends FVButton {
 
 		private WFTransactionWrapper wrapper = null;
 		private boolean reject = false;
 		
 		public SignRejectButton(WFTransactionWrapper wrapper, boolean isReject) {
-			super(" مواققة ");
+			super(wrapper.getFocObject().workflow_GetSignButtonCaption(false));
 			reject = isReject;
 			if(isReject) { 
-				setCaption(" رفض ");
+				setCaption(wrapper.getFocObject().workflow_GetRejectButtonCaption(false));
 				setIcon(FontAwesome.TIMES);
 			} else {
 				setIcon(FontAwesome.CHECK_CIRCLE);
