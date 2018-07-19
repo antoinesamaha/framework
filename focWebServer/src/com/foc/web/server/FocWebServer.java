@@ -87,6 +87,8 @@ public class FocWebServer implements Serializable {
 	private int                                 nextModuleOrder      = 1;
 	private String                              versionTitle         = "";
 	
+	NotificationScheduledThread notificationScheduledThread = null;
+	
 	public FocWebServer(){
 		applicationArrayList = new ArrayList<FocWebApplication>();
 		FocThreadLocal.setWebServer(this);
@@ -225,8 +227,8 @@ public class FocWebServer implements Serializable {
 		
 		setReady(true);
 
-		FocThreadWithSession scheduledBatchThread = new FocThreadWithSession(FocWebApplication.getInstanceForThread(), this, new NotificationScheduledThread());
-		scheduledBatchThread.start();
+		notificationScheduledThread = new NotificationScheduledThread(FocWebApplication.getInstanceForThread(), this);
+		notificationScheduledThread.start();
 
 		/*
 		Binding binding = new Binding();
@@ -238,6 +240,7 @@ public class FocWebServer implements Serializable {
 	}
 	
 	public void dispose(){
+		notificationScheduledThread = null;
 		if(applicationArrayList != null){
 			for(int i=0; i<applicationArrayList.size(); i++){
 				FocWebApplication app = applicationArrayList.get(i);

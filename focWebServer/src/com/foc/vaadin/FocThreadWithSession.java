@@ -14,12 +14,12 @@ public class FocThreadWithSession extends Thread {
 	private String       classNameFocWebApplication = null;
 	private FocWebServer webServer = null;
 	
-	private Runnable     runnable = null;
+//	private Runnable     runnable = null;
 	
-	public FocThreadWithSession(FocWebApplication initialWebApplication, FocWebServer webServer, Runnable runnable) {
+	public FocThreadWithSession(FocWebApplication initialWebApplication, FocWebServer webServer/*, Runnable runnable*/) {
 		super();
 		
-		this.runnable = runnable;
+//		this.runnable = runnable;
 		this.webServer = webServer;
 		
 		if(initialWebApplication != null) {
@@ -37,11 +37,16 @@ public class FocThreadWithSession extends Thread {
 			Globals.logException(e);
 		}
 		
-		if(!initSession() && runnable != null) {
-			runnable.run();
+		if(!initSession()) {
+			main();
+//			runnable.run();
 		}
 	}
 
+	public void main() {
+		//Implement here your core execution
+	}
+	
 	public boolean initSession() {
 		boolean error = false;
 		
