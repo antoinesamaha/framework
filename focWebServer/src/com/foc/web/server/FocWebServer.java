@@ -240,7 +240,10 @@ public class FocWebServer implements Serializable {
 	}
 	
 	public void dispose(){
-		notificationScheduledThread = null;
+		if(notificationScheduledThread != null) {
+			notificationScheduledThread.interrupt();			
+			notificationScheduledThread = null;
+		}
 		if(applicationArrayList != null){
 			for(int i=0; i<applicationArrayList.size(); i++){
 				FocWebApplication app = applicationArrayList.get(i);

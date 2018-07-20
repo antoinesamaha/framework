@@ -144,22 +144,23 @@ public class FVGridLayout extends DDGridLayout implements FVLayout {
     this.attributes = attributes;
     FocXMLGuiComponentStatic.applyAttributes(this, attributes);
     
-    if (attributes.getValue("border") != null) {
-      addStyleName("border");
+    if(attributes != null) {
+	    if (attributes.getValue("border") != null) {
+	      addStyleName("border");
+	    }
+	    
+	    if (attributes.getValue(FXML.ATT_ROWS) != null) {
+	      setRows(Integer.parseInt(attributes.getValue(FXML.ATT_ROWS)));
+	    }
+	    
+	    if (attributes.getValue(FXML.ATT_COLS) != null) {
+	      setColumns(Integer.parseInt(attributes.getValue(FXML.ATT_COLS)));
+	    }
+	    
+	    if (attributes.getValue(FXML.ATT_INNER_GRID_LAYOUT_BORDER) != null && attributes.getValue(FXML.ATT_INNER_GRID_LAYOUT_BORDER).equals("true")) {
+	    	addStyleName("innerGridLayoutBorder");
+	    }
     }
-    
-    if (attributes.getValue(FXML.ATT_ROWS) != null) {
-      setRows(Integer.parseInt(attributes.getValue(FXML.ATT_ROWS)));
-    }
-    
-    if (attributes.getValue(FXML.ATT_COLS) != null) {
-      setColumns(Integer.parseInt(attributes.getValue(FXML.ATT_COLS)));
-    }
-    
-    if (attributes.getValue(FXML.ATT_INNER_GRID_LAYOUT_BORDER) != null && attributes.getValue(FXML.ATT_INNER_GRID_LAYOUT_BORDER).equals("true")) {
-    	addStyleName("innerGridLayoutBorder");
-    }
-    
     setCaption("");
   }
 

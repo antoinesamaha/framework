@@ -52,6 +52,22 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 		
 	}
 	
+	protected boolean isFocDescIncuded(FocDesc focDescToFind) {
+		boolean found = false;
+		FocDataDictionary dictionary = getFocDataDictionary(false);
+		if(dictionary != null && focDescToFind != null) {
+			int index = 1;
+			IFocDataResolver resolver = dictionary.getParameter("DESC"+index);
+			while (resolver != null && !found) {
+				String tableName = (String) resolver.getValue(null, null);
+				found = focDescToFind.getStorageName().equals(tableName);
+				index++;
+				resolver = dictionary.getParameter("DESC"+index);
+			}
+		}
+		return found;
+	}
+	
 	protected void reloadTransactionWrapperList() {
 		if(wrapperList != null) {
 			wrapperList.removeAll();

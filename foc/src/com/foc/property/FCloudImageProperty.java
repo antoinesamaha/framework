@@ -1,3 +1,4 @@
+
 package com.foc.property;
 
 import java.sql.Blob;
