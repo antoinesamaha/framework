@@ -3080,4 +3080,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		
 	}
 	
+	public boolean isInnerLayout() {
+		FVTableWrapperLayout tableWrapperLayout = findAncestor(FVTableWrapperLayout.class);
+		boolean inner = tableWrapperLayout != null;
+		return inner; 
+	}
 }
