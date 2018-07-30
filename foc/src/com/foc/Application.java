@@ -2139,7 +2139,7 @@ public class Application {
 		return setLogEventStatus(entityName, logEventRef, status, "");
 	}
 	
-	public boolean setLogEventStatus(String entityName, long logEventRef, int status, String commitError) {
+	public boolean setLogEventStatus(String entityName, long logEventRef, int status, String statusCommitError) {
 		boolean error = logEventRef<=0 || Utils.isStringEmpty(entityName);
 
 		if(!error) {
@@ -2152,11 +2152,11 @@ public class Application {
 				StringBuffer buffer = null;
 				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
-					buffer.append("set EVENT_STATUS = "+status+" , COMMIT_ERROR = \""+commitError+"\"");
+					buffer.append("set EVENT_STATUS = "+status+" , STATUS_ERROR = \""+statusCommitError+"\"");
 					buffer.append(" where "+logFocDesc.getRefFieldName()+" = "+logEventRef+" ");						
 				} else {
 					buffer = new StringBuffer("UPDATE \"" + logFocDesc.getStorageName_ForSQL() + "\" ");
-					buffer.append("set \"EVENT_STATUS\" = "+status+" , \"COMMIT_ERROR\" = \'"+commitError+"\'");
+					buffer.append("set \"EVENT_STATUS\" = "+status+" , \"STATUS_ERROR\" = \'"+statusCommitError+"\'");
 					buffer.append(" where \""+logFocDesc.getRefFieldName()+"\" = "+logEventRef+" ");
 				}					
 				error = Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
