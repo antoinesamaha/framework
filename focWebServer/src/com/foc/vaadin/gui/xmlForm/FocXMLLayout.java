@@ -1753,6 +1753,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String withPrintAndExit  = focXmlAttributes.getValue(FXML.ATT_PRINT_AND_EXIT);
 				String avoidRowBreak     = focXmlAttributes.getValue(FXML.ATT_AVOID_ROW_BREAK);
 
+				validationSettings.setReportPrintAsWord(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_PRINT_AS_WORD, true));
+				validationSettings.setReportSendEMail(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_SEND_EMAIL, true));
+				
 				if(title != null){
 					validationSettings.setTitle(title);
 				}

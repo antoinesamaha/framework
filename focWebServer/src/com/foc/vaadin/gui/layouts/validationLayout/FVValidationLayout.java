@@ -1976,6 +1976,14 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 					XMLViewKey xmlViewKey = new XMLViewKey(PrnLayoutDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
 					centralPanel = (PrnLayout_Table) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(iNavigationWindow, xmlViewKey, layoutList);
 					centralPanel.setPrintingAction_AndBecomeOwner(printingAction);
+					
+					boolean isReportSendEMail = ConfigInfo.isReportingLayout_EmailSend() && 
+							(previousLayout == null || previousLayout.getValidationLayout() == null || previousLayout.getValidationLayout().getValidationSettings() == null || previousLayout.getValidationLayout().getValidationSettings().isReportSendEMail());
+					boolean isReportPrintAsWord = ConfigInfo.isReportingLayout_WordExport() &&
+							(previousLayout == null || previousLayout.getValidationLayout() == null || previousLayout.getValidationLayout().getValidationSettings() == null || previousLayout.getValidationLayout().getValidationSettings().isReportPrintAsWord());
+					
+					centralPanel.setShowEMailSending(isReportSendEMail);
+					centralPanel.setShowWordPrinting(isReportPrintAsWord);
 					centralPanel.parseXMLAndBuildGui();
 					iNavigationWindow.changeCentralPanelContent(centralPanel, true);
 				}

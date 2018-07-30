@@ -106,6 +106,8 @@ public interface FXML {
   public static final String ATT_WITH_PRINT            		= "withPrint"        ;
   public static final String ATT_WITH_PDF                 = "withPdf"					 ;
   public static final String ATT_WITH_MSWORD              = "withMSWord"			 ;
+  public static final String ATT_ALLOW_REPORT_PRINT_AS_WORD = "reportPrintAsWord";
+  public static final String ATT_ALLOW_REPORT_SEND_EMAIL    = "reportSendEMail"	 ;
   public static final String ATT_WITH_ATTACH           		= "withAttach"       ;
   public static final String ATT_WITH_EMAIL            		= "withEmail"        ;
   public static final String ATT_WITH_EMAIL_SEND_ICON     = "withSendIcon"     ;

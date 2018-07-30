@@ -72,6 +72,21 @@ public class FocXMLAttributes extends FXMLAbstractAttributes {
 		return value;
 	}
 	
+	public boolean getBoolean(String name, boolean defaultValue) {
+		boolean val = defaultValue;
+		String value = super.getValue(name);
+		if(value != null) {
+			value = value.trim().toLowerCase();
+			if(value.equals("true") || value.equals("1")) {
+				val = true;
+			}else if(value.equals("false") || value.equals("0")) {
+				val = false;
+			}
+		}
+		return val;
+	}
+	
+	
 	public String getValueWithoutResolve(int arg0) {
     String value = super.getValue(arg0);
     return value;
