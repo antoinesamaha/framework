@@ -30,6 +30,10 @@ public class WFLog extends FocObject implements FocLogEvent {
 		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_TYPE);
 	}
 
+	public int getEventStatus(){
+		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS);
+	}
+
 	public String getEventTypeTitle(){
 		return getPropertyMultiChoiceTitle(WFLogDesc.FLD_EVENT_TYPE);
 	}
@@ -173,5 +177,15 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public String logEvent_GetSQLRequests() {
 		return null;
+	}
+
+	@Override
+	public long logEvent_GetLogEventReference() {
+		return getReferenceInt();
+	}
+
+	@Override
+	public int logEvent_GetStatus() {
+		return getEventStatus();
 	}
 }

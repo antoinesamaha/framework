@@ -224,6 +224,8 @@ public class FocWebServer implements Serializable {
 		FVValidationMore.getInstance().setValidationLayoutMoreMenuFiller(newValidationLayoutMoreFiller());
 		
 		fillDataDictionaryWithApplicationParameters();
+
+		Globals.getApp().setLogListenerIfConfigured();
 		
 		setReady(true);
 

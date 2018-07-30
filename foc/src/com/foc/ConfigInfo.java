@@ -81,6 +81,7 @@ public class ConfigInfo {
   private static boolean adaptIndexesEnabled     = true;
   private static boolean adaptConstraints        = true;
   private static String  cloudStorageClassName = null;
+  private static String  logListenerClassName = null;
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
   private static boolean shrinkDBNames = false;
@@ -220,6 +221,9 @@ public class ConfigInfo {
         	cloudClassName = "com.foc.cloudStorage.FocCloudStorage_LocalDisc";
         }
         setCloudStorageClassName(cloudClassName);
+
+        String logListenerClassName = getProperty("logListenerClassName");
+        setLogListenerClassName(logListenerClassName);
         
         //Setting default navigator size to full screen
         //Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -689,5 +693,13 @@ public class ConfigInfo {
 
 	public static void setShowStageNameOnValidationLayoutButton(boolean showStageNameOnValidationLayoutButton) {
 		ConfigInfo.showStageNameOnValidationLayoutButton = showStageNameOnValidationLayoutButton;
+	}
+
+	public static String getLogListenerClassName() {
+		return logListenerClassName;
+	}
+
+	public static void setLogListenerClassName(String logListenerClassName) {
+		ConfigInfo.logListenerClassName = logListenerClassName;
 	}
 }
