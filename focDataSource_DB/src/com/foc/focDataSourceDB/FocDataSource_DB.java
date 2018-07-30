@@ -388,15 +388,19 @@ public class FocDataSource_DB implements IFocDataSource {
       FocDesc focDesc = focObject.getThisFocDesc();
       Globals.setMouseComputing(true);
       if(focDesc != null){
-      	if(focObject.workflow_IsWorkflowSubject() && ((IWorkflow)focObject).iWorkflow_getWorkflow() != null){
-      		((IWorkflow)focObject).iWorkflow_getWorkflow().addLogLine();
-      	}
+//      	if(focObject.workflow_IsWorkflowSubject() && ((IWorkflow)focObject).iWorkflow_getWorkflow() != null){
+//      		((IWorkflow)focObject).iWorkflow_getWorkflow().addLogLine();
+//      	}
       	if(Globals.getDBManager().sync_isRemote()){
       		focObject.sync_SetNew(true);
       	}
         SQLInsert sqlInsert = new SQLInsert(focDesc, focObject);
         try{
         	error = sqlInsert.execute();
+					if(!error && focObject.workflow_IsWorkflowSubject()){
+						Workflow workflow = ((IWorkflow)focObject).iWorkflow_getWorkflow();
+						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_CREATION);
+					}        	
 				}catch (Exception e){
 					error = true;
 					Globals.logException(e);
@@ -426,7 +430,8 @@ public class FocDataSource_DB implements IFocDataSource {
 					error = sqlUpdate.execute();
 					if(!error && focObject.workflow_IsWorkflowSubject()){
 						Workflow workflow = ((IWorkflow)focObject).iWorkflow_getWorkflow();
-						if(workflow != null) workflow.addLogLine(WFLogDesc.EVENT_MODIFICATION);
+//						if(workflow != null) workflow.addLogLine(WFLogDesc.EVENT_MODIFICATION);
+						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_MODIFICATION);
 					}
 				}catch (Exception e){
 					error = true;

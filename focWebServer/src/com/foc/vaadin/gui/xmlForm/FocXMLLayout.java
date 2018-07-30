@@ -274,10 +274,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public String getScreenHelpText(){
 		return screenHelp;
 	}
-	
-	public FocObject getFocObject(){
+
+	public static FocObject getFocObject(IFocData focData) {
 		FocObject focObj = null;
-		IFocData focData = getFocData();
 		if(focData instanceof FocObject){
 			focObj = (FocObject) focData;
 		}else if(focData instanceof FocDataMap){
@@ -287,6 +286,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 		}
 		return focObj;
+	}
+	
+	public FocObject getFocObject(){
+		return getFocObject(getFocData());
 	}
 
 	public FocList getFocList(){

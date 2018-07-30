@@ -10,6 +10,8 @@
     <!-- <TableColumn name="ON_BEHALF_OF" caption="نيابة عن" /> 
     <TableColumn name="TITLE" caption="العنوان" /> -->
     <TableColumn name="COMMENT" caption="ملاحظات" />
+    <TableColumn name="EVENT_STATUS" caption="الوضع" width="-1px" />
+    <TableColumn name="STATUS_ERROR" caption="الخطأ" width="-1px" />
     <TableColumn name="PREVIOUS_STAGE" caption="المرحلة السابقة" />
     <TableColumn name="TARGET_STAGE" caption="المرحلة المستهدفة" />
   </GuiTable>

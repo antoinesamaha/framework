@@ -46,6 +46,7 @@ public class WFLogDesc extends FocDesc {
 	public static final int EVENT_CUSTOM          = FocLogEvent.EVENT_CUSTOM;
 	public static final int EVENT_COMMENT         = FocLogEvent.EVENT_COMMENT;
 	public static final int EVENT_REJECT          = FocLogEvent.EVENT_REJECT;
+	public static final int EVENT_OPENED          = FocLogEvent.EVENT_OPENED;
 	
 	public static final int LEN_FLD_COMMENT      = 400;
 	
@@ -100,6 +101,7 @@ public class WFLogDesc extends FocDesc {
 		mFld.addChoice(EVENT_CUSTOM, ConfigInfo.isArabic() ? "Custom" : "Custom");
 		mFld.addChoice(EVENT_COMMENT, ConfigInfo.isArabic() ? "ملاحظة" : "Comment");
 		mFld.addChoice(EVENT_REJECT, ConfigInfo.isArabic() ? "الغاء الموافقات السابقة" : "Reject");
+		mFld.addChoice(EVENT_OPENED, ConfigInfo.isArabic() ? "اطلاع" : "Opened");
 		addField(mFld);
 
     FDateTimeField dateTimeFld = new FDateTimeField("DATE_TIME", "Date|Time", FLD_DATE_TIME, false);

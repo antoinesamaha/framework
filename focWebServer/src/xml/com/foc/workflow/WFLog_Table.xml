@@ -10,6 +10,8 @@
     <TableColumn name="ON_BEHALF_OF" caption="On Behalf" width="-1px" />
     <TableColumn name="TITLE" caption="Title" width="-1px" />
     <TableColumn name="COMMENT" caption="Comment" expandRation="1" />
+    <TableColumn name="EVENT_STATUS" caption="Status" width="-1px" />
+    <TableColumn name="STATUS_ERROR" caption="Status Error" width="-1px" />
     <TableColumn name="PREVIOUS_STAGE" caption="From Stage" width="-1px" />
     <TableColumn name="TARGET_STAGE" caption="To Stage" width="-1px" />
   </GuiTable>

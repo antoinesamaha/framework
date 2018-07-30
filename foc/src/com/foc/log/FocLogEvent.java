@@ -14,6 +14,7 @@ public interface FocLogEvent {
 	public static final int EVENT_CUSTOM          = 8;
 	public static final int EVENT_COMMENT         = 9;
 	public static final int EVENT_REJECT          = 10;
+	public static final int EVENT_OPENED          = 11;
 
 	public static final int STATUS_EXCLUDED       =  0;
 	public static final int STATUS_INCLUDED       =  1;

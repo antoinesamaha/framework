@@ -2,12 +2,15 @@ package com.foc.vaadin;
 
 import java.util.ArrayList;
 
-import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
+import com.foc.business.workflow.implementation.IWorkflow;
+import com.foc.business.workflow.implementation.Workflow;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
+import com.foc.log.FocLogEvent;
+import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
@@ -280,6 +283,16 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				getCentralPanelsArrayList().add(newCentralPanel);
 			}
 		}	
+	}
+	
+	public static void logFormOpened(IFocData focData) {
+		if(focData != null) {
+			FocObject focObjToBeViewed = FocXMLLayout.getFocObject(focData);
+			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsWorkflowSubject()) {
+				Workflow workflow = ((IWorkflow)focObjToBeViewed).iWorkflow_getWorkflow();
+				if(workflow != null) workflow.insertLogLine(FocLogEvent.EVENT_OPENED);
+			}
+		}
 	}
 	
 	public void removeFromCacheAndDispose_AllLayouts(boolean keepLast){
