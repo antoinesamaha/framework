@@ -182,8 +182,6 @@ public class ConfigInfo {
 	          
 	          jdbcSchema = schema.split("\\?")[0];
 	        }else if( jdbcURL.indexOf("sqlserver") != -1 ){//SQL Server
-	        	//jdbc.url=jdbc:sqlserver://localhost:49172;instance=SQLEXPRESS;databaseName=isf_inspection;integratedSecurity=true;useUnicode=true;characterEncoding=UTF-8;
-	        	//jdbc.url=jdbc:sqlserver://localhost:1433;databaseName=FenixInspection;integratedSecurity=true;useUnicode=true;characterEncoding=UTF-8;
 	          String localhost = jdbcURL.substring(jdbcURL.indexOf("//", 10)+2, jdbcURL.indexOf(':', 16));
 	          String port = jdbcURL.substring(jdbcURL.indexOf(':', 16)+1, jdbcURL.indexOf(';', 16));
 	          
