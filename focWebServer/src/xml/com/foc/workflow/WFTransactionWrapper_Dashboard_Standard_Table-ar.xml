@@ -5,8 +5,8 @@
     <TableColumn name="TYPE" caption="النوع" width="100px"/>
     <TableColumn name="DESCRIPTION" caption="تفاصيل" link="false" expandRatio="1"/>
     <!-- TableColumn name="CURRENT_STAGE" caption="الوضع" / -->
-    <TableColumn name="REJECT" caption="رفض" width="100px" />
-    <TableColumn name="SIGN" caption="موافقة" width="100px" />
+    <TableColumn name="REJECT" caption="رفض" width="-1px" />
+    <TableColumn name="SIGN" caption="موافقة" width="-1px" />
     <!--
     <TableColumn name="CODE" caption="Code" link="true" />
     <TableColumn name="ON_BEHALF_OF" caption="On Behalf" />
