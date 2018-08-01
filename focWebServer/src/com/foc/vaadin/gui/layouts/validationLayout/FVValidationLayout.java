@@ -920,10 +920,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
   private INavigationWindow getNavigationWindow(){
   	ICentralPanel centralPanel = getCentralPanel();
-  	INavigationWindow iNavigationWindow = null;
-  	if(centralPanel instanceof FocXMLLayout){
-  		iNavigationWindow = ((FocXMLLayout)centralPanel).getMainWindow();
-  	}
+  	INavigationWindow iNavigationWindow = centralPanel != null ? centralPanel.getMainWindow() : null;
   	return iNavigationWindow;
   }
   
@@ -2439,31 +2436,52 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		FocObject focObj = getWorkflowFocObject();
 		if(worflowConsole == null && focObj instanceof IWorkflow && createIfNull) {
 			XMLViewKey   key = new XMLViewKey(WorkflowWebModule.STORAGE_NAME_WORKFLOW_CONSOLE, XMLViewKey.TYPE_FORM);
-			worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) getWindow(), key, focObj);
+			INavigationWindow window = findAncestor(FocCentralPanel.class);
+			if(window == null) window = (INavigationWindow) getWindow();
 			
-			worflowConsole.setForceHideSignCancel(isForceHideSignCancel());
-			worflowConsole.setWidth("100%");
-			addComponentAsFirst(worflowConsole);
-			setComponentAlignment(worflowConsole, Alignment.BOTTOM_LEFT);
+//      if(window != null) {
+				worflowConsole = (WFConsole_Form) XMLViewDictionary.getInstance().newCentralPanel(window, key, focObj);
+				
+				worflowConsole.setForceHideSignCancel(isForceHideSignCancel());
+				worflowConsole.setWidth("100%");
+				addComponentAsFirst(worflowConsole);
+				setComponentAlignment(worflowConsole, Alignment.BOTTOM_LEFT);
+				
+				worflowConsole.setFocXMLLayout(getCentralPanel());
 			
-			worflowConsole.setFocXMLLayout(getCentralPanel());
-		
-			worflowConsole.addStyleName("foc-footerLayout");
-			setLogLayoutInWorkflowConsole();
-		}
+				worflowConsole.addStyleName("foc-footerLayout");
+				setLogLayoutInWorkflowConsole();
+      }
+//		}
 		return worflowConsole;
 	}
 			
+	private FocXMLLayout newLogLayout(INavigationWindow mainWindow) {
+		FocObject focObj = getWorkflowFocObject() ;
+		XMLViewKey key = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
+		logLayout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focObj);
+		return logLayout;
+	}
+	
 	private FocXMLLayout getLogLayout(boolean createIfNull) {
 		FocObject focObj = getWorkflowFocObject() ;
 		if(logLayout == null && focObj instanceof IWorkflow && createIfNull) {
-			FocWebVaadinWindow mainWindow = (FocWebVaadinWindow) getFocVaadinMainWindow();
-			FVVerticalLayout mainVerticalLayout = mainWindow != null ? mainWindow.getCentralPanelWrapper() : null;
-			if(mainVerticalLayout != null) {
-				XMLViewKey key = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_TABLE, "Banner", XMLViewKey.VIEW_DEFAULT);
-				logLayout = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focObj);
-				mainVerticalLayout.addComponent(logLayout);
-			}
+			INavigationWindow mainWindow = getNavigationWindow();
+			
+			Window popupWindow = getWindow();
+			if(popupWindow != null) {
+				logLayout = newLogLayout(mainWindow);
+				addComponentAsFirst(logLayout);
+			} else { 
+				if(mainWindow instanceof FocWebVaadinWindow) {
+					FVVerticalLayout mainVerticalLayout = mainWindow != null ? ((FocWebVaadinWindow)mainWindow).getCentralPanelWrapper() : null;
+					if(mainVerticalLayout != null) {
+						logLayout = newLogLayout(mainWindow);
+						mainVerticalLayout.addComponent(logLayout);
+					}
+				}
+			} 
+
 			setLogLayoutInWorkflowConsole();
 		}
 		

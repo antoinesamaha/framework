@@ -53,8 +53,8 @@ public class FVStageLayout_Button extends Button {
 	public void buttonClicked() {
 		FVValidationLayout vLayout = getValidationLayout();
 		if(vLayout != null) {
-			vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
 			vLayout.setVisible_WorkflowConsole(!vLayout.isVisible_WorkflowConsole());
+			vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
 			
 			if(vLayout.isVisible_WorkflowConsole()) {
 				setIcon(FontAwesome.ARROW_DOWN);
