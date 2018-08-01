@@ -262,7 +262,10 @@ public class WFConsole_Form extends FocXMLLayout {
 				public boolean executeOption(String option) {
 					if(option.equals("YES")){
 						Workflow  workflow  = getWorkflow();
-						if(workflow != null) workflow.undoAllSignatures(getCommentWritten());
+						if(workflow != null) {
+							workflow.undoAllSignatures(getCommentWritten());
+							setCommentWritten("");
+						}
 						if(gotoNextSlide()) {
 							applyForm();
 						}

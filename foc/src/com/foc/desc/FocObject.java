@@ -4185,7 +4185,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 
 	public String workflow_GetSignButtonCaption(boolean onBehalf){
 		if(onBehalf) return ConfigInfo.isArabic() ? "موافقة بالنيابة" : "Sign PP";
-		else return ConfigInfo.isArabic() ? " مواققة " : "Sign" ;
+		else return ConfigInfo.isArabic() ? " موافقة " : "Sign" ;
 	}
 	
 	public String workflow_GetRejectButtonCaption(boolean onBehalf){
