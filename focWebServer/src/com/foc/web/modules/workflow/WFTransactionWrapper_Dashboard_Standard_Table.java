@@ -94,6 +94,8 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 					resolver = dictionary.getParameter("DESC"+index);
 				}
 			}
+			
+			wrapperList.setDefaultListOrder();
 		}
 	}
 	

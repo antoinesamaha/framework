@@ -1,9 +1,11 @@
 package com.foc.business.workflow.signing;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import com.foc.business.calendar.FCalendar;
 import com.foc.business.department.Department;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WorkflowTransactionFactory;
@@ -157,8 +159,32 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 				fillWrapperListForFocDesc(focDesc); 
 			}
 		}
-			
+		
+		setDefaultListOrder();
+//		setOrderComparator(new Comparator<WFTransactionWrapper>() {
+//			@Override
+//			public int compare(WFTransactionWrapper w0, WFTransactionWrapper w1) {
+//				int ret= 0;
+//				
+//				if(w0 != null && w1 != null) {
+//					long compDate = FCalendar.compareDatesRegardlessOfTime(w0.getTransactionDate(), w1.getTransactionDate());
+//					if(compDate > 0) ret = 1;
+//					else if(compDate < 0) ret = -1;
+//					
+//					if(ret == 0) {
+//						
+//					}
+//				}
+//				
+//				return ret;
+//			}
+//		});
+	}
+
+	public void setDefaultListOrder() {
 		FocListOrder order = new FocListOrder();
+		order.setReverted(true);
+		order.addField(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_DATE));
 		order.addField(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_TYPE));
 		order.addField(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_CODE));
 		setListOrder(order);

@@ -16,6 +16,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 		super(constr);
 		newFocProperties();
 	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
 
 	public void setLogSubjectReference(long ref) {
 		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
@@ -127,7 +132,7 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public long logEvent_GetEntityReference() {
 		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
-		long ref = prop != null ? prop.getLocalReferenceInt() : null;
+		long ref = prop != null ? prop.getLocalReferenceInt() : 0;
 		return ref;
 	}
 

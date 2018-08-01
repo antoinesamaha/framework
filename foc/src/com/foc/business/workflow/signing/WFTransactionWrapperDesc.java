@@ -4,6 +4,7 @@ import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.map.WFStageDesc;
 import com.foc.desc.FocDesc;
+import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
@@ -13,13 +14,14 @@ import com.foc.list.FocListOrder;
 
 public class WFTransactionWrapperDesc extends FocDesc {
 	public static final int FLD_TRANSACTION_TYPE          = 1;
-	public static final int FLD_TRANSACTION_CODE          = 2;  
+	public static final int FLD_TRANSACTION_CODE          = 2;
 	public static final int FLD_TRANSACTION_DESCRIPTION   = 3;
 	public static final int FLD_TRANSACTION_CURRENT_STAGE = 4;
 	public static final int FLD_TRANSACTION_AREA          = 5;
 	public static final int FLD_ORIGINAL_TRANSACTION      = 6;
 	public static final int FLD_TITLE                     = 7;
 	public static final int FLD_ON_BEHALF_OF              = 8;
+	public static final int FLD_TRANSACTION_DATE          = 9;
 	
 	public static final String DB_TABLE_NAME = "WF_TRANSACTION_WRAPPER";
   
@@ -41,6 +43,9 @@ public class WFTransactionWrapperDesc extends FocDesc {
 		cFld = new FStringField("DESCRIPTION", "Description", FLD_TRANSACTION_DESCRIPTION, false, 1000);
 		addField(cFld);
 
+		FDateField dFld = new FDateField("TRANSACTION_DATE", "Date", FLD_TRANSACTION_DATE, false);
+		addField(dFld);
+		
 		FObjectField oFld = new FObjectField("CURRENT_STAGE", "Current Stage", FLD_TRANSACTION_CURRENT_STAGE, WFStageDesc.getInstance());
 		oFld.setSelectionList(WFStageDesc.getList(FocList.NONE));
 		oFld.setComboBoxCellEditor(WFStageDesc.FLD_NAME);
