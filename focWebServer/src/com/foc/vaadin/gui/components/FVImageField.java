@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocObject;
 import com.foc.property.FBlobMediumProperty;
@@ -28,6 +29,7 @@ import com.foc.vaadin.gui.components.upload.FVImageReceiver;
 import com.foc.vaadin.gui.components.upload.FVUpload_Image;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.vaadin.server.ConnectorResource;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.server.FileDownloader;
@@ -35,6 +37,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -263,6 +266,25 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		return prop;
   }
 	
+	public FProperty getFocProperty(){
+		FProperty porp = null;
+		if(cloudStorageProperty != null){
+			porp = cloudStorageProperty;
+		} else if(imageProperty != null) {
+			porp = imageProperty;
+		}
+		return porp;
+	}
+	
+	public FocObject getFocObject() {
+		FocObject focObject = null;
+		FProperty prop = getFocProperty();
+		if(prop != null) {
+			focObject = prop.getFocObject();
+		}
+		return focObject;
+	}
+	
 	@Override
 	public void imageReceived(SucceededEvent event, InputStream image) {
 		if(cloudStorageProperty != null){
@@ -290,6 +312,36 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			}
 		}		
 		refreshImageFromProperty();
+		adjustDownloadButtonVisibility(cloudStorageProperty != null ? cloudStorageProperty : imageProperty);
+	}
+
+	public boolean saveObjectBeforeUploadIfCreated() {
+		boolean error = false;
+		//If Object is created we need to insert it first
+		FocObject focObject = getFocObject(); 
+		if(focObject != null && focObject.isCreated()){
+			error = true;
+			
+			Component comp = this;
+			while(comp != null && comp.getParent() != null) {
+				comp = comp.getParent();
+				
+				if(comp instanceof FocXMLLayout) {
+					FocXMLLayout xmlLay = (FocXMLLayout) comp;
+					xmlLay.copyGuiToMemory();
+					if(xmlLay.getValidationLayout() != null) {
+						if(!xmlLay.getValidationLayout().commit()) {
+							error = false;
+							break;
+						}
+					}
+				}
+			}
+			
+			//If Still created we try directly saving
+			if(!error && focObject.isCreated()) focObject.validate(true);
+		}
+		return error;
 	}
 	
 	public boolean refreshImageFromProperty(){
@@ -374,6 +426,10 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			    uploader.setImageReceiver(this);
 			    
 			    downloadButton = new Button("Download");//, FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD));
+					if(ConfigInfo.isArabic()) {
+						downloadButton.setCaption("تنزيل");//To hide the default ugly button we should set this to null
+					}
+//					downloadButton.setIcon(FontAwesome.DOWNLOAD);
 			    downloadButton.setWidth("100px");
 //			    downloadButton.setCaption(null);
 //			    downloadButton.setStyleName(BaseTheme.BUTTON_LINK);
