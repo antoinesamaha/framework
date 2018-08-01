@@ -1,7 +1,10 @@
 <VerticalLayout spacing="false" width="100%" captionMargin="0" margin="false">
   <ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" withStatus="false" />
   
-  <Label name="SENDER" value="$F{USER.FULL_NAME} - $F{DATE_TIME} - $P{EVENT_TYPE_TITLE}" style="f12" width="1000px" description="$F{Date} - $F{Time}"/>
-  <Label name="MESSAGE" value="$F{COMMENT}" style="f14,text-right" width="1000px" border="true" margin="true" spacing="true" description="$F{Date} - $F{Time}" visibleWhenXX="NOT(IS_EMPTY(COMMENT))" />
+  <Label name="SENDER" value="$F{USER.FULL_NAME} - $F{DATE_TIME} - $P{EVENT_TYPE_TITLE}" style="f12,text-right" width="1000px" description="$F{Date} - $F{Time}"/>
+  <Label name="MESSAGE" value="$F{COMMENT}" style="f14,text-right,border-blue" width="1000px" margin="true" spacing="true" description="$F{Date} - $F{Time}" visibleWhen="NOT(IS_EMPTY(COMMENT))" />
+  <Label name="MESSAGE" value="$F{COMMENT}" style="f14,text-right,border-bottom-blue" width="1000px" margin="true" spacing="true" description="$F{Date} - $F{Time}" visibleWhen="IS_EMPTY(COMMENT)" />
+  
+  <!-- Line style="borderBlue" width="1000px" / -->
   
 </VerticalLayout>

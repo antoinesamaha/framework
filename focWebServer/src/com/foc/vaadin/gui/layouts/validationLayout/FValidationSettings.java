@@ -26,6 +26,9 @@ public class FValidationSettings {
   public boolean hasPDFGenerator   = false;
   public boolean hasMSWordGenerator= false;
   public boolean avoidRowBreak = false;
+  public boolean reportPrintAsWord = true;
+  public boolean reportSendEMail   = true;
+
 //  public boolean printAndExit = false;
 
   public FValidationSettings() {
@@ -245,4 +248,20 @@ public class FValidationSettings {
   public void setCommitData(boolean commitData) {
     this.commitData = commitData;
   }
+
+	public boolean isReportPrintAsWord() {
+		return reportPrintAsWord;
+	}
+
+	public void setReportPrintAsWord(boolean reportPrintAsWord) {
+		this.reportPrintAsWord = reportPrintAsWord;
+	}
+
+	public boolean isReportSendEMail() {
+		return reportSendEMail;
+	}
+
+	public void setReportSendEMail(boolean reportSendEMail) {
+		this.reportSendEMail = reportSendEMail;
+	}
 }

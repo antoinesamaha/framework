@@ -106,6 +106,10 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 		super.init(window, xmlView, focData);
 	}
 	
+	protected boolean isWithDocumentTypeFilter() {
+		return true;
+	}
+	
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
@@ -119,7 +123,9 @@ public class PhotoAlbum_Table extends FocXMLLayout {
     }
 		
     addPopupMenu_DownAttachment();
-    addDocumentTypeFilterComboBox();
+    if(isWithDocumentTypeFilter()) {
+    	addDocumentTypeFilterComboBox();
+    }
     
     PhotoAlbumConfig config = PhotoAlbumConfig.getInstance();
     if(config != null && config.isSingleGroup()){
@@ -282,7 +288,7 @@ public class PhotoAlbum_Table extends FocXMLLayout {
   		columnGenerator = new ColumnGenerator() {
   			public Object generateCell(Table source, Object itemId, Object columnId) {
   				long objId = (Long) itemId;
-  				FVButton button = new FVButton(tableColumn.getCaption());
+  				FVButton button = new FVButton("");
   				Resource iconResource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD);
   				button.setStyleName(Runo.BUTTON_LINK);
   				button.setWidth("-1px");
@@ -312,6 +318,10 @@ public class PhotoAlbum_Table extends FocXMLLayout {
   	return XMLViewKey.VIEW_DEFAULT;
   }
   
+  public boolean isPopupDocumentFormWhenAdd() {
+  	return true;
+  }
+  
   public void addPhotoToAlbum(String fileName, InputStream inputStream){
     if(inputStream != null){
     	FocWebApplication application = FocWebApplication.getInstanceForThread();
@@ -325,8 +335,10 @@ public class PhotoAlbum_Table extends FocXMLLayout {
         if(photoAlbum != null){
         	photoAlbum.setDocumentType(filteredType);
 	        refresh();
-	        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, getFormContextAfterUpload(), getFormViewAfterUpload());
-	        getMainWindow().changeCentralPanelContent(XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, photoAlbum), true);
+	        if(isPopupDocumentFormWhenAdd()) {
+		        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, getFormContextAfterUpload(), getFormViewAfterUpload());
+		        getMainWindow().changeCentralPanelContent(XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, photoAlbum), true);
+	        }
         }
       }
     }

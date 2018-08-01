@@ -1,0 +1,5 @@
+<VerticalLayout margin="true" captionMargin="0" spacing="true" width="720px" height="-1px">
+  <ValidationSettings formTitle="ملاحظات" withApply="true" withSave="false" withAttach="false" withPrint="false" viewSelector="false" withStatus="false" withStage="false" commitData="false"/>
+  <Label value="Comments" style="bold,f16,text-right" width="100%"/>
+  <TextField prompt="Enter your comments here" textArea="true" name="MY_COMMENT" style="orange-bubble" width="100%" height="75px" expandRatio="1" />  
+</VerticalLayout>

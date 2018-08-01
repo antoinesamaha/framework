@@ -11,6 +11,7 @@ public class WFTransWrapperFilterDesc extends FocDescForFilter{
 
 	public static final String COND_TYPE        = "TYPE"        ;
 	public static final String COND_CODE        = "CODE"        ;
+	public static final String COND_DATE        = "DATE"        ;
 	public static final String COND_DESCRIPTION = "DESCRIPTION" ;
 	
   public WFTransWrapperFilterDesc() {
@@ -27,6 +28,9 @@ public class WFTransWrapperFilterDesc extends FocDescForFilter{
 
       strCond = new StringCondition(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_CODE), COND_CODE);
       filterDesc.addCondition(strCond);
+
+      DateCondition dateCond = new DateCondition(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_DATE), COND_DATE);
+      filterDesc.addCondition(dateCond);
 
       strCond = new StringCondition(FFieldPath.newFieldPath(WFTransactionWrapperDesc.FLD_TRANSACTION_DESCRIPTION), COND_DESCRIPTION);
       filterDesc.addCondition(strCond);

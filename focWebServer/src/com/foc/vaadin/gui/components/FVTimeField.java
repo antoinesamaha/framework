@@ -2,12 +2,8 @@ package com.foc.vaadin.gui.components;
 
 import org.xml.sax.Attributes;
 
-import com.foc.Globals;
-import com.foc.property.FDouble;
 import com.foc.property.FProperty;
 import com.foc.property.FTime;
-import com.foc.property.validators.FNumLimitValidator;
-import com.foc.property.validators.FPropertyValidator;
 
 @SuppressWarnings({ "serial"})
 public class FVTimeField extends FVTextField {

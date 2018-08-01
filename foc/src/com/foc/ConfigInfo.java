@@ -81,9 +81,11 @@ public class ConfigInfo {
   private static boolean adaptIndexesEnabled     = true;
   private static boolean adaptConstraints        = true;
   private static String  cloudStorageClassName = null;
+  private static String  logListenerClassName = null;
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
   private static boolean shrinkDBNames = false;
+  private static boolean showStageNameOnValidationLayoutButton = true;
   
   private static boolean allowCSVExport          = true;
   private static boolean allowEXCELExport        = true;
@@ -92,6 +94,9 @@ public class ConfigInfo {
   
   private static String reportFileFullPath = "d:/eclipseworkspace_c3/c3plugin_mg/defaultConfig.properties";
     
+  private static boolean reportingLayout_wordExport = true;
+  private static boolean reportingLayout_emailSend  = true;
+  
   private static Properties props = null; 
   
   public static String getProperty(String key){
@@ -217,6 +222,9 @@ public class ConfigInfo {
         	cloudClassName = "com.foc.cloudStorage.FocCloudStorage_LocalDisc";
         }
         setCloudStorageClassName(cloudClassName);
+
+        String logListenerClassName = getProperty("logListenerClassName");
+        setLogListenerClassName(logListenerClassName);
         
         //Setting default navigator size to full screen
         //Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -336,6 +344,15 @@ public class ConfigInfo {
         if(str != null && !str.isEmpty()){
         	StatusHolderDesc.PRINTED_LABEL_FOR_PROPOSAL = str;
         }
+        
+        str = getProperty("foc.showStageNameOnValidationLayoutButton");
+        showStageNameOnValidationLayoutButton = str != null ? str.compareTo("1") == 0 : true;     
+        
+        str = getProperty("reportingLayout.wordExport");
+        reportingLayout_wordExport = str != null ? str.compareTo("1") == 0 : true;
+        
+        str = getProperty("reportingLayout.emailSend");
+        reportingLayout_emailSend = str != null ? str.compareTo("1") == 0 : true;
         
         userName          = getProperty("userLogin");
         password          = getProperty("password");
@@ -675,5 +692,37 @@ public class ConfigInfo {
 
 	public static boolean isShowSignatureButton() {
 		return showSignatureButton;
+	}
+
+	public static boolean isShowStageNameOnValidationLayoutButton() {
+		return showStageNameOnValidationLayoutButton;
+	}
+
+	public static void setShowStageNameOnValidationLayoutButton(boolean showStageNameOnValidationLayoutButton) {
+		ConfigInfo.showStageNameOnValidationLayoutButton = showStageNameOnValidationLayoutButton;
+	}
+
+	public static String getLogListenerClassName() {
+		return logListenerClassName;
+	}
+
+	public static void setLogListenerClassName(String logListenerClassName) {
+		ConfigInfo.logListenerClassName = logListenerClassName;
+	}
+
+	public static boolean isReportingLayout_WordExport() {
+		return reportingLayout_wordExport;
+	}
+
+	public static void setReportingLayout_WordExport(boolean reportingLayout_wordExport) {
+		ConfigInfo.reportingLayout_wordExport = reportingLayout_wordExport;
+	}
+
+	public static boolean isReportingLayout_EmailSend() {
+		return reportingLayout_emailSend;
+	}
+
+	public static void setReportingLayout_EmailSend(boolean reportingLayout_emailSend) {
+		ConfigInfo.reportingLayout_emailSend = reportingLayout_emailSend;
 	}
 }

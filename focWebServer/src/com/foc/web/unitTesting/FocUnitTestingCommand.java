@@ -25,6 +25,7 @@ import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVGearWrapper.PopupLinkButton;
 import com.foc.vaadin.gui.components.FVMultipleChoiceOptionGroupPopupView;
 import com.foc.vaadin.gui.components.FVObjectComboBox;
@@ -199,13 +200,18 @@ public class FocUnitTestingCommand {
     }
     
   	if(layoutName != null){
-	    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(result, layoutName, false);
-	    if (tableWrapper != null) {
-	    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
-	    	if(centralPanel != null){
-	    		result = (FocXMLLayout) centralPanel; 
-	    	}
-	    }
+  		Component layoutComponent = (Component) findComponent(result, layoutName, false);
+  		if(layoutComponent instanceof FVTableWrapperLayout) {
+		    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) layoutComponent;
+		    if (tableWrapper != null) {
+		    	ICentralPanel centralPanel = tableWrapper.innerLayout_GetICentralPanel();
+		    	if(centralPanel != null){
+		    		result = (FocXMLLayout) centralPanel; 
+		    	}
+		    }
+  		} else {
+  			result = (FocXMLLayout) layoutComponent;
+  		}
   	}
     
     return result;
@@ -1197,7 +1203,6 @@ public class FocUnitTestingCommand {
     }
 	}
   
-  
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, String priorityToCaptionProperty) throws Exception {
   	return setComponentValue(component, compNameForTheMessage, componentValue, false, priorityToCaptionProperty);
   }
@@ -1730,8 +1735,9 @@ public class FocUnitTestingCommand {
 
   	if(component == null){
   		if(failIfNotFound){
+  			Globals.logString("Could not find component " + componentName + ".");
+  			navigationLayout.debug_PrintAllComponents();
 	  		getLogger().addFailure("Could not find component " + componentName + ".");
-	  		navigationLayout.debug_PrintAllComponents();
   		}
   	}else{
 			AbstractComponent comp = (AbstractComponent) component;
@@ -1884,7 +1890,7 @@ public class FocUnitTestingCommand {
       	if(validationLayout.isVisible_WorkflowConsole()) {
       		WFConsole_Form console = validationLayout.getWorkflowConsole();
       		if(console != null && console.isVisible() && console.getComponentByName("SIGN") != null && console.getComponentByName("SIGN").isVisible()) {
-      			console.button_SIGN_Clicked(null);
+      			console.button_SIGN_Clicked((FVButtonClickEvent)null);
       			getLogger().addInfo("Sign button Clicked");
       		} else {
       			getLogger().addFailure("Console not found");
@@ -1976,5 +1982,12 @@ public class FocUnitTestingCommand {
 
   public void notification_Expect(String notificationMessage, String description, String notificationType) {
   	getDictionary().expectedNotification_Set(notificationMessage, description, notificationType);
+  }
+  
+  public void notification_CheckOccured() throws Exception {
+  	FocUnitExpectedNotification pendingNotif = getDictionary().expectedNotification_Get();
+  	if(pendingNotif != null) {
+  		getDictionary().getLogger().addFailure("Expected Notification Did Not Occure");
+  	}
   }
 }

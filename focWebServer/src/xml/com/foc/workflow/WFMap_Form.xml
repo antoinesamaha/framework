@@ -4,6 +4,7 @@
   <HorizontalLayout captionMargin="0" spacing="true" margin="true">
       <GuiField name="NAME" caption="Name" width="150px" height="-1px" />
       <GuiField name="DESCRIP" caption="Description" width="250px" height="-1px" />
+      <GuiField name="TITLE_INITIAL_EDIT>NAME" caption="Title of initial edit" width="250px" height="-1px" />
   </HorizontalLayout>
   <IncludeXML captionMargin="0" name="WF_SIGNATURE_TABLE_LIST" dataPath="WF_SIGNATURE_LIST" storage="WF_SIGNATURE" type="table" />
 </VerticalLayout>

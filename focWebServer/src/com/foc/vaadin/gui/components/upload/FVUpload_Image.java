@@ -5,20 +5,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
-import com.foc.vaadin.gui.FVIconFactory;
-import com.vaadin.server.Resource;
+import com.foc.vaadin.gui.components.FVImageField;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.Upload;
+import com.vaadin.ui.Upload.StartedEvent;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Button.ClickEvent;
 
 @SuppressWarnings("serial")
-public class FVUpload_Image extends CustomComponent implements Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
+public class FVUpload_Image extends CustomComponent implements Upload.StartedListener, Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
 
 	private int maxSizeAllowed = 6048576;
 	
@@ -40,7 +39,12 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 		// Create the Upload component.
 		upload = new Upload(null, this);
 		upload.setImmediate(true);
-		upload.setButtonCaption("Upload");//To hide the default ugly button we should set this to null
+//		upload.addStyleName("focUpload");
+		if(ConfigInfo.isArabic()) {
+			upload.setButtonCaption("تحميل");//To hide the default ugly button we should set this to null
+		} else {
+			upload.setButtonCaption("Upload");//To hide the default ugly button we should set this to null
+		}
 		
 		// Use a custom button caption instead of plain "Upload".
 		//upload.setButtonCaption(null);
@@ -58,6 +62,7 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 		// Listen for events regarding the success of upload.
 		upload.addSucceededListener((Upload.SucceededListener) this);
 		upload.addFailedListener((Upload.FailedListener) this);
+		upload.addStartedListener((Upload.StartedListener) this);
 
 		root.addComponent(upload);
 		root.setComponentAlignment(upload, Alignment.TOP_RIGHT);
@@ -135,7 +140,8 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 	// This is called if the upload fails.
 	public void uploadFailed(Upload.FailedEvent event) {
 		// Log the failure on screen.
-		root.addComponent(new Label("Uploading " + event.getFilename() + " of type '" + event.getMIMEType() + "' failed."));
+		//root.addComponent(new Label("Uploading " + event.getFilename() + " of type '" + event.getMIMEType() + "' failed."));
+		Globals.logString("FVUpload_Image Failure " + event.getFilename() + " of type '" + event.getMIMEType() + "' failed.");
 	}
 
 	public int getMaxSizeAllowed() {
@@ -144,5 +150,19 @@ public class FVUpload_Image extends CustomComponent implements Upload.SucceededL
 
 	public void setMaxSizeAllowed(int maxSizeAllowed) {
 		this.maxSizeAllowed = maxSizeAllowed;
+	}
+
+	@Override
+	public void uploadStarted(StartedEvent event) {
+		boolean error = false;
+		FVImageReceiver receiver = getImageReceiver();
+		if(receiver != null && receiver instanceof FVImageField) {
+			error = ((FVImageField)receiver).saveObjectBeforeUploadIfCreated();
+		}
+
+		if(upload != null && error) {
+			upload.interruptUpload();
+			Globals.showNotification("Upload interrupted", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+		}
 	}
 }

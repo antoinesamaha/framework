@@ -24,11 +24,13 @@ import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
+import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.FocWebServer;
 
@@ -427,6 +429,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   		  if(centralPanel != null){
   		  	centralPanel.setLinkSerialisation(linkSerialization);
   		  	centralPanel.init(mainWindow, view, focData);
+  		  	FocCentralPanel.logFormOpened(focData);
   		  	centralPanel.setViewRights(rightAllowed);
   		  	if(withXMLParsing){
   		  		centralPanel.parseXMLAndBuildGui();

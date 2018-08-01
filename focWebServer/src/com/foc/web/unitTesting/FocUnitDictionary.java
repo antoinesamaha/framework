@@ -228,6 +228,7 @@ public class FocUnitDictionary {
     FocUnitTestingSuite suite = getTestingSuite(suiteName);
 		
 		try {
+			Globals.getApp().setIsUnitTest(true);
 			suite.runTestByName(testName);
 		} catch (Exception e) {
 		  Globals.logException(e);

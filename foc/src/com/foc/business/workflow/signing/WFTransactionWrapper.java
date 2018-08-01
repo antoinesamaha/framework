@@ -1,5 +1,8 @@
 package com.foc.business.workflow.signing;
 
+import java.sql.Date;
+
+import com.foc.business.calendar.FCalendar;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.implementation.IWorkflow;
@@ -43,6 +46,14 @@ public class WFTransactionWrapper extends FocObject {
 
 	public void setTransactionCode(String code){
 		setPropertyString(WFTransactionWrapperDesc.FLD_TRANSACTION_CODE, code);
+	}
+	
+	public Date getTransactionDate(){
+		return getPropertyDate(WFTransactionWrapperDesc.FLD_TRANSACTION_DATE);
+	}
+
+	public void setTransactionDate(Date date){
+		setPropertyDate(WFTransactionWrapperDesc.FLD_TRANSACTION_DATE, date);
 	}
 
 	public WFTitle getTitle(){
@@ -88,10 +99,13 @@ public class WFTransactionWrapper extends FocObject {
 	public void setWorkflow(IWorkflow iWorkflow){
 //		this.iWorkflow = iWorkflow;
 		if(iWorkflow != null){
-			setOriginalTransaction((FocObject) iWorkflow);
+			FocObject focObj = (FocObject) iWorkflow;
+			
+			setOriginalTransaction(focObj);
 			IWorkflowDesc iWorkflowDesc = (IWorkflowDesc) iWorkflow.iWorkflow_getWorkflow().getFocDesc();
 			setTransactionType(iWorkflowDesc.iWorkflow_getTitle());
 			setTransactionCode(iWorkflow.iWorkflow_getCode());
+			if(!FCalendar.isDateZero(focObj.getDate())) setTransactionDate(focObj.getDate());
 			setTransactionDescription(iWorkflow.iWorkflow_getDescription());
 			setTransactionArea(iWorkflow.iWorkflow_getWorkflow().getArea());
 			setTransactionStage(iWorkflow.iWorkflow_getWorkflow().getCurrentStage());
@@ -143,13 +157,15 @@ public class WFTransactionWrapper extends FocObject {
 	
 	public void sign(){
 		IWorkflow iworkflow = getWorkflow();
-		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
-		
-		WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
-		if(result != null){
-			workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf());
-		}else{
-			workflow.sign();
+		if(iworkflow != null) {
+			Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
+			
+			WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
+			if(result != null){
+				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf());
+			}else{
+				workflow.sign();
+			}
 		}
 //		workflow.sign(getSignature(), getTitleIndex());
 	}
@@ -165,5 +181,11 @@ public class WFTransactionWrapper extends FocObject {
 		IWorkflow iworkflow = getWorkflow();
 		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
 		workflow.undoAllSignatures();
+	}
+	
+	public void undoAllSignatures(String comment){
+		IWorkflow iworkflow = getWorkflow();
+		Workflow  workflow  = iworkflow.iWorkflow_getWorkflow();
+		workflow.undoAllSignatures(comment);
 	}
 }

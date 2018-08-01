@@ -75,6 +75,14 @@ public class FCloudStorageProperty extends FBlobMediumProperty {
 		this.key = key;
 	}
 	
+	public void setFileNameInProperty(String fileName){
+		FCloudStorageField csField = (FCloudStorageField) getFocField();
+		FProperty nameProp = (csField != null && getFocObject() != null) ? getFocObject().getFocProperty(csField.getFileNameFieldID()) : null; 
+		if(nameProp != null){
+			nameProp.setString(fileName);
+		}
+	}
+	
 	public String getFileName(){
 		String fileName = DEFAULT_FILE_NAME;
 		

@@ -16,6 +16,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 		super(constr);
 		newFocProperties();
 	}
+	
+	@Override
+	public void dispose() {
+		super.dispose();
+	}
 
 	public void setLogSubjectReference(long ref) {
 		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
@@ -28,6 +33,10 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	public int getEventType(){
 		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_TYPE);
+	}
+
+	public int getEventStatus(){
+		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS);
 	}
 
 	public String getEventTypeTitle(){
@@ -123,7 +132,7 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public long logEvent_GetEntityReference() {
 		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
-		long ref = prop != null ? prop.getLocalReferenceInt() : null;
+		long ref = prop != null ? prop.getLocalReferenceInt() : 0;
 		return ref;
 	}
 
@@ -173,5 +182,15 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public String logEvent_GetSQLRequests() {
 		return null;
+	}
+
+	@Override
+	public long logEvent_GetLogEventReference() {
+		return getReferenceInt();
+	}
+
+	@Override
+	public int logEvent_GetStatus() {
+		return getEventStatus();
 	}
 }

@@ -5,11 +5,16 @@ import com.foc.business.notifier.FNotifTrigger;
 import com.foc.business.notifier.FocNotificationEvent;
 import com.foc.business.notifier.FocNotificationManager;
 import com.foc.list.FocList;
+import com.foc.web.server.FocWebServer;
 
-public class NotificationScheduledThread implements Runnable {
+public class NotificationScheduledThread extends FocThreadWithSession {
+
+	public NotificationScheduledThread(FocWebApplication initialWebApplication, FocWebServer webServer) {
+		super(initialWebApplication, webServer);
+	}
 
 	@Override
-	public void run() {
+	public void main() {
 		FocNotificationEvent event = new FocNotificationEvent(FNotifTrigger.EVT_SCHEDULED, null);
 		
 		while(true) {

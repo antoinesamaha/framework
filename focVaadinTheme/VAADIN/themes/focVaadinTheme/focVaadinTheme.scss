@@ -920,6 +920,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', end
   .foc-textBlue {
     color: blue;
   }
+  .foc-borderBlue{
+    border-color: blue;
+  }
 
   .foc-textOrange {
     color: orange;
@@ -2276,5 +2279,26 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
 	    font-weight: bold;
 	    font-size: 12px;
     }
+  }
+  
+  .foc-border-bottom-blue{
+		border-bottom: 1px;
+		border-top: 0px;
+		border-left: 0px;
+		border-right: 0px;
+		margin: 5px;
+		padding: 5px;
+		/*border-radius: 5px;*/
+		border-color: blue;
+		border-style: solid;
+  }
+  
+  .foc-border-blue{
+		border: 1px;
+		margin: 5px;
+		padding: 5px;
+		border-radius: 5px;
+		border-color: blue;
+		border-style: solid;
   }
 }

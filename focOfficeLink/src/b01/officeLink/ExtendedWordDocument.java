@@ -89,10 +89,25 @@ public class ExtendedWordDocument {
 		}
   }
   
+  /*
+  private static void setOrientation(XWPFParagraph par) {
+    if (par.getCTP().getPPr() == null) {
+      par.getCTP().addNewPPr();
+    }
+    if ( par.getCTP().getPPr().getBidi()==null ) {
+      par.getCTP().getPPr().addNewBidi();
+      par.getCTP().getPPr().setTextDirection(TextDirection.);
+    }
+    par.getCTP().getPPr().getBidi().setVal(STOnOff.ON);
+  }
+  */
+  
   public boolean replaceInParagraph(XWPFParagraph para, String toReplace, String replaceWith){
   	boolean didReplace = false;
   	
   	if(para != null && toReplace != null && replaceWith != null){
+//  		setOrientation(para);
+  		
 			List<XWPFRun> runs = para.getRuns();
 			TextSegement found = para.searchText(toReplace, new PositionInParagraph());
 			if(found != null){

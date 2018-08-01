@@ -2504,4 +2504,18 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		this.siteRestrictionAccess = siteRestrictionAccess;
 	}
 	
+	public FocDesc getWFLogDesc() {
+		FocDesc logFocDesc = null;
+		if(this instanceof IWorkflowDesc) {
+			WorkflowDesc workflowDesc = ((IWorkflowDesc)this).iWorkflow_getWorkflowDesc();
+			if(workflowDesc != null){
+				FListField listField = (FListField) getFieldByID(workflowDesc.getFieldID_LogList());
+				if(listField != null) {
+					logFocDesc = listField.getFocDesc();
+				}
+			}
+		}
+		return logFocDesc;
+	}
+
 }

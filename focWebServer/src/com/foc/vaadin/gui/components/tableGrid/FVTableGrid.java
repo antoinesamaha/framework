@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.xml.sax.Attributes;
 
+import com.foc.Globals;
 import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocDesc;
@@ -68,9 +69,9 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
   }
   
 	protected Object convertValueToItemId(String value){
-  	Integer intObject = null;
+  	Long intObject = null;
   	try{
-  		intObject = Integer.valueOf(value);
+  		intObject = Long.valueOf(value);
   	}catch(Exception e){
   	}
 		return intObject != null ? intObject : value;
@@ -139,7 +140,13 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
   	//ANTOINE123
 //  	FVTableGridIndexedContainer gridIndexedContainer = new FVTableGridIndexedContainer(this, focListWrapper);
 //  	setContainerDataSource(gridIndexedContainer);
+  	if(focListWrapper != null && focListWrapper.getFocList() != null && focListWrapper.getFocList().getFocDesc() != null) {
+  		Globals.logString(" GRID Desc : "+focListWrapper.getFocList().getFocDesc().getStorageName());
+  	}
+  	removeAllColumns();
   	setContainerDataSource(focListWrapper);
+//  	getTableTreeDelegate().pushVisibleColumns();
+//  	getTableTreeDelegate().setContainerDataSource(focListWrapper);
   	
   	setEditable(getDelegate().isEditable());
   	if(getTableTreeDelegate() != null && getTableTreeDelegate().getVisiblePropertiesArrayList() != null){
@@ -304,7 +311,7 @@ public class FVTableGrid extends Grid implements FocXMLGuiComponent, ITableTree 
 		//In case of multi-selection mode we can't get the selected row while adding a new object 
 		if(getSelectionModel() instanceof SelectionModel.Single) {
 			Object selected = getSelectedRow();
-			if(selected instanceof Integer){
+			if(selected instanceof Long){
 				long ref = ((Long)selected).longValue();
 				focObject = getFocList().searchByReference(ref);
 			}

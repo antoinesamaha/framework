@@ -44,7 +44,8 @@ public class WFLog_Banner_Standard_Table extends WFLog_Table {
 		super.afterLayoutConstruction();
 		FVTextArea textArea = getTextArea();
 		if(textArea != null) {
-			textArea.addStyleName("fenix-me-bubble");
+//			textArea.addStyleName("fenix-me-bubble");
+			textArea.addStyleName("border-blue");
 			textArea.setEnabled(true);
 		}
 	}

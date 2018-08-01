@@ -51,6 +51,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_STARTUP_MENU               = 16;
   public static final int FLD_ALLOW_REPORT_CREATION      = 17;
   public static final int FLD_DEFAULT_TITLE              = 18;
+  public static final int FLD_DASHBOARD_CONTEXT          = 19;
   
   public static final int FLD_MENU_RIGHTS_LIST            = 50;
   public static final int FLD_VIEWS_RIGHTS_LIST           = 51;
@@ -102,6 +103,9 @@ public class FocGroupDesc extends FocDesc{
     addField(objFld);
     
     focFld = new FStringField("STARTUP_MENU", "Startup Menu", FLD_STARTUP_MENU, false, 150);
+    addField(focFld);
+
+    focFld = new FStringField("DASHBOARD_CONTEXT", "Dashboard Context", FLD_DASHBOARD_CONTEXT, false, 150);
     addField(focFld);
 
     focFld = new FBoolField("NAME_MODF", "Allow Naming Modification", FLD_ALLOW_NAMING_MODIF, false);

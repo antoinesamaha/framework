@@ -1,10 +1,11 @@
 package com.fab.model.table;
 
+import java.sql.Date;
+
 import com.foc.business.adrBook.AdrBookParty;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.workflow.WFSite;
-import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.business.workflow.map.WFSignature;
@@ -60,6 +61,11 @@ public class UserDefinedObject extends FocObject implements IStatusHolder, IWork
 	@Override
 	public String iWorkflow_getCode() {
 		return code_getCode();
+	}
+	
+	@Override
+	public Date iWorkflow_getDate() {
+		return getDate();
 	}
 
 	@Override

@@ -4,6 +4,7 @@
         <OpenForm containerWindow="same window" />
         <TableColumn name="NAME" caption="Name" />
         <TableColumn name="DESCRIP" caption="Description" />
+        <TableColumn name="DASHBOARD_CONTEXT" caption="Dashboard Context" />
         <TableColumn name="GUEST_APPLICABLE" caption="Guest" />
     </GuiTable>
 </VerticalLayout>

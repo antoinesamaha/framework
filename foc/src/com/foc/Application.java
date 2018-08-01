@@ -161,7 +161,7 @@ public class Application {
   private RootGarbageClass rgc = null;
   private FocTestSuite focTestSuite = null;
   
-  private ArrayList<FocLogListener> logListenerArray = null;
+  private FocLogListener logListener = null;
   
   public static final int LOGIN_WAITING = 1;
   public static final int LOGIN_VALID   = 2;
@@ -631,7 +631,7 @@ public class Application {
    	BusinessModule.getInstance().declare();
    	PhotoAlbumManagmentModule.getInstance().declare();
    	
-    FocVersion.addVersion("FOC", "foc1.6" , 1624);
+    FocVersion.addVersion("FOC", "foc1.6" , 1625);
     
     //if(withDatabase && !isDoNotCheckTables()){
     //  adminModule.checkTables();
@@ -2104,23 +2104,65 @@ public class Application {
 		return reportConfigFocDescMap != null ? reportConfigFocDescMap.get(context) : null;
 	}
 
-	public void addLogListener(FocLogListener logListener) {
+	public void setLogListener(FocLogListener logListener) {
 		if(logListener != null) {
-			if(logListenerArray == null) {
-				logListenerArray = new ArrayList<FocLogListener>();
-			}
-			logListenerArray.add(logListener);
+			this.logListener = logListener;
 		}
 	}
 	
 	public void logListenerNotification(FocLogEvent event) {
-		if(logListenerArray != null) {
-			for(int i=0; i<logListenerArray.size(); i++) {
-				FocLogListener listener = logListenerArray.get(i);
-				if(listener != null) {
-					listener.addLogEvent(event);
-				}
+		if(logListener != null) {
+			logListener.addLogEvent(event);
+		}
+	}
+	
+	public void setLogListenerIfConfigured() {
+		String listenerClassName = ConfigInfo.getLogListenerClassName();
+		if(!Utils.isStringEmpty(listenerClassName)) {
+			try{
+				Class<IFocCloudStorage> cls = (Class<IFocCloudStorage>) Class.forName(listenerClassName);
+				Class[] param = new Class[0];
+				Constructor constr = cls.getConstructor(param);
+				
+				Object[] argsNew = new Object[0];
+				Object createdObject = constr.newInstance(argsNew);
+				setLogListener((FocLogListener) createdObject);
+			}catch(Exception e){
+				Globals.logException(e);
+				String message = "!! ERROR: LogListener: Could not Instanciate Log Listener Class named: "+listenerClassName;
+				Globals.logString(message);
 			}
 		}
+	}
+	
+	public boolean setLogEventStatus(String entityName, long logEventRef, int status) {
+		return setLogEventStatus(entityName, logEventRef, status, "");
+	}
+	
+	public boolean setLogEventStatus(String entityName, long logEventRef, int status, String statusCommitError) {
+		boolean error = logEventRef<=0 || Utils.isStringEmpty(entityName);
+
+		if(!error) {
+			FocDesc focDesc    = getFocDescByName(entityName);
+			FocDesc logFocDesc = focDesc != null ? focDesc.getWFLogDesc() : null;
+			
+			if(logFocDesc == null) {
+				error = true;
+			}else {
+				StringBuffer buffer = null;
+				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
+					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
+					buffer.append("set EVENT_STATUS = "+status+" , STATUS_ERROR = \""+statusCommitError+"\"");
+					buffer.append(" where "+logFocDesc.getRefFieldName()+" = "+logEventRef+" ");						
+				} else {
+					buffer = new StringBuffer("UPDATE \"" + logFocDesc.getStorageName_ForSQL() + "\" ");
+					buffer.append("set \"EVENT_STATUS\" = "+status+" , \"STATUS_ERROR\" = \'"+statusCommitError+"\'");
+					buffer.append(" where \""+logFocDesc.getRefFieldName()+"\" = "+logEventRef+" ");
+				}					
+				error = Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+			}
+		}
+			
+		return error;
 	}
 }

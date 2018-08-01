@@ -13,12 +13,14 @@ import javax.imageio.ImageIO;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocObject;
 import com.foc.property.FBlobMediumProperty;
 import com.foc.property.FCloudStorageProperty;
 import com.foc.property.FImageProperty;
 import com.foc.property.FProperty;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -27,6 +29,7 @@ import com.foc.vaadin.gui.components.upload.FVImageReceiver;
 import com.foc.vaadin.gui.components.upload.FVUpload_Image;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.vaadin.server.ConnectorResource;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.server.FileDownloader;
@@ -34,6 +37,7 @@ import com.vaadin.server.Resource;
 import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Image;
@@ -178,33 +182,54 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
     return embedded;
   }
   
+  private void adjustDownloadButtonVisibility(FProperty property) {
+		if(property != null && property.getFocField() != null){
+			boolean visible = false;
+			if(property instanceof FCloudStorageProperty) {
+				visible = !property.getFocObject().isCreated() && ((FCloudStorageProperty)property).doesFileExist();
+			}else if(property instanceof FImageProperty){
+				visible = true;
+			}else if(property instanceof FBlobMediumProperty){
+				visible = false;
+			}	
+			if(downloadButton != null) downloadButton.setVisible(visible);
+		}
+  }
+  
 	public void setProperty(FProperty property){
 		if(property != null && property.getFocField() != null){
 			if(property instanceof FCloudStorageProperty){
 				setCloudStorageProperty((FCloudStorageProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(true);
 			}else if(property instanceof FImageProperty){
 				this.setImageProperty((FImageProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(true);
 			}else if(property instanceof FBlobMediumProperty){
 				this.setBlobMediumProperty((FBlobMediumProperty) property);
-				if(downloadButton != null) downloadButton.setVisible(false);				
 			}	
 		}
+		
+		adjustDownloadButtonVisibility(property);
+		
 		if(resource != null){
 			resource.setProperty(property);
 		}
 		
-		embedded = new Image();
-		embedded.setImmediate(false);
-		setEmbedded(embedded);
-				
-		boolean error = refreshImageFromProperty();
-		setIsImage(!error);
-		
-		addComponentAsFirst(embedded);
-		setExpandRatio(embedded, 1);
-		reactToEditable();
+		boolean showImage = true;
+		String showImgStr = getAttributes() != null ? getAttributes().getValue(FXML.ATT_SHOW_IMAGE) : "true";
+		if(showImgStr != null && (showImgStr.trim().toLowerCase().equals("false") || showImgStr.trim().toLowerCase().equals("0"))) {
+			showImage = false;
+		}
+		if(showImage) {
+			embedded = new Image();
+			embedded.setImmediate(false);
+			setEmbedded(embedded);
+					
+			boolean error = refreshImageFromProperty();
+			setIsImage(!error);
+			
+			addComponentAsFirst(embedded);
+			setExpandRatio(embedded, 1);
+			reactToEditable();
+		}
 	}
 	
 	public BufferedImage getBufferedImage(){
@@ -241,9 +266,32 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 		return prop;
   }
 	
+	public FProperty getFocProperty(){
+		FProperty porp = null;
+		if(cloudStorageProperty != null){
+			porp = cloudStorageProperty;
+		} else if(imageProperty != null) {
+			porp = imageProperty;
+		}
+		return porp;
+	}
+	
+	public FocObject getFocObject() {
+		FocObject focObject = null;
+		FProperty prop = getFocProperty();
+		if(prop != null) {
+			focObject = prop.getFocObject();
+		}
+		return focObject;
+	}
+	
 	@Override
 	public void imageReceived(SucceededEvent event, InputStream image) {
 		if(cloudStorageProperty != null){
+			if(event != null && !Utils.isStringEmpty(event.getFilename())) {
+				cloudStorageProperty.setFileNameInProperty(event.getFilename());
+				cloudStorageProperty.generateKey();
+			}
 			cloudStorageProperty.setObject(image);
 		}else{
 			BufferedImage bufferedImage = null;
@@ -264,6 +312,36 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			}
 		}		
 		refreshImageFromProperty();
+		adjustDownloadButtonVisibility(cloudStorageProperty != null ? cloudStorageProperty : imageProperty);
+	}
+
+	public boolean saveObjectBeforeUploadIfCreated() {
+		boolean error = false;
+		//If Object is created we need to insert it first
+		FocObject focObject = getFocObject(); 
+		if(focObject != null && focObject.isCreated()){
+			error = true;
+			
+			Component comp = this;
+			while(comp != null && comp.getParent() != null) {
+				comp = comp.getParent();
+				
+				if(comp instanceof FocXMLLayout) {
+					FocXMLLayout xmlLay = (FocXMLLayout) comp;
+					xmlLay.copyGuiToMemory();
+					if(xmlLay.getValidationLayout() != null) {
+						if(!xmlLay.getValidationLayout().commit()) {
+							error = false;
+							break;
+						}
+					}
+				}
+			}
+			
+			//If Still created we try directly saving
+			if(!error && focObject.isCreated()) focObject.validate(true);
+		}
+		return error;
 	}
 	
 	public boolean refreshImageFromProperty(){
@@ -297,7 +375,9 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 				String timestamp = df.format(new Date(System.currentTimeMillis()));
 				streamResource.setFilename("FileName-"+timestamp+".jpg");
 
-				embedded.setSource(streamResource);
+				if(embedded != null) {
+					embedded.setSource(streamResource);
+				}
 			}
 		}
 		return error;
@@ -346,6 +426,10 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			    uploader.setImageReceiver(this);
 			    
 			    downloadButton = new Button("Download");//, FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_DOWNLOAD));
+					if(ConfigInfo.isArabic()) {
+						downloadButton.setCaption("تنزيل");//To hide the default ugly button we should set this to null
+					}
+//					downloadButton.setIcon(FontAwesome.DOWNLOAD);
 			    downloadButton.setWidth("100px");
 //			    downloadButton.setCaption(null);
 //			    downloadButton.setStyleName(BaseTheme.BUTTON_LINK);
@@ -404,6 +488,8 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
 			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_WORD);
 		}else if(getCloudStorageProperty().getFileName().endsWith(".ppt") || getCloudStorageProperty().getFileName().endsWith(".pptx")){
 			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_PPT);
+		}else if(getCloudStorageProperty().getFileName().endsWith(".pdf")){
+			resource = FVIconFactory.getInstance().getFVIcon_24(FVIconFactory.ICON_ADOBE);
 		}else{
 			resource = FVIconFactory.getInstance().getFVIcon(FVIconFactory.ICON_NOTE);
 		}

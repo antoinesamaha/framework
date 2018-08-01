@@ -1,5 +1,6 @@
 package com.foc.business.workflow.implementation;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.business.workflow.WFTitleDesc;
@@ -9,13 +10,14 @@ import com.foc.business.workflow.signing.WFTransactionWrapperDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
+import com.foc.log.FocLogEvent;
 
 public class WFLogDesc extends FocDesc {
 	public static final int FLD_MASTER           = 1;
@@ -30,18 +32,21 @@ public class WFLogDesc extends FocDesc {
 	public static final int FLD_DESCERIPTION     = FField.FLD_DESCRIPTION;
 	public static final int FLD_COMMENT          = 10;
 	public static final int FLD_SIGNED_TRANSACTION_XML = 11;
+	public static final int FLD_EVENT_STATUS           = 12;//0, 1-Posted, 2-Committed
+	public static final int FLD_EVENT_STATUS_ERROR     = 13;
 	
-	public static final int EVENT_NONE            = 0;
-	public static final int EVENT_SIGNATURE       = 1;
-	public static final int EVENT_CREATION        = 2;
-	public static final int EVENT_CANCELLATION    = 3;
-	public static final int EVENT_MODIFICATION    = 4;
-	public static final int EVENT_APPROVED        = 5;
-	public static final int EVENT_CLOSED          = 6;
-	public static final int EVENT_UNDO_SIGNATURE  = 7;
-	public static final int EVENT_CUSTOM          = 8;
-	public static final int EVENT_COMMENT         = 9;
-	public static final int EVENT_REJECT          = 10;
+	public static final int EVENT_NONE            = FocLogEvent.EVENT_NONE;
+	public static final int EVENT_SIGNATURE       = FocLogEvent.EVENT_SIGNATURE;
+	public static final int EVENT_CREATION        = FocLogEvent.EVENT_CREATION;
+	public static final int EVENT_CANCELLATION    = FocLogEvent.EVENT_CANCELLATION;
+	public static final int EVENT_MODIFICATION    = FocLogEvent.EVENT_MODIFICATION;
+	public static final int EVENT_APPROVED        = FocLogEvent.EVENT_APPROVED;
+	public static final int EVENT_CLOSED          = FocLogEvent.EVENT_CLOSED;
+	public static final int EVENT_UNDO_SIGNATURE  = FocLogEvent.EVENT_UNDO_SIGNATURE;
+	public static final int EVENT_CUSTOM          = FocLogEvent.EVENT_CUSTOM;
+	public static final int EVENT_COMMENT         = FocLogEvent.EVENT_COMMENT;
+	public static final int EVENT_REJECT          = FocLogEvent.EVENT_REJECT;
+	public static final int EVENT_OPENED          = FocLogEvent.EVENT_OPENED;
 	
 	public static final int LEN_FLD_COMMENT      = 400;
 	
@@ -73,23 +78,30 @@ public class WFLogDesc extends FocDesc {
 				objFld.setForcedDBName("MASTER_"+refFld.getName());
 			}
 			addField(objFld);
-		}else{
-			int debug = 3;
-			debug++;
 		}
 		
+		FMultipleChoiceField statusFld = new FMultipleChoiceField("EVENT_STATUS", "Event Status", FLD_EVENT_STATUS, false, 2);
+		statusFld.setSortItems(false);
+		statusFld.addChoice(FocLogEvent.STATUS_EXCLUDED , "Excluded");
+		statusFld.addChoice(FocLogEvent.STATUS_INCLUDED , "Included");
+		statusFld.addChoice(FocLogEvent.STATUS_POSTED   , "Posted");
+		statusFld.addChoice(FocLogEvent.STATUS_COMMITTED, "Committed");
+		statusFld.addChoice(FocLogEvent.STATUS_ERROR    , "Error");
+		addField(statusFld);
+		
 		FMultipleChoiceField mFld = new FMultipleChoiceField("EVENT_TYPE", "Event Type", FLD_EVENT_TYPE, false, 2);
-		mFld.addChoice(EVENT_NONE, "none");
-		mFld.addChoice(EVENT_SIGNATURE, "Signature");
-		mFld.addChoice(EVENT_CANCELLATION, "Cancellation");
-		mFld.addChoice(EVENT_MODIFICATION, "Modification");
-		mFld.addChoice(EVENT_CREATION, "Creation");
-		mFld.addChoice(EVENT_APPROVED, "Approval");
-		mFld.addChoice(EVENT_CLOSED, "Closure");
-		mFld.addChoice(EVENT_UNDO_SIGNATURE, "Undo Signature");
-		mFld.addChoice(EVENT_CUSTOM, "Custom");
-		mFld.addChoice(EVENT_COMMENT, "Comment");
-		mFld.addChoice(EVENT_REJECT, "Reject");
+		mFld.addChoice(EVENT_NONE, ConfigInfo.isArabic() ? "-" : "none");
+		mFld.addChoice(EVENT_SIGNATURE, ConfigInfo.isArabic() ? "موافقة" : "Signature");
+		mFld.addChoice(EVENT_CANCELLATION, ConfigInfo.isArabic() ? "الغاء" : "Cancellation");
+		mFld.addChoice(EVENT_MODIFICATION, ConfigInfo.isArabic() ? "تعديل" : "Modification");
+		mFld.addChoice(EVENT_CREATION, ConfigInfo.isArabic() ? "ادخال" : "Creation");
+		mFld.addChoice(EVENT_APPROVED, ConfigInfo.isArabic() ? "تصديق" : "Approval");
+		mFld.addChoice(EVENT_CLOSED, ConfigInfo.isArabic() ? "ختم" : "Closure");
+		mFld.addChoice(EVENT_UNDO_SIGNATURE, ConfigInfo.isArabic() ? "الغاء الموافقة" : "Undo Signature");
+		mFld.addChoice(EVENT_CUSTOM, ConfigInfo.isArabic() ? "Custom" : "Custom");
+		mFld.addChoice(EVENT_COMMENT, ConfigInfo.isArabic() ? "ملاحظة" : "Comment");
+		mFld.addChoice(EVENT_REJECT, ConfigInfo.isArabic() ? "الغاء الموافقات السابقة" : "Reject");
+		mFld.addChoice(EVENT_OPENED, ConfigInfo.isArabic() ? "اطلاع" : "Opened");
 		addField(mFld);
 
     FDateTimeField dateTimeFld = new FDateTimeField("DATE_TIME", "Date|Time", FLD_DATE_TIME, false);
@@ -146,6 +158,9 @@ public class WFLogDesc extends FocDesc {
 
     FBlobStringField focFld = new FBlobStringField("SIGNED_TRANSACTION_XML", "Signed Transaction XML", FLD_SIGNED_TRANSACTION_XML, false, 300, 5);
     addField(focFld);
+    
+		chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, 1000);
+    addField(chfld);
   }
 	
 	public static String getStorageName_ForWorkflowDesc(IWorkflowDesc iWFDesc){

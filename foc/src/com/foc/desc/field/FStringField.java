@@ -52,7 +52,7 @@ public class FStringField extends FField {
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
     	return " [" + name + "] [nvarchar]" + "(" + getSize() + ") ";
     }else if (getProvider()== DBManager.PROVIDER_H2){
-    	return " \"" + name + "\" VARCHAR" + "(" + getSize() + ") ";
+    	return " \"" + name + "\" VARCHAR" + "(" + getSize() + ") DEFAULT ''";
     }else{
       return " " + name + " VARCHAR" + "(" + getSize() + ") CHARACTER SET utf8 COLLATE utf8_general_ci ";
     }

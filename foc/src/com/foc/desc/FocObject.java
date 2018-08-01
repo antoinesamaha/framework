@@ -46,6 +46,7 @@ import org.w3c.dom.Text;
 
 import com.fab.gui.details.GuiDetails;
 import com.fab.model.table.UserDefinedObjectGuiDetailsPanel;
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.AccessControl;
@@ -4110,7 +4111,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					if(neverLockWhateverTheStage){
 						allowModif = true;
 					}else{
-						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null && workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck();//Only the user waiting to sign can edit
+						WFMap map = workflow_getTransactionConfig().getWorkflowMap();
+						allowModif =	 workflow.iWorkflow_getWorkflow().getCurrentStage() == null 
+												&& (    workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck()/*Only the user waiting to sign can edit*/
+												     || (map.getTitleInitialEdit() != null && map.getTitleInitialEdit().equals(Globals.getApp().getCurrentTitle()))
+												   );
 					}
 //						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null || workflow_NeedsSignatureOfThisUser();//Only the user waiting to sign can edit
 				}
@@ -4178,6 +4183,15 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return assignment;
 	}
 
+	public String workflow_GetSignButtonCaption(boolean onBehalf){
+		if(onBehalf) return ConfigInfo.isArabic() ? "موافقة بالنيابة" : "Sign PP";
+		else return ConfigInfo.isArabic() ? " موافقة " : "Sign" ;
+	}
+	
+	public String workflow_GetRejectButtonCaption(boolean onBehalf){
+		return ConfigInfo.isArabic() ? " رفض " : "Reject" ;
+	}
+	
 	public boolean workflow_IsLastSignatureDoneByThisUser(boolean forceReloadOfLogList){
 		boolean signProject = false;
 		
@@ -4301,6 +4315,19 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		return signatureNeededResult;
 	}
 
+	public void workflow_SignIfAllowed(String comment) {
+		if(workflow_IsWorkflowSubject() && this instanceof IWorkflow){
+			Workflow workflow = ((IWorkflow)this).iWorkflow_getWorkflow();
+			
+			WFSignatureNeededResult result = workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+			if(result != null){
+				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), comment);
+			}else{
+				workflow.sign(comment);
+			}
+		}
+	}
+	
 	/**
 	 * 
 	 * @param stage

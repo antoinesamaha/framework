@@ -108,19 +108,23 @@ public class WFConsole_Form extends FocXMLLayout {
 		if(nextButton != null) {
 			nextButton.setVisible(getTransactionWrapperForm() != null);
 		}
+
+		if(focObj != null && rejectButton != null) {
+			rejectButton.setCaption(focObj.workflow_GetRejectButtonCaption(false));
+		}
 		
 		if(focObj != null && signButton != null) {
 			WFSignatureNeededResult result = focObj.workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
 			if(result != null && result.getTitleIndex() >= 0){
 				if(result.isOnBehalfOf()){
-					signButton.setCaption(isArabic() ? "موافقة بالنيابة" : "Sign PP");
+					signButton.setCaption(focObj.workflow_GetSignButtonCaption(true));
 					signButton.setDescription(isArabic() ? "موافقة بالنيابة وبصفة " + result.getTitle() : "Sign per procurationement as "+result.getTitle());
 				}else{
-					signButton.setCaption(isArabic() ? "موافقة" : "Sign");
+					signButton.setCaption(focObj.workflow_GetSignButtonCaption(false));
 					signButton.setDescription(isArabic() ? "موافقة وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
 				}
 				signButton.setVisible(!isForceHideSignCancel());
-				rejectButton.setVisible(!isForceHideSignCancel());
+				rejectButton.setVisible(!isForceHideSignCancel() && getWorkflow() != null && getWorkflow().getCurrentStage() != null);
 			} else {
 				signButton.setVisible(false);
 				rejectButton.setVisible(false);
@@ -207,6 +211,10 @@ public class WFConsole_Form extends FocXMLLayout {
 	}
 
 	public void button_SIGN_Clicked(FVButtonClickEvent evt){
+		button_SIGN_Clicked(getCommentWritten());
+	}
+	
+	public void button_SIGN_Clicked(String comment){
 		Workflow  workflow  = getWorkflow();
 		
 		String error = null;
@@ -217,12 +225,10 @@ public class WFConsole_Form extends FocXMLLayout {
 		}
 		
 		if(Utils.isStringEmpty(error)) {
-			WFSignatureNeededResult result = getFocObject() != null ? getFocObject().workflow_NeedsSignatureOfThisUser_AsTitleIndex(null) : null;
-			if(result != null){
-				workflow.sign(result.getSignature(), result.getTitleIndex(), result.isOnBehalfOf(), getCommentWritten());
-			}else{
-				workflow.sign(getCommentWritten());
+			if(getFocObject() != null) {
+				getFocObject().workflow_SignIfAllowed(comment);
 			}
+			
 			setCommentWritten("");
 			if(xmlLayout != null) xmlLayout.afterSigning();
 			
@@ -256,7 +262,10 @@ public class WFConsole_Form extends FocXMLLayout {
 				public boolean executeOption(String option) {
 					if(option.equals("YES")){
 						Workflow  workflow  = getWorkflow();
-						if(workflow != null) workflow.undoAllSignatures(getCommentWritten());
+						if(workflow != null) {
+							workflow.undoAllSignatures(getCommentWritten());
+							setCommentWritten("");
+						}
 						if(gotoNextSlide()) {
 							applyForm();
 						}
@@ -290,6 +299,7 @@ public class WFConsole_Form extends FocXMLLayout {
 				if(option.equals("YES")){
 					Workflow  workflow  = getWorkflow();
 					if(workflow != null) workflow.undoLastSignature(getCommentWritten());
+//					copyMemoryToGui();
 					if(gotoNextSlide()) {
 						applyForm();
 					}

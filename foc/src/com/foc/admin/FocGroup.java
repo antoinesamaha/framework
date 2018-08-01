@@ -87,6 +87,7 @@ public class FocGroup extends FocObject{
     new FString(this, FocGroupDesc.FLD_NAME, "") ;
     new FString(this, FocGroupDesc.FLD_DESCRIPTION, "") ;
     new FString(this, FocGroupDesc.FLD_STARTUP_MENU, "") ;
+    new FString(this, FocGroupDesc.FLD_DASHBOARD_CONTEXT, "") ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_NAMING_MODIF, false) ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, false) ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_AREA_MODIF, false) ;
@@ -134,7 +135,10 @@ public class FocGroup extends FocObject{
   	setPropertyString(FocGroupDesc.FLD_NAME, groupName);
   }
   
-  
+  public String getDashboardContext(){
+    return getPropertyString(FocGroupDesc.FLD_DASHBOARD_CONTEXT);
+  }
+    
   public String getStartupMenu(){
     FString startupMenuProp = (FString) getFocProperty(FocGroupDesc.FLD_STARTUP_MENU);
     return (startupMenuProp != null) ? startupMenuProp.getString() : (String)null;

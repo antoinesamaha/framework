@@ -2,6 +2,7 @@ package com.foc.business.workflow.map;
 
 import java.util.HashMap;
 
+import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.formula.FocSimpleFormulaContext;
@@ -61,6 +62,10 @@ public class WFMap extends FocObject {
 		return index;
 	}
 
+	public WFTitle getTitleInitialEdit() {
+		return (WFTitle) getPropertyObject(WFMapDesc.FLD_TITLE_INITIAL_EDIT);
+	}
+	
 	public FocList getSignatureList(){
 		FocList list = getPropertyList(WFMapDesc.FLD_SIGNATURE_LIST);
 		if(list != null){

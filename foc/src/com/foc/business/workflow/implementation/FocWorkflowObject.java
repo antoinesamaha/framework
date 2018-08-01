@@ -1,5 +1,7 @@
 package com.foc.business.workflow.implementation;
 
+import java.sql.Date;
+
 import com.foc.business.adrBook.AdrBookParty;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
@@ -90,6 +92,11 @@ public abstract class FocWorkflowObject extends FocObject implements IWorkflow, 
   @Override
   public String iWorkflow_getCode() {
     return code_getCode();
+  }
+
+  @Override
+  public Date iWorkflow_getDate() {
+    return getDate();
   }
 
   @Override

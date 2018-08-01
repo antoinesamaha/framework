@@ -274,10 +274,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public String getScreenHelpText(){
 		return screenHelp;
 	}
-	
-	public FocObject getFocObject(){
+
+	public static FocObject getFocObject(IFocData focData) {
 		FocObject focObj = null;
-		IFocData focData = getFocData();
 		if(focData instanceof FocObject){
 			focObj = (FocObject) focData;
 		}else if(focData instanceof FocDataMap){
@@ -287,6 +286,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 		}
 		return focObj;
+	}
+	
+	public FocObject getFocObject(){
+		return getFocObject(getFocData());
 	}
 
 	public FocList getFocList(){
@@ -1750,6 +1753,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String withPrintAndExit  = focXmlAttributes.getValue(FXML.ATT_PRINT_AND_EXIT);
 				String avoidRowBreak     = focXmlAttributes.getValue(FXML.ATT_AVOID_ROW_BREAK);
 
+				validationSettings.setReportPrintAsWord(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_PRINT_AS_WORD, true));
+				validationSettings.setReportSendEMail(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_SEND_EMAIL, true));
+				
 				if(title != null){
 					validationSettings.setTitle(title);
 				}
@@ -3080,4 +3086,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		
 	}
 	
+	public boolean isInnerLayout() {
+		FVTableWrapperLayout tableWrapperLayout = findAncestor(FVTableWrapperLayout.class);
+		boolean inner = tableWrapperLayout != null;
+		return inner; 
+	}
 }

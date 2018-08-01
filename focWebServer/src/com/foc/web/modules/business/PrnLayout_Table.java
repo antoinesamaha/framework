@@ -41,6 +41,8 @@ import com.vaadin.ui.Table;
 public class PrnLayout_Table extends FocXMLLayout{
 
 	private PrintingAction printingAction = null;
+	private boolean        showWordPrinting = true;
+	private boolean        showEMailSending = true;
 	
 	@Override
 	public void dispose() {
@@ -80,19 +82,21 @@ public class PrnLayout_Table extends FocXMLLayout{
 		TableTreeDelegate tableTreeDelegate = getTableTreeDelegate();
 		if(tableTreeDelegate != null){
 
-			tableTreeDelegate.getTable().addGeneratedColumn("PRINT_WORD_BUTTON", new Table.ColumnGenerator() {
-				
-				@Override
-				public Object generateCell(Table source, Object itemId, Object columnId) {
-					Button button = new Button("MS Word");
-					if(getFocList() != null && itemId != null){
-						BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new BrowserWindowOpenerStreamResource(itemId, true));
-						browserWindowOpener.extend(button);
+			if(isShowWordPrinting()) {
+				tableTreeDelegate.getTable().addGeneratedColumn("PRINT_WORD_BUTTON", new Table.ColumnGenerator() {
+					
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						Button button = new Button("MS Word");
+						if(getFocList() != null && itemId != null){
+							BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new BrowserWindowOpenerStreamResource(itemId, true));
+							browserWindowOpener.extend(button);
+						}
+						return button;
 					}
-					return button;
-				}
-			});
-			tableTreeDelegate.getTable().setColumnHeader("PRINT_WORD_BUTTON", "MS Word");
+				});
+				tableTreeDelegate.getTable().setColumnHeader("PRINT_WORD_BUTTON", "MS Word");
+			}
 			
 			tableTreeDelegate.getTable().addGeneratedColumn("PRINT_BUTTON", new Table.ColumnGenerator() {
 				
@@ -108,44 +112,46 @@ public class PrnLayout_Table extends FocXMLLayout{
 			});
 			tableTreeDelegate.getTable().setColumnHeader("PRINT_BUTTON", "PDF");
 			
-			tableTreeDelegate.getTable().addGeneratedColumn("SEND_EMAIL_BUTTON", new Table.ColumnGenerator() {
-				
-				@Override
-				public Object generateCell(Table source, final Object itemId, Object columnId) {
-					FVButton button = new FVButton("Send Email");
-					button.addClickListener(new ClickListener() {
-						
-						@Override
-						public void buttonClick(ClickEvent event) {
+			if(isShowEMailSending()) {
+				tableTreeDelegate.getTable().addGeneratedColumn("SEND_EMAIL_BUTTON", new Table.ColumnGenerator() {
+					
+					@Override
+					public Object generateCell(Table source, final Object itemId, Object columnId) {
+						FVButton button = new FVButton("Send Email");
+						button.addClickListener(new ClickListener() {
 							
-							PrintingAction printingAction = getPrintingAction();
-							if(getFocList() != null && itemId != null && printingAction != null){
-								PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Long) itemId);
-								if(prnLayout != null){
-									boolean withLogo = false; 
-											
-									if(getPrintLogoCheckBox() != null){
-									  withLogo = getPrintLogoCheckBox().getValue();
+							@Override
+							public void buttonClick(ClickEvent event) {
+								
+								PrintingAction printingAction = getPrintingAction();
+								if(getFocList() != null && itemId != null && printingAction != null){
+									PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Long) itemId);
+									if(prnLayout != null){
+										boolean withLogo = false; 
+												
+										if(getPrintLogoCheckBox() != null){
+										  withLogo = getPrintLogoCheckBox().getValue();
+										}
+										
+										FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getGeneralEmailTemplate();
+								    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null));
+										email.init(template, printingAction.getObjectToPrint());
+										prnLayout.attachToEmail(email, printingAction, withLogo);
+										email.fill();
+								    email.send();
+								    email.setCreated(true);
+								    email.validate(true);
+										
+	//									Globals.popup(email, false, FocNotificationEmailDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
 									}
-									
-									FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getGeneralEmailTemplate();
-							    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null));
-									email.init(template, printingAction.getObjectToPrint());
-									prnLayout.attachToEmail(email, printingAction, withLogo);
-									email.fill();
-							    email.send();
-							    email.setCreated(true);
-							    email.validate(true);
-									
-//									Globals.popup(email, false, FocNotificationEmailDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT);
 								}
 							}
-						}
-					});
-					return button;
-				}
-			});
-			tableTreeDelegate.getTable().setColumnHeader("SEND_EMAIL_BUTTON", "Send Email");
+						});
+						return button;
+					}
+				});
+				tableTreeDelegate.getTable().setColumnHeader("SEND_EMAIL_BUTTON", "Send Email");
+			}
 		}
 		
 	}
@@ -323,5 +329,21 @@ public class PrnLayout_Table extends FocXMLLayout{
 			return downloadStream;
 		}
 		
+	}
+
+	public boolean isShowWordPrinting() {
+		return showWordPrinting;
+	}
+
+	public void setShowWordPrinting(boolean showWordPrinting) {
+		this.showWordPrinting = showWordPrinting;
+	}
+
+	public boolean isShowEMailSending() {
+		return showEMailSending;
+	}
+
+	public void setShowEMailSending(boolean showEMailSending) {
+		this.showEMailSending = showEMailSending;
 	}
 }

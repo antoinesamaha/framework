@@ -41,6 +41,7 @@ import com.foc.web.modules.admin.OptionDialog_Form;
 import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
+import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
@@ -353,9 +354,26 @@ public class FocWebVaadinWindow extends FocCentralPanel {
     return centralPanel;
   }
   
+  private String getSpecialDashboardContext() {
+  	String specialDashboardContext = null;
+		FocUser user = Globals.getApp() != null ? Globals.getApp().getUser_ForThisSession() : null;
+		if (user != null && user.getGroup() != null) {
+			specialDashboardContext = user.getGroup().getDashboardContext();
+		}
+		return specialDashboardContext;
+  }
+  
   public ICentralPanel newCentralPanel_AfterLogin(){
   	ICentralPanel centralPanel = null;
+  	
   	XMLViewKey xmlViewKey = new XMLViewKey(AdminWebModule.STORAGE_HOMEPAGE, XMLViewKey.TYPE_FORM);
+  	String specialDashboardContext = getSpecialDashboardContext();
+  	if(!Utils.isStringEmpty(specialDashboardContext)) {
+  		xmlViewKey.setContext(specialDashboardContext);
+  		XMLView view = XMLViewDictionary.getInstance().get(xmlViewKey);//Check if key exists
+  		if(view == null) xmlViewKey.setContext(XMLViewKey.CONTEXT_DEFAULT);//If not put back Main
+  	}
+  	
   	if(FocWebApplication.getInstanceForThread().isMobile()){
   		xmlViewKey.setMobileFriendly(true);
   	}

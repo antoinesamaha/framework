@@ -33,8 +33,8 @@ public class FVStageLayout_Button extends Button {
 	
 	private void init(){
 		setImmediate(true);
+		adjustButtonsCaption();
 //		addMenuBarItems();
-		selectCurrentStage();
 	}
 	
 	public void dispose(){
@@ -42,6 +42,10 @@ public class FVStageLayout_Button extends Button {
 		focObject = null;
 	}
 
+	public void adjustButtonsCaption() {
+		selectCurrentStage();
+	}
+	
 	public boolean isArabic(){
 		return ConfigInfo.isArabic();
 	}
@@ -49,8 +53,8 @@ public class FVStageLayout_Button extends Button {
 	public void buttonClicked() {
 		FVValidationLayout vLayout = getValidationLayout();
 		if(vLayout != null) {
-			vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
 			vLayout.setVisible_WorkflowConsole(!vLayout.isVisible_WorkflowConsole());
+			vLayout.setVisible_LogLayout(!vLayout.isVisible_LogLayout());
 			
 			if(vLayout.isVisible_WorkflowConsole()) {
 				setIcon(FontAwesome.ARROW_DOWN);
@@ -177,10 +181,16 @@ public class FVStageLayout_Button extends Button {
 	}
 	
 	private String getCurrentStageName(){
-		String  currentStageName = isArabic() ? "ملاحظات" : "Comment";
-		WFStage stage = getCurrentStage();
-		if(stage != null){
-			currentStageName = stage.getName();
+		String currentStageName = isArabic() ? "ملاحظات" : "Comment";
+		if(ConfigInfo.isShowStageNameOnValidationLayoutButton()) {
+				WFStage stage = getCurrentStage();
+				if(stage != null){
+					currentStageName = stage.getName();
+				}
+		} else {
+			if(getFocObject().workflow_NeedsSignatureOfThisUser() && (getValidationLayout() == null || !getValidationLayout().isForceHideSignCancel())) {
+				currentStageName = isArabic() ? "موافقة" : "Signature";
+			}
 		}
 		return currentStageName;
 	}

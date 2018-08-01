@@ -1,13 +1,17 @@
 package com.foc.business.workflow.map;
 
+import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
+import com.foc.desc.field.FObjectField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 
 public class WFMapDesc extends FocDesc {
 	public static final int FLD_NAME               = FField.FLD_NAME;
 	public static final int FLD_DESCRIPTION        = FField.FLD_DESCRIPTION;
+	
+	public static final int FLD_TITLE_INITIAL_EDIT = 1;
 	
 	public static final int FLD_SIGNATURE_LIST     = 10;
 	
@@ -21,6 +25,13 @@ public class WFMapDesc extends FocDesc {
 		
 		addNameField();
 		addDescriptionField();
+		
+		FObjectField objFld = new FObjectField("TITLE_INITIAL_EDIT", "Title that can initially edit", FLD_TITLE_INITIAL_EDIT, WFTitleDesc.getInstance());
+		objFld.setSelectionList(WFTitleDesc.getList(FocList.NONE));
+		objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
+		objFld.setDisplayField(WFTitleDesc.FLD_NAME);
+		addField(objFld);
+		
 		/*
 		FObjectField objFld = new FObjectField("CREATION_TITLE", "Creation Title", FLD_CREATION_TITLE, false, WFTitleDesc.getInstance(), "CREATION_TITLE_");
 		objFld.setSelectionList(WFTitleDesc.getList(FocList.NONE));
