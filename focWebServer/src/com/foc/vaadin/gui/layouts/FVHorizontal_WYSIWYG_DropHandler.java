@@ -1,28 +1,30 @@
 package com.foc.vaadin.gui.layouts;
 
+import org.xml.sax.helpers.AttributesImpl;
+
 import com.foc.Globals;
+import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 import com.vaadin.event.DataBoundTransferable;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropTarget;
-import com.vaadin.shared.ui.dd.VerticalDropLocation;
+import com.vaadin.shared.ui.dd.HorizontalDropLocation;
 import com.vaadin.ui.AbstractOrderedLayout;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
-import com.vaadin.ui.HasComponents;
 
 import fi.jasoft.dragdroplayouts.DDAbsoluteLayout;
-import fi.jasoft.dragdroplayouts.DDVerticalLayout.VerticalLayoutTargetDetails;
+import fi.jasoft.dragdroplayouts.DDHorizontalLayout.HorizontalLayoutTargetDetails;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 @SuppressWarnings("serial")
-public class FVVerticalDropHandler extends FVDropHandler {
-  
+public class FVHorizontal_WYSIWYG_DropHandler extends FVDropHandler {
+
   private Alignment dropAlignment;
   
-  public FVVerticalDropHandler(FVLayout layout) {
+  public FVHorizontal_WYSIWYG_DropHandler(FVLayout layout) {
     super(layout);
   }
   
@@ -33,50 +35,63 @@ public class FVVerticalDropHandler extends FVDropHandler {
   public void setDropAlignment(Alignment dropAlignment) {
     this.dropAlignment = dropAlignment;
   }
-  
+
   @Override
   protected void handleComponentReordering(DragAndDropEvent event) {
  // Component re-ordering
     LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
-    VerticalLayoutTargetDetails details = (VerticalLayoutTargetDetails) event.getTargetDetails();
+    HorizontalLayoutTargetDetails details = (HorizontalLayoutTargetDetails) event.getTargetDetails();
     AbstractOrderedLayout layout = (AbstractOrderedLayout) details.getTarget();
     Component comp = transferable.getComponent();
     int idx = (details).getOverIndex();
 
     // Detach
-    if(comp != null && layout != null) layout.removeComponent(comp);
+    if(layout != null && comp != null) layout.removeComponent(comp);
     idx--;
 
     // Increase index if component is dropped after or above a previous
     // component
-    VerticalDropLocation loc = details.getDropLocation();
-    if (loc == VerticalDropLocation.MIDDLE || loc == VerticalDropLocation.BOTTOM) {
+    HorizontalDropLocation loc = details.getDropLocation();
+    if (loc == HorizontalDropLocation.CENTER || loc == HorizontalDropLocation.RIGHT) {
         idx++;
     }
-    
-    // Add component
-    if(layout != null){
-	    if (idx >= 0) {
-	        layout.addComponent(comp, idx);
-	    } else {
-	        layout.addComponent(comp);
-	    }
-    }
-    
-    if (comp instanceof FVLayout) {
-      ((FVLayout) comp).setDragDrop(true);
-    }
 
-    // Add component alignment if given
-    if (dropAlignment != null && layout != null) {
-    	layout.setComponentAlignment(comp, dropAlignment);
-    }
+    if(comp != null){
+	    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout)comp.getParent());
+	    
+	    if (newAttributes.getIndex(FXML.ATT_IDX) != -1) {
+	      newAttributes.setValue(newAttributes.getIndex("idx"), idx+"");
+	    } else {
+	      newAttributes.addAttribute("", FXML.ATT_IDX, FXML.ATT_IDX, "CDATA", idx+"");
+	    }
+	    
+	    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
+    
+	    // Add component
+	    if(layout != null){
+		    if (idx >= 0) {
+		        layout.addComponent(comp, idx);
+		    } else {
+		        layout.addComponent(comp);
+		    }
+	    }
+    
+	    if (comp instanceof FVLayout) {
+	      Globals.logString("Here3");
+	      ((FVLayout) comp).setDragDrop(true);
+	    }
+	
+	    // Add component alignment if given
+	    if (dropAlignment != null && layout != null && comp != null) {
+	      layout.setComponentAlignment(comp, dropAlignment);
+	    }
+  	}
   }
 
   @Override
   protected void handleDropFromLayout(DragAndDropEvent event) {
     LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
-    VerticalLayoutTargetDetails details = (VerticalLayoutTargetDetails) event.getTargetDetails();
+    HorizontalLayoutTargetDetails details = (HorizontalLayoutTargetDetails) event.getTargetDetails();
     AbstractOrderedLayout layout = (AbstractOrderedLayout) details.getTarget();
     Component source = event.getTransferable().getSourceComponent();
     int idx = (details).getOverIndex();
@@ -85,9 +100,10 @@ public class FVVerticalDropHandler extends FVDropHandler {
     // Check that we are not dragging an outer layout into an inner
     // layout
     Component parent = layout.getParent();
+    
     while (parent != null) {
       if (parent == comp) {
-        return;
+          return;
       }
       parent = parent.getParent();
     }
@@ -107,10 +123,19 @@ public class FVVerticalDropHandler extends FVDropHandler {
     // Increase index if component is dropped after or above a
     // previous
     // component
-    VerticalDropLocation loc = (details).getDropLocation();
-    if (loc == VerticalDropLocation.MIDDLE || loc == VerticalDropLocation.BOTTOM) {
+    HorizontalDropLocation loc = (details).getDropLocation();
+    
+    if (loc == HorizontalDropLocation.CENTER || loc == HorizontalDropLocation.RIGHT) {
       idx++;
     }
+    
+    AttributesImpl newAttributes = removeNotNeededAttributes(((FocXMLGuiComponent) comp).getAttributes(), (FVLayout) sourceLayout);
+    
+    if(newAttributes.getIndex(FXML.ATT_IDX) > -1) {
+      newAttributes.setValue(newAttributes.getIndex(FXML.ATT_IDX), idx+"");
+    }
+    
+    ((FocXMLGuiComponent) comp).setAttributes(newAttributes);
     
     // Add component
     if (idx >= 0) {
@@ -126,11 +151,12 @@ public class FVVerticalDropHandler extends FVDropHandler {
   }
   
   public void drop(DragAndDropEvent event) {
-    VerticalLayoutTargetDetails details = (VerticalLayoutTargetDetails) event.getTargetDetails();
+    HorizontalLayoutTargetDetails details = (HorizontalLayoutTargetDetails) event.getTargetDetails();
     DropTarget layout = details.getTarget();
     Component source = event.getTransferable().getSourceComponent();
     
     if (layout == source) {
+      Globals.logString("Here in");
       handleComponentReordering(event);
     } else if (event.getTransferable() instanceof LayoutBoundTransferable) {
         LayoutBoundTransferable transferable = (LayoutBoundTransferable) event.getTransferable();
@@ -144,13 +170,12 @@ public class FVVerticalDropHandler extends FVDropHandler {
           handleDropFromLayout(event);
         }
     } else if (event.getTransferable() instanceof DataBoundTransferable) {
-      
+
       DataBoundTransferable t = (DataBoundTransferable) event.getTransferable();
       
       String name = t.getItemId()+"";
       
       Globals.logString("Item ID = "+t.getItemId());
-      Globals.logString("Here in DataBoundTrans");
       
       FVLayout targetLayout = (FVLayout) details.getTarget();
       
@@ -158,9 +183,8 @@ public class FVVerticalDropHandler extends FVDropHandler {
       attributes.addAttribute("", FXML.ATT_IDX, FXML.ATT_IDX, "CDATA", details.getOverIndex()+"");
       
       handleSourceContainer(t, targetLayout, name, attributes);
-      
+        
       Globals.logString(targetLayout.toString());
     }
   }
-  
 }

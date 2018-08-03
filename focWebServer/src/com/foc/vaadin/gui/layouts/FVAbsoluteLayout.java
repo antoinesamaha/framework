@@ -38,8 +38,12 @@ public class FVAbsoluteLayout extends DDAbsoluteLayout implements FVLayout {
     setCaption("");
     addLayoutClickListener(listener);
     
-    setDropHandler(new FVAbsoulteDropHandler(this));
     addStyleName(FVLayout.DEFAULT_STYLE);
+  }
+  
+  @Override
+  public void setWYSIWYGDropHandler() {
+    setDropHandler(new FVAbsoulte_WYSIWYG_DropHandler(this));
   }
   
   private LayoutClickListener listener = new LayoutClickListener() {

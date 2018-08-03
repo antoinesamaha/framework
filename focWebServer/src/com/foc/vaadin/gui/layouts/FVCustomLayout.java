@@ -55,6 +55,10 @@ public class FVCustomLayout extends CustomLayout implements FVLayout {
     removeAllComponents();
   }
 
+  @Override
+  public void setWYSIWYGDropHandler() {
+  }
+  
   public String getName() {
     return name;
   }
