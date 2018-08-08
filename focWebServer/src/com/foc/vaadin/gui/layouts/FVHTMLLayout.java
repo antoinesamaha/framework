@@ -9,10 +9,8 @@ import java.util.Iterator;
 
 import org.xml.sax.Attributes;
 
-import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
 import com.foc.Globals;
 import com.foc.dataDictionary.FocDataDictionary;
-import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
@@ -20,6 +18,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.CustomLayout;
@@ -50,6 +49,10 @@ public class FVHTMLLayout extends CustomComponent implements FVLayout {
 		addStyleName(FVLayout.DEFAULT_STYLE);
 	}
 
+	@Override
+	public void setWYSIWYGDropHandler() {
+	}
+	
 	@Override
 	public void dispose() {
 		name = null;

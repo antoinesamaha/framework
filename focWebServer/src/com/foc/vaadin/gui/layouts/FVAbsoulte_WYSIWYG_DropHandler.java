@@ -19,9 +19,9 @@ import fi.jasoft.dragdroplayouts.details.AbsoluteLayoutTargetDetails;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 @SuppressWarnings("serial")
-public class FVAbsoulteDropHandler extends FVDropHandler {
+public class FVAbsoulte_WYSIWYG_DropHandler extends FVDropHandler {
   
-  public FVAbsoulteDropHandler(FVLayout layout) {
+  public FVAbsoulte_WYSIWYG_DropHandler(FVLayout layout) {
     super(layout);
   }
   

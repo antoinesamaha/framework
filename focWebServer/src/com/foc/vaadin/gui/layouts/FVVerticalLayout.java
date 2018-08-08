@@ -40,7 +40,6 @@ public class FVVerticalLayout extends DDVerticalLayout implements FVLayout {
     setCaption("");
     addLayoutClickListener(listener);
     addStyleName(FVLayout.DEFAULT_STYLE);
-    setDropHandler(new FVVerticalDropHandler(this));
   }
 
   @Override
@@ -55,10 +54,11 @@ public class FVVerticalLayout extends DDVerticalLayout implements FVLayout {
 		removeAllComponents();
   }
   
-  public void addStyleName(String style) {
-    super.addStyleName(style);
+  @Override
+  public void setWYSIWYGDropHandler() {
+    setDropHandler(new FVVertical_WYSIWYG_DropHandler(this));
   }
-  
+    
   private LayoutClickListener listener = new LayoutClickListener() {
     
     @Override

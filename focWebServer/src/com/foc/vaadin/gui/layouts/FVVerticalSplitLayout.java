@@ -37,7 +37,6 @@ public class FVVerticalSplitLayout extends DDVerticalSplitPanel implements FVLay
       }
     });
     addStyleName(FVLayout.DEFAULT_STYLE);
-    setDropHandler(new FVVerticalDropHandler(this));
   }
   
   @Override
@@ -48,6 +47,11 @@ public class FVVerticalSplitLayout extends DDVerticalSplitPanel implements FVLay
     type       = null;
   }
 
+  @Override
+  public void setWYSIWYGDropHandler() {
+    setDropHandler(new FVVertical_WYSIWYG_DropHandler(this));
+  }
+  
   @Override
   public IFocData getFocData() {
     return null;

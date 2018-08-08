@@ -38,7 +38,6 @@ public class FVHorizontalSplitLayout extends DDHorizontalSplitPanel implements F
       }
     });
     addStyleName(FVLayout.DEFAULT_STYLE);
-    setDropHandler(new FVVerticalDropHandler(this));
   }
   
   @Override
@@ -53,6 +52,11 @@ public class FVHorizontalSplitLayout extends DDHorizontalSplitPanel implements F
     removeAllComponents();
   }
 
+  @Override
+  public void setWYSIWYGDropHandler() {
+    setDropHandler(new FVVertical_WYSIWYG_DropHandler(this));
+  }
+  
   @Override
   public IFocData getFocData() {
     return null;

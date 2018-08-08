@@ -35,10 +35,14 @@ public class FVGridLayout extends DDGridLayout implements FVLayout {
     delegate = new FocXMLGuiComponentDelegate(this);
     setAttributes(attributes);
     addLayoutClickListener(listener);
-    setDropHandler(new FVGridDropHandler(this, null));
     addStyleName("bg-white");
     setSpacing(true);
     setMargin(true);
+  }
+  
+  @Override
+  public void setWYSIWYGDropHandler() {
+    setDropHandler(new FVGrid_WYSIWYG_DropHandler(this, null));
   }
   
   private LayoutClickListener listener = new LayoutClickListener() {

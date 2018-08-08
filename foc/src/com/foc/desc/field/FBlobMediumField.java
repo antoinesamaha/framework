@@ -20,7 +20,7 @@ public class FBlobMediumField extends FBlobField{
     if (getProvider()== DBManager.PROVIDER_ORACLE){
       return " \"" + name + "\" BLOB";
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
-    	return " " + name + " varbinary";
+    	return " " + name + " varbinary(max)";
     }else{
       return " " + name + " MEDIUMBLOB";
     }

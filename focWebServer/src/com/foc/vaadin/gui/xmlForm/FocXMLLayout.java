@@ -139,7 +139,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	
 	private boolean immediateComponentAllowed = true;
 	private String  screenHelp = null;
-	
+
 	// This is the only constructor that will be called automatically
 	// After that the init method will be called
 	public FocXMLLayout() {
@@ -3091,4 +3091,36 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		boolean inner = tableWrapperLayout != null;
 		return inner; 
 	}
+
+	private void scanComponentsAndSetWYSIWYGDropHandlers() {
+		Iterator<FocXMLGuiComponent> iter = getComponentMap().values().iterator();
+		if(iter != null){
+			while(iter.hasNext()){
+  			FocXMLGuiComponent focXMLGuiComponent = iter.next();
+				if(focXMLGuiComponent != null && focXMLGuiComponent instanceof FVLayout){
+					((FVLayout)focXMLGuiComponent).setWYSIWYGDropHandler();
+				}
+			}
+		}
+		
+		childXMLLayoutArray_Scan(new IChildFocXMLLayoutScanner() {
+			@Override
+			public boolean before(FocXMLLayout layout) {
+				layout.scanComponentsAndSetWYSIWYGDropHandlers();
+				return false;
+			}
+
+			@Override
+			public boolean after(FocXMLLayout layout) {
+				return false;
+			}
+		});		
+	}
+	
+	public void setWYSIWYGActive(boolean active) {
+		if(active) {
+			scanComponentsAndSetWYSIWYGDropHandlers();
+		}
+	}
+	
 }

@@ -37,4 +37,5 @@ public interface FVLayout extends FocXMLGuiComponent {
   public Attributes getAttributes();
   public boolean isXMLLeaf();
   public void fillXMLNodeContent(XMLBuilder builder);
+  public void setWYSIWYGDropHandler();
 }

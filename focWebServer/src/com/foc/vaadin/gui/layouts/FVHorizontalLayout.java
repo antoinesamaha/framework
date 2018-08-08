@@ -37,8 +37,12 @@ public class FVHorizontalLayout extends DDHorizontalLayout implements FVLayout {
     
     addLayoutClickListener(listener);
 
-    setDropHandler(new FVHorizontalDropHandler(this));
     addStyleName(FVLayout.DEFAULT_STYLE);
+  }
+  
+  @Override
+  public void setWYSIWYGDropHandler() {
+  	setDropHandler(new FVHorizontal_WYSIWYG_DropHandler(this));
   }
   
   private LayoutClickListener listener = new LayoutClickListener() {

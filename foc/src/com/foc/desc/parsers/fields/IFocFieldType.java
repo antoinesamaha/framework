@@ -35,6 +35,7 @@ public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_BLOB            = "Blob";
   public static final String TYPE_BLOB_MEDIUM     = "BlobMedium";
   public static final String TYPE_IMAGE           = "Image";
+  public static final String TYPE_CLOUD_IMAGE     = "CloudImage";
   public static final String TYPE_FILE            = "File";
   public static final String TYPE_FOREIGN_ENTITY  = "ForeignEntity";
   public static final String TYPE_TABLE_NAME      = "TableName";

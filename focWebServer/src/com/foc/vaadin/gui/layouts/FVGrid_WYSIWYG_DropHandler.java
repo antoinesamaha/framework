@@ -22,10 +22,10 @@ import fi.jasoft.dragdroplayouts.DDGridLayout.GridLayoutTargetDetails;
 import fi.jasoft.dragdroplayouts.events.LayoutBoundTransferable;
 
 @SuppressWarnings("serial")
-public class FVGridDropHandler extends FVDropHandler {
+public class FVGrid_WYSIWYG_DropHandler extends FVDropHandler {
   private final Alignment dropAlignment;
   
-  public FVGridDropHandler(FVLayout layout, Alignment dropAlignment) {
+  public FVGrid_WYSIWYG_DropHandler(FVLayout layout, Alignment dropAlignment) {
     super(layout);
     this.dropAlignment = dropAlignment;
   }

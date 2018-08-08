@@ -285,14 +285,15 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 	}
 
 	@Override
+	public void setWYSIWYGDropHandler() {
+	}
+	
+	@Override
 	public void setDragDrop(boolean state) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public boolean isDragDrop() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

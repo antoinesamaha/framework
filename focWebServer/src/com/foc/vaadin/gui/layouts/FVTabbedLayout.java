@@ -55,6 +55,10 @@ public class FVTabbedLayout extends TabSheet implements FVLayout {
     
     addStyleName(FVLayout.DEFAULT_STYLE);
   }
+
+  @Override
+  public void setWYSIWYGDropHandler() {
+  }
   
   @Override
   public IFocData getFocData() {
@@ -130,8 +134,7 @@ public class FVTabbedLayout extends TabSheet implements FVLayout {
   public void setDragDrop(boolean state) {
     if (state) {
       isDragDropEnabled = true;
-    }
-    else {
+    } else {
       isDragDropEnabled = false;
     }
   }
