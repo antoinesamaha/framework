@@ -182,6 +182,29 @@ public class FocDataDictionary implements IFocDataDictionary {
 			}
 		});
     
+		putParameter("FORMAT_DATE_TO_ARABIC", new IFocDataResolver() {
+			public Object getValue(IFocData focData, ArrayList<String> arguments) {
+				String value = "";
+				try {
+					if (focData != null && arguments != null && arguments.size() == 1) {
+						String dataPath = arguments.get(0);
+						FDate prop = (FDate) focData.iFocData_getDataByPath(dataPath);
+						if (prop != null) {
+							Date date = (Date) prop.getDate();							
+							SimpleDateFormat RTL_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+							String rtl = "\u200F";
+							String ltre = "\u202A";
+							String df = "\u202C";							
+							value = rtl + ltre + RTL_DATE_FORMAT.format(date) + df + rtl;
+						}
+					}
+				} catch (Exception e) {
+					Globals.logException(e);
+				}
+				return value;
+			}
+		});
+    
     putParameter("FORMAT_DATE", new IFocDataResolver() {
 			public Object getValue(IFocData focData, ArrayList<String> arguments) {
 				String value = "";
