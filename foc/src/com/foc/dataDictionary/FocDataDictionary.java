@@ -182,7 +182,7 @@ public class FocDataDictionary implements IFocDataDictionary {
 			}
 		});
     
-		putParameter("INSERT_DATE", new IFocDataResolver() {
+		putParameter("FORMAT_DATE_TO_ARABIC", new IFocDataResolver() {
 			public Object getValue(IFocData focData, ArrayList<String> arguments) {
 				String value = "";
 				try {
