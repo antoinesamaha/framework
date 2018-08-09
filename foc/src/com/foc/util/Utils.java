@@ -9,10 +9,10 @@ import java.io.InputStreamReader;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.safety.Whitelist;
 
 public class Utils {
 
@@ -63,7 +63,13 @@ public class Utils {
 		}
 	}
 
+	private static final String regExp = "[\\x00-\\x20]*[+-]?(((((\\p{Digit}+)(\\.)?((\\p{Digit}+)?)([eE][+-]?(\\p{Digit}+))?)|(\\.((\\p{Digit}+))([eE][+-]?(\\p{Digit}+))?)|(((0[xX](\\p{XDigit}+)(\\.)?)|(0[xX](\\p{XDigit}+)?(\\.)(\\p{XDigit}+)))[pP][+-]?(\\p{Digit}+)))[fFdD]?))[\\x00-\\x20]*";
+	private static final Pattern pattern = Pattern.compile(regExp);
+	
 	public static boolean isNumeric(String text){
+    Matcher m = pattern.matcher(text);
+    return m.matches();
+/*
 		boolean result = true;
 
 		try{
@@ -72,6 +78,7 @@ public class Utils {
 			result = false;
 		}
 		return result;
+		*/
 	}
 	
 	public static boolean isInteger(String text){

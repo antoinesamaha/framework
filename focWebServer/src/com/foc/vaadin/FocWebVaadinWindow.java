@@ -101,6 +101,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	private HashMap<String, NativeButton> menuBarIconsMap = null;
 	
+	private ArrayList<ButtonWithPendingSignature> buttonsWithSignatureArray = null;
+	
 	public FocWebVaadinWindow(){
 		super();
 		fill();
@@ -112,7 +114,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		changeCentralPanelIntoGuestHomePage();
 		//--------------------------------
 	}
-	
+		
 	protected void menuBarIcons_Add(String menuItem, NativeButton button){
 		if(menuBarIconsMap == null){
 			menuBarIconsMap = new HashMap<String, NativeButton>();
@@ -274,6 +276,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 		logoutMenuItem = null;
 		broadcastNotifyer_Dispose();
+		buttonsWithSignatureArray.clear();
+		buttonsWithSignatureArray = null;
 	}
 	
 	public void hideMenuBar(){
@@ -1136,9 +1140,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			broadcastNotifyer = null;
 		}
 	}
-	
-	private ArrayList<ButtonWithPendingSignature> buttonsWithSignatureArray = null;
-	
+		
 	public void refreshAllSignatureCounts() {
 		if(buttonsWithSignatureArray != null) {
 			for(int i=0; i<buttonsWithSignatureArray.size(); i++) {

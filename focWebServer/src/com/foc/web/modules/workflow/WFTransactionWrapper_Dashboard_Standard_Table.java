@@ -5,6 +5,7 @@ import com.foc.business.workflow.signing.WFTransactionWrapper;
 import com.foc.business.workflow.signing.WFTransactionWrapperList;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.dataDictionary.IFocDataResolver;
+import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.shared.dataStore.IFocData;
@@ -13,6 +14,7 @@ import com.foc.util.Utils;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.ITableTree;
+import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -70,6 +72,12 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 	
 	protected void reloadTransactionWrapperList() {
 		if(wrapperList != null) {
+			FVTableWrapperLayout wrapperLayout = getTableWrapperLayout();
+			
+			boolean backupRefreshValue = true;
+			FocDataWrapper focDataWrpper = wrapperLayout != null ? wrapperLayout.getFocDataWrapper() : null;
+			if(focDataWrpper != null) backupRefreshValue = focDataWrpper.setRefreshGuiDisabled(true);
+			
 			wrapperList.removeAll();
 			
 			if(!isFilterAdded()) {
@@ -96,6 +104,7 @@ public class WFTransactionWrapper_Dashboard_Standard_Table extends WFTransaction
 			}
 			
 			wrapperList.setDefaultListOrder();
+			if(focDataWrpper != null) focDataWrpper.setRefreshGuiDisabled(backupRefreshValue);
 		}
 	}
 	
