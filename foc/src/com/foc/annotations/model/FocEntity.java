@@ -20,4 +20,5 @@ public @interface FocEntity {
 	public FocFilterCondition[] filterConditions() default {};
 	public FocGroupByField[] groupByFields() default {};
 	public String reportContext() default "";
+	public boolean cached() default true;
 }
