@@ -116,6 +116,7 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
       FocEntity entity = (FocEntity) FocAnnotationUtil.findAnnotation(objClass, FocEntity.class);
       if(entity != null) {
 	      if(entity.isTree()) focDesc.setWithObjectTree();
+	      focDesc.setListInCache(entity.cached());
 	      if(entity.hasRevision()){
 	      	focDesc.setWithObjectTree();
 	      	

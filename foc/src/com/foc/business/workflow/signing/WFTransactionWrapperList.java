@@ -132,8 +132,11 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		int count = 0;
 		FocList transList = getTransactionList(focDesc); 
 		if(transList != null) {
-//			transList.reloadFromDB();
-			transList.loadIfNotLoadedFromDB();
+//			if(isListOwner(focDesc)) {
+			  transList.reloadFromDB();
+//			} else {
+//				transList.loadIfNotLoadedFromDB();
+//			}
 			count = countOrAddTransactionsToWraper(transList, false);
 		}
 		return count;
