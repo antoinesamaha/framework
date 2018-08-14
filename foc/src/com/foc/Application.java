@@ -2106,18 +2106,21 @@ public class Application {
 
 	public void setLogListener(FocLogListener logListener) {
 		if(logListener != null) {
+			Globals.logString("-FocLogListener: Setting the FocLogListener: "+logListener.getClass().getName());
 			this.logListener = logListener;
 		}
 	}
 	
 	public void logListenerNotification(FocLogEvent event) {
 		if(logListener != null) {
+			Globals.logString("-FocLogListener: Notification:"+event.logEvent_GetEventType()+" Entity:"+event.logEvent_GetEntityName()+":"+event.logEvent_GetEntityCode());
 			logListener.addLogEvent(event);
 		}
 	}
 	
 	public void setLogListenerIfConfigured() {
 		String listenerClassName = ConfigInfo.getLogListenerClassName();
+		Globals.logString("-FocLogListener: ConfigInfo.LogListenerClassName = "+listenerClassName+".");
 		if(!Utils.isStringEmpty(listenerClassName)) {
 			try{
 				Class<IFocCloudStorage> cls = (Class<IFocCloudStorage>) Class.forName(listenerClassName);
