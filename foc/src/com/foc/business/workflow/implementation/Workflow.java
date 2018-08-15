@@ -143,7 +143,7 @@ public class Workflow {
 		return insertLogLine(event, null);
 	}
 	
-	public long insertLogLine(int event, String comment) {
+	public long insertLogLine(int event, String comment) {//, String sqlRequest
 		long ref = 0;
 		FocDesc logFocDesc = getWFLogDesc();
 		FocObject focObj = getFocObject();
@@ -152,12 +152,16 @@ public class Workflow {
 			WFLog log = (WFLog) constr.newItem();
 			if(log != null) {
 				log.setCreated(true);
-				log.setLogSubjectReference(getFocObject().getReferenceInt());
+				log.setLogSubjectReference(focObj.getReferenceInt());
 				fillLogLine(log, event);
 				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
+//				if(!Utils.isStringEmpty(sqlRequest)) log.setreqComment(sqlRequest);
 				log.validate(false);
 				ref = log.getReferenceInt();
-				if(Globals.getApp() != null) Globals.getApp().logListenerNotification(log);
+				if(Globals.getApp() != null) {
+					log.setObjectLogged(focObj);
+					Globals.getApp().logListenerNotification(log);
+				}
 				log.dispose();
 			}
 		} else {

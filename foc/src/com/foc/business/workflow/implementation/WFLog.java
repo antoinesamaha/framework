@@ -6,7 +6,9 @@ import com.foc.admin.FocUser;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.map.WFStage;
 import com.foc.desc.FocConstructor;
+import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.log.FocLogEvent;
 import com.foc.property.FObject;
 
@@ -22,6 +24,16 @@ public class WFLog extends FocObject implements FocLogEvent {
 		super.dispose();
 	}
 
+	public FocObject getObjectLogged() {
+		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
+		return (FocObject) prop.getObject();
+	}
+	
+	public void setObjectLogged(FocObject focObject) {
+		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
+		prop.setObject_WithoutListeners(focObject);
+	}
+	
 	public void setLogSubjectReference(long ref) {
 		FObject prop = (FObject) getFocProperty(WFLogDesc.FLD_MASTER);
 		if(prop != null) prop.setLocalReferenceInt(ref);
@@ -126,7 +138,10 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	@Override
 	public String logEvent_GetEntityName() {
-		return workflow_getTransactionTitle();
+		FField  masterField = getThisFocDesc().getFieldByID(WFLogDesc.FLD_MASTER);
+		FocDesc tableBeingLogged = masterField != null ? masterField.getFocDesc() : null;
+		String storageName = tableBeingLogged != null ? tableBeingLogged.getStorageName() : "";
+		return storageName;
 	}
 
 	@Override
@@ -138,28 +153,28 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	@Override
 	public String logEvent_GetEntityCompanyName() {
-		FocObject master = getMasterObject();
+		FocObject master = getObjectLogged();
 		String compName = master != null && master.getCompany() != null ? master.getCompany().getName() : null;   
 		return compName;
 	}
 
 	@Override
 	public String logEvent_GetEntitySiteName() {
-		FocObject master = getMasterObject();
+		FocObject master = getObjectLogged();
 		String compName = master != null && master.workflow_GetSite() != null ? master.workflow_GetSite().getName() : null;   
 		return compName;
 	}
 
 	@Override
 	public String logEvent_GetEntityCode() {
-		FocObject master = getMasterObject();
+		FocObject master = getObjectLogged();
 		String code = master != null && master.code_getCode() != null ? master.code_getCode() : null;   
 		return code;
 	}
 
 	@Override
 	public Date logEvent_GetEntityDate() {
-		FocObject master = getMasterObject();
+		FocObject master = getObjectLogged();
 		return master != null ? master.getDate() : null;   
 	}
 
