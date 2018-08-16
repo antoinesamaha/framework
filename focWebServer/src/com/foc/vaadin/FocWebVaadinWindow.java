@@ -276,8 +276,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 		logoutMenuItem = null;
 		broadcastNotifyer_Dispose();
-		buttonsWithSignatureArray.clear();
-		buttonsWithSignatureArray = null;
+		if(buttonsWithSignatureArray != null) {
+			buttonsWithSignatureArray.clear();
+			buttonsWithSignatureArray = null;
+		}
 	}
 	
 	public void hideMenuBar(){
