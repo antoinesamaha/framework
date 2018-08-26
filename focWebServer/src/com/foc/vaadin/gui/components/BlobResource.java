@@ -47,17 +47,30 @@ public class BlobResource implements ConnectorResource {
   
   public static BlobResource newBlobResource(FCloudStorageProperty cloudStorageProperty){
 		if(Utils.isStringEmpty(cloudStorageProperty.getKey())){
+			Globals.logString("DOWNLOAD: newBlobResource 1 Key Empty, generating it");
 			cloudStorageProperty.generateKey();
 		}
+		
+		Globals.logString("DOWNLOAD: newBlobResource 1bis Key="+cloudStorageProperty.getKey());
 
 		if(cloudStorageProperty.getDirectory() == null){
+			Globals.logString("DOWNLOAD: newBlobResource 2 Directory null computing it");
 			cloudStorageProperty.setDirectory(Globals.getApp().getCloudStorageDirectory(), false);
 		}
 
+		Globals.logString("DOWNLOAD: newBlobResource 2bis Key="+cloudStorageProperty.getDirectory());
+		
 		InputStream is = (InputStream) cloudStorageProperty.getObject();
 
+		if(is == null) Globals.logString("DOWNLOAD: newBlobResource 3 inputStream is null");
+		else Globals.logString("DOWNLOAD: newBlobResource 3bis inputStream is Good");
+		
+		Globals.logString("DOWNLOAD: newBlobResource 4 FileName : "+cloudStorageProperty.getFileName());
+		
 		File file = new File(cloudStorageProperty.getFileName());
+		Globals.logString("DOWNLOAD: newBlobResource 5");
 		BlobResource resource = new BlobResource(file, is, cloudStorageProperty.getFileName());
+		Globals.logString("DOWNLOAD: newBlobResource 6");
 		return resource;
   }
 
