@@ -98,6 +98,7 @@ public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 	@Override
 	public InputStream downloadFile(String key) throws FocCloudStorageException {
 		String fileName = getFileName(key);
+		Globals.logString("Downloading File : "+fileName);
 		File file = new File(fileName);
 		InputStream inputStream = null;
 		try{
