@@ -21,9 +21,11 @@ public class NotificationScheduledThread extends FocThreadWithSession {
 			try {
 				Thread.sleep(60000);
 				
+				Globals.logString("NOTIFICATION TRIGGER: Scanning Notification Triggers for scheduled threads every 60000");
 				if(FocNotificationManager.getInstance() != null) {
 					FocList eventNotifierList = FocNotificationManager.getInstance().getEventNotifierList();
 					if(eventNotifierList != null) {
+						Globals.logString("NOTIFICATION TRIGGER:   - Scanning "+eventNotifierList.size()+" Notification Triggers");
 			      for (int i = 0; i < eventNotifierList.size(); i++) {
 			        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
 			        trigger.executeIfSameEvent(event);
