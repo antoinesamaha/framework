@@ -19,7 +19,7 @@ import com.vaadin.ui.VerticalLayout;
 @SuppressWarnings("serial")
 public class FVUpload_Image extends CustomComponent implements Upload.StartedListener, Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
 
-	private int maxSizeAllowed = 6048576;
+	private int maxSizeAllowed = ConfigInfo.getUploadMaxSize();
 	
 	private VerticalLayout        root                  = null; // Root element for contained components.
 	private Upload                upload                = null;
@@ -109,7 +109,7 @@ public class FVUpload_Image extends CustomComponent implements Upload.StartedLis
 //		root.addComponent(new Label("File " + event.getFilename() + " of type '" + event.getMIMEType() + "' uploaded."));
 		long uploadSize = event.getLength();
 		
-		if(uploadSize < getMaxSizeAllowed()){
+		if(getMaxSizeAllowed() == 0 || uploadSize < getMaxSizeAllowed()){
 			Globals.logString("Received: " + fileName);
 			try{
 				byte[] imageInByte = byteArrayOutputStream.toByteArray();
@@ -127,7 +127,7 @@ public class FVUpload_Image extends CustomComponent implements Upload.StartedLis
 				Globals.logException(e);
 			}
 		}else{
-			Globals.showNotification("Upload Failed", "Attachment file size accessed the allowed size", IFocEnvironment.TYPE_ERROR_MESSAGE);
+			Globals.showNotification("Upload Failed", "File size exceeds limit: "+uploadSize+" > "+getMaxSizeAllowed(), IFocEnvironment.TYPE_ERROR_MESSAGE);
 		}
 		// Display the uploaded file in the image panel.
 		/*

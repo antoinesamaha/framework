@@ -87,6 +87,8 @@ public class ConfigInfo {
   private static boolean shrinkDBNames = false;
   private static boolean showStageNameOnValidationLayoutButton = true;
   
+  private static int     uploadMaxSize = 6048576;
+  
   private static boolean allowCSVExport          = true;
   private static boolean allowEXCELExport        = true;
   
@@ -242,6 +244,9 @@ public class ConfigInfo {
         if(str != null) guiNavigatorHeight = Integer.valueOf(str).intValue(); 
         str = getProperty("gui.table.maxWidth");
         if(str != null) FTable.MAX_WIDTH = Integer.valueOf(str).intValue();
+        
+        str = getProperty("uploadMaxSize");
+        if(str != null) uploadMaxSize = Integer.valueOf(str).intValue();
         
         str = getProperty("devMode");
         devMode = str != null ? str.compareTo("1") == 0 : false;
@@ -726,5 +731,9 @@ public class ConfigInfo {
 
 	public static void setReportingLayout_EmailSend(boolean reportingLayout_emailSend) {
 		ConfigInfo.reportingLayout_emailSend = reportingLayout_emailSend;
+	}
+
+	public static int getUploadMaxSize() {
+		return uploadMaxSize;
 	}
 }
