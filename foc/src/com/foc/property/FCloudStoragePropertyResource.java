@@ -48,7 +48,7 @@ public class FCloudStoragePropertyResource implements ConnectorResource {
 	    
 	    if(is != null){
 	      downloadStream = new DownloadStream(is, "application/x-unknown", cloudStorageProperty.getFileName());
-	      downloadStream.setParameter("Content-Disposition", "attachment; filename=" + cloudStorageProperty.getFileName());
+	      downloadStream.setParameter("Content-Disposition", "attachment; filename=" + DownloadStream.getContentDispositionFilename(cloudStorageProperty.getFileName()));
 	      downloadStream.setCacheTime(0);  
 	    }
     }
