@@ -14,6 +14,7 @@ import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Upload;
 import com.vaadin.ui.VerticalLayout;
 
+@Deprecated
 @SuppressWarnings("serial")
 public class FVUpload_Document extends CustomComponent implements Upload.SucceededListener, Upload.FailedListener, Upload.Receiver {
 
