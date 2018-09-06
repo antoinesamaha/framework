@@ -569,7 +569,7 @@ public class FVImageField extends FVVerticalLayout implements FocXMLGuiComponent
       if(bais != null){
       	String fileName = getFilename();
         downloadStream = new DownloadStream(bais, "application/x-unknown", fileName);
-        downloadStream.setParameter("Content-Disposition", "attachment; filename=" + fileName);
+        downloadStream.setParameter("Content-Disposition", "attachment; filename=" + DownloadStream.getContentDispositionFilename(fileName));
         downloadStream.setCacheTime(0);
       }
       return downloadStream;
