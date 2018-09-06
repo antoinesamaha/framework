@@ -2616,6 +2616,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return getThisFocDesc() != null && getThisFocDesc().workflow_IsWorkflowSubject();
   }
   
+  public boolean workflow_IsLoggable(){
+  	return getThisFocDesc() != null && getThisFocDesc().workflow_IsLoggable();
+  }
+  
   public WFSite workflow_GetSite(){
   	WFSite site = null;
   	if(this instanceof IWorkflow && this instanceof IStatusHolder){

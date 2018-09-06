@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.foc.Globals;
 import com.foc.admin.FocUser;
-import com.foc.business.workflow.implementation.IWorkflow;
-import com.foc.business.workflow.implementation.Workflow;
+import com.foc.business.workflow.implementation.ILoggable;
+import com.foc.business.workflow.implementation.Loggable;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
@@ -288,8 +288,8 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	public static void logFormOpened(IFocData focData) {
 		if(focData != null) {
 			FocObject focObjToBeViewed = FocXMLLayout.getFocObject(focData);
-			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsWorkflowSubject()) {
-				Workflow workflow = ((IWorkflow)focObjToBeViewed).iWorkflow_getWorkflow();
+			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsLoggable()) {
+				Loggable workflow = ((ILoggable)focObjToBeViewed).iWorkflow_getWorkflow();
 				if(workflow != null) workflow.insertLogLine(FocLogEvent.EVENT_OPENED);
 			}
 		}

@@ -20,17 +20,17 @@ import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 
 public class WFLogDesc extends FocDesc {
-	public static final int FLD_MASTER           = 1;
-	public static final int FLD_USER             = 2;
-	public static final int FLD_DATE_TIME        = 3;
-	public static final int FLD_TITLE            = 4;
-	public static final int FLD_PREVIOUS_STAGE   = 5;
-	public static final int FLD_TARGET_STAGE     = 6;
-	public static final int FLD_EVENT_UNDONE     = 7;
-	public static final int FLD_EVENT_TYPE       = 8;
-	public static final int FLD_ON_BEHALF_OF     = 9;
-	public static final int FLD_DESCERIPTION     = FField.FLD_DESCRIPTION;
-	public static final int FLD_COMMENT          = 10;
+	public static final int FLD_MASTER                 = 1;
+	public static final int FLD_USER                   = 2;
+	public static final int FLD_DATE_TIME              = 3;
+	public static final int FLD_TITLE                  = 4;
+	public static final int FLD_PREVIOUS_STAGE         = 5;
+	public static final int FLD_TARGET_STAGE           = 6;
+	public static final int FLD_EVENT_UNDONE           = 7;
+	public static final int FLD_EVENT_TYPE             = 8;
+	public static final int FLD_ON_BEHALF_OF           = 9;
+	public static final int FLD_DESCERIPTION           = FField.FLD_DESCRIPTION;
+	public static final int FLD_COMMENT                = 10;
 	public static final int FLD_SIGNED_TRANSACTION_XML = 11;
 	public static final int FLD_EVENT_STATUS           = 12;//0, 1-Posted, 2-Committed
 	public static final int FLD_EVENT_STATUS_ERROR     = 13;
@@ -52,16 +52,20 @@ public class WFLogDesc extends FocDesc {
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
-	public WFLogDesc(IWorkflowDesc iWFDesc){
+	public WFLogDesc(ILoggableDesc iWFDesc){
 		this(iWFDesc, ((FocDesc) iWFDesc).getStorageName());
 	}
 		
-	public WFLogDesc(IWorkflowDesc iWFDesc, String dbTableSuffix){
+	public WFLogDesc(ILoggableDesc iWFDesc, String dbTableSuffix){
 		super(WFLog.class, FocDesc.DB_RESIDENT, getStorageName_ForTransactionStorageName(dbTableSuffix), false);
 		setGuiBrowsePanelClass(WFLogGuiBrowsePanel.class);
 		addReferenceField();
 		
-		WorkflowTransactionFactory.getInstance().add(iWFDesc);
+		boolean isWorkflow = iWFDesc instanceof IWorkflowDesc; 
+		
+		if(isWorkflow) {
+			WorkflowTransactionFactory.getInstance().add((IWorkflowDesc) iWFDesc);
+		}
 		
 		addDescriptionField();
 		
@@ -127,13 +131,27 @@ public class WFLogDesc extends FocDesc {
 		objFld.setDisplayField(WFTitleDesc.FLD_NAME);
 		addField(objFld);
 
-		objFld = WFStageDesc.newFieldStage("TARGET_STAGE", FLD_TARGET_STAGE);
-		addField(objFld);
-		
-		objFld = WFStageDesc.newFieldStage("PREVIOUS_STAGE", FLD_PREVIOUS_STAGE);
-		addField(objFld);
+		FStringField chfld = new FStringField("COMMENT", "Comment", FLD_COMMENT, false, LEN_FLD_COMMENT);
+    addField(chfld);
 
-		addField(WFTransactionWrapperDesc.newOnBehalfOfField(FLD_ON_BEHALF_OF));
+    FBlobStringField focFld = new FBlobStringField("SIGNED_TRANSACTION_XML", "Signed Transaction XML", FLD_SIGNED_TRANSACTION_XML, false, 300, 5);
+    addField(focFld);
+
+		if (isWorkflow) {
+			objFld = WFStageDesc.newFieldStage("TARGET_STAGE", FLD_TARGET_STAGE);
+			addField(objFld);
+			
+			objFld = WFStageDesc.newFieldStage("PREVIOUS_STAGE", FLD_PREVIOUS_STAGE);
+			addField(objFld);
+	
+			addField(WFTransactionWrapperDesc.newOnBehalfOfField(FLD_ON_BEHALF_OF));
+			
+			FBoolField bFld = new FBoolField("EVENT_UNDONE", "Event Undone", FLD_EVENT_UNDONE, false);
+			addField(bFld);
+	    
+			chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, 1000);
+	    addField(chfld);
+		}
 		
 		/*
 		objFld = new FObjectField("TARGET_STAGE", "Target|Stage", FLD_TARGET_STAGE, false, WFStageDesc.getInstance(), "TARGET_STAGE_");
@@ -149,18 +167,6 @@ public class WFLogDesc extends FocDesc {
 		objFld.setDisplayField(WFStageDesc.FLD_NAME);
 		addField(objFld);
 		*/
-		
-		FBoolField bFld = new FBoolField("EVENT_UNDONE", "Event Undone", FLD_EVENT_UNDONE, false);
-		addField(bFld);
-		
-		FStringField chfld = new FStringField("COMMENT", "Comment", FLD_COMMENT, false, LEN_FLD_COMMENT);
-    addField(chfld);
-
-    FBlobStringField focFld = new FBlobStringField("SIGNED_TRANSACTION_XML", "Signed Transaction XML", FLD_SIGNED_TRANSACTION_XML, false, 300, 5);
-    addField(focFld);
-    
-		chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, 1000);
-    addField(chfld);
   }
 	
 	public static String getStorageName_ForWorkflowDesc(IWorkflowDesc iWFDesc){

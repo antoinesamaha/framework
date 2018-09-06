@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.business.workflow.implementation.WFLog;
 import com.foc.dataDictionary.FocDataDictionary;
@@ -11,7 +11,7 @@ import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.vaadin.ui.Component;
 
 @SuppressWarnings("serial")
-public class WFLog_Banner_Standard_Form extends FocXMLLayout {
+public class WF_LOG_Banner_Standard_Form extends FocXMLLayout {
 	@Override
 	public void init(INavigationWindow window, XMLView xmlView, IFocData focData) {
 		super.init(window, xmlView, focData);

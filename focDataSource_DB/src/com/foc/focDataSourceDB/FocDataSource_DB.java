@@ -32,9 +32,9 @@ import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.admin.FocVersion;
 import com.foc.business.notifier.FocNotificationManager;
-import com.foc.business.workflow.implementation.IWorkflow;
+import com.foc.business.workflow.implementation.ILoggable;
+import com.foc.business.workflow.implementation.Loggable;
 import com.foc.business.workflow.implementation.WFLogDesc;
-import com.foc.business.workflow.implementation.Workflow;
 import com.foc.dataSource.IExecuteResultSet;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.IFocDataUtil;
@@ -397,8 +397,8 @@ public class FocDataSource_DB implements IFocDataSource {
         SQLInsert sqlInsert = new SQLInsert(focDesc, focObject);
         try{
         	error = sqlInsert.execute();
-					if(!error && focObject.workflow_IsWorkflowSubject()){
-						Workflow workflow = ((IWorkflow)focObject).iWorkflow_getWorkflow();
+					if(!error && focObject.workflow_IsLoggable()){
+						Loggable workflow = ((ILoggable)focObject).iWorkflow_getWorkflow();
 						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_CREATION);
 					}        	
 				}catch (Exception e){
@@ -428,9 +428,8 @@ public class FocDataSource_DB implements IFocDataSource {
         }
         try{
 					error = sqlUpdate.execute();
-					if(!error && focObject.workflow_IsWorkflowSubject()){
-						Workflow workflow = ((IWorkflow)focObject).iWorkflow_getWorkflow();
-//						if(workflow != null) workflow.addLogLine(WFLogDesc.EVENT_MODIFICATION);
+					if(!error && focObject.workflow_IsLoggable()){
+						Loggable workflow = ((ILoggable)focObject).iWorkflow_getWorkflow();
 						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_MODIFICATION);
 					}
 				}catch (Exception e){

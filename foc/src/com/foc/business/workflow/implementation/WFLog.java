@@ -3,6 +3,7 @@ package com.foc.business.workflow.implementation;
 import java.sql.Date;
 
 import com.foc.admin.FocUser;
+import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.map.WFStage;
 import com.foc.desc.FocConstructor;
@@ -11,6 +12,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.log.FocLogEvent;
 import com.foc.property.FObject;
+import com.foc.util.Utils;
 
 public class WFLog extends FocObject implements FocLogEvent {
 	
@@ -161,8 +163,9 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public String logEvent_GetEntitySiteName() {
 		FocObject master = getObjectLogged();
-		String compName = master != null && master.workflow_GetSite() != null ? master.workflow_GetSite().getName() : null;   
-		return compName;
+		WFSite site = master != null ? master.workflow_GetSite() : null;
+		String siteName = site != null ? site.getName() : null;   
+		return siteName;
 	}
 
 	@Override
@@ -185,8 +188,16 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	@Override
 	public String logEvent_GetUsername() {
+		String userName = "";
+		
 		FocUser user = getUser();
-		return user != null ? user.getFullName() : "";
+		if(user != null) {
+			userName = user.getFullName();
+			if(Utils.isStringEmpty(userName)) {
+				userName = user.getName();
+			}
+		}
+		return userName;
 	}
 
 	@Override

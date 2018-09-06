@@ -1,6 +1,8 @@
 package com.foc.web.server;
 
+import com.foc.business.workflow.implementation.ILoggable;
 import com.foc.business.workflow.implementation.IWorkflow;
+import com.foc.business.workflow.implementation.Loggable;
 import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.desc.FocObject;
@@ -12,6 +14,7 @@ import com.foc.vaadin.gui.components.menuBar.FVMenuBarCommand;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.IValidationLayoutMoreMenuFiller;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.MenuBar.MenuItem;
@@ -24,7 +27,7 @@ public class FocValidationLayoutMoreMenuFiller implements IValidationLayoutMoreM
     	
       final FocObject focObject = validationLayout.getFocObject();
 
-      if (focObject != null && focObject.workflow_IsWorkflowSubject() && focObject.workflow_IsAllowViewLog()) {//!(focData instanceof WBSPointer)
+      if (focObject != null && focObject.workflow_IsLoggable() && focObject.workflow_IsAllowViewLog()) {//!(focData instanceof WBSPointer)
 
         if (validationLayout.getCentralPanel() != null) {
           XMLView xmlView = validationLayout.getCentralPanel().getXMLView();
@@ -37,18 +40,19 @@ public class FocValidationLayoutMoreMenuFiller implements IValidationLayoutMoreM
               if (!storageName.contains("WF_LOG")) {
                 validationLayout.addMoreItem("View Logs", new FVMenuBarCommand() {
                   public void menuSelected(MenuItem selectedItem) {
-                    IWorkflow iWorkflow = (IWorkflow) focObject;
-                    Workflow workflow = iWorkflow.iWorkflow_getWorkflow();
+                    ILoggable iLoggable = (ILoggable) focObject;
+                    Loggable loggable = iLoggable.iWorkflow_getWorkflow();
 
-                    if (workflow != null) {
-                      FocList logList = workflow.getLogList();
-
-                      if (logList != null) {
-                        INavigationWindow mainWindow = (INavigationWindow) getValidationLayout().getCentralPanel().getMainWindow();
-                        XMLViewKey xmlViewKey = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_FORM);
-                        ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, focObject);
-                        mainWindow.changeCentralPanelContent(centralPanel, true);
-                      }
+                    if (loggable != null) {
+                    	String context = XMLViewKey.CONTEXT_DEFAULT;
+                    	if(!focObject.workflow_IsWorkflowSubject()) {
+                    		context = WorkflowWebModule.CTXT_WF_NO_WORKFLOW__LOG_ONLY;
+                    	}
+                    	
+                      INavigationWindow mainWindow = (INavigationWindow) getValidationLayout().getCentralPanel().getMainWindow();
+                      XMLViewKey xmlViewKey = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_FORM, context, XMLViewKey.VIEW_DEFAULT);
+                      ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, focObject);
+                      mainWindow.changeCentralPanelContent(centralPanel, true);
                     }
                   }
                 });
