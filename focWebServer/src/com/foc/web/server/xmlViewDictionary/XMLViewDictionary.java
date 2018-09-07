@@ -17,6 +17,8 @@ import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.GroupXMLView;
 import com.foc.admin.GroupXMLViewDesc;
+import com.foc.business.workflow.implementation.WFLogDesc;
+import com.foc.business.workflow.implementation.Workflow;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -32,6 +34,7 @@ import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.FocWebServer;
 
 public class XMLViewDictionary implements IXMLViewDictionary {
@@ -429,7 +432,9 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   		  if(centralPanel != null){
   		  	centralPanel.setLinkSerialisation(linkSerialization);
   		  	centralPanel.init(mainWindow, view, focData);
-  		  	FocCentralPanel.logFormOpened(focData);
+  		  	if(view.getXmlViewKey() == null || view.getXmlViewKey().getStorageName() == null || !view.getXmlViewKey().getStorageName().equals(WFLogDesc.WF_LOG_VIEW_KEY)) {
+  		  		FocCentralPanel.logFormOpened(focData);
+  		  	}
   		  	centralPanel.setViewRights(rightAllowed);
   		  	if(withXMLParsing){
   		  		centralPanel.parseXMLAndBuildGui();

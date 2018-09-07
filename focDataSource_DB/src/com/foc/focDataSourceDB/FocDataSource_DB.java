@@ -78,6 +78,7 @@ import com.foc.property.FObject;
 import com.foc.property.FObject121;
 import com.foc.property.FProperty;
 import com.foc.property.FTypedObject;
+import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.Utils;
 import com.vaadin.server.ClassResource;
 
@@ -427,10 +428,31 @@ public class FocDataSource_DB implements IFocDataSource {
         	}
         }
         try{
+        	Loggable loggable = null;
+        	String json = null;
+        	
+					if(focObject.workflow_IsLoggable()){
+						loggable = ((ILoggable)focObject).iWorkflow_getWorkflow();
+						if(loggable != null) {
+							B01JsonBuilder builder = new B01JsonBuilder();
+							try {
+								builder.setModifiedOnly(true);
+								builder.setPrintObjectNamesNotRefs(true);
+								builder.setScanSubList(true);
+								builder.setPrintRootRef(false);
+								focObject.toJson(builder);
+								json = builder.toString();
+							} catch(Exception e) {
+								Globals.logException(e);
+							}
+							builder.dispose();
+						}
+					}
+        	
 					error = sqlUpdate.execute();
-					if(!error && focObject.workflow_IsLoggable()){
-						Loggable workflow = ((ILoggable)focObject).iWorkflow_getWorkflow();
-						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_MODIFICATION);
+					
+					if(!error && loggable != null) {
+						loggable.insertLogLine(WFLogDesc.EVENT_MODIFICATION, json);
 					}
 				}catch (Exception e){
 					error = true;

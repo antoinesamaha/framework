@@ -2,12 +2,14 @@ package com.foc;
 
 import java.io.Serializable;
 
+import com.foc.business.workflow.implementation.SQLLogCumulator;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
 public class FocThreadLocal implements Serializable{
 	private static ThreadLocal<Object> threadWebServer      = new ThreadLocal<Object>();
 	private static ThreadLocal<Object> threadWebApplication = new ThreadLocal<Object>();
+	private static ThreadLocal<Object> threadLoggableSubSQLRequest = new ThreadLocal<Object>();
 	
 	public static void setWebServer(Object webServer){
 		if(webServer == null){
@@ -39,6 +41,7 @@ public class FocThreadLocal implements Serializable{
 		Globals.logString("THREAD SET SERVER ThreadID="+Thread.currentThread().getId()+" TO NULL (Remove)");
 		threadWebServer.remove();
 		threadWebApplication.remove();		
+		threadLoggableSubSQLRequest.remove();
 	}
 	
 	public static void setWebApplication(Object webApplication){
@@ -55,4 +58,14 @@ public class FocThreadLocal implements Serializable{
 		}
 		return obj;
 	}
+
+	public static Object getSQLLogCumulator(){
+		SQLLogCumulator logSqlReq = (SQLLogCumulator) threadLoggableSubSQLRequest.get();
+		if(logSqlReq == null) {
+			logSqlReq = new SQLLogCumulator();
+			threadLoggableSubSQLRequest.set(logSqlReq);
+		}
+		return logSqlReq;
+	}
+	
 }

@@ -186,21 +186,25 @@ public class Loggable {
 		}
 	}
 	
-	public void addLogLine(){
-		int event = WFLogDesc.EVENT_NONE;
-		if(getFocObject().isCreated()){
-			event = WFLogDesc.EVENT_CREATION;
-		}else if(getFocObject().isModified()) {// && !isCanceled()){
-			event = WFLogDesc.EVENT_MODIFICATION;
-		}
-		addLogLine(event);
-	}
+//	public void addLogLine(){
+//		int event = WFLogDesc.EVENT_NONE;
+//		if(getFocObject().isCreated()){
+//			event = WFLogDesc.EVENT_CREATION;
+//		}else if(getFocObject().isModified()) {// && !isCanceled()){
+//			event = WFLogDesc.EVENT_MODIFICATION;
+//		}
+//		addLogLine(event);
+//	}
 
 	public long insertLogLine(int event) {
 		return insertLogLine(event, null);
 	}
-	
+		
 	public long insertLogLine(int event, String comment) {//, String sqlRequest
+		return insertLogLine(event, comment, null);
+	}
+	
+	public long insertLogLine(int event, String comment, String sql) {//, String sqlRequest
 		long ref = 0;
 		FocDesc logFocDesc = getWFLogDesc();
 		FocObject focObj = getFocObject();

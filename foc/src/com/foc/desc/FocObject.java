@@ -2261,11 +2261,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public boolean commitStatusToDatabaseWithPropagation() {
   	boolean error = false;
   	if(!isCreated() || !isEmpty()){
+  		//Start saving the requests
+//			if(workflow_IsLoggable()){
+//				Loggable loggable = ((ILoggable) this).iWorkflow_getWorkflow();
+//				if(loggable != null) {
+//					ThreadLocal 
+//				}
+//			}
+  		
 	  	error = super.commitStatusToDatabaseWithPropagation();
 	  	fireEvent(FocEvent.ID_SAVE_AFTER_PROPAGATION);
-  	}else{
-  		int debug = 3;
-  		debug++;
+	  	
+  		//Save them in the SQL field in the Database
   	}
   	return error;
   }
@@ -4445,7 +4452,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		if(builder != null){
 			builder.beginObject();
 			FReference fRef = getReference();
-			if(fRef != null){
+			if(fRef != null && builder.isPrintRootRef()){
 				builder.appendKeyValue(fRef.getFocField().getName(), fRef.getInteger());
 			}
 			FocFieldEnum fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_ALL, FocFieldEnum.LEVEL_PLAIN);
@@ -4453,12 +4460,19 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				FField fld = fieldEnum.nextField();
 				if(fld.getID() != FField.REF_FIELD_ID){
 					FProperty prop = fieldEnum.getProperty();
-					if(prop != null){
+					if(prop != null && (!builder.isModifiedOnly() || prop.isModifiedFlag())){
 						//if(prop.isObjectProperty()){
 						if(prop instanceof FObject){
 							FObjectField objFld  = (FObjectField) prop.getFocField();
 							FObject      objProp = (FObject) prop;
-							builder.appendKeyValue(fld.getName()/*+".REF"*/, objProp.getLocalReferenceInt());
+							String value = String.valueOf(objProp.getLocalReferenceInt());
+							if(builder.isPrintObjectNamesNotRefs()) {
+								FocObject valueFocObject = (FocObject) objProp.getObject();
+								if(valueFocObject != null) {
+									value = valueFocObject.getName();
+								}
+							}
+							builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
 							/*
 							builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
 							if(objFld.getFocDesc() != null && objProp.getObject_CreateIfNeeded() != null){
@@ -4475,6 +4489,27 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			fieldEnum.dispose();
 			fieldEnum = null;
 				
+			if(builder.isScanSubList()) {
+				fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
+				while(fieldEnum != null && fieldEnum.hasNext()){
+					FField fld = fieldEnum.nextField();
+					if(fld.getID() != FField.REF_FIELD_ID){
+						FList prop = (FList) fieldEnum.getProperty();
+						FocList list = prop != null ? prop.getList() : null;
+						if(list != null) {
+							for(int i=0; i<list.size(); i++) {
+								FocObject focObj = list.getFocObject(i);
+								if(focObj != null && (!builder.isModifiedOnly() || focObj.isModified())) {
+									focObj.toJson(builder);
+								}
+							}
+						}
+					}
+				}
+				fieldEnum.dispose();
+				fieldEnum = null;
+			}
+			
 			builder.endObject();
 		}
 	}
