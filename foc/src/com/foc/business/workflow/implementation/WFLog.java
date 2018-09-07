@@ -207,7 +207,7 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	@Override
 	public String logEvent_GetSQLRequests() {
-		return null;
+		return getComment();
 	}
 
 	@Override
