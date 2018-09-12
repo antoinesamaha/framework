@@ -9,7 +9,7 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 
 	private PrintingAction printingAction = null;
 	private PrnLayout      prnLayout      = null;
-	private boolean        wordDoc = false;
+	private boolean        wordDoc        = false;
 	
 	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingaction) {
 		this(prnLayout, printingaction, false);
@@ -68,6 +68,22 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 			}
 		}
 		return downloadStream;
+	}
+
+	public PrnLayout getPrnLayout() {
+		return prnLayout;
+	}
+
+	public void setPrnLayout(PrnLayout prnLayout) {
+		this.prnLayout = prnLayout;
+	}
+
+	public boolean isWordDoc() {
+		return wordDoc;
+	}
+
+	public void setWordDoc(boolean wordDoc) {
+		this.wordDoc = wordDoc;
 	}
 	
 }
