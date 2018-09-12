@@ -328,18 +328,21 @@ public class PhotoAlbum_Table extends FocXMLLayout {
       
       if(application != null){
       	FocListWrapper wrapper = (FocListWrapper) getFocData();
-      	PhotoAlbumListWithFilter photoAlbumList = (PhotoAlbumListWithFilter) wrapper.getFocList();
-      	
-//        PhotoAlbumListWithFilter photoAlbumList = getPhotoAlbumList();
-        PhotoAlbum photoAlbum = photoAlbumList.addPhotoAlbum(fileName, inputStream);
-        if(photoAlbum != null){
-        	photoAlbum.setDocumentType(filteredType);
-	        refresh();
-	        if(isPopupDocumentFormWhenAdd()) {
-		        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, getFormContextAfterUpload(), getFormViewAfterUpload());
-		        getMainWindow().changeCentralPanelContent(XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, photoAlbum), true);
-	        }
-        }
+      	if(wrapper != null) {
+	      	PhotoAlbumListWithFilter photoAlbumList = (PhotoAlbumListWithFilter) wrapper.getFocList();
+	      	
+	      	if(photoAlbumList != null) {
+		        PhotoAlbum photoAlbum = photoAlbumList.addPhotoAlbum(fileName, inputStream);
+		        if(photoAlbum != null){
+		        	photoAlbum.setDocumentType(filteredType);
+			        refresh();
+			        if(isPopupDocumentFormWhenAdd()) {
+				        XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, getFormContextAfterUpload(), getFormViewAfterUpload());
+				        getMainWindow().changeCentralPanelContent(XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, photoAlbum), true);
+			        }
+		        }
+	      	}
+      	}
       }
     }
   }
