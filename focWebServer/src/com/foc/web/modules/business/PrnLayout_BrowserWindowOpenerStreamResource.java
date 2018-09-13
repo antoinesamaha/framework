@@ -10,6 +10,7 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 	private PrintingAction printingAction = null;
 	private PrnLayout      prnLayout      = null;
 	private boolean        wordDoc        = false;
+	private String         outputFileNameWithoutExtension = null; 
 	
 	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingaction) {
 		this(prnLayout, printingaction, false);
@@ -18,6 +19,7 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingAction, boolean wordDoc) {
 //		super(null, "printnig_"+System.currentTimeMillis()+ (wordDoc ? ".docx" : ".pdf"));
 		super(null, "printnig_"+System.currentTimeMillis());
+		outputFileNameWithoutExtension = "printnig_"+System.currentTimeMillis();
 		this.prnLayout = prnLayout;
 		this.printingAction = printingAction;
 		this.wordDoc = wordDoc;
@@ -53,10 +55,10 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 				
 				byte[] bytes = null;
 				if(wordDoc){
-					if(getFilename() != null && !getFilename().endsWith(".docx")) setFilename(getFilename()+".docx");
+					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".docx");
 					bytes = getPrintingAction().getLauncher().printWordDocument(prnLayout);
 				}else{
-					if(getFilename() != null && !getFilename().endsWith(".pdf")) setFilename(getFilename()+".pdf");
+					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".pdf");
 					bytes = getPrintingAction().getLauncher().web_FillReport(prnLayout, prnLayout.getFileName());
 				}
 				if(bytes != null){
