@@ -150,7 +150,12 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	public TableTreeDelegate(ITableTree treeOrTable, Attributes attributes) {
 		this.treeOrTable = treeOrTable;
 		this.attributes = attributes;
-//		setAttributes(attributes);
+		
+		//Initiate tool tip generator to fix empty rows issue when initiated while generating cells
+		if(tableToolTipGenerator == null && getTable() != null){
+			tableToolTipGenerator = new FTableToolTipGenerator();
+			getTable().setItemDescriptionGenerator(tableToolTipGenerator);
+		}
 	}
 
 	public void dispose() {
