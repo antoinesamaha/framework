@@ -30,8 +30,6 @@ import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.server.BrowserWindowOpener;
-import com.vaadin.server.DownloadStream;
-import com.vaadin.server.StreamResource;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -54,7 +52,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 		}
 	}
 	
-	private FVCheckBox getPrintLogoCheckBox(){
+	FVCheckBox getPrintLogoCheckBox(){
 		return (FVCheckBox) getComponentByName("PRINT_LOGO");
 	}
 	
@@ -89,8 +87,18 @@ public class PrnLayout_Table extends FocXMLLayout{
 					public Object generateCell(Table source, Object itemId, Object columnId) {
 						Button button = new Button("MS Word");
 						if(getFocList() != null && itemId != null){
-							BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new BrowserWindowOpenerStreamResource(itemId, true));
-							browserWindowOpener.extend(button);
+							PrnLayout layout = (PrnLayout) getFocList().searchByReference((long) itemId);
+							if(layout != null) {
+								BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new PrnLayout_BrowserWindowOpenerStreamResource(layout, PrnLayout_Table.this.getPrintingAction(), true){
+									protected boolean isWithLogo() {
+										if(getPrintLogoCheckBox() != null){
+										  return getPrintLogoCheckBox().getValue();
+										}
+										return true;
+									}
+								});
+								browserWindowOpener.extend(button);
+							}
 						}
 						return button;
 					}
@@ -103,8 +111,16 @@ public class PrnLayout_Table extends FocXMLLayout{
 				@Override
 				public Object generateCell(Table source, Object itemId, Object columnId) {
 					Button button = new Button("PDF");
-					if(getFocList() != null && itemId != null){
-						BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new BrowserWindowOpenerStreamResource(itemId));
+					PrnLayout layout = (PrnLayout) getFocList().searchByReference((long) itemId);
+					if(layout != null) {
+						BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new PrnLayout_BrowserWindowOpenerStreamResource(layout, PrnLayout_Table.this.getPrintingAction())) {
+							protected boolean isWithLogo() {
+								if(getPrintLogoCheckBox() != null){
+								  return getPrintLogoCheckBox().getValue();
+								}
+								return true;
+							}
+						};
 						browserWindowOpener.extend(button);
 					}
 					return button;
@@ -276,61 +292,6 @@ public class PrnLayout_Table extends FocXMLLayout{
 		}
   };
   
-	private class BrowserWindowOpenerStreamResource extends StreamResource{
-
-		private Object selectedItemId = null;
-		private boolean wordDoc = false;
-		
-		public BrowserWindowOpenerStreamResource(Object selectedItemId) {
-			this(selectedItemId, false);
-		}
-		
-		public BrowserWindowOpenerStreamResource(Object selectedItemId, boolean wordDoc) {
-			super(null, "printnig_"+System.currentTimeMillis()+ (wordDoc ? ".docx" : ".pdf"));
-			this.selectedItemId = selectedItemId;
-			this.wordDoc = wordDoc;
-			setCacheTime(1);
-		}
-		
-		public void dispose(){
-			selectedItemId = null;
-		}
-		
-		@Override
-		public DownloadStream getStream() {
-			DownloadStream downloadStream = null;
-			if(getFocList() != null && selectedItemId != null && getPrintingAction() != null && getPrintingAction().getLauncher() != null){
-				PrnLayout prnLayout = (PrnLayout) getFocList().searchByReference((Long) selectedItemId);
-				if(prnLayout != null){
-					
-					if(getPrintLogoCheckBox() != null){
-					  boolean withLogo = getPrintLogoCheckBox().getValue();
-					  getPrintingAction().getLauncher().setWithLogo(withLogo);
-					}
-					getPrintingAction().setLaunchedAutomatically(false);
-					
-					byte[] bytes = null;
-					if(wordDoc){
-						bytes = getPrintingAction().getLauncher().printWordDocument(prnLayout);
-					}else{
-  					bytes = getPrintingAction().getLauncher().web_FillReport(prnLayout, prnLayout.getFileName());
-					}
-					if(bytes != null){
-						if(wordDoc){
-							setMIMEType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-						}else{
-							setMIMEType("application/pdf");
-						}
-			  		setStreamSource(new FStreamSource(bytes));
-					}
-					downloadStream = super.getStream();
-				}
-			}
-			return downloadStream;
-		}
-		
-	}
-
 	public boolean isShowWordPrinting() {
 		return showWordPrinting;
 	}

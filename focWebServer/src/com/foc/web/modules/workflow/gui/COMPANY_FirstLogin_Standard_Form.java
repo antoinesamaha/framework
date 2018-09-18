@@ -1,49 +1,15 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
-import java.util.Iterator;
-
-import com.foc.Globals;
-import com.foc.IFocDescDeclaration;
-import com.foc.admin.FocGroup;
-import com.foc.admin.FocGroupDesc;
-import com.foc.admin.FocUser;
-import com.foc.admin.FocUserDesc;
-import com.foc.admin.GrpWebModuleRights;
-import com.foc.admin.GrpWebModuleRightsDesc;
-import com.foc.admin.UserSession;
-import com.foc.business.adrBook.AdrBookParty;
-import com.foc.business.adrBook.AdrBookPartyDesc;
 import com.foc.business.company.Company;
-import com.foc.business.company.UserCompanyRights;
-import com.foc.business.company.UserCompanyRightsDesc;
-import com.foc.business.workflow.WFOperator;
-import com.foc.business.workflow.WFSite;
-import com.foc.business.workflow.WFTitle;
-import com.foc.business.workflow.WFTitleDesc;
-import com.foc.business.workflow.rights.RightLevel;
-import com.foc.business.workflow.rights.RightLevelDesc;
-import com.foc.business.workflow.rights.UserTransactionRight;
-import com.foc.desc.AutoPopulatable;
-import com.foc.desc.FocDesc;
-import com.foc.desc.FocObject;
-import com.foc.event.FocEvent;
-import com.foc.event.FocListener;
-import com.foc.list.FocList;
-import com.foc.shared.xmlView.XMLViewKey;
-import com.foc.vaadin.IApplicationConfigurator;
-import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.foc.web.modules.admin.AdminWebModule;
-import com.foc.web.server.FocWebServer;
-import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.themes.Reindeer;
 
 @SuppressWarnings("serial")
-public class Company_FirstLogin_Form extends FocXMLLayout {
-  private FocListener userCompanyRightsListener = null;
+public class COMPANY_FirstLogin_Standard_Form extends FocXMLLayout {
+//  private FocListener userCompanyRightsListener = null;
   
   public Company getCompany(){
     return (Company) getFocData();

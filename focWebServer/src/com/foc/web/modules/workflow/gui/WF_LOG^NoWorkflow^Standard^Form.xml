@@ -1,0 +1,15 @@
+<VerticalLayout spacing="true" width="100%" captionMargin="0" margin="true">
+  <ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" withStatus="false" />
+  <!-- 
+  <HorizontalLayout spacing="true" captionMargin="0">
+    <GuiField name="SITE" caption="Site" />
+    <GuiField name="STATUS" caption="Status" />
+    <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="Signature Stage" />
+    <GuiField name="CREATION_USER" caption="Creation User" />
+    <GuiField name="CREATTION_DATE" caption="Creation Date" />
+    <GuiField name="VALIDATION_DATE" caption="Approval Date" />
+    <GuiField name="CLOSURE_DATE" caption="Closure Date" />
+  </HorizontalLayout>
+  <GuiField name="ALL_SIGNATURES" caption="Signatures" width="100%" height="50px" />
+  -->
+</VerticalLayout>

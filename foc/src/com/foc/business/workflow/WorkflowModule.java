@@ -16,9 +16,9 @@ public class WorkflowModule extends FocModule {
   
 	public static final String MODULE_NAME = "WORKFLOW";
 	
-	public static final int MODULE_ID = 155;
+	public static final int VERSION_ID = 156;
 	
-	public static final int MODULE_ID_LAST_BEFORE_FLD_NAME_CUT = 152;
+	public static final int VERSION_ID_LAST_BEFORE_FLD_NAME_CUT = 152;
 	
 	private WorkflowModule(){
 	}
@@ -28,7 +28,7 @@ public class WorkflowModule extends FocModule {
 	
   public void declare(){
     Application app = Globals.getApp();
-    FocVersion.addVersion(MODULE_NAME, "workflow 1.0", MODULE_ID);
+    FocVersion.addVersion(MODULE_NAME, "workflow 1.0", VERSION_ID);
     app.declareModule(this);
   }
 

@@ -26,6 +26,7 @@ public class FTypeMultipleChoiceString extends FocFieldTypAbstract<FocMultipleCh
 		focField = new FMultipleChoiceStringField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setDBResident(a.dbResident());
 		focField.setUseSameColumnValues(a.useColumnValues());
+		focField.setAllowOutofListSelection(a.allowNewValues());
 		if(a.choices() != null){
 			for(String title: a.choices()){
 				focField.addChoice(title);

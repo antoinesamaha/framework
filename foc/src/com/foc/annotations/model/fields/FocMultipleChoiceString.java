@@ -13,5 +13,6 @@ public @interface FocMultipleChoiceString {
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
 	public boolean useColumnValues() default true;
+	public boolean allowNewValues() default true;
 	public String[] choices() default {};
 }

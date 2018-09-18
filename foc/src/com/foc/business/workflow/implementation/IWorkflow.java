@@ -6,7 +6,7 @@ import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.map.WFSignature;
 import com.foc.gui.FPanel;
 
-public interface IWorkflow extends IAdrBookParty {
+public interface IWorkflow extends ILoggable {
 	public Workflow     iWorkflow_getWorkflow();
 	public WFSite       iWorkflow_getComputedSite();
 	public String       iWorkflow_getCode();

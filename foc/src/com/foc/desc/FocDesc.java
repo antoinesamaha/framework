@@ -45,6 +45,7 @@ import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
+import com.foc.business.workflow.implementation.LoggableDesc;
 import com.foc.business.workflow.implementation.WFLog;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.business.workflow.implementation.WorkflowDesc;
@@ -89,7 +90,6 @@ import com.foc.list.FocListOrder;
 import com.foc.list.filter.FocDescForFilter;
 import com.foc.plugin.IFocDescPlugIn;
 import com.foc.property.FList;
-import com.foc.property.FMultipleChoice;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.AbstractDataStore;
@@ -117,6 +117,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   private   boolean      dbResident          = false;
   private   boolean      deprecated          = false;
   protected WorkflowDesc workflowDesc        = null ;
+  protected LoggableDesc loggableDesc        = null ;
   private   int          dummyPropertyCount  = 0    ;
 	private   boolean      logActive           = false;
 	private   boolean      listInCache         = true ;
@@ -1804,6 +1805,10 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		return workflowDesc != null;
 	}
 	
+	public boolean workflow_IsLoggable() {
+		return workflowDesc != null || loggableDesc != null;
+	}
+	
 	private int workflow_GetStatusForRigtsCheck(FocObject focObject){
 		return focObject instanceof IStatusHolder ? ((IStatusHolder)focObject).getStatusHolder().getStatus() : StatusHolderDesc.STATUS_APPROVED; 
 	}
@@ -1865,7 +1870,13 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	}
 
 	public boolean workflow_IsAllowViewLog(){
-		return workflow_IsAllow_Action(RightLevelDesc.FLD_VIEW_LOG);
+		if(workflow_IsWorkflowSubject()) {
+			return workflow_IsAllow_Action(RightLevelDesc.FLD_VIEW_LOG);
+		} else if(workflow_IsLoggable()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public boolean workflow_IsAllowInsert(){

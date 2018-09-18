@@ -49,7 +49,7 @@ import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVViewSelector_MenuBar;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.admin.FocUser_HomePage_Form;
-import com.foc.web.modules.workflow.WFConsole_Form;
+import com.foc.web.modules.workflow.gui.WFConsole_Form;
 import com.foc.web.server.FocWebServer;
 import com.foc.webservice.FocWebService;
 import com.vaadin.event.DataBoundTransferable;

@@ -1,6 +1,7 @@
 package com.foc.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,8 +12,12 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 import org.jsoup.Jsoup;
+
+import com.foc.Globals;
 
 public class Utils {
 
@@ -210,4 +215,108 @@ public class Utils {
 		return comp;
 	}
 
+	public static byte[] compressByteArray(byte[] bytes){
+		ByteArrayOutputStream baos = null;
+		Deflater dfl = new Deflater();
+		dfl.setLevel(Deflater.BEST_COMPRESSION);
+		dfl.setInput(bytes);
+		dfl.finish();
+		baos = new ByteArrayOutputStream();
+		byte[] tmp = new byte[4*1024];
+		try{
+			while(!dfl.finished()){
+				int size = dfl.deflate(tmp);
+				baos.write(tmp, 0, size);
+			}
+		} catch (Exception ex){
+      
+		} finally {
+			try{
+				if(baos != null) baos.close();
+			} catch(Exception ex){
+			}
+		}
+  
+ 		return baos.toByteArray();
+	}
+
+	public static byte[] decompressByteArray(byte[] bytes){
+	  ByteArrayOutputStream baos = null;
+	  Inflater iflr = new Inflater();
+	  iflr.setInput(bytes);
+	  baos = new ByteArrayOutputStream();
+	  byte[] tmp = new byte[4*1024];
+	  try{
+	    while(!iflr.finished()){
+        int size = iflr.inflate(tmp);
+        baos.write(tmp, 0, size);
+	    }
+	  } catch (Exception ex){
+	  	Globals.logException(ex);  
+	  } finally {
+	    try{
+	    	if(baos != null) baos.close();
+	    } catch(Exception ex){}
+	  }
+	   
+	  return baos.toByteArray();
+	}
+
+	public static String compressString(String in) {
+		String out = "";
+		
+		if(in != null) {
+			try{
+				byte[] content = compressByteArray(in.getBytes("UTF8"));
+				out = new String(content, "UTF8");
+			}catch (Exception e){
+				Globals.logException(e);
+			}
+		}
+		
+		return out;
+	}
+	
+	public static String decompressString(String zipped){
+		String unzipped = "";
+    if(zipped != null) {
+    	try {
+		    byte[] decom = decompressByteArray(zipped.getBytes("UTF8"));
+		    unzipped = new String(decom, "UTF8");
+			}catch (Exception e){
+				Globals.logException(e);
+    	}
+    }
+    		
+    return unzipped;
+	}
+	
+	public static void main(String[] args) {
+		String in = "{\"Field1\":\"";
+		in += "الاسم";
+		in += "\"}";
+		
+		in="{\"REF\":\"4048\",\"SITE\":\"التفتيش المركزي\",\"STATUS\":\"Proposal\",\"CREATTION_DATE\":\"10/09/2018 15:01\",\"VALIDATION_DATE\":\"\",\"CLOSURE_DATE\":\"\",\"CREATION_USER\":\"01BARMAJA\",\"LAST_MODIF_DATE\":\"\",\"LAST_MODIF_USER\":\"0\",\"WF_CURRENT_STAGE\":\"0\",\"WF_CANCELED\":\"0\",\"WF_CANCEL_REASON\":\"\",\"WF_LAST_COMMENT\":\"\",\"WF_COMMENT\":\"\",\"TITLE_1\":\"0\",\"TITLE_2\":\"0\",\"TITLE_3\":\"0\",\"WF_HIDE_1\":\"0\",\"WF_HIDE_2\":\"0\",\"WF_HIDE_3\":\"0\",\"ALL_SIGNATURES\":\"\",\"SIMULATION\":\"0\",\"CODE\":\"01051\",\"DATE\":\"10/09/2018\",\"EXTERNAL_CODE\":\"\",\"ACCUSATION\":\"0\",\"ACCUSATION_DESCRIPTION\":\"NEW FROM MINISTRY\",\"ACCUSATION_SUMMARY\":\"\",\"COMPLAINT_SOURCE\":\"0\",\"COMPLAINT_PURPOSE\":\"\",\"VIOLATION_DATE\":\"\",\"VIOLATION_TIME\":\"00:00\",\"VIOLATION_ADDRESS\":\"\",\"HUMAN_RIGHTS\":\"0\",\"HRIGHTS\":\"\",\"INVESTIGATOR\":\"0\",\"ComplaintStatus\":\"قيد التحقيق\",{\"REF\":\"-1\",\"ORDER_FLD\":\"1\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-2\",\"ORDER_FLD\":\"2\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-3\",\"ORDER_FLD\":\"3\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-4\",\"ORDER_FLD\":\"4\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-5\",\"ORDER_FLD\":\"5\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-6\",\"ORDER_FLD\":\"6\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-7\",\"ORDER_FLD\":\"7\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-8\",\"ORDER_FLD\":\"8\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-9\",\"ORDER_FLD\":\"9\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"}}";
+		
+		try {
+			byte[] inBytes = in.getBytes();
+			String inTemp = new String(inBytes);
+			
+			byte[] b = compressByteArray(inBytes);
+			String temp = new String(b);
+			byte[] tempBytes = temp.getBytes();
+			byte[] outBytes = decompressByteArray(b);
+			byte[] outTempBytes = decompressByteArray(tempBytes);
+			int debug = 0;
+			debug++;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println("in:"+in);
+		String temp = compressString(in);
+		System.out.println("temp:"+temp);
+		String out = decompressString(temp);
+		System.out.println("out:"+out);
+	}
 }

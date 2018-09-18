@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.business.company.Company;
 import com.foc.business.company.CompanyDesc;
@@ -6,7 +6,7 @@ import com.foc.list.FocList;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 @SuppressWarnings("serial")
-public class Company_Saas_Form extends FocXMLLayout {
+public class COMPANY_Saas_Standard_Form extends FocXMLLayout {
 
 	public Company getCompany(){
     return (Company) getFocData();

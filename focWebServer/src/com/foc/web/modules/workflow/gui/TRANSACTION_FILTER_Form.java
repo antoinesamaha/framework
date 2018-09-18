@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,6 +26,7 @@ import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
@@ -33,10 +34,10 @@ import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Component;
 
 @SuppressWarnings("serial")
-public class TransactionFilter_Form extends FocXMLLayout{
+public class TRANSACTION_FILTER_Form extends FocXMLLayout{
 
 	private FVTableWrapperLayout      tableWrapperLayout        = null;
-	private Department_Selection_Tree department_Selection_Tree = null;
+	private ACC_DEPARTMENT_Selection_Standard_Tree department_Selection_Tree = null;
 	
 	public void dispose(){
 		super.dispose();
@@ -159,7 +160,7 @@ public class TransactionFilter_Form extends FocXMLLayout{
 		if(getTransactionFilterVerticalLayout() != null){
 			DepartmentTree departmentTree = new DepartmentTree();
 			XMLViewKey xmlViewKey = new XMLViewKey(DepartmentDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TREE, WorkflowWebModule.CTXT_DEPARTMENT_SELECTION, XMLViewKey.VIEW_DEFAULT);
-			department_Selection_Tree = (Department_Selection_Tree) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, departmentTree);
+			department_Selection_Tree = (ACC_DEPARTMENT_Selection_Standard_Tree) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), xmlViewKey, departmentTree);
 			
 			department_Selection_Tree.setParentLayout(this);
 			department_Selection_Tree.setFocDataOwner(true);

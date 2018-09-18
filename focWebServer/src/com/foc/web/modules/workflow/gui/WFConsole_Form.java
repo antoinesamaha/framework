@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
@@ -21,6 +21,7 @@ import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.modules.workflow.WFTransactionWrapper_Form;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.vaadin.ui.Alignment;
 

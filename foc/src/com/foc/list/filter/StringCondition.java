@@ -175,18 +175,8 @@ public class StringCondition extends FilterCondition {
     	
     	fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
     	
-    	String speachMarks_Start = "\"";
-    	String speachMarks_End   = "\"";
-    	if(getProvider() == DBManager.PROVIDER_MSSQL){
-    		speachMarks_Start = "N\'";
-    		speachMarks_End = "\'";
-    	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
-      	speachMarks_Start = "'";
-      	speachMarks_End   = "'";
-    	}else if(getProvider() == DBManager.PROVIDER_H2){
-      	speachMarks_Start = "'";
-      	speachMarks_End   = "'";
-    	}
+    	String speachMarks_Start = FField.getSpeachMarks_Start(getProvider());
+    	String speachMarks_End   = FField.getSpeachMarks_End(getProvider());
     	
     	if(ignoreCase) text = text.toUpperCase();
     	

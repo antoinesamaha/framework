@@ -7,6 +7,11 @@ public class B01JsonBuilder {
 	
 	private ArrayList<Boolean> firstIndicator = new ArrayList<Boolean>();
 	
+	private boolean modifiedPropertiesOnly  = false;
+	private boolean printObjectNamesNotRefs = false;
+	private boolean scanSubList             = false;
+	private boolean printRootRef            = true;
+	
 	public B01JsonBuilder(){
 		buffer = new StringBuffer();
 	}
@@ -15,12 +20,16 @@ public class B01JsonBuilder {
 		this.buffer = buffer;
 	}
 	
+	public void dispose() {
+		
+	}
+	
 	public boolean firstIndicator_IsCurrentFirst(){
-		return firstIndicator.get(firstIndicator.size()-1);
+		return firstIndicator.size() > 0 ? firstIndicator.get(firstIndicator.size()-1) : true;
 	}
 	
 	public boolean firstIndicator_SetCurrentFirst(boolean first){
-		return firstIndicator.set(firstIndicator.size()-1, first);
+		return firstIndicator.size() > 0 ? firstIndicator.set(firstIndicator.size()-1, first) : true;
 	}
 
 	public boolean firstIndicator_AddLevel(){
@@ -110,5 +119,37 @@ public class B01JsonBuilder {
 	@Override
 	public String toString(){
 		return buffer != null ? buffer.toString() : "";
+	}
+
+	public boolean isModifiedOnly() {
+		return modifiedPropertiesOnly;
+	}
+
+	public void setModifiedOnly(boolean modifiedOnly) {
+		this.modifiedPropertiesOnly = modifiedOnly;
+	}
+
+	public boolean isPrintObjectNamesNotRefs() {
+		return printObjectNamesNotRefs;
+	}
+
+	public void setPrintObjectNamesNotRefs(boolean printObjectNamesNotRefs) {
+		this.printObjectNamesNotRefs = printObjectNamesNotRefs;
+	}
+
+	public boolean isScanSubList() {
+		return scanSubList;
+	}
+
+	public void setScanSubList(boolean scanSubList) {
+		this.scanSubList = scanSubList;
+	}
+
+	public boolean isPrintRootRef() {
+		return printRootRef;
+	}
+
+	public void setPrintRootRef(boolean printRootRef) {
+		this.printRootRef = printRootRef;
 	}
 }

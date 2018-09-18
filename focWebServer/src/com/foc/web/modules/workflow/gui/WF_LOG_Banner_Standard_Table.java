@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.WFLog;
@@ -14,7 +14,7 @@ import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 
 @SuppressWarnings("serial")
-public class WFLog_Banner_Standard_Table extends WFLog_Table {
+public class WF_LOG_Banner_Standard_Table extends WF_LOG_Table {
 	
 	private Workflow workflow = null; 
 			

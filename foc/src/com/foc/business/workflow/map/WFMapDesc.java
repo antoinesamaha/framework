@@ -11,7 +11,8 @@ public class WFMapDesc extends FocDesc {
 	public static final int FLD_NAME               = FField.FLD_NAME;
 	public static final int FLD_DESCRIPTION        = FField.FLD_DESCRIPTION;
 	
-	public static final int FLD_TITLE_INITIAL_EDIT = 1;
+	public static final int FLD_TITLE_INITIAL_EDIT  = 1;
+	public static final int FLD_STAGE_OF_LOCK_BEGIN = 2;
 	
 	public static final int FLD_SIGNATURE_LIST     = 10;
 	
@@ -30,6 +31,11 @@ public class WFMapDesc extends FocDesc {
 		objFld.setSelectionList(WFTitleDesc.getList(FocList.NONE));
 		objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
 		objFld.setDisplayField(WFTitleDesc.FLD_NAME);
+		addField(objFld);
+		
+		objFld = new FObjectField("STAGE_OF_LOCK_BEGIN", "Stage of lock begin", FLD_STAGE_OF_LOCK_BEGIN, WFStageDesc.getInstance());
+		objFld.setSelectionList(WFStageDesc.getList(FocList.NONE));
+		objFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
 		addField(objFld);
 		
 		/*

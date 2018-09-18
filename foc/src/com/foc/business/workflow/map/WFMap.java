@@ -66,6 +66,10 @@ public class WFMap extends FocObject {
 		return (WFTitle) getPropertyObject(WFMapDesc.FLD_TITLE_INITIAL_EDIT);
 	}
 	
+	public WFStage getStageOfLockBegin() {
+		return (WFStage) getPropertyObject(WFMapDesc.FLD_STAGE_OF_LOCK_BEGIN);
+	}
+	
 	public FocList getSignatureList(){
 		FocList list = getPropertyList(WFMapDesc.FLD_SIGNATURE_LIST);
 		if(list != null){

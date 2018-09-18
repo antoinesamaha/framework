@@ -850,6 +850,30 @@ public abstract class FField implements Cloneable, IFocData {
 		return fieldNameString;
 	}
 	
+	public static String getSpeachMarks_Start(int dbProvider) {
+		String speachMarks_Start = "\"";
+		if(dbProvider == DBManager.PROVIDER_MSSQL){
+			speachMarks_Start = "N\'";
+		}else if(dbProvider == DBManager.PROVIDER_ORACLE){
+	  	speachMarks_Start = "'";
+		}else if(dbProvider == DBManager.PROVIDER_H2){
+	  	speachMarks_Start = "'";
+		}
+		return speachMarks_Start;
+	}
+	
+	public static String getSpeachMarks_End(int dbProvider) {
+		String speachMarks_End   = "\"";
+		if(dbProvider == DBManager.PROVIDER_MSSQL){
+			speachMarks_End = "\'";
+		}else if(dbProvider == DBManager.PROVIDER_ORACLE){
+	  	speachMarks_End   = "'";
+		}else if(dbProvider == DBManager.PROVIDER_H2){
+	  	speachMarks_End   = "'";
+		}
+		return speachMarks_End;
+	}
+	
   //--------------------------------------------------------
   // IFocData
   //--------------------------------------------------------  

@@ -1,9 +1,9 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 @SuppressWarnings("serial")
-public class WFTransactionConfig_Table extends FocXMLLayout{
+public class WF_ASSIGNEMENT_Table extends FocXMLLayout{
 
 	/*
 	@Override
