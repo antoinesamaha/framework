@@ -113,6 +113,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	private boolean excelExportEnabled = true;
 	private boolean statusStyleEnabled = true;
 	
+	private boolean deleteWithoutConfirmation = false;
+	
 	private String lastClickedFocDataByPath = null;
 	
 	private FocFormula_Form formulaForm   = null;
@@ -809,6 +811,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 //						}
 //					}
 				}
+			}
+			
+			String withoutConfirmation = attributes.getValue(FXML.ATT_DELETE_WITHOUT_CONFIRMATION);
+			if(withoutConfirmation != null && (withoutConfirmation.toLowerCase().equals("true") || withoutConfirmation.toLowerCase().equals("1"))){
+				setDeleteWithoutConfirmation(true);
 			}
 			
 			/*
@@ -1607,28 +1614,26 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			if(message != null){
 				Globals.showNotification("Cannot delete Item.", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	
 			}else{
-				OptionDialog dialog = new OptionDialog("Delete Confirmation", "Are you sure you want to delete this item", focObject) {
-					
-					@Override
-					public boolean executeOption(String optionName) {
-						if(optionName != null && optionName.equals("DELETE")){
-							FocObject focObject = (FocObject) getOptionFocData();
-							FocXMLLayout xmlLay = getFocXMLLayout();
-							if(xmlLay == null){
-								delete_NoPopupConfirmation(focObject);
-							}else{
-								xmlLay.table_DeleteItem(getTreeOrTable(), focObject);
+				if(isDeleteWithoutConfirmation()) {
+					delete_InternalWithoutAnyPopup(focObject);
+				} else {
+					OptionDialog dialog = new OptionDialog("Delete Confirmation", "Are you sure you want to delete this item", focObject) {
+						
+						@Override
+						public boolean executeOption(String optionName) {
+							if(optionName != null && optionName.equals("DELETE")){
+								FocObject focObject = (FocObject) getOptionFocData();
+								delete_InternalWithoutAnyPopup(focObject);
 							}
-		
+							return false;
 						}
-						return false;
-					}
-				};
-				dialog.addOption("DELETE", "Delete");
-				dialog.addOption("CANCEL", "Cancel");
-				dialog.setWidth("400px");
-				dialog.setHeight("180px");
-				dialog.popup();
+					};
+					dialog.addOption("DELETE", "Delete");
+					dialog.addOption("CANCEL", "Cancel");
+					dialog.setWidth("400px");
+					dialog.setHeight("180px");
+					dialog.popup();
+				}
 			}
 		}
 		/*
@@ -1667,6 +1672,15 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 //			}
 //		});
 //		FocWebApplication.getInstanceForThread().addWindow(optionWindow);
+	}
+	
+	private void delete_InternalWithoutAnyPopup(FocObject focObject) {
+		FocXMLLayout xmlLay = getFocXMLLayout();
+		if(xmlLay == null){
+			delete_NoPopupConfirmation(focObject);
+		}else{
+			xmlLay.table_DeleteItem(getTreeOrTable(), focObject);
+		}
 	}
 	
 	// public boolean isInLineEditing(){
@@ -2778,5 +2792,13 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				tableToolTipGenerator.addTooltip(itemId, propertyId, ttt);
 			}
 		}
+	}
+
+	public boolean isDeleteWithoutConfirmation() {
+		return deleteWithoutConfirmation;
+	}
+
+	public void setDeleteWithoutConfirmation(boolean deleteWithoutConfirmation) {
+		this.deleteWithoutConfirmation = deleteWithoutConfirmation;
 	}
 }

@@ -138,6 +138,7 @@ public interface FXML {
   public static final String ATT_DOUBLE_CLICK_ENABLED     = "doubleClickEnabled" ;
   public static final String ATT_EXCEL_EXPORT_ENABLED     = "exportEnabled"    ;
   public static final String ATT_DELETE_ENABLED           = "deleteEnabled"    ;
+  public static final String ATT_DELETE_WITHOUT_CONFIRMATION = "deleteWithoutConfirmation"    ;
   public static final String ATT_REFRESH_ENABLED          = "refreshEnabled"   ;
   public static final String ATT_IMMEDIATE                = "immediate"        ;
   public static final String ATT_WITH_FILTER              = "withFilter"       ;

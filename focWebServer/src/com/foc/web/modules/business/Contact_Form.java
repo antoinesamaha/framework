@@ -5,8 +5,6 @@ import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.business.adrBook.AdrBookParty;
 import com.foc.business.adrBook.Contact;
-import com.foc.business.notifier.FocNotificationConst;
-import com.foc.business.notifier.FocNotificationEvent;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;

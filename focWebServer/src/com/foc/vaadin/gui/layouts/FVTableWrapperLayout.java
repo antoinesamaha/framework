@@ -46,8 +46,8 @@ import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.vaadin.gui.xmlForm.IValidationListener;
-import com.foc.web.modules.workflow.TransactionFilter_Form;
 import com.foc.web.modules.workflow.WorkflowWebModule;
+import com.foc.web.modules.workflow.gui.TRANSACTION_FILTER_Form;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
@@ -723,7 +723,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 	private void transactionFilterClickListener() {
 		XMLViewKey xmlViewKey = new XMLViewKey(WorkflowWebModule.STORAGE_NAME_TRANSACTION_FILTER, XMLViewKey.TYPE_FORM);
-		TransactionFilter_Form transactionFilterForm = (TransactionFilter_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(FVTableWrapperLayout.this.getWindow(), xmlViewKey, null);
+		TRANSACTION_FILTER_Form transactionFilterForm = (TRANSACTION_FILTER_Form) XMLViewDictionary.getInstance().newCentralPanel_NoParsing(FVTableWrapperLayout.this.getWindow(), xmlViewKey, null);
 		transactionFilterForm.setTableWrapperLayout(FVTableWrapperLayout.this);
 		transactionFilterForm.parseXMLAndBuildGui();
 		FVTableWrapperLayout.this.getWindow().changeCentralPanelContent(transactionFilterForm, true);

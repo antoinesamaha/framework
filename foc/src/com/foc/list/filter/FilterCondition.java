@@ -3,6 +3,7 @@
  */
 package com.foc.list.filter;
 
+import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;

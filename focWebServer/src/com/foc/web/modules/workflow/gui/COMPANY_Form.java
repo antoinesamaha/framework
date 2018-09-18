@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.business.adrBook.AdrBookParty;
 import com.foc.business.adrBook.AdrBookPartyDesc;
@@ -8,7 +8,7 @@ import com.foc.property.FPropertyListener;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 @SuppressWarnings("serial")
-public class Company_Form extends FocXMLLayout {
+public class COMPANY_Form extends FocXMLLayout {
 	
 	private FPropertyListener nameListener = null;
 	private FPropertyListener descriptionListener = null;

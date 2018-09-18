@@ -1,6 +1,7 @@
-<VerticalLayout height="-1px" >
+<VerticalLayout height="-1px" margin="true" captionMargin="0" spacing="true">
     <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-    <GuiTable name="WF_ASSIGNEMENT" dataPath="DATAROOT" caption="" height="-1px" width="99%" inLineEditable="true" pageLength="fit" addEnabled="false" deleteEnabled="false" openEnabled="true">
+    <Label value="Transaction Configuration" style="H2,text-center" width="100%"/>
+    <GuiTable name="WF_ASSIGNEMENT" dataPath="DATAROOT" caption="" height="-1px" width="100%" inLineEditable="true" pageLength="fit" addEnabled="false" deleteEnabled="false" openEnabled="true">
         <OpenForm containerWindow="same window" />
         <TableColumn name="_LINE_NUMBER" caption="Ln" width="50px"/>
         <TableColumn name="TRANSACTION" caption="Transaction"   editable="true" width="100px"/>

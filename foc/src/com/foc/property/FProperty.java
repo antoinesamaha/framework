@@ -290,6 +290,14 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
 //    Globals.logString("Backup not implemented");
   }
 
+  public boolean containsListener(FPropertyListener propListener) {
+  	boolean contains = false;
+    if(propListener != null && listeners != null){
+      contains = listeners.contains(propListener);
+    }
+    return contains;
+  }
+
   public void addListener(FPropertyListener propListener) {
     if(propListener != null){
       if(listeners == null){
@@ -298,7 +306,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
       listeners.add(propListener);
     }
   }
-
+  
   public void removeListener(FPropertyListener propListener) {
     if(listeners != null && propListener != null){
       listeners.remove(propListener);

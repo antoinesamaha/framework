@@ -260,7 +260,7 @@ public class WFTransactionConfigDesc extends FocDesc {
 	@Override
 	public void beforeAdaptTableModel(boolean alreadyExists) {
   	FocVersion dbVersion = FocVersion.getDBVersionForModule(WorkflowModule.MODULE_NAME);
-		if(alreadyExists && (dbVersion == null || dbVersion.getId() <= WorkflowModule.MODULE_ID_LAST_BEFORE_FLD_NAME_CUT)){
+		if(alreadyExists && (dbVersion == null || dbVersion.getId() <= WorkflowModule.VERSION_ID_LAST_BEFORE_FLD_NAME_CUT)){
   		if(Globals.getApp() != null && Globals.getApp().getDataSource() != null && Globals.getApp().getDataSource().getUtility() != null){
 	  		Globals.getApp().getDataSource().getUtility().dbUtil_RenameColumnsText(getStorageName(), "CODE_PREFIX_TRANS_PREFIX_PROPOSAL", "CODE_PREFIX_PROPOSAL", FocDesc.LEN_CODE_FOC);
 	  		Globals.getApp().getDataSource().getUtility().dbUtil_RenameColumnsInteger(getStorageName(), "PROMPT_FOR_APPROVE_UPON_VALIDATION", "PROMPT_APPROVE_UPON_VALID");

@@ -1,0 +1,8 @@
+<VerticalLayout margin="true" spacing="true" captionMargin="0">
+  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
+  <Label value="Workflow signature sequence maps" style="H2,text-center" width="100%"/>
+  <GuiTable name="WFMAP_TABLE" dataPath="DATAROOT" width="100%" height="-1px" openInNewTabEnabled="true" >
+    <TableColumn name="NAME" caption="Name"    />
+    <TableColumn name="DESCRIP" caption="Description"    />
+  </GuiTable>
+</VerticalLayout>

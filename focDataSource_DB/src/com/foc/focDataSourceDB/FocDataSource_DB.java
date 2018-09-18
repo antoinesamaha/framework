@@ -400,7 +400,25 @@ public class FocDataSource_DB implements IFocDataSource {
         	error = sqlInsert.execute();
 					if(!error && focObject.workflow_IsLoggable()){
 						Loggable workflow = ((ILoggable)focObject).iWorkflow_getWorkflow();
-						if(workflow != null) workflow.insertLogLine(WFLogDesc.EVENT_CREATION);
+						if(workflow != null) {
+							String json = null;
+							/*
+							B01JsonBuilder builder = new B01JsonBuilder();
+							try {
+								builder.setModifiedOnly(false);
+								builder.setPrintObjectNamesNotRefs(true);
+								builder.setScanSubList(true);
+								builder.setPrintRootRef(true);
+								focObject.toJson(builder);
+								json = builder.toString();
+							} catch(Exception e) {
+								Globals.logException(e);
+							}
+							builder.dispose();
+							*/
+							
+							workflow.insertLogLine(WFLogDesc.EVENT_CREATION, json);
+						}
 					}        	
 				}catch (Exception e){
 					error = true;
@@ -433,6 +451,7 @@ public class FocDataSource_DB implements IFocDataSource {
         	
 					if(focObject.workflow_IsLoggable()){
 						loggable = ((ILoggable)focObject).iWorkflow_getWorkflow();
+						/*
 						if(loggable != null) {
 							B01JsonBuilder builder = new B01JsonBuilder();
 							try {
@@ -447,6 +466,7 @@ public class FocDataSource_DB implements IFocDataSource {
 							}
 							builder.dispose();
 						}
+						*/
 					}
         	
 					error = sqlUpdate.execute();

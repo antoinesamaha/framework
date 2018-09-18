@@ -4123,10 +4123,22 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						allowModif = true;
 					}else{
 						WFMap map = workflow_getTransactionConfig().getWorkflowMap();
-						allowModif =	 workflow.iWorkflow_getWorkflow().getCurrentStage() == null 
-												&& (    workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck()/*Only the user waiting to sign can edit*/
-												     || (map.getTitleInitialEdit() != null && map.getTitleInitialEdit().equals(Globals.getApp().getCurrentTitle()))
-												   );
+						
+						WFStage currentStage = workflow.iWorkflow_getWorkflow().getCurrentStage();
+						if(currentStage == null) {
+							allowModif =    workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck()/*Only the user waiting to sign can edit*/
+									         || (map.getTitleInitialEdit() != null && map.getTitleInitialEdit().equals(Globals.getApp().getCurrentTitle()));
+						} else {
+							WFStage lockStartStage = map.getStageOfLockBegin();
+							allowModif = 		lockStartStage != null 
+													&& 	workflow_CompareStages(lockStartStage) < 0
+													&&  workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck();
+						}
+						
+//						allowModif =	 workflow.iWorkflow_getWorkflow().getCurrentStage() == null 
+//												&& (    workflow_NeedsSignatureOfThisUser_WithoutAllowSignatureCheck()/*Only the user waiting to sign can edit*/
+//												     || (map.getTitleInitialEdit() != null && map.getTitleInitialEdit().equals(Globals.getApp().getCurrentTitle()))
+//												   );
 					}
 //						allowModif = workflow.iWorkflow_getWorkflow().getCurrentStage() == null || workflow_NeedsSignatureOfThisUser();//Only the user waiting to sign can edit
 				}

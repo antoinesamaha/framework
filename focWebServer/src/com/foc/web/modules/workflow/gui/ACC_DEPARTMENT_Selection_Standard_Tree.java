@@ -1,4 +1,4 @@
-package com.foc.web.modules.workflow;
+package com.foc.web.modules.workflow.gui;
 
 import com.foc.vaadin.gui.components.FVTreeTable;
 import com.foc.vaadin.gui.components.TableTreeDelegate;
@@ -6,7 +6,7 @@ import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 @SuppressWarnings("serial")
-public class Department_Selection_Tree extends FocXMLLayout{
+public class ACC_DEPARTMENT_Selection_Standard_Tree extends FocXMLLayout{
 
 	@Override
 	protected void afterLayoutConstruction() {
