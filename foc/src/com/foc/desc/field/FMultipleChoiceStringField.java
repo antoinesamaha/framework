@@ -183,7 +183,7 @@ public class FMultipleChoiceStringField extends FStringField {
 	}
 
 	public boolean isChoicesAreFromSameColumn() {
-		return choicesSelection_FocDesc != null;
+		return choicesSelection_FocDesc != null || isUseSameColumnValues();
 	}
 
 	public void setChoicesAreFromSameColumn(FocDesc focDescForChoicesSelect) {
