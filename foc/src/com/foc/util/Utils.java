@@ -319,4 +319,17 @@ public class Utils {
 		String out = decompressString(temp);
 		System.out.println("out:"+out);
 	}
+	
+	public static String getCurrentMethodName() {
+		return getCurrentMethodName(1);
+	}
+	
+	public static String getCurrentMethodName(int depth) {
+		String name = "";
+		final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+		if(ste != null && ste.length > 2+depth) {
+			name = ste[2+depth].getMethodName();
+		}
+		return name;
+	}
 }
