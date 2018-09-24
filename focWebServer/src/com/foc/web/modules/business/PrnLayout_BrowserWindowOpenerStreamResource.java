@@ -39,8 +39,12 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 		return printingAction;
 	}
 	
+	protected void beforeGetStream() {
+	}
+	
 	@Override
 	public DownloadStream getStream() {
+		beforeGetStream();
 		DownloadStream downloadStream = null;
 		if(getPrintingAction() != null && getPrintingAction().getLauncher() != null){
 			if(prnLayout != null){
