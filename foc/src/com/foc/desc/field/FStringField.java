@@ -46,11 +46,29 @@ public class FStringField extends FField {
     return FieldDefinition.SQL_TYPE_ID_CHAR_FIELD;
   }
 
+  private boolean isClob() {
+  	boolean clob = false;
+  	if(getProvider() == DBManager.PROVIDER_ORACLE) {
+  		clob = getSize() > 4000;
+  	} else if(getProvider() == DBManager.PROVIDER_MSSQL) {
+  		clob = getSize() > 4000;
+  	}
+  	return clob;
+  }
+  
   public String getCreationString(String name) {
     if (getProvider()== DBManager.PROVIDER_ORACLE){
-      return " \"" + name + "\" VARCHAR2" + "(" + getSize() + ") ";
+    	if(isClob()) {
+    		return " \"" + name + "\" CLOB ";
+    	} else {
+    		return " \"" + name + "\" VARCHAR2" + "(" + getSize() + ") ";
+    	}
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
-    	return " [" + name + "] [nvarchar]" + "(" + getSize() + ") ";
+    	if(isClob()) {
+    		return " [" + name + "] [ntext] ";
+    	} else {
+    		return " [" + name + "] [nvarchar]" + "(" + getSize() + ") ";
+    	}
     }else if (getProvider()== DBManager.PROVIDER_H2){
     	return " \"" + name + "\" VARCHAR" + "(" + getSize() + ") DEFAULT ''";
     }else{
