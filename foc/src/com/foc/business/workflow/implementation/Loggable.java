@@ -204,7 +204,7 @@ public class Loggable {
 		return insertLogLine(event, comment, null);
 	}
 	
-	public long insertLogLine(int event, String comment, String sql) {//, String sqlRequest
+	public long insertLogLine(int event, String comment, String changes) {//, String sqlRequest
 		long ref = 0;
 		FocDesc logFocDesc = getWFLogDesc();
 		FocObject focObj = getFocObject();
@@ -216,7 +216,7 @@ public class Loggable {
 				log.setLogSubjectReference(focObj.getReferenceInt());
 				fillLogLine(log, event);
 				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
-//				if(!Utils.isStringEmpty(sqlRequest)) log.setreqComment(sqlRequest);
+				if(!Utils.isStringEmpty(changes)) log.setChanges(changes);
 				log.validate(false);
 				ref = log.getReferenceInt();
 				if(Globals.getApp() != null) {

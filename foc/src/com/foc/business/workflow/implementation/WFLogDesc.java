@@ -34,6 +34,8 @@ public class WFLogDesc extends FocDesc {
 	public static final int FLD_SIGNED_TRANSACTION_XML = 11;
 	public static final int FLD_EVENT_STATUS           = 12;//0, 1-Posted, 2-Committed
 	public static final int FLD_EVENT_STATUS_ERROR     = 13;
+	public static final int FLD_CHANGES                = 14;
+
 	
 	public static final int EVENT_NONE            = FocLogEvent.EVENT_NONE;
 	public static final int EVENT_SIGNATURE       = FocLogEvent.EVENT_SIGNATURE;
@@ -48,7 +50,8 @@ public class WFLogDesc extends FocDesc {
 	public static final int EVENT_REJECT          = FocLogEvent.EVENT_REJECT;
 	public static final int EVENT_OPENED          = FocLogEvent.EVENT_OPENED;
 	
-	public static final int LEN_FLD_COMMENT      = 4000;
+	public static final int LEN_FLD_COMMENT      =   400;
+	public static final int LEN_FLD_CHANGES      = 10000;
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
@@ -132,6 +135,9 @@ public class WFLogDesc extends FocDesc {
 		addField(objFld);
 
 		FStringField chfld = new FStringField("COMMENT", "Comment", FLD_COMMENT, false, LEN_FLD_COMMENT);
+    addField(chfld);
+
+		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, LEN_FLD_CHANGES);
     addField(chfld);
 
     FBlobStringField focFld = new FBlobStringField("SIGNED_TRANSACTION_XML", "Signed Transaction XML", FLD_SIGNED_TRANSACTION_XML, false, 300, 5);

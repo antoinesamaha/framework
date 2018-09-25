@@ -267,8 +267,8 @@ public class Utils {
 		
 		if(in != null) {
 			try{
-				byte[] content = compressByteArray(in.getBytes("UTF8"));
-				out = new String(content, "UTF8");
+				byte[] content = compressByteArray(in.getBytes("UTF-8"));
+				out = new String(content, "UTF-8");
 			}catch (Exception e){
 				Globals.logException(e);
 			}
@@ -281,14 +281,27 @@ public class Utils {
 		String unzipped = "";
     if(zipped != null) {
     	try {
-		    byte[] decom = decompressByteArray(zipped.getBytes("UTF8"));
-		    unzipped = new String(decom, "UTF8");
+		    byte[] decom = decompressByteArray(zipped.getBytes("UTF-8"));
+		    unzipped = new String(decom, "UTF-8");
 			}catch (Exception e){
 				Globals.logException(e);
     	}
     }
     		
     return unzipped;
+	}
+	
+	public static String getCurrentMethodName() {
+		return getCurrentMethodName(1);
+	}
+	
+	public static String getCurrentMethodName(int depth) {
+		String name = "";
+		final StackTraceElement[] ste = Thread.currentThread().getStackTrace();
+		if(ste != null && ste.length > 2+depth) {
+			name = ste[2+depth].getMethodName();
+		}
+		return name;
 	}
 	
 	public static void main(String[] args) {
@@ -299,24 +312,26 @@ public class Utils {
 		in="{\"REF\":\"4048\",\"SITE\":\"التفتيش المركزي\",\"STATUS\":\"Proposal\",\"CREATTION_DATE\":\"10/09/2018 15:01\",\"VALIDATION_DATE\":\"\",\"CLOSURE_DATE\":\"\",\"CREATION_USER\":\"01BARMAJA\",\"LAST_MODIF_DATE\":\"\",\"LAST_MODIF_USER\":\"0\",\"WF_CURRENT_STAGE\":\"0\",\"WF_CANCELED\":\"0\",\"WF_CANCEL_REASON\":\"\",\"WF_LAST_COMMENT\":\"\",\"WF_COMMENT\":\"\",\"TITLE_1\":\"0\",\"TITLE_2\":\"0\",\"TITLE_3\":\"0\",\"WF_HIDE_1\":\"0\",\"WF_HIDE_2\":\"0\",\"WF_HIDE_3\":\"0\",\"ALL_SIGNATURES\":\"\",\"SIMULATION\":\"0\",\"CODE\":\"01051\",\"DATE\":\"10/09/2018\",\"EXTERNAL_CODE\":\"\",\"ACCUSATION\":\"0\",\"ACCUSATION_DESCRIPTION\":\"NEW FROM MINISTRY\",\"ACCUSATION_SUMMARY\":\"\",\"COMPLAINT_SOURCE\":\"0\",\"COMPLAINT_PURPOSE\":\"\",\"VIOLATION_DATE\":\"\",\"VIOLATION_TIME\":\"00:00\",\"VIOLATION_ADDRESS\":\"\",\"HUMAN_RIGHTS\":\"0\",\"HRIGHTS\":\"\",\"INVESTIGATOR\":\"0\",\"ComplaintStatus\":\"قيد التحقيق\",{\"REF\":\"-1\",\"ORDER_FLD\":\"1\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-2\",\"ORDER_FLD\":\"2\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-3\",\"ORDER_FLD\":\"3\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-4\",\"ORDER_FLD\":\"4\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-5\",\"ORDER_FLD\":\"5\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-6\",\"ORDER_FLD\":\"6\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-7\",\"ORDER_FLD\":\"7\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-8\",\"ORDER_FLD\":\"8\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-9\",\"ORDER_FLD\":\"9\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"}}";
 		
 		try {
-			byte[] inBytes = in.getBytes();
-			String inTemp = new String(inBytes);
+			byte[] inBytes = in.getBytes("UTF-8");
+			byte[] compressedBytes = compressByteArray(inBytes);
+			byte[] outBytes = decompressByteArray(compressedBytes);
 			
-			byte[] b = compressByteArray(inBytes);
-			String temp = new String(b);
-			byte[] tempBytes = temp.getBytes();
-			byte[] outBytes = decompressByteArray(b);
-			byte[] outTempBytes = decompressByteArray(tempBytes);
+			String in2 = new String(inBytes);
+//			String temp = new String(b, "UTF-8");
+			String out2 = new String(outBytes);
+			
 			int debug = 0;
 			debug++;
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
+		/*
 		System.out.println("in:"+in);
 		String temp = compressString(in);
 		System.out.println("temp:"+temp);
 		String out = decompressString(temp);
 		System.out.println("out:"+out);
+		 */
 	}
 }
