@@ -11,7 +11,6 @@ import com.foc.util.Utils;
 import com.vaadin.server.ConnectorResource;
 import com.vaadin.server.DownloadStream;
 import com.vaadin.server.StreamResource;
-import com.vaadin.shared.ApplicationConstants;
 
 public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource {
 
