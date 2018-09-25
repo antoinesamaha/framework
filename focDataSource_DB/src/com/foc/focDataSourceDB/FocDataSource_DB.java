@@ -410,15 +410,15 @@ public class FocDataSource_DB implements IFocDataSource {
 								builder.setPrintRootRef(true);
 								focObject.toJson(builder);
 								json = builder.toString();
-								if(json.length() >= WFLogDesc.LEN_FLD_COMMENT) {
-									json = json.substring(0, WFLogDesc.LEN_FLD_COMMENT-1);
+								if(json.length() >= WFLogDesc.LEN_FLD_CHANGES) {
+									json = json.substring(0, WFLogDesc.LEN_FLD_CHANGES-1);
 								}
 							} catch(Exception e) {
 								Globals.logException(e);
 							}
 							builder.dispose();
 							
-							workflow.insertLogLine(WFLogDesc.EVENT_CREATION, json);
+							workflow.insertLogLine(WFLogDesc.EVENT_CREATION, null, json);
 						}
 					}        	
 				}catch (Exception e){
@@ -461,8 +461,8 @@ public class FocDataSource_DB implements IFocDataSource {
 								builder.setPrintRootRef(false);
 								focObject.toJson(builder);
 								json = builder.toString();
-								if(json.length() >= WFLogDesc.LEN_FLD_COMMENT) {
-									json = json.substring(0, WFLogDesc.LEN_FLD_COMMENT-1);
+								if(json.length() >= WFLogDesc.LEN_FLD_CHANGES) {
+									json = json.substring(0, WFLogDesc.LEN_FLD_CHANGES-1);
 								}
 							} catch(Exception e) {
 								Globals.logException(e);
@@ -474,7 +474,7 @@ public class FocDataSource_DB implements IFocDataSource {
 					error = sqlUpdate.execute();
 					
 					if(!error && loggable != null) {
-						loggable.insertLogLine(WFLogDesc.EVENT_MODIFICATION, json);
+						loggable.insertLogLine(WFLogDesc.EVENT_MODIFICATION, null, json);
 					}
 				}catch (Exception e){
 					error = true;

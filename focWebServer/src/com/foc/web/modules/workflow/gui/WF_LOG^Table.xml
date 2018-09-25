@@ -9,7 +9,8 @@
     <TableColumn name="DESCRIP" caption="Description" expandRation="1" />
     <TableColumn name="ON_BEHALF_OF" caption="On Behalf" width="-1px" />
     <TableColumn name="TITLE" caption="Title" width="-1px" />
-    <TableColumn name="COMMENT" caption="Comment" expandRation="1" />
+    <TableColumn name="COMMENT" caption="Comment" expandRation="0.5" />
+    <TableColumn name="CHANGES" caption="Changes" expandRatio="0.5" />    
     <TableColumn name="EVENT_STATUS" caption="Status" width="-1px" />
     <TableColumn name="STATUS_ERROR" caption="Status Error" width="-1px" />
     <TableColumn name="PREVIOUS_STAGE" caption="From Stage" width="-1px" />

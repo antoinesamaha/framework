@@ -106,6 +106,14 @@ public class WFLog extends FocObject implements FocLogEvent {
 		return getPropertyString(WFLogDesc.FLD_COMMENT);
 	}
 	
+	public void setChanges(String changes){
+		setPropertyString(WFLogDesc.FLD_CHANGES, changes);
+	}
+
+	public String getChanges(){
+		return getPropertyString(WFLogDesc.FLD_CHANGES);
+	}
+	
 	public void setPreviousStage(WFStage stage){
 		setPropertyObject(WFLogDesc.FLD_PREVIOUS_STAGE, stage);
 	}
@@ -207,7 +215,7 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	@Override
 	public String logEvent_GetSQLRequests() {
-		return getComment();
+		return getChanges();
 	}
 
 	@Override
