@@ -73,6 +73,26 @@ public class WFSignature extends FocObject {
 		return getTitleIndex(title) >= 0;
 	}
 	
+	public String getSignCaption(){
+		return getPropertyString(WFSignatureDesc.FLD_SignCaption);
+	}
+	
+	public void setSignCaption(String formula){
+		setPropertyString(WFSignatureDesc.FLD_SignCaption, formula);
+	}
+	
+	public String getRejectCaption(){
+		return getPropertyString(WFSignatureDesc.FLD_RejectCaption);
+	}
+	
+	public void setRejectCaption(String caption){
+		setPropertyString(WFSignatureDesc.FLD_RejectCaption, caption);
+	}
+	
+	public boolean isRejectHidden() {
+		return getPropertyBoolean(WFSignatureDesc.FLD_RejectHidden);
+	}
+	
 	public int getTitleIndex(WFTitle title){
 		int idx = -1;
 		for(int i=0; i<WFSignatureDesc.FLD_TITLE_COUNT && idx < 0; i++){

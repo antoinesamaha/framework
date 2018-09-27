@@ -125,7 +125,7 @@ public class WFConsole_Form extends FocXMLLayout {
 					signButton.setDescription(isArabic() ? "موافقة وبصفة "+ result.getTitle(): "Sign as "+result.getTitle());
 				}
 				signButton.setVisible(!isForceHideSignCancel());
-				rejectButton.setVisible(!isForceHideSignCancel() && getWorkflow() != null && getWorkflow().getCurrentStage() != null);
+				rejectButton.setVisible(!isForceHideSignCancel() && focObj.workflow_IsRejectButtonVisible());
 			} else {
 				signButton.setVisible(false);
 				rejectButton.setVisible(false);

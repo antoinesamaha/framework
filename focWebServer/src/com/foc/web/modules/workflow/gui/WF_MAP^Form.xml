@@ -19,6 +19,9 @@
     <TableColumn name="TRANSACTION_CONTEXT" caption="Transaction Context" />
     <TableColumn name="TRANSACTION_VIEW" caption="Transaction View" />
     <TableColumn name="CONDITION_TO_REQUIRE_SIGNATURE" caption="Condition" />
+    <TableColumn name="SignCaption" caption="Sign Caption" />
+    <TableColumn name="RejectCaption" caption="Reject Caption" />
+    <TableColumn name="RejectHidden" caption="Reject Hidden" />
   </GuiTable>
   
 </VerticalLayout>

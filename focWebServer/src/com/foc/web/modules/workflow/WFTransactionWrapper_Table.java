@@ -175,12 +175,14 @@ public class WFTransactionWrapper_Table extends FocXMLLayout{
 	}
 	
 	protected boolean rejectButton_IsVisible(WFTransactionWrapper transaction) {
-		return transaction != null
-				&& transaction.getWorkflow() != null
-				&& transaction.getWorkflow().iWorkflow_getWorkflow() != null
-				&& transaction.getWorkflow().iWorkflow_getWorkflow().getCurrentStage() != null;
+		boolean visible = false;
+		if(transaction != null) {
+			FocObject focObject = transaction.getFocObject();
+			visible = focObject != null && focObject.workflow_IsRejectButtonVisible();
+		}
+		return visible;
 	}
-	
+
 	public class SignRejectButton extends FVButton {
 
 		private WFTransactionWrapper wrapper = null;
