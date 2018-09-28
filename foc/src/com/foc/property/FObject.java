@@ -697,7 +697,7 @@ public class FObject extends FProperty implements FPropertyListener{
     if(localReference != null){
     	localReference.setFocObject(focObjValue);
     }
-    copyReferenceFromObject();
+//    copyReferenceFromObject();
     plugListenerToReferencePropertyOfObjectValue();
     //localSourceList = backupLocalSourceList;
   }
