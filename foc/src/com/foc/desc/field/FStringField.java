@@ -136,7 +136,11 @@ public class FStringField extends FField {
   } 
   
   public int compareSQLDeclaration(FField field){
-    return this.getSize() - field.getSize();
+	  	if(!this.isClob()) {
+	  		return this.getSize() - field.getSize();
+	  	} else {
+	  		return 0;
+	  	}
   }
   
   public boolean isObjectContainer(){
