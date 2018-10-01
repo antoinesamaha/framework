@@ -23,6 +23,32 @@ import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.vaadin.data.util.converter.Converter;
 
+/*
+ * //*** SEE TOP EXPLANATION
+ * The backup of FObject never worked; At least not after the SQL select. Because we backup the focObjValue and not 
+ * the local REF. At that point, focObjValue is null and only REF is assigned a value
+ * 
+ * The restore of FObject never worked; because we were restoring the focObjValue leaving the REF as is. 
+ * But REF is the true value saved in DB...
+ * 
+ * Till here it is true that backups do not work, restores set the focObjValue = null, but the cal to a getObject_CreateIfNeeded()
+ * would simply re-fetch the focObject from the list since the REF is still there. 
+ * REF is still good because the backup did not set it to zero....
+ * 
+ * 2018-09-28: Antoine corrected partially the bug:
+ * 
+ * Antoine made the restore adjust the REF to the restored Object; meaning that after restoring 
+ * and setting the focObjValue to null, we now recompute the SHOULD BE REF, the one related to the focObjValue 
+ * this REF is almost always = 0 since the backup doesn't work and was not fixed a that point.
+ * We will now remove this line introduced by Antoine
+ * 
+ * The TRUE FULL Fix to come:
+ * 1- Make the backup and restore both deal with the REF first. if the focObjValue backed up corresponds 
+ * to the restored REF then we use it otherwize we stick to the REF and set the focObject to null waiting for 
+ * the first getObject_CreateIfNeeded to be called. 
+ *  
+ */
+
 /**
  * @author 01Barmaja
  */
@@ -697,7 +723,8 @@ public class FObject extends FProperty implements FPropertyListener{
     if(localReference != null){
     	localReference.setFocObject(focObjValue);
     }
-    copyReferenceFromObject();
+    //*** SEE TOP EXPLANATION
+    //copyReferenceFromObject();
     plugListenerToReferencePropertyOfObjectValue();
     //localSourceList = backupLocalSourceList;
   }
