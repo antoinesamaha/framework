@@ -4207,12 +4207,51 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	}
 
 	public String workflow_GetSignButtonCaption(boolean onBehalf){
-		if(onBehalf) return ConfigInfo.isArabic() ? "موافقة بالنيابة" : "Sign PP";
-		else return ConfigInfo.isArabic() ? " موافقة " : "Sign" ;
+		String caption = "";
+		
+		WFSignatureNeededResult result = workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+		if(result != null){
+			WFSignature currentSignature = result.getSignature();
+			if(currentSignature != null) caption = currentSignature.getSignCaption();
+		}
+	  
+	  if(Utils.isStringEmpty(caption)) {
+			if(onBehalf) caption = ConfigInfo.isArabic() ? "موافقة بالنيابة" : "Sign PP";
+			else caption = ConfigInfo.isArabic() ? " موافقة " : "Sign" ;
+	  }
+
+		return caption;
 	}
 	
 	public String workflow_GetRejectButtonCaption(boolean onBehalf){
-		return ConfigInfo.isArabic() ? " رفض " : "Reject" ;
+		String caption = "";
+		
+		WFSignatureNeededResult result = workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+		if(result != null){
+			WFSignature currentSignature = result.getSignature();
+			if(currentSignature != null) caption = currentSignature.getRejectCaption();
+		}
+	  
+	  if(Utils.isStringEmpty(caption)) {
+	  	caption = ConfigInfo.isArabic() ? " رفض " : "Reject" ;
+	  }
+
+		return caption;
+	}
+	
+	public boolean workflow_IsRejectButtonVisible(){
+		boolean visible = false;
+		
+		WFSignatureNeededResult result = workflow_NeedsSignatureOfThisUser_AsTitleIndex(null);
+		if(result != null){
+			WFSignature currentSignature = result.getSignature();
+			if(currentSignature.getPreviousStage() == null) {
+				visible = false;
+			} else {
+				visible = !currentSignature.isRejectHidden();
+			}
+		}
+		return visible;
 	}
 	
 	public boolean workflow_IsLastSignatureDoneByThisUser(boolean forceReloadOfLogList){

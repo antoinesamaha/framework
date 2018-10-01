@@ -41,6 +41,7 @@ public interface FocLogEvent {
 	public int    logEvent_GetEventType();
 	public String logEvent_GetUsername();
 	public Date   logEvent_GetDateTime();
-	public String logEvent_GetSQLRequests();
+	public String logEvent_GetComment();
+	public String logEvent_GetChanges();
 	public int    logEvent_GetStatus();
 }

@@ -4,6 +4,7 @@ import com.foc.admin.FocUserDesc;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FStringField;
+import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
@@ -23,7 +24,9 @@ public class WFSignatureDesc extends FocDesc {
 	public static final int FLD_TITLE_COUNT                    =  3;
 	public static final int FLD_TRANSACTION_CONTEXT            = 50;
 	public static final int FLD_TRANSACTION_VIEW               = 51;
-	
+	public static final int FLD_RejectHidden                   = 52;
+	public static final int FLD_SignCaption                    = 53;
+	public static final int FLD_RejectCaption                  = 54;
 	
 	public static final String DB_TABLE_NAME = "WF_SIGNATURE";
   
@@ -69,6 +72,15 @@ public class WFSignatureDesc extends FocDesc {
 		
 		FStringField formulaField = new FStringField("CONDITION_TO_REQUIRE_SIGNATURE", "Condition to require", FLD_CONDITION_TO_REQUIRE_SIGNATURE, false, 500);
 		addField(formulaField);
+		
+		FStringField signField = new FStringField("SignCaption", "Signature Caption", FLD_SignCaption, false, 500);
+		addField(signField);
+		
+		FStringField rejectField = new FStringField("RejectCaption", "Reject Caption", FLD_RejectCaption, false, 500);
+		addField(rejectField);
+		
+		FBoolField rejectHiddenField = new FBoolField("RejectHidden", "Reject Hidden", FLD_RejectHidden, false);
+		addField(rejectHiddenField);
 		
 		FObjectField fObjectFld = new FObjectField("FOC_USER", "User", FLD_USER, false, FocUserDesc.getInstance(), "USER_");
     fObjectFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);

@@ -248,6 +248,7 @@ public abstract class FField implements Cloneable, IFocData {
     case Types.NCHAR://This is for MSSQL
     case Types.CLOB:
     case Types.NCLOB:
+    case Types.LONGNVARCHAR://NTEXT
       field = new FStringField(name, name, id, false, size);
       break;
     case Types.CHAR:
