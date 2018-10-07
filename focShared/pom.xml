@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.focframework</groupId>
   <artifactId>focShared</artifactId>
-  <version>1.7.1-SNAPSHOT</version>
+  <version>1.7.1</version>
   <name>focShared</name>
   <description>focShared</description>
   
@@ -32,6 +32,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
+        <configuration>
+        	<localCheckout>true</localCheckout>
+        	<pushChanges>false</pushChanges>
+    	</configuration>
       </plugin>      
     </plugins>
   </build>
