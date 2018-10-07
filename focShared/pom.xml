@@ -28,10 +28,18 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+      </plugin>      
     </plugins>
   </build>
   
   <properties>
   	<foc.version>1.7.1-SNAPSHOT</foc.version>
   </properties>  
+  <scm>
+  	<url>https://github.com/FOC-framework/framework.git</url>
+  </scm>
 </project>
