@@ -2301,4 +2301,8 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e696', end
 		border-color: blue;
 		border-style: solid;
   }
+  
+  .foc-leftToRight{
+		direction: ltr !important;
+	}
 }
