@@ -47,6 +47,6 @@
   	<url>https://github.com/FOC-framework/framework.git</url>  	
 	<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>  		
 	<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
-    <tag>focShared-1.7.1</tag>
+    <tag>focShared-1.7.1.bis</tag>
   </scm>
 </project>
