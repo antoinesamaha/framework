@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.focframework</groupId>
   <artifactId>focShared</artifactId>
-  <version>1.7.2</version>
+  <version>1.7.3-SNAPSHOT</version>
   <name>focShared</name>
   <description>focShared</description>
   
@@ -47,6 +47,6 @@
   	<url>https://github.com/FOC-framework/framework.git</url>  	
 	<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>  		
 	<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
-    <tag>focShared-1.7.2</tag>
+    <tag>HEAD</tag>
   </scm>
 </project>
