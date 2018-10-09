@@ -21,11 +21,15 @@ import org.xml.sax.helpers.DefaultHandler;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
+import com.foc.access.AccessSubject;
 import com.foc.access.FocDataMap;
 import com.foc.admin.GroupXMLViewDesc;
 import com.foc.business.printing.gui.PrintingAction;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
+import com.foc.business.workflow.implementation.ILoggable;
+import com.foc.business.workflow.implementation.JSONLog;
+import com.foc.business.workflow.implementation.LoggableChangeCumulator;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.dataDictionary.FocDataResolver_StringConstant;
 import com.foc.dataSource.store.DataStore;
@@ -118,7 +122,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private Map<String, FocXMLGuiComponent> compMap = null;
 	private Stack<Component> stack = null;
 	private RightPanel rightPanel = null;
-	private boolean copyingMemoryToGui = false;
+	private boolean reactToGuiChangeDisable = false;
 	private boolean enableRightsApplicationToGuiFields = true;
 	private FocXMLLayout parentLayout     = null;
 	private boolean      commitWithParent = false;
@@ -1126,15 +1130,48 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		
 		return error;
 	}
+
+	private ILoggable pushLogInfoForLoggable() {
+		ILoggable loggable = null;
+		AccessSubject accessSubject = (focData != null && focData instanceof AccessSubject) ? (AccessSubject)focData : null ; 
+		while(accessSubject != null && loggable == null) {
+			if(accessSubject instanceof FocObject) {
+				loggable = (ILoggable) ((FocObject) accessSubject).workflow_GetFirstFatherLoggable();
+			}
+			accessSubject = accessSubject.getFatherSubject();
+		}
+		
+		if(loggable != null) {
+  		LoggableChangeCumulator logger = LoggableChangeCumulator.getInstanceForThread();
+  		JSONLog log = logger.get(loggable);
+  		if(log != null) {
+  			loggable = null;
+  		} else {
+    		logger.push(loggable);
+  		}
+		}
+		return loggable; 
+	}
+	
+	private void consumeLogInfoForLoggable(ILoggable loggable) {
+		if(loggable != null) {
+			LoggableChangeCumulator logCumulator = LoggableChangeCumulator.getInstanceForThread();
+			if(logCumulator != null) logCumulator.insertLogLine_IfNotInsertedYet(loggable);
+		}
+	}
 	
 	@Override
 	public boolean validationCommit(FVValidationLayout validationLayout) {
 		boolean error = false;
 		if(!error && (getValidationSettings(false) == null || getValidationSettings(false).isCommitData())){
+			ILoggable loggable = pushLogInfoForLoggable();
+			
 			if(!error) error = innerLayout_CommitOrCheckData(true);
 			if(!error && focData != null){
 				error = focData.iFocData_validate();
 			}
+
+			consumeLogInfoForLoggable(loggable);
 		}
 		
 		//Propagating the Validation Actions to child layouts if linked...
@@ -1339,9 +1376,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return error;
 	}
 
-	public boolean copyGuiToMemory(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
+  public boolean propertyChangeIntention(FocObject focObject, FProperty property, Object before, String after, FocXMLGuiComponent componentModified) {
+  	return false;
+  }
+  
+	public boolean propertyChangeIntention_Accepted(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
 		boolean error = false;
-	
+		
 		try{
 			error = scanComponentsAndcopyGuiToMemory();
 			// Because if we have 2 components CODE and NAME for the same datapath
@@ -1365,6 +1406,44 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				}
 			}else{
 				mapDataPath2ListenerAction_ApplyVisibilityFormulas();
+			}
+			
+			copyMemoryToGui();
+		}catch (Exception e){
+			Globals.logException(e);
+			error = true;
+		}
+		return error;
+	}
+	
+	public void propertyChangeIntention_Rejected(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
+		if(componentModified != null) {
+			boolean backup = setReactToGuiChangeDisable(true);
+			componentModified.copyMemoryToGui();
+			setReactToGuiChangeDisable(backup);
+		}
+	}
+	
+	public boolean copyGuiToMemory(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
+		boolean error = false;
+	
+		try{
+			//PropertyChangeIntention
+			//In This case we want to make sure that FocObject Allows the Change before triggering any listeners
+			boolean propertyChangeSuspended = false;
+			if(propertyOfEvent != null && componentModified != null) {
+				Object valueBefore = propertyOfEvent != null ? propertyOfEvent.getObject() : null;
+				String valueAfter  = componentModified.getValueString(); 
+				if(!error && propertyOfEvent != null) {
+					FocObject fatherObj = propertyOfEvent.getFocObject();
+					propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
+				}
+			}
+			
+			if(propertyChangeSuspended) {
+				error = true;
+			} else {
+				error = propertyChangeIntention_Accepted(componentModified, propertyOfEvent);
 			}
 		}catch (Exception e){
 			Globals.logException(e);
@@ -1394,7 +1473,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 
 	protected void copyMemoryToGui_Local() {
-		setCopyingMemoryToGui(true);
+		setReactToGuiChangeDisable(true);
 		Iterator<FocXMLGuiComponent> iter = getComponentMap().values().iterator();
 		while (iter != null && iter.hasNext()){
 			FocXMLGuiComponent obj = iter.next();
@@ -1435,7 +1514,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 		}
 		mapDataPath2ListenerAction_ApplyVisibilityFormulas();
-		setCopyingMemoryToGui(false);
+		setReactToGuiChangeDisable(false);
 	}
 
 	private IFocData getDataByPath(String path) {
@@ -2261,12 +2340,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
-	public boolean isCopyingMemoryToGui() {
-		return copyingMemoryToGui;
+	private boolean isReactToGuiChangeDisable() {
+		return reactToGuiChangeDisable;
 	}
 
-	public void setCopyingMemoryToGui(boolean copyingMemoryToGui) {
-		this.copyingMemoryToGui = copyingMemoryToGui;
+	private boolean setReactToGuiChangeDisable(boolean copyingMemoryToGui) {
+		boolean ret = this.reactToGuiChangeDisable;
+		this.reactToGuiChangeDisable = copyingMemoryToGui;
+		return ret;
 	}
 
 	public boolean isVisibleWhenApplicable() {
@@ -2346,7 +2427,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		@Override
 		public void valueChange(ValueChangeEvent event) {
 			try{
-				if(!isCopyingMemoryToGui()){
+				if(!isReactToGuiChangeDisable()){
 					FProperty propertyModified = null;
 					FocXMLGuiComponent componentModified = null;
 					if(event.getProperty() instanceof FocXMLGuiComponent){
@@ -2371,11 +2452,12 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					}
 					if(copyGuiToMemory){
 						copyGuiToMemory(componentModified, propertyModified);
+					} else {
+						copyMemoryToGui();
 					}
 //					copyGuiToMemory(componentModified, propertyModified);
 					
 					// ((FocObject)getFocData()).computePropertiesWithFormula();
-					copyMemoryToGui();
 				}
 			}catch (Exception e){
 				Globals.logException(e);
@@ -3090,6 +3172,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		FVTableWrapperLayout tableWrapperLayout = findAncestor(FVTableWrapperLayout.class);
 		boolean inner = tableWrapperLayout != null;
 		return inner; 
+	}
+
+	public FocXMLLayout getMainLayoutForInnerLayout() {
+		FocXMLLayout xmlLayout = null;
+		FVTableWrapperLayout tableWrapperLayout = findAncestor(FVTableWrapperLayout.class);
+		xmlLayout = tableWrapperLayout != null ? tableWrapperLayout.findAncestor(FocXMLLayout.class) : null;
+		return xmlLayout;
 	}
 
 	private void scanComponentsAndSetWYSIWYGDropHandlers() {
