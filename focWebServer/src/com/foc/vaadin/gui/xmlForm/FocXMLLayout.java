@@ -1052,11 +1052,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 							caption = fld.getName();
 						}
 					}
-					String title   = "Missing Data";
-					String message = "Please enter data for : "+caption;
-					if(isArabic()){
-						title   = "المعلومات ناقصة";
-						message = "يرج ادخال المعلومات الناقصة" + " : " + caption;
+					String title = "Alert";
+					String message = "Please enter data for : " + caption;
+					if (isArabic()) {
+						title = "تنبيه";
+						message = "الرجاء إدخال المعلومات التالية" + " : " + caption;
 					}
 					
 					OptionDialog dialog = new OptionDialog(title, message) {
