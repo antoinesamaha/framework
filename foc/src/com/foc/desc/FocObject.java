@@ -4080,7 +4080,19 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 		return father;
 	}
-		
+	
+	public FocObject workflow_GetFirstFatherLoggable(){
+		FocObject fatherWithWorkflow = null;
+		FocObject father = this;
+		while(father != null && fatherWithWorkflow == null){
+			if(father.workflow_IsLoggable()){
+				fatherWithWorkflow = father;
+			}
+			father = father.getFirstFatherFocObject();
+		}
+		return fatherWithWorkflow;
+	}
+	
 	public FocObject workflow_GetFirstFatherWorkflowSubject(){
 		FocObject fatherWithWorkflow = null;
 		FocObject father = this;

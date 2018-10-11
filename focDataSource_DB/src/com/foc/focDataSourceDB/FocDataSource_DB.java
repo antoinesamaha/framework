@@ -34,6 +34,7 @@ import com.foc.admin.FocVersion;
 import com.foc.business.notifier.FocNotificationManager;
 import com.foc.business.workflow.implementation.ILoggable;
 import com.foc.business.workflow.implementation.Loggable;
+import com.foc.business.workflow.implementation.LoggableChangeCumulator;
 import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.dataSource.IExecuteResultSet;
 import com.foc.dataSource.IFocDataSource;
@@ -453,28 +454,18 @@ public class FocDataSource_DB implements IFocDataSource {
 					if(focObject.workflow_IsLoggable()){
 						loggable = ((ILoggable)focObject).iWorkflow_getWorkflow();
 						if(loggable != null) {
-							B01JsonBuilder builder = new B01JsonBuilder();
-							try {
-								builder.setModifiedOnly(true);
-								builder.setPrintObjectNamesNotRefs(true);
-								builder.setScanSubList(true);
-								builder.setPrintRootRef(false);
-								focObject.toJson(builder);
-								json = builder.toString();
-								if(json.length() >= WFLogDesc.LEN_FLD_CHANGES) {
-									json = json.substring(0, WFLogDesc.LEN_FLD_CHANGES-1);
-								}
-							} catch(Exception e) {
-								Globals.logException(e);
-							}
-							builder.dispose();
+				  		LoggableChangeCumulator logger = LoggableChangeCumulator.getInstanceForThread();
+				  		json = logger.getJson(focObject);
 						}
 					}
         	
 					error = sqlUpdate.execute();
 					
 					if(!error && loggable != null) {
-						loggable.insertLogLine(WFLogDesc.EVENT_MODIFICATION, null, json);
+						LoggableChangeCumulator logger = LoggableChangeCumulator.getInstanceForThread();
+						if(logger != null) {
+							logger.insertLogLine_IfNotInsertedYet((ILoggable)focObject);
+						}
 					}
 				}catch (Exception e){
 					error = true;

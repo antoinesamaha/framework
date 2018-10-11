@@ -1,10 +1,10 @@
 package com.foc.web.unitTesting;
 
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
@@ -63,6 +63,23 @@ public class FocUnitTestingSuite {
       testMap.clear();
       testMap = null;
     }
+  }
+  
+  public void declareAllTestMethods() {
+  	Class cls = getClass();
+  	Method[] methodArray = cls.getMethods();
+  	for(int i=0; i<methodArray.length; i++) {
+  		Method m = methodArray[i];
+  		try{
+  			if(m.getName().startsWith("test_")) {
+		      Class[] clss = new Class[0];
+		      Object[] args = new Object[0];
+  				m.invoke(this, clss);
+  			}
+			}catch (Exception e){
+				Globals.logException(e);
+			}
+  	}
   }
   
   public void runSuite() throws Exception {

@@ -5,9 +5,10 @@
     <TableColumn name="DATE_TIME" caption="Date Time" width="-1px" />
     <TableColumn name="EVENT_TYPE" caption="Event Type" width="-1px" />
     <TableColumn name="USER" caption="User" width="-1px" />
-    <TableColumn name="DESCRIP" caption="Description" expandRation="1" />
+    <TableColumn name="DESCRIP" caption="Description" />
     <TableColumn name="TITLE" caption="Title" width="-1px" />
-    <TableColumn name="COMMENT" caption="Comment" expandRation="1" />
+    <TableColumn name="COMMENT" caption="Comment" expandRation="0.5" />
+    <TableColumn name="CHANGES" caption="Changes" expandRatio="0.5" />
     <TableColumn name="EVENT_STATUS" caption="Status" width="-1px" />
   </GuiTable>
 </VerticalLayout>
