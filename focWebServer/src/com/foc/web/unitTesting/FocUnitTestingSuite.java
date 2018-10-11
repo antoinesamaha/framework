@@ -36,6 +36,23 @@ public class FocUnitTestingSuite {
     setFileName(fileName);
     setDictionary(dictionary);
   }
+  
+  /**
+   * This is used for the new Test that do not use XML and support parsing methods "test_" for test declataion
+   * 
+   * @param dictionary
+   * @param name
+   */
+  public FocUnitTestingSuite(FocUnitDictionary dictionary, String name) {
+    setName(name);
+    setFileName(null);
+    setDictionary(dictionary);
+
+		setParsingDone(true);
+		dictionary.put(this);
+		
+    declareAllTestMethods();
+  }
 
   public void dispose(int mode) {
     

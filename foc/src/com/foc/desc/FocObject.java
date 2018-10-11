@@ -464,6 +464,27 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	setPropertyString(FField.FLD_NAME, name);
   }
 
+  public String getJSONName() {
+  	String  str     = "";
+  	FocDesc focDesc = getThisFocDesc();
+  	if(focDesc.hasCodeField()) {
+  		str = code_getCode();
+  	}else if(focDesc.getFieldByID(FField.FLD_NAME) != null) {
+  		str = getName();
+  	}else if(focDesc.getFieldByID(FField.FLD_DESCRIPTION) != null) {
+  		str = getDescription();
+  	}else if(focDesc.getKeyFieldsSize() > 0){
+  		for(int i=0; i<focDesc.getKeyFieldsSize(); i++) {
+  			FField fld = focDesc.getKeyFieldAt(i);
+  			FProperty prop = getFocProperty(fld.getID());
+  			str += prop.getString();
+  		}
+  	}else {
+  		str = getName();
+  	}
+  	return str;
+  }
+  
   public String getDescription(){
   	return getPropertyString(FField.FLD_DESCRIPTION);
   }
@@ -2242,7 +2263,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
         	FProperty prop = fEnum.getProperty();
           if( prop != null && prop instanceof FObject){
             FocObject obj = (FocObject)prop.getObject();
-            if( obj != null && obj.isCreated()){
+            if( obj != null && obj.isCreated() && !obj.isEmpty()){
             	error = error || !obj.validate(true);//commitStatusToDatabaseWithPropagation(); VALIDATE_VALIDATE_VALIDATE
             	if(error){
             		int debug = 3;
@@ -4532,7 +4553,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							if(builder.isPrintObjectNamesNotRefs()) {
 								FocObject valueFocObject = (FocObject) objProp.getObject();
 								if(valueFocObject != null) {
-									value = valueFocObject.getName();
+									value = valueFocObject.getJSONName() + "[" + value + "]";
 								}
 							}
 							builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
@@ -4842,5 +4863,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	}
    	
   	return empty;
+  }
+  
+  @Override
+  public boolean validate(boolean checkValidity, boolean callFromValidationPanel){
+  	boolean doNotValidate = isCreated() && isEmpty();
+  	return doNotValidate ? true : super.validate(checkValidity, callFromValidationPanel);
   }
 }

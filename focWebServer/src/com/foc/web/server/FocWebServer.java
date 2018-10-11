@@ -87,6 +87,8 @@ public class FocWebServer implements Serializable {
 	private int                                 nextModuleOrder      = 1;
 	private String                              versionTitle         = "";
 	
+	private String                              nextTestSuiteName    = "";
+	
 	NotificationScheduledThread notificationScheduledThread = null;
 	
 	public FocWebServer(){
@@ -735,5 +737,13 @@ public class FocWebServer implements Serializable {
 
 	public void setVersionTitle(String versionTitle) {
 		this.versionTitle = versionTitle;
+	}
+
+	public String getNextTestSuiteName() {
+		return nextTestSuiteName;
+	}
+
+	public void setNextTestSuiteName(String nextTestSuiteName) {
+		this.nextTestSuiteName = nextTestSuiteName;
 	}
 }

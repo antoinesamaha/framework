@@ -1169,16 +1169,19 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			if(!error) error = innerLayout_CommitOrCheckData(true);
 			if(!error && focData != null){
 				error = focData.iFocData_validate();
+				if(!error) {
+					consumeLogInfoForLoggable(loggable);
+				}
 			}
-
-			consumeLogInfoForLoggable(loggable);
 		}
 		
-		//Propagating the Validation Actions to child layouts if linked...
-		for(int i=0; i<childXMLLayoutArray_Size(); i++){
-			FocXMLLayout layout = childXMLLayoutArray_Get(i);
-			if(layout.isCommitWithParent()){
-				error = layout.validationCommit(validationLayout); 
+		if(!error) {
+			//Propagating the Validation Actions to child layouts if linked...
+			for(int i=0; i<childXMLLayoutArray_Size(); i++){
+				FocXMLLayout layout = childXMLLayoutArray_Get(i);
+				if(layout.isCommitWithParent()){
+					error = layout.validationCommit(validationLayout); 
+				}
 			}
 		}
 		

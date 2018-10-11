@@ -229,10 +229,14 @@ public abstract class FocWebApplication extends UI {
 			
 	    //Make sure the environment allows unit testing			
 			if(ConfigInfo.isUnitAllowed() && uri.getHost().equals("localhost")){
-//		  String path = getNavigationWindow().getPathInfo();
+				String suiteName = focWebServer.getNextTestSuiteName();
+				
 		  	if(path != null && path.toLowerCase().startsWith(URL_PARAMETER_KEY_UNIT_SUITE+":")){
+		  		suiteName = path.substring((URL_PARAMETER_KEY_UNIT_SUITE+":").length());
+		  	}
+		  		
+		  	if(!Utils.isStringEmpty(suiteName)) {
 		  		INavigationWindow window = getNavigationWindow();
-		  		String suiteName = path.substring((URL_PARAMETER_KEY_UNIT_SUITE+":").length());
 		  		boolean keepTestingTrue = false;
 		  		try{
 		  			int indexOfSuperior = suiteName.indexOf(".");
@@ -252,7 +256,6 @@ public abstract class FocWebApplication extends UI {
 		  					){
 		  				FocUnitDictionary.getInstance().popupLogger(window);
 		  			}
-//	  				ConfigInfo.setUnitAllowed(false);//So that if we refresh the url it does not relaunch the unit testing again.
 					}
 				}
 			}
