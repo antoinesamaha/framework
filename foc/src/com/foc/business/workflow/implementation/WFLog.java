@@ -2,6 +2,7 @@ package com.foc.business.workflow.implementation;
 
 import java.sql.Date;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
@@ -19,6 +20,9 @@ public class WFLog extends FocObject implements FocLogEvent {
 	public WFLog(FocConstructor constr){
 		super(constr);
 		newFocProperties();
+		if(ConfigInfo.isLogListeningEnabled()) {
+			setEventStatus(WFLog.STATUS_INCLUDED);
+		}
 	}
 	
 	@Override
@@ -51,6 +55,10 @@ public class WFLog extends FocObject implements FocLogEvent {
 
 	public int getEventStatus(){
 		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS);
+	}
+	
+	public void setEventStatus(int status){
+		setPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS, status);
 	}
 
 	public String getEventTypeTitle(){

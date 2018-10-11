@@ -6,7 +6,8 @@
     <TableColumn name="EVENT_TYPE" caption="نوع التغيير" />
     <TableColumn name="USER" caption="المستخدم" />
     <TableColumn name="DESCRIP" caption="شرح" />
-    <TableColumn name="COMMENT" caption="ملاحظات" />
+    <TableColumn name="COMMENT" caption="ملاحظات" expandRatio="0.5" />
+    <TableColumn name="CHANGES" caption="التعديلات" expandRatio="0.5" style="leftToRight" />
     <TableColumn name="EVENT_STATUS" caption="الوضع" width="-1px" />
   </GuiTable>
 </VerticalLayout>

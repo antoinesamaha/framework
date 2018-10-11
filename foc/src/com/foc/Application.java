@@ -109,7 +109,7 @@ public class Application {
 	private FocLogger                       focLogger  = null;//The Logger
 	private FocNotificationEventFactory     focNEF     = null;
 	private FocNotifActionFactory           notifActionFactory = null;
-	private SaaSConfig                appConfiguration = null;        
+	private SaaSConfig                      appConfiguration = null;        
 	
 	private IFocDataSource   dataSource            = null;
 	private IFocCloudStorage cloudStorage          = null;
@@ -2112,7 +2112,8 @@ public class Application {
 	}
 	
 	public void logListenerNotification(FocLogEvent event) {
-		if(logListener != null) {
+		if(logListener != null && event != null && 
+				(event.logEvent_GetStatus() == FocLogEvent.STATUS_INCLUDED || event.logEvent_GetStatus() == FocLogEvent.STATUS_POSTED)) {
 			Globals.logString("-FocLogListener: Notification:"+event.logEvent_GetEventType()+" Entity:"+event.logEvent_GetEntityName()+":"+event.logEvent_GetEntityCode());
 			logListener.addLogEvent(event);
 		}

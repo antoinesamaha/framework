@@ -82,6 +82,7 @@ public class ConfigInfo {
   private static boolean adaptConstraints        = true;
   private static String  cloudStorageClassName = null;
   private static String  logListenerClassName = null;
+  private static boolean logListeningEnabled = false;
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
   private static boolean shrinkDBNames = false;
@@ -227,6 +228,13 @@ public class ConfigInfo {
 
         String logListenerClassName = getProperty("logListenerClassName");
         setLogListenerClassName(logListenerClassName);
+        
+        String logListeningEnabledString = getProperty("logListeningEnabled");
+        if(!Utils.isStringEmpty(logListeningEnabledString)) {
+        	if(logListeningEnabledString.trim().equals("1") && logListeningEnabledString.trim().toLowerCase().equals("true")) {
+        		logListeningEnabled = true;
+        	}
+        }
         
         //Setting default navigator size to full screen
         //Dimension screenDim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -707,6 +715,10 @@ public class ConfigInfo {
 		ConfigInfo.showStageNameOnValidationLayoutButton = showStageNameOnValidationLayoutButton;
 	}
 
+	public static boolean isLogListeningEnabled() {
+		return ConfigInfo.logListeningEnabled;
+	}
+	
 	public static String getLogListenerClassName() {
 		return logListenerClassName;
 	}

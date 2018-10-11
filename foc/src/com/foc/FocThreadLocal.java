@@ -2,7 +2,7 @@ package com.foc;
 
 import java.io.Serializable;
 
-import com.foc.business.workflow.implementation.SQLLogCumulator;
+import com.foc.business.workflow.implementation.LoggableChangeCumulator;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
@@ -59,10 +59,10 @@ public class FocThreadLocal implements Serializable{
 		return obj;
 	}
 
-	public static Object getSQLLogCumulator(){
-		SQLLogCumulator logSqlReq = (SQLLogCumulator) threadLoggableSubSQLRequest.get();
+	public static Object getLoggableChangeCumulator(){
+		LoggableChangeCumulator logSqlReq = (LoggableChangeCumulator) threadLoggableSubSQLRequest.get();
 		if(logSqlReq == null) {
-			logSqlReq = new SQLLogCumulator();
+			logSqlReq = new LoggableChangeCumulator();
 			threadLoggableSubSQLRequest.set(logSqlReq);
 		}
 		return logSqlReq;

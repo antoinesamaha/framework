@@ -1,6 +1,5 @@
 package com.foc.desc.parsers.predefinedFields;
 
-import com.foc.annotations.model.predefinedFields.FocEXTERNAL_CODE;
 import com.foc.annotations.model.predefinedFields.FocORDER;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;

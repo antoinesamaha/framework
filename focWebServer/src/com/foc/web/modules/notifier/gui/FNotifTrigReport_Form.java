@@ -1,7 +1,6 @@
 package com.foc.web.modules.notifier.gui;
 
 import com.foc.business.notifier.FNotifTrigReport;
-import com.foc.business.notifier.FNotifTrigger;
 import com.foc.business.printing.PrnContext;
 import com.foc.business.printing.PrnLayout;
 import com.foc.business.printing.ReportFactory;
@@ -11,7 +10,6 @@ import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
-import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.components.FVMultipleChoiceStringField;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
@@ -19,7 +17,7 @@ import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 
-public class FNotifTrigger_Form extends FocXMLLayout {
+public class FNotifTrigReport_Form extends FocXMLLayout {
 
 	private FPropertyListener listener = null; 
 	
@@ -27,28 +25,20 @@ public class FNotifTrigger_Form extends FocXMLLayout {
 	public void init(INavigationWindow window, XMLView xmlView, IFocData focData) {
 		super.init(window, xmlView, focData);
 		
-		FNotifTrigger trigger = getNotifTrigger();
+		FNotifTrigReport trigger = getNotifTrigReport();
 		if(trigger != null) {
-			FocList list = trigger.getReportList();
-			for(int i=0; i<list.size(); i++) {
-				FNotifTrigReport rep = (FNotifTrigReport) list.getFocObject(i);
-				if(rep != null) {
-					rep.copyReportConfig_Ref2Object();
-				}
-			}
-			
 			trigger.copyReportConfig_Ref2Object();
 			
 			listener = new FPropertyListener() {
 				@Override
 				public void propertyModified(FProperty property) {
 					if(property != null) {
-						FVMultipleChoiceStringField multiChoice = (FVMultipleChoiceStringField) getComponentByName(FNotifTrigger.FIELD_ReportLayout);
+						FVMultipleChoiceStringField multiChoice = (FVMultipleChoiceStringField) getComponentByName(FNotifTrigReport.FIELD_ReportLayout);
 						
 						if(multiChoice != null) {
 							multiChoice.removeAllItems();
 							
-							FNotifTrigger trigger = (FNotifTrigger) getNotifTrigger();
+							FNotifTrigReport trigger = (FNotifTrigReport) getNotifTrigReport();
 							FocDesc focDesc = trigger != null ? trigger.getReportConfigFocDesc() : null;
 							String contextName = focDesc != null ? focDesc.getReportContext() : null;
 							if(!Utils.isStringEmpty(contextName)) {
@@ -72,15 +62,15 @@ public class FNotifTrigger_Form extends FocXMLLayout {
 				public void dispose() {
 				}
 			};
-			FProperty prop = trigger.getFocPropertyByName(FNotifTrigger.FIELD_ReportConfiguration);
+			FProperty prop = trigger.getFocPropertyByName(FNotifTrigReport.FIELD_ReportConfiguration);
 			prop.addListener(listener);
 		}
 	}
 	
 	public void dispose() {
 		if(listener != null) {
-			FNotifTrigger trigger = getNotifTrigger();
-			FProperty prop = trigger != null ? trigger.getFocPropertyByName(FNotifTrigger.FIELD_ReportConfiguration) : null;
+			FNotifTrigReport trigger = getNotifTrigReport();
+			FProperty prop = trigger != null ? trigger.getFocPropertyByName(FNotifTrigReport.FIELD_ReportConfiguration) : null;
 			if(prop != null) prop.removeListener(listener);
 			listener.dispose();
 			listener = null;
@@ -106,7 +96,7 @@ public class FNotifTrigger_Form extends FocXMLLayout {
 			
 			@Override
 			public boolean validationCheckData(FVValidationLayout validationLayout) {
-				FNotifTrigger trigger = getNotifTrigger();
+				FNotifTrigReport trigger = getNotifTrigReport();
 				if(trigger != null) {
 					trigger.copyReportConfig_Object2Ref();
 				}
@@ -119,16 +109,16 @@ public class FNotifTrigger_Form extends FocXMLLayout {
 		});
 	}
 	
-	public FNotifTrigger getNotifTrigger(){
-		return (FNotifTrigger) getFocObject();
+	public FNotifTrigReport getNotifTrigReport(){
+		return (FNotifTrigReport) getFocObject();
 	}
 	
-	public void button_TEST_Clicked(FVButtonClickEvent evt) {
-		copyGuiToMemory();
-		FNotifTrigger trigger = getNotifTrigger();
-		if(trigger != null) {
-			trigger.copyReportConfig_Object2Ref();
-			trigger.execute(null);
-		}
-	}
+//	public void button_TEST_Clicked(FVButtonClickEvent evt) {
+//		copyGuiToMemory();
+//		FNotifTrigger trigger = getNotifTrigReport();
+//		if(trigger != null) {
+//			trigger.copyReportConfig_Object2Ref();
+//			trigger.execute(null);
+//		}
+//	}
 }
