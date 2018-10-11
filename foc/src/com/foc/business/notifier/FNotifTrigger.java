@@ -96,7 +96,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
 	@FocForeignEntity(table = "NOTIF_EMAIL_TEMPLATE")
 	public static final String FIELD_NOTIF_EMAIL_TEMPLATE = "NOTIF_EMAIL_TEMPLATE";
+		
+	@FocString(size = 500)
+	public static final String FIELD_AdditionalCondition = "AdditionalCondition";
 	
+	public static final String FIELD_FNotifTrigReportList = "FNotifTrigReport_LIST";
+	//Report Section moved to Slave Table
+	//-----------------------------------
 	@FocTableName(size = 200)
 	public static final String FIELD_ReportTableName = "ReportTableName";
 
@@ -108,9 +114,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	@FocMultipleChoiceString(size = 200)
 	public static final String FIELD_ReportLayout = "ReportLayout";
-	
-	@FocString(size = 500)
-	public static final String FIELD_AdditionalCondition = "AdditionalCondition";
+	//-----------------------------------
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -449,5 +453,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
 	public void setWFStage(WFStage value) {
 		setPropertyObject(FIELD_WFStage, value);
+	}
+	
+	public FocList getReportList() {
+		return getPropertyList(FIELD_FNotifTrigReportList);
 	}
 }

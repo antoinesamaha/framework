@@ -3,15 +3,11 @@ package com.foc.business.printing;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import com.foc.Globals;
-import com.foc.business.config.BusinessConfig;
 import com.foc.business.notifier.FocNotificationEmail;
-import com.foc.business.notifier.FocNotificationEmailDesc;
-import com.foc.business.notifier.FocNotificationEmailTemplate;
 import com.foc.business.printing.gui.PrintingAction;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
-import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 
 public class PrnLayout extends FocObject {
 
@@ -56,13 +52,21 @@ public class PrnLayout extends FocObject {
 	}
 
 	public void attachToEmail(FocNotificationEmail email, PrintingAction printingAction, boolean withLogo){
+		attachToEmail(email, printingAction, withLogo, null);
+	}
+	
+	public void attachToEmail(FocNotificationEmail email, PrintingAction printingAction, boolean withLogo, String specificName){
 		if(printingAction != null && printingAction.getLauncher() != null){
 			printingAction.getLauncher().setWithLogo(withLogo);
 	
 			byte[] bytes = printingAction.getLauncher().web_FillReport(this, getFileName());
 			if(bytes != null){
 				InputStream stream = new ByteArrayInputStream(bytes);
-				email.addAttachment(getFileNameWithoutExtensionIfExists()+".pdf", stream, "application/pdf");
+				String name = specificName;
+				if(Utils.isStringEmpty(name)) {
+					name = getFileNameWithoutExtensionIfExists();
+				}
+				email.addAttachment(name+".pdf", stream, "application/pdf");
 			}
 		}
 			
