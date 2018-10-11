@@ -115,4 +115,25 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
     this.callerArguments = callerArguments;
   }
      
+	public void loginAs(String name, String password) throws Exception {
+		component_SetValue("NAME", name, false);
+		component_SetValue("PASSWORD", password, false);
+		button_Click("LOGIN");
+	}
+	
+	public void loginAs(String name) throws Exception {
+		loginAs(name, "");
+	}
+
+	public void changeSite(String station, String title) throws Exception {
+		FocLogger.getInstance().openNode("Change Site and Writer : "+station+" - "+title);
+		{
+			popupUserAccount();
+			component_SetValue("CURRENT_SITE", station, false);
+			component_SetValue("CURRENT_TITLE", title, false);
+			button_ClickApply();
+		}
+		FocLogger.getInstance().closeNode();
+	}
+
 }
