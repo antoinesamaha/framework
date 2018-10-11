@@ -680,13 +680,15 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  	getFocWebApplication().logout(FocWebVaadinWindow.this);
 	  	String location = getUI().getPage().getLocation().toString();
 	  	if(!Utils.isStringEmpty(unitTest) && !Utils.isStringEmpty(location)){
+	  		/*
 	  		int index = location.indexOf(FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE);
 	  		if(index > 0){
 	  			location = location.substring(0, index)+FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE+":"+unitTest;
 	  		} else {
 	  			location = location+FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE+":"+unitTest;
 	  		}
-	  		
+	  		*/
+	  		FocWebServer.getInstance().setNextTestSuiteName(unitTest);
 	  	}
 	  	getUI().getPage().setLocation( location );
 	  	PerfManager.print();
