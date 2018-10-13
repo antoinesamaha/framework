@@ -58,7 +58,7 @@
         <version>2.5.3</version>
         <configuration>
         	<localCheckout>true</localCheckout>
-        	<pushChanges>true</pushChanges>
+        	<pushChanges>false</pushChanges>
     	</configuration>
       </plugin>			
     </plugins>
