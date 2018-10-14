@@ -57,6 +57,10 @@
 						<goals>
 							<goal>sign</goal>
 						</goals>
+						<configuration>
+							<keyname>049FE00FA937BC187DD164112EEA74CBE741B06E</keyname>
+							<passphraseServerId>signID</passphraseServerId>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
