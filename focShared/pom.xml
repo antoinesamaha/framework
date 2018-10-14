@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.focframework</groupId>
 	<artifactId>focShared</artifactId>
@@ -59,7 +58,7 @@
 						</goals>
 						<configuration>
 							<keyname>049FE00FA937BC187DD164112EEA74CBE741B06E</keyname>
-							<passphraseServerId>signID</passphraseServerId>
+							<passphraseServerId>049FE00FA937BC187DD164112EEA74CBE741B06E</passphraseServerId>
 						</configuration>
 					</execution>
 				</executions>
@@ -74,5 +73,5 @@
 		<url>https://github.com/FOC-framework/framework.git</url>
 		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
 		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
-	</scm>
+  </scm>
 </project>
