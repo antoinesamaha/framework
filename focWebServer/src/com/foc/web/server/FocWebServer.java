@@ -41,7 +41,6 @@ import com.foc.saas.manager.SaaSConfig;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocMobileModule;
-import com.foc.vaadin.FocThreadWithSession;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.FocWebModule;
@@ -87,11 +86,13 @@ public class FocWebServer implements Serializable {
 	private int                                 nextModuleOrder      = 1;
 	private String                              versionTitle         = "";
 	
-	private String                              nextTestSuiteName    = "";
-	
 	NotificationScheduledThread notificationScheduledThread = null;
 	
 	public FocWebServer(){
+	  //This allows to have email attachment file names with arabi letters
+    System.setProperty("mail.mime.decodefilename", "true");
+    System.setProperty("mail.mime.encodefilename", "true");
+	  
 		applicationArrayList = new ArrayList<FocWebApplication>();
 		FocThreadLocal.setWebServer(this);
 		
@@ -739,11 +740,4 @@ public class FocWebServer implements Serializable {
 		this.versionTitle = versionTitle;
 	}
 
-	public String getNextTestSuiteName() {
-		return nextTestSuiteName;
-	}
-
-	public void setNextTestSuiteName(String nextTestSuiteName) {
-		this.nextTestSuiteName = nextTestSuiteName;
-	}
 }
