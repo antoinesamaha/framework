@@ -92,7 +92,8 @@ public class FocWebServer implements Serializable {
 	  //This allows to have email attachment file names with arabi letters
     System.setProperty("mail.mime.decodefilename", "true");
     System.setProperty("mail.mime.encodefilename", "true");
-	  
+    System.setProperty("mail.mime.charset", "UTF-8");
+    
 		applicationArrayList = new ArrayList<FocWebApplication>();
 		FocThreadLocal.setWebServer(this);
 		
