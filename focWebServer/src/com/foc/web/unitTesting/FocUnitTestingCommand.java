@@ -233,10 +233,12 @@ public class FocUnitTestingCommand {
   /**
    * Simulates a click on the "Log Out" button in the application.
    */
-  public void logout(String nextTestSuite) throws Exception {
+  public void logout() throws Exception {
   	if(Globals.isValo()){
   		
-  		getMainWindow().logout(nextTestSuite);
+  		getDictionary().incrementTestIndexes();
+  		getMainWindow().logout();
+  		FocUnitDictionary.getInstance().setExitTesting(true);
   		/*
   		MenuItem logoutMenuItem = getMainWindow() != null ? getMainWindow().getLogoutMenuItem() : null;
   		if(logoutMenuItem != null && logoutMenuItem.getCommand() != null){
@@ -1007,17 +1009,22 @@ public class FocUnitTestingCommand {
         if (table.getValue() != null) {
           father = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
         }
-        FocObject object = ((ITableTree) table).getTableTreeDelegate().addItem(father);
-        getLogger().addInfo("Adding a new item in table " + tableName + ".");
-        if (object != null && object.getReference() != null) {
-        	ref = object.getReference().getLong();
-          if (variableName != null && !variableName.isEmpty()) {
-            reference = object.getReference().toString();
-            getDictionary().putXMLVariable(variableName, reference);
-            getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
-          }
-          table.select(object.getReference().getLong());
-        }
+        TableTreeDelegate tableDelegate = ((ITableTree) table).getTableTreeDelegate();
+        if(tableDelegate == null || !tableDelegate.isAddEnabled()) {
+        	getLogger().addFailure("Add not allowed in table " + tableName);
+        }else{
+	        FocObject object = tableDelegate.addItem(father);
+	        getLogger().addInfo("Adding a new item in table " + tableName + ".");
+	        if (object != null && object.getReference() != null) {
+	        	ref = object.getReference().getLong();
+	          if (variableName != null && !variableName.isEmpty()) {
+	            reference = object.getReference().toString();
+	            getDictionary().putXMLVariable(variableName, reference);
+	            getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
+	          }
+	          table.select(object.getReference().getLong());
+	        }
+	      }
       }
     }
     if(nodeCreated) getLogger().closeNode();
@@ -1260,7 +1267,7 @@ public class FocUnitTestingCommand {
     	}
     }
     return error;
-   }
+  }
   
   /**
    * Simulates setting the value of a component in a table.

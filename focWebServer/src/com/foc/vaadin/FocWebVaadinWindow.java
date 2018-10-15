@@ -422,7 +422,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
 	protected void executeAutomatedTesting() {
-		
+		FocUnitDictionary dictionary = FocUnitDictionary.getInstance();
+		if (dictionary != null) {
+			Globals.getApp().setIsUnitTest(true);
+			try {
+				dictionary.runSequence();
+			} catch (Exception e) {
+				Globals.logException(e);
+			}
+			Globals.getApp().setIsUnitTest(false);
+		}
 	}
 	
   public void fillMenuBar_AfterLogin(){
@@ -648,7 +657,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				
 				@Override
 				public void menuSelected(MenuItem selectedItem) {
-					logout(null);
+					FocUnitDictionary.getInstance().setExitTesting(true);
+					logout();
 				}
 			});
     	
@@ -673,13 +683,13 @@ public class FocWebVaadinWindow extends FocCentralPanel {
     }
   }
 
-  public void logout(String unitTest){
+  public void logout(){
 		if (getFocWebApplication() != null && getFocWebApplication().getFocWebSession() != null) {
 	  	removeFocAllWindows();
 			Globals.logString("DEBUG_SESSION_NOT_VALID FocWebVaadinWindow.buttonClick() calling Session Logout");
 	  	getFocWebApplication().logout(FocWebVaadinWindow.this);
 	  	String location = getUI().getPage().getLocation().toString();
-	  	if(!Utils.isStringEmpty(unitTest) && !Utils.isStringEmpty(location)){
+//	  	if(!Utils.isStringEmpty(unitTest) && !Utils.isStringEmpty(location)){
 	  		/*
 	  		int index = location.indexOf(FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE);
 	  		if(index > 0){
@@ -688,9 +698,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  			location = location+FocWebApplication.URL_PARAMETER_KEY_UNIT_SUITE+":"+unitTest;
 	  		}
 	  		*/
-	  		FocWebServer.getInstance().setNextTestSuiteName(unitTest);
-	  	}
-	  	getUI().getPage().setLocation( location );
+//	  		FocWebServer.getInstance().setNextTestSuiteName(unitTest);
+//	  	}
+	  	getUI().getPage().setLocation(location);
 	  	PerfManager.print();
 	  }
   }
@@ -851,7 +861,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					} catch (Exception e) {
 						Globals.logException(e);
 					} finally {
-						if (FocUnitDictionary.getInstance() != null) {
+						if (FocUnitDictionary.getInstance() != null && !FocUnitDictionary.getInstance().hasNextTest()) {
 							FocUnitDictionary.getInstance().popupLogger(FocWebVaadinWindow.this);
 						}
 					}

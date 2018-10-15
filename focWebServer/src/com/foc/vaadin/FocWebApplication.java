@@ -225,29 +225,36 @@ public abstract class FocWebApplication extends UI {
 		initAccountFromDataBase();
 
 		if(getNavigationWindow() != null){
+			INavigationWindow window = getNavigationWindow();
+			
 			URI uri = Page.getCurrent().getLocation();
 			
 	    //Make sure the environment allows unit testing			
 			if(ConfigInfo.isUnitAllowed() && uri.getHost().equals("localhost")){
-				String suiteName = focWebServer.getNextTestSuiteName();
-				
-		  	if(path != null && path.toLowerCase().startsWith(URL_PARAMETER_KEY_UNIT_SUITE+":")){
-		  		suiteName = path.substring((URL_PARAMETER_KEY_UNIT_SUITE+":").length());
-		  	}
-		  		
-		  	if(!Utils.isStringEmpty(suiteName)) {
-		  		INavigationWindow window = getNavigationWindow();
-		  		boolean keepTestingTrue = false;
+				//If there are no test indexes already then we need to check the URL for test request
+				if(!FocUnitDictionary.getInstance().hasNextTest()) {
+					String suiteName = null;
+					String testName  = null;
+					
+			  	if(path != null && path.toLowerCase().startsWith(URL_PARAMETER_KEY_UNIT_SUITE+":")){
+			  		suiteName = path.substring((URL_PARAMETER_KEY_UNIT_SUITE+":").length());
+
+				  	if(!Utils.isStringEmpty(suiteName)) {
+			  			int indexOfSuperior = suiteName.indexOf(".");
+			  			if(indexOfSuperior > 0){
+			  				testName  = suiteName.substring(indexOfSuperior+1, suiteName.length());
+			  				suiteName = suiteName.substring(0, indexOfSuperior);
+			  			}
+			  			
+			  			FocUnitDictionary.getInstance().initializeCurrentSuiteAndTest(suiteName, testName);
+				  	}
+			  	}
+				}
+
+				if(FocUnitDictionary.getInstance().hasNextTest()) {
 		  		try{
-		  			int indexOfSuperior = suiteName.indexOf(".");
-		  			if(indexOfSuperior > 0){
-		  				String testToContinue = suiteName.substring(indexOfSuperior+1, suiteName.length());
-		  				suiteName = suiteName.substring(0, indexOfSuperior);
-		  				keepTestingTrue = true;
-		  				FocUnitDictionary.getInstance().continueTestByName(suiteName, testToContinue);
-		  			}else{
-		  				FocUnitDictionary.getInstance().runUnitTest(suiteName);
-		  			}
+		  			Globals.getApp().setIsUnitTest(true);
+						FocUnitDictionary.getInstance().runSequence();
 		  		}catch(Exception e){
 		  			Globals.logException(e);
 		  		}finally {
@@ -256,6 +263,7 @@ public abstract class FocWebApplication extends UI {
 		  					){
 		  				FocUnitDictionary.getInstance().popupLogger(window);
 		  			}
+		  			Globals.getApp().setIsUnitTest(false);
 					}
 				}
 			}
