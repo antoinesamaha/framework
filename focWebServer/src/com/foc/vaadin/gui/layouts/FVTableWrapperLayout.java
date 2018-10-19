@@ -1073,6 +1073,23 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
+	public String setQuickFilterExpression(String filterExpression) {
+	  String error = filterTextField == null ? "filter expression field does not exist" : null;
+	  if(error == null) {
+	    error = !filterTextField.isEnabled() ? "filter expression field disabled" : null;
+	  }
+	  if(error == null) {
+	    filterTextField.setValue(filterExpression);
+	    if(!filterTextField.getValue().equals(filterExpression)) {
+	      error = "Cound not set quick filter expression to "+filterExpression+" remained "+filterTextField.getValue();
+	    }else {
+	      quickFilterExecute(filterExpression);
+	    }
+	  }
+	  
+	  return error;
+	}
+	
 	public void setFilterBoxListenerIfNecessary() {
 		if(withFilterBox() && filter == null && getTableOrTree() != null && getTableOrTree().getFocDataWrapper() != null){// !(tableOrTree
 																																																											// instanceof
@@ -1154,37 +1171,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			filterTextField.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			filterTextField.addTextChangeListener(new TextChangeListener() {
 				public void textChange(TextChangeEvent event) {
-					FocDataWrapper dataWrapper = (FocDataWrapper) getTableOrTree().getFocDataWrapper();
-					String newFilterString = event.getText();
-
-					if(newFilterString != null && (newFilterString.length() > 1 || (filterString != null && newFilterString.length() < filterString.length()))){
-						filterString = newFilterString;
-						multipleExpressions = null;
-						dataWrapper.resetVisibleListElements();
-
-						if(getTableTreeDelegate() != null){
-							getTableTreeDelegate().refresh_CallContainerItemSetChangeEvent();
-						}
-						// (getTableOrTree()).applyFocListAsContainer();
-						if(getTableOrTree() instanceof FVTreeTable){
-							if(!Utils.isStringEmpty(event.getText())){
-								FVTreeTable treeTable = (FVTreeTable) getTableOrTree();
-
-								int countToExpand = 20;
-
-								boolean backup = treeTable.setRefreshGuiDisabled(true);
-								Collection itemIDs = dataWrapper.getItemIds();
-								Iterator iter = itemIDs.iterator();
-								if(iter != null){
-									while (iter.hasNext() && countToExpand > 0){
-										treeTable.setCollapsed(iter.next(), false);
-										countToExpand--;
-									}
-								}
-								treeTable.setRefreshGuiDisabled(backup);
-							}
-						}
-					}
+				  String newFilterString = event.getText();
+				  quickFilterExecute(newFilterString);
 				}
 			});
 			getHeaderRightLayout().addComponent(filterTextField);
@@ -1192,6 +1180,40 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
+	public void quickFilterExecute(String newFilterString) {
+    FocDataWrapper dataWrapper = (FocDataWrapper) getTableOrTree().getFocDataWrapper();
+
+    if(newFilterString != null && (newFilterString.length() > 1 || (filterString != null && newFilterString.length() < filterString.length()))){
+      filterString = newFilterString;
+      multipleExpressions = null;
+      dataWrapper.resetVisibleListElements();
+
+      if(getTableTreeDelegate() != null){
+        getTableTreeDelegate().refresh_CallContainerItemSetChangeEvent();
+      }
+      // (getTableOrTree()).applyFocListAsContainer();
+      if(getTableOrTree() instanceof FVTreeTable){
+        if(!Utils.isStringEmpty(newFilterString)){
+          FVTreeTable treeTable = (FVTreeTable) getTableOrTree();
+
+          int countToExpand = 20;
+
+          boolean backup = treeTable.setRefreshGuiDisabled(true);
+          Collection itemIDs = dataWrapper.getItemIds();
+          Iterator iter = itemIDs.iterator();
+          if(iter != null){
+            while (iter.hasNext() && countToExpand > 0){
+              treeTable.setCollapsed(iter.next(), false);
+              countToExpand--;
+            }
+          }
+          treeTable.setRefreshGuiDisabled(backup);
+        }
+      }
+    }
+	}
+	
+	
 	public void enableReplace() {
 		if(replaceCheckBox == null){
 			replaceCheckBox = new FVCheckBox("Rep.");
