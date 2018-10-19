@@ -13,7 +13,8 @@ public abstract class OptionDialog {
 	private String message = null;
 	private String width   = "-1px";
 	private String height  = "200px";
-	private IFocData focData = null;
+  private IFocData focData = null;
+  private boolean html = false;
 	
 	private ArrayList<Option> optionArray = null; 
 	
@@ -46,6 +47,14 @@ public abstract class OptionDialog {
 		return focData;
 	}
 	
+	public boolean isHtml() {
+    return html;
+  }
+
+  public void setHtml(boolean html) {
+    this.html = html;
+  }
+
 	public void addOption(String name, String caption){
 		if(optionArray == null) optionArray = new ArrayList<OptionDialog.Option>();
 		Option option = new Option(name, caption);
