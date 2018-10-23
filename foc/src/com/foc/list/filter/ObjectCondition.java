@@ -237,10 +237,10 @@ public class ObjectCondition extends FilterCondition {
 			}
 				break;
 			case OPERATION_EMPTY:
-				buffer.append(fullFieldName + "=0 ");
+				buffer.append(fullFieldName + " = 0 OR " + fullFieldName + " IS NULL ");
 				break;
 			case OPERATION_NOT_EMPTY:
-				buffer.append(fullFieldName + "<>0 ");
+				buffer.append(fullFieldName + " <> 0 AND " + fullFieldName + " IS NOT NULL ");
 				break;
 			case OPERATION_IN:
 				String refList = getInList(filter);
