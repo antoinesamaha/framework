@@ -109,7 +109,6 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   
   private void init(){
   	if(Globals.isValo()){
-  		
   		valueChangeListener = new ValueChangeListener() {
 				@Override
 				public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
@@ -297,7 +296,12 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   
   public void copyMemoryToGui() {
     if(focData instanceof FProperty){
-    	setValue(((FProperty)focData).getValue());
+    	long ref = (long)((FProperty)focData).getValue();
+    	if(ref == 0) {
+    		setValue(null);
+    	} else {
+    		setValue(ref);
+    	}
     }
   }
   

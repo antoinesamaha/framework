@@ -20,6 +20,7 @@ import com.foc.access.FocLogger;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
+import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.web.gui.INavigationWindow;
@@ -266,6 +267,12 @@ public class FocUnitDictionary {
   			}
   			if(isExitTesting()) break;
   			currentTest = 0;
+  		}
+  		if(currentSuite >= suiteSequence.size()) {
+  		  currentSuite = -1;
+  		  currentTest = -1;
+  		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
+  		  FocUnitDictionary.getInstance().popupLogger(window);
   		}
   	}
   }

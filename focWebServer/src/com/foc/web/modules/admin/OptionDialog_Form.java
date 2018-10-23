@@ -48,6 +48,9 @@ public class OptionDialog_Form extends FocXMLLayout {
 			label.addStyleName("foc-text-right");
 			label.addStyleName("rightToLeft");
 		}
+		if(getOptionDialog() != null && getOptionDialog().isHtml()) {
+		  label.setCaptionAsHtml(true);
+		}
 		label.setValue(optionDialog.getMessage());
 	}
 	

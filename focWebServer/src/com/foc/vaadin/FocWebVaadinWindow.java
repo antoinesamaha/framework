@@ -860,10 +860,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 						executeAutomatedTesting();
 					} catch (Exception e) {
 						Globals.logException(e);
-					} finally {
-						if (FocUnitDictionary.getInstance() != null && !FocUnitDictionary.getInstance().hasNextTest()) {
-							FocUnitDictionary.getInstance().popupLogger(FocWebVaadinWindow.this);
-						}
 					}
 				}
 			});
@@ -1120,15 +1116,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	public void fillHomepageShortcutMenu(FocXMLLayout centralPanel) {
 		super.fillHomepageShortcutMenu(centralPanel);
 		
-		if(Globals.getApp().isUnitTest()){
+		if (ConfigInfo.isUnitAllowed()) {
+//		if(Globals.getApp().isUnitTest()){
 			FVHorizontalLayout horizontalLayout = getMenuBarLayout(centralPanel);
 	    if(horizontalLayout != null){
 	    	FVButton isrButton = new FVButton("Unit LOG");
-	    	isrButton.addStyleName(FocXMLGuiComponentStatic.getButtonStyleForIndex(0));
+//	    	isrButton.addStyleName(FocXMLGuiComponentStatic.getButtonStyleForIndex(0));
 	    	isrButton.addStyleName("foc-bold");
-	    	isrButton.addStyleName("foc-f22");
-	    	isrButton.setWidth("50px");
-	    	isrButton.setHeight("50px");
+	    	isrButton.addStyleName("foc-f12");
+	    	isrButton.setWidth("70px");
+	    	isrButton.setHeight("20px");
 	    	
 	    	horizontalLayout.addComponent(isrButton);
 	    	isrButton.addClickListener(new ClickListener() {

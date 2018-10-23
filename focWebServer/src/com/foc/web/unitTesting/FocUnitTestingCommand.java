@@ -898,6 +898,37 @@ public class FocUnitTestingCommand {
   	}
   }
 
+  /**
+   * Sets the quick filter expression on the top right of the table. It checks if exists and enabled and returns the size of the list
+   * 
+   * @param tableName
+   * @param filterValue
+   * @return the size of the table after setting to the filterValue
+   * @throws Exception
+   */
+  public int table_QuickFilter(String tableName, String filterValue) throws Exception {
+    int size = -1;
+    boolean nodeCreated = !getLogger().openCommand("Table "+tableName+" quick filter on: "+filterValue);
+    
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+    if(tableWrapper != null){//The find method will report the right log of failure
+      String errorMessage = tableWrapper.setQuickFilterExpression(filterValue);
+      if(Utils.isStringEmpty(errorMessage)) {
+        FocDataWrapper wrapper = tableWrapper.getFocDataWrapper();
+        size = wrapper.size();
+      } else {
+        getLogger().addFailure("Could not quick filter on table" + tableName+" Because: "+errorMessage);
+      }
+    } else {
+      getLogger().addFailure("Could not find table " + tableName);
+    }
+    
+    if(nodeCreated) getLogger().closeNode();
+    
+    return size;
+  }
+  
   public int table_Size(String tableName) throws Exception {
   	int size = -1;
   	boolean nodeCreated = !getLogger().openCommand("Table "+tableName+" get size");

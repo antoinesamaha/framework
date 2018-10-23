@@ -258,11 +258,11 @@ public abstract class FocWebApplication extends UI {
 		  		}catch(Exception e){
 		  			Globals.logException(e);
 		  		}finally {
-		  			if(		 !FocUnitDictionary.getInstance().isPause()
-		  					&& !FocUnitDictionary.getInstance().isNextTestExist()
-		  					){
-		  				FocUnitDictionary.getInstance().popupLogger(window);
-		  			}
+//		  			if(		 !FocUnitDictionary.getInstance().isPause()
+//		  					&& !FocUnitDictionary.getInstance().isNextTestExist()
+//		  					){
+//		  				FocUnitDictionary.getInstance().popupLogger(window);
+//		  			}
 		  			Globals.getApp().setIsUnitTest(false);
 					}
 				}
