@@ -231,7 +231,7 @@ public class ConfigInfo {
         
         String logListeningEnabledString = getProperty("logListeningEnabled");
         if(!Utils.isStringEmpty(logListeningEnabledString)) {
-        	if(logListeningEnabledString.trim().equals("1") && logListeningEnabledString.trim().toLowerCase().equals("true")) {
+        	if(logListeningEnabledString.trim().equals("1") || logListeningEnabledString.trim().toLowerCase().equals("true")) {
         		logListeningEnabled = true;
         	}
         }
