@@ -2,7 +2,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.focframework</groupId>
 	<artifactId>focShared</artifactId>
-	<packaging>pom</packaging>
 	<version>1.7.1-SNAPSHOT</version>
 	<name>focShared</name>
 	<description>focShared</description>
