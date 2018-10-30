@@ -3,7 +3,6 @@ package com.foc.business.workflow.implementation;
 import java.sql.Date;
 import java.util.Comparator;
 
-import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.admin.FocUser;
@@ -23,7 +22,6 @@ import com.foc.serializer.FSerializer;
 import com.foc.serializer.FSerializerDictionary;
 import com.foc.util.Encryptor;
 import com.foc.util.Utils;
-import com.google.gwt.dom.client.Document;
 
 public class Loggable {
 	private ILoggable iLoggable = null;
