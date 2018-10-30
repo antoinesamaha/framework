@@ -54,8 +54,8 @@ public class WFLogDesc extends FocDesc {
 	public static final int EVENT_OPENED          = FocLogEvent.EVENT_OPENED;
 	
 	public static final int LEN_FLD_COMMENT      =   400;
-//	public static final int LEN_FLD_CHANGES      = 10000;
-	public static final int LEN_FLD_CHANGES      =  4000;
+	public static final int LEN_FLD_CHANGES      = 10000;
+//	public static final int LEN_FLD_CHANGES      =  4000;
 	public static final int LEN_FLD_ZIPPED_DOC   =  20000;
 	
 	

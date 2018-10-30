@@ -4,17 +4,9 @@ import org.json.JSONException;
 
 import com.foc.Globals;
 import com.foc.business.workflow.implementation.WFLog;
-import com.foc.vaadin.gui.components.FVLabel;
-import com.foc.vaadin.gui.components.FVRichTextArea;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
 
 @SuppressWarnings("serial")
 public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
