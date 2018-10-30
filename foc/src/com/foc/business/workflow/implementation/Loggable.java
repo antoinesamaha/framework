@@ -16,6 +16,9 @@ import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
+import com.foc.serializer.FSerializer;
+import com.foc.serializer.FSerializerDictionary;
+import com.foc.util.Encryptor;
 import com.foc.util.Utils;
 
 public class Loggable {
@@ -217,6 +220,19 @@ public class Loggable {
 				fillLogLine(log, event);
 				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
 				if(!Utils.isStringEmpty(changes)) log.setChanges(changes);
+				
+				StringBuffer buff = new StringBuffer();
+				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON");
+				if(ser != null) {
+					ser.serializeToBuffer();
+					String fullJson = buff.toString();
+					if(!Utils.isStringEmpty(fullJson)) {
+						log.setDocZip(fullJson);
+						log.setDocVersion(ser.getVersion());
+						log.setDocHash(Encryptor.encrypt_MD5(fullJson));
+					}
+				}
+				
 				log.validate(false);
 				ref = log.getReferenceInt();
 				if(Globals.getApp() != null) {
@@ -231,4 +247,36 @@ public class Loggable {
 		return ref;
 	}
 
+	public boolean checkAgainstLastDocHashFromDB() {
+		boolean error = false;
+		
+		FocList list = getLogList(false);
+		if(list != null) {
+			list.loadIfNotLoadedFromDB();
+			if(list.size() > 0) {
+				WFLog log = (WFLog) list.getFocObject(list.size()-1);
+				if(log != null) {
+					//These are the reference Doc and Version
+					int version = log.getDocVersion();
+					String hash = log.getDocHash();
+					
+					//Let us compute the current Hash for that version  
+					FocObject focObj = getFocObject();
+					
+					StringBuffer buff = new StringBuffer();
+					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", version);
+					if(ser != null) {
+						ser.serializeToBuffer();
+						String fullJson = buff.toString();
+						if(!Utils.isStringEmpty(fullJson)) {
+							String computedHash = Encryptor.encrypt_MD5(fullJson);
+							error = !computedHash.equals(hash);
+						}
+					}
+				}
+			}
+		}		
+		
+		return error;
+	}
 }

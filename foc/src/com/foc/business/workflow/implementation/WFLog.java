@@ -122,6 +122,30 @@ public class WFLog extends FocObject implements FocLogEvent {
 		return getPropertyString(WFLogDesc.FLD_CHANGES);
 	}
 	
+	public void setDocZip(String changes){
+		setPropertyString(WFLogDesc.FLD_DOC_ZIP, changes);
+	}
+
+	public String getDocZip(){
+		return getPropertyString(WFLogDesc.FLD_DOC_ZIP);
+	}
+	
+	public void setDocVersion(int changes){
+		setPropertyInteger(WFLogDesc.FLD_DOC_VERSION, changes);
+	}
+
+	public int getDocVersion(){
+		return getPropertyInteger(WFLogDesc.FLD_DOC_VERSION);
+	}
+	
+	public void setDocHash(String changes){
+		setPropertyString(WFLogDesc.FLD_DOC_HASH, changes);
+	}
+
+	public String getDocHash(){
+		return getPropertyString(WFLogDesc.FLD_DOC_HASH);
+	}
+	
 	public void setPreviousStage(WFStage stage){
 		setPropertyObject(WFLogDesc.FLD_PREVIOUS_STAGE, stage);
 	}

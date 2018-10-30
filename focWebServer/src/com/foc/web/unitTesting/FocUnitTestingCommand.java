@@ -764,19 +764,19 @@ public class FocUnitTestingCommand {
    */
   public void menu_Highlight(String menuCode) throws Exception {
     button_ClickNavigate();
-    changePanel(menuCode);
+    changePanel(menuCode, false);
   }
   
   public void menuAdmin_Highlight(String menuCode) throws Exception {
   	button_ClickAdmin();
-  	changePanel(menuCode);
+  	changePanel(menuCode, false);
   }
   
   /**
    * open Panel according to menuCode
    * @param menuCode
    */
-  private void changePanel(String menuCode) throws Exception {
+  private void changePanel(String menuCode, boolean assertNotAvailable) throws Exception {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
     if (navigationLayout != null) {
@@ -791,21 +791,34 @@ public class FocUnitTestingCommand {
           getLogger().addInfo("Navigating to the menu item with the code " + menuCode + ".");
           FocObject object = delegate.selectByFocProperty(FocMenuItemConst.FNAME_CODE, menuCode);
 
-          if (object != null) {
-            Object objectID = treeTable.getParent(treeTable.getValue());
-
-            while (objectID != null) {
-              treeTable.setCollapsed(objectID, false);
-              objectID = treeTable.getParent(objectID);
-            }
+          if(assertNotAvailable) {
+          	if (object != null) {
+          		getLogger().addFailure("Menu " + menuCode + " is available while it should not");
+          	}
           } else {
-            getLogger().addFailure("Could not navigate to " + menuCode + ".");
+            if (object != null) {
+              Object objectID = treeTable.getParent(treeTable.getValue());
+
+              while (objectID != null) {
+                treeTable.setCollapsed(objectID, false);
+                objectID = treeTable.getParent(objectID);
+              }
+            } else {
+              getLogger().addFailure("Could not navigate to " + menuCode + ".");
+            }
           }
         }
       }
     }
   }
 
+  public void menu_ExistAssert(String menuCode, boolean exist) throws Exception {
+  	boolean nodeOpened = !getLogger().openCommand("Assert menu "+menuCode+" "+(exist?"exists":"does not exist"));
+  	button_ClickNavigate();
+  	changePanel(menuCode, true);
+  	if(nodeOpened) getLogger().closeNode();
+  }
+  
   /**
    * Simulates the navigation to a specific menu item in the main navigation
    * while expanding all parent menu items and selecting the menu item in
