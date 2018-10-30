@@ -84,6 +84,7 @@ import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 import com.foc.log.FocLogListener;
+import com.foc.log.HashedDocument;
 import com.foc.menu.FMenu;
 import com.foc.menu.FMenuItem;
 import com.foc.menu.FMenuList;
@@ -2173,6 +2174,14 @@ public class Application {
 		return error;
 	}
 	
+	public HashedDocument logListenerGetLastHashedDocument(String entityName, long entityRef) {
+		HashedDocument hashedDoc = null;
+		if(logListener != null && !Utils.isStringEmpty(entityName) && entityRef > 0) {
+			hashedDoc = logListener.getLastHash(entityName, entityRef);
+		}
+		return hashedDoc;
+	}
+
 	public FSerializerDictionary getHTMLGeneratorDictionary() {
 		if(htmlGeneratorDictionary == null) {
 			htmlGeneratorDictionary = new FSerializerDictionary();

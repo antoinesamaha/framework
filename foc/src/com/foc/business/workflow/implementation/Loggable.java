@@ -3,7 +3,9 @@ package com.foc.business.workflow.implementation;
 import java.sql.Date;
 import java.util.Comparator;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.admin.FocUser;
 import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
@@ -14,12 +16,14 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FListField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
+import com.foc.log.HashedDocument;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.serializer.FSerializer;
 import com.foc.serializer.FSerializerDictionary;
 import com.foc.util.Encryptor;
 import com.foc.util.Utils;
+import com.google.gwt.dom.client.Document;
 
 public class Loggable {
 	private ILoggable iLoggable = null;
@@ -233,6 +237,14 @@ public class Loggable {
 					}
 				}
 				
+				if(log.getEventType() == WFLogDesc.EVENT_OPENED) {
+					boolean error = checkAgainstLastDocHashFromDB(log.getDocHash(), log.getDocVersion());
+					
+					if(error) {
+						Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+					}
+				}
+				
 				log.validate(false);
 				ref = log.getReferenceInt();
 				if(Globals.getApp() != null) {
@@ -275,6 +287,48 @@ public class Loggable {
 					}
 				}
 			}
+		}		
+		
+		return error;
+	}
+	
+	public boolean checkAgainstLastDocHashFromDB(String computedHash, int versionOfComputed) {
+		boolean error = false;
+
+		HashedDocument lastHashedDoc = null;
+		FocObject focObj = getFocObject();
+		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
+			lastHashedDoc = Globals.getApp().logListenerGetLastHashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt());
+//			ConfigInfo.isLogListeningEnabled()
+//			if(hashedDoc == null) {
+//				FocList list = getLogList(false);
+//				if(list != null) {
+//					list.loadIfNotLoadedFromDB();
+//					if(list.size() > 0) {
+//						WFLog log = (WFLog) list.getFocObject(list.size()-1);
+//						if(log != null) {
+//							hashedDoc = new new HashedDocument();
+//							log.getDocHash();
+//						}
+//					}
+//				}
+//			}
+		}			
+					
+		if(lastHashedDoc != null) {
+			if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
+				StringBuffer buff = new StringBuffer();
+				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", lastHashedDoc.getVersion());
+				if(ser != null) {
+					ser.serializeToBuffer();
+					String fullJson = buff.toString();
+					if(!Utils.isStringEmpty(fullJson)) {
+						computedHash = Encryptor.encrypt_MD5(fullJson);
+						versionOfComputed = lastHashedDoc.getVersion();
+					}
+				}						
+			}
+			error = !computedHash.equals(lastHashedDoc.getHash());
 		}		
 		
 		return error;

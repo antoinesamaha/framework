@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import com.foc.desc.FocObject;
 import com.foc.property.FProperty;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.util.Utils;
 
 public abstract class FJSONSerializer<O extends FocObject> extends B01JsonBuilder implements FSerializer {
 
@@ -54,7 +55,9 @@ public abstract class FJSONSerializer<O extends FocObject> extends B01JsonBuilde
 		}
 		if(prop != null) {
 			value = prop.getString();
-			appendKeyValue(key, value);
+			if(!Utils.isStringEmpty(value)) {
+				appendKeyValue(key, value);
+			}
 		}
 	}
 }

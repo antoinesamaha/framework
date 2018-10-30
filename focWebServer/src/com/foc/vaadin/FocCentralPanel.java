@@ -291,10 +291,6 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsLoggable() && !focObjToBeViewed.isCreated()) {
 				Loggable loggable = ((ILoggable)focObjToBeViewed).iWorkflow_getWorkflow();
 				if(loggable != null) {
-					boolean error = loggable.checkAgainstLastDocHashFromDB();
-					if(error) {
-						Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", FocWebEnvironment.TYPE_ERROR_MESSAGE);
-					}
 					loggable.insertLogLine(FocLogEvent.EVENT_OPENED);
 				}
 			}
