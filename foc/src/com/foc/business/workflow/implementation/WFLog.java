@@ -264,4 +264,19 @@ public class WFLog extends FocObject implements FocLogEvent {
 	public int logEvent_GetStatus() {
 		return getEventStatus();
 	}
+
+	@Override
+	public String logEvent_GetDocumentZipped() {
+		return getDocZip();
+	}
+
+	@Override
+	public String logEvent_GetDocumentHash() {
+		return getDocHash();
+	}
+
+	@Override
+	public int logEvent_GetDocumentVersion() {
+		return getDocVersion();
+	}
 }
