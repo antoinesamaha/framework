@@ -12,6 +12,7 @@ import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FField;
+import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
@@ -35,7 +36,9 @@ public class WFLogDesc extends FocDesc {
 	public static final int FLD_EVENT_STATUS           = 12;//0, 1-Posted, 2-Committed
 	public static final int FLD_EVENT_STATUS_ERROR     = 13;
 	public static final int FLD_CHANGES                = 14;
-
+	public static final int FLD_DOC_ZIP                = 15;
+	public static final int FLD_DOC_HASH               = 16;
+	public static final int FLD_DOC_VERSION            = 17;
 	
 	public static final int EVENT_NONE            = FocLogEvent.EVENT_NONE;
 	public static final int EVENT_SIGNATURE       = FocLogEvent.EVENT_SIGNATURE;
@@ -52,6 +55,9 @@ public class WFLogDesc extends FocDesc {
 	
 	public static final int LEN_FLD_COMMENT      =   400;
 	public static final int LEN_FLD_CHANGES      = 10000;
+//	public static final int LEN_FLD_CHANGES      =  4000;
+	public static final int LEN_FLD_ZIPPED_DOC   =  20000;
+	
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
@@ -139,6 +145,18 @@ public class WFLogDesc extends FocDesc {
 
 		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, LEN_FLD_CHANGES);
     addField(chfld);
+    
+    FStringField zipfld = new FStringField("DocZip", "Document Zipped", FLD_DOC_ZIP, false, LEN_FLD_ZIPPED_DOC);
+    zipfld.setAllwaysLocked(true);
+    addField(zipfld);
+
+    FIntField verfld = new FIntField("DocVersion", "Document version", FLD_DOC_VERSION, false, 10);
+    verfld.setAllwaysLocked(true);
+    addField(verfld);
+    
+    FStringField hashfld = new FStringField("DocHash", "Document hash", FLD_DOC_HASH, false, 22);
+    hashfld.setAllwaysLocked(true);
+    addField(hashfld);
 
     FBlobStringField focFld = new FBlobStringField("SIGNED_TRANSACTION_XML", "Signed Transaction XML", FLD_SIGNED_TRANSACTION_XML, false, 300, 5);
     addField(focFld);

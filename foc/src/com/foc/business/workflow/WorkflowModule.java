@@ -16,7 +16,7 @@ public class WorkflowModule extends FocModule {
   
 	public static final String MODULE_NAME = "WORKFLOW";
 	
-	public static final int VERSION_ID = 156;
+	public static final int VERSION_ID = 157;
 	
 	public static final int VERSION_ID_LAST_BEFORE_FLD_NAME_CUT = 152;
 	

@@ -27,7 +27,7 @@ import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.util.Encryptor;
 
-public class FocUserDesc extends FocDesc{
+public class FocUserDesc extends FocDesc {
 	
   public static final String DB_TABLE_NAME = "FUSER";
   public static final String FLDNAME_NAME  = "NAME";

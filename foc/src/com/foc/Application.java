@@ -84,6 +84,7 @@ import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 import com.foc.log.FocLogListener;
+import com.foc.log.HashedDocument;
 import com.foc.menu.FMenu;
 import com.foc.menu.FMenuItem;
 import com.foc.menu.FMenuList;
@@ -92,6 +93,7 @@ import com.foc.property.FMultipleChoice;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.saas.manager.SaaSConfig;
+import com.foc.serializer.FSerializerDictionary;
 import com.foc.util.Utils;
 
 /**
@@ -191,6 +193,8 @@ public class Application {
   private FocMenuSettings menuSettings = null;
   
   public boolean isUnitTest = false;
+  
+  public FSerializerDictionary htmlGeneratorDictionary = null; 
   
   public static void initArgs(String[] args){
   	String timeZone = Application.argumentGetValue(args, "timeZone");
@@ -2168,5 +2172,20 @@ public class Application {
 		}
 			
 		return error;
+	}
+	
+	public HashedDocument logListenerGetLastHashedDocument(String entityName, long entityRef) {
+		HashedDocument hashedDoc = null;
+		if(logListener != null && !Utils.isStringEmpty(entityName) && entityRef > 0) {
+			hashedDoc = logListener.getLastHash(entityName, entityRef);
+		}
+		return hashedDoc;
+	}
+
+	public FSerializerDictionary getHTMLGeneratorDictionary() {
+		if(htmlGeneratorDictionary == null) {
+			htmlGeneratorDictionary = new FSerializerDictionary();
+		}
+		return htmlGeneratorDictionary;
 	}
 }
