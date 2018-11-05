@@ -61,6 +61,7 @@ public class FSerializerDictionary {
 		FSerializerIdentifier foundSerId = null;
 		
 		String key = buildKey(storageName, type);
+		if(map != null){
 		ArrayList<FSerializerIdentifier> serializerArray = map.get(key);
 		if(serializerArray != null) {
 			for(int i=0; i<serializerArray.size(); i++) {
@@ -75,6 +76,7 @@ public class FSerializerDictionary {
 					}
 				}
 			}
+		}
 		}
 		
 		return foundSerId;
