@@ -99,7 +99,9 @@ public abstract class FStreamSource_Report<T extends Object> implements StreamSo
 				reportIndex++;
 			}
 			
-			bytes = JasperExportManager.exportReportToPdf(jr);
+			if(jr != null) {
+				bytes = JasperExportManager.exportReportToPdf(jr);
+			}
 //			bytes = JasperRunManager.runReportToPdf(newInputStream(), getParams(), getDataSource());
 		} catch (JRException e) {
 			Globals.logException(e);
