@@ -347,7 +347,7 @@ public class DBManagerServer {
   }
 
   private void auxPools_LoadFiles(){
-		CredentialsFileScanner scanner = new CredentialsFileScanner("/properties/db/");
+		CredentialsFileScanner scanner = new CredentialsFileScanner("properties/db/");
 		scanner.scanDirectory(this);
 		scanner.dispose();
   }

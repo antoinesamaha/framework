@@ -85,10 +85,15 @@ public class FocWebServer implements Serializable {
 	private boolean                             ready                = false;
 	private int                                 nextModuleOrder      = 1;
 	private String                              versionTitle         = "";
+	private boolean                             webServicesOnly      = false;
 	
 	NotificationScheduledThread notificationScheduledThread = null;
 	
 	public FocWebServer(){
+	}
+	
+	public void init(boolean webServicesOnly) {
+		this.webServicesOnly = webServicesOnly;
 	  //This allows to have email attachment file names with UTF-8 letters
     System.setProperty("mail.mime.decodefilename", "true");
     System.setProperty("mail.mime.encodefilename", "true");
@@ -188,8 +193,12 @@ public class FocWebServer implements Serializable {
 			//-----------------------------------------------------------------------
 		}
 		
-		modules_ScanAndAddJasperReports();
-		modules_ScanAndAddXMLViews();
+		if(!isWebServicesOnly()) {
+			modules_ScanAndAddJasperReports();
+			modules_ScanAndAddXMLViews();
+		} else {
+			getXMLViewDictionary();
+		}
 		modules_ScanAndDeclareLeafMenuItems();			
 		modules_ScanAndAddWebModulesToGroupsForRights();
 		modules_ScanAndAddMobileModulesToGroupsForRights();
@@ -233,8 +242,10 @@ public class FocWebServer implements Serializable {
 		
 		setReady(true);
 
-		notificationScheduledThread = new NotificationScheduledThread(FocWebApplication.getInstanceForThread(), this);
-		notificationScheduledThread.start();
+		if(!isWebServicesOnly()) {
+			notificationScheduledThread = new NotificationScheduledThread(FocWebApplication.getInstanceForThread(), this);
+			notificationScheduledThread.start();
+		}
 
 		/*
 		Binding binding = new Binding();
@@ -403,9 +414,14 @@ public class FocWebServer implements Serializable {
 		return applicationArrayList != null ? applicationArrayList.size() : 0;
 	}
 	
+	public static FocWebApplication findWebApplicationBySessionID(String sessionID, ServletContext servletContext){
+		FocWebServer webServer = getInstance_FromServletContext(servletContext);
+		return webServer != null ? findWebApplicationBySessionID(sessionID, webServer) : null;
+	}
+	
 	public static FocWebApplication findWebApplicationBySessionID(String sessionID, FocWebServer webServer){
 		FocWebApplication webApplication_Found = null;
-
+		
 		webServer.removeApplicationsNotRunning();
 		
     for (int i = 0; i < webServer.getApplicationCount(); i++) {
@@ -627,7 +643,7 @@ public class FocWebServer implements Serializable {
 	  }
 	}
 
-  private static FocWebServer newWebServer(){
+  private static FocWebServer newWebServer(boolean webServicesOnly){
     FocWebServer server = null;
     try {    
       ConfigInfo.loadFile();
@@ -635,25 +651,6 @@ public class FocWebServer implements Serializable {
       Class<FocWebServer> cls;
 
       cls = (Class<FocWebServer>) Class.forName(serverClassName);
-      
-      //DEBUGGING
-//      if(cls != null){
-//      	Class klass = cls;
-//      	URL location = klass.getResource('/'+klass.getName().replace('.', '/')+".class");
-//      	String path = location.toString();
-//      	Globals.logString(path);
-//      	
-//      	klass = FocWebServer.class;
-//      	location = klass.getResource('/'+klass.getName().replace('.', '/')+".class");
-//      	path = location.toString();
-//      	Globals.logString(path);
-//      	
-//      	klass = ConfigInfo.class;
-//      	location = klass.getResource('/'+klass.getName().replace('.', '/')+".class");
-//      	path = location.toString();
-//      	Globals.logString(path);
-//      }
-      //---------
       
       if (serverClassName != null) {
         Class<FocDesc>[]  param = null;
@@ -663,9 +660,7 @@ public class FocWebServer implements Serializable {
         Object createdObject = constr.newInstance(args);
         if(createdObject != null && createdObject instanceof FocWebServer){
         	server = (FocWebServer) createdObject;
-        }else{
-        	int debug = 3;
-        	debug++;
+        	server.init(webServicesOnly);
         }
       }
     } catch (Exception e) {
@@ -674,7 +669,7 @@ public class FocWebServer implements Serializable {
     return server;
   }
   
-  public static synchronized FocWebServer connect(ServletContext servletContext){
+  public static synchronized FocWebServer connect(ServletContext servletContext, boolean webServicesOnly){
     FocWebServer server = null; 
     if(servletContext != null){
     	try{
@@ -685,7 +680,7 @@ public class FocWebServer implements Serializable {
     	}
       
       if(server == null){
-        server = newWebServer();
+        server = newWebServer(webServicesOnly);
         setInstance_InServletContext(servletContext, server);
       }else{
       	//This line was commented and I had to put it again for the Mobile applications second call to work
@@ -739,6 +734,14 @@ public class FocWebServer implements Serializable {
 
 	public void setVersionTitle(String versionTitle) {
 		this.versionTitle = versionTitle;
+	}
+
+	public boolean isWebServicesOnly() {
+		return webServicesOnly;
+	}
+
+	public void setWebServicesOnly(boolean webServicesOnly) {
+		this.webServicesOnly = webServicesOnly;
 	}
 
 }

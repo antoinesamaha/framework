@@ -61,17 +61,19 @@ public class FSerializerDictionary {
 		FSerializerIdentifier foundSerId = null;
 		
 		String key = buildKey(storageName, type);
-		ArrayList<FSerializerIdentifier> serializerArray = map.get(key);
-		if(serializerArray != null) {
-			for(int i=0; i<serializerArray.size(); i++) {
-				FSerializerIdentifier serId = serializerArray.get(i);
-				if(serId.getVersion() == version) {
-					foundSerId = serId;
-					break;
-				}
-				if(version == 0) {
-					if(foundSerId == null || foundSerId.getVersion() < serId.getVersion()) {
+		if(map != null){
+			ArrayList<FSerializerIdentifier> serializerArray = map.get(key);
+			if(serializerArray != null) {
+				for(int i=0; i<serializerArray.size(); i++) {
+					FSerializerIdentifier serId = serializerArray.get(i);
+					if(serId.getVersion() == version) {
 						foundSerId = serId;
+						break;
+					}
+					if(version == 0) {
+						if(foundSerId == null || foundSerId.getVersion() < serId.getVersion()) {
+							foundSerId = serId;
+						}
 					}
 				}
 			}
@@ -102,6 +104,9 @@ public class FSerializerDictionary {
 			String storageName = focObject.getThisFocDesc().getStorageName();
 			FSerializerIdentifier serializerIdentifier = getSerializerIdentifier(storageName, type, version);
 			if(serializerIdentifier != null) {
+				if(version == 0) {
+					version = serializerIdentifier.getVersion(); 
+				}
 				Class<FSerializer> serializerClass = serializerIdentifier.getSerializerClass();
 				
 		    try{

@@ -82,7 +82,7 @@ public class ConfigInfo {
   private static boolean adaptConstraints        = true;
   private static String  cloudStorageClassName = null;
   private static String  logListenerClassName = null;
-  private static boolean logListeningEnabled = false;
+  private static boolean logListeningEnabled = false;  
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
   private static boolean shrinkDBNames = false;

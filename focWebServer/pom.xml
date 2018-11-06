@@ -156,6 +156,13 @@
 		   <artifactId>vaadin-sliderpanel</artifactId>
 		   <version>1.4.2</version>
 		</dependency>
+    <!-- These are added to allow Json manipulation in WF_LOG_JSON_Standard_Form -->
+    <dependency>
+      <groupId>com.vaadin.external.json</groupId>
+      <artifactId>json</artifactId>
+      <version>0.0.20080701</version>
+    </dependency>
+    <!-- ======================================================================= -->
     <!-- dependency>
 		   <groupId>org.vaadin.alump.fancylayouts</groupId>
 		   <artifactId>fancylayouts-addon</artifactId>

@@ -16,4 +16,5 @@ public interface FocNotificationConst {
   public static final int EVT_SCHEDULED                = 8;
   public static final int EVT_TRANSACTION_SIGN         = 9;
   public static final int EVT_TRANSACTION_UNSIGN       =10;
+  public static final int EVT_DOC_HASH_MISSMATCH       =11;
 }

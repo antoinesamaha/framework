@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import com.foc.ConfigInfo;
@@ -91,14 +92,9 @@ public abstract class FocWebApplication extends UI {
 		return user != null && user.isGuest();
 	}
 	
-	private void setSessionIfEmpty(){
+	private void setSessionIfEmpty(HttpSession httpSession){
 		if(getFocWebSession() == null){
-			WrappedHttpSession wrapperHttpSession = (WrappedHttpSession) VaadinSession.getCurrent().getSession();
-			
-			if(wrapperHttpSession != null){
-				setFocWebSession(new FocWebSession(wrapperHttpSession.getHttpSession()));
-			}
-			
+			setFocWebSession(new FocWebSession(httpSession));
 		}
 	}
 	
@@ -135,6 +131,17 @@ public abstract class FocWebApplication extends UI {
 	
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
+		HttpSession httpSession = null;
+		WrappedHttpSession wrapperHttpSession = VaadinSession.getCurrent() != null ? (WrappedHttpSession) VaadinSession.getCurrent().getSession() : null;
+		if(wrapperHttpSession != null){
+			httpSession = wrapperHttpSession.getHttpSession();
+		}
+				
+		initialize(vaadinRequest, VaadinServlet.getCurrent().getServletContext(), httpSession, false);
+		initializeGUI(vaadinRequest, VaadinServlet.getCurrent().getServletContext(), httpSession);
+	}
+	
+	public void initialize(VaadinRequest vaadinRequest, ServletContext servletContext, HttpSession httpSession, boolean webServicesOnly) {
 //		setTheme(FocVaadinTheme.THEME_NAME);
 //		Page.getCurrent().setUriFragment("01barmaja");
 		Globals.logString("FocWebApplication.init 111");
@@ -155,12 +162,12 @@ public abstract class FocWebApplication extends UI {
 	    } 
 		});
 		
-		String userAgent = vaadinRequest.getHeader("User-Agent");
+		String userAgent = vaadinRequest != null ? vaadinRequest.getHeader("User-Agent") : null;
 		isMobile = Utils.isMobile(userAgent);
 		Globals.logString("FocWebApplication.init 2");
 //		isMobile = Globals.isTouchDevice();
 		
-		String path = vaadinRequest.getPathInfo();
+		String path = vaadinRequest != null ? vaadinRequest.getPathInfo() : null;
 		Globals.logString("FocWebApplication.init 3");
   	if(path != null && !path.isEmpty() && path.length() > 1){
   		path = path.substring(1);
@@ -173,9 +180,9 @@ public abstract class FocWebApplication extends UI {
   	Globals.logString("FocWebApplication.init 5");
   	
 		//		FocWebApplication.setInstanceForThread(this);
-		setSessionIfEmpty();
+		setSessionIfEmpty(httpSession);
 		Globals.logString("FocWebApplication.init 6");
-		startApplicationServer();
+		startApplicationServer(servletContext, webServicesOnly);
 		Globals.logString("FocWebApplication.init 7");
 		FocWebServer focWebServer = FocWebServer.getInstance();
 		if(focWebServer == null){
@@ -185,11 +192,17 @@ public abstract class FocWebApplication extends UI {
 		}
 		focWebServer.addApplication(this);
 		Globals.logString("FocWebApplication.init 9");
+	}
+	
+	public void initializeGUI(VaadinRequest vaadinRequest, ServletContext servletContext, HttpSession httpSession) {
+		String path = vaadinRequest != null ? vaadinRequest.getPathInfo() : null;
 		navigationWindow = newWindow();
 
 		if(Utils.isStringEmpty(Globals.getApp().getURL())){
-			URI url = Page.getCurrent().getLocation();
-			Globals.getApp().setURL(url.toString());
+			if(Page.getCurrent() != null) {
+				URI url = Page.getCurrent().getLocation();
+				Globals.getApp().setURL(url.toString());
+			}
 		}
 		
 		applyUserThemeSelection();
@@ -443,11 +456,11 @@ public abstract class FocWebApplication extends UI {
   	}
   }
   
-  private synchronized void startApplicationServer(){
+  private synchronized void startApplicationServer(ServletContext servletContext, boolean webServicesOnly){
   	FocWebServer server = null;
 
   	//    if(getFocWebSession() != null && getFocWebSession().getHttpSession() != null && getFocWebSession().getHttpSession().getServletContext() != null){
-  	server = FocWebServer.connect(VaadinServlet.getCurrent().getServletContext());
+  	server = FocWebServer.connect(servletContext, webServicesOnly);
   	//    }
 
   	if(server != null){

@@ -935,7 +935,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	public String getPathInfo(){
   	VaadinRequest vaadinRequest = VaadinService.getCurrent().getCurrentRequest();
-  	String path = vaadinRequest.getPathInfo();
+  	String path = vaadinRequest != null ? vaadinRequest.getPathInfo() : null;
   	return path;
 	}
 	

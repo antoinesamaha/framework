@@ -5,7 +5,11 @@ import java.util.Comparator;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
+import com.foc.business.notifier.FocNotificationConst;
+import com.foc.business.notifier.FocNotificationEvent;
+import com.foc.business.notifier.FocNotificationManager;
 import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -16,6 +20,7 @@ import com.foc.desc.field.FListField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.log.HashedDocument;
+import com.foc.log.IFocLogLastHash;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.serializer.FSerializer;
@@ -223,6 +228,7 @@ public class Loggable {
 				if(!Utils.isStringEmpty(comment)) log.setComment(comment);
 				if(!Utils.isStringEmpty(changes)) log.setChanges(changes);
 				
+				//Preparing the JSON with the latest version 
 				StringBuffer buff = new StringBuffer();
 				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON");
 				if(ser != null) {
@@ -235,13 +241,10 @@ public class Loggable {
 					}
 				}
 				
+				//If the Event is open we check with the last HASH 
 				if(log.getEventType() == WFLogDesc.EVENT_OPENED) {
-					boolean error = checkAgainstLastDocHashFromDB(log.getDocHash(), log.getDocVersion());
-					
-					if(error) {
-						Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
-					}
-				}
+					fetchLastDocHashForChecking(new LastHashHandler(log.getDocZip(), log.getDocHash(), log.getDocVersion()));
+			  }
 				
 				log.validate(false);
 				ref = log.getReferenceInt();
@@ -249,6 +252,7 @@ public class Loggable {
 					log.setObjectLogged(focObj);
 					Globals.getApp().logListenerNotification(log);
 				}
+				
 				log.dispose();
 			}
 		} else {
@@ -256,79 +260,73 @@ public class Loggable {
 		}
 		return ref;
 	}
-
-	public boolean checkAgainstLastDocHashFromDB() {
-		boolean error = false;
+	
+	private void fetchLastDocHashForChecking(IFocLogLastHash lastHashHandler) {
+		FocObject focObj = getFocObject();
+		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
+			Globals.getApp().logListenerGetLastHashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt(), lastHashHandler);
+		}
+	}
+	
+	public class LastHashHandler implements IFocLogLastHash {
+		private String fullDocComputed = null;
+		private String hashComputed = null;
+		private int versionOfComputed = 0; 
 		
-		FocList list = getLogList(false);
-		if(list != null) {
-			list.loadIfNotLoadedFromDB();
-			if(list.size() > 0) {
-				WFLog log = (WFLog) list.getFocObject(list.size()-1);
-				if(log != null) {
-					//These are the reference Doc and Version
-					int version = log.getDocVersion();
-					String hash = log.getDocHash();
-					
-					//Let us compute the current Hash for that version  
-					FocObject focObj = getFocObject();
-					
-					StringBuffer buff = new StringBuffer();
-					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", version);
-					if(ser != null) {
-						ser.serializeToBuffer();
-						String fullJson = buff.toString();
-						if(!Utils.isStringEmpty(fullJson)) {
-							String computedHash = Encryptor.encrypt_MD5(fullJson);
-							error = !computedHash.equals(hash);
+		public LastHashHandler(String fullDocComputed, String hashComputed, int versionOfComputed) {
+			this.fullDocComputed = fullDocComputed;
+			this.hashComputed = hashComputed;
+			this.versionOfComputed = versionOfComputed;
+		}
+		
+		@Override
+		public void lastLog(HashedDocument lastHashedDoc) {
+			FocObject focObj = getFocObject();
+			if(lastHashedDoc == null) {
+				//If lastHashedDoc == null we compute from the log tables in FOC
+				FocList list = getLogList(false);
+				if(list != null) {
+					list.loadIfNotLoadedFromDB();
+					if(list.size() > 0) {
+						WFLog log = (WFLog) list.getFocObject(list.size()-1);
+						if(log != null && log.getDocVersion() > 0 && !Utils.isStringEmpty(log.getDocZip())) {
+							lastHashedDoc = new HashedDocument();
+							lastHashedDoc.setDocument(log.getDocZip());
+							lastHashedDoc.setVersion(log.getDocVersion());
+							lastHashedDoc.setHash(log.getDocHash());
 						}
 					}
 				}
 			}
-		}		
-		
-		return error;
-	}
-	
-	public boolean checkAgainstLastDocHashFromDB(String computedHash, int versionOfComputed) {
-		boolean error = false;
 
-		HashedDocument lastHashedDoc = null;
-		FocObject focObj = getFocObject();
-		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
-			lastHashedDoc = Globals.getApp().logListenerGetLastHashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt());
-//			ConfigInfo.isLogListeningEnabled()
-//			if(hashedDoc == null) {
-//				FocList list = getLogList(false);
-//				if(list != null) {
-//					list.loadIfNotLoadedFromDB();
-//					if(list.size() > 0) {
-//						WFLog log = (WFLog) list.getFocObject(list.size()-1);
-//						if(log != null) {
-//							hashedDoc = new new HashedDocument();
-//							log.getDocHash();
-//						}
-//					}
-//				}
-//			}
-		}			
-					
-		if(lastHashedDoc != null) {
-			if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
-				StringBuffer buff = new StringBuffer();
-				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", lastHashedDoc.getVersion());
-				if(ser != null) {
-					ser.serializeToBuffer();
-					String fullJson = buff.toString();
-					if(!Utils.isStringEmpty(fullJson)) {
-						computedHash = Encryptor.encrypt_MD5(fullJson);
-						versionOfComputed = lastHashedDoc.getVersion();
+			//If lastHashedDoc is null this means we will not check anything
+			if(lastHashedDoc != null) {
+				//If the last saved version is lower than the new computed one we need to compute another 
+				if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
+					StringBuffer buff = new StringBuffer();
+					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", lastHashedDoc.getVersion());
+					if(ser != null) {
+						ser.serializeToBuffer();
+						fullDocComputed = buff.toString();
+						if(!Utils.isStringEmpty(fullDocComputed)) {
+							hashComputed = Encryptor.encrypt_MD5(fullDocComputed);
+							versionOfComputed = lastHashedDoc.getVersion();
+						}
 					}
-				}						
-			}
-			error = !computedHash.equals(lastHashedDoc.getHash());
-		}		
-		
-		return error;
+				}
+				if(!hashComputed.equals(lastHashedDoc.getHash())){
+	  		  FocDataMap focDataMap = new FocDataMap(focObj);
+		  		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
+		  		focDataMap.putString("COMPUTED_DOC", fullDocComputed);
+		  		focDataMap.putString("EXPECTED_DOC", lastHashedDoc.getDocument());
+		  		focDataMap.putString("COMPUTED_VERSION", String.valueOf(versionOfComputed));
+		  		focDataMap.putString("EXPECTED_VERSION", String.valueOf(lastHashedDoc.getVersion()));
+		  		focDataMap.putString("COMPUTED_HASH", hashComputed);
+		  		focDataMap.putString("EXPECTED_HASH", lastHashedDoc.getHash());
+	        FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
+					Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+				}
+			}		
+		}
 	}
 }
