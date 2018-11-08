@@ -47,7 +47,7 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 		// IllegalArgumentException in Java. Known bug. Apparently fixed in JDK7
 		// String auth = request.getHeader("Authorization");
 
-		FocWebServer webServer = FocWebServer.connect(request.getSession().getServletContext());
+		//FocWebServer webServer = FocWebServer.connect(request.getSession().getServletContext());
 		// FocThreadLocal.setWebServer(webServer);//This line is important when the
 		// WebServer already exists. In the second call or if the WebServer is
 		// launched by the GUI
@@ -56,26 +56,24 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 		FocWebSession webSession = null;
 		int status = com.foc.Application.LOGIN_WRONG;
 		
-		if (webServer == null) {
-			Globals.logString("Could not connect to the WebServer webServer = null");
-		} else {
-			webApplication = FocWebServer.findWebApplicationBySessionID(requestSessionID, webServer);
+		{
+			webApplication = FocWebServer.findWebApplicationBySessionID(requestSessionID, request.getSession().getServletContext());
 			if (webApplication == null) {
 				Globals.logString("EverproLinkServlet is creating a new FocWebApplication(UI)");
 				try {
-					Class cls = Class.forName("b01.everpro.custom.application.CustomEverproWebApplication");
+					Class cls = Class.forName("siren.isf.fenix.main.FenixUI");
 					Class[] param = new Class[0];
 					Constructor constr = cls.getConstructor(param);
 					Object[] argsNew = new Object[0];
 
 					webApplication = (FocWebApplication) constr.newInstance(argsNew);
 					FocWebApplication.setInstanceForThread(webApplication);
-					webApplication.setData(webServer);
+					webApplication.initialize(null, request.getServletContext(), request.getSession(), false);
+					webApplication.setData(FocWebServer.getInstance());
 				} catch (Exception e) {
 					Globals.logException(e);
 				}
 			}
-
 			
 			if (webApplication != null) {
 				webSession = webApplication.getFocWebSession();
@@ -87,8 +85,8 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 			if (webSession == null) {
 				Globals.logString("EverproLinkServlet is creating a new FocWebSession and adding the FocWebApplication(UI) to the webServer");
 				webApplication.setFocWebSession(request.getSession(), new FocWebSession(request.getSession()));
-				webServer.addApplication(webApplication);
-				webSession = FocWebServer.findWebSessionBySessionID(requestSessionID, webServer);
+				FocWebServer.getInstance().addApplication(webApplication);
+				webSession = FocWebServer.findWebSessionBySessionID(requestSessionID, FocWebServer.getInstance());
 			}
 
 			// ---------------------------------------------
@@ -167,4 +165,95 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 			this.status = status;
 		}
   }
+  
+  
+	public SessionAndApplication doPost_Init2(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String requestSessionID = request.getSession().getId();
+		Globals.logString("SESSION_ID = " + requestSessionID);
+		
+		// Using the Basic authorization HTTP protocol creates an
+		// IllegalArgumentException in Java. Known bug. Apparently fixed in JDK7
+		// String auth = request.getHeader("Authorization");
+
+		FocWebServer webServer = FocWebServer.connect(request.getSession().getServletContext(), false);
+		// FocThreadLocal.setWebServer(webServer);//This line is important when the
+		// WebServer already exists. In the second call or if the WebServer is
+		// launched by the GUI
+
+		FocWebApplication webApplication = null; 
+		FocWebSession webSession = null;
+		int status = com.foc.Application.LOGIN_WRONG;
+		
+		if (webServer == null) {
+			Globals.logString("Could not connect to the WebServer webServer = null");
+		} else {
+			webApplication = FocWebServer.findWebApplicationBySessionID(requestSessionID, webServer);
+			if (webApplication == null) {
+				Globals.logString("EverproLinkServlet is creating a new FocWebApplication(UI)");
+				try {
+					Class cls = Class.forName("b01.everpro.custom.application.CustomEverproWebApplication");
+					Class[] param = new Class[0];
+					Constructor constr = cls.getConstructor(param);
+					Object[] argsNew = new Object[0];
+
+					webApplication = (FocWebApplication) constr.newInstance(argsNew);
+					FocWebApplication.setInstanceForThread(webApplication);
+					webApplication.setData(webServer);
+				} catch (Exception e) {
+					Globals.logException(e);
+				}
+			}
+
+			
+			if (webApplication != null) {
+				webSession = webApplication.getFocWebSession();
+			}
+
+			// ---------------------------------------------
+			// If the FocWebSession is not found, create a new FocWebApplication and a
+			// new FocWebSession.
+			if (webSession == null) {
+				Globals.logString("EverproLinkServlet is creating a new FocWebSession and adding the FocWebApplication(UI) to the webServer");
+				webApplication.setFocWebSession(request.getSession(), new FocWebSession(request.getSession()));
+				webServer.addApplication(webApplication);
+				webSession = FocWebServer.findWebSessionBySessionID(requestSessionID, webServer);
+			}
+
+			// ---------------------------------------------
+			// If the FocWebSession has no user, try to log in by reading the user
+			// name and password from the HTTP request header.
+			if (webSession != null && webSession.getFocUser() == null) {
+				String username = request.getHeader("username");
+				String password = request.getHeader("password");
+				if (username == null) {
+					username = (String) request.getAttribute(HEADER_KEY_USERNAME);
+				}
+				if (password == null) {
+					password = (String) request.getAttribute(HEADER_KEY_PASSWORD);
+				}
+
+				Globals.logString(username);
+				Globals.logString(password);
+				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+				FocLoginAccess loginAccess = new FocLoginAccess();
+
+				status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+
+				if (status == com.foc.Application.LOGIN_VALID) {
+					// webSession = newApplication.getFocWebSession();
+					webSession.setFocUser(loginAccess.getUser());
+				}
+				if (status == com.foc.Application.LOGIN_WRONG) {
+					Globals.logString("Error: Login credentials are incorrect.");
+//					PrintWriter printWriter = response.getWriter();
+//					printWriter.println("Error: Login credentials are incorrect.");
+				}
+			}
+		}
+		
+		SessionAndApplication session = new SessionAndApplication(webSession, webApplication, status);
+		return session;
+	}
+
 }
+

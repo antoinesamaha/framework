@@ -50,10 +50,13 @@ public class CredentialsFileScanner {
 						}
 
 						Properties props = new Properties();
-			      ClassResource resource = null;
+//			      ClassResource resource = null;
 			      InputStream inputStream = null;
-		        resource = new ClassResource(fullXMLFileNameWithPath);
-		        inputStream = resource.getStream().getStream();
+			      
+			      inputStream = Globals.getInputStream(fullXMLFileNameWithPath);
+			      
+//		        resource = new ClassResource(fullXMLFileNameWithPath);
+//		        inputStream = resource.getStream().getStream();
 
 		        if(inputStream != null){
 		  	      try{

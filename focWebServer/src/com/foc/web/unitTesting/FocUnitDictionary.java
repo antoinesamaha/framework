@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -19,6 +20,7 @@ import com.foc.access.FocLogger;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
+import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.web.gui.INavigationWindow;
@@ -26,8 +28,9 @@ import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 
 public class FocUnitDictionary {
-  private Map<String, FocUnitTestingSuite> testSuiteMap = null; 
-  private Map<String, Object> xmlVariables              = null;
+  private Map<String, FocUnitTestingSuite> testSuiteMap  = null;
+  private LinkedList<FocUnitTestingSuite>  suiteSequence = null;
+  private Map<String, Object> xmlVariables               = null;
   
   private FocUnitExpectedNotification expectedNotification = null;  
 
@@ -35,10 +38,19 @@ public class FocUnitDictionary {
   private boolean                 pause     = false;
   private Stack<FocUnitTestLevel> testStack = null;
   
+//	private String                  nextSuiteName = null;
+//	private String                  nextTestName  = null;
+  private boolean                 exitTesting   = false;
+  
+  private int currentSuite = -1;
+  private int currentTest  = -1;
+  
   public static int MODE_CLEAR   = 0;
   public static int MODE_DISPOSE = 1;
   
   public FocUnitDictionary() {
+  	suiteSequence = new LinkedList<FocUnitTestingSuite>();
+  	
     FocUnitTestingSuite suite = null;
 
     suite = new FocUnitTestingSuite(this, "ADMIN", "/xmlUnitTesting/admin/Admin.xml");
@@ -157,7 +169,16 @@ public class FocUnitDictionary {
   }
   
   public void put(FocUnitTestingSuite suite) {
+  	put(suite, false);
+  }
+
+  public void putAndSequence(FocUnitTestingSuite suite) {
+  	put(suite, true);
+  }
+  
+  private void put(FocUnitTestingSuite suite, boolean addToSequence) {
     getTestingSuiteMap().put(suite.getName(), suite);
+    if(addToSequence) suiteSequence.add(suite);
   }
   
   public FocUnitTestingSuite getTestingSuite(String name) {
@@ -201,6 +222,72 @@ public class FocUnitDictionary {
       unitDictionary = FocWebServer.getInstance().getUnitDictionary();
     }
     return unitDictionary;
+  }
+  
+  public void initializeCurrentSuiteAndTest(String suiteName, String testName) {
+  	currentTest  = -1;
+  	currentSuite = -1;
+  	
+  	if(!Utils.isStringEmpty(suiteName)) {
+	  	for(int s=0; s<suiteSequence.size() && currentSuite < 0; s++) {
+	  		FocUnitTestingSuite suite = suiteSequence.get(s);
+	  		if(suite.getName().equals(suiteName)) {
+	  			currentSuite = s;
+	  			if(Utils.isStringEmpty(testName)) {
+	  				currentTest = 0;
+	  			} else {
+		  			for(int t=0; t<suite.testSequence_Size() && currentTest < 0; t++) {
+		  				FocUnitTest test = suite.testSequence_Get(t);
+		  				if(test.getName().equals(testName)) {
+		  					currentTest = t;
+		  				}
+		  			}
+	  			}
+	  		}
+	  	}
+  	}
+  }
+  
+  public void runSequence() throws Exception {
+  	setExitTesting(false);
+  	if(currentSuite == -1) {
+  		currentSuite = 0;
+  		currentTest = 0;
+  	}
+  	
+  	if(suiteSequence != null) {
+  		for(; currentSuite<suiteSequence.size(); currentSuite++) {
+  			FocUnitTestingSuite suite = suiteSequence.get(currentSuite);
+  			for(; currentTest<suite.testSequence_Size(); currentTest++) {
+  				FocUnitTest test = suite.testSequence_Get(currentTest);
+  				if(test != null) {
+  					test.runTest();
+  					if(isExitTesting()) break;
+  				}
+  			}
+  			if(isExitTesting()) break;
+  			currentTest = 0;
+  		}
+  		if(currentSuite >= suiteSequence.size()) {
+  		  currentSuite = -1;
+  		  currentTest = -1;
+  		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
+  		  FocUnitDictionary.getInstance().popupLogger(window);
+  		}
+  	}
+  }
+  
+  public void incrementTestIndexes() {
+  	if(currentSuite >= 0) {
+  		FocUnitTestingSuite suite = suiteSequence.get(currentSuite);
+  		if(suite != null && currentTest >= 0) {
+  			currentTest++;
+  			if(currentTest >= suite.testSequence_Size()) {
+  				currentTest = 0;
+  				currentSuite++;
+  			}
+  		}
+  	}
   }
   
   public void runUnitTest(String suiteName) throws Exception {
@@ -285,5 +372,33 @@ public class FocUnitDictionary {
 
 	public void setNextTestExist(boolean nextTestExist) {
 		this.nextTestExist = nextTestExist;
+	}
+
+	public boolean isExitTesting() {
+		return exitTesting;
+	}
+
+	public void setExitTesting(boolean exitTesting) {
+		this.exitTesting = exitTesting;
+	}
+		
+	public boolean hasNextTest() {
+		return getCurrentSuite() >= 0;
+	}
+
+	public int getCurrentSuite() {
+		return currentSuite;
+	}
+
+	public void setCurrentSuite(int currentSuite) {
+		this.currentSuite = currentSuite;
+	}
+
+	public int getCurrentTest() {
+		return currentTest;
+	}
+
+	public void setCurrentTest(int currentTest) {
+		this.currentTest = currentTest;
 	}
 }

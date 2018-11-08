@@ -32,7 +32,7 @@ public class FocFileLoader {
 		}
 		
 		try{
-			Globals.logString("GETTING RESOURCE URL:"+rootDirectory);
+//			Globals.logString("GETTING RESOURCE URL:"+rootDirectory);
 			URL url = getClass().getResource(rootDirectory);
 			URI uri = url != null ? url.toURI() : null;
 			
@@ -83,6 +83,7 @@ public class FocFileLoader {
 				}
 			}
 		}catch(Exception e){
+			Globals.logString("GETTING RESOURCE URL:"+rootDirectory);
 			Globals.logException(e);
 		}
 		

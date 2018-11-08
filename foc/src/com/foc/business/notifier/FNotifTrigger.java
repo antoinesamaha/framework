@@ -63,7 +63,8 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 			@FocChoice(id=EVT_TRANSACTION_CANCEL, title="Traansaction Cancel"),
 			@FocChoice(id=EVT_SCHEDULED, title="Scheduled"),
 			@FocChoice(id=EVT_TRANSACTION_SIGN, title="Sign"),
-			@FocChoice(id=EVT_TRANSACTION_UNSIGN, title="Unsign")
+			@FocChoice(id=EVT_TRANSACTION_UNSIGN, title="Unsign"),
+			@FocChoice(id=EVT_DOC_HASH_MISSMATCH, title="Document Hash Missmatch")
 	})
 	public static final String FIELD_Event = "Event";
 
@@ -293,6 +294,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 		if(eventFired != null) {
 			if(eventFired.getEventKey() == getEvent()) {
 				switch(getEvent()) {
+					case EVT_DOC_HASH_MISSMATCH:
+						match = evaluateAdditionalCondition(eventFired); 
+						break;
 					case EVT_TABLE_ADD:
 					case EVT_TABLE_DELETE:
 					case EVT_TABLE_UPDATE:

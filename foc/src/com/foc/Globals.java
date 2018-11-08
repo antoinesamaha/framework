@@ -188,7 +188,7 @@ public class Globals{
     if(!insideLogException){
 	    insideLogException = true;
 	    try{
-		    if(ConfigInfo.isPopupExceptionDialog() && getApp() != null && !getApp().isUnitTesting()){
+		    if(ConfigInfo.isPopupExceptionDialog() && getApp() != null && !getApp().isUnitTest()){
 		    	String message = e.getClass().getName()+": "+e.getMessage();
 		    	Globals.showNotification("Exception Error", message, IFocEnvironment.TYPE_ERROR_MESSAGE);
 		    }

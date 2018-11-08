@@ -2,9 +2,12 @@ package com.foc.web.unitTesting;
 
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.xml.parsers.SAXParser;
@@ -25,7 +28,10 @@ public class FocUnitTestingSuite {
 
   private boolean parsingDone = false;
   private String startingTest = null;
+  
   private Map<String, FocUnitTest> testMap = null;
+  private LinkedList<FocUnitTest> testSequence = null;
+  
   private FocUnitDictionary dictionary = null;
   
   public FocUnitTestingSuite() {
@@ -49,7 +55,7 @@ public class FocUnitTestingSuite {
     setDictionary(dictionary);
 
 		setParsingDone(true);
-		dictionary.put(this);
+		dictionary.putAndSequence(this);
 		
     declareAllTestMethods();
   }
@@ -84,7 +90,10 @@ public class FocUnitTestingSuite {
   
   public void declareAllTestMethods() {
   	Class cls = getClass();
-  	Method[] methodArray = cls.getMethods();
+  	
+  	Method[] methodArray = getDeclaredMethodsInOrder(cls);
+  	
+//  	Method[] methodArray = cls.getMethods();
   	for(int i=0; i<methodArray.length; i++) {
   		Method m = methodArray[i];
   		try{
@@ -99,17 +108,22 @@ public class FocUnitTestingSuite {
   	}
   }
   
+  //REVERTME final
   public void runSuite() throws Exception {
-    FocUnitDictionary.getInstance().clear();
+  	if(!FocUnitDictionary.getInstance().isExitTesting()) {
+//	    FocUnitDictionary.getInstance().clear();
+      FocLogger.getInstance().openNode("Starting suite " + this.getName());
+	    execute();
+      FocLogger.getInstance().closeNode();
+  	}
+  }
+  
+  public void execute() throws Exception {
     String startingTest = getStartingTest();
     if (startingTest != null && getTestMap(false).get(startingTest) != null) {
-      FocLogger.getInstance().openNode("Starting: Test " + startingTest + " in suite " + this.getName() + " by name.");
       runTestByName(startingTest);
-      FocLogger.getInstance().closeNode("Ending: Test " + startingTest + " in suite " + this.getName() + " by name.");
     } else {
-      FocLogger.getInstance().openNode("Starting: All tests in suite " + this.getName() + ".");
       runAllTests();
-      FocLogger.getInstance().closeNode("Ending: All tests in suite " + this.getName() + ".");
     }
   }
 
@@ -307,6 +321,8 @@ public class FocUnitTestingSuite {
 
   public void put(FocUnitTest test) {
     getTestMap(true).put(test.getName(), test);
+    if(testSequence == null) testSequence = new LinkedList<FocUnitTest>();
+    testSequence.add(test);
   }
 
   public boolean isParsingDone() {
@@ -333,4 +349,117 @@ public class FocUnitTestingSuite {
     this.showInMenu = showInMenu;
   }
 
+  public int testSequence_Size() {
+  	return testSequence != null ? testSequence.size() : 0;
+  }
+  
+  public FocUnitTest testSequence_Get(int at) {
+  	return testSequence != null ? testSequence.get(at) : null;
+  }
+  
+  
+  
+  /** Grok the bytecode to get the declared order */
+  public static Method[] getDeclaredMethodsInOrder(Class clazz) {
+      Method[] methods = null;
+      try {
+          String resource = clazz.getName().replace('.', '/')+".class";
+
+          methods = clazz.getDeclaredMethods();
+
+          InputStream is = clazz.getClassLoader()
+              .getResourceAsStream(resource);
+
+          if (is == null) {
+              return methods;
+          }
+
+          java.util.Arrays.sort(methods,new ByLength());
+          ArrayList<byte[]> blocks = new ArrayList<byte[]>();
+          int length = 0;
+          for (;;) {
+              byte[] block = new byte[16*1024];
+              int n = is.read(block);
+              if (n > 0) {
+                  if (n < block.length) {
+                      block = java.util.Arrays.copyOf(block,n);
+                  }
+                  length += block.length;
+                  blocks.add(block);
+              } else {
+                  break;
+              }
+          }
+
+          byte[] data = new byte[length];
+          int offset = 0;
+          for (byte[] block : blocks) {
+              System.arraycopy(block,0,data,offset,block.length);
+              offset += block.length;
+          }
+
+          String sdata = new String(data,java.nio.charset.Charset.forName("UTF-8"));
+          int lnt = sdata.indexOf("LineNumberTable");
+          if (lnt != -1) sdata = sdata.substring(lnt+"LineNumberTable".length()+3);
+          int cde = sdata.lastIndexOf("SourceFile");
+          if (cde != -1) sdata = sdata.substring(0,cde);
+          
+          MethodOffset mo[] = new MethodOffset[methods.length];
+
+          
+          for (int i=0; i<methods.length; ++i) {
+              int pos = -1;
+              for (;;) {
+                  pos=sdata.indexOf(methods[i].getName(),pos);
+                  if (pos == -1) break;
+                  boolean subset = false;
+                  for (int j=0; j<i; ++j) {
+                      if (mo[j].offset >= 0 &&
+                          mo[j].offset <= pos &&
+                          pos < mo[j].offset + mo[j].method.getName().length()) {
+                          subset = true;
+                          break;
+                      }
+                  }
+                  if (subset) {
+                      pos += methods[i].getName().length();
+                  } else {
+                      break;
+                  }
+              }
+              mo[i] = new MethodOffset(methods[i],pos);
+          }
+          java.util.Arrays.sort(mo);
+          for (int i=0; i<mo.length; ++i) {
+              methods[i]=mo[i].method;
+          }
+      } catch (Exception ex) {
+          ex.printStackTrace();
+      }
+
+      return methods;
+  }
+  
+  private static class MethodOffset implements Comparable<MethodOffset> {
+    MethodOffset(Method _method, int _offset) {
+        method=_method;
+        offset=_offset;
+    }
+
+    @Override
+    public int compareTo(MethodOffset target) {
+        return offset-target.offset;
+    }
+
+    Method method;
+    int offset;
+  }
+
+  static class ByLength implements Comparator<Method> {
+
+    @Override
+    public int compare(Method a, Method b) {
+        return b.getName().length()-a.getName().length();
+    }
+  }
 }
