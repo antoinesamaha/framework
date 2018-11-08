@@ -101,6 +101,13 @@ public class B01JsonBuilder {
 			appendValue(String.valueOf(value));
 		}
 	}
+	
+	public void appendKeyValue(String key, long value){
+		if(buffer != null){
+			appendKey(key);
+			appendValue(String.valueOf(value));
+		}
+	}
 		
 	public void appendKeyValue(String key, double value){
 		if(buffer != null){

@@ -55,7 +55,7 @@ public class PojoFileScanner {
 			for(int i=0; i<xmlFileNames.size(); i++){
 				String xmlFileName = xmlFileNames.get(i);
 				if(xmlFileName != null){
-					Globals.logString("Pojo File : " + xmlFileName);
+//					Globals.logString("Pojo File : " + xmlFileName);
 					int indexOfDOT = xmlFileName.lastIndexOf(".");
 					if(indexOfDOT > 0){
 						String simpleClassName = xmlFileName.substring(0, xmlFileName.indexOf("."));

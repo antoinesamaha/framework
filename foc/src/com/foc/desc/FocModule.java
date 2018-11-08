@@ -31,11 +31,11 @@ public abstract class FocModule {
 			scanner.scanDirectory();
 			scanner.dispose();
 			
-			Globals.logString("Starting Pojo Scan : "+packageName);
+//			Globals.logString("Starting Pojo Scan : "+packageName);
 			PojoFileScanner pojoFileScanner = new PojoFileScanner(this, packageName);
 			pojoFileScanner.scanDirectory();
 			pojoFileScanner.dispose();		
-			Globals.logString("Ending Pojo Scan");
+//			Globals.logString("Ending Pojo Scan");
   	}
   }
   

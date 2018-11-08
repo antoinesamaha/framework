@@ -230,7 +230,7 @@ public class Loggable {
 				
 				//Preparing the JSON with the latest version 
 				StringBuffer buff = new StringBuffer();
-				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON");
+				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON);
 				if(ser != null) {
 					ser.serializeToBuffer();
 					String fullJson = buff.toString();
@@ -304,7 +304,7 @@ public class Loggable {
 				//If the last saved version is lower than the new computed one we need to compute another 
 				if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
 					StringBuffer buff = new StringBuffer();
-					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, "JSON", lastHashedDoc.getVersion());
+					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, lastHashedDoc.getVersion());
 					if(ser != null) {
 						ser.serializeToBuffer();
 						fullDocComputed = buff.toString();
@@ -315,18 +315,24 @@ public class Loggable {
 					}
 				}
 				if(!hashComputed.equals(lastHashedDoc.getHash())){
-	  		  FocDataMap focDataMap = new FocDataMap(focObj);
-		  		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
-		  		focDataMap.putString("COMPUTED_DOC", fullDocComputed);
-		  		focDataMap.putString("EXPECTED_DOC", lastHashedDoc.getDocument());
-		  		focDataMap.putString("COMPUTED_VERSION", String.valueOf(versionOfComputed));
-		  		focDataMap.putString("EXPECTED_VERSION", String.valueOf(lastHashedDoc.getVersion()));
-		  		focDataMap.putString("COMPUTED_HASH", hashComputed);
-		  		focDataMap.putString("EXPECTED_HASH", lastHashedDoc.getHash());
-	        FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
-					Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+					notifyForHashDiscrepancy(focObj, fullDocComputed, lastHashedDoc.getDocument(), 
+							versionOfComputed, lastHashedDoc.getVersion(), 
+							hashComputed, lastHashedDoc.getHash());
 				}
 			}		
 		}
+	}
+	
+	public static void notifyForHashDiscrepancy(FocObject focObj, String computedDoc, String storedDoc, int computedVersion, int storedVersion, String computedHash, String storedHash) {
+	  FocDataMap focDataMap = new FocDataMap(focObj);
+		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
+		focDataMap.putString("COMPUTED_DOC", computedDoc);
+		focDataMap.putString("EXPECTED_DOC", storedDoc);
+		focDataMap.putString("COMPUTED_VERSION", String.valueOf(computedVersion));
+		focDataMap.putString("EXPECTED_VERSION", String.valueOf(storedVersion));
+		focDataMap.putString("COMPUTED_HASH", computedHash);
+		focDataMap.putString("EXPECTED_HASH", storedHash);
+	  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
+		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
 	}
 }

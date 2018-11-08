@@ -85,7 +85,7 @@ public class FSerializerDictionary {
 	public String buildJSON(FocObject focObject) {
 		String fullJson = "";
 		StringBuffer buff = new StringBuffer();
-		FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObject, buff, "JSON");
+		FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObject, buff, FSerializer.TYPE_JSON);
 		if(ser != null) {
 			ser.serializeToBuffer();
 			fullJson = buff.toString();
@@ -137,7 +137,7 @@ public class FSerializerDictionary {
 		return serializer;
 	}
 	
-	private class FSerializerIdentifier {
+	public class FSerializerIdentifier {
 		private int                version   = 0;
 		private Class<FSerializer> className = null;
 		

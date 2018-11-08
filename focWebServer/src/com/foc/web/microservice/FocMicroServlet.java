@@ -3,6 +3,7 @@ package com.foc.web.microservice;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,6 +22,70 @@ import com.foc.web.server.session.FocWebSession;
 public abstract class FocMicroServlet extends HttpServlet implements SrvConst_ServerSide {
 	
 	protected abstract String getUIClassName();
+	
+	protected String getParameterString(HttpServletRequest request, String paramName) {
+		String value = null;
+		Map<String, String[]> map = request.getParameterMap();
+		if(map != null) {
+			String[] valueArray = map.get(paramName);
+			value = valueArray != null && valueArray.length > 0 ? valueArray[0] : null;
+		}
+		return value;
+	}
+
+	protected long getParameterLong(HttpServletRequest request, String paramName, long defaultValue) {
+		long value = defaultValue;
+		Map<String, String[]> map = request.getParameterMap();
+		if(map != null) {
+			String[] valueArray = map.get(paramName);
+			String valueStr = valueArray != null && valueArray.length > 0 ? valueArray[0] : null;
+			if(valueStr != null) {
+				try {
+					value = Long.valueOf(valueStr);
+				} catch(Exception e) {
+					
+				}
+			}
+
+		}
+		return value;
+	}
+
+	protected int getParameterInteger(HttpServletRequest request, String paramName, int defaultValue) {
+		int value = defaultValue;
+		Map<String, String[]> map = request.getParameterMap();
+		if(map != null) {
+			String[] valueArray = map.get(paramName);
+			String valueStr = valueArray != null && valueArray.length > 0 ? valueArray[0] : null;
+			if(valueStr != null) {
+				try {
+					value = Integer.valueOf(valueStr);
+				} catch(Exception e) {
+					
+				}
+			}
+
+		}
+		return value;
+	}
+
+	protected boolean getParameterBoolean(HttpServletRequest request, String paramName, boolean defaultValue) {
+		boolean value = defaultValue;
+		Map<String, String[]> map = request.getParameterMap();
+		if(map != null) {
+			String[] valueArray = map.get(paramName);
+			String valueStr = valueArray != null && valueArray.length > 0 ? valueArray[0] : null;
+			if(valueStr != null) {
+				try {
+					value = Boolean.valueOf(valueStr);
+				} catch(Exception e) {
+					
+				}
+			}
+
+		}
+		return value;
+	}
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
@@ -142,6 +207,13 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		public void dispose() {
 			webSession = null;
 			webApplication = null;
+		}
+		
+		public void logout() { 
+			if(getWebApplication() != null){
+				getWebApplication().logout(null);
+			}
+			FocWebServer.disconnect();
 		}
 
 		public FocWebSession getWebSession() {
