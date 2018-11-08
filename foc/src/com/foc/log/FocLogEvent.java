@@ -43,5 +43,8 @@ public interface FocLogEvent {
 	public Date   logEvent_GetDateTime();
 	public String logEvent_GetComment();
 	public String logEvent_GetChanges();
+	public String logEvent_GetDocumentZipped();
+	public String logEvent_GetDocumentHash();
+	public int    logEvent_GetDocumentVersion();
 	public int    logEvent_GetStatus();
 }

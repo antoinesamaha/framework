@@ -289,8 +289,10 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		if(focData != null) {
 			FocObject focObjToBeViewed = FocXMLLayout.getFocObject(focData);
 			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsLoggable() && !focObjToBeViewed.isCreated()) {
-				Loggable workflow = ((ILoggable)focObjToBeViewed).iWorkflow_getWorkflow();
-				if(workflow != null) workflow.insertLogLine(FocLogEvent.EVENT_OPENED);
+				Loggable loggable = ((ILoggable)focObjToBeViewed).iWorkflow_getWorkflow();
+				if(loggable != null) {
+					loggable.insertLogLine(FocLogEvent.EVENT_OPENED);
+				}
 			}
 		}
 	}

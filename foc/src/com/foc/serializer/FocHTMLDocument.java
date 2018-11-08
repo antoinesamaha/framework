@@ -1,4 +1,4 @@
-package com.foc.html;
+package com.foc.serializer;
 
 import java.io.StringWriter;
 import java.util.ArrayList;

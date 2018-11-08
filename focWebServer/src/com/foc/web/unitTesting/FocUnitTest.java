@@ -3,6 +3,7 @@ package com.foc.web.unitTesting;
 import java.util.ArrayList;
 
 import com.foc.Globals;
+import com.foc.access.FocLogLine;
 import com.foc.access.FocLogger;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 
@@ -84,27 +85,29 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
   
   @Override
   public void runTest() {
-  	String testStartMessage = "TEST: " + getSuite().getName()+" / "+getName();
-  	//String testStartMessage = "TEST: ";
-  	if(callerArguments != null){
-  		String[] excluds = {FXMLUnit.ATT_CALL_SUIT, FXMLUnit.ATT_CALL_TEST, FXMLUnit.ATT_NAME};
-  		testStartMessage += " " + callerArguments.getString(excluds);
-  	}
-    FocLogger.getInstance().openNode(testStartMessage);
-    
-    FocUnitDictionary.getInstance().stackPush(FocUnitTest.this, 0);
-    
-    try{
-			exec();
-		}catch (Exception e){
-			Globals.logException(e);
-		}
-    
-    if(!FocUnitDictionary.getInstance().isPause()){
-    	FocUnitDictionary.getInstance().stackPop();
-    	FocLogger.getInstance().closeNode();
-    }
-    
+  	if(!FocUnitDictionary.getInstance().isExitTesting()) {
+	  	String testStartMessage = "TEST: " + getSuite().getName()+" / "+getName();
+	  	//String testStartMessage = "TEST: ";
+	  	if(callerArguments != null){
+	  		String[] excluds = {FXMLUnit.ATT_CALL_SUIT, FXMLUnit.ATT_CALL_TEST, FXMLUnit.ATT_NAME};
+	  		testStartMessage += " " + callerArguments.getString(excluds);
+	  	}
+	    FocLogLine logLine = FocLogger.getInstance().openNode(testStartMessage);
+	    
+	    FocUnitDictionary.getInstance().stackPush(FocUnitTest.this, 0);
+	    
+	    try{
+				exec();
+			}catch (Exception e){
+				FocUnitDictionary.getInstance().setExitTesting(true);
+				Globals.logException(e);
+			}finally {
+				if(!FocUnitDictionary.getInstance().isPause()){
+					FocUnitDictionary.getInstance().stackPop();
+					FocLogger.getInstance().closeNodeUntil(logLine);
+				}
+			}
+  	}    
   }
 
   public FocUnitXMLAttributes getCallerArguments() {

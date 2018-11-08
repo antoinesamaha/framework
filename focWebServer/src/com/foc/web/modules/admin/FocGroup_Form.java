@@ -118,7 +118,7 @@ public class FocGroup_Form extends FocXMLLayout {
 	    	FocAppGroup appGroup = (FocAppGroup) getGroup().getAppGroupAt(FocGroupDesc.FLD_START_APP_GROUPS + i);
 	    	if(appGroup != null){
 	    		FVButton grpButton = new FVButton(appGroup.getTitle());
-	    		grpButton.setWidth("100%");
+	    		grpButton.setWidth("200px");
 	  			putComponent(appGroup.getTitle(), grpButton);
 	    		buttonsLayout.addComponent(grpButton);
 	    		AppGroupButtonListener listener = new AppGroupButtonListener(grpButton, appGroup);

@@ -81,19 +81,34 @@ public class FocLogger {
   	return error;
   }
   
-  public void openNode(String message){
+  public FocLogLine openNode(String message){
 	  //
 	  //use the current node the current FocLogLine 
 	  //addLogLine();
+  	FocLogLine line = null;
   	if(isEnabled()) {
-		  FocLogLine line = addInfo(message);
+		  line = addInfo(message);
 		  line.setFatherObject(currentNode);
 		  currentNode = line;
   	}
+  	return line;
   }
 
   public void closeNode(){
   	closeNode(null);
+  }
+
+  public void closeNodeUntil(FocLogLine logLine){
+  	if(logLine == null) {
+  		closeNode(null);
+  	} else {
+	  	boolean stop = currentNode == logLine;
+	  	closeNode(null);
+	  	while(!stop) {
+	  		stop = currentNode == logLine;
+	  		closeNode(null);
+	  	}
+  	}
   }
   
   public void closeNode(String message){

@@ -233,10 +233,12 @@ public class FocUnitTestingCommand {
   /**
    * Simulates a click on the "Log Out" button in the application.
    */
-  public void logout(String nextTestSuite) throws Exception {
+  public void logout() throws Exception {
   	if(Globals.isValo()){
   		
-  		getMainWindow().logout(nextTestSuite);
+  		getDictionary().incrementTestIndexes();
+  		getMainWindow().logout();
+  		FocUnitDictionary.getInstance().setExitTesting(true);
   		/*
   		MenuItem logoutMenuItem = getMainWindow() != null ? getMainWindow().getLogoutMenuItem() : null;
   		if(logoutMenuItem != null && logoutMenuItem.getCommand() != null){
@@ -762,19 +764,19 @@ public class FocUnitTestingCommand {
    */
   public void menu_Highlight(String menuCode) throws Exception {
     button_ClickNavigate();
-    changePanel(menuCode);
+    changePanel(menuCode, false);
   }
   
   public void menuAdmin_Highlight(String menuCode) throws Exception {
   	button_ClickAdmin();
-  	changePanel(menuCode);
+  	changePanel(menuCode, false);
   }
   
   /**
    * open Panel according to menuCode
    * @param menuCode
    */
-  private void changePanel(String menuCode) throws Exception {
+  private void changePanel(String menuCode, boolean assertNotAvailable) throws Exception {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
     if (navigationLayout != null) {
@@ -789,21 +791,34 @@ public class FocUnitTestingCommand {
           getLogger().addInfo("Navigating to the menu item with the code " + menuCode + ".");
           FocObject object = delegate.selectByFocProperty(FocMenuItemConst.FNAME_CODE, menuCode);
 
-          if (object != null) {
-            Object objectID = treeTable.getParent(treeTable.getValue());
-
-            while (objectID != null) {
-              treeTable.setCollapsed(objectID, false);
-              objectID = treeTable.getParent(objectID);
-            }
+          if(assertNotAvailable) {
+          	if (object != null) {
+          		getLogger().addFailure("Menu " + menuCode + " is available while it should not");
+          	}
           } else {
-            getLogger().addFailure("Could not navigate to " + menuCode + ".");
+            if (object != null) {
+              Object objectID = treeTable.getParent(treeTable.getValue());
+
+              while (objectID != null) {
+                treeTable.setCollapsed(objectID, false);
+                objectID = treeTable.getParent(objectID);
+              }
+            } else {
+              getLogger().addFailure("Could not navigate to " + menuCode + ".");
+            }
           }
         }
       }
     }
   }
 
+  public void menu_ExistAssert(String menuCode, boolean exist) throws Exception {
+  	boolean nodeOpened = !getLogger().openCommand("Assert menu "+menuCode+" "+(exist?"exists":"does not exist"));
+  	button_ClickNavigate();
+  	changePanel(menuCode, true);
+  	if(nodeOpened) getLogger().closeNode();
+  }
+  
   /**
    * Simulates the navigation to a specific menu item in the main navigation
    * while expanding all parent menu items and selecting the menu item in
@@ -896,6 +911,37 @@ public class FocUnitTestingCommand {
   	}
   }
 
+  /**
+   * Sets the quick filter expression on the top right of the table. It checks if exists and enabled and returns the size of the list
+   * 
+   * @param tableName
+   * @param filterValue
+   * @return the size of the table after setting to the filterValue
+   * @throws Exception
+   */
+  public int table_QuickFilter(String tableName, String filterValue) throws Exception {
+    int size = -1;
+    boolean nodeCreated = !getLogger().openCommand("Table "+tableName+" quick filter on: "+filterValue);
+    
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, tableName);
+    if(tableWrapper != null){//The find method will report the right log of failure
+      String errorMessage = tableWrapper.setQuickFilterExpression(filterValue);
+      if(Utils.isStringEmpty(errorMessage)) {
+        FocDataWrapper wrapper = tableWrapper.getFocDataWrapper();
+        size = wrapper.size();
+      } else {
+        getLogger().addFailure("Could not quick filter on table" + tableName+" Because: "+errorMessage);
+      }
+    } else {
+      getLogger().addFailure("Could not find table " + tableName);
+    }
+    
+    if(nodeCreated) getLogger().closeNode();
+    
+    return size;
+  }
+  
   public int table_Size(String tableName) throws Exception {
   	int size = -1;
   	boolean nodeCreated = !getLogger().openCommand("Table "+tableName+" get size");
@@ -1007,17 +1053,22 @@ public class FocUnitTestingCommand {
         if (table.getValue() != null) {
           father = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
         }
-        FocObject object = ((ITableTree) table).getTableTreeDelegate().addItem(father);
-        getLogger().addInfo("Adding a new item in table " + tableName + ".");
-        if (object != null && object.getReference() != null) {
-        	ref = object.getReference().getLong();
-          if (variableName != null && !variableName.isEmpty()) {
-            reference = object.getReference().toString();
-            getDictionary().putXMLVariable(variableName, reference);
-            getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
-          }
-          table.select(object.getReference().getLong());
-        }
+        TableTreeDelegate tableDelegate = ((ITableTree) table).getTableTreeDelegate();
+        if(tableDelegate == null || !tableDelegate.isAddEnabled()) {
+        	getLogger().addFailure("Add not allowed in table " + tableName);
+        }else{
+	        FocObject object = tableDelegate.addItem(father);
+	        getLogger().addInfo("Adding a new item in table " + tableName + ".");
+	        if (object != null && object.getReference() != null) {
+	        	ref = object.getReference().getLong();
+	          if (variableName != null && !variableName.isEmpty()) {
+	            reference = object.getReference().toString();
+	            getDictionary().putXMLVariable(variableName, reference);
+	            getLogger().addInfo("Storing added item reference in variable " + variableName + ".");
+	          }
+	          table.select(object.getReference().getLong());
+	        }
+	      }
       }
     }
     if(nodeCreated) getLogger().closeNode();
@@ -1260,7 +1311,7 @@ public class FocUnitTestingCommand {
     	}
     }
     return error;
-   }
+  }
   
   /**
    * Simulates setting the value of a component in a table.
