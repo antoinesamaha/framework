@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.Comparator;
 
 import com.foc.Globals;
-import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
 import com.foc.business.notifier.FocNotificationConst;
@@ -324,6 +323,8 @@ public class Loggable {
 	}
 	
 	public static void notifyForHashDiscrepancy(FocObject focObj, String computedDoc, String storedDoc, int computedVersion, int storedVersion, String computedHash, String storedHash) {
+		Globals.logString("--- Illegal document modification detected : This document is suspected of being tempered with ---");
+		Globals.logString("--- "+focObj.getThisFocDesc().getStorageName()+" : "+focObj.getReferenceInt());
 	  FocDataMap focDataMap = new FocDataMap(focObj);
 		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
 		focDataMap.putString("COMPUTED_DOC", computedDoc);
@@ -333,6 +334,6 @@ public class Loggable {
 		focDataMap.putString("COMPUTED_HASH", computedHash);
 		focDataMap.putString("EXPECTED_HASH", storedHash);
 	  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
-		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+//		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
 	}
 }
