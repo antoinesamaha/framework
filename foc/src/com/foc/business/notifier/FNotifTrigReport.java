@@ -6,6 +6,7 @@ import com.foc.annotations.model.fields.FocForeignEntity;
 import com.foc.annotations.model.fields.FocMultipleChoiceString;
 import com.foc.annotations.model.fields.FocReference;
 import com.foc.annotations.model.fields.FocTableName;
+import com.foc.annotations.model.predefinedFields.FocORDER;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -17,6 +18,7 @@ import com.foc.property.FObject;
 import com.foc.util.Utils;
 
 @FocEntity
+@FocORDER
 @SuppressWarnings("serial")
 public class FNotifTrigReport extends PojoFocObject implements FocNotificationConst {
     

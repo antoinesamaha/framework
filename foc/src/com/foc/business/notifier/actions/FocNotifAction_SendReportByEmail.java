@@ -27,6 +27,7 @@ public class FocNotifAction_SendReportByEmail extends FocNotifAction_Abstract {
 		    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null));
 		    
 		    FocList list = notifier.getReportList();
+		    list.sort();
 		    for(int i=0; i<list.size(); i++) {
 		    	FNotifTrigReport trigReport = (FNotifTrigReport) list.getFocObject(i);
 

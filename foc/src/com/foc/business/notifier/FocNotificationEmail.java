@@ -3,7 +3,7 @@ package com.foc.business.notifier;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -35,7 +35,8 @@ import com.vaadin.ui.JavaScript;
 public class FocNotificationEmail extends FocObject implements FocNotificationEmailConst {
 
 	private IFocNotificationEmailLaunchStatus iFocNotificationEmailLaunchStatus = null;
-	private HashMap<String, EmailAttachements> attachmentsMap = null;
+	private HashMap<String, EmailAttachements> attachmentsMap   = null;
+	private LinkedList<String>                 attachmentsOrder = null;
   private MimeMessage mimeMessage = null;
   private IFocData    focData     = null;
 
@@ -358,11 +359,11 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
 				}
 		  }
 			
-			if(attachmentsMap != null){
-				Iterator<EmailAttachements> iter = attachmentsMap.values().iterator();
-				while(iter != null && iter.hasNext()){
-					EmailAttachements imgAtt = iter.next();
-					if(imgAtt != null){
+			if(attachmentsOrder != null) {
+				for(int i=0; i<attachmentsOrder.size(); i++) {
+					String repname = attachmentsOrder.get(i);
+					EmailAttachements imgAtt = attachmentsMap.get(repname);
+					if(imgAtt != null) {
 						InputStream imageStream = imgAtt.getInputStream();
 						if(imageStream != null){
 							messageBodyPart = new MimeBodyPart();
@@ -400,8 +401,14 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
   }
   
   public void addAttachment(String name, InputStream inputStream, String mimeType){
-		if(attachmentsMap == null){
+		if(attachmentsMap == null) {
 			attachmentsMap = new HashMap<String, FocNotificationEmail.EmailAttachements>();
+		}
+		if(attachmentsOrder == null) {
+			attachmentsOrder = new LinkedList<String>();
+		}
+		if(!attachmentsOrder.contains(name)) {
+			attachmentsOrder.add(name);
 		}
 		attachmentsMap.put(name, new EmailAttachements(name, inputStream, mimeType));
 	}
