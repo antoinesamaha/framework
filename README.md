@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages from gh-pages branch
+## Welcome to GitHub Pages from master branch
 
 You can use the [editor on GitHub](https://github.com/FOC-framework/framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
