@@ -56,6 +56,12 @@ public class AccessConsole implements IFocData {
   	}
   }
   
+  public void removeDisposeDependentObject(AccessConsole disposeDependentObject){
+  	if(disposeDependentObject != null && disposeDependentObjectsArray != null){
+  		disposeDependentObjectsArray.remove(disposeDependentObject);
+  	}
+  }
+  
   /*  
   public int subjectNumber() {
     return childrenSubjects != null ? childrenSubjects.size() : 0;

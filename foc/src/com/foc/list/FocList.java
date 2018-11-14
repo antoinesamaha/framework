@@ -1169,7 +1169,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
       if(!isCollectionBehaviour()) focObj.setMasterObject(masterObject);
       
       if(!containsObject(focObj)){
-        
+      	if(isWaitForValidationToAddObject()) {
+      		removeDisposeDependentObject(focObj);
+      	}
+      	
         FInt fInt = focObj.getOrderProperty();
         if(fInt != null && fInt.getInteger() == 0){
           focObj.setOrder(getNextOrder());  
@@ -1333,7 +1336,12 @@ public class FocList extends AccessSubject implements IFocList, Container {
     if (isDirectImpactOnDatabase()) {
     	newFoc.forceControler(true);
     }
-    if(!isLoading()) newFoc.setCreated(true);       
+    if(!isLoading()) {
+    	newFoc.setCreated(true);
+    	if(isWaitForValidationToAddObject()){
+    		addDisposeDependentObject(newFoc);
+    	}
+    }
   }
   
   protected void fillForeignObjectsProperties(FocObject newFocObj){
@@ -1406,8 +1414,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
     	    Globals.logException(e);
         }
     	}
-    	if(subject.isCreated() && !isWaitForValidationToAddObject()){
-        this.add((FocObject) subject);
+    	if(subject.isCreated()) {
+    		if(!isWaitForValidationToAddObject()){
+    			this.add((FocObject) subject);
+    		}
       }else if (subject.isDeleted()){
       	boolean doRemove = false;
         if(this.isDirectImpactOnDatabase()){
@@ -1549,8 +1559,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
   
   public void childValidated(AccessSubject subject, char initialStatusFlags) {
     if (subject != null) {
-      if (AccessSubject.isCreated(initialStatusFlags) && isWaitForValidationToAddObject()) {
-        this.add((FocObject) subject);
+      if (AccessSubject.isCreated(initialStatusFlags)) {
+      	if(isWaitForValidationToAddObject()) {
+      		this.add((FocObject) subject);
+      	} 
       }
 
       if (this.isDirectImpactOnDatabase()) {
