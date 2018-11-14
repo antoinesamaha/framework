@@ -25,6 +25,7 @@ import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 import com.foc.list.FocListWithFilter;
+import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class WFTransactionWrapperList extends FocListWithFilter{
@@ -81,10 +82,11 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		}else{
 			ArrayList<SiteStageCouple> siteStageCoupleArrayList = WorkflowDesc.getSiteStageCoulpeArrayList(workflowDesc);
 			String  additionalWhere = buildWhere(workflowDesc, siteStageCoupleArrayList);
-			
-			transList = focDesc.newFocList();
-			transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
-			transList.loadIfNotLoadedFromDB();
+			if(!Utils.isStringEmpty(additionalWhere)) {
+				transList = focDesc.newFocList();
+				transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
+				transList.loadIfNotLoadedFromDB();
+			}
 		}
 
 		return transList;
@@ -194,7 +196,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 		setListOrder(order);
 	}
 	
-  public void fill2(){
+  private void fill2(){
 		for(int i=0; i<WorkflowTransactionFactory.getInstance().getFocDescCount(); i++){
 			FocDesc       focDesc      = (FocDesc)       WorkflowTransactionFactory.getInstance().getFocDescAt(i);
 			IWorkflowDesc workflowDesc = (IWorkflowDesc) WorkflowTransactionFactory.getInstance().getIWorkflowDesc(i);
