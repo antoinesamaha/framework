@@ -3,6 +3,7 @@ package com.foc.business.workflow.implementation;
 import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.business.workflow.LoggableFactory;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.WorkflowTransactionFactory;
 import com.foc.business.workflow.map.WFStageDesc;
@@ -75,6 +76,7 @@ public class WFLogDesc extends FocDesc {
 		if(isWorkflow) {
 			WorkflowTransactionFactory.getInstance().add((IWorkflowDesc) iWFDesc);
 		}
+		LoggableFactory.getInstance().add((ILoggableDesc) iWFDesc);
 		
 		addDescriptionField();
 		

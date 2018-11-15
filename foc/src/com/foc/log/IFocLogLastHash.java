@@ -1,5 +1,7 @@
 package com.foc.log;
 
+import java.util.ArrayList;
+
 public interface IFocLogLastHash {
-	public void lastLog(HashedDocument hashedDocument);
+	public void lastLog(ArrayList<HashedDocument> hashedDocuments);
 }
