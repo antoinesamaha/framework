@@ -1,6 +1,7 @@
 package com.foc.business.workflow.implementation;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.foc.Globals;
@@ -263,7 +264,10 @@ public class Loggable {
 	private void fetchLastDocHashForChecking(IFocLogLastHash lastHashHandler) {
 		FocObject focObj = getFocObject();
 		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
-			Globals.getApp().logListenerGetLastHashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt(), lastHashHandler);
+			HashedDocument hashed = new HashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt());
+			ArrayList<HashedDocument> array = new ArrayList<HashedDocument>();
+			array.add(hashed);
+			Globals.getApp().logListenerGetLastHash(array, lastHashHandler);
 		}
 	}
 	
@@ -279,7 +283,8 @@ public class Loggable {
 		}
 		
 		@Override
-		public void lastLog(HashedDocument lastHashedDoc) {
+		public void lastLog(ArrayList<HashedDocument> lastHashedDoc) {
+			/*
 			FocObject focObj = getFocObject();
 			if(lastHashedDoc == null) {
 				//If lastHashedDoc == null we compute from the log tables in FOC
@@ -319,21 +324,26 @@ public class Loggable {
 							hashComputed, lastHashedDoc.getHash());
 				}
 			}		
+			*/
 		}
 	}
 	
 	public static void notifyForHashDiscrepancy(FocObject focObj, String computedDoc, String storedDoc, int computedVersion, int storedVersion, String computedHash, String storedHash) {
 		Globals.logString("--- Illegal document modification detected : This document is suspected of being tempered with ---");
 		Globals.logString("--- "+focObj.getThisFocDesc().getStorageName()+" : "+focObj.getReferenceInt());
-	  FocDataMap focDataMap = new FocDataMap(focObj);
-		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
-		focDataMap.putString("COMPUTED_DOC", computedDoc);
-		focDataMap.putString("EXPECTED_DOC", storedDoc);
-		focDataMap.putString("COMPUTED_VERSION", String.valueOf(computedVersion));
-		focDataMap.putString("EXPECTED_VERSION", String.valueOf(storedVersion));
-		focDataMap.putString("COMPUTED_HASH", computedHash);
-		focDataMap.putString("EXPECTED_HASH", storedHash);
-	  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
-//		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+		try {
+		  FocDataMap focDataMap = new FocDataMap(focObj);
+			focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
+			focDataMap.putString("COMPUTED_DOC", computedDoc);
+			focDataMap.putString("EXPECTED_DOC", storedDoc);
+			focDataMap.putString("COMPUTED_VERSION", String.valueOf(computedVersion));
+			focDataMap.putString("EXPECTED_VERSION", String.valueOf(storedVersion));
+			focDataMap.putString("COMPUTED_HASH", computedHash);
+			focDataMap.putString("EXPECTED_HASH", storedHash);
+		  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
+	//		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+		}catch(Exception e){
+			Globals.logException(e);
+		}
 	}
 }
