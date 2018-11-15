@@ -549,6 +549,7 @@ public class AdminWebModule extends FocWebModule {
         
         XMLViewKey xmlViewKey = new XMLViewKey(ActiveUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
      	  ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, list);
+     	  centralPanel.setFocDataOwner(true);
      	  mainWindow.changeCentralPanelContent(centralPanel, true);
       }
     });
