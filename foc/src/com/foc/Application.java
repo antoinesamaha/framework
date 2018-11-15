@@ -84,8 +84,7 @@ import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 import com.foc.log.FocLogListener;
-import com.foc.log.HashedDocument;
-import com.foc.log.IFocLogLastHash;
+import com.foc.log.ILoggedHashContainer;
 import com.foc.menu.FMenu;
 import com.foc.menu.FMenuItem;
 import com.foc.menu.FMenuList;
@@ -2175,13 +2174,11 @@ public class Application {
 		return error;
 	}
 	
-	public void logListenerGetLastHash(ArrayList<HashedDocument> documents, IFocLogLastHash lastHash) {
+	public void logListenerGetLastHash(ILoggedHashContainer lastHash) {
 		if(			logListener != null 
-				&& 	lastHash != null
-				&&  documents != null
-				&&  documents.size() > 0) {
+				&& 	lastHash != null) {
 			Globals.logString("-FocLogListener: LastHash request");
-			logListener.getLastHash(documents, lastHash);
+			logListener.getLastHash(lastHash);
 		}
 	}
 

@@ -1,7 +1,6 @@
 package com.foc.business.workflow.implementation;
 
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 import com.foc.Globals;
@@ -19,8 +18,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FListField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
-import com.foc.log.HashedDocument;
-import com.foc.log.IFocLogLastHash;
+import com.foc.log.ILoggedHashContainer;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.serializer.FSerializer;
@@ -243,7 +241,11 @@ public class Loggable {
 				
 				//If the Event is open we check with the last HASH 
 				if(log.getEventType() == WFLogDesc.EVENT_OPENED) {
-					fetchLastDocHashForChecking(new LastHashHandler(log.getDocZip(), log.getDocHash(), log.getDocVersion()));
+					LastHashHandler handler = new LastHashHandler(
+											focObj.getThisFocDesc().getStorageName(), 
+											focObj.getReferenceInt(), 
+											log.getDocZip(), log.getDocHash(), log.getDocVersion());
+					Globals.getApp().logListenerGetLastHash(handler);
 			  }
 				
 				log.validate(false);
@@ -260,33 +262,60 @@ public class Loggable {
 		}
 		return ref;
 	}
-	
-	private void fetchLastDocHashForChecking(IFocLogLastHash lastHashHandler) {
-		FocObject focObj = getFocObject();
-		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
-			HashedDocument hashed = new HashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt());
-			ArrayList<HashedDocument> array = new ArrayList<HashedDocument>();
-			array.add(hashed);
-			Globals.getApp().logListenerGetLastHash(array, lastHashHandler);
-		}
-	}
-	
-	public class LastHashHandler implements IFocLogLastHash {
+		
+	public class LastHashHandler implements ILoggedHashContainer {
+		private String entityName = null;
+		private long entityReference = -1;
 		private String fullDocComputed = null;
 		private String hashComputed = null;
-		private int versionOfComputed = 0; 
+		private int versionOfComputed = 0;
 		
-		public LastHashHandler(String fullDocComputed, String hashComputed, int versionOfComputed) {
+		private String storedHash = null;
+		private String storedDoc  = null;
+		private int versionOfStored = 0;
+		
+		public LastHashHandler(String entityName, long entityReference, String fullDocComputed, String hashComputed, int versionOfComputed) {
+			this.entityName = entityName;
+			this.entityReference = entityReference;
 			this.fullDocComputed = fullDocComputed;
 			this.hashComputed = hashComputed;
 			this.versionOfComputed = versionOfComputed;
 		}
-		
+
 		@Override
-		public void lastLog(ArrayList<HashedDocument> lastHashedDoc) {
-			/*
+		public int size() {
+			return 1;
+		}
+
+		@Override
+		public String getEntityName(int at) {
+			return entityName;
+		}
+
+		@Override
+		public long getEntityReference(int at) {
+			return entityReference;
+		}
+
+		@Override
+		public void setStoredHash(int at, String hash) {
+			storedHash = hash;
+		}
+
+		@Override
+		public void setStoredJSON(int at, String json) {
+			storedDoc = json;			
+		}
+
+		@Override
+		public void setStoredVersion(int at, int version) {
+			versionOfStored = version;
+		}
+
+		@Override
+		public void done() {
 			FocObject focObj = getFocObject();
-			if(lastHashedDoc == null) {
+			if(storedHash == null) {
 				//If lastHashedDoc == null we compute from the log tables in FOC
 				FocList list = getLogList(false);
 				if(list != null) {
@@ -294,37 +323,35 @@ public class Loggable {
 					if(list.size() > 0) {
 						WFLog log = (WFLog) list.getFocObject(list.size()-1);
 						if(log != null && log.getDocVersion() > 0 && !Utils.isStringEmpty(log.getDocZip())) {
-							lastHashedDoc = new HashedDocument();
-							lastHashedDoc.setDocument(log.getDocZip());
-							lastHashedDoc.setVersion(log.getDocVersion());
-							lastHashedDoc.setHash(log.getDocHash());
+							storedDoc = log.getDocZip();
+							versionOfStored = log.getDocVersion();
+							storedHash = log.getDocHash();
 						}
 					}
 				}
 			}
 
 			//If lastHashedDoc is null this means we will not check anything
-			if(lastHashedDoc != null) {
+			if(storedDoc != null) {
 				//If the last saved version is lower than the new computed one we need to compute another 
-				if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
+				if(versionOfStored != versionOfComputed && versionOfStored > 0) {
 					StringBuffer buff = new StringBuffer();
-					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, lastHashedDoc.getVersion());
+					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, versionOfStored);
 					if(ser != null) {
 						ser.serializeToBuffer();
 						fullDocComputed = buff.toString();
 						if(!Utils.isStringEmpty(fullDocComputed)) {
 							hashComputed = Encryptor.encrypt_MD5(fullDocComputed);
-							versionOfComputed = lastHashedDoc.getVersion();
+							versionOfComputed = versionOfStored;
 						}
 					}
 				}
-				if(!hashComputed.equals(lastHashedDoc.getHash())){
-					notifyForHashDiscrepancy(focObj, fullDocComputed, lastHashedDoc.getDocument(), 
-							versionOfComputed, lastHashedDoc.getVersion(), 
-							hashComputed, lastHashedDoc.getHash());
+				if(!hashComputed.equals(storedHash)){
+					notifyForHashDiscrepancy(focObj, fullDocComputed, storedDoc, 
+							versionOfComputed, versionOfStored, 
+							hashComputed, storedHash);
 				}
 			}		
-			*/
 		}
 	}
 	
