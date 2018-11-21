@@ -49,5 +49,7 @@ public interface ICentralPanel {
   public boolean             isGoBackRequested();
   public void                setGoBackRequested(boolean goBackRequested);
   //-----------------------------------------------------------------------
+  
+  public boolean isPropertyChangeSuspended();
 }
 

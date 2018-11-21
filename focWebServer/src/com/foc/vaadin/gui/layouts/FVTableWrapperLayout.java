@@ -607,11 +607,16 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			FocUnitRecorder.recordLine("table_Delete(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){
-			FocObject focObject = getTableTreeDelegate().getSelectedObject();
-			if(focObject != null){
-				getTableTreeDelegate().delete(focObject);
-			}else{
-				Globals.showNotification("Select an Item", "to delete", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+			ICentralPanel previousCentralPanel = innerLayout_GetICentralPanel();
+			if(previousCentralPanel != null && previousCentralPanel.isPropertyChangeSuspended()) {
+				Globals.logString("Could not process innerLayout_Replace_Internal because PropertyChangeSuspended !!!");
+			} else {
+				FocObject focObject = getTableTreeDelegate().getSelectedObject();
+				if(focObject != null){
+					getTableTreeDelegate().delete(focObject);
+				}else{
+					Globals.showNotification("Select an Item", "to delete", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+				}
 			}
 		}
 	}
@@ -1674,58 +1679,62 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 	private void innerLayout_Replace_Internal(ICentralPanel centralPanel) {
 		ICentralPanel previousCentralPanel = innerLayout_GetICentralPanel();
-		if(getFocXMLLayout() != null && previousCentralPanel != null && previousCentralPanel instanceof FocXMLLayout){
-			getFocXMLLayout().childXMLLayoutArray_Remove((FocXMLLayout)previousCentralPanel);
-			previousCentralPanel.dispose();
-		}
-
-		innerLayout.removeAllComponents();
-
-		if(centralPanel instanceof FocXMLLayout){
-			((FocXMLLayout)centralPanel).showValidationLayout(false, FocXMLLayout.POSITION_UP);
-		}else{
-			centralPanel.showValidationLayout(false);
-		}
-		FVValidationLayout vLay = centralPanel.getValidationLayout();
-		if(vLay != null){
-			vLay.adjustStyleForInnerLayoutsWithPositionUP();
-			FocXMLGuiComponentStatic.setCaptionMargin_Zero(vLay);
-			vLay.setDeleteButtonVisible(false);
-			Button applyButton = vLay.valo_GetApplyButton(false);
-			vLay.addValidationListener(new IValidationListener() {
-				@Override
-				public void validationDiscard(FVValidationLayout validationLayout) {
-					getTableTreeDelegate().addItem(null);//When we cancel the inner form we want to clear it
-					refresh();
-				}
-				
-				@Override
-				public boolean validationCheckData(FVValidationLayout validationLayout) {
-					boolean error = false;
-					return error;
-				}
-				
-				@Override
-				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-					if(innerLayout_IsEnableAddEmptyItemAfterCommit() && commited){//If not committed for errors do not clear.
-						getTableTreeDelegate().addItem(null);
+		if(previousCentralPanel != null && previousCentralPanel.isPropertyChangeSuspended()) {
+			Globals.logString("Could not process innerLayout_Replace_Internal because PropertyChangeSuspended !!!");
+		} else {
+			if(getFocXMLLayout() != null && previousCentralPanel != null && previousCentralPanel instanceof FocXMLLayout){
+				getFocXMLLayout().childXMLLayoutArray_Remove((FocXMLLayout)previousCentralPanel);
+				previousCentralPanel.dispose();
+			}
+	
+			innerLayout.removeAllComponents();
+	
+			if(centralPanel instanceof FocXMLLayout){
+				((FocXMLLayout)centralPanel).showValidationLayout(false, FocXMLLayout.POSITION_UP);
+			}else{
+				centralPanel.showValidationLayout(false);
+			}
+			FVValidationLayout vLay = centralPanel.getValidationLayout();
+			if(vLay != null){
+				vLay.adjustStyleForInnerLayoutsWithPositionUP();
+				FocXMLGuiComponentStatic.setCaptionMargin_Zero(vLay);
+				vLay.setDeleteButtonVisible(false);
+				Button applyButton = vLay.valo_GetApplyButton(false);
+				vLay.addValidationListener(new IValidationListener() {
+					@Override
+					public void validationDiscard(FVValidationLayout validationLayout) {
+						getTableTreeDelegate().addItem(null);//When we cancel the inner form we want to clear it
+						refresh();
 					}
-					refresh();
-				}
-
-				@Override
-				public boolean validationCommit(FVValidationLayout validationLayout) {
-					// TODO Auto-generated method stub
-					return false;
-				}
-			});
-			if(applyButton != null) applyButton.setVisible(false);
-		}
-		innerLayout.addComponent((Component) centralPanel);
-		if(centralPanel instanceof FocXMLLayout){
-			((FocXMLLayout)centralPanel).setParentLayout(getFocXMLLayout());
-			//When parent changes the editable status has to be recomputed
-			((FocXMLLayout)centralPanel).refreshEditable();
+					
+					@Override
+					public boolean validationCheckData(FVValidationLayout validationLayout) {
+						boolean error = false;
+						return error;
+					}
+					
+					@Override
+					public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+						if(innerLayout_IsEnableAddEmptyItemAfterCommit() && commited){//If not committed for errors do not clear.
+							getTableTreeDelegate().addItem(null);
+						}
+						refresh();
+					}
+	
+					@Override
+					public boolean validationCommit(FVValidationLayout validationLayout) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				});
+				if(applyButton != null) applyButton.setVisible(false);
+			}
+			innerLayout.addComponent((Component) centralPanel);
+			if(centralPanel instanceof FocXMLLayout){
+				((FocXMLLayout)centralPanel).setParentLayout(getFocXMLLayout());
+				//When parent changes the editable status has to be recomputed
+				((FocXMLLayout)centralPanel).refreshEditable();
+			}
 		}
 	}
 	
