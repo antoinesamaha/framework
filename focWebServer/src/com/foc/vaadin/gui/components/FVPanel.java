@@ -350,4 +350,9 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public boolean isPropertyChangeSuspended() {
+		return false;
+	}
 }

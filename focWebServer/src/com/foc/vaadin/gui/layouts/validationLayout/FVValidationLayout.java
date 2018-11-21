@@ -868,39 +868,46 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     boolean error = false;
     try{
     	if(!isObjectLocked()){
-	    	addTransactionToRecentVisited();
+    		boolean isPropertyChangeSuspended = isPropertyChangeSuspended();
 	    	
-	    	ArrayList<IValidationListener> cloneValidationListeners = new ArrayList<IValidationListener>();
-	    	if(validationListeners != null){
-		    	for(int i=0; i<validationListeners.size(); i++){
-		    		cloneValidationListeners.add(validationListeners.get(i));	
+	    	if(!isPropertyChangeSuspended) {
+		    	addTransactionToRecentVisited();
+		    	
+		    	ArrayList<IValidationListener> cloneValidationListeners = new ArrayList<IValidationListener>();
+		    	if(validationListeners != null){
+			    	for(int i=0; i<validationListeners.size(); i++){
+			    		cloneValidationListeners.add(validationListeners.get(i));	
+			    	}
 		    	}
-	    	}
-	    	
-	    	if(check){
-		      for(int i=0; i<cloneValidationListeners.size(); i++){
-		        error = error || cloneValidationListeners.get(i).validationCheckData(FVValidationLayout.this);
-		      }
-	    	}
-	    	if(commit){
-		      for(int i=0; i<cloneValidationListeners.size(); i++){
-		        error = error || cloneValidationListeners.get(i).validationCommit(FVValidationLayout.this);
-		      }
-		      for(int i=0; i<cloneValidationListeners.size(); i++){
-		      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
-		      }
+		    	
+		    	if(check){
+			      for(int i=0; i<cloneValidationListeners.size(); i++){
+			        error = error || cloneValidationListeners.get(i).validationCheckData(FVValidationLayout.this);
+			      }
+		    	}
+		    	if(commit){
+			      for(int i=0; i<cloneValidationListeners.size(); i++){
+			        error = error || cloneValidationListeners.get(i).validationCommit(FVValidationLayout.this);
+			      }
+			      for(int i=0; i<cloneValidationListeners.size(); i++){
+			      	cloneValidationListeners.get(i).validationAfter(FVValidationLayout.this, !error);
+			      }
+			      
+			      WFConsole_Form console = getWorkflowConsole(false);
+			      if(console != null) {
+							String message = console.getCommentWritten();
+							if(message != null && !message.trim().isEmpty()) {
+								console.button_SEND_COMMENT_Clicked(null);
+							}
+			      }
+		    	}
 		      
-		      WFConsole_Form console = getWorkflowConsole(false);
-		      if(console != null) {
-						String message = console.getCommentWritten();
-						if(message != null && !message.trim().isEmpty()) {
-							console.button_SEND_COMMENT_Clicked(null);
-						}
-		      }
-	    	}
-	      
-	      cloneValidationListeners.clear();
-	      cloneValidationListeners = null;
+		      cloneValidationListeners.clear();
+		      cloneValidationListeners = null;
+	    	} else {
+	    		error = true;
+	    		Globals.logString("Could not commit because GUI is under: PropertyChangeSuspended !!!!!");
+	    	}	
     	}else{
     		error = true;
         Globals.showNotification("Modifications are not allowed.", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
@@ -974,11 +981,26 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
   	return discardButton;
   }
+
+  private boolean isPropertyChangeSuspended() {
+		boolean isPropertyChangeSuspended = false;
+  	ICentralPanel centralPanel = getCentralPanel();
+  	if(centralPanel != null){
+  		isPropertyChangeSuspended = centralPanel.isPropertyChangeSuspended(); 
+  	}
+  	return isPropertyChangeSuspended;
+  }
   
   private void discardButtonClickListener(){
-  	INavigationWindow nw = getNavigationWindow();
-  	cancel();
-  	refreshPendingSignatureButtonCaption(nw);
+		boolean isPropertyChangeSuspended = isPropertyChangeSuspended();
+  	
+  	if(!isPropertyChangeSuspended) {
+	  	INavigationWindow nw = getNavigationWindow();
+	  	cancel();
+	  	refreshPendingSignatureButtonCaption(nw);
+  	} else {
+  		Globals.logString("Could not pocess discard button because PropertyChangeSuspended");
+  	}
   }
   
   private Button getInternalEmailButton(boolean createIfNeeded){
