@@ -241,11 +241,15 @@ public class Loggable {
 				
 				//If the Event is open we check with the last HASH 
 				if(log.getEventType() == WFLogDesc.EVENT_OPENED) {
-					LastHashHandler handler = new LastHashHandler(
-											focObj.getThisFocDesc().getStorageName(), 
-											focObj.getReferenceInt(), 
-											log.getDocZip(), log.getDocHash(), log.getDocVersion());
-					Globals.getApp().logListenerGetLastHash(handler);
+					try {
+						LastHashHandler handler = new LastHashHandler(
+												focObj.getThisFocDesc().getStorageName(), 
+												focObj.getReferenceInt(), 
+												log.getDocZip(), log.getDocHash(), log.getDocVersion());
+						Globals.getApp().logListenerGetLastHash(handler);
+					}catch(Exception e) {
+						Globals.logException(e);
+					}
 			  }
 				
 				log.validate(false);
