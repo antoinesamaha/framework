@@ -555,7 +555,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					boolean consumed = getFocXMLLayout() == null ? false : getFocXMLLayout().table_LinkClicked(getTableName(), getTreeOrTable(), FVColGen_FocProperty.this, focObject);
 					if(!consumed && getTableTreeDelegate() != null){
 						FocXMLLayout layout = getFocXMLLayout();
-						if(!layout.isPropertyChangeSuspended()) {
+						if(layout == null || !layout.isPropertyChangeSuspended()) {
 							getTableTreeDelegate().open(focObject);
 						} else {
 							Globals.logString("Could not execute open in link button because PropertySuspended");

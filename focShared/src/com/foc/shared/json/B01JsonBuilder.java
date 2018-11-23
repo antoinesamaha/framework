@@ -98,21 +98,21 @@ public class B01JsonBuilder {
 	public void appendKeyValue(String key, int value){
 		if(buffer != null){
 			appendKey(key);
-			appendValue(String.valueOf(value));
+			buffer.append(value);
 		}
 	}
 	
 	public void appendKeyValue(String key, long value){
 		if(buffer != null){
 			appendKey(key);
-			appendValue(String.valueOf(value));
+			buffer.append(value);
 		}
 	}
 		
 	public void appendKeyValue(String key, double value){
 		if(buffer != null){
 			appendKey(key);
-			appendValue(String.valueOf(value));
+			buffer.append(value);
 		}
 	}
 	
