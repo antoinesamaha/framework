@@ -2115,6 +2115,10 @@ public class Application {
 		}
 	}
 	
+	public boolean hasLogListener() {
+		return logListener != null;
+	}
+	
 	public void logListenerNotification(FocLogEvent event) {
 		if(logListener != null && event != null && 
 				(event.logEvent_GetStatus() == FocLogEvent.STATUS_INCLUDED || event.logEvent_GetStatus() == FocLogEvent.STATUS_POSTED)) {
