@@ -61,6 +61,7 @@ import com.foc.business.notifier.manipulators.FocNotificationEventFactory;
 import com.foc.business.photoAlbum.PhotoAlbumManagmentModule;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
@@ -2161,6 +2162,10 @@ public class Application {
 			if(logFocDesc == null) {
 				error = true;
 			}else {
+				if(statusCommitError.length() > WFLogDesc.LEN_STATUS_ERROR-10) {
+					statusCommitError = statusCommitError.substring(0, WFLogDesc.LEN_STATUS_ERROR - 10);
+				}
+				
 				StringBuffer buffer = null;
 				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
