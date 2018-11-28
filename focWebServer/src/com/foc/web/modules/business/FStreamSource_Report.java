@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.business.printing.PrnReportLauncher;
 import com.foc.jasper.JRFocListDataSource;
 import com.foc.jasper.JRFocObjectParameters;
 import com.foc.util.Utils;
@@ -37,8 +38,11 @@ public abstract class FStreamSource_Report<T extends Object> implements StreamSo
 	private int reportIndex = 0;
 	private String errorMessage = null;
 	
-	public FStreamSource_Report(T data) {
+	private int format = PrnLayout_BrowserWindowOpenerStreamResource.PDF;
+	
+	public FStreamSource_Report(T data, int format) {
 		this.data = data;
+		this.format = format;
 	}
 	
 	public void dispose(){
@@ -121,7 +125,13 @@ public abstract class FStreamSource_Report<T extends Object> implements StreamSo
 			}
 			
 			if(jr != null) {
-				bytes = JasperExportManager.exportReportToPdf(jr);
+				if(format == PrnLayout_BrowserWindowOpenerStreamResource.DOC) {//DOC
+					bytes = PrnReportLauncher.jasperPrint2ByteArray(jr, false);
+				} else if(format == PrnLayout_BrowserWindowOpenerStreamResource.RTF) {//RTF
+					bytes = PrnReportLauncher.jasperPrint2ByteArray(jr, true);
+				} else if(format == PrnLayout_BrowserWindowOpenerStreamResource.PDF) {//PDF
+					bytes = JasperExportManager.exportReportToPdf(jr);
+				}
 			}
 //			bytes = JasperRunManager.runReportToPdf(newInputStream(), getParams(), getDataSource());
 		} catch (JRException e) {

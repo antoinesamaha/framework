@@ -97,6 +97,7 @@ public class ConfigInfo {
   
   private static String reportFileFullPath = "d:/eclipseworkspace_c3/c3plugin_mg/defaultConfig.properties";
     
+  private static boolean reportingLayout_RTFExport  = true;
   private static boolean reportingLayout_wordExport = true;
   private static boolean reportingLayout_emailSend  = true;
   
@@ -363,6 +364,9 @@ public class ConfigInfo {
         
         str = getProperty("reportingLayout.wordExport");
         reportingLayout_wordExport = str != null ? str.compareTo("1") == 0 : true;
+        
+        str = getProperty("reportingLayout.RTFExport");
+        reportingLayout_RTFExport = str != null ? str.compareTo("1") == 0 : true;
         
         str = getProperty("reportingLayout.emailSend");
         reportingLayout_emailSend = str != null ? str.compareTo("1") == 0 : true;
@@ -727,6 +731,10 @@ public class ConfigInfo {
 		ConfigInfo.logListenerClassName = logListenerClassName;
 	}
 
+	public static boolean isReportingLayout_RTFExport() {
+		return reportingLayout_RTFExport;
+	}
+	
 	public static boolean isReportingLayout_WordExport() {
 		return reportingLayout_wordExport;
 	}

@@ -2000,9 +2000,12 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 							(previousLayout == null || previousLayout.getValidationLayout() == null || previousLayout.getValidationLayout().getValidationSettings() == null || previousLayout.getValidationLayout().getValidationSettings().isReportSendEMail());
 					boolean isReportPrintAsWord = ConfigInfo.isReportingLayout_WordExport() &&
 							(previousLayout == null || previousLayout.getValidationLayout() == null || previousLayout.getValidationLayout().getValidationSettings() == null || previousLayout.getValidationLayout().getValidationSettings().isReportPrintAsWord());
+					boolean isReportPrintAsRTF = ConfigInfo.isReportingLayout_RTFExport() &&
+							(previousLayout == null || previousLayout.getValidationLayout() == null || previousLayout.getValidationLayout().getValidationSettings() == null || previousLayout.getValidationLayout().getValidationSettings().isReportPrintAsRTF());
 					
 					centralPanel.setShowEMailSending(isReportSendEMail);
 					centralPanel.setShowWordPrinting(isReportPrintAsWord);
+					centralPanel.setShowRTFPrinting(isReportPrintAsRTF);
 					centralPanel.parseXMLAndBuildGui();
 					iNavigationWindow.changeCentralPanelContent(centralPanel, true);
 				}

@@ -69,6 +69,7 @@ import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.business.workflow.implementation.WorkflowDesc;
 import com.foc.business.workflow.map.WFMap;
@@ -4580,13 +4581,16 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					if(fld.getID() != FField.REF_FIELD_ID){
 						FList prop = (FList) fieldEnum.getProperty();
 						FocList list = prop != null ? prop.getList() : null;
-						if(list != null) {
+						if(list != null && list.getFocDesc() != null && (list.getFocDesc() instanceof WFLogDesc) && list.size() > 0) {
+							builder.appendKey(fld.getName());
+							builder.beginList();
 							for(int i=0; i<list.size(); i++) {
 								FocObject focObj = list.getFocObject(i);
 								if(focObj != null && (!builder.isModifiedOnly() || focObj.isModified())) {
 									focObj.toJson(builder);
 								}
 							}
+							builder.endList();
 						}
 					}
 				}
