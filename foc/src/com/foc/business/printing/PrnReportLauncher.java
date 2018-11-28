@@ -22,10 +22,12 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.ooxml.JRDocxExporter;
 import net.sf.jasperreports.export.Exporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimpleWriterExporterOutput;
 
 public class PrnReportLauncher implements FocJRReportLauncher {
 
@@ -177,7 +179,15 @@ public class PrnReportLauncher implements FocJRReportLauncher {
 		return bytes;
 	}
 	
+	public byte[] printRTFDocument(PrnLayout layout){
+		return printDocument(layout, true);
+	}
+
 	public byte[] printWordDocument(PrnLayout layout){
+		return printDocument(layout, false);
+	}
+	
+	private byte[] printDocument(PrnLayout layout, boolean rtf){
 		byte[] result = null;
 		
 		JasperPrint jasperPrint = null;
@@ -191,12 +201,29 @@ public class PrnReportLauncher implements FocJRReportLauncher {
     	common_DisposeReport();
     }
 		
-		Exporter exporter = new JRDocxExporter();
+    result = jasperPrint2ByteArray(jasperPrint, rtf);
+
+		return result;
+	}
+	
+	public static byte[] jasperPrint2ByteArray(JasperPrint jasperPrint, boolean rtf) {
+		byte[] result = null;
+		
+    Exporter exporter = null;
+    if(rtf) {
+    	exporter = new JRRtfExporter();
+    } else {
+    	exporter = new JRDocxExporter();
+    }
 		exporter.setExporterInput(new SimpleExporterInput(jasperPrint));
 		
 		// Exporting to a ByteArrayOutputStream for the Web
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+    if(rtf) {
+    	exporter.setExporterOutput(new SimpleWriterExporterOutput(baos));
+    } else {
+    	exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos));
+    }
 		
 		//Exporting to a file saved locally
 		//File exportReportFile = new File("C:\\temp\\report.docx");

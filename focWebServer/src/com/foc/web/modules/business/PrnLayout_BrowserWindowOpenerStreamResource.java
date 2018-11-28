@@ -16,21 +16,25 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 
 	private PrintingAction printingAction = null;
 	private PrnLayout      prnLayout      = null;
-	private boolean        wordDoc        = false;
 	private String         outputFileNameWithoutExtension = null;
 	private String         errorMessage   = null;
+	private int            outputFormat   = PDF;
+	
+	public static final int PDF = 0;
+	public static final int DOC = 1;
+	public static final int RTF = 2;
 	
 	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingaction) {
-		this(prnLayout, printingaction, false);
+		this(prnLayout, printingaction, PDF);
 	}
 	
-	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingAction, boolean wordDoc) {
+	public PrnLayout_BrowserWindowOpenerStreamResource(PrnLayout prnLayout, PrintingAction printingAction, int format) {
 //		super(null, "printnig_"+System.currentTimeMillis()+ (wordDoc ? ".docx" : ".pdf"));
 		super(null, "printnig_"+System.currentTimeMillis());
 		outputFileNameWithoutExtension = "printnig_"+System.currentTimeMillis();
 		this.prnLayout = prnLayout;
 		this.printingAction = printingAction;
-		this.wordDoc = wordDoc;
+		this.outputFormat = format;
 		setCacheTime(1);
 	}
 	
@@ -66,15 +70,18 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 				getPrintingAction().setLaunchedAutomatically(false);
 				
 				byte[] bytes = null;
-				if(wordDoc){
+				if(outputFormat == DOC){
 					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".docx");
 					bytes = getPrintingAction().getLauncher().printWordDocument(prnLayout);
+				}else if(outputFormat == RTF){
+					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".rtf");
+					bytes = getPrintingAction().getLauncher().printRTFDocument(prnLayout);					
 				}else{
 					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".pdf");
 					bytes = getPrintingAction().getLauncher().web_FillReport(prnLayout, prnLayout.getFileName());
 				}
 				if(bytes != null){
-					if(wordDoc){
+					if(outputFormat == DOC || outputFormat == RTF){
 						setMIMEType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 					}else{
 						setMIMEType("application/pdf");
@@ -112,13 +119,13 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 		this.prnLayout = prnLayout;
 	}
 
-	public boolean isWordDoc() {
-		return wordDoc;
-	}
-
-	public void setWordDoc(boolean wordDoc) {
-		this.wordDoc = wordDoc;
-	}
+//	public boolean isWordDoc() {
+//		return wordDoc;
+//	}
+//
+//	public void setWordDoc(boolean wordDoc) {
+//		this.wordDoc = wordDoc;
+//	}
 
 	public String getErrorMessageAsHTML() {
 		String message = getErrorMessage();

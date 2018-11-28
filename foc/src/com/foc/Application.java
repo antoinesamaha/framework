@@ -61,6 +61,7 @@ import com.foc.business.notifier.manipulators.FocNotificationEventFactory;
 import com.foc.business.photoAlbum.PhotoAlbumManagmentModule;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
@@ -84,7 +85,7 @@ import com.foc.gui.DisplayManager;
 import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 import com.foc.log.FocLogListener;
-import com.foc.log.IFocLogLastHash;
+import com.foc.log.ILoggedHashContainer;
 import com.foc.menu.FMenu;
 import com.foc.menu.FMenuItem;
 import com.foc.menu.FMenuList;
@@ -2115,6 +2116,10 @@ public class Application {
 		}
 	}
 	
+	public boolean hasLogListener() {
+		return logListener != null;
+	}
+	
 	public void logListenerNotification(FocLogEvent event) {
 		if(logListener != null && event != null && 
 				(event.logEvent_GetStatus() == FocLogEvent.STATUS_INCLUDED || event.logEvent_GetStatus() == FocLogEvent.STATUS_POSTED)) {
@@ -2157,6 +2162,10 @@ public class Application {
 			if(logFocDesc == null) {
 				error = true;
 			}else {
+				if(statusCommitError.length() > WFLogDesc.LEN_STATUS_ERROR-10) {
+					statusCommitError = statusCommitError.substring(0, WFLogDesc.LEN_STATUS_ERROR - 10);
+				}
+				
 				StringBuffer buffer = null;
 				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
@@ -2174,9 +2183,11 @@ public class Application {
 		return error;
 	}
 	
-	public void logListenerGetLastHashedDocument(String entityName, long entityRef, IFocLogLastHash lastHash) {
-		if(logListener != null && !Utils.isStringEmpty(entityName) && entityRef > 0) {
-			logListener.getLastHash(entityName, entityRef, lastHash);
+	public void logListenerGetLastHash(ILoggedHashContainer lastHash) {
+		if(			logListener != null 
+				&& 	lastHash != null) {
+			Globals.logString("-FocLogListener: LastHash request");
+			logListener.getLastHash(lastHash);
 		}
 	}
 

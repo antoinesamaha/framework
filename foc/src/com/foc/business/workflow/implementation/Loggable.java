@@ -4,12 +4,12 @@ import java.sql.Date;
 import java.util.Comparator;
 
 import com.foc.Globals;
-import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
 import com.foc.business.notifier.FocNotificationConst;
 import com.foc.business.notifier.FocNotificationEvent;
 import com.foc.business.notifier.FocNotificationManager;
+import com.foc.business.workflow.WFSite;
 import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -19,8 +19,8 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FListField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
-import com.foc.log.HashedDocument;
-import com.foc.log.IFocLogLastHash;
+import com.foc.log.ILoggedHashContainer;
+import com.foc.property.FDate;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.serializer.FSerializer;
@@ -241,9 +241,38 @@ public class Loggable {
 					}
 				}
 				
-				//If the Event is open we check with the last HASH 
-				if(log.getEventType() == WFLogDesc.EVENT_OPENED) {
-					fetchLastDocHashForChecking(new LastHashHandler(log.getDocZip(), log.getDocHash(), log.getDocVersion()));
+				//If the Event is open we check with the last HASH is = current HASH 
+				if(			log.getEventType() == WFLogDesc.EVENT_OPENED 
+						&& 	log.getDocVersion() > 0) {// Only if we have a hash algorithm
+					try {
+						LastHashHandler handler = new LastHashHandler(
+												focObj,
+												log.getDocZip(), 
+												log.getDocHash(), 
+												log.getDocVersion());
+						if(Globals.getApp().hasLogListener()) {
+							handler.setSynchronous(false);
+							Globals.getApp().logListenerGetLastHash(handler);
+						} else {
+							handler.setSynchronous(true);
+							//If lastHashedDoc == null we compute from the log tables in FOC
+							FocList list = getLogList(false);
+							if(list != null) {
+								list.loadIfNotLoadedFromDB();
+								if(list.size() > 0) {
+									WFLog lastLog = (WFLog) list.getFocObject(list.size()-1);
+									if(lastLog != null && lastLog.getDocVersion() > 0 && !Utils.isStringEmpty(lastLog.getDocZip())) {
+										handler.setStoredHash(0, log.getDocHash());
+										handler.setStoredJSON(0, log.getDocZip());
+										handler.setStoredVersion(0, log.getDocVersion());
+										handler.done();
+									}
+								}
+							}
+						}
+					}catch(Exception e) {
+						Globals.logException(e);
+					}
 			  }
 				
 				log.validate(false);
@@ -260,79 +289,151 @@ public class Loggable {
 		}
 		return ref;
 	}
-	
-	private void fetchLastDocHashForChecking(IFocLogLastHash lastHashHandler) {
-		FocObject focObj = getFocObject();
-		if(focObj != null && focObj.getThisFocDesc() != null && focObj.getReferenceInt() > 0) {
-			Globals.getApp().logListenerGetLastHashedDocument(focObj.getThisFocDesc().getStorageName(), focObj.getReferenceInt(), lastHashHandler);
-		}
-	}
-	
-	public class LastHashHandler implements IFocLogLastHash {
+		
+	public class LastHashHandler implements ILoggedHashContainer {
+		private String entityName = null;
+		private long entityReference = -1;
+		
+		private FocDesc focDesc = null;
+		private String code = null;
+		private Date   date = null;
+		private WFSite site = null;
+		
 		private String fullDocComputed = null;
 		private String hashComputed = null;
-		private int versionOfComputed = 0; 
+		private int versionOfComputed = 0;
 		
-		public LastHashHandler(String fullDocComputed, String hashComputed, int versionOfComputed) {
+		private String storedHash = null;
+		private String storedDoc  = null;
+		private int versionOfStored = 0;
+		
+		private boolean synchronous = true;
+		
+		public LastHashHandler(FocObject focObj, String fullDocComputed, String hashComputed, int versionOfComputed) {
+			if(focObj != null) {
+				focDesc = focObj.getThisFocDesc();
+				this.entityName = focObj.getThisFocDesc().getStorageName();
+				this.entityReference = focObj.getReferenceInt();
+				this.code = focObj.code_getCode();
+				this.date = focObj.getDate();
+				this.site = focObj.workflow_GetSite();
+			}
 			this.fullDocComputed = fullDocComputed;
 			this.hashComputed = hashComputed;
 			this.versionOfComputed = versionOfComputed;
 		}
-		
+
 		@Override
-		public void lastLog(HashedDocument lastHashedDoc) {
-			FocObject focObj = getFocObject();
-			if(lastHashedDoc == null) {
-				//If lastHashedDoc == null we compute from the log tables in FOC
-				FocList list = getLogList(false);
-				if(list != null) {
-					list.loadIfNotLoadedFromDB();
-					if(list.size() > 0) {
-						WFLog log = (WFLog) list.getFocObject(list.size()-1);
-						if(log != null && log.getDocVersion() > 0 && !Utils.isStringEmpty(log.getDocZip())) {
-							lastHashedDoc = new HashedDocument();
-							lastHashedDoc.setDocument(log.getDocZip());
-							lastHashedDoc.setVersion(log.getDocVersion());
-							lastHashedDoc.setHash(log.getDocHash());
-						}
-					}
-				}
-			}
+		public int size() {
+			return 1;
+		}
+
+		@Override
+		public String getEntityName(int at) {
+			return entityName;
+		}
+
+		@Override
+		public long getEntityReference(int at) {
+			return entityReference;
+		}
+
+		@Override
+		public void setStoredHash(int at, String hash) {
+			storedHash = hash;
+		}
+
+		@Override
+		public void setStoredJSON(int at, String json) {
+			storedDoc = json;			
+		}
+
+		@Override
+		public void setStoredVersion(int at, int version) {
+			versionOfStored = version;
+		}
+
+		@Override
+		public void done() {
 
 			//If lastHashedDoc is null this means we will not check anything
-			if(lastHashedDoc != null) {
+			if(storedDoc != null) {
 				//If the last saved version is lower than the new computed one we need to compute another 
-				if(lastHashedDoc.getVersion() != versionOfComputed && lastHashedDoc.getVersion() > 0) {
+				if(versionOfStored != versionOfComputed && versionOfStored > 0) {
+					FocObject focObj = null;
+					if(isSynchronous()) {
+						focObj = getFocObject();
+					} else {
+						FocConstructor constr = new FocConstructor(focDesc);
+						focObj = constr.newItem();
+						focObj.setReference(entityReference);
+						focObj.load();
+					}
+					
 					StringBuffer buff = new StringBuffer();
-					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, lastHashedDoc.getVersion());
+					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, versionOfStored);
 					if(ser != null) {
 						ser.serializeToBuffer();
 						fullDocComputed = buff.toString();
 						if(!Utils.isStringEmpty(fullDocComputed)) {
 							hashComputed = Encryptor.encrypt_MD5(fullDocComputed);
-							versionOfComputed = lastHashedDoc.getVersion();
+							versionOfComputed = versionOfStored;
 						}
 					}
+					
+					if(!isSynchronous() && focObj != null) {
+						focObj.dispose();
+						focObj = null;
+					}
 				}
-				if(!hashComputed.equals(lastHashedDoc.getHash())){
-					notifyForHashDiscrepancy(focObj, fullDocComputed, lastHashedDoc.getDocument(), 
-							versionOfComputed, lastHashedDoc.getVersion(), 
-							hashComputed, lastHashedDoc.getHash());
+				if(!hashComputed.equals(storedHash)){
+					notifyForHashDiscrepancy(code, date, site, entityName, entityReference, 
+							fullDocComputed, storedDoc, 
+							versionOfComputed, versionOfStored, 
+							hashComputed, storedHash);
 				}
 			}		
 		}
+
+		public boolean isSynchronous() {
+			return synchronous;
+		}
+
+		public void setSynchronous(boolean synchronous) {
+			this.synchronous = synchronous;
+		}
 	}
 	
-	public static void notifyForHashDiscrepancy(FocObject focObj, String computedDoc, String storedDoc, int computedVersion, int storedVersion, String computedHash, String storedHash) {
-	  FocDataMap focDataMap = new FocDataMap(focObj);
-		focDataMap.putString("TABLE_NAME", focObj.getThisFocDesc().getStorageName());
-		focDataMap.putString("COMPUTED_DOC", computedDoc);
-		focDataMap.putString("EXPECTED_DOC", storedDoc);
-		focDataMap.putString("COMPUTED_VERSION", String.valueOf(computedVersion));
-		focDataMap.putString("EXPECTED_VERSION", String.valueOf(storedVersion));
-		focDataMap.putString("COMPUTED_HASH", computedHash);
-		focDataMap.putString("EXPECTED_HASH", storedHash);
-	  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
-		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+	public static void notifyForHashDiscrepancy(
+					String code,
+					Date date,
+					WFSite site,
+					String storageName,
+					long ref,
+					String computedDoc, 
+					String storedDoc, 
+					int computedVersion, 
+					int storedVersion, 
+					String computedHash, 
+					String storedHash) {
+		Globals.logString("--- Illegal document modification detected : This document is suspected of being tempered with ---");
+		Globals.logString("--- "+storageName+" : "+ref);
+		try {
+		  FocDataMap focDataMap = new FocDataMap(null);
+		  focDataMap.putString("CODE", code);
+		  focDataMap.putString("DATE", FDate.convertDateToDisplayString(date));
+		  focDataMap.putString("SITE", site.getName());		  
+			focDataMap.putString("TABLE_NAME", storageName);
+			focDataMap.putString("COMPUTED_DOC", computedDoc);
+			focDataMap.putString("EXPECTED_DOC", storedDoc);
+			focDataMap.putString("COMPUTED_VERSION", String.valueOf(computedVersion));
+			focDataMap.putString("EXPECTED_VERSION", String.valueOf(storedVersion));
+			focDataMap.putString("COMPUTED_HASH", computedHash);
+			focDataMap.putString("EXPECTED_HASH", storedHash);
+		  FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_DOC_HASH_MISSMATCH, focDataMap));
+	//		Globals.showNotification("Illegal document modification detected", "This document is suspected of being tempered with", IFocEnvironment.TYPE_ERROR_MESSAGE);
+		}catch(Exception e){
+			Globals.logException(e);
+		}
 	}
 }

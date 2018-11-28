@@ -204,13 +204,13 @@ public class WFTransactionConfigDesc extends FocDesc {
 		      
 		//      Globals.logString("Searching for :"+currentCompany+" TITLE:"+transactionName);
 		//      Globals.logString("-----------------------------------------------------------------------------");
-		      
+
 		      for(int i=0; i<list.size(); i++){
 		        WFTransactionConfig temp = (WFTransactionConfig) list.getFocObject(i);
 		  
 		//        Globals.logString("Company :"+temp.getCompany()+" TITLE:"+temp.getTransactionDBTitle());
 		        
-		        if(currentCompany.equalsRef(temp.getCompany()) && temp.getTransactionDBTitle().equals(transactionName)){
+		        if(temp.getTransactionDBTitle().equals(transactionName) && currentCompany.equalsRef(temp.getCompany())){
 		          w = temp;
 		          break; 
 		        }

@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import com.foc.Globals;
 import com.foc.SrvConst_ServerSide;
 import com.foc.admin.FocLoginAccess;
@@ -31,6 +33,59 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			value = valueArray != null && valueArray.length > 0 ? valueArray[0] : null;
 		}
 		return value;
+	}
+	
+	protected String getJsonString(JSONObject jsonObj, String key) {
+		String value = null;
+		try {
+			value = jsonObj != null ? jsonObj.getString(key) : null;
+		}catch(Exception e) {
+			Globals.logException(e);
+		}
+		return value;
+	}
+	
+	protected int getJsonInteger(JSONObject jsonObj, String key, int defaultValue) {
+		int value = defaultValue;
+		try {
+			value = jsonObj != null ? jsonObj.getInt(key) : null;
+		}catch(Exception e) {
+			Globals.logException(e);
+		}
+		return value;
+	}
+	
+	protected long getJsonLong(JSONObject jsonObj, String key, long defaultValue) {
+		long value = defaultValue;
+		try {
+			value = jsonObj != null ? jsonObj.getLong(key) : null;
+		}catch(Exception e) {
+			Globals.logException(e);
+		}
+		return value;
+	}
+	
+	protected boolean getJsonBoolean(JSONObject jsonObj, String key, boolean defaultValue) {
+		boolean value = defaultValue;
+		try {
+			value = jsonObj != null ? jsonObj.getBoolean(key) : null;
+		}catch(Exception e) {
+			Globals.logException(e);
+		}
+		return value;
+	}
+	
+	protected StringBuffer getRequestAsStringBuffer(HttpServletRequest request) {
+		StringBuffer sb = new StringBuffer();
+		String s = null;
+		try {
+			while ((s = request.getReader().readLine()) != null) {
+				sb.append(s);
+			}
+		}catch(Exception e){
+			Globals.logException(e);
+		}
+		return sb;
 	}
 
 	protected long getParameterLong(HttpServletRequest request, String paramName, long defaultValue) {

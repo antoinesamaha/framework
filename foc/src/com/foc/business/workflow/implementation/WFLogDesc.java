@@ -3,6 +3,7 @@ package com.foc.business.workflow.implementation;
 import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.business.workflow.LoggableFactory;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.WorkflowTransactionFactory;
 import com.foc.business.workflow.map.WFStageDesc;
@@ -57,7 +58,7 @@ public class WFLogDesc extends FocDesc {
 	public static final int LEN_FLD_CHANGES      = 10000;
 //	public static final int LEN_FLD_CHANGES      =  4000;
 	public static final int LEN_FLD_ZIPPED_DOC   =  20000;
-	
+	public static final int LEN_STATUS_ERROR     =  1000;
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
@@ -75,6 +76,7 @@ public class WFLogDesc extends FocDesc {
 		if(isWorkflow) {
 			WorkflowTransactionFactory.getInstance().add((IWorkflowDesc) iWFDesc);
 		}
+		LoggableFactory.getInstance().add((ILoggableDesc) iWFDesc);
 		
 		addDescriptionField();
 		
@@ -173,7 +175,7 @@ public class WFLogDesc extends FocDesc {
 			FBoolField bFld = new FBoolField("EVENT_UNDONE", "Event Undone", FLD_EVENT_UNDONE, false);
 			addField(bFld);
 	    
-			chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, 1000);
+			chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, LEN_STATUS_ERROR);
 	    addField(chfld);
 		}
 		

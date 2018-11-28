@@ -40,6 +40,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 
 	private PrintingAction printingAction = null;
 	private boolean        showWordPrinting = true;
+	private boolean        showRTFPrinting  = true;
 	private boolean        showEMailSending = true;
 	
 	@Override
@@ -80,6 +81,32 @@ public class PrnLayout_Table extends FocXMLLayout{
 		TableTreeDelegate tableTreeDelegate = getTableTreeDelegate();
 		if(tableTreeDelegate != null){
 
+			if(isShowRTFPrinting()) {
+				tableTreeDelegate.getTable().addGeneratedColumn("PRINT_RTF_BUTTON", new Table.ColumnGenerator() {
+					
+					@Override
+					public Object generateCell(Table source, Object itemId, Object columnId) {
+						Button button = new Button("RTF");
+						if(getFocList() != null && itemId != null){
+							PrnLayout layout = (PrnLayout) getFocList().searchByReference((long) itemId);
+							if(layout != null) {
+								BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new PrnLayout_BrowserWindowOpenerStreamResource(layout, PrnLayout_Table.this.getPrintingAction(), PrnLayout_BrowserWindowOpenerStreamResource.RTF){
+									protected boolean isWithLogo() {
+										if(getPrintLogoCheckBox() != null){
+										  return getPrintLogoCheckBox().getValue();
+										}
+										return true;
+									}
+								});
+								browserWindowOpener.extend(button);
+							}
+						}
+						return button;
+					}
+				});
+				tableTreeDelegate.getTable().setColumnHeader("PRINT_RTF_BUTTON", "RTF");
+			}
+			
 			if(isShowWordPrinting()) {
 				tableTreeDelegate.getTable().addGeneratedColumn("PRINT_WORD_BUTTON", new Table.ColumnGenerator() {
 					
@@ -89,7 +116,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 						if(getFocList() != null && itemId != null){
 							PrnLayout layout = (PrnLayout) getFocList().searchByReference((long) itemId);
 							if(layout != null) {
-								BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new PrnLayout_BrowserWindowOpenerStreamResource(layout, PrnLayout_Table.this.getPrintingAction(), true){
+								BrowserWindowOpener browserWindowOpener = new BrowserWindowOpener(new PrnLayout_BrowserWindowOpenerStreamResource(layout, PrnLayout_Table.this.getPrintingAction(), PrnLayout_BrowserWindowOpenerStreamResource.DOC){
 									protected boolean isWithLogo() {
 										if(getPrintLogoCheckBox() != null){
 										  return getPrintLogoCheckBox().getValue();
@@ -298,6 +325,14 @@ public class PrnLayout_Table extends FocXMLLayout{
 
 	public void setShowWordPrinting(boolean showWordPrinting) {
 		this.showWordPrinting = showWordPrinting;
+	}
+	
+	public boolean isShowRTFPrinting() {
+		return showRTFPrinting;
+	}
+
+	public void setShowRTFPrinting(boolean showRTFPrinting) {
+		this.showRTFPrinting = showRTFPrinting;
 	}
 
 	public boolean isShowEMailSending() {

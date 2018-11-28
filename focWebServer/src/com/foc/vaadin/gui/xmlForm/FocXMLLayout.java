@@ -144,6 +144,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private boolean immediateComponentAllowed = true;
 	private String  screenHelp = null;
 
+	private boolean propertyChangeSuspended = false;
+	
 	// This is the only constructor that will be called automatically
 	// After that the init method will be called
 	public FocXMLLayout() {
@@ -870,6 +872,29 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return immediateComponentAllowed;
 	}
 	
+	protected boolean field_IsImmediate(FocXMLGuiComponent guiComponent, IFocData focData) {
+		boolean shouldBeImmediate = false;
+
+		if(guiComponent != null){
+			shouldBeImmediate = isComponentSetImmediate(guiComponent);
+		
+			if(!shouldBeImmediate){
+				if(focData != null && focData instanceof FProperty){
+					FProperty property = (FProperty) focData;
+					if(			property.hasListeners() 
+							|| 	mapDataPath2ListenerAction_GetListenerAction(guiComponent) != null
+							|| 	(property.getFocField() != null && property.getFocField().getPropertyValidator() != null
+							||  property instanceof FTime)//We always listen immediately to time in case they type with bad format 
+							){
+						shouldBeImmediate = true;
+					}
+				}
+			}
+		}
+		
+		return shouldBeImmediate;
+	}
+	
 	public void addListenerToField_AndSetRequired(FocXMLGuiComponent guiComponent) {
 		if(guiComponent != null){
 			IFocData focData = guiComponent.getFocData();
@@ -878,21 +903,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			//------------------------------
 			boolean shouldBeImmediate = false;
 			
-			if(isImmediateComponentAllowed()){//In Bkdn_Tree we set it to immediate not allowed when without palette.
-				shouldBeImmediate = isComponentSetImmediate(guiComponent);
-			
-				if(!shouldBeImmediate){
-					if(focData != null && focData instanceof FProperty){
-						FProperty property = (FProperty) focData;
-						if(			property.hasListeners() 
-								|| 	mapDataPath2ListenerAction_GetListenerAction(guiComponent) != null
-								|| 	(property.getFocField() != null && property.getFocField().getPropertyValidator() != null
-								||  property instanceof FTime)//We always listen immediately to time in case they type with bad format 
-								){
-							shouldBeImmediate = true;
-						}
-					}
-				}
+			if(isImmediateComponentAllowed()){
+				shouldBeImmediate = field_IsImmediate(guiComponent, focData);
 			}
 			  
 			if(shouldBeImmediate){
@@ -1383,10 +1395,22 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
   	return false;
   }
   
+  public boolean isPropertyChangeSuspended() {
+  	boolean isSus = propertyChangeSuspended;
+  	
+		for(int i = 0; !isSus && i < childXMLLayoutArray_Size(); i++){
+			FocXMLLayout layout = childXMLLayoutArray_Get(i);
+			isSus = layout.isPropertyChangeSuspended();
+		}
+  	
+  	return isSus;
+  }
+  
 	public boolean propertyChangeIntention_Accepted(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
 		boolean error = false;
 		
 		try{
+			propertyChangeSuspended = false;
 			error = scanComponentsAndcopyGuiToMemory();
 			// Because if we have 2 components CODE and NAME for the same datapath
 			// PARTY or JOB...
@@ -1420,6 +1444,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 	
 	public void propertyChangeIntention_Rejected(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
+		propertyChangeSuspended = false;
 		if(componentModified != null) {
 			boolean backup = setReactToGuiChangeDisable(true);
 			componentModified.copyMemoryToGui();
@@ -1433,13 +1458,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		try{
 			//PropertyChangeIntention
 			//In This case we want to make sure that FocObject Allows the Change before triggering any listeners
-			boolean propertyChangeSuspended = false;
-			if(propertyOfEvent != null && componentModified != null) {
-				Object valueBefore = propertyOfEvent != null ? propertyOfEvent.getObject() : null;
-				String valueAfter  = componentModified.getValueString(); 
-				if(!error && propertyOfEvent != null) {
-					FocObject fatherObj = propertyOfEvent.getFocObject();
-					propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
+			if(!propertyChangeSuspended) {
+				if(propertyOfEvent != null && componentModified != null) {
+					Object valueBefore = propertyOfEvent != null ? propertyOfEvent.getObject() : null;
+					String valueAfter  = componentModified.getValueString(); 
+					if(!error && propertyOfEvent != null) {
+						FocObject fatherObj = propertyOfEvent.getFocObject();
+						propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
+					}
 				}
 			}
 			
@@ -1836,6 +1862,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				String avoidRowBreak     = focXmlAttributes.getValue(FXML.ATT_AVOID_ROW_BREAK);
 
 				validationSettings.setReportPrintAsWord(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_PRINT_AS_WORD, true));
+				validationSettings.setReportPrintAsRTF(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_PRINT_AS_RTF, true));
 				validationSettings.setReportSendEMail(focXmlAttributes.getBoolean(FXML.ATT_ALLOW_REPORT_SEND_EMAIL, true));
 				
 				if(title != null){

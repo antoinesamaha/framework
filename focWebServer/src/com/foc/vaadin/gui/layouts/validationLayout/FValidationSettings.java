@@ -27,6 +27,7 @@ public class FValidationSettings {
   public boolean hasMSWordGenerator= false;
   public boolean avoidRowBreak = false;
   public boolean reportPrintAsWord = true;
+  public boolean reportPrintAsRTF  = true;
   public boolean reportSendEMail   = true;
 
 //  public boolean printAndExit = false;
@@ -257,6 +258,14 @@ public class FValidationSettings {
 		this.reportPrintAsWord = reportPrintAsWord;
 	}
 
+	public boolean isReportPrintAsRTF() {
+		return reportPrintAsRTF;
+	}
+
+	public void setReportPrintAsRTF(boolean reportPrintAsRTF) {
+		this.reportPrintAsRTF = reportPrintAsRTF;
+	}
+	
 	public boolean isReportSendEMail() {
 		return reportSendEMail;
 	}
