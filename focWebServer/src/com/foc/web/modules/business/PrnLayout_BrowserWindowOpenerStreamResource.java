@@ -73,19 +73,17 @@ public class PrnLayout_BrowserWindowOpenerStreamResource extends StreamResource 
 				if(outputFormat == DOC){
 					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".docx");
 					bytes = getPrintingAction().getLauncher().printWordDocument(prnLayout);
+					if(bytes != null) setMIMEType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
 				}else if(outputFormat == RTF){
 					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".rtf");
-					bytes = getPrintingAction().getLauncher().printRTFDocument(prnLayout);					
+					bytes = getPrintingAction().getLauncher().printRTFDocument(prnLayout);
+					if(bytes != null) setMIMEType("application/rtf");
 				}else{
 					if(outputFileNameWithoutExtension != null) setFilename(outputFileNameWithoutExtension+".pdf");
 					bytes = getPrintingAction().getLauncher().web_FillReport(prnLayout, prnLayout.getFileName());
+					if(bytes != null) setMIMEType("application/pdf");
 				}
 				if(bytes != null){
-					if(outputFormat == DOC || outputFormat == RTF){
-						setMIMEType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-					}else{
-						setMIMEType("application/pdf");
-					}
 		  		setStreamSource(new FStreamSource(bytes));
 				}
 				downloadStream = super.getStream();
