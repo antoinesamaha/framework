@@ -94,13 +94,14 @@ public class FocNotificationManager {
     if(internalEventNotifierList == null && createIfNeeded){
       internalEventNotifierList = new FocList(new FocLinkSimple(FNotifTrigger.getFocDesc()));
       internalEventNotifierList.setDbResident(false);
+      internalEventNotifierList.setCollectionBehaviour(true);
     }
     return internalEventNotifierList;
   }
 
   public FNotifTrigger addInternalEventNotifier(int eventID, FocDesc focDesc, String transactionName, IFocNotifAction eventAction){
     FocList list = getInternalEventNotifierList(true);
-    FNotifTrigger notifier = (FNotifTrigger) list.newEmptyItem();
+    FNotifTrigger notifier = (FNotifTrigger) list.newEmptyDisconnectedItem();
     notifier.setEvent(eventID);
     notifier.setTableDesc(focDesc);
     notifier.setActionObject(eventAction);
@@ -110,8 +111,9 @@ public class FocNotificationManager {
   
   public void removeInternalEventNotifier(FNotifTrigger notifier){
   	FocList list = getInternalEventNotifierList(false);
-  	if(list != null){
+  	if(notifier != null && list != null){
   		list.remove(notifier);
+  		notifier.dispose();
   	}
   }
   
