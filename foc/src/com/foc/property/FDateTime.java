@@ -63,9 +63,13 @@ public class FDateTime extends FDate {
     if(dateTimeFormat == null) dateTimeFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
   	return dateTimeFormat;
   }
-  
-  public String convertDateToSQLString(java.util.Date date){
+
+  public static String convertDateToSQLString_Static(java.util.Date date){
     return date != null ? sqlDateTimeFormat.format(date) : sqlDateTimeFormat.format(new Date(0));
+  }
+
+  public String convertDateToSQLString(java.util.Date date){
+    return convertDateToSQLString_Static(date);
   }
 
   public static String convertDateToDisplayString(java.util.Date date){   
@@ -93,17 +97,21 @@ public class FDateTime extends FDate {
   }
 
   public String getSqlString() {
-    if (getProvider() == DBManager.PROVIDER_ORACLE){
-      return "TO_DATE (" + "'" + convertDateToSQLString(date) + "'" + " , "+ "'YYYY-MM-DD HH24:MI:SS')";
-    }else if (getProvider() == DBManager.PROVIDER_MSSQL){
-    	return "CAST(N\'"+convertDateToSQLString(date)+".000\' AS DateTime)";
-    }else if (getProvider() == DBManager.PROVIDER_H2){
-    	return "\'" + convertDateToSQLString(date) + "\'";
-    }else{
-      return "\"" + convertDateToSQLString(date) + "\"";
-    }
+  	return getSqlString_Static(getProvider(), date);
   }
 
+  public static String getSqlString_Static(int provider, Date date) {
+    if (provider == DBManager.PROVIDER_ORACLE){
+      return "TO_DATE (" + "'" + convertDateToSQLString_Static(date) + "'" + " , "+ "'YYYY-MM-DD HH24:MI:SS')";
+    }else if (provider == DBManager.PROVIDER_MSSQL){
+    	return "CAST(N\'"+convertDateToSQLString_Static(date)+".000\' AS DateTime)";
+    }else if (provider == DBManager.PROVIDER_H2){
+    	return "\'" + convertDateToSQLString_Static(date) + "\'";
+    }else{
+      return "\"" + convertDateToSQLString_Static(date) + "\"";
+    }
+  }
+  
   public void setSqlStringInternal(String str) {
     try {
       if (str != null && !str.equals("0000-00-00 00:00:00") && str != ""){
