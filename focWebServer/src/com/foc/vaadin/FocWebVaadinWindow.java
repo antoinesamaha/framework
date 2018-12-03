@@ -280,6 +280,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			buttonsWithSignatureArray.clear();
 			buttonsWithSignatureArray = null;
 		}
+		dispose_MenuTree();
 	}
 	
 	public void hideMenuBar(){

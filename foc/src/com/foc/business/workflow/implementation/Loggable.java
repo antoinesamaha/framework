@@ -21,6 +21,7 @@ import com.foc.list.FocList;
 import com.foc.list.FocListElement;
 import com.foc.log.ILoggedHashContainer;
 import com.foc.property.FDate;
+import com.foc.property.FDateTime;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.serializer.FSerializer;
@@ -142,23 +143,28 @@ public class Loggable {
 				FocDesc focDesc = getFocDesc();
 				long userRef = user != null ? user.getReferenceInt() : 0;
 				
-				setLastModifDate(dateTime);
-				setLastModifUserRef(userRef);
+//				setLastModifDate(dateTime);
+//				setLastModifUserRef(userRef);
 	
 				FDateTimeField lastModifDateFld = (FDateTimeField) focDesc.getFieldByID(getLoggableDesc().getFieldID_LastModificationDate());
 				FField lastModifUserFld = focDesc.getFieldByID(getLoggableDesc().getFieldID_LastModificationUser());
+				
+//				FDateTime dateTimeProp = getFocObject().getFocProperty(lastModifDateFld.getID());
+//				getFocObject().getFocProperty(lastModifUserFld.getID());
+
+				String dateSQLStr = FDateTime.convertDateToSQLString_Static(dateTime);
 				
 				if(lastModifDateFld != null && lastModifUserFld != null) {
 					StringBuffer buffer = null;
 					if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 						buffer = new StringBuffer("UPDATE " + focDesc.getStorageName_ForSQL() + " ");
 						buffer.append("set "+lastModifUserFld.getDBName()+" = "+userRef+" ");
-						buffer.append(", "+lastModifDateFld.getDBName()+" = "+getLastModifDateSQLString()+" ");
+						buffer.append(", "+lastModifDateFld.getDBName()+" = "+dateSQLStr+" ");
 						buffer.append(" where "+focDesc.getRefFieldName()+" = "+ref+" ");						
 					} else {
 						buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
 						buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
-						buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+getLastModifDateSQLString()+" ");
+						buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
 						buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
 					}					
 					Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
@@ -379,6 +385,8 @@ public class Loggable {
 							hashComputed = Encryptor.encrypt_MD5(fullDocComputed);
 							versionOfComputed = versionOfStored;
 						}
+						ser.dispose();
+						ser = null;
 					}
 					
 					if(!isSynchronous() && focObj != null) {
