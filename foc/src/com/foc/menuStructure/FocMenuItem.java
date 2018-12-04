@@ -14,6 +14,11 @@ public class FocMenuItem extends AutoGen_FocMenuItem {
     super(constr);
     setGuest(false);
   }
+  
+  public void dispose() {
+  	super.dispose();
+  	menuAction = null;
+  }
 
 	public IFocMenuItemAction getMenuAction() {
 		return menuAction;
@@ -22,6 +27,7 @@ public class FocMenuItem extends AutoGen_FocMenuItem {
 	public void setMenuAction(IFocMenuItemAction menuAction) {
 	  this.menuAction = menuAction;
 	}
+	
 //	
 //	public ArrayList<IFocMenuItemAction> getExtraActions() {
 //	  if(extraActions == null && FLD_EXTRA_COUNT>0){

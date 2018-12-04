@@ -152,7 +152,7 @@ public class Loggable {
 //				FDateTime dateTimeProp = getFocObject().getFocProperty(lastModifDateFld.getID());
 //				getFocObject().getFocProperty(lastModifUserFld.getID());
 
-				String dateSQLStr = FDateTime.convertDateToSQLString_Static(dateTime);
+				String dateSQLStr = FDateTime.getSqlString_Static(focDesc.getProvider(), dateTime);
 				
 				if(lastModifDateFld != null && lastModifUserFld != null) {
 					StringBuffer buffer = null;
