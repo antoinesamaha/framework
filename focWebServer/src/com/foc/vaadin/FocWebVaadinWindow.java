@@ -1095,7 +1095,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	public void changeCentralPanelIntoGuestHomePage(){
   	FocUser user = Globals.getApp().getUser_ForThisSession();
   	FocGroup group = user != null ? user.getGroup() : null;
-  	if(group != null && group.getStartupMenu()!= null){
+  	if(group != null && !Utils.isStringEmpty(group.getStartupMenu())){
 	  	FVMenuTree menuTree = new FVMenuTree();
 	  	if(menuTree != null){
 	  		menuTree.setTreeType(FVMenuTree.TYPE_NORMAL);
@@ -1104,6 +1104,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		  	if(menuItem != null){
 		  		menuItem.getMenuAction().actionPerformed(this, menuItem, 0);
 		  	}
+		  	menuItem.dispose();
 	  	}
   	}
   }

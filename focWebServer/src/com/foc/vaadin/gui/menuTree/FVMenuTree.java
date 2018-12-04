@@ -53,6 +53,8 @@ public class FVMenuTree extends FocXMLLayout {
 	public static final int TYPE_ADMIN   = 2;
 
 	public FVMenuTree() {
+		int debug = 3;
+		debug++;
 	}
 
 	public void dispose() {
