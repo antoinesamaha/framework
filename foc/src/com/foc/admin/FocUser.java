@@ -902,7 +902,7 @@ public class FocUser extends FocObject {
 			FocList operatorList = WFOperatorDesc.getList(FocList.FORCE_RELOAD);
 			for(int i=0; i<operatorList.size(); i++){
 				WFOperator operator = (WFOperator) operatorList.getFocObject(i);
-				if(operator != null && operator.getUser().getName().equals(Globals.getApp().getUser_ForThisSession().getName())){
+				if(operator != null && operator.getUser() != null && operator.getUser().getName().equals(Globals.getApp().getUser_ForThisSession().getName())){
 					FNode areaNode = areaTree.findNode(operator.getArea().getReference().getInteger());
 					if(areaNode != null){
 						//Scan the are node tree and copies of this operator with these areas
