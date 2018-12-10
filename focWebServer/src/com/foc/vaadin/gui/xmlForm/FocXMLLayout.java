@@ -161,21 +161,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			valueChangeListener = null;
 		}
 		
-    childXMLLayoutArray_Scan(new IChildFocXMLLayoutScanner() {
-			
-			public boolean before(FocXMLLayout layout) {
-				layout.dispose();
-				return true;
-			}
-			
-			public boolean after(FocXMLLayout layout) {
-				return false;
-			}
-		});
-    if(childLayoutArray != null){
-	    childLayoutArray.clear();
-	    childLayoutArray = null;
-    }
+		dispose_ChildLayout();
     
 		xmlView = null;
 		mainWindow = null;
@@ -256,6 +242,24 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			compMap.clear();
 			compMap = null;
 		}
+	}
+	
+	public void dispose_ChildLayout(){
+	  childXMLLayoutArray_Scan(new IChildFocXMLLayoutScanner() {
+			public boolean before(FocXMLLayout layout) {
+				layout.dispose();
+				return true;
+			}
+			
+			public boolean after(FocXMLLayout layout) {
+				return false;
+			}
+		});
+	  
+	  if(childLayoutArray != null){
+	    childLayoutArray.clear();
+	    childLayoutArray = null;
+	  }
 	}
 	
 	public void dispose_ValidationSettings() {
@@ -1009,6 +1013,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	
 	public void re_parseXMLAndBuildGui() {
 		removeAllComponents();
+		dispose_ChildLayout();
 		dispose_ComponentsMap();
 		parseXMLAndBuildGui();
 		if(validationLayout != null){
