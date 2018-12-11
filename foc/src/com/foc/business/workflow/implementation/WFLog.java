@@ -115,6 +115,9 @@ public class WFLog extends FocObject implements FocLogEvent {
 	}
 	
 	public void setChanges(String changes){
+		if(changes.length()>1900) {
+			changes = changes.substring(0, 1900);
+		}
 		setPropertyString(WFLogDesc.FLD_CHANGES, changes);
 	}
 
@@ -122,8 +125,12 @@ public class WFLog extends FocObject implements FocLogEvent {
 		return getPropertyString(WFLogDesc.FLD_CHANGES);
 	}
 	
-	public void setDocZip(String changes){
-		setPropertyString(WFLogDesc.FLD_DOC_ZIP, changes);
+	public void setDocZip(String doc){
+		if(doc.length()>1900) {
+			doc = doc.substring(0, 1900);
+		}
+//		doc = "";
+		setPropertyString(WFLogDesc.FLD_DOC_ZIP, doc);
 	}
 
 	public String getDocZip(){
