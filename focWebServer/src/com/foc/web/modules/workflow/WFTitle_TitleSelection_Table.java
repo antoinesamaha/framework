@@ -52,7 +52,7 @@ public class WFTitle_TitleSelection_Table extends FocXMLLayout {
 	}
 	
 	public void insertRowsAfterTitleSelection(){
-		for(int i=0;i<getSelectedSiteList().size();i++){
+		for(int i=0; i<getSelectedSiteList().size(); i++){
 			WFSite site = getSelectedSiteList().get(i);
 			WFOperator operator = (WFOperator) site.getOperatorList().newEmptyItem();
 			for(int j=0;j<getSelectedTitle().size();j++){
@@ -61,13 +61,16 @@ public class WFTitle_TitleSelection_Table extends FocXMLLayout {
 			operator.setUser(getUser());
 			site.getOperatorList().add(operator);
 			operator.validate(true);
+			site.validate(true);
 		}
 	}
 	
 	@Override
 	public boolean validationCheckData(FVValidationLayout validationLayout) {
 		boolean error = super.validationCheckData(validationLayout);
-		insertRowsAfterTitleSelection();
+		if(!error) {
+			insertRowsAfterTitleSelection();
+		}
 		return error;
 	}
 	
