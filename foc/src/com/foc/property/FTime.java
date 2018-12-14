@@ -48,10 +48,10 @@ public class FTime extends FProperty {
     }
   }
   
-  public String convertTimeToSQLString(java.util.Date date){
+  public static String convertTimeToSQLString(int provider, java.util.Date date){
     String str = null;
     if (sqlTimeFormat == null) {
-      if (getProvider() == DBManager.PROVIDER_ORACLE){
+      if (provider == DBManager.PROVIDER_ORACLE){
         str = "01-JAN-1970 ";
         sqlTimeFormat = new SimpleDateFormat("dd-MMM-yyyy H:m:ss");
       }else{
@@ -61,14 +61,18 @@ public class FTime extends FProperty {
     }
     str = date != null ? sqlTimeFormat.format(date) : sqlTimeFormat.format(getZeroTime());
     
-  	if(getProvider() == DBManager.PROVIDER_MSSQL){
+  	if(provider == DBManager.PROVIDER_MSSQL){
   		str = "CAST(N'"+str+"' AS Time)";
   	}
     
     return str;
   }
   
-  private static SimpleDateFormat getTimeFormat(){
+  public String convertTimeToSQLString(java.util.Date date){
+  	return convertTimeToSQLString(getProvider(), date);
+  }
+  
+  public static SimpleDateFormat getTimeFormat(){
     if (timeFormat == null) {
       timeFormat = new SimpleDateFormat("HH:mm");
     }
