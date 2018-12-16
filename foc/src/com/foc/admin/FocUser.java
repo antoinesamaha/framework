@@ -53,6 +53,7 @@ import com.foc.tree.FNode;
 import com.foc.tree.TreeScanner;
 import com.foc.util.ASCII;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -896,21 +897,28 @@ public class FocUser extends FocObject {
 			
 			WFSiteTree areaTree = WFSiteTree.newInstance();
 			
-			//We scan the saved Operators list. 
-			//Then for each operator that matches the user 
-			//1- We add its 
-			FocList operatorList = WFOperatorDesc.getList(FocList.FORCE_RELOAD);
-			for(int i=0; i<operatorList.size(); i++){
-				WFOperator operator = (WFOperator) operatorList.getFocObject(i);
-				if(operator != null && operator.getUser() != null && operator.getUser().getName().equals(Globals.getApp().getUser_ForThisSession().getName())){
-					FNode areaNode = areaTree.findNode(operator.getArea().getReference().getInteger());
-					if(areaNode != null){
-						//Scan the are node tree and copies of this operator with these areas
-						areaNode.scan(new AreaOperatorTreeScanner(operator));
+			String sessionUsername = (Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null) ? Globals.getApp().getUser_ForThisSession().getName() : null;
+			if(areaTree != null && !Utils.isStringEmpty(sessionUsername)) {
+				//We scan the saved Operators list. 
+				//Then for each operator that matches the user 
+				//1- We add its 
+				FocList operatorList = WFOperatorDesc.getList(FocList.FORCE_RELOAD);
+				for(int i=0; i<operatorList.size(); i++){
+					WFOperator operator = (WFOperator) operatorList.getFocObject(i);
+					if(			operator != null
+							&& 	operator.getUser() != null
+							&&  operator.getUser().getName() != null
+							&&  operator.getUser().getName().equals(sessionUsername)
+							&&  operator.getArea() != null
+							&&  operator.getArea().getReference() != null){
+						FNode areaNode = areaTree.findNode(operator.getArea().getReference().getInteger());
+						if(areaNode != null){
+							//Scan the are node tree and copies of this operator with these areas
+							areaNode.scan(new AreaOperatorTreeScanner(operator));
+						}
 					}
 				}
 			}
-			
 		}		
 		return operatorsArrayForThisUser_AllAreas;
 	}

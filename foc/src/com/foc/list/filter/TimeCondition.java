@@ -9,13 +9,13 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.sql.Date;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 
 import com.foc.ConfigInfo;
-import com.foc.Globals;
 import com.foc.db.DBManager;
-import com.foc.desc.*;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FMultipleChoiceField;
@@ -23,46 +23,46 @@ import com.foc.desc.field.FTimeField;
 import com.foc.gui.FGComboBox;
 import com.foc.gui.FGLabel;
 import com.foc.gui.FPanel;
-import com.foc.property.FDate;
 import com.foc.property.FInt;
 import com.foc.property.FMultipleChoice;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
+import com.foc.property.FTime;
 
 /**
  * @author 01Barmaja
  */
 public class TimeCondition extends FilterCondition {
-  private static final int FLD_FIRST_DATE = 1;
-  private static final int FLD_LAST_DATE = 2;
+  private static final int FLD_FIRST_TIME = 1;
+  private static final int FLD_LAST_TIME = 2;
   private static final int FLD_OPERATOR = 3;
 
   //Make the constansts public and add operator_equals
   /*private static final int OPERATOR_BETWEEN = 0;
   private static final int OPERATOR_GREATER_THAN = 1;
   private static final int OPERATOR_LESS_THAN = 2;*/
-  public static final int OPERATOR_BETWEEN = 0;
-  public static final int OPERATOR_GREATER_THAN = 1;
-  public static final int OPERATOR_LESS_THAN = 2;
-  public static final int OPERATOR_EQUALS = 3;
-  public static final int OPERATOR_INDIFERENT= 4;
+  public static final int OPERATOR_INDIFERENT= 0;
+  public static final int OPERATOR_EQUALS = 1;
+  public static final int OPERATOR_GREATER_THAN = 2;
+  public static final int OPERATOR_BETWEEN = 3;
+  public static final int OPERATOR_LESS_THAN = 4;
   
-  public TimeCondition(FFieldPath dateFieldPath, String fieldPrefix){
-    super(dateFieldPath, fieldPrefix);
+  public TimeCondition(FFieldPath timeFieldPath, String fieldPrefix){
+    super(timeFieldPath, fieldPrefix);
   }
   
   public TimeCondition(int fieldID){
   	super(fieldID);
   }
 
-  public java.sql.Date getFirstDate(FocListFilter filter){
-    FDate prop = (FDate) filter.getFocProperty(getFirstFieldID() + FLD_FIRST_DATE);
-    return prop.getDate();
+  public java.sql.Time getFirstTime(FocListFilter filter){
+    FTime prop = (FTime) filter.getFocProperty(getFirstFieldID() + FLD_FIRST_TIME);
+    return prop.getTime();
   }
 
-  public java.sql.Date getLastDate(FocListFilter filter){
-    FDate prop = (FDate) filter.getFocProperty(getFirstFieldID() + FLD_LAST_DATE);
-    return prop.getDate();
+  public java.sql.Time getLastTime(FocListFilter filter){
+    FTime prop = (FTime) filter.getFocProperty(getFirstFieldID() + FLD_LAST_TIME);
+    return prop.getTime();
   }
 
   public int getOperator(FocListFilter filter){
@@ -77,17 +77,17 @@ public class TimeCondition extends FilterCondition {
     }
   }
   
-  public void setFirstDate(FocListFilter filter ,Date d){
-    FDate date = (FDate)filter.getFocProperty(getFirstFieldID() + FLD_FIRST_DATE);
-    if (date != null){
-      date.setDate(d);
+  public void setFirstTime(FocListFilter filter ,Time d){
+    FTime timeProp = (FTime)filter.getFocProperty(getFirstFieldID() + FLD_FIRST_TIME);
+    if (timeProp != null){
+      timeProp.setTime(d);
     }
   }
   
-  public void setLastDate(FocListFilter filter ,Date d){
-    FDate date = (FDate)filter.getFocProperty(getFirstFieldID() + FLD_LAST_DATE);
-    if (date != null){
-      date.setDate(d);
+  public void setLastTime(FocListFilter filter ,Time d){
+    FTime timeProp = (FTime)filter.getFocProperty(getFirstFieldID() + FLD_LAST_TIME);
+    if (timeProp != null){
+      timeProp.setTime(d);
     }
   }
   
@@ -99,38 +99,38 @@ public class TimeCondition extends FilterCondition {
   
   public void fillProperties(FocObject focFatherObject){
   	new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_OPERATOR, OPERATOR_GREATER_THAN);
-    new FDate(focFatherObject, getFirstFieldID() + FLD_FIRST_DATE, new Date(0));
-    new FDate(focFatherObject, getFirstFieldID() + FLD_LAST_DATE, new Date(0));
+    new FTime(focFatherObject, getFirstFieldID() + FLD_FIRST_TIME, FTime.getZeroTime_Copy());
+    new FTime(focFatherObject, getFirstFieldID() + FLD_LAST_TIME, FTime.getZeroTime_Copy());
   }
   
 	@Override
 	public void copyCondition(FocObject tarObject, FocObject srcObject, FilterCondition srcCondition) {
 	  copyProperty(tarObject, getFirstFieldID() + FLD_OPERATOR  , srcObject, srcCondition.getFirstFieldID() + FLD_OPERATOR);
-	  copyProperty(tarObject, getFirstFieldID() + FLD_FIRST_DATE, srcObject, srcCondition.getFirstFieldID() + FLD_FIRST_DATE);
-	  copyProperty(tarObject, getFirstFieldID() + FLD_LAST_DATE , srcObject, srcCondition.getFirstFieldID() + FLD_LAST_DATE);
+	  copyProperty(tarObject, getFirstFieldID() + FLD_FIRST_TIME, srcObject, srcCondition.getFirstFieldID() + FLD_FIRST_TIME);
+	  copyProperty(tarObject, getFirstFieldID() + FLD_LAST_TIME , srcObject, srcCondition.getFirstFieldID() + FLD_LAST_TIME);
 	}
 
   public boolean includeObject(FocListFilter filter, FocObject object){
     boolean include = true;
     
-    FDate dateProp = (FDate) getFieldPath().getPropertyFromObject(object);
-    Date date = dateProp.getDate(); 
-    Date firstDate = getFirstDate(filter);
-    Date lastDate = getLastDate(filter);
+    FTime timeProp = (FTime) getFieldPath().getPropertyFromObject(object);
+    Time time = timeProp.getTime(); 
+    Time firstTime = getFirstTime(filter);
+    Time lastTime = getLastTime(filter);
     
     int op = getOperator(filter);
     
     if(op != OPERATOR_INDIFERENT){
-      if(!FDate.isEmpty(firstDate) && (op == OPERATOR_BETWEEN || op == OPERATOR_GREATER_THAN)){
-        include = date.after(firstDate) || date.equals(firstDate);
+      if(!FTime.isEmpty(firstTime) && (op == OPERATOR_BETWEEN || op == OPERATOR_GREATER_THAN)){
+        include = time.after(firstTime) || time.equals(firstTime);
       }
   
-      if(include && !FDate.isEmpty(lastDate) && (op == OPERATOR_BETWEEN || op == OPERATOR_LESS_THAN)){
-        include = date.before(lastDate) || date.equals(lastDate);
+      if(include && !FTime.isEmpty(lastTime) && (op == OPERATOR_BETWEEN || op == OPERATOR_LESS_THAN)){
+        include = time.before(lastTime) || time.equals(lastTime);
       }
 
-      if(include && !FDate.isEmpty(firstDate) && (op == OPERATOR_EQUALS)){
-        include = date.equals(firstDate);
+      if(include && !FTime.isEmpty(firstTime) && (op == OPERATOR_EQUALS)){
+        include = time.equals(firstTime);
       }
     }
     
@@ -140,93 +140,44 @@ public class TimeCondition extends FilterCondition {
   @Override
   public void forceFocObjectToConditionValueIfNeeded(FocListFilter filter, FocObject focObject) {
     if(getOperator(filter) == OPERATOR_EQUALS){
-      FDate fDate = (FDate) getFieldPath().getPropertyFromObject(focObject);
-      if(fDate != null){
-        fDate.setDate(getFirstDate(filter));
+      FTime fTimeProp = (FTime) getFieldPath().getPropertyFromObject(focObject);
+      if(fTimeProp != null){
+        fTimeProp.setTime(getFirstTime(filter));
       }
     }
   }
 
-  public static int adjustTheOperation(int op, Date firstDate, Date lastDate) {
-    if (op != OPERATOR_INDIFERENT){
-    	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
-    	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
-	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
-	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
-    }
-    return op;
-  }
-  
-  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) {
-    //b01.foc.Globals.logString("Condition sql build not implemented yet");
+  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Time firstTime, Time lastTime) {
     StringBuffer buffer = null;
-    //Date firstDate = getFirstDate(filter);
-    //Date lastDate = getLastDate(filter);
-    //int op = getOperator(filter);
     
     buffer = new StringBuffer();
     
-//    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy");
-//    if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
-//    	
-//    }
-    String firstDateFormat = "";
-    String lastDateFormat = "";
-    if (provider == DBManager.PROVIDER_ORACLE){
-    	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-      firstDateFormat = dateFormat.format(firstDate);
-      lastDateFormat = dateFormat.format(lastDate);
-    }else{
-      firstDateFormat = String.valueOf(firstDate);
-      lastDateFormat = String.valueOf(lastDate);
-    }
-    
-    op = adjustTheOperation(op, firstDate, lastDate); 
+    String firstDateFormat = FTime.convertTimeToSQLString(provider, firstTime);
+    String lastDateFormat = FTime.convertTimeToSQLString(provider, lastTime);
     
     if (op != OPERATOR_INDIFERENT){
 	    fieldName = FField.adaptFieldNameToProvider(provider, fieldName);
-	    
-	    if(provider == DBManager.PROVIDER_MSSQL){
+
+	    if(provider == DBManager.PROVIDER_ORACLE) {
+	      if (op == OPERATOR_GREATER_THAN){ 
+	        buffer.append(fieldName + ">= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
+	      }else if (op == OPERATOR_LESS_THAN) {
+	      	 buffer.append(fieldName + "<= TO_DATE('" + lastDateFormat +"', 'dd-MM-yyyy HH24:MI:SS')");
+	      }else if (op == OPERATOR_BETWEEN){
+	      	buffer.append(fieldName + ">= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS') AND "+fieldName + "<= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
+	      }else if (op == OPERATOR_EQUALS){
+	      	buffer.append(fieldName + " =  TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
+	      }
+	    } else {
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
-	        buffer.append(fieldName + ">= CAST(N'" + firstDateFormat + "' AS Date)");
+	        buffer.append(fieldName + ">= " + firstDateFormat);
 	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append(fieldName + "<= CAST(N'" + lastDateFormat + "' AS Date)");
+	        buffer.append(fieldName + "<= " + lastDateFormat);
 	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append(fieldName + " BETWEEN CAST(N'" + firstDateFormat + "' AS Date) AND CAST(N'" + lastDateFormat + "' AS Date)" );
+	        buffer.append(fieldName + " BETWEEN "+ firstDateFormat +" AND " + lastDateFormat);
 	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append(fieldName + " = CAST(N'" + firstDateFormat + "' AS Date)");
-	      }
-	    }else if(provider == DBManager.PROVIDER_ORACLE){
-//	    	fieldName = "\""+fieldName+"\"";
-	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
-	        buffer.append("TRUNC(" + fieldName + ") >= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
-	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append("TRUNC(" + fieldName + ") <= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')");
-	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append("TRUNC(" + fieldName + ") >= TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy') AND "+fieldName + "<= TO_DATE('" + lastDateFormat + "', 'dd-MM-yyyy')" );
-	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append("TRUNC(" + fieldName + ") = TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
-	      }
-	    }else if(provider == DBManager.PROVIDER_H2){
-	      if (op == OPERATOR_GREATER_THAN){
-	        buffer.append(fieldName + ">= '" + firstDateFormat + "'");
-	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append(fieldName + "<= '" + lastDateFormat + "'");
-	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append(fieldName + " BETWEEN '" + firstDateFormat + "' AND '" + lastDateFormat + "'" );
-	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append(fieldName + " = '" + firstDateFormat + "'");
-	      }
-	    }else{
-	      if (op == OPERATOR_GREATER_THAN){
-	        buffer.append(fieldName + ">= \"" + firstDateFormat + "\"");
-	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append(fieldName + "<= \"" + lastDateFormat + "\"");
-	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append(fieldName + " BETWEEN \"" + firstDateFormat + " \" AND \"" + lastDateFormat + "\"" );
-	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append(fieldName + " = \"" + firstDateFormat + "\"");
-	      }
+	        buffer.append(fieldName + " = " + firstDateFormat);
+	      }	    	
 	    }
     }
     return buffer;
@@ -234,7 +185,7 @@ public class TimeCondition extends FilterCondition {
   
   public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
-  	return buildSQLWhere(getProvider(), fieldName, getOperator(filter), getFirstDate(filter), getLastDate(filter));
+  	return buildSQLWhere(getProvider(), fieldName, getOperator(filter), getFirstTime(filter), getLastTime(filter));
   }
   
   public void setToOperationWithLock(FocListFilter filter, int operation, boolean lock){
@@ -243,43 +194,41 @@ public class TimeCondition extends FilterCondition {
     prop.setValueLocked(lock);
   }
   
-  public void setToValue(FocListFilter filter, int operation, Date firstDate, Date lastDate){
-  	setToValue(filter, operation, firstDate, lastDate, false);
+  public void setToValue(FocListFilter filter, int operation, Time firstTime, Time lastTime){
+  	setToValue(filter, operation, firstTime, lastTime, false);
   }
   
-  public void forceToValue(FocListFilter filter, int operation, Date firstDate, Date lastDate){
-  	setToValue(filter, operation, firstDate, lastDate, true);
+  public void forceToValue(FocListFilter filter, int operation, Time firstTime, Time lastTime){
+  	setToValue(filter, operation, firstTime, lastTime, true);
   }
   
-  private void setToValue(FocListFilter filter, int operation, Date firstDate, Date lastDate, boolean lockConditionAlso){
+  private void setToValue(FocListFilter filter, int operation, Time firstTime, Time lastTime, boolean lockConditionAlso){
   	FProperty operatorprop = filter.getFocProperty(getFirstFieldID() + FLD_OPERATOR);
   	operatorprop.setInteger(operation);
   	if(lockConditionAlso){
   		operatorprop.setValueLocked(true);
   	}
   	
-  	FDate dateCond = null;
+  	FTime timeCond = null;
   	
-  	if(firstDate != null){
-	  	dateCond = (FDate) filter.getFocProperty(getFirstFieldID() + FLD_FIRST_DATE);
-	  	dateCond.setDate(firstDate);
+  	if(firstTime != null){
+	  	timeCond = (FTime) filter.getFocProperty(getFirstFieldID() + FLD_FIRST_TIME);
+	  	timeCond.setTime(firstTime);
 	  	if(lockConditionAlso){
-	  		dateCond.setValueLocked(true);
+	  		timeCond.setValueLocked(true);
 	  	}
   	}
 
-  	if(lastDate != null){
-	  	dateCond = (FDate) filter.getFocProperty(getFirstFieldID() + FLD_LAST_DATE);
-	  	dateCond.setDate(lastDate);
+  	if(lastTime != null){
+	  	timeCond = (FTime) filter.getFocProperty(getFirstFieldID() + FLD_LAST_TIME);
+	  	timeCond.setTime(lastTime);
 	  	if(lockConditionAlso){
-	  		dateCond.setValueLocked(true);
+	  		timeCond.setValueLocked(true);
 	  	}
   	}
   }
 
   public int fillDesc(FocDesc focDesc, int firstID){
-  	int nextIdx = firstID;
-  	
     setFirstFieldID(firstID);
     
     if(focDesc != null){
@@ -302,23 +251,23 @@ public class TimeCondition extends FilterCondition {
       focDesc.addField(multipleChoice);
       multipleChoice.addListener(colorListener);
 
-      int firstDateFLD = firstID + FLD_FIRST_DATE;
-      FTimeField dateField = new FTimeField(getFieldPrefix()+"_FTIME", "First time", firstDateFLD, false);
+      int firstTimeFLD = firstID + FLD_FIRST_TIME;
+      FTimeField dateField = new FTimeField(getFieldPrefix()+"_FTIME", "First time", firstTimeFLD, false);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
       
-      int lastDateFLD = firstID + FLD_LAST_DATE;
-      dateField = new FTimeField(getFieldPrefix()+"_LTIME", "Last time", lastDateFLD, false);
+      int lastTimeFLD = firstID + FLD_LAST_TIME;
+      dateField = new FTimeField(getFieldPrefix()+"_LTIME", "Last time", lastTimeFLD, false);
       focDesc.addField(dateField);
       dateField.addListener(colorListener);
     }
     
-    return nextIdx;//firstID + FLD_OPERATOR + 1;
+    return firstID + FLD_OPERATOR + 1;
   }
 
   FGComboBox combo = null;
-  Component firstDateComp = null;
-  Component lastDateComp = null;
+  Component firstTimeComp = null;
+  Component lastTimeComp = null;
   FGLabel flecheComp = null;
   
   /* (non-Javadoc)
@@ -328,22 +277,22 @@ public class TimeCondition extends FilterCondition {
     GuiSpace space = new GuiSpace();
     
     FProperty operatorProp = filter.getFocProperty(getFirstFieldID() + FLD_OPERATOR);
-    FProperty firstDateProp = filter.getFocProperty(getFirstFieldID() + FLD_FIRST_DATE);
-    FProperty lastDateProp = filter.getFocProperty(getFirstFieldID() + FLD_LAST_DATE);
+    FProperty firstDateProp = filter.getFocProperty(getFirstFieldID() + FLD_FIRST_TIME);
+    FProperty lastDateProp = filter.getFocProperty(getFirstFieldID() + FLD_LAST_TIME);
    
     FPanel datesPanel = new FPanel();
     
     combo = (FGComboBox) operatorProp.getGuiComponent();
     panel.add(getFieldLabel(), combo, x, y);
     
-    firstDateComp = firstDateProp.getGuiComponent();
-    datesPanel.add(firstDateComp, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    firstTimeComp = firstDateProp.getGuiComponent();
+    datesPanel.add(firstTimeComp, 0, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
 
     flecheComp = new FGLabel("->");
     datesPanel.add(flecheComp, 1, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     
-    lastDateComp = lastDateProp.getGuiComponent();
-    datesPanel.add(lastDateComp, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
+    lastTimeComp = lastDateProp.getGuiComponent();
+    datesPanel.add(lastTimeComp, 2, 0, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     
     panel.add(datesPanel, x+2, y, 1, 1, GridBagConstraints.WEST, GridBagConstraints.NONE);
     
@@ -352,28 +301,28 @@ public class TimeCondition extends FilterCondition {
     ItemListener itemListener = new ItemListener(){
       public void itemStateChanged(ItemEvent e) {
         if(e == null || e.getStateChange() == ItemEvent.SELECTED){
-          firstDateComp.setVisible(true);
-          lastDateComp.setVisible(true);
+          firstTimeComp.setVisible(true);
+          lastTimeComp.setVisible(true);
           flecheComp.setVisible(true);
-          firstDateComp.setVisible(false);
-          lastDateComp.setVisible(false);
+          firstTimeComp.setVisible(false);
+          lastTimeComp.setVisible(false);
           flecheComp.setVisible(false);
           
           switch(combo.getSelectedIndex()){
           case OPERATOR_BETWEEN:
-            firstDateComp.setVisible(true);
-            lastDateComp.setVisible(true);
+            firstTimeComp.setVisible(true);
+            lastTimeComp.setVisible(true);
             flecheComp.setVisible(true);
             break;
           case OPERATOR_GREATER_THAN:           
-            firstDateComp.setVisible(true);
+            firstTimeComp.setVisible(true);
             
             break;
           case OPERATOR_LESS_THAN:            
-            lastDateComp.setVisible(true);            
+            lastTimeComp.setVisible(true);            
             break;
           case OPERATOR_EQUALS:
-            firstDateComp.setVisible(true);
+            firstTimeComp.setVisible(true);
             break;
           }
         }
@@ -396,7 +345,7 @@ public class TimeCondition extends FilterCondition {
   } 
   
   public void resetToDefaultValue(FocListFilter filter){
-  	Date date = new Date(0);
+  	Time date = FTime.getZeroTime_Copy();
   	setToValue(filter, OPERATOR_GREATER_THAN, date, date);
   }
   
@@ -405,16 +354,16 @@ public class TimeCondition extends FilterCondition {
   	String description = null;
   	
   	int op = getOperator(filter);
-  	Date firstDate = getFirstDate(filter);
-  	Date lastDate = getLastDate(filter);
+  	Time firstTime = getFirstTime(filter);
+  	Time lastTime = getLastTime(filter);
   	
-  	op = adjustTheOperation(op, firstDate, lastDate);
+//  	op = adjustTheOperation(op, firstDate, lastDate);
   	if (op != OPERATOR_INDIFERENT){
   		String fieldName = getFieldLabel();
   		
-      SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-      String firstDateFormat = dateFormat.format(firstDate);
-      String lastDateFormat = dateFormat.format(lastDate);
+  		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+      String firstDateFormat = dateFormat.format(firstTime);
+      String lastDateFormat = dateFormat.format(lastTime);
   		
       switch(op){
       case OPERATOR_EQUALS:

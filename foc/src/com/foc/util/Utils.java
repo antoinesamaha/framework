@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
@@ -267,10 +268,15 @@ public class Utils {
 		
 		if(in != null) {
 			try{
+//				byte[] content = compressByteArray(in.getBytes("UTF-8"));
+//				out = new String(content, "ISO-8859-1");
+
 				byte[] content = compressByteArray(in.getBytes("UTF-8"));
-				out = new String(content, "UTF-8");
+				byte[] base64Encoded = Base64.getEncoder().encode(content);
+				out = new String(base64Encoded, "ISO-8859-1");
+				
 			}catch (Exception e){
-				Globals.logException(e);
+				Globals.logExceptionWithoutPopup(e);
 			}
 		}
 		
@@ -281,10 +287,16 @@ public class Utils {
 		String unzipped = "";
     if(zipped != null) {
     	try {
-		    byte[] decom = decompressByteArray(zipped.getBytes("UTF-8"));
-		    unzipped = new String(decom, "UTF-8");
+    		if(!Utils.isStringEmpty(zipped)){
+	    		byte[] encodedBytes = zipped.getBytes("ISO-8859-1");
+	    		byte[] bytes = Base64.getDecoder().decode(encodedBytes);
+	    		byte[] decom = decompressByteArray(bytes);
+	    		unzipped = new String(decom, "UTF-8");
+	//		    byte[] decom = decompressByteArray(zipped.getBytes("ISO-8859-1"));
+	//		    unzipped = new String(decom, "UTF-8");
+    		}
 			}catch (Exception e){
-				Globals.logException(e);
+				Globals.logExceptionWithoutPopup(e);
     	}
     }
     		
@@ -312,6 +324,9 @@ public class Utils {
 		in="{\"REF\":\"4048\",\"SITE\":\"التفتيش المركزي\",\"STATUS\":\"Proposal\",\"CREATTION_DATE\":\"10/09/2018 15:01\",\"VALIDATION_DATE\":\"\",\"CLOSURE_DATE\":\"\",\"CREATION_USER\":\"01BARMAJA\",\"LAST_MODIF_DATE\":\"\",\"LAST_MODIF_USER\":\"0\",\"WF_CURRENT_STAGE\":\"0\",\"WF_CANCELED\":\"0\",\"WF_CANCEL_REASON\":\"\",\"WF_LAST_COMMENT\":\"\",\"WF_COMMENT\":\"\",\"TITLE_1\":\"0\",\"TITLE_2\":\"0\",\"TITLE_3\":\"0\",\"WF_HIDE_1\":\"0\",\"WF_HIDE_2\":\"0\",\"WF_HIDE_3\":\"0\",\"ALL_SIGNATURES\":\"\",\"SIMULATION\":\"0\",\"CODE\":\"01051\",\"DATE\":\"10/09/2018\",\"EXTERNAL_CODE\":\"\",\"ACCUSATION\":\"0\",\"ACCUSATION_DESCRIPTION\":\"NEW FROM MINISTRY\",\"ACCUSATION_SUMMARY\":\"\",\"COMPLAINT_SOURCE\":\"0\",\"COMPLAINT_PURPOSE\":\"\",\"VIOLATION_DATE\":\"\",\"VIOLATION_TIME\":\"00:00\",\"VIOLATION_ADDRESS\":\"\",\"HUMAN_RIGHTS\":\"0\",\"HRIGHTS\":\"\",\"INVESTIGATOR\":\"0\",\"ComplaintStatus\":\"قيد التحقيق\",{\"REF\":\"-1\",\"ORDER_FLD\":\"1\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-2\",\"ORDER_FLD\":\"2\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-3\",\"ORDER_FLD\":\"3\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-4\",\"ORDER_FLD\":\"4\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-5\",\"ORDER_FLD\":\"5\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-6\",\"ORDER_FLD\":\"6\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-7\",\"ORDER_FLD\":\"7\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-8\",\"ORDER_FLD\":\"8\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"},{\"REF\":\"-9\",\"ORDER_FLD\":\"9\",\"COMPLAINT\":\"\",\"FROM_FACILITY\":\"\",\"TO_FACILITY\":\"\",\"REFERRAL_NUMBER\":\"\",\"REFERRAL_DATE\":\"\"}}";
 		
 		try {
+			String compressed = compressString(in);
+			String deCompressed = decompressString(compressed);
+			
 			byte[] inBytes = in.getBytes("UTF-8");
 			byte[] compressedBytes = compressByteArray(inBytes);
 			byte[] outBytes = decompressByteArray(compressedBytes);

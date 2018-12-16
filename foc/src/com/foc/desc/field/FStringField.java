@@ -29,6 +29,7 @@ public class FStringField extends FField {
   private boolean capital    = false;
   private boolean multiline  = false;
   private int     columns    = 0;  
+  private boolean compress   = false;
   
   public FStringField(String name, String title, int id, boolean key, int size) {
     super(name, title, id, key, size, 0);
@@ -183,6 +184,14 @@ public class FStringField extends FField {
 
 	public void setColumns(int columns) {
 		this.columns = columns;
+	}
+
+	public boolean isCompress() {
+		return compress;
+	}
+
+	public void setCompress(boolean compress) {
+		this.compress = compress;
 	}
   
   /*private boolean displayEmptyValues = true;

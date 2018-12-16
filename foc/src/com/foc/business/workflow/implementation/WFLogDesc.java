@@ -58,7 +58,7 @@ public class WFLogDesc extends FocDesc {
 	public static final int LEN_FLD_CHANGES      = 10000;
 //	public static final int LEN_FLD_CHANGES      =  4000;
 	public static final int LEN_FLD_ZIPPED_DOC   =  20000;
-	public static final int LEN_STATUS_ERROR     =  1000;
+	public static final int LEN_STATUS_ERROR     =  4000;
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
@@ -146,10 +146,12 @@ public class WFLogDesc extends FocDesc {
     addField(chfld);
 
 		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, LEN_FLD_CHANGES);
+		chfld.setCompress(true);
     addField(chfld);
     
     FStringField zipfld = new FStringField("DocZip", "Document Zipped", FLD_DOC_ZIP, false, LEN_FLD_ZIPPED_DOC);
     zipfld.setAllwaysLocked(true);
+    zipfld.setCompress(true);
     addField(zipfld);
 
     FIntField verfld = new FIntField("DocVersion", "Document version", FLD_DOC_VERSION, false, 10);

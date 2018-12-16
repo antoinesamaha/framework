@@ -13,6 +13,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.log.FocLogEvent;
 import com.foc.property.FObject;
+import com.foc.property.FString;
 import com.foc.util.Utils;
 
 public class WFLog extends FocObject implements FocLogEvent {
@@ -115,8 +116,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 	}
 	
 	public void setChanges(String changes){
-		if(changes.length()>1900) {
-			changes = changes.substring(0, 1900);
+		if(changes != null) {
+			String changesZipped = Utils.compressString(changes);
+			if(changesZipped.length()>3999) {
+				changes = changes.substring(0, 1900);
+			}
 		}
 		setPropertyString(WFLogDesc.FLD_CHANGES, changes);
 	}
@@ -125,16 +129,28 @@ public class WFLog extends FocObject implements FocLogEvent {
 		return getPropertyString(WFLogDesc.FLD_CHANGES);
 	}
 	
+	public String getChangesCompressed(){
+		FString prop = (FString) getFocProperty(WFLogDesc.FLD_CHANGES);
+		return prop != null ? prop.getStringCompressed() : null;
+	}
+	
 	public void setDocZip(String doc){
-		if(doc.length()>1900) {
-			doc = doc.substring(0, 1900);
+		if(doc != null) {
+			String zippedDoc = Utils.compressString(doc);
+			if(zippedDoc.length() > 3999) {
+				doc = doc.substring(0, 1900);
+			}
 		}
-//		doc = "";
 		setPropertyString(WFLogDesc.FLD_DOC_ZIP, doc);
 	}
 
 	public String getDocZip(){
 		return getPropertyString(WFLogDesc.FLD_DOC_ZIP);
+	}
+	
+	public String getDocZipCompressed(){
+		FString prop = (FString) getFocProperty(WFLogDesc.FLD_DOC_ZIP);
+		return prop != null ? prop.getStringCompressed() : null;
 	}
 	
 	public void setDocVersion(int changes){
@@ -263,6 +279,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 	}
 	
 	@Override
+	public String logEvent_GetChangesCompressed() {
+		return getChangesCompressed();
+	}
+	
+	@Override
 	public long logEvent_GetLogEventReference() {
 		return getReferenceInt();
 	}
@@ -275,6 +296,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 	@Override
 	public String logEvent_GetDocumentZipped() {
 		return getDocZip();
+	}
+	
+	@Override
+	public String logEvent_GetDocumentZippedCompressed() {
+		return getDocZipCompressed();
 	}
 
 	@Override

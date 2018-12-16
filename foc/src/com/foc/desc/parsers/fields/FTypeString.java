@@ -15,10 +15,10 @@ public class FTypeString extends FocFieldTypAbstract<FocString> {
 
 	@Override
 	public FField newFField(Class focObjClass, Field f, FocString a) {
-		FField focField = null;
-		focField = new FStringField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
+		FStringField focField = new FStringField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
+		focField.setCompress(a.compress());
 		return focField;
 	}
 

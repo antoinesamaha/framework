@@ -2162,8 +2162,8 @@ public class Application {
 			if(logFocDesc == null) {
 				error = true;
 			}else {
-				if(statusCommitError.length() > WFLogDesc.LEN_STATUS_ERROR-10) {
-					statusCommitError = statusCommitError.substring(0, WFLogDesc.LEN_STATUS_ERROR - 10);
+				if(statusCommitError.length() > (WFLogDesc.LEN_STATUS_ERROR/2)) {
+					statusCommitError = statusCommitError.substring(0, (WFLogDesc.LEN_STATUS_ERROR/2));
 				}
 				
 				StringBuffer buffer = null;

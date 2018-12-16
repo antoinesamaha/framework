@@ -12,4 +12,5 @@ public @interface FocString {
 	public int size() default 50;
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
+	public boolean compress() default false;
 }
