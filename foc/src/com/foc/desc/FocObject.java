@@ -1640,9 +1640,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return this;
   }
 
-  /**
-   * @return
-   */
   public FocDesc getThisFocDesc() {
   	return thisFocDesc;
   }
@@ -1673,9 +1670,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return new FocFieldEnum(this.getThisFocDesc(), this, category, level);
   }
 
-  /**
-   * @return
-   */
   public FocObject getMasterObject() {
     return masterObject;
   }
@@ -2894,9 +2888,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     fireEvent(FocEvent.ID_BACKUP);
   }
 
-  /**
-   * @return
-   */
   public boolean isLoadedFromDB() {
   	return (flags & FLG_LOADED_FROM_DB) != 0;  	
   }
@@ -4417,8 +4408,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	/**
 	 * 
 	 * @return  0 if the transaction stage is equal to stage
-	 *          1 if the transaction stage is > stage
-	 *         -1 if the transaction stage is < stage
+	 *          1 if the transaction stage is greater than stage
+	 *         -1 if the transaction stage is less then stage
 	 */
 	public int workflow_CompareStages(WFStage stage){
 		int compare = -1;

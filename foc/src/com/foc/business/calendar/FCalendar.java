@@ -1025,9 +1025,11 @@ public class FCalendar extends FocObject {
 
 	/**
 	 * 
-	 * @param date1
+	 * @param date1 
+	 * 				first date
 	 * @param date2
-	 * @return ArrayList<Long> each couple of elements are a start and an end of a working period
+	 * 				second date
+	 * @return ArrayList of Long each couple of elements are a start and an end of a working period
 	 * 
 	 */
 	public ArrayList<Long> getArrayOfWorkingTimesBetweenDates(Date date1, Date date2){
