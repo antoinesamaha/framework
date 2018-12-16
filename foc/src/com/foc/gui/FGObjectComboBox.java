@@ -34,9 +34,6 @@ public class FGObjectComboBox extends FGAbstractComboBox {
   private boolean    isTableRenderer = false;
   //public static final String NONE_CHOICE = "-- NONE --";
   
-  /**
-   * @param field
-   */
   public FGObjectComboBox(int displayField) {
     init1(displayField, false);
     init2();
@@ -62,9 +59,6 @@ public class FGObjectComboBox extends FGAbstractComboBox {
   	this(prop, displayField, false);
   }
 
-  /**
-   * @param prop
-   */
   public FGObjectComboBox(FProperty prop, int displayField, boolean browsePopup) {
     init1(displayField, browsePopup);
     init2();    

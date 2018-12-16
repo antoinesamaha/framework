@@ -21,7 +21,8 @@ public class FGButton extends JButton {
   private FTable table = null;
   
   /**
-   * @param arg0
+   * @param label
+   *        label used
    */
   public FGButton(String label) {
     super(label);
@@ -53,7 +54,8 @@ public class FGButton extends JButton {
   }
 
   /**
-   * @param arg0
+   * @param icon
+   *        Icon to be used
    */
   public FGButton(Icon icon) {
     super(icon);

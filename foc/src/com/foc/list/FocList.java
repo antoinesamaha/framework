@@ -366,7 +366,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   }
   
   /**
-   * @return
+   * @return returns the FocDesc object on the items of that list
    */
   public FocDesc getFocDesc() {
     return (focLink != null) ? focLink.getSlaveDesc() : null;
@@ -483,9 +483,6 @@ public class FocList extends AccessSubject implements IFocList, Container {
   	return getSelectionPanel(withSeletionCheckBox, viewIDForSelectionBrowse);
   }
   
-  /**
-   * @return
-   */
   public FAbstractListPanel getSelectionPanel(boolean withSeletionCheckBox, int viewIDForBrowser_Local) {
     if(selectionPanel != null){
       selectionPanel.dispose();
@@ -511,14 +508,14 @@ public class FocList extends AccessSubject implements IFocList, Container {
   }
 
   /**
-   * @return
+   * @return SQLFilter 
    */
   public SQLFilter getFilter() {
     return filter;
   }
   
   /**
-   * @return
+   * @return FocObject considered as Master Object of that list 
    */
   public FocObject getMasterObject() {
     return masterObject;
@@ -789,7 +786,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   }
 
   /**
-   * @return
+   * @return FocListOrder the list order
    */
   public FocListOrder getListOrder() {
     return listOrder;
@@ -844,7 +841,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
   /**
    * @param arg0
-   * @return
+   * @return true if contains the key
    */
   public boolean containsKey(Object arg0) {//Attention
     return (elements != null) ? elements.containsKey(arg0) : false;
@@ -1904,16 +1901,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
   	return (flags & FLG_AUTO_REFRESH) != 0;
   }
 
-  /**
-   * @return
-   */
   public boolean isDirectImpactOnDatabase() {
   	return (flags & FLG_DIRECT_IMPACT_ON_DATABASE) != 0;
   }
 
-  /**
-   * @param b
-   */
   public void setDirectImpactOnDatabase(boolean directImpactOnDatabase) {
     if(directImpactOnDatabase){
       flags = (char)(flags | FLG_DIRECT_IMPACT_ON_DATABASE);
