@@ -1452,10 +1452,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return getFocProperty_FocObject(fieldID);
   }
   
-  /**
-   * @param fieldID
-   * @return
-   */
   public FProperty getFocProperty_FocObject(int fieldID) {
     FProperty property = null;
     FField    field    = null;
@@ -1684,9 +1680,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return masterObject;
   }
 
-  /**
-   * @param object
-   */
   public void setMasterObject(FocObject object) {
     masterObject = object;
   }
@@ -2908,9 +2901,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return (flags & FLG_LOADED_FROM_DB) != 0;  	
   }
 
-  /**
-   * @param b
-   */
   public void setLoadedFromDB(boolean b) {
     if(b){
       flags = (char)(flags | FLG_LOADED_FROM_DB);
@@ -4426,7 +4416,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	
 	/**
 	 * 
-	 * @param stage
 	 * @return  0 if the transaction stage is equal to stage
 	 *          1 if the transaction stage is > stage
 	 *         -1 if the transaction stage is < stage
@@ -4658,7 +4647,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
    * </p>
    * 
    * @param id
-   *            ID of the Property to be removed
+   *         ID of the Property to be removed
    * @return <code>true</code> if the operation succeeded
    * @throws UnsupportedOperationException
    *             if the operation is not supported. <code>false</code> if not

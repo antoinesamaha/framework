@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
@@ -267,10 +268,15 @@ public class Utils {
 		
 		if(in != null) {
 			try{
+//				byte[] content = compressByteArray(in.getBytes("UTF-8"));
+//				out = new String(content, "ISO-8859-1");
+
 				byte[] content = compressByteArray(in.getBytes("UTF-8"));
-				out = new String(content, "ISO-8859-1");
+				byte[] base64Encoded = Base64.getEncoder().encode(content);
+				out = new String(base64Encoded, "ISO-8859-1");
+				
 			}catch (Exception e){
-				Globals.logException(e);
+				Globals.logExceptionWithoutPopup(e);
 			}
 		}
 		
@@ -281,10 +287,16 @@ public class Utils {
 		String unzipped = "";
     if(zipped != null) {
     	try {
-		    byte[] decom = decompressByteArray(zipped.getBytes("ISO-8859-1"));
-		    unzipped = new String(decom, "UTF-8");
+    		if(!Utils.isStringEmpty(zipped)){
+	    		byte[] encodedBytes = zipped.getBytes("ISO-8859-1");
+	    		byte[] bytes = Base64.getDecoder().decode(encodedBytes);
+	    		byte[] decom = decompressByteArray(bytes);
+	    		unzipped = new String(decom, "UTF-8");
+	//		    byte[] decom = decompressByteArray(zipped.getBytes("ISO-8859-1"));
+	//		    unzipped = new String(decom, "UTF-8");
+    		}
 			}catch (Exception e){
-				Globals.logException(e);
+				Globals.logExceptionWithoutPopup(e);
     	}
     }
     		

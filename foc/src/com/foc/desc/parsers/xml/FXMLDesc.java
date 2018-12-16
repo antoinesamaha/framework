@@ -80,6 +80,7 @@ public interface FXMLDesc {
   public static final String ATT_KEY         = "partOfKey";
   public static final String ATT_MANDATORY   = "mandatory";
   public static final String ATT_GROUPING    = "grouping";
+  public static final String ATT_COMPRESS    = "compress";
   
   //Table node attributes 
   public static final String ATT_WORKFLOW    = "workflow";

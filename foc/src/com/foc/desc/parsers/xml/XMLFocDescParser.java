@@ -229,6 +229,7 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	
     } else if (qName.equals(TAG_STRING)) {
     	fld = new FStringField(getName(att), getTitle(att), xmlFocDesc.nextFldID(), isKey(att), getSize(att));
+    	((FStringField)fld).setCompress(getBoolean(att, ATT_COMPRESS, false)); 
     	xmlFocDesc.addField(fld);
     } else if (qName.equals(TAG_BOOLEAN)) {
     	fld = new FBoolField(getName(att), getTitle(att), xmlFocDesc.nextFldID(), isKey(att));

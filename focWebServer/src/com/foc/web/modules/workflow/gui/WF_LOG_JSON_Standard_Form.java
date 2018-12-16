@@ -17,7 +17,8 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 
 		WFLog log = getWFLog();
 				
-		String val = log.getDocZip().replace("'","\"");
+		String val = log.getDocZip();//.replace("'","\"");
+		String changes = log.getChanges();
 
 //		val = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
 		try{
@@ -32,8 +33,15 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 			textArea.setHeight("200px");
 			textArea.setValue(val);
 			vLay.addComponent(textArea);
-			
-			
+
+			jsonObj = new org.json.JSONObject(changes);
+			val = jsonObj.toString(4);
+
+			textArea = new FVTextArea(null, null);
+			textArea.setWidth("100%");
+			textArea.setHeight("200px");
+			textArea.setValue(changes);
+			vLay.addComponent(textArea);			
 			
 //			FVLabel jsonTextArea = (FVLabel) getComponentByName("JSON_PRETTY");
 //	    if(jsonTextArea != null && val != null) {

@@ -10,7 +10,8 @@ import com.foc.IFocEnvironment;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
-import com.vaadin.data.Property.ValueChangeListener;
+import com.foc.desc.field.FStringField;
+import com.foc.util.Utils;
 
 /**
  * @author Standard
@@ -30,24 +31,6 @@ public class FString extends FProperty implements Cloneable{
     zClone.setString(str);
     return zClone;
   }
-  
-	@Override
-	public void addValueChangeListener(ValueChangeListener listener) {
-		if(getFocObject() != null && getFocObject().getThisFocDesc() != null && getFocObject().getThisFocDesc().getStorageName().equals("OfficialDocumentType") ){
-			int debug = 3;
-			debug++;
-		}
-		super.addValueChangeListener(listener);
-	}
-	
-	@Override
-	public void removeValueChangeListener(ValueChangeListener listener) {
-		if(getFocObject() != null && getFocObject().getThisFocDesc() != null && getFocObject().getThisFocDesc().getStorageName().equals("OfficialDocumentType") ){
-			int debug = 3;
-			debug++;
-		}		
-		super.removeValueChangeListener(listener);
-	}
   
   public boolean isEmpty(){
     return getString() == null || getString().trim().compareTo("") == 0;
@@ -107,30 +90,50 @@ public class FString extends FProperty implements Cloneable{
   
   @Override
   protected void setSqlStringInternal(String str) {
-  	str = str != null ? str.replace("''", "\"") : null;
+  	if(isCompress()) {
+  		str = Utils.decompressString(str);
+  	} else {
+  		str = (str != null) ? str.replace("''", "\"") : null;	
+  	}
     setString(str);
   }
 
+  private FStringField getStringField() {
+  	return (FStringField) getFocField();
+  }
+  
+  private boolean isCompress(){
+  	FStringField fld = getStringField();
+  	return fld != null ? fld.isCompress() : false;
+  }
+  
+  public String getStringCompressed() {
+  	String sqlStr = new String(getString() != null ? getString() : "");
+  	return sqlStr != null ? Utils.compressString(sqlStr) : null;
+  }
+  
   public String getSqlString() {
   	String sqlStr = new String(getString() != null ? getString() : "");
+  	if(isCompress()) {
+  		sqlStr = Utils.compressString(sqlStr);
+  	}
   	if(getProvider() == DBManager.PROVIDER_MSSQL){
 //  		try{
 //				sqlStr = new String(sqlStr.getBytes(), "UTF-8");
 //			}catch (UnsupportedEncodingException e){
 //				Globals.logException(e);
 //			}
-  		sqlStr = sqlStr.replace("'", "''");
+  		if(!isCompress()) sqlStr = sqlStr.replace("'", "''");
   		sqlStr = "N\'" + sqlStr + "\'";
   	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
-  		sqlStr = sqlStr.replaceAll("'", "''");
-  		sqlStr = sqlStr.replaceAll("\"", "''");
+  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
+  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
   		sqlStr = "\'" + sqlStr + "\'";
   	}else if(getProvider() == DBManager.PROVIDER_H2){
-  		sqlStr = sqlStr.replaceAll("'", "''");
-//  		sqlStr = sqlStr.replaceAll("\"", "''");
+  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
   		sqlStr = "\'" + sqlStr + "\'";
   	}else{
-  		sqlStr = sqlStr.replaceAll("\"", "''");
+  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
   		sqlStr = "\"" + sqlStr + "\"";
   	}
     return sqlStr;
