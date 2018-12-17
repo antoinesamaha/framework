@@ -164,8 +164,6 @@ public class JFreeChartWrapper_Modified extends Embedded {
 	 * commonly developer may need to fine tune the value when the
 	 * {@link JFreeChartWrapper_Modified} has a relative size.
 	 * 
-	 * @see JFreeChartWrapper_Modified#getGraphWidth()
-	 * @see #setSvgAspectRatio(String)
 	 * @param width
 	 */
 	public void setGraphWidth(int width) {
@@ -181,8 +179,6 @@ public class JFreeChartWrapper_Modified extends Embedded {
 	 * commonly developer may need to fine tune the value when the
 	 * {@link JFreeChartWrapper_Modified} has a relative size.
 	 * 
-	 * @see JFreeChartWrapper_Modified#getGraphHeigt()
-	 * @see #setSvgAspectRatio(String)
 	 * @param height
 	 */
 	public void setGraphHeight(int height) {

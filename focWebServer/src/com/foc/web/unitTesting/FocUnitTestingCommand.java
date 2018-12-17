@@ -756,11 +756,6 @@ public class FocUnitTestingCommand {
    * while expanding all parent menu items and selecting the menu item in
    * question.
    * 
-   * @param propertyName
-   *          The name of the property. The use of the property name "CODE" is
-   *          recommended.
-   * @param propertyValue
-   *          The value of the property we are looking for.
    */
   public void menu_Highlight(String menuCode) throws Exception {
     button_ClickNavigate();
@@ -825,11 +820,6 @@ public class FocUnitTestingCommand {
    * question. This function then constructs a mouse click event to simulate a
    * double click on the selected item.
    * 
-   * @param propertyName
-   *          The name of the property. The use of the property name "CODE" is
-   *          recommended.
-   * @param propertyValue
-   *          The value of the property we are looking for.
    */
   public void menu_Click(String menuCode) throws Exception {
   	boolean nodeOpened = !getLogger().openCommand("Navigate to : "+menuCode);
@@ -1035,7 +1025,6 @@ public class FocUnitTestingCommand {
    *          The name of the table to add an item in.
    * @param variableName
    *          The variable that will contain the id of the created object.
-   * @param father
    */
   public long table_Add(String tableName, String variableName) throws Exception {
   	long ref = 0;
@@ -1499,7 +1488,7 @@ public class FocUnitTestingCommand {
    * 
    * @param bannerLayoutName
    *          The name of the layout.
-   * @param index
+   * @param idx
    *          The index of the line to delete.
    */
   public void banner_DeleteLineByIndex(String bannerLayoutName, int idx) throws Exception {
