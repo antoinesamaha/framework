@@ -39,7 +39,6 @@ public class PrintPreviewPanel extends FPanel {
   
   /**
    Constructs a print preview dialog.
-   @param b a Book
    */
   public PrintPreviewPanel(FPReport rep) {
     this.rep = rep;
@@ -67,10 +66,6 @@ public class PrintPreviewPanel extends FPanel {
     setZoom(getZoom() - zoomNormalisation * 0.2);
   }
 
-  /**
-   Lays out the UI of the dialog.
-   @param book the book to be previewed
-   */
   public void layoutUI(FPReport rep) {
     //setPreferredSize(new Dimension(WIDTH, HEIGHT));
     //setSize(new Dimension(WIDTH, HEIGHT));

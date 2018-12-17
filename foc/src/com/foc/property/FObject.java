@@ -807,10 +807,6 @@ public class FObject extends FProperty implements FPropertyListener{
     }
   }
 
-  /**
-   * @param localSourceList
-   *          The localSourceList to set.
-   */
   /*
   public void setLocalSourceList(FocList localSourceList) {
     this.localSourceList = localSourceList;

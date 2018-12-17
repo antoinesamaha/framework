@@ -299,7 +299,7 @@ public class FTreeCellEditor extends DefaultCellEditor implements CellEditorList
   
   /**
    * This is overridden to forward the event to the tree. This will
-   * return true if the click count >= 3, or the event is null.
+   * return true if the click count greater or equal to 3, or the event is null.
    */
   
   public boolean isCellEditable(EventObject e) {

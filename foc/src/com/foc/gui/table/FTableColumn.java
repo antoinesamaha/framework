@@ -194,8 +194,8 @@ public class FTableColumn implements Cloneable /* extends TableColumn */{
   }
 
   /**
-   * @param preferredWidth
-   *          The preferredWidth to set.
+   * @param size
+   *        column size
    */
   public void setSize(int size) {
     this.size = size ;

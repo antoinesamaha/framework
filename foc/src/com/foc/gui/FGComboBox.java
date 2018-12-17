@@ -30,7 +30,10 @@ public class FGComboBox extends FGAbstractComboBox {
   }
   
   /**
-   * @param field
+   * @param choices
+   *        Choices iterator
+   * @param sort
+   *        sort choices in drop down
    */
   public FGComboBox(Iterator choices, boolean sort) {
     init(choices, sort);

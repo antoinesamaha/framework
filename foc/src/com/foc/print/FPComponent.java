@@ -151,9 +151,6 @@ public abstract class FPComponent implements FPInterface {
     yLimit = limit;
   }
   
-  /**
-   * @return Returns the page.
-   */
   /*
   public int getPage() {
     return page;
