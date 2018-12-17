@@ -29,7 +29,8 @@ public class FGToggleButton extends JToggleButton implements FPropertyListener, 
   private Icon iconOff = null;
 
   /**
-   * @param arg0
+   * @param label
+   *        label
    */
   public FGToggleButton(String label) {
     super(label);
@@ -38,9 +39,6 @@ public class FGToggleButton extends JToggleButton implements FPropertyListener, 
     setBackground(Globals.getDisplayManager().getBackgroundColor());
   }
 
-  /**
-   * @param arg0
-   */
   public FGToggleButton(Icon icon) {
     super(icon);
     setIconOn(icon);
@@ -53,9 +51,6 @@ public class FGToggleButton extends JToggleButton implements FPropertyListener, 
     addItemListener(this);
   }
 
-  /**
-   * 
-   */
   public FGToggleButton() {
     super();
     addItemListener(this);
