@@ -174,8 +174,6 @@ public class JFreeChartWrapper extends Embedded {
 	 * <p>
 	 * Sets the pixel size of the area where the graph is rendered. Most commonly developer may need to fine tune the value when the {@link JFreeChartWrapper} has a relative size.
 	 * 
-	 * @see JFreeChartWrapper#getGraphHeigt()
-	 * @see #setSvgAspectRatio(String)
 	 * @param height
 	 */
 	public void setGraphHeight(int height) {

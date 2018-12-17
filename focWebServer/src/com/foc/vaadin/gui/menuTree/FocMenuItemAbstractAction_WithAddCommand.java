@@ -54,9 +54,6 @@ public abstract class FocMenuItemAbstractAction_WithAddCommand implements IFocMe
    * @param navigationWindow
    * @param menuItem
    * @param extraActionIndex
-   * @param popup
-   *          Specifies if the extra command should open a popup dialog or
-   *          switch the central panel instead.
    */
   public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
     FocList focList = getFocList();
