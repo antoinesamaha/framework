@@ -4561,16 +4561,24 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					if(fld.getID() != FField.REF_FIELD_ID){
 						FList prop = (FList) fieldEnum.getProperty();
 						FocList list = prop != null ? prop.getList() : null;
-						if(list != null && list.getFocDesc() != null && (list.getFocDesc() instanceof WFLogDesc) && list.size() > 0) {
-							builder.appendKey(fld.getName());
-							builder.beginList();
+						if(list != null && list.getFocDesc() != null && !(list.getFocDesc() instanceof WFLogDesc) && list.size() > 0) {
+							boolean listStarted = false;//This boolean allows not to add the list tag at all when empty
+							
 							for(int i=0; i<list.size(); i++) {
 								FocObject focObj = list.getFocObject(i);
 								if(focObj != null && (!builder.isModifiedOnly() || focObj.isModified())) {
+									if(!listStarted) {
+										builder.appendKey(fld.getName());
+										builder.beginList();
+										listStarted = true;
+									}
+									
 									focObj.toJson(builder);
 								}
 							}
-							builder.endList();
+							if(listStarted) {
+								builder.endList();
+							}
 						}
 					}
 				}

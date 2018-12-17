@@ -741,7 +741,7 @@ public class FocUser extends FocObject {
    * until it finds an available name and then it will return the new user.
    * This method also sets the password as the first user name found that is available.
    * 
-   * @param name The contact to create a user from.
+   * @param contact The contact to create a user from.
    * @return The new user created. Null if no user was able to be created.
    */
   

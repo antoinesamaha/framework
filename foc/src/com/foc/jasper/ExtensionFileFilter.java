@@ -54,7 +54,7 @@ import javax.swing.filechooser.*;
  * image files:
  * 
  * JFileChooser chooser = new JFileChooser(); ExampleFileFilter filter = new
- * ExampleFileFilter( new String{"gif", "jpg"}, "JPEG & GIF Images")
+ * ExampleFileFilter( new String{"gif", "jpg"}, "JPEG and GIF Images")
  * chooser.addChoosableFileFilter(filter); chooser.showOpenDialog(this);
  * 
  * @version 1.14 01/23/03
