@@ -45,7 +45,10 @@ public class FGButton extends JButton {
   }
 
   /**
-   * @param arg0
+   * @param label
+   * 				button caption
+   * @param icon
+   *        button icon
    */
   public FGButton(String label, Icon icon) {
     super(label, icon);
@@ -55,7 +58,7 @@ public class FGButton extends JButton {
 
   /**
    * @param icon
-   *        Icon to be used
+   *        Button icon
    */
   public FGButton(Icon icon) {
     super(icon);

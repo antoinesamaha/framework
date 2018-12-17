@@ -167,16 +167,10 @@ public class FTableColumn implements Cloneable /* extends TableColumn */{
     return editable;
   }
 
-  /**
-   * @param b
-   */
   public void setEditable(boolean b) {
     editable = b;
   }
 
-  /**
-   * @return
-   */
   public FFieldPath getFieldPath() {
     return fieldPath;
   }

@@ -142,8 +142,7 @@ public class ExtensionFileFilter extends FileFilter {
    * 
    * Files that begin with "." are ignored.
    * 
-   * @see #getExtension
-   * @see FileFilter#accepts
+   * 
    */
   public boolean accept(File f) {
     if (f != null) {
@@ -228,10 +227,6 @@ public class ExtensionFileFilter extends FileFilter {
   /**
    * Sets the human readable description of this filter. For example:
    * filter.setDescription("Gif and JPG Images");
-   * 
-   * @see setDescription
-   * @see setExtensionListInDescription
-   * @see isExtensionListInDescription
    */
   public void setDescription(String description) {
     this.description = description;
@@ -245,9 +240,6 @@ public class ExtensionFileFilter extends FileFilter {
    * Only relevent if a description was provided in the constructor or using
    * setDescription();
    * 
-   * @see getDescription
-   * @see setDescription
-   * @see isExtensionListInDescription
    */
   public void setExtensionListInDescription(boolean b) {
     useExtensionsInDescription = b;
@@ -261,9 +253,6 @@ public class ExtensionFileFilter extends FileFilter {
    * Only relevent if a description was provided in the constructor or using
    * setDescription();
    * 
-   * @see getDescription
-   * @see setDescription
-   * @see setExtensionListInDescription
    */
   public boolean isExtensionListInDescription() {
     return useExtensionsInDescription;
