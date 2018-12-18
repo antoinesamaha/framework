@@ -1007,7 +1007,7 @@ public class FocUnitTestingCommand {
   }
 
   /**
-   * Simulates adding an item in an open table (right-click -> Add). Also stores
+   * Simulates adding an item in an open table (right-click then Add). Also stores
    * the id of the created object in a variable.
    * 
    * @param tableName
@@ -1018,7 +1018,7 @@ public class FocUnitTestingCommand {
   }
   
   /**
-   * Simulates adding an item in an open table (right-click -> Add). Also stores
+   * Simulates adding an item in an open table (right-click then Add). Also stores
    * the id of the created object in a variable.
    * 
    * @param tableName
@@ -1114,7 +1114,7 @@ public class FocUnitTestingCommand {
   }
   
   /**
-   * Simulates opening the selected item in a table (right-click -> Open).
+   * Simulates opening the selected item in a table (right-click then Open).
    * 
    * @param tableName
    *          The name of the table to open the item selected in.
@@ -1144,7 +1144,7 @@ public class FocUnitTestingCommand {
   }
 
   /**
-   * Simulates deleting the selected item in a table (right-click -> Delete).
+   * Simulates deleting the selected item in a table (right-click then Delete).
    * 
    * @param tableName
    *          The name of the table to delete the item selected in.
@@ -1753,7 +1753,7 @@ public class FocUnitTestingCommand {
    * 
    * @param navigationLayout
    *          Name of the FocXMLLayout to look in.
-   * @param name
+   * @param componentName
    *          Name of the component.
    * @return the FocXMLGuiComponent
    */
@@ -1766,7 +1766,7 @@ public class FocUnitTestingCommand {
    * 
    * @param navigationLayout
    *          Name of the FocXMLLayout to look in.
-   * @param name
+   * @param componentName
    *          Name of the component.
    * @return the FocXMLGuiComponent
    */
@@ -1808,9 +1808,10 @@ public class FocUnitTestingCommand {
   
   /**
    * Simulates a drag and drop event.
-   * @param source
-   * @param sourceItem
-   * @param target
+   * @param sourceName
+   * @param sourcePropertyName
+   * @param targetPropertyName
+   * @param targetPropertyValue
    */
   
   public void dragAndDropHighLevel(String sourceName, String sourcePropertyName, String sourcePropertyValue, String targetName, String targetPropertyName, String targetPropertyValue) throws Exception {
