@@ -13,12 +13,14 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FField;
+import com.foc.desc.field.FLongField;
 import com.foc.desc.field.FReferenceField;
 import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.xml.FXMLDesc;
 import com.foc.desc.parsers.xml.XMLFocDescParser;
 import com.foc.join.FocRequestField;
 import com.foc.join.Join;
+import com.foc.join.JoinUsingLongField;
 import com.foc.join.JoinUsingObjectField;
 import com.foc.join.TableAlias;
 import com.foc.util.Utils;
@@ -111,13 +113,29 @@ public class ParsedJoin implements FXMLDesc {
 				if(otherJoin != null && otherJoin.getTableAlias() != null){
 					boolean fieldInSource = true;
 					FField fld = getOtherField();
+					FField targetObjectField = getThisField();
+					
 					if(fld instanceof FReferenceField){
 						fld = getThisField();
+						targetObjectField = getOtherField();
+						
 						if(fld == null) fld = getThisField();
 						fieldInSource = false;
 					}
+					
+					//Get the Target Field ID
+					int targetObjectFieldID = 0;					
+					if(targetObjectField != null && targetObjectField instanceof FLongField){
+						targetObjectFieldID = targetObjectField.getID();
+					}	
+					
 					if(fld != null){
-					  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
+						Join join = null;
+						if(targetObjectFieldID > 0){
+							join = new JoinUsingLongField(otherJoin.getTableAlias(), fld.getID(), fieldInSource, targetObjectFieldID);
+						}else{
+							join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
+						}					  
 					  
 					  if(type != null){
 						  if(type.equals("left")){
