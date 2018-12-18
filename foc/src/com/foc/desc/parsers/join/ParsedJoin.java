@@ -113,6 +113,98 @@ public class ParsedJoin implements FXMLDesc {
 				if(otherJoin != null && otherJoin.getTableAlias() != null){
 					boolean fieldInSource = true;
 					FField fld = getOtherField();
+					if(fld instanceof FReferenceField){
+						fld = getThisField();
+						if(fld == null) fld = getThisField();
+						fieldInSource = false;
+					}
+					if(fld != null){
+					  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
+					  
+					  if(type != null){
+						  if(type.equals("left")){
+						  	join.setType(SQLJoin.JOIN_TYPE_LEFT);
+						  }else if(type.equals("right")){
+						  	join.setType(SQLJoin.JOIN_TYPE_RIGHT);
+						  }
+					  }
+					  if(!Utils.isStringEmpty(getWhere())){
+					  	join.setAdditionalWhere(getWhere());
+					  }
+					  
+					  tableAlias.addJoin(join);
+					}else{
+						if(getFocDesc() != null){
+							Globals.logString("MODEL ERROR -------------------------");
+							Globals.logString("MODEL ERROR : In Table "+getFocDesc().getStorageName()+" Reference field not found for table Alias:"+otherAlias+" for Table Name "+ otherJoin.getTable());
+							Globals.logString("-------------------------------------");							
+						}
+					}
+				}else{
+					if(otherJoin == null){
+						if(getFocDesc() != null){
+							Globals.logString("MODEL ERROR -------------------------");
+							Globals.logString("MODEL ERROR : In Table "+getFocDesc().getStorageName()+" Join not found for :"+otherAlias);
+							Globals.logString("-------------------------------------");							
+						}
+					}
+				}
+			}
+
+			for(int f=0; f<array.size(); f++){
+				ParsedRequestField xmlReqFld = array.get(f);
+				
+				if(xmlReqFld.getSourceFieldName().equals("*")){
+					FocFieldEnum fieldEnum = new FocFieldEnum(getThisFocDesc(), FocFieldEnum.CAT_ALL, FocFieldEnum.LEVEL_PLAIN);
+			    while(fieldEnum != null && fieldEnum.hasNext()){
+			    	FField fld = (FField) fieldEnum.next();
+			    	if(fld != null && fld.isDBResident() && !(fld instanceof FBlobStringField)){
+			    		int fldID = 0;
+			    		if(isPrimaryKey() && fld.getID() == FField.REF_FIELD_ID){
+			    			fldID = FField.REF_FIELD_ID;
+			    		}else{
+			    			fldID = getFocDesc().nextFldID();
+			    		}
+			    		FocRequestField reqFld = new FocRequestField(fldID, tableAlias, fld.getID());
+			    		if(getFocDesc() != null && getFocDesc().getFocRequestDesc() != null) getFocDesc().getFocRequestDesc().addField(reqFld);
+			    	}
+			    }
+				}else{
+					if(getThisFocDesc() == null){
+						Globals.showNotification("Could not find Table", "Table name : "+table, IFocEnvironment.TYPE_ERROR_MESSAGE);
+					}else{
+						FField fld = getThisFocDesc().getFieldByName(xmlReqFld.getSourceFieldName());
+						if(fld == null){
+							Globals.showNotification("Could not find Field", getThisFocDesc().getStorageName()+"."+xmlReqFld.getSourceFieldName(), IFocEnvironment.TYPE_ERROR_MESSAGE);
+						}else{
+							if(getFocDesc() != null && getFocDesc().getFocRequestDesc() != null){
+								FocRequestField reqFld = new FocRequestField(getFocDesc().nextFldID(), tableAlias, fld.getID());
+								getFocDesc().getFocRequestDesc().addField(reqFld);
+								
+				    		String groupByFormula = xmlReqFld.getGroupByFormula();
+				    		reqFld.setGroupByFormula(groupByFormula);
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return tableAlias;
+	}
+
+	/* BATOUL
+		public TableAlias getTableAlias(){
+		if(tableAlias == null){
+			FocDesc focDesc = getThisFocDesc();
+			tableAlias = new TableAlias(getAlias(), focDesc);
+			tableAlias.setOrder(getOrder());
+			
+			if(!Utils.isStringEmpty(otherAlias) && !Utils.isStringEmpty(otherFieldName) && !Utils.isStringEmpty(thisFieldName)){
+				ParsedJoin otherJoin = getFocDesc().getJoin(otherAlias);
+				if(otherJoin != null && otherJoin.getTableAlias() != null){
+					boolean fieldInSource = true;
+					FField fld = getOtherField();
 					FField targetObjectField = getThisField();
 					
 					if(fld instanceof FReferenceField){
@@ -208,7 +300,8 @@ public class ParsedJoin implements FXMLDesc {
 		
 		return tableAlias;
 	}
-	
+
+	 */
 	public void addRequestFied(ParsedRequestField requestField){
 		if(array == null){
 			array = new ArrayList<ParsedRequestField>();
