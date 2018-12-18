@@ -6,6 +6,13 @@
 	<version>${foc.version}</version>
 	<name>focAPI</name>
 	<description>focAPI</description>
+	<url>http://www.focframework.com</url>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 	<developers>
 		<developer>
 			<name>Antoine Samaha</name>
@@ -21,7 +28,7 @@
 		</snapshotRepository>
 		<repository>
 			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
 
@@ -38,12 +45,51 @@
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<localCheckout>true</localCheckout>
+					<pushChanges>false</pushChanges>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyname>049FE00FA937BC187DD164112EEA74CBE741B06E</keyname>
+							<passphraseServerId>049FE00FA937BC187DD164112EEA74CBE741B06E</passphraseServerId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
 						<goals>
-							<goal>jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -51,6 +97,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -60,33 +107,10 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-				<configuration>
-					<localCheckout>true</localCheckout>
-					<pushChanges>false</pushChanges>
-				</configuration>
-			</plugin>
-	    <plugin>
-	      <groupId>org.apache.maven.plugins</groupId>
-	      <artifactId>maven-gpg-plugin</artifactId>
-	      <version>1.5</version>
-	      <executions>
-	        <execution>
-	          <id>sign-artifacts</id>
-	          <phase>verify</phase>
-	          <goals>
-	            <goal>sign</goal>
-	          </goals>
-	        </execution>
-	      </executions>
-	    </plugin>
 		</plugins>
 	</build>
 	<properties>
-		<foc.version>1.7.1-SNAPSHOT</foc.version>
+		<foc.version>1.7.2</foc.version>
 	</properties>
 	<scm>
 		<url>https://github.com/FOC-framework/framework.git</url>

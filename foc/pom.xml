@@ -3,10 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.focframework</groupId>
 	<artifactId>foc</artifactId>
-	<packaging>pom</packaging>
 	<version>${foc.version}</version>
 	<name>foc</name>
 	<description>foc</description>
+	<url>http://www.focframework.com</url>
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
 	<developers>
 		<developer>
 			<name>Antoine Samaha</name>
@@ -28,14 +34,14 @@
 
 	<build>
 		<sourceDirectory>src</sourceDirectory>
-		<resources>
+		<!-- resources>
 			<resource>
 				<directory>src</directory>
 				<excludes>
 					<exclude>**/*.java</exclude>
 				</excludes>
 			</resource>
-		</resources>
+		</resources -->
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -43,6 +49,7 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+					<encoding>UTF-8</encoding> 
 				</configuration>
 			</plugin>
 			<plugin>
@@ -64,6 +71,50 @@
 						<phase>verify</phase>
 						<goals>
 							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyname>049FE00FA937BC187DD164112EEA74CBE741B06E</keyname>
+							<passphraseServerId>049FE00FA937BC187DD164112EEA74CBE741B06E</passphraseServerId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding> 
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -107,9 +158,11 @@
 			<version>1.2.2</version>
 		</dependency>
 	</dependencies>
+	
 	<properties>
-		<foc.version>1.7.1-SNAPSHOT</foc.version>
+		<foc.version>1.7.2</foc.version>
 	</properties>
+	
 	<scm>
 		<url>https://github.com/FOC-framework/framework.git</url>
 		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
