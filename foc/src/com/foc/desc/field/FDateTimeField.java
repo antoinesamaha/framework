@@ -6,12 +6,15 @@ package com.foc.desc.field;
 import java.awt.Component;
 import java.sql.Types;
 
-import com.foc.Globals;
+import com.fab.model.table.FieldDefinition;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.gui.FGDateChooser;
 import com.foc.gui.StaticComponent;
-import com.foc.property.*;
+import com.foc.list.filter.DateTimeCondition;
+import com.foc.list.filter.FilterCondition;
+import com.foc.property.FDateTime;
+import com.foc.property.FProperty;
 
 /**
  * @author Tony
@@ -38,6 +41,10 @@ public class FDateTimeField extends FDateField {
 
   public int getSqlType() {
     return Types.TIMESTAMP;
+  }
+
+  public int getFabType() {
+    return FieldDefinition.SQL_TYPE_ID_DATE_TIME;
   }
 
   public String getCreationString(String name) {
@@ -78,4 +85,12 @@ public class FDateTimeField extends FDateField {
   public int getFieldDisplaySize() {
     return 17;
   }
+  
+  protected FilterCondition getFilterCondition(FFieldPath fieldPath, String conditionPrefix){
+		DateTimeCondition condition = null;
+		if(fieldPath != null && conditionPrefix != null){
+			condition = new DateTimeCondition(fieldPath, conditionPrefix);
+		}
+		return condition;
+	}
 }

@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.field.FDateField;
 import com.foc.property.FDate;
@@ -22,6 +23,11 @@ import com.vaadin.ui.PopupDateField;
 
 @SuppressWarnings("serial")
 public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
+	public static String rtl = "\u200F";
+	public static String ltre = "\u202A";
+	public static String df = "\u202C";
+	public String separator = ltre + " " + df;
+	
 	private String name = null;
   
 	private IFocData focData   = null;
@@ -38,7 +44,12 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
     
     this.setSizeUndefined();
     addStyleName("component-margin");
-//    setDateFormat("dd-MM-yyyy");
+    
+    FDateField dateField = null;
+    if(property != null && property.getFocField() instanceof FDateField) {
+    	dateField = (FDateField) property.getFocField();
+    }
+    adjustDateFormat(dateField);
   }
 
   @Override
@@ -181,33 +192,60 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 	    	if(dateField.isTimeRelevant()){
 	    		setResolution(Resolution.HOUR);
 	    		setResolution(Resolution.MINUTE);
-	    		setResolution(Resolution.SECOND);
+//	    		setResolution(Resolution.SECOND);
 	    	}
     	}
-    	
-  		String fmt = "";
-  		if(dateField.isMonthRelevantOnly()){
-  			fmt = "MMM yyyy";  			
-  		}else{
-	  		if(dateField.isDateRelevant()){
-	  			fmt = "dd MMM yyyy";
-	  		}
-	  		if(dateField.isTimeRelevant()){
-	  			if(!fmt.isEmpty()){
-	  				fmt += " ";
-	  			}
-	  			fmt += "kk:mm";
-	  		}
-  		}
-  		setDateFormat(fmt);
-  		
-    }else{
-    	String format = getAttributes() != null ? getAttributes().getValue(FXML.ATT_FORMAT) : null;
-    	if(format == null) format = "dd MMM yyyy kk:mm";
-  		setDateFormat(format);
-  	}
+    }
+    
+    adjustDateFormat(dateField);
   }
 
+  private void adjustDateFormat(FDateField dateField) {
+  	if(dateField != null){
+			String fmt = "";
+			
+			if(dateField.isMonthRelevantOnly()){
+				if(ConfigInfo.isArabic()) {
+					fmt = "MMM"+separator+"yyyy";
+				} else {
+					fmt = "MMM yyyy";
+				}
+			}else{
+				if(dateField.isDateRelevant()){
+					if(ConfigInfo.isArabic()) {
+						fmt = rtl+"dd"+separator+"MMM"+separator+"yyyy";
+					} else {
+						fmt = "dd MMM yyyy";
+					}
+				}
+		  	if(dateField.isTimeRelevant()){
+		  		if(ConfigInfo.isArabic()) {
+		  			if(!fmt.isEmpty()){
+		  				fmt = " " + fmt;
+		  			}
+			  		fmt = "kk:mm" + fmt;
+		  		} else {
+		  			if(!fmt.isEmpty()){
+		  				fmt += " ";
+		  			}
+			  		fmt += "kk:mm";
+		  		}
+		  	}
+			}
+			setDateFormat(fmt);
+	  }else{
+	  	String format = getAttributes() != null ? getAttributes().getValue(FXML.ATT_FORMAT) : null;
+		  if(format == null) {
+		  	if(ConfigInfo.isArabic()) {
+		  		format = rtl+"dd"+separator+"MMM"+separator+"yyyy"+" "+"kk:mm";
+		  	} else {
+		  		format = "dd MMM yyyy kk:mm";
+		  	}
+		  }
+			setDateFormat(format);
+	  }
+  }
+  
   @Override
   public String getValueString() {
   	Date date = (Date) getValue();

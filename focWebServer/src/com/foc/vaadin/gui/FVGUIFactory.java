@@ -135,6 +135,7 @@ public class FVGUIFactory extends HashMap<String, FocXMLGuiComponentCreator> {
 				tag = FXML.TAG_EMAIL_FIELD;
 				break;
 			case FieldDefinition.SQL_TYPE_ID_DATE:
+			case FieldDefinition.SQL_TYPE_ID_DATE_TIME:
 				tag = FXML.TAG_DATE_FIELD;
 				break;
 			case FieldDefinition.SQL_TYPE_ID_TIME:
