@@ -223,12 +223,12 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 		  			if(!fmt.isEmpty()){
 		  				fmt = " " + fmt;
 		  			}
-			  		fmt = "kk:mm" + fmt;
+			  		fmt = "HH:mm" + fmt;
 		  		} else {
 		  			if(!fmt.isEmpty()){
 		  				fmt += " ";
 		  			}
-			  		fmt += "kk:mm";
+			  		fmt += "HH:mm";
 		  		}
 		  	}
 			}
@@ -237,9 +237,9 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
 	  	String format = getAttributes() != null ? getAttributes().getValue(FXML.ATT_FORMAT) : null;
 		  if(format == null) {
 		  	if(ConfigInfo.isArabic()) {
-		  		format = rtl+"dd"+separator+"MMM"+separator+"yyyy"+" "+"kk:mm";
+		  		format = rtl+"dd"+separator+"MMM"+separator+"yyyy"+" "+"HH:mm";
 		  	} else {
-		  		format = "dd MMM yyyy kk:mm";
+		  		format = "dd MMM yyyy HH:mm";
 		  	}
 		  }
 			setDateFormat(format);
