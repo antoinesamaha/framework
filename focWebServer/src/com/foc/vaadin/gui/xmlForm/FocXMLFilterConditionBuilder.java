@@ -17,6 +17,7 @@ import com.foc.list.filter.NumCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
 import com.foc.list.filter.TimeCondition;
+import com.foc.util.Utils;
 
 public class FocXMLFilterConditionBuilder {
 	
@@ -115,7 +116,7 @@ public class FocXMLFilterConditionBuilder {
 					
 					//Operation
 					newFieldTag(handler, prefix+"_OP", "120px");
-					newFieldTag(handler, prefix+"_OBJREF", "270px", "OR("+prefix+"_OP>0)");
+					newFieldTag(handler, prefix+"_OBJREF", "270px", "OR("+prefix+"_OP>0)", captionProperty);
 
 				}else if(condition instanceof IntegerCondition){
 					String fldNameOP = prefix+IntegerCondition.FNAME_OP;
@@ -152,10 +153,6 @@ public class FocXMLFilterConditionBuilder {
 		}
 	}
 
-	public static void newFieldTag(DefaultHandler handler, String fieldName, String width) throws Exception {
-		newFieldTag(handler, fieldName, width, null); 
-	}
-
 	public static void newShifterButtonTag(DefaultHandler handler, String fieldName, String visibleWhen) throws Exception {
 		FocXMLAttributes opAttributes = new FocXMLAttributes();
 	  opAttributes.addAttribute(FXML.ATT_NAME, fieldName);
@@ -167,14 +164,27 @@ public class FocXMLFilterConditionBuilder {
 		handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
 		handler.endElement(null, null, FXML.TAG_FIELD);
 	}
-	
+
+	public static void newFieldTag(DefaultHandler handler, String fieldName, String width) throws Exception {
+		newFieldTag(handler, fieldName, width, null, null);
+	}
+
 	public static void newFieldTag(DefaultHandler handler, String fieldName, String width, String visibleWhen) throws Exception {
+		newFieldTag(handler, fieldName, width, visibleWhen, null);
+	}
+		
+	public static void newFieldTag(DefaultHandler handler, String fieldName, String width, String visibleWhen, String captionProperty) throws Exception {
 		FocXMLAttributes opAttributes = new FocXMLAttributes();
 		opAttributes.addAttribute(FXML.ATT_NAME, fieldName);
 		opAttributes.addAttribute(FXML.ATT_WIDTH, width);
-		opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, visibleWhen);		
+		opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, visibleWhen);
+		if(!Utils.isStringEmpty(captionProperty)) {
+			opAttributes.addAttribute(FXML.ATT_CAPTION_PROPERTY, captionProperty);
+		}
 		handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
 		handler.endElement(null, null, FXML.TAG_FIELD);
+		
+
 	}
 	
 	public static String getButtonName_ForFirstDateShifterButton(FilterCondition filterCondition) {
