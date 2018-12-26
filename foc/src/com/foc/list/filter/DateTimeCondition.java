@@ -10,7 +10,6 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Date;
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 
 import com.foc.ConfigInfo;
@@ -20,6 +19,7 @@ import com.foc.business.dateShifter.DateShifterDesc;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
@@ -450,15 +450,18 @@ public class DateTimeCondition extends FilterCondition {
   public String buildDescriptionText(FocListFilter filter) {
   	String description = null;
   	
+  	FDateTime dateProp = (FDateTime) filter.getFocProperty(getFirstFieldID() + FLD_FIRST_DATE);
+  	FDateField dateField = dateProp != null ? (FDateField) dateProp.getFocField() : null;
+  	String format = dateField != null ? dateField.newDateFormat() : null;
+  	
   	int op = getOperator(filter);
   	Date firstDate = getFirstDateTime(filter);
   	Date lastDate = getLastDateTime(filter);
-  	
   	op = adjustTheOperation(op, firstDate, lastDate);
   	if (op != OPERATOR_INDIFERENT){
   		String fieldName = getFieldLabel();
-  		
-      SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	  	
+      SimpleDateFormat dateFormat = new SimpleDateFormat(format);
       String firstDateFormat = dateFormat.format(firstDate);
       String lastDateFormat = dateFormat.format(lastDate);
   		

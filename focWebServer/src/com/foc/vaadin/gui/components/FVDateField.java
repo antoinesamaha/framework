@@ -23,11 +23,6 @@ import com.vaadin.ui.PopupDateField;
 
 @SuppressWarnings("serial")
 public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
-	public static String rtl = "\u200F";
-	public static String ltre = "\u202A";
-	public static String df = "\u202C";
-	public String separator = ltre + " " + df;
-	
 	private String name = null;
   
 	private IFocData focData   = null;
@@ -201,49 +196,26 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
   }
 
   private void adjustDateFormat(FDateField dateField) {
+  	String fmt = newDateFormat_Internal(dateField);
+		setDateFormat(fmt);
+  }
+  
+  private String newDateFormat_Internal(FDateField dateField) {
+  	String fmt = "";
   	if(dateField != null){
-			String fmt = "";
-			
-			if(dateField.isMonthRelevantOnly()){
-				if(ConfigInfo.isArabic()) {
-					fmt = "MMM"+separator+"yyyy";
-				} else {
-					fmt = "MMM yyyy";
-				}
-			}else{
-				if(dateField.isDateRelevant()){
-					if(ConfigInfo.isArabic()) {
-						fmt = rtl+"dd"+separator+"MMM"+separator+"yyyy";
-					} else {
-						fmt = "dd MMM yyyy";
-					}
-				}
-		  	if(dateField.isTimeRelevant()){
-		  		if(ConfigInfo.isArabic()) {
-		  			if(!fmt.isEmpty()){
-		  				fmt = " " + fmt;
-		  			}
-			  		fmt = "HH:mm" + fmt;
-		  		} else {
-		  			if(!fmt.isEmpty()){
-		  				fmt += " ";
-		  			}
-			  		fmt += "HH:mm";
-		  		}
-		  	}
-			}
-			setDateFormat(fmt);
+  		fmt = dateField.newDateFormat();
 	  }else{
-	  	String format = getAttributes() != null ? getAttributes().getValue(FXML.ATT_FORMAT) : null;
-		  if(format == null) {
+	  	fmt = getAttributes() != null ? getAttributes().getValue(FXML.ATT_FORMAT) : null;
+		  if(fmt == null) {
 		  	if(ConfigInfo.isArabic()) {
-		  		format = rtl+"dd"+separator+"MMM"+separator+"yyyy"+" "+"HH:mm";
+		  		fmt = FDateField.RTL+"dd"+FDateField.SEPARATOR+"MMM"+FDateField.SEPARATOR+"yyyy"+" "+"HH:mm";
 		  	} else {
-		  		format = "dd MMM yyyy HH:mm";
+		  		fmt = "dd MMM yyyy HH:mm";
 		  	}
 		  }
-			setDateFormat(format);
 	  }
+
+  	return fmt;
   }
   
   @Override

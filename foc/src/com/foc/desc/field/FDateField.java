@@ -5,11 +5,9 @@ package com.foc.desc.field;
 
 import java.awt.Component;
 import java.sql.Types;
-import java.util.Calendar;
 
 import com.fab.model.table.FieldDefinition;
-import com.foc.Globals;
-import com.foc.business.calendar.FCalendar;
+import com.foc.ConfigInfo;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -26,6 +24,11 @@ import com.foc.property.FProperty;
  * @author Tony
  */
 public class FDateField extends FField {
+
+	public static String RTL = "\u200F";
+	public static String LTRE = "\u202A";
+	public static String DF = "\u202C";
+	public static String SEPARATOR = LTRE + " " + DF;
 
 	private boolean monthLevelOnly = false;
 	private long    zeroValueTime  = 0;   
@@ -121,7 +124,40 @@ public class FDateField extends FField {
 	public void setZeroValueTime(long zeroValueTime) {
 		this.zeroValueTime = zeroValueTime;
 	}
-	
+
+  public String newDateFormat() {
+  	String fmt = "";
+		if(isMonthRelevantOnly()){
+			if(ConfigInfo.isArabic()) {
+				fmt = "MMM"+SEPARATOR+"yyyy";
+			} else {
+				fmt = "MMM yyyy";
+			}
+		}else{
+			if(isDateRelevant()){
+				if(ConfigInfo.isArabic()) {
+					fmt = RTL+"dd"+SEPARATOR+"MMM"+SEPARATOR+"yyyy";
+				} else {
+					fmt = "dd MMM yyyy";
+				}
+			}
+	  	if(isTimeRelevant()){
+	  		if(ConfigInfo.isArabic()) {
+	  			if(!fmt.isEmpty()){
+	  				fmt = " " + fmt;
+	  			}
+		  		fmt = "HH:mm" + fmt;
+	  		} else {
+	  			if(!fmt.isEmpty()){
+	  				fmt += " ";
+	  			}
+		  		fmt += "HH:mm";
+	  		}
+	  	}
+		}
+		return fmt;
+  }
+
 //  We keep the Vaadin class String to turn arround the format table bug that doesn't take into account our format
 //  public Class vaadin_getClass(){
 //    return java.util.Date.class;
