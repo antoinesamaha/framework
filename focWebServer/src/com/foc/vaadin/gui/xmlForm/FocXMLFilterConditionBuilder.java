@@ -8,6 +8,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
 import com.foc.list.filter.BooleanCondition;
 import com.foc.list.filter.DateCondition;
+import com.foc.list.filter.DateTimeCondition;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.IntegerCondition;
@@ -16,8 +17,11 @@ import com.foc.list.filter.NumCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
 import com.foc.list.filter.TimeCondition;
+import com.foc.util.Utils;
 
 public class FocXMLFilterConditionBuilder {
+	
+	private static final String WIDTH_VALUE = "170px";
 
 	public static void addConditionComponents(DefaultHandler handler, FocXMLLayout xmlLayout, FocListFilter listFilter, FilterCondition condition, FocXMLAttributes attributes){
 		try{
@@ -44,125 +48,56 @@ public class FocXMLFilterConditionBuilder {
 
 				if(condition instanceof TimeCondition){
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_OP", "120px");
 					
 					String firstDateVisibleWhen = "OR("+prefix+"_OP="+TimeCondition.OPERATOR_EQUALS+","+prefix+"_OP="+TimeCondition.OPERATOR_GREATER_THAN+","+prefix+"_OP="+TimeCondition.OPERATOR_BETWEEN+")";
-					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_FTIME");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_FTIME", WIDTH_VALUE, firstDateVisibleWhen);
 	
 					String lastDateVisibleWhen = "OR("+prefix+"_OP="+TimeCondition.OPERATOR_BETWEEN+","+prefix+"_OP="+TimeCondition.OPERATOR_LESS_THAN+")";
-
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_LTIME");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);			
+					newFieldTag(handler, prefix+"_LTIME", WIDTH_VALUE, lastDateVisibleWhen);
 					
 				}else if(condition instanceof DateCondition){
-//				<GuiField name="EndDate_OP" width="120px" height="-1px" />
-//				<GuiField name="EndDate_FDATE" width="130px" height="-1px" visibleWhen="OR(EndDate_OP=0,EndDate_OP=1,EndDate_OP=3)" />
-//				<GuiField name="EndDate_LDATE" width="130px" height="-1px" visibleWhen="OR(EndDate_OP=0,EndDate_OP=2)" />
-					
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_OP", "120px");
 					
 					String firstDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=1,"+prefix+"_OP=3)";
 					String firstDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+firstDateVisibleWhen+")";
 					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_FDATE");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_FDATE", WIDTH_VALUE, firstDateVisibleWhen);
 
 					if(xmlLayout instanceof FocXMLLayout_Filter) {
-						opAttributes = new FocXMLAttributes();
-						opAttributes.addAttribute(FXML.ATT_NAME, getButtonName_ForFirstDateShifterButton(condition));
-						opAttributes.addAttribute(FXML.ATT_ICON, "edit");
-						opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
-						opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
-						opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
-						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateButtonVisibleWhen);
-						handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
-						handler.endElement(null, null, FXML.TAG_FIELD);
+						newShifterButtonTag(handler, getButtonName_ForFirstDateShifterButton(condition), firstDateButtonVisibleWhen);
 					}
 	
 					String lastDateVisibleWhen = "OR("+prefix+"_OP=0,"+prefix+"_OP=2)";
 					String lastDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+lastDateVisibleWhen+")";
 
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_LDATE");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);			
+					newFieldTag(handler, prefix+"_LDATE", WIDTH_VALUE, lastDateVisibleWhen);
 					
 					if(xmlLayout instanceof FocXMLLayout_Filter) {
-						opAttributes = new FocXMLAttributes();
-					  opAttributes.addAttribute(FXML.ATT_NAME, getButtonName_ForLastDateShifterButton(condition));
-						opAttributes.addAttribute(FXML.ATT_ICON, "edit");
-						opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
-						opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
-						opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
-						opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateButtonVisibleWhen);
-						handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
-						handler.endElement(null, null, FXML.TAG_FIELD);
+						newShifterButtonTag(handler, getButtonName_ForLastDateShifterButton(condition), lastDateButtonVisibleWhen);
 					}
-					
-				}else if(condition instanceof StringCondition){
-//				<GuiField name="TypeDisplay_OP" width="120px" height="-1px" />
-//				<GuiField name="TypeDisplay_TXT" width="270px" height="-1px" visibleWhen="TypeDisplay_OP>0" />
-					
+
+				}else if(condition instanceof DateTimeCondition){
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_OP", "120px");
 					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_TXT");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "270px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP>0)");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					String firstDateVisibleWhen = "OR("+prefix+"_OP="+DateTimeCondition.OPERATOR_EQUALS+","+prefix+"_OP="+DateTimeCondition.OPERATOR_GREATER_THAN+","+prefix+"_OP="+DateTimeCondition.OPERATOR_BETWEEN+")";
+					newFieldTag(handler, prefix+"_FDATE", WIDTH_VALUE, firstDateVisibleWhen);
+					
+					String lastDateVisibleWhen = "OR("+prefix+"_OP="+DateTimeCondition.OPERATOR_BETWEEN+","+prefix+"_OP="+DateTimeCondition.OPERATOR_LESS_THAN+")";
+					newFieldTag(handler, prefix+"_LDATE", WIDTH_VALUE, lastDateVisibleWhen);
+				}else if(condition instanceof StringCondition){
+					//Operation
+					newFieldTag(handler, prefix+"_OP", "120px");
+					newFieldTag(handler, prefix+"_TXT", "270px", "OR("+prefix+"_OP>0)");
 				}else if(condition instanceof BooleanCondition){
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_VAL");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_VAL", "120px");
 				}else if(condition instanceof MultipleChoiceCondition){
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
-					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_VAL");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "270px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP>0)");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
-					
+					newFieldTag(handler, prefix+"_OP", "120px");
+					newFieldTag(handler, prefix+"_VAL", "270px", "OR("+prefix+"_OP>0)");
 				}else if(condition instanceof ObjectCondition){
 					String captionProperty = attributes.getValue(FXML.ATT_CAPTION_PROPERTY);
 					//Guessing the adequate captionProperty 
@@ -180,77 +115,36 @@ public class FocXMLFilterConditionBuilder {
 					}
 					
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OP");
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
-					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, prefix+"_OBJREF");
-					opAttributes.addAttribute(FXML.ATT_CAPTION_PROPERTY, captionProperty);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "270px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, "OR("+prefix+"_OP>0)");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, prefix+"_OP", "120px");
+					newFieldTag(handler, prefix+"_OBJREF", "270px", "OR("+prefix+"_OP>0)", captionProperty);
+
 				}else if(condition instanceof IntegerCondition){
 					String fldNameOP = prefix+IntegerCondition.FNAME_OP;
 					String fldNameFVAL = prefix+IntegerCondition.FNAME_FVAL;
 					String fldNameLVAL = prefix+IntegerCondition.FNAME_LVAL;
 					
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameOP);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, fldNameOP, "120px");
 					
 					String firstDateVisibleWhen = "OR("+fldNameOP+"="+IntegerCondition.OPERATOR_EQUALS+","+fldNameOP+"="+IntegerCondition.OPERATOR_GREATER_THAN+","+fldNameOP+"="+IntegerCondition.OPERATOR_BETWEEN+")";
-					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameFVAL);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, fldNameFVAL, WIDTH_VALUE, firstDateVisibleWhen);
 	
 					String lastDateVisibleWhen = "OR("+fldNameOP+"="+IntegerCondition.OPERATOR_BETWEEN+","+fldNameOP+"="+IntegerCondition.OPERATOR_LESS_THAN+")";
+					newFieldTag(handler, fldNameLVAL, WIDTH_VALUE, lastDateVisibleWhen);
 
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameLVAL);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);			
 				}else if(condition instanceof NumCondition){
 					String fldNameOP = prefix+NumCondition.FNAME_OP;
 					String fldNameFVAL = prefix+NumCondition.FNAME_FVAL;
 					String fldNameLVAL = prefix+NumCondition.FNAME_LVAL;
 					
 					//Operation
-					FocXMLAttributes opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameOP);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "120px");
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, fldNameOP, "120px");
 					
 					String firstDateVisibleWhen = "OR("+fldNameOP+"="+IntegerCondition.OPERATOR_EQUALS+","+fldNameOP+"="+IntegerCondition.OPERATOR_GREATER_THAN+","+fldNameOP+"="+IntegerCondition.OPERATOR_BETWEEN+")";
-					
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameFVAL);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, firstDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);
+					newFieldTag(handler, fldNameFVAL, WIDTH_VALUE, firstDateVisibleWhen);
 	
 					String lastDateVisibleWhen = "OR("+fldNameOP+"="+IntegerCondition.OPERATOR_BETWEEN+","+fldNameOP+"="+IntegerCondition.OPERATOR_LESS_THAN+")";
-
-					opAttributes = new FocXMLAttributes();
-					opAttributes.addAttribute(FXML.ATT_NAME, fldNameLVAL);
-					opAttributes.addAttribute(FXML.ATT_WIDTH, "130px");
-					opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, lastDateVisibleWhen);
-					handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
-					handler.endElement(null, null, FXML.TAG_FIELD);			
+					newFieldTag(handler, fldNameLVAL, WIDTH_VALUE, lastDateVisibleWhen);
 				}
 			}
 			handler.endElement(null, null, FXML.TAG_HORIZONTAL_LAYOUT);
@@ -259,6 +153,40 @@ public class FocXMLFilterConditionBuilder {
 		}
 	}
 
+	public static void newShifterButtonTag(DefaultHandler handler, String fieldName, String visibleWhen) throws Exception {
+		FocXMLAttributes opAttributes = new FocXMLAttributes();
+	  opAttributes.addAttribute(FXML.ATT_NAME, fieldName);
+		opAttributes.addAttribute(FXML.ATT_ICON, "edit");
+		opAttributes.addAttribute(FXML.ATT_BUTTON_LINK_STYLE, "true");
+		opAttributes.addAttribute(FXML.ATT_WIDTH, "10px");
+		opAttributes.addAttribute(FXML.ATT_HEIGHT, "-1px");
+		opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, visibleWhen);
+		handler.startElement(null, null, FXML.TAG_BUTTON, opAttributes);
+		handler.endElement(null, null, FXML.TAG_FIELD);
+	}
+
+	public static void newFieldTag(DefaultHandler handler, String fieldName, String width) throws Exception {
+		newFieldTag(handler, fieldName, width, null, null);
+	}
+
+	public static void newFieldTag(DefaultHandler handler, String fieldName, String width, String visibleWhen) throws Exception {
+		newFieldTag(handler, fieldName, width, visibleWhen, null);
+	}
+		
+	public static void newFieldTag(DefaultHandler handler, String fieldName, String width, String visibleWhen, String captionProperty) throws Exception {
+		FocXMLAttributes opAttributes = new FocXMLAttributes();
+		opAttributes.addAttribute(FXML.ATT_NAME, fieldName);
+		opAttributes.addAttribute(FXML.ATT_WIDTH, width);
+		opAttributes.addAttribute(FXML.ATT_VISIBLE_WHEN, visibleWhen);
+		if(!Utils.isStringEmpty(captionProperty)) {
+			opAttributes.addAttribute(FXML.ATT_CAPTION_PROPERTY, captionProperty);
+		}
+		handler.startElement(null, null, FXML.TAG_FIELD, opAttributes);
+		handler.endElement(null, null, FXML.TAG_FIELD);
+		
+
+	}
+	
 	public static String getButtonName_ForFirstDateShifterButton(FilterCondition filterCondition) {
 		return filterCondition != null ? filterCondition.getFieldPrefix()+"_FButton" : null;
 	}

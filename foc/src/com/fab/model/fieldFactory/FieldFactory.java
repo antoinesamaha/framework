@@ -21,6 +21,7 @@ public class FieldFactory extends HashMap<Integer, FDAbstract> {
 		put(FieldDefinition.SQL_TYPE_ID_PASSWORD, new FDPassword());
 		put(FieldDefinition.SQL_TYPE_ID_DOUBLE, new FDDouble());
 		put(FieldDefinition.SQL_TYPE_ID_DATE, new FDDate());
+		put(FieldDefinition.SQL_TYPE_ID_DATE_TIME, new FDDate());
 		put(FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD, new FDObject());
 		put(FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE, new FDMultipleChoice());
 		put(FieldDefinition.SQL_TYPE_ID_BOOLEAN, new FDBoolean());

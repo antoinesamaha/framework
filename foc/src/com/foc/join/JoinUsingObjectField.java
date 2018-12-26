@@ -7,8 +7,6 @@ import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
-import com.foc.desc.field.FObjectField;
-import com.foc.desc.field.FStringField;
 
 /**
  * @author 01Barmaja
@@ -43,7 +41,7 @@ public class JoinUsingObjectField extends Join{
         int provider = srcDesc.getProvider();
         
         if(objectFieldIsInSource){
-          FObjectField objField = (FObjectField)srcDesc.getFieldByID(objectFieldID);
+          FField objField = (FField)srcDesc.getFieldByID(objectFieldID);
           
           if(tarDesc.getWithReference() && objField != null){
           	if(DBManager.provider_FieldNamesBetweenSpeachmarks(provider)){
@@ -53,11 +51,7 @@ public class JoinUsingObjectField extends Join{
           	}
           }
         }else{
-        	if(tarDesc.getFieldByID(objectFieldID) instanceof FStringField) {
-        		int debug = 3;
-        		debug++;
-        	}
-          FObjectField objField = (FObjectField)tarDesc.getFieldByID(objectFieldID);
+          FField objField = (FField)tarDesc.getFieldByID(objectFieldID);
 
           if(srcDesc.getWithReference() && objField != null){
           	if(provider == DBManager.PROVIDER_ORACLE){

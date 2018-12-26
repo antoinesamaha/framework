@@ -27,6 +27,9 @@ public class FilterConditionFactory {
 		case FieldDefinition.SQL_TYPE_ID_TIME:
 			condition = new TimeCondition(dateFieldPath, fieldPrefix);
 			break;
+		case FieldDefinition.SQL_TYPE_ID_DATE_TIME:
+			condition = new DateTimeCondition(dateFieldPath, fieldPrefix);
+			break;			
 		case FieldDefinition.SQL_TYPE_ID_DOUBLE:
 			condition = new NumCondition(dateFieldPath, fieldPrefix);
 			break;

@@ -20,6 +20,7 @@ import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FCompanyField;
 import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FEMailField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FImageField;
@@ -50,6 +51,7 @@ public class FieldDefinition extends FocObject {
 	public static final int SQL_TYPE_ID_LONG                         = IDataStoreConst.FIELD_TYPE_LONG;
 	public static final int SQL_TYPE_ID_DATE                         = IDataStoreConst.FIELD_TYPE_DATE;
 	public static final int SQL_TYPE_ID_TIME                         = IDataStoreConst.FIELD_TYPE_TIME;
+	public static final int SQL_TYPE_ID_DATE_TIME                    = IDataStoreConst.FIELD_TYPE_DATE_TIME;
 	public static final int SQL_TYPE_ID_OBJECT_FIELD                 = IDataStoreConst.FIELD_TYPE_OBJECT;
 	public static final int SQL_TYPE_ID_LIST_FIELD                   = IDataStoreConst.FIELD_TYPE_LIST;
 	public static final int SQL_TYPE_ID_BOOLEAN                      = IDataStoreConst.FIELD_TYPE_BOOLEAN;
@@ -68,6 +70,7 @@ public class FieldDefinition extends FocObject {
 	public static final String SQL_TYPE_NAME_DOUBLE          = "DOUBLE";
 	public static final String SQL_TYPE_NAME_LONG            = "LONG";
 	public static final String SQL_TYPE_NAME_DATE            = "DATE";
+	public static final String SQL_TYPE_NAME_DATE_TIME       = "DATE TIME";
 	public static final String SQL_TYPE_NAME_TIME            = "TIME";
 	public static final String SQL_TYPE_NAME_OBJECT_FIELD    = "OBJECT";
 	public static final String SQL_TYPE_NAME_LIST_FIELD      = "LIST";
@@ -362,7 +365,7 @@ public class FieldDefinition extends FocObject {
 	
 	public void adjustPropertiesEnability(){
 		int SQLTYPE = getSQLType();
-		boolean lockLength = SQLTYPE == FieldDefinition.SQL_TYPE_ID_BOOLEAN || SQLTYPE == FieldDefinition.SQL_TYPE_ID_DATE || SQLTYPE == FieldDefinition.SQL_TYPE_ID_TIME ||SQLTYPE == FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD ||SQLTYPE == FieldDefinition.SQL_TYPE_ID_LIST_FIELD;
+		boolean lockLength = SQLTYPE == FieldDefinition.SQL_TYPE_ID_BOOLEAN || SQLTYPE == FieldDefinition.SQL_TYPE_ID_DATE || SQLTYPE == FieldDefinition.SQL_TYPE_ID_TIME || SQLTYPE == FieldDefinition.SQL_TYPE_ID_DATE_TIME ||SQLTYPE == FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD ||SQLTYPE == FieldDefinition.SQL_TYPE_ID_LIST_FIELD;
 		boolean lockDecimals = SQLTYPE != FieldDefinition.SQL_TYPE_ID_DOUBLE && SQLTYPE != FieldDefinition.SQL_TYPE_ID_IMAGE;
 		boolean lockFormula = SQLTYPE == FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD || SQLTYPE == FieldDefinition.SQL_TYPE_ID_LIST_FIELD || SQLTYPE == FieldDefinition.SQL_TYPE_ID_IMAGE;
 		boolean lockPropertiesRelatedToObjectField = SQLTYPE != FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD;
@@ -601,6 +604,11 @@ public class FieldDefinition extends FocObject {
 			if(create){
 				field = new FTimeField(getName(),getTitle(),getID(),isKey());
 			}
+			
+		}else if(sqlType == SQL_TYPE_ID_DATE_TIME){
+			if(create){
+				field = new FDateTimeField(getName(),getTitle(),getID(),isKey());
+			}			
 
 		}else if(sqlType == SQL_TYPE_ID_IMAGE){
 			if(create){

@@ -253,6 +253,7 @@ public class FieldDefinitionDesc extends FocDesc {
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_LONG, FieldDefinition.SQL_TYPE_NAME_LONG);
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_BOOLEAN, FieldDefinition.SQL_TYPE_NAME_BOOLEAN);
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_DATE, FieldDefinition.SQL_TYPE_NAME_DATE);
+		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_DATE_TIME, FieldDefinition.SQL_TYPE_NAME_DATE_TIME);
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_TIME, FieldDefinition.SQL_TYPE_NAME_TIME);
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD, FieldDefinition.SQL_TYPE_NAME_OBJECT_FIELD);
 		multiChoice.addChoice(FieldDefinition.SQL_TYPE_ID_LIST_FIELD, FieldDefinition.SQL_TYPE_NAME_LIST_FIELD);
@@ -349,7 +350,8 @@ public class FieldDefinitionDesc extends FocDesc {
 					}else if(SQLType == FieldDefinition.SQL_TYPE_ID_BOOLEAN){
 						fieldDefinition.setLength(0);
 						fieldDefinition.setDecimals(0);
-					}else if(SQLType == FieldDefinition.SQL_TYPE_ID_DATE){
+					}else if(SQLType == FieldDefinition.SQL_TYPE_ID_DATE
+							  || SQLType == FieldDefinition.SQL_TYPE_ID_DATE_TIME){
 						fieldDefinition.setLength(0);
 						fieldDefinition.setDecimals(0);
 					}else if(SQLType == FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE){

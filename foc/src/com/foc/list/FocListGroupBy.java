@@ -28,6 +28,8 @@ import com.foc.util.Utils;
  */
 public class FocListGroupBy {
 	private static final String LISTAGG_SEPARATOR = "|";
+	private static final String COUNT_DISTINCT = "COUNT_DISTINCT(";
+	private static final String COUNT_DISTINCT_QUERY = "COUNT(DISTINCT ";
 	
 	private ArrayList<String>                     arrayOfAtomicExpressions = null;
 	private String                                groupByExpression        = null;
@@ -211,6 +213,9 @@ public class FocListGroupBy {
 			if(formulaFullExpression != null){
 				ret = formulaFullExpression;
 			}else{
+				if (formulaBefore.equals(COUNT_DISTINCT)){
+					formulaBefore = COUNT_DISTINCT_QUERY;
+				}
 				ret = formulaBefore + str + formulaAfter;
 			}
 			return ret;

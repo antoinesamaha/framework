@@ -186,8 +186,7 @@ public class ParsedJoin implements FXMLDesc {
 					}
 				}
 			}
-		}
-		
+		}		
 		return tableAlias;
 	}
 	
