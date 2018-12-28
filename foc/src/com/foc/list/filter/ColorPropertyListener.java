@@ -1,7 +1,5 @@
 package com.foc.list.filter;
 
-import java.awt.Color;
-
 import com.foc.desc.field.FField;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
@@ -19,8 +17,8 @@ public class ColorPropertyListener implements FPropertyListener /*AbstractAction
 	}
 
 	public void propertyModified(FProperty property) {
+		/*
 		FocListFilter filter = (FocListFilter) property.getFocObject();
-				
 		StringBuffer buff = condition.buildSQLWhere(filter, "RIEN");
 		if(buff != null && buff.length() > 0){
 			FProperty prop = filter.getFocProperty(operationPropertyId);
@@ -29,5 +27,6 @@ public class ColorPropertyListener implements FPropertyListener /*AbstractAction
 			FProperty prop = filter.getFocProperty(operationPropertyId);
 			prop.setBackground(null);
 		}
+		*/
 	}
 }

@@ -14,10 +14,10 @@ import java.text.SimpleDateFormat;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
-import com.foc.business.dateShifter.DateShifter;
 import com.foc.business.dateShifter.DateShifterDesc;
 import com.foc.db.DBManager;
-import com.foc.desc.*;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
@@ -320,13 +320,13 @@ public class DateCondition extends FilterCondition {
       IFocDescForFilter focDescForFilter = (IFocDescForFilter) focDesc;
       FilterDesc filterDesc = focDescForFilter != null ? focDescForFilter.getFilterDesc() : null;
       
-      firstDateShifterDesc = new DateShifterDesc(focDesc, firstID + FLD_OPERATOR + 1, getFieldPrefix()+"_F_", null, firstDateFLD);
+      firstDateShifterDesc = new DateShifterDesc(focDesc, firstID + FLD_OPERATOR + 1, getFieldPrefix()+"_F_", null, firstDateFLD, DateShifterDesc.ADJUST_NONE);
       nextIdx = firstDateShifterDesc.addFields();
       if(filterDesc != null) {
       	filterDesc.putDateShifterDesc(firstDateShifterDesc.getFieldsShift(), firstDateShifterDesc);
       }
       	
-      lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD);
+      lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD, DateShifterDesc.ADJUST_NONE);
       nextIdx = lastDateShifterDesc.addFields();
       if(filterDesc != null) {
       	filterDesc.putDateShifterDesc(lastDateShifterDesc.getFieldsShift(), lastDateShifterDesc);
@@ -453,20 +453,6 @@ public class DateCondition extends FilterCondition {
   	}  	
   	
   	return description;
-  }
-  
-  public void computeDatesFromShifters(FocListFilter filter) {
-  	DateShifter dateShifter = new DateShifter(filter, firstDateShifterDesc);
-  	if(dateShifter != null) {
-	  	dateShifter.adjustDate();
-	  	dateShifter.dispose();
-  	}
-  	
-  	dateShifter = new DateShifter(filter, lastDateShifterDesc);
-  	if(dateShifter != null) {
-	  	dateShifter.adjustDate();
-	  	dateShifter.dispose();
-  	}
   }
 
 	public DateShifterDesc getFirstDateShifterDesc() {

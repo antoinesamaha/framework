@@ -346,13 +346,13 @@ public class DateTimeCondition extends FilterCondition {
       IFocDescForFilter focDescForFilter = (IFocDescForFilter) focDesc;
       FilterDesc filterDesc = focDescForFilter != null ? focDescForFilter.getFilterDesc() : null;
       
-      firstDateShifterDesc = new DateShifterDesc(focDesc, firstID + FLD_OPERATOR + 1, getFieldPrefix()+"_F_", null, firstDateFLD);
+      firstDateShifterDesc = new DateShifterDesc(focDesc, firstID + FLD_OPERATOR + 1, getFieldPrefix()+"_F_", null, firstDateFLD, DateShifterDesc.ADJUST_LOW);
       nextIdx = firstDateShifterDesc.addFields();
       if(filterDesc != null) {
       	filterDesc.putDateShifterDesc(firstDateShifterDesc.getFieldsShift(), firstDateShifterDesc);
       }
       	
-      lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD);
+      lastDateShifterDesc = new DateShifterDesc(focDesc, nextIdx, getFieldPrefix()+"_L_", null, lastDateFLD, DateShifterDesc.ADJUST_UP);
       nextIdx = lastDateShifterDesc.addFields();
       if(filterDesc != null) {
       	filterDesc.putDateShifterDesc(lastDateShifterDesc.getFieldsShift(), lastDateShifterDesc);

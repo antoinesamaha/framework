@@ -39,7 +39,17 @@ public class DateShifter implements IFocData {
 				currentMonth      = cal.get(Calendar.MONTH);
 				currentYear       = cal.get(Calendar.YEAR);
 			}			
-			
+			if(getDateShifterDesc() != null) {
+				if(getDateShifterDesc().getAdjustTime() == DateShifterDesc.ADJUST_LOW) {
+					cal.set(Calendar.HOUR_OF_DAY, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+				}else if(getDateShifterDesc().getAdjustTime() == DateShifterDesc.ADJUST_UP) {
+					cal.set(Calendar.HOUR_OF_DAY, 23);
+					cal.set(Calendar.MINUTE, 59);
+					cal.set(Calendar.SECOND, 59);
+				}
+			}
 			cal.set(Calendar.DAY_OF_MONTH, 1);
 			
 			//Start by computing the year			
