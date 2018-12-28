@@ -2,6 +2,7 @@ package com.foc.vaadin.gui.xmlForm;
 
 import com.foc.business.dateShifter.DateShifter;
 import com.foc.list.filter.DateCondition;
+import com.foc.list.filter.DateTimeCondition;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.FocListFilter;
@@ -37,11 +38,22 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 	    if(filterDesc != null){
 		  	for(int i=0; i<filterDesc.getConditionCount(); i++){
 		      FilterCondition cond = filterDesc.getConditionAt(i);
-		      if(cond != null && cond instanceof DateCondition){
-		      	DateCondition dateCondition = (DateCondition)cond;
+		      if(			cond != null 
+		      		&& 	(   cond instanceof DateCondition
+		      		     || cond instanceof DateTimeCondition)){
 		      	
-		      	DateShifter firstDateShifter = getFilter().getDateShifter(dateCondition.getFirstDateShifterDesc().getFieldsShift());
-		      	DateShifter lastDateShifter = getFilter().getDateShifter(dateCondition.getLastDateShifterDesc().getFieldsShift());
+		      	DateShifter firstDateShifter = null; 
+		      	DateShifter lastDateShifter = null;
+		      	
+		      	if(cond instanceof DateCondition) {
+			      	DateCondition dateCondition = (DateCondition) cond;
+			      	firstDateShifter = getFilter().getDateShifter(dateCondition.getFirstDateShifterDesc().getFieldsShift());
+			      	lastDateShifter = getFilter().getDateShifter(dateCondition.getLastDateShifterDesc().getFieldsShift());
+		      	} else {
+			      	DateTimeCondition dateCondition = (DateTimeCondition) cond;
+			      	firstDateShifter = getFilter().getDateShifter(dateCondition.getFirstDateShifterDesc().getFieldsShift());
+			      	lastDateShifter = getFilter().getDateShifter(dateCondition.getLastDateShifterDesc().getFieldsShift());
+		      	}
 		      	
 		      	String buttonName = FocXMLFilterConditionBuilder.getButtonName_ForFirstDateShifterButton(cond);
 		      	Component comp = getComponentByName(buttonName);

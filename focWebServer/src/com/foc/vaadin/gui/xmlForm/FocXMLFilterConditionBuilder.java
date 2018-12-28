@@ -83,10 +83,21 @@ public class FocXMLFilterConditionBuilder {
 					newFieldTag(handler, prefix+"_OP", "120px");
 					
 					String firstDateVisibleWhen = "OR("+prefix+"_OP="+DateTimeCondition.OPERATOR_EQUALS+","+prefix+"_OP="+DateTimeCondition.OPERATOR_GREATER_THAN+","+prefix+"_OP="+DateTimeCondition.OPERATOR_BETWEEN+")";
+					String firstDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+firstDateVisibleWhen+")";
 					newFieldTag(handler, prefix+"_FDATE", WIDTH_VALUE, firstDateVisibleWhen);
 					
+					if(xmlLayout instanceof FocXMLLayout_Filter) {
+						newShifterButtonTag(handler, getButtonName_ForFirstDateShifterButton(condition), firstDateButtonVisibleWhen);
+					}
+
 					String lastDateVisibleWhen = "OR("+prefix+"_OP="+DateTimeCondition.OPERATOR_BETWEEN+","+prefix+"_OP="+DateTimeCondition.OPERATOR_LESS_THAN+")";
+					String lastDateButtonVisibleWhen = "AND($P{DB_RESIDENT},"+lastDateVisibleWhen+")";
 					newFieldTag(handler, prefix+"_LDATE", WIDTH_VALUE, lastDateVisibleWhen);
+					
+					if(xmlLayout instanceof FocXMLLayout_Filter) {
+						newShifterButtonTag(handler, getButtonName_ForLastDateShifterButton(condition), lastDateButtonVisibleWhen);
+					}
+
 				}else if(condition instanceof StringCondition){
 					//Operation
 					newFieldTag(handler, prefix+"_OP", "120px");

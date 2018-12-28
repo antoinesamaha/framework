@@ -170,4 +170,12 @@ public class FDateTime extends FDate {
   public void setEmptyValue(){
   	setDate(new java.sql.Date(0));
   }
+  
+  @Override
+  public void copy(FProperty sourceProp){
+  	if(sourceProp instanceof FDateTime) {
+  		long time = ((FDateTime) sourceProp).getTime();
+  		setDate(new java.sql.Date(time));
+  	}
+  }
 }

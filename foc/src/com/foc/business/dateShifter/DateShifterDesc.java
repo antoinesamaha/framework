@@ -20,6 +20,12 @@ public class DateShifterDesc {
 	private String  fieldPrefix = "";
 	private int     dateFieldID = 0;
 	
+	private int       adjustTime  = 0;
+	
+	public static int ADJUST_LOW  = -1;
+	public static int ADJUST_NONE =  0;
+	public static int ADJUST_UP   =  1;
+	
 	public static final int FLD_YEAR              = 1;
 	public static final int FLD_MONTH             = 2;
 	public static final int FLD_MONTH_SHIFT       = 3;
@@ -47,19 +53,24 @@ public class DateShifterDesc {
 	public static final int SHIFTER_ACTIVE     = 1;
 	
 	public DateShifterDesc(FocDesc focDesc, int shift, String suffix, int dateFieldID) {
-		this(focDesc, shift, null, suffix, dateFieldID);
+		this(focDesc, shift, null, suffix, dateFieldID, ADJUST_NONE);
 	}
 	
-	public DateShifterDesc(FocDesc focDesc, int shift, String prefix, String suffix, int dateFieldID) {
+	public DateShifterDesc(FocDesc focDesc, int shift, String prefix, String suffix, int dateFieldID, int adjustTime) {
 		this.focDesc     = focDesc;
 		this.shift       = shift;
 		this.fieldPrefix = prefix;
 		this.fieldSuffix = suffix;
 		this.dateFieldID = dateFieldID;
+		this.adjustTime  = adjustTime;
 	}
 	
 	public void dispose(){
 		focDesc = null;
+	}
+	
+	public int getAdjustTime() {
+		return adjustTime;
 	}
 
 	public String adjustFieldName(String fieldName){
