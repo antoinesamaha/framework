@@ -155,12 +155,12 @@
 		<dependency>
 			<groupId>com.focframework</groupId>
 			<artifactId>everproTreeGrid</artifactId>
-			<version>1.2.2</version>
+			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
 	
 	<properties>
-		<foc.version>1.7.2</foc.version>
+		<foc.version>1.7.3</foc.version>
 	</properties>
 	
 	<scm>

@@ -227,7 +227,7 @@
 		<dependency>
 			<groupId>com.focframework</groupId>
 			<artifactId>everproTreeGrid</artifactId>
-			<version>1.2.2</version>
+			<version>1.2.3</version>
 		</dependency>
     <dependency>
       <groupId>org.vaadin.addon</groupId>
@@ -264,7 +264,7 @@
 		</repository>
 	</repositories>
 	<properties>
-		<foc.version>1.7.2</foc.version>
+		<foc.version>1.7.3</foc.version>
 	</properties>
 	<scm>
 		<url>https://github.com/FOC-framework/framework.git</url>
