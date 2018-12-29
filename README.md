@@ -1,13 +1,23 @@
 ## focframework
 
 FOC is an open source full stack web application framework build using [java](http://www.java.com) and [vaadin](http://www.vaadin.com) 
-It is free to use under the `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
+It is free to use under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+
+### Tutorial
+
+[Here](https://foc-frameworkgithubio.readthedocs.io/en/latest/index.html) you can find our recent tutorial
+
+### Startup project
+
+[This project](https://github.com/FOC-framework/foc.samples) can be used as a startup for yours.
+
+### Startup project
 
 You can use the [editor on GitHub](https://github.com/FOC-framework/framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
