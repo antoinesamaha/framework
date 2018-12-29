@@ -1,4 +1,7 @@
-## Welcome to GitHub Pages from master branch 2
+## focframework
+
+FOC is an open source full stack web application framework build using `java <http://www.java.com>`_ and `vaadin <http://www.vaadin.com>`_ 
+It is free to use under the `Apache License, Version 2.0 <http://www.apache.org/licenses/LICENSE-2.0>`_.
 
 You can use the [editor on GitHub](https://github.com/FOC-framework/framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
