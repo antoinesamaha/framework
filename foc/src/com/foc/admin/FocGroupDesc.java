@@ -111,9 +111,6 @@ public class FocGroupDesc extends FocDesc{
     focFld = new FBoolField("NAME_MODF", "Allow Naming Modification", FLD_ALLOW_NAMING_MODIF, false);
     addField(focFld);
 
-//    focFld = new FBoolField("STATUS_MANUAL_MODF", "Allow Status Manual Modification", FLD_ALLOW_STATUS_MANUAL_MODIF, false);
-//    addField(focFld);
-
     focFld = new FBoolField("AREA_MANUAL_MODF", "Allow Area Manual Modification", FLD_ALLOW_AREA_MODIF, false);
     addField(focFld);
 
