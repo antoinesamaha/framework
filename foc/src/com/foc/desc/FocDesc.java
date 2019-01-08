@@ -1907,6 +1907,14 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		return workflow_IsAllow_Action(focObject, RightLevelDesc.FLD_APPROVE, RightLevelDesc.FLD_APPROVE);
 	}
 
+	public boolean workflow_IsAllowResetToProposal(FocObject focObject){
+		return workflow_IsAllow_Action(focObject, RightLevelDesc.FLD_RESET_TO_PROPOSAL, RightLevelDesc.FLD_RESET_TO_PROPOSAL);
+	}
+	
+	public boolean workflow_IsAllowResetToApproved(FocObject focObject){
+		return workflow_IsAllow_Action(focObject, RightLevelDesc.FLD_RESET_TO_APPROVED, RightLevelDesc.FLD_RESET_TO_APPROVED);
+	}
+	
 	public boolean workflow_IsAllowCancel(FocObject focObject){
 		return workflow_IsAllow_Action(focObject, RightLevelDesc.FLD_CANCEL, RightLevelDesc.FLD_CANCEL);
 	}

@@ -113,6 +113,17 @@ public class StatusHolder {
   	return !ok;
   }
   
+  public boolean resetStatusToApproved(){
+  	boolean ok = getStatus() == StatusHolderDesc.STATUS_CANCELED || getStatus() == StatusHolderDesc.STATUS_CLOSED;
+  	if(ok){
+  		ok = getIStatusHolder().allowSettingStatusTo(StatusHolderDesc.STATUS_APPROVED);
+	    if(ok){
+	    	setStatus(StatusHolderDesc.STATUS_APPROVED);
+	    }
+  	}
+  	return !ok;
+  }
+  
   public boolean setStatusToValidated(){
   	return setStatusToValidated(true);
   }

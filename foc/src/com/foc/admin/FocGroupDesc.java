@@ -43,7 +43,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_ALLOW_REPORT_ACCESS        = 8;
   public static final int FLD_ALLOW_DATABASE_BACKUP      = 9;
   public static final int FLD_ALLOW_DATABASE_RESTORE     = 10;
-  public static final int FLD_ALLOW_STATUS_MANUAL_MODIF  = 11;
+//  public static final int FLD_ALLOW_STATUS_MANUAL_MODIF  = 11;
   public static final int FLD_ALLOW_AREA_MODIF           = 12;
   public static final int FLD_ALLOW_IMPORT               = 13;
   public static final int FLD_ALLOW_EXPORT               = 14;
@@ -111,8 +111,8 @@ public class FocGroupDesc extends FocDesc{
     focFld = new FBoolField("NAME_MODF", "Allow Naming Modification", FLD_ALLOW_NAMING_MODIF, false);
     addField(focFld);
 
-    focFld = new FBoolField("STATUS_MANUAL_MODF", "Allow Status Manual Modification", FLD_ALLOW_STATUS_MANUAL_MODIF, false);
-    addField(focFld);
+//    focFld = new FBoolField("STATUS_MANUAL_MODF", "Allow Status Manual Modification", FLD_ALLOW_STATUS_MANUAL_MODIF, false);
+//    addField(focFld);
 
     focFld = new FBoolField("AREA_MANUAL_MODF", "Allow Area Manual Modification", FLD_ALLOW_AREA_MODIF, false);
     addField(focFld);

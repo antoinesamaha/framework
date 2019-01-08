@@ -4208,6 +4208,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		isAllowApprove = isAllowApprove && !focObject_IsLocked();
 		return isAllowApprove;
 	}
+	
+	public boolean workflow_IsAllowResetToProposal(){
+		boolean isAllowProposal = getThisFocDesc() != null ? getThisFocDesc().workflow_IsAllowResetToProposal(this) : false;
+		isAllowProposal = isAllowProposal && !focObject_IsLocked();
+		return isAllowProposal;
+	}
+	
+	public boolean workflow_IsAllowResetToApproved(){
+		boolean isAllowApprove = getThisFocDesc() != null ? getThisFocDesc().workflow_IsAllowResetToApproved(this) : false;
+		isAllowApprove = isAllowApprove && !focObject_IsLocked();
+		return isAllowApprove;
+	}
 
 	public WFTransactionConfig workflow_getTransactionConfig(){
 		WFTransactionConfig assignment = null; 

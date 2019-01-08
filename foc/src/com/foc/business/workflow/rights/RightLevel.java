@@ -94,6 +94,22 @@ public class RightLevel extends FocObject implements RightLevelConst {
 	  setPropertyBoolean(FLD_APPROVE, allowApprove); 
 	}
 	
+	public boolean isAllowResetToProposal(){
+	  return getPropertyBoolean(FLD_RESET_TO_PROPOSAL); 
+	}
+	
+	public void setAllowResetToProposal(boolean allowCancel){
+	  setPropertyBoolean(FLD_RESET_TO_PROPOSAL, allowCancel); 
+	}
+	
+	public boolean isAllowResetToApproved(){
+	  return getPropertyBoolean(FLD_RESET_TO_APPROVED); 
+	}
+	
+	public void setAllowResetToApproved(boolean allowCancel){
+	  setPropertyBoolean(FLD_RESET_TO_APPROVED, allowCancel); 
+	}
+	
 	public boolean isAllowModifyCodeDraft(){
 	  return getPropertyBoolean(FLD_MODIFY_CODE_DRAFT); 
 	}

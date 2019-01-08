@@ -12,11 +12,13 @@ public interface RightLevelConst {
 	public static final int FLD_APPROVE                =  9;
 	public static final int FLD_CLOSE                  = 10;
 	public static final int FLD_CANCEL                 = 11;
-	public static final int FLD_MODIFY_CODE_DRAFT      = 12;
-	public static final int FLD_MODIFY_CODE_APPROVED   = 13;
-	public static final int FLD_UNDO_SIGNATURE         = 14;
-	public static final int FLD_MODIFY_SIGNATRUE_STAGE = 15;
-	public static final int FLD_VIEW_LOG               = 16;
+	public static final int FLD_RESET_TO_PROPOSAL      = 12;
+	public static final int FLD_RESET_TO_APPROVED      = 13;
+	public static final int FLD_MODIFY_CODE_DRAFT      = 14;
+	public static final int FLD_MODIFY_CODE_APPROVED   = 15;
+	public static final int FLD_UNDO_SIGNATURE         = 16;
+	public static final int FLD_MODIFY_SIGNATRUE_STAGE = 17;
+	public static final int FLD_VIEW_LOG               = 18;
 	
 	public static final String ALL_RIGHTS = "All Rights";
 }

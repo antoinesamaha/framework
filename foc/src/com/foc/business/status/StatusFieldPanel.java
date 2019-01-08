@@ -99,11 +99,11 @@ public class StatusFieldPanel extends FPanel {
     }
         
     comp = addField(focObject, getIStatusHolderDesc().getFLD_STATUS(), 0, 0);
-    if(Globals.getApp().getGroup().allowStatusManualModif()){
-    	comp.setEnabled(true);
-    }else{
-    	comp.setEnabled(false);
-    }
+//    if(Globals.getApp().getGroup().allowStatusManualModif()){
+//    	comp.setEnabled(true);
+//    }else{
+//    	comp.setEnabled(false);
+//    }
     if(closeButton   != null) add(closeButton  , 3, 0, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
     if(approveButton != null) add(approveButton, 2, 0, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);
     if(cancelButton  != null) add(cancelButton , 4, 0, 1, 1, GridBagConstraints.NORTH, GridBagConstraints.BOTH);

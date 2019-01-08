@@ -1,7 +1,5 @@
 package com.foc.vaadin.gui.layouts.validationLayout;
 
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
 import com.foc.Globals;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
@@ -24,6 +22,8 @@ import com.foc.web.modules.workflow.WFTransactionWrapper_Form;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.modules.workflow.Workflow_Cancel_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -106,7 +106,7 @@ public class FVStatusLayout extends FVGearWrapper<FVLabel>{
 	  	}
 	  }
 	  
-	  if(FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
+	  if(getFocObject().workflow_IsAllowResetToProposal()){
 	    if(status != StatusHolderDesc.STATUS_PROPOSAL) root.addComponent(getResetStatusButton(true));
 	  }
 	}
