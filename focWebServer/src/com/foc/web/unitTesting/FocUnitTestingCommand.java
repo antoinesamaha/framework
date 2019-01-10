@@ -1435,7 +1435,7 @@ public class FocUnitTestingCommand {
   }
 
   public void button_Click(String layoutName, String buttonName) throws Exception {
-  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
+  	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
   	String backup = getLayoutName();
   	setLayoutName(layoutName);
   	button_Click(buttonName);
@@ -1448,7 +1448,7 @@ public class FocUnitTestingCommand {
    * 
    */
   public void button_Click(String buttonName) throws Exception {
-  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
+  	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVButton button = (FVButton) findComponent(navigationLayout, buttonName);
     if (button != null) {

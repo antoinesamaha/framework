@@ -6,6 +6,7 @@ import com.foc.Globals;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
+import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.ui.AbstractComponent;
@@ -62,12 +63,33 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 					}
 					
 					if(tableName != null) {
-						FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
+						boolean treated = false;
+						
+						FVTableWrapperLayout tableWrapperLayout = getTableWrapperLayout();
+						if(tableWrapperLayout != null) {
+							boolean recordedWithRefSelecion = tableWrapperLayout.recordTableLineSelection("ref");
+							if(recordedWithRefSelecion) {
+								FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", ref, \""+columnName+"\", \""+component.getValueString()+"\", null);");
+								treated = true;
+							}
+						}
+						
+						if(!treated){
+							FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
+						}
 					} else {
 						FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
 					}
 				}
 			}
 		}
+	}
+	
+	public FVTableWrapperLayout getTableWrapperLayout() {
+		FVTableWrapperLayout tableWrapper = null;
+		if(component instanceof AbstractComponent) {
+			tableWrapper = ((AbstractComponent)component).findAncestor(FVTableWrapperLayout.class);
+		}		
+		return tableWrapper;
 	}
 }
