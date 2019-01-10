@@ -6,7 +6,11 @@ import com.foc.Globals;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.unitTesting.FocUnitRecorder;
+import com.vaadin.ui.AbstractComponent;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Field;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 
@@ -33,29 +37,35 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 		if(component != null) {
 			FocXMLGuiComponentDelegate delegate = component.getDelegate(); 
 			if(delegate != null && !Utils.isStringEmpty(delegate.getNameInMap())){
-				String compName = delegate.getNameInMap();
-				String tableName = null;
-				long ref = 0;
-				String columnName = null;
-				
-				if(compName.contains("|")) {
-					try {
-						StringTokenizer tokenizer = new StringTokenizer(compName, "|") ;
-						if(tokenizer.countTokens() == 3) {
-							tableName = tokenizer.nextToken();
-							ref = Long.valueOf(tokenizer.nextToken());
-							columnName = tokenizer.nextToken();
-						}
-					}catch(Exception e) {
-						tableName = null;
-						Globals.logExceptionWithoutPopup(e);
-					}
+				FocXMLLayout xmlLayout = null;
+				if(component instanceof AbstractComponent) {
+					xmlLayout = ((AbstractComponent)component).findAncestor(FocXMLLayout.class);
 				}
-				
-				if(tableName != null) {
-					FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
-				} else {
-					FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
+				if(xmlLayout == null || !xmlLayout.isProcessingCopyMemoryToGui()) {
+					String compName = delegate.getNameInMap();
+					String tableName = null;
+					long ref = 0;
+					String columnName = null;
+					
+					if(compName.contains("|")) {
+						try {
+							StringTokenizer tokenizer = new StringTokenizer(compName, "|") ;
+							if(tokenizer.countTokens() == 3) {
+								tableName = tokenizer.nextToken();
+								ref = Long.valueOf(tokenizer.nextToken());
+								columnName = tokenizer.nextToken();
+							}
+						}catch(Exception e) {
+							tableName = null;
+							Globals.logExceptionWithoutPopup(e);
+						}
+					}
+					
+					if(tableName != null) {
+						FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
+					} else {
+						FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
+					}
 				}
 			}
 		}
