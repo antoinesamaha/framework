@@ -176,11 +176,11 @@ public class FocUnitTestingCommand {
     	result = (FocXMLLayout) window.getCentralPanel();
       Collection<Window> children = ui.getWindows();
       if (!children.isEmpty()) {
-      	Object obj = ((Window) children.toArray()[0]).getContent();
+      	Object obj = ((Window) children.toArray()[children.size()-1]).getContent();
       	if(obj instanceof FocXMLLayout){
       		result = (FocXMLLayout) obj;
       	}else{
-      		FocCentralPanel panel = (FocCentralPanel) ((Window) children.toArray()[0]).getContent();
+      		FocCentralPanel panel = (FocCentralPanel) ((Window) children.toArray()[children.size()-1]).getContent();
           
           if (panel != null) {
             result = (FocXMLLayout) panel.getCentralPanel();
