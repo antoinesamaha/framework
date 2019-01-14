@@ -456,7 +456,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 	private void openClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
-			recordTableLineSelection();
+			recordTableLineSelection(null);
 			FocUnitRecorder.recordLine("table_Open(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){
@@ -561,17 +561,17 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	// }
 	// }
 
-	private void recordTableLineSelection() {
+	public boolean recordTableLineSelection(String refParamName) {
+		boolean recordedWithRefSelection = false;
 		if(FocUnitRecorder.isRecording()) {
 			try {
-				boolean recorded = false;
 				if(getDelegate() != null && getTableTreeDelegate() != null) {
 					FocObject selectedFocObject = getTableTreeDelegate().getSelectedObject();
 					FVTableColumn column = null;
 					if(getTableTreeDelegate().getVisibleColumnCount() > 0) {
-						column = getTableTreeDelegate().findColumn(FField.FNAME_CODE);
-						if(column == null) column = getTableTreeDelegate().findColumn(FField.FNAME_NAME);
-						if(column == null) column = getTableTreeDelegate().findColumn(FField.FNAME_DESCRIPTION);
+						column = getTableTreeDelegate().findColumnThatEndsWith(FField.FNAME_CODE);
+						if(column == null) column = getTableTreeDelegate().findColumnThatEndsWith(FField.FNAME_NAME);
+						if(column == null) column = getTableTreeDelegate().findColumnThatEndsWith(FField.FNAME_DESCRIPTION);
 						if(column == null) {
 							if(getTableTreeDelegate().isRTL()) {
 								column = getTableTreeDelegate().getVisibleColumnByIndex(getTableTreeDelegate().getVisibleColumnCount() - 1);
@@ -587,23 +587,28 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 						}
 						FProperty prop = selectedFocObject.getFocPropertyForPath(path);
 						if(prop != null) {
-							recorded = true;
-							FocUnitRecorder.recordLine("table_Select(\""+getDelegate().getNameInMap()+"\", \""+path+"\", \""+prop.getString()+"\");");
+							String line = "table_Select(\""+getDelegate().getNameInMap()+"\", \""+path+"\", \""+prop.getString()+"\");";
+							if(!Utils.isStringEmpty(refParamName)) {
+								line = "long "+refParamName+" = "+line;
+								recordedWithRefSelection = true;
+							}
+							FocUnitRecorder.recordLine(line);
 						}
 					}
 				}
-				if(!recorded) {
-					FocUnitRecorder.recordLine("table_Select(!! COULD NOT DETECT SELECTION PARAMETERS !!);");
-				}
+//				if(!recorded) {
+//					FocUnitRecorder.recordLine("table_Select(!! COULD NOT DETECT SELECTION PARAMETERS !!);");
+//				}
 			}catch(Exception e) {
 				Globals.logException(e);
 			}
 		}
+		return recordedWithRefSelection;
 	}
 		
 	private void deleteItemClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
-			recordTableLineSelection();
+			recordTableLineSelection(null);
 			FocUnitRecorder.recordLine("table_Delete(\""+getDelegate().getNameInMap()+"\");");
 		}
 		if(getTableTreeDelegate() != null){

@@ -10,7 +10,6 @@
       </VerticalLayout>
       <VerticalLayout spacing="true">
         <GuiField name="NAME_MODF" caption="Allow Naming Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-        <GuiField name="STATUS_MANUAL_MODF" caption="Allow Status Manual Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
         <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
         <GuiField name="FX_RTE_MODIF" caption="Allow Currency rates modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" maskDataFoundError="true" />
         <GuiField name ="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />

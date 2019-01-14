@@ -20,7 +20,6 @@ import com.foc.business.printing.PrnReportLauncher;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.dataModelTree.DataModelGuiPanel_ForReporting;
-import com.foc.desc.field.FField;
 import com.foc.gui.FGButton;
 import com.foc.gui.FGCheckBox;
 import com.foc.gui.FPanel;

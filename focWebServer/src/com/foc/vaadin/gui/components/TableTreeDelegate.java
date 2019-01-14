@@ -900,6 +900,18 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		}
 	}
 	
+	public FVTableColumn findColumnThatEndsWith(String suffix) {
+		FVTableColumn found = null;
+		ArrayList<FVTableColumn> arrayList = getVisiblePropertiesArrayList();
+		for(int i = 0; i < arrayList.size() && found == null; i++){
+			FVTableColumn col = arrayList.get(i);
+			if(col.getName().equals(suffix) || col.getName().endsWith("-"+suffix)){
+				found = col;
+			}
+		}
+		return found;
+	}
+	
 	public FVTableColumn findColumn(String name) {
 		FVTableColumn found = null;
 		ArrayList<FVTableColumn> arrayList = getVisiblePropertiesArrayList();
