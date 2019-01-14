@@ -8,6 +8,8 @@ import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_TextArea;
+import com.foc.web.unitTesting.recording.UnitTestingRecorder_TextField;
 import com.vaadin.event.FieldEvents.TextChangeEvent;
 import com.vaadin.event.FieldEvents.TextChangeListener;
 import com.vaadin.ui.Field;
@@ -19,9 +21,11 @@ public class FVTextArea extends TextArea implements FocXMLGuiComponent {
 	private IFocData focData = null;
 	private Attributes attributes = null;
 	private FocXMLGuiComponentDelegate delegate = null;
+	private UnitTestingRecorder_TextArea recorder = null;
 
 	public FVTextArea(FProperty property, Attributes attributes) {
 		delegate = new FocXMLGuiComponentDelegate(this);
+		recorder = new UnitTestingRecorder_TextArea(this);
 		setAttributes(attributes);
 		setFocData(property);
 		addStyleName("component-margin");
@@ -44,6 +48,10 @@ public class FVTextArea extends TextArea implements FocXMLGuiComponent {
 
 	@Override
 	public void dispose() {
+  	if(recorder != null) {
+  		recorder.dispose();
+  		recorder = null;
+  	}
 		focData = null;
 		attributes = null;
 		if (delegate != null) {
