@@ -1841,7 +1841,12 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 						if(workflow_GetStatusForRigtsCheck(focObject) <= StatusHolderDesc.STATUS_PROPOSAL){
 							allow = rightLevel.getPropertyBoolean(fieldForDraft);
 						}else if(workflow_GetStatusForRigtsCheck(focObject) == StatusHolderDesc.STATUS_CLOSED){
-							allow = false;
+							if(			fieldForDraft == RightLevelDesc.FLD_RESET_TO_PROPOSAL
+									|| 	fieldForDraft == RightLevelDesc.FLD_RESET_TO_APPROVED) {
+								allow = rightLevel.getPropertyBoolean(fieldForDraft);
+							} else{
+								allow = false;
+							}
 						}else{
 							allow = rightLevel.getPropertyBoolean(fieldForApprove);
 						}
