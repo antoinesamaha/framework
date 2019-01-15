@@ -102,7 +102,7 @@ public class FVStatusLayout_ComboBox extends ComboBox implements com.vaadin.data
 		  		addNewItemProperty(ITEM_TITLE_CLOSE);	  		
 		  	}
 		  }
-		  if(FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
+		  if(getFocObject().workflow_IsAllowResetToProposal()){
 		  	addNewItemProperty(ITEM_TITLE_RESET_STATUS);
 		  }
 		}

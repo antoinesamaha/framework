@@ -7,17 +7,13 @@ import com.foc.OptionDialog;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.status.StatusHolderDesc;
-import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.map.WFTransactionConfig;
 import com.foc.desc.FocObject;
 import com.foc.property.FProperty;
-import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocCentralPanel;
-import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.foc.web.modules.workflow.WFTransactionWrapper_Form;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.modules.workflow.Workflow_Cancel_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -26,20 +22,15 @@ import com.vaadin.ui.MenuBar;
 @SuppressWarnings("serial")
 public class FVStatusLayout_MenuBar extends MenuBar {
 
+	private final static String ITEM_TITLE_APPROVED          = "Approved";
+	private final static String ITEM_TITLE_RESET_STATUS      = "Reset to Proposal";
+	private final static String ITEM_TITLE_RESET_TO_APPROVED = "Reset to Approved";
+	private final static String ITEM_TITLE_CANCEL            = "Cancel";
+	private final static String ITEM_TITLE_CLOSE             = "Close";
+
 	private FocXMLLayout xmlLayout = null;
-
-	private FocObject focObject = null;
-
-	private final static String ITEM_TITLE_APPROVED = "Approved";
-
-	private final static String ITEM_TITLE_RESET_STATUS = "Reset to Proposal";
-
-	private final static String ITEM_TITLE_CANCEL = "Cancel";
-
-	private final static String ITEM_TITLE_CLOSE = "Close";
-
-	private MenuItem rootMenuItem = null;
-
+	private FocObject    focObject = null;
+	private MenuItem     rootMenuItem = null;
 	private OptionDialog optionDialog = null;
 
 	public FVStatusLayout_MenuBar(FocXMLLayout xmlLayout, FocObject focObject) {
@@ -91,11 +82,15 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 			if(getFocObject().workflow_IsAllowClose()){
 				getRootMenuItem().addItem(ITEM_TITLE_CLOSE, statusMenuItemClicKListener);
 			}
+			if(getFocObject().workflow_IsAllowResetToProposal()){
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, statusMenuItemClicKListener);
+			}
+		}else if(status == StatusHolderDesc.STATUS_CLOSED || status == StatusHolderDesc.STATUS_CANCELED) {
+			if(getFocObject().workflow_IsAllowResetToApproved()){
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, statusMenuItemClicKListener);
+			}
 		}
-		boolean allowMidification = getFocObject() != null ? !getFocObject().focObject_IsLocked() : false;
-		if(allowMidification && FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
-			getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, statusMenuItemClicKListener);
-		}
+//		if(allowModification && FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
 	}
 
 	private void selectCurrentStatus() {
@@ -143,6 +138,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 					close();
 				}else if(menuItemTitle.equals(ITEM_TITLE_RESET_STATUS)){
 					resetToProposal();
+				}else if(menuItemTitle.equals(ITEM_TITLE_RESET_TO_APPROVED)){
+					resetToApproved();					
 				}
 				refreshStatusMenuBar();
 
@@ -188,8 +185,10 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 					if(optionName.equals("APPROVE")){
 						getStatusHolder().setStatusToValidated();
 						getFocObject().validate(true);
-						xmlLayout.copyMemoryToGui();
-						xmlLayout.getValidationLayout().commit();
+						if(xmlLayout != null) {
+							xmlLayout.copyMemoryToGui();
+							xmlLayout.getValidationLayout().commit();
+						}
 						refreshStatusMenuBar();
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
@@ -275,6 +274,34 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				if(optionName != null){
 					if(optionName.equals("RESET")){
 						boolean error = getStatusHolder().resetStatusToProposal();
+						if(!error){
+							getFocObject().validate(true);
+							xmlLayout.getValidationLayout().commit();
+						}
+						refreshStatusMenuBar();
+					}else if(optionName.equals("CANCEL")){
+						selectCurrentStatus();
+					}
+				}
+				return false;
+			}
+		};
+		dialog.addOption("RESET", "Yes Reset");
+		dialog.addOption("CANCEL", "No Cancel");
+		dialog.setWidth("400px");
+		dialog.setHeight("180px");
+		dialog.popup();
+		setOptionDialog(dialog);
+	}
+
+	public void resetToApproved() {
+		OptionDialog dialog = new OptionDialog("Reset to Approved Confirmation", "Reset this transaction to approved?") {
+
+			@Override
+			public boolean executeOption(String optionName) {
+				if(optionName != null){
+					if(optionName.equals("RESET")){
+						boolean error = getStatusHolder().resetStatusToApproved();
 						if(!error){
 							getFocObject().validate(true);
 							xmlLayout.getValidationLayout().commit();

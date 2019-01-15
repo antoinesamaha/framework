@@ -89,7 +89,7 @@ public class FocGroup extends FocObject{
     new FString(this, FocGroupDesc.FLD_STARTUP_MENU, "") ;
     new FString(this, FocGroupDesc.FLD_DASHBOARD_CONTEXT, "") ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_NAMING_MODIF, false) ;
-    new FBoolean(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, false) ;
+//    new FBoolean(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, false) ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_AREA_MODIF, false) ;
     if(FocGroupDesc.getInstance().getLink_AppGroup() != null){
     	new FList(this, FocGroupDesc.FLD_APP_GROUP, new FocList(this, FocGroupDesc.getInstance().getLink_AppGroup(), null));
@@ -162,9 +162,9 @@ public class FocGroup extends FocObject{
     return pAllowNaingModif != null ? pAllowNaingModif.getBoolean() : false;
   }
 
-  public boolean allowStatusManualModif(){
-    return getPropertyBoolean(FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF);
-  }
+//  public boolean allowStatusManualModif(){
+//    return getPropertyBoolean(FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF);
+//  }
 
   public boolean allowAreaManualModif(){
     return getPropertyBoolean(FocGroupDesc.FLD_ALLOW_AREA_MODIF);
@@ -262,8 +262,8 @@ public class FocGroup extends FocObject{
     comp = checkFlagPanel.add(this, FocGroupDesc.FLD_ALLOW_NAMING_MODIF, 0, yy++, 2, 1, GridBagConstraints.NONE);
     if(viewID == VIEW_READ_ONLY) comp.setEnabled(false);
 
-    comp = checkFlagPanel.add(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, 0, yy++, 2, 1, GridBagConstraints.NONE);
-    if(viewID == VIEW_READ_ONLY) comp.setEnabled(false);
+//    comp = checkFlagPanel.add(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, 0, yy++, 2, 1, GridBagConstraints.NONE);
+//    if(viewID == VIEW_READ_ONLY) comp.setEnabled(false);
 
     comp = checkFlagPanel.add(this, FocGroupDesc.FLD_ALLOW_AREA_MODIF, 0, yy++, 2, 1, GridBagConstraints.NONE);
     if(viewID == VIEW_READ_ONLY) comp.setEnabled(false);

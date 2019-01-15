@@ -53,6 +53,12 @@ public class RightLevelDesc extends FocDesc implements RightLevelConst {
 		bFld = new FBoolField("CLOSE_RIGHT", "Close", FLD_CLOSE, false); 
 		addField(bFld);
 
+		bFld = new FBoolField("RESET_TO_PROPOSAL", "Reset to Proposal", FLD_RESET_TO_PROPOSAL, false); 
+		addField(bFld);
+		
+		bFld = new FBoolField("RESET_TO_APPROVED", "Reset to Approved", FLD_RESET_TO_APPROVED, false); 
+		addField(bFld);
+		
 		bFld = new FBoolField("MODIFY_CODE_DRAFT_RIGHT", "Modify|Code|Draft", FLD_MODIFY_CODE_DRAFT, false); 
 		addField(bFld);
 		

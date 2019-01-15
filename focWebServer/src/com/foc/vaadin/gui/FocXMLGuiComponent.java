@@ -3,7 +3,6 @@ package com.foc.vaadin.gui;
 import org.xml.sax.Attributes;
 
 import com.foc.shared.dataStore.IFocData;
-import com.foc.web.unitTesting.recording.UnitTestingRecorder_CommonField;
 import com.vaadin.ui.Field;
 
 public interface FocXMLGuiComponent {

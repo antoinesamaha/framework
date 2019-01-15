@@ -12,6 +12,8 @@
         <TableColumn name="APPROVE_RIGHT" caption="Approve"  />
         <TableColumn name="CLOSE_RIGHT" caption="Close"  />
         <TableColumn name="CANCEL_RIGHT" caption="Cancel"  />
+        <TableColumn name="RESET_TO_PROPOSAL" caption="Reset to Proposal"  />
+        <TableColumn name="RESET_TO_APPROVED" caption="Reset to Approved"  />
         <TableColumn name="PRINT_DRAFT_RIGHT" caption="Print Draft"  />
         <TableColumn name="PRINT_APPROVE_RIGHT" caption="Print Approved"  />
         <TableColumn name="MODIFY_CODE_DRAFT_RIGHT" caption="Modify Code Draft"  />

@@ -2375,6 +2375,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 
+	public boolean isProcessingCopyMemoryToGui() {
+		return isReactToGuiChangeDisable();
+	}
+	
 	private boolean isReactToGuiChangeDisable() {
 		return reactToGuiChangeDisable;
 	}

@@ -176,11 +176,11 @@ public class FocUnitTestingCommand {
     	result = (FocXMLLayout) window.getCentralPanel();
       Collection<Window> children = ui.getWindows();
       if (!children.isEmpty()) {
-      	Object obj = ((Window) children.toArray()[0]).getContent();
+      	Object obj = ((Window) children.toArray()[children.size()-1]).getContent();
       	if(obj instanceof FocXMLLayout){
       		result = (FocXMLLayout) obj;
       	}else{
-      		FocCentralPanel panel = (FocCentralPanel) ((Window) children.toArray()[0]).getContent();
+      		FocCentralPanel panel = (FocCentralPanel) ((Window) children.toArray()[children.size()-1]).getContent();
           
           if (panel != null) {
             result = (FocXMLLayout) panel.getCentralPanel();
@@ -1435,7 +1435,7 @@ public class FocUnitTestingCommand {
   }
 
   public void button_Click(String layoutName, String buttonName) throws Exception {
-  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
+  	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
   	String backup = getLayoutName();
   	setLayoutName(layoutName);
   	button_Click(buttonName);
@@ -1448,7 +1448,7 @@ public class FocUnitTestingCommand {
    * 
    */
   public void button_Click(String buttonName) throws Exception {
-  	boolean nodeCreated = !getLogger().openCommand("Button clisk : "+buttonName);
+  	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FVButton button = (FVButton) findComponent(navigationLayout, buttonName);
     if (button != null) {

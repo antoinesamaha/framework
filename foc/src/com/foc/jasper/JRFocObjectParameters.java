@@ -47,7 +47,7 @@ public class JRFocObjectParameters extends HashMap<String, Object>{
       }
 		}
 		
-		if(iStatusHolder != null){
+		if(iStatusHolder != null && iStatusHolder.getStatusHolder() != null){
 			if(doNotPRintTheProposalTag){
 				put("X_STATUS", "");	
 			}else{
