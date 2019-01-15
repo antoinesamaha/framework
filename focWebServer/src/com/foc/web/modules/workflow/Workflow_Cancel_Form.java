@@ -8,14 +8,11 @@ import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.Workflow;
 import com.foc.desc.FocObject;
 import com.foc.util.Utils;
-import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout;
-import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_ComboBox;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_MenuBar;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.vaadin.gui.xmlForm.IValidationListener;
-import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
 public class Workflow_Cancel_Form extends FocXMLLayout{
@@ -153,9 +150,17 @@ public class Workflow_Cancel_Form extends FocXMLLayout{
 				
 				@Override
 				public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-			  	if(getFocXMLLayout() != null) {
-			  		getFocXMLLayout().goBack(null);
-			  	}
+					if(commited) {
+						if(getFocXMLLayout() != null) {
+							getFocXMLLayout().re_parseXMLAndBuildGui();
+							if(getFocXMLLayout().getValidationLayout() != null) {
+								FVStatusLayout_MenuBar statusLayout = getFocXMLLayout().getValidationLayout().getStatusLayout(false);
+								if(statusLayout != null) {
+									statusLayout.refreshStatusMenuBar();
+								}
+							}
+						}
+					}
 				}
 			});
 		}

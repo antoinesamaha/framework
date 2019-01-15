@@ -190,6 +190,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 							xmlLayout.getValidationLayout().commit();
 						}
 						refreshStatusMenuBar();
+						xmlLayout.goBack(getWindow());
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
@@ -246,11 +247,13 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 			public boolean executeOption(String optionName) {
 				if(optionName != null){
 					if(optionName.equals("CLOSE")){
-//						getStatusHolder().setStatus(StatusHolderDesc.STATUS_CLOSED);
+						xmlLayout.getValidationLayout().saveAndRefreshWithoutGoBack();
 						getStatusHolder().setStatusToClosed();
-						getStatusHolder().setClosureDate(Globals.getDBManager().getCurrentTimeStamp_AsTime());
-						xmlLayout.getValidationLayout().commit();
+						getStatusHolder().setClosureDate(Globals.getDBManager().getCurrentTimeStamp_AsTime());					
+						getFocObject().validate(true);
+						
 						refreshStatusMenuBar();
+						xmlLayout.re_parseXMLAndBuildGui();
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
@@ -279,6 +282,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 							xmlLayout.getValidationLayout().commit();
 						}
 						refreshStatusMenuBar();
+						xmlLayout.re_parseXMLAndBuildGui();
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
@@ -307,6 +311,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 							xmlLayout.getValidationLayout().commit();
 						}
 						refreshStatusMenuBar();
+						xmlLayout.re_parseXMLAndBuildGui();
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
