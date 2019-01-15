@@ -160,7 +160,7 @@
 	</dependencies>
 	
 	<properties>
-		<foc.version>1.7.3</foc.version>
+		<foc.version>1.7.4-SNAPSHOT</foc.version>
 	</properties>
 	
 	<scm>
