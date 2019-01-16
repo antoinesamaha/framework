@@ -2,6 +2,7 @@ package com.foc.vaadin.gui.layouts.validationLayout;
 
 import java.util.List;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
 import com.foc.business.status.IStatusHolder;
@@ -177,7 +178,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void approve() {
-		OptionDialog dialog = new OptionDialog("Approve Confirmation", "Are you sure you want to approve this transaction?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد الموافقة" : "Approve Confirmation", isArabic ? "انت اكيد من الموافقة على المعاملة؟" : "Are you sure you want to approve this transaction?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -190,7 +192,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 							xmlLayout.getValidationLayout().commit();
 						}
 						refreshStatusMenuBar();
-						xmlLayout.goBack(getWindow());
+						xmlLayout.re_parseXMLAndBuildGui();						
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
@@ -198,8 +200,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("APPROVE", "Yes Approve");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("APPROVE", isArabic ? "موافقة" : "Yes Approve");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -241,7 +243,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void close() {
-		OptionDialog dialog = new OptionDialog("Close Confirmation", "Are you sure you want to close this transaction?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تاكيد الاغلاق" : "Close Confirmation", isArabic ? "انت اكيد من اغلاق المعاملة؟" :"Are you sure you want to close this transaction"+"?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -261,8 +264,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("CLOSE", "Yes Close");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("CLOSE", isArabic ? "اغلاق" : "Yes Close");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -270,7 +273,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void resetToProposal() {
-		OptionDialog dialog = new OptionDialog("Reset to Proposal Confirmation", "Reset this transaction to proposal?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد أعادة المعاملة كمسودة" : "Reset to Proposal Confirmation", isArabic ? "انت اكيد من أعادة المعاملة كمسودة؟" : "Reset this transaction to proposal?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -290,8 +294,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("RESET", "Yes Reset");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("RESET", isArabic ? "أعادة المعاملة كمسودة" : "Yes Reset");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -299,7 +303,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void resetToApproved() {
-		OptionDialog dialog = new OptionDialog("Reset to Approved Confirmation", "Reset this transaction to approved?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد أعادة فتح المعاملة" : "Reset to Approved Confirmation", isArabic ? "انت اكيد من أعادة فتح المعاملة؟" : "Reset this transaction to approved?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -319,8 +324,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("RESET", "Yes Reset");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("RESET", isArabic ? "أعادة فتح المعاملة" : "Yes Reset");
+		dialog.addOption("CANCEL", isArabic ? "كلا": "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();

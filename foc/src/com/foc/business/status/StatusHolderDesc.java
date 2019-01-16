@@ -1,5 +1,6 @@
 package com.foc.business.status;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.desc.FocDesc;
@@ -139,12 +140,13 @@ public class StatusHolderDesc {
 	}
 	
 	public static FMultipleChoiceField newStatusField(int fldID, String fldName){
+		boolean arabic = ConfigInfo.isArabic();
 	  FMultipleChoiceField multipleChoice = new FMultipleChoiceField(fldName, "Status", fldID, false, 3);
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_SYSTEM  , "System"  );
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_PROPOSAL, PRINTED_LABEL_FOR_PROPOSAL/*"Proposal"*/);
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_APPROVED, "Approved");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CANCELED, "Canceled");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CLOSED  , "Closed"  );
+	  multipleChoice.addChoice(StatusHolderDesc.STATUS_SYSTEM  , "System", "closed.png");
+	  multipleChoice.addChoice(StatusHolderDesc.STATUS_PROPOSAL, arabic ? "مسودة" : PRINTED_LABEL_FOR_PROPOSAL/*"Proposal"*/, "proposal.png");
+	  multipleChoice.addChoice(StatusHolderDesc.STATUS_APPROVED, arabic ? "موافقة" : "Approved", "approved.png");
+	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CANCELED, arabic ? "ملغاة" : "Canceled", "cancelled.png");
+	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CLOSED  , arabic ? "مغلقة" : "Closed", "closed.png" );
 	  multipleChoice.setSortItems(false);
 	  return multipleChoice;
 	}
