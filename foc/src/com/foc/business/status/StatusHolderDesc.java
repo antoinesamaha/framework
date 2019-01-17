@@ -7,6 +7,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
+import com.foc.desc.field.FMultipleChoiceItem;
 import com.foc.desc.field.FObjectField;
 import com.foc.gui.table.FTableView;
 import com.foc.list.FocList;
@@ -141,13 +142,48 @@ public class StatusHolderDesc {
 	
 	public static FMultipleChoiceField newStatusField(int fldID, String fldName){
 		boolean arabic = ConfigInfo.isArabic();
-	  FMultipleChoiceField multipleChoice = new FMultipleChoiceField(fldName, "Status", fldID, false, 3);
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_SYSTEM  , "System", "closed.png");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_PROPOSAL, arabic ? "مسودة" : PRINTED_LABEL_FOR_PROPOSAL/*"Proposal"*/, "proposal.png");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_APPROVED, arabic ? "موافقة" : "Approved", "approved.png");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CANCELED, arabic ? "ملغاة" : "Canceled", "cancelled.png");
-	  multipleChoice.addChoice(StatusHolderDesc.STATUS_CLOSED  , arabic ? "مغلقة" : "Closed", "closed.png" );
+	  
+		FMultipleChoiceField multipleChoice = new FMultipleChoiceField(fldName, "Status", fldID, false, 3);
+	  FMultipleChoiceItem item = null;
+	  item = multipleChoice.addChoice(StatusHolderDesc.STATUS_SYSTEM  , "System");
+	  item.setIconFontAwesomeName(getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_SYSTEM));
+	  
+	  item = multipleChoice.addChoice(StatusHolderDesc.STATUS_PROPOSAL, arabic ? "مسودة" : PRINTED_LABEL_FOR_PROPOSAL/*"Proposal"*/);
+	  item.setIconFontAwesomeName(getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_PROPOSAL));
+	  
+	  item = multipleChoice.addChoice(StatusHolderDesc.STATUS_APPROVED, arabic ? "موافقة" : "Approved");
+	  item.setIconFontAwesomeName(getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_APPROVED));
+	  
+	  item = multipleChoice.addChoice(StatusHolderDesc.STATUS_CANCELED, arabic ? "ملغاة" : "Canceled");
+	  item.setIconFontAwesomeName(getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CANCELED));
+	  
+	  item = multipleChoice.addChoice(StatusHolderDesc.STATUS_CLOSED  , arabic ? "مغلقة" : "Closed");
+	  item.setIconFontAwesomeName(getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CLOSED));
+	  
 	  multipleChoice.setSortItems(false);
+	  
 	  return multipleChoice;
+	}
+	
+	public static String getFontAwesomeIconNameForValue(int value) {
+		String icon = null;
+		switch(value) {
+		case StatusHolderDesc.STATUS_SYSTEM:
+			icon = "ERASER";
+			break;
+		case StatusHolderDesc.STATUS_PROPOSAL:
+			icon = "ERASER";
+			break;
+		case StatusHolderDesc.STATUS_APPROVED:
+			icon = "CHECK_SQUARE";
+			break;
+		case StatusHolderDesc.STATUS_CLOSED:
+			icon = "LOCK";
+			break;
+		case StatusHolderDesc.STATUS_CANCELED:
+			icon = "BAN";
+			break;
+		}
+		return icon;
 	}
 }

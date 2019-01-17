@@ -1,7 +1,5 @@
 package com.foc.vaadin.gui.layouts.validationLayout;
 
-import java.util.List;
-
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
@@ -18,16 +16,17 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.modules.workflow.Workflow_Cancel_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.MenuBar;
 
 @SuppressWarnings("serial")
 public class FVStatusLayout_MenuBar extends MenuBar {
 
-	private final static String ITEM_TITLE_APPROVED          = "Approved";
-	private final static String ITEM_TITLE_RESET_STATUS      = "Reset to Proposal";
-	private final static String ITEM_TITLE_RESET_TO_APPROVED = "Reset to Approved";
-	private final static String ITEM_TITLE_CANCEL            = "Cancel";
-	private final static String ITEM_TITLE_CLOSE             = "Close";
+	private static String ITEM_TITLE_APPROVED          = "Approved";
+	private static String ITEM_TITLE_RESET_STATUS      = "Reset to Proposal";
+	private static String ITEM_TITLE_RESET_TO_APPROVED = "Reset to Approved";
+	private static String ITEM_TITLE_CANCEL            = "Cancel";
+	private static String ITEM_TITLE_CLOSE             = "Close";
 
 	private FocXMLLayout xmlLayout = null;
 	private FocObject    focObject = null;
@@ -42,6 +41,13 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	private void init() {
+		if(ConfigInfo.isArabic()) {
+			ITEM_TITLE_APPROVED          = "موافقة";
+			ITEM_TITLE_RESET_STATUS      = "أعادة المعاملة كمسودة";
+			ITEM_TITLE_RESET_TO_APPROVED = "أعادة فتح المعاملة";
+			ITEM_TITLE_CANCEL            = "الغاء";
+			ITEM_TITLE_CLOSE             = "اغلاق";
+		}
 		fillStatusMenuBar();
 	}
 
@@ -71,44 +77,45 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 
 		if(status == StatusHolderDesc.STATUS_PROPOSAL){
 			if(getFocObject().workflow_IsAllowApprove() && !hasMapForSignatures){
-				getRootMenuItem().addItem(ITEM_TITLE_APPROVED, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_APPROVED));
+				getRootMenuItem().addItem(ITEM_TITLE_APPROVED, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowCancel()){
-				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CANCELED));
+				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, iconResource, statusMenuItemClicKListener);
 			}
 		}else if(status == StatusHolderDesc.STATUS_APPROVED){
 			if(getFocObject().workflow_IsAllowCancel()){
-				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CANCELED));
+				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowClose()){
-				getRootMenuItem().addItem(ITEM_TITLE_CLOSE, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CLOSED));
+				getRootMenuItem().addItem(ITEM_TITLE_CLOSE, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowResetToProposal()){
-				getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_PROPOSAL));
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, iconResource, statusMenuItemClicKListener);
 			}
 		}else if(status == StatusHolderDesc.STATUS_CLOSED || status == StatusHolderDesc.STATUS_CANCELED) {
 			if(getFocObject().workflow_IsAllowResetToApproved()){
-				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_APPROVED));
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, iconResource, statusMenuItemClicKListener);
 			}
 		}
 //		if(allowModification && FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
 	}
-
+	
 	private void selectCurrentStatus() {
 		FProperty property = focObject != null ? (FProperty) focObject.iFocData_getDataByPath(StatusHolderDesc.FNAME_STATUS) : null;
 		if(property != null){
 			getRootMenuItem().setText(property.getString());
-			addStatusIfNeededAndSelectIt(property.getString());
+			FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(property.getInteger()));
+			getRootMenuItem().setIcon(iconResource);
+//			addStatusIfNeededAndSelectIt(property);
 		}
 	}
 	
-	private void addStatusIfNeededAndSelectIt(String status){
-		List<MenuItem> menuItemsList = getRootMenuItem() != null ? getRootMenuItem().getChildren() : null;
-		if(menuItemsList == null && status != null && !status.isEmpty()){
-			getRootMenuItem().addItem(status, null);
-		}
-	}
-
 	private void setFocObject(FocObject focObject) {
 		this.focObject = focObject;
 	}

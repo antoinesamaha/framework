@@ -22,6 +22,7 @@ public class FMultipleChoiceItem implements FMultipleChoiceItemInterface, Item {
   private ImageIcon   imageIcon = null;
   private LanguageKey langKey   = null;
   private String      iconPath  = null;
+  private String      iconFontAwesomeName = null;
 
   public FMultipleChoiceItem(int id, String title, String iconPath) {
     this.id       = id      ;
@@ -126,4 +127,12 @@ public class FMultipleChoiceItem implements FMultipleChoiceItemInterface, Item {
 	}
   //-----------------------------------------------------------------------
   //-----------------------------------------------------------------------
+
+	public String getIconFontAwesomeName() {
+		return iconFontAwesomeName;
+	}
+
+	public void setIconFontAwesomeName(String iconFontAwesomeName) {
+		this.iconFontAwesomeName = iconFontAwesomeName;
+	}
 }
