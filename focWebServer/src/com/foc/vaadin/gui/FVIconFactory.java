@@ -58,6 +58,11 @@ public class FVIconFactory {
   public final static String ICON_INFOPATH = "MS-InfoPath-icon.png";
   public final static String ICON_ONE_NOTE = "MS-Onenote-icon.png";
   public final static String ICON_DOWNLOAD = "Download-2-icon.png";
+  
+  public final static String ICON_PROPOSAL  = "proposal.png";
+  public final static String ICON_APPROVED  = "approved.png";
+  public final static String ICON_CLOSED    = "closed.png";
+  public final static String ICON_CANCELLED = "cancelled.png";
 
   /*
   public final static String ICON_EXCEL_16X16    = "Office-Apps-Excel-alt-1-Metro-icon(16x16).png";

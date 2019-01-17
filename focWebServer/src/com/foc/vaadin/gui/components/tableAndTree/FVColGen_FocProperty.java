@@ -3,12 +3,16 @@ package com.foc.vaadin.gui.components.tableAndTree;
 import java.util.Collection;
 import java.util.Locale;
 
+import org.hamcrest.core.IsInstanceOf;
+
 import com.foc.Globals;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FImageField;
+import com.foc.desc.field.FMultipleChoiceItem;
+import com.foc.desc.field.FMultipleChoiceItemInterface;
 import com.foc.list.FocList;
 import com.foc.property.FCloudStorageProperty;
 import com.foc.property.FDate;
@@ -45,8 +49,10 @@ import com.vaadin.event.FieldEvents.BlurListener;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
 import com.vaadin.server.BrowserWindowOpener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -314,7 +320,15 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 						objReturned = imageField;
 					}
 				}
-			}else if(property instanceof FObject || property instanceof FDate || property instanceof FString || property instanceof FDouble || (property instanceof FInt && !(property instanceof FMultipleChoice))){
+			}else if(			property instanceof FObject 
+								|| 	property instanceof FDate 
+								||  property instanceof FString 
+								||  property instanceof FDouble 
+								||  property instanceof FInt
+								||  property instanceof FMultipleChoice){
+				if(property instanceof FMultipleChoice) {
+					objReturned = property.getString();
+				}
 				FVLabel lbl = null;
 				String  styleAttrib   = column.getAttributes() != null ? column.getAttributes().getValue(FXML.ATT_STYLE) : null;
 				int     maxCharacters = column.getMaxCharacters();
@@ -324,11 +338,33 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 					lbl = new FVLabel((String) objReturned);
 					lbl.parseStyleAttributeValue(styleAttrib);
 					objReturned = lbl;
-				}else if(property instanceof FDouble || property instanceof FInt){
+				}else if(property instanceof FDouble || (property instanceof FInt  && !(property instanceof FMultipleChoice))){
 					lbl = new FVLabelInTable(property, focObject, column);
 					lbl.copyMemoryToGui();
 					lbl.addStyleName("foc-text-right");
 					objReturned = lbl;
+				}
+				
+				if(property instanceof FMultipleChoice) {
+					Object itemObj = ((FMultipleChoice)property).getValue();
+					if(itemObj != null && itemObj instanceof FMultipleChoiceItem) {
+						FMultipleChoiceItem item = (FMultipleChoiceItem) itemObj;
+						if(lbl == null) { 
+							String iconNameInFontAwesome = item != null ? item.getIconFontAwesomeName() : null;
+							if(iconNameInFontAwesome == null) {
+								lbl = new FVLabel(item.getTitle());
+//								lbl.setIcon(FVIconFactory.getInstance().getFVIcon_Small(path));
+							} else {
+								FontAwesome icon = FontAwesome.valueOf(iconNameInFontAwesome);
+								lbl = new FVLabel("");
+								lbl.setCaption(null);
+								lbl.setContentMode(ContentMode.HTML);
+								lbl.setValue(item.getTitle() + " " + icon.getHtml());
+							}
+							
+							objReturned = lbl;
+						}
+					}
 				}
 				
 				//If RTL I have t put the String in a label to align right
@@ -366,8 +402,9 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 						ttt = originalValue;
 						if(getFocXMLLayout().isRTL()){
 							objReturned = ttt.substring(0, maxCharacters)+"...";
+						} else {
+							objReturned = ttt.substring(0, maxCharacters)+"...";
 						}
-						else objReturned = ttt.substring(0, maxCharacters)+"...";
 					}
 				}
 				if(ttt != null && getTableTreeDelegate() != null){
@@ -402,15 +439,15 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 				}
 			}else{
 				objReturned = property;
-				if((property instanceof FMultipleChoice)){
-					FocXMLAttributes attributes = column.getAttributes();
-					if(attributes != null && attributes.getValue(FXML.ATT_LINK) != null && attributes.getValue(FXML.ATT_LINK).equals("true")){
-						HyperLinkButton button = new HyperLinkButton(focObject, property.getString());
-						button.addClickListener(hyperLinkButtonListener);
-						button.addStyleName("focLinkInTable");
-						objReturned = button;
-					}
-				}
+//				if((property instanceof FMultipleChoice)){
+//					FocXMLAttributes attributes = column.getAttributes();
+//					if(attributes != null && attributes.getValue(FXML.ATT_LINK) != null && attributes.getValue(FXML.ATT_LINK).equals("true")){
+//						HyperLinkButton button = new HyperLinkButton(focObject, property.getString());
+//						button.addClickListener(hyperLinkButtonListener);
+//						button.addStyleName("focLinkInTable");
+//						objReturned = button;
+//					}
+//				}
 			}
 		}
 //		if(objReturned instanceof String){

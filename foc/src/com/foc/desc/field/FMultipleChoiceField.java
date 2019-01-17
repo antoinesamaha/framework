@@ -110,19 +110,22 @@ public class FMultipleChoiceField extends FIntField {
     return newProperty_ToImplement(masterObj, null);
   }
 
-  public void addChoice(int id, String title, String iconPath) {
+  public FMultipleChoiceItem addChoice(int id, String title, String iconPath) {
     FMultipleChoiceItem item = new FMultipleChoiceItem(id, title, iconPath);
     list.put(Integer.valueOf(id), item);
+    return item;
   }
   
-  public void addChoice(int id, ImageIcon imageIcon, String title) {
+  public FMultipleChoiceItem addChoice(int id, ImageIcon imageIcon, String title) {
     FMultipleChoiceItem item = new FMultipleChoiceItem(id, imageIcon, title);
     list.put(Integer.valueOf(id), item);
+    return item;
   }
   
-  public void addChoice(int id, String title) {
+  public FMultipleChoiceItem addChoice(int id, String title) {
     FMultipleChoiceItem item = new FMultipleChoiceItem(id, title);
     list.put(Integer.valueOf(id), item);
+    return item;
   }
 
   public void addChoice(int id, LanguageKey langKey) {

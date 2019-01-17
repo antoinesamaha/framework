@@ -1,7 +1,6 @@
 package com.foc.vaadin.gui.layouts.validationLayout;
 
-import java.util.List;
-
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
 import com.foc.business.status.IStatusHolder;
@@ -17,16 +16,17 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.modules.workflow.Workflow_Cancel_Form;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.MenuBar;
 
 @SuppressWarnings("serial")
 public class FVStatusLayout_MenuBar extends MenuBar {
 
-	private final static String ITEM_TITLE_APPROVED          = "Approved";
-	private final static String ITEM_TITLE_RESET_STATUS      = "Reset to Proposal";
-	private final static String ITEM_TITLE_RESET_TO_APPROVED = "Reset to Approved";
-	private final static String ITEM_TITLE_CANCEL            = "Cancel";
-	private final static String ITEM_TITLE_CLOSE             = "Close";
+	private static String ITEM_TITLE_APPROVED          = "Approved";
+	private static String ITEM_TITLE_RESET_STATUS      = "Reset to Proposal";
+	private static String ITEM_TITLE_RESET_TO_APPROVED = "Reset to Approved";
+	private static String ITEM_TITLE_CANCEL            = "Cancel";
+	private static String ITEM_TITLE_CLOSE             = "Close";
 
 	private FocXMLLayout xmlLayout = null;
 	private FocObject    focObject = null;
@@ -41,6 +41,13 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	private void init() {
+		if(ConfigInfo.isArabic()) {
+			ITEM_TITLE_APPROVED          = "موافقة";
+			ITEM_TITLE_RESET_STATUS      = "أعادة المعاملة كمسودة";
+			ITEM_TITLE_RESET_TO_APPROVED = "أعادة فتح المعاملة";
+			ITEM_TITLE_CANCEL            = "الغاء";
+			ITEM_TITLE_CLOSE             = "اغلاق";
+		}
 		fillStatusMenuBar();
 	}
 
@@ -70,44 +77,45 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 
 		if(status == StatusHolderDesc.STATUS_PROPOSAL){
 			if(getFocObject().workflow_IsAllowApprove() && !hasMapForSignatures){
-				getRootMenuItem().addItem(ITEM_TITLE_APPROVED, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_APPROVED));
+				getRootMenuItem().addItem(ITEM_TITLE_APPROVED, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowCancel()){
-				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CANCELED));
+				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, iconResource, statusMenuItemClicKListener);
 			}
 		}else if(status == StatusHolderDesc.STATUS_APPROVED){
 			if(getFocObject().workflow_IsAllowCancel()){
-				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CANCELED));
+				getRootMenuItem().addItem(ITEM_TITLE_CANCEL, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowClose()){
-				getRootMenuItem().addItem(ITEM_TITLE_CLOSE, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_CLOSED));
+				getRootMenuItem().addItem(ITEM_TITLE_CLOSE, iconResource, statusMenuItemClicKListener);
 			}
 			if(getFocObject().workflow_IsAllowResetToProposal()){
-				getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_PROPOSAL));
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_STATUS, iconResource, statusMenuItemClicKListener);
 			}
 		}else if(status == StatusHolderDesc.STATUS_CLOSED || status == StatusHolderDesc.STATUS_CANCELED) {
 			if(getFocObject().workflow_IsAllowResetToApproved()){
-				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, statusMenuItemClicKListener);
+				FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(StatusHolderDesc.STATUS_APPROVED));
+				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, iconResource, statusMenuItemClicKListener);
 			}
 		}
 //		if(allowModification && FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
 	}
-
+	
 	private void selectCurrentStatus() {
 		FProperty property = focObject != null ? (FProperty) focObject.iFocData_getDataByPath(StatusHolderDesc.FNAME_STATUS) : null;
 		if(property != null){
 			getRootMenuItem().setText(property.getString());
-			addStatusIfNeededAndSelectIt(property.getString());
+			FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(property.getInteger()));
+			getRootMenuItem().setIcon(iconResource);
+//			addStatusIfNeededAndSelectIt(property);
 		}
 	}
 	
-	private void addStatusIfNeededAndSelectIt(String status){
-		List<MenuItem> menuItemsList = getRootMenuItem() != null ? getRootMenuItem().getChildren() : null;
-		if(menuItemsList == null && status != null && !status.isEmpty()){
-			getRootMenuItem().addItem(status, null);
-		}
-	}
-
 	private void setFocObject(FocObject focObject) {
 		this.focObject = focObject;
 	}
@@ -177,7 +185,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void approve() {
-		OptionDialog dialog = new OptionDialog("Approve Confirmation", "Are you sure you want to approve this transaction?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد الموافقة" : "Approve Confirmation", isArabic ? "انت اكيد من الموافقة على المعاملة؟" : "Are you sure you want to approve this transaction?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -190,7 +199,7 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 							xmlLayout.getValidationLayout().commit();
 						}
 						refreshStatusMenuBar();
-						xmlLayout.goBack(getWindow());
+						xmlLayout.re_parseXMLAndBuildGui();						
 					}else if(optionName.equals("CANCEL")){
 						selectCurrentStatus();
 					}
@@ -198,8 +207,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("APPROVE", "Yes Approve");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("APPROVE", isArabic ? "موافقة" : "Yes Approve");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -241,7 +250,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void close() {
-		OptionDialog dialog = new OptionDialog("Close Confirmation", "Are you sure you want to close this transaction?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تاكيد الاغلاق" : "Close Confirmation", isArabic ? "انت اكيد من اغلاق المعاملة؟" :"Are you sure you want to close this transaction"+"?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -261,8 +271,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("CLOSE", "Yes Close");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("CLOSE", isArabic ? "اغلاق" : "Yes Close");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -270,7 +280,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void resetToProposal() {
-		OptionDialog dialog = new OptionDialog("Reset to Proposal Confirmation", "Reset this transaction to proposal?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد أعادة المعاملة كمسودة" : "Reset to Proposal Confirmation", isArabic ? "انت اكيد من أعادة المعاملة كمسودة؟" : "Reset this transaction to proposal?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -290,8 +301,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("RESET", "Yes Reset");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("RESET", isArabic ? "أعادة المعاملة كمسودة" : "Yes Reset");
+		dialog.addOption("CANCEL", isArabic ? "كلا" : "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
@@ -299,7 +310,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	}
 
 	public void resetToApproved() {
-		OptionDialog dialog = new OptionDialog("Reset to Approved Confirmation", "Reset this transaction to approved?") {
+		boolean isArabic = ConfigInfo.isArabic();
+		OptionDialog dialog = new OptionDialog(isArabic ? "تأكيد أعادة فتح المعاملة" : "Reset to Approved Confirmation", isArabic ? "انت اكيد من أعادة فتح المعاملة؟" : "Reset this transaction to approved?") {
 
 			@Override
 			public boolean executeOption(String optionName) {
@@ -319,8 +331,8 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				return false;
 			}
 		};
-		dialog.addOption("RESET", "Yes Reset");
-		dialog.addOption("CANCEL", "No Cancel");
+		dialog.addOption("RESET", isArabic ? "أعادة فتح المعاملة" : "Yes Reset");
+		dialog.addOption("CANCEL", isArabic ? "كلا": "No Cancel");
 		dialog.setWidth("400px");
 		dialog.setHeight("180px");
 		dialog.popup();
