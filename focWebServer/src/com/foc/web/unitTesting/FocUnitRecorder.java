@@ -48,7 +48,7 @@ public class FocUnitRecorder {
 	
 	private static FocUnitRecorder instance = null;
 	
-	private static FocUnitRecorder getInstance(boolean create){
+	public static FocUnitRecorder getInstance(boolean create){
 		if(instance == null && create) instance = new FocUnitRecorder();
 		return instance;
 	}

@@ -9,11 +9,9 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.unitTesting.FocUnitRecorder;
-import com.vaadin.ui.AbstractComponent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.Field;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.ui.AbstractComponent;
 
 public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> implements ValueChangeListener {
 
@@ -33,15 +31,40 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 		}
 	}
 	
+	private FocXMLLayout getParentFocXMLLayout() {
+		FocXMLLayout xmlLayout = null;
+		if(component instanceof AbstractComponent) {
+			xmlLayout = ((AbstractComponent)component).findAncestor(FocXMLLayout.class);
+		}		
+		return xmlLayout;
+	}
+	
+	private String getLayoutNameSection() {
+		String layoutNameSection = "";
+		FocXMLLayout xmlLayout = null;
+		xmlLayout = getParentFocXMLLayout();
+		if(xmlLayout != null) {
+			FocXMLLayout xmlLayoutHigher = xmlLayout.findAncestor(FocXMLLayout.class);
+			if(xmlLayoutHigher != null && xmlLayout.getDelegate() != null) {
+				layoutNameSection = xmlLayout.getDelegate().getNameInMap();
+				if(!Utils.isStringEmpty(layoutNameSection)) {
+					layoutNameSection = "\""+layoutNameSection+"\", ";
+				}
+			}
+		}
+
+		return layoutNameSection; 
+	}
+	
 	@Override
 	public void valueChange(ValueChangeEvent event) {
-		if(component != null) {
+		FocUnitRecorder recorder = FocUnitRecorder.getInstance(false);
+		
+		if(recorder != null && component != null) {
 			FocXMLGuiComponentDelegate delegate = component.getDelegate(); 
 			if(delegate != null && !Utils.isStringEmpty(delegate.getNameInMap())){
-				FocXMLLayout xmlLayout = null;
-				if(component instanceof AbstractComponent) {
-					xmlLayout = ((AbstractComponent)component).findAncestor(FocXMLLayout.class);
-				}
+				String layoutNameSection = getLayoutNameSection();
+				FocXMLLayout xmlLayout = getParentFocXMLLayout(); 
 				if(xmlLayout == null || !xmlLayout.isProcessingCopyMemoryToGui()) {
 					String compName = delegate.getNameInMap();
 					String tableName = null;
@@ -69,16 +92,16 @@ public class UnitTestingRecorder_CommonField<C extends FocXMLGuiComponent> imple
 						if(tableWrapperLayout != null) {
 							boolean recordedWithRefSelecion = tableWrapperLayout.recordTableLineSelection("ref");
 							if(recordedWithRefSelecion) {
-								FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", ref, \""+columnName+"\", \""+component.getValueString()+"\", null);");
+								FocUnitRecorder.recordLine("componentInTable_SetValue("+layoutNameSection+"\""+tableName+"\", ref, \""+columnName+"\", \""+component.getValueString()+"\", null);");
 								treated = true;
 							}
 						}
 						
 						if(!treated){
-							FocUnitRecorder.recordLine("componentInTable_SetValue(\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
+							FocUnitRecorder.recordLine("componentInTable_SetValue("+layoutNameSection+"\""+tableName+"\", "+ref+", \""+columnName+"\", \""+component.getValueString()+"\", null);");
 						}
 					} else {
-						FocUnitRecorder.recordLine("component_SetValue(\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
+						FocUnitRecorder.recordLine("component_SetValue("+layoutNameSection+"\""+delegate.getNameInMap()+"\", \""+component.getValueString()+"\", false);");
 					}
 				}
 			}
