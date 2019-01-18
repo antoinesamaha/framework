@@ -10,6 +10,7 @@ import com.vaadin.ui.Button.ClickListener;
 public class UnitTestingRecorder_Button implements ClickListener {
 
 	private FVButton button = null;
+	private String   buttonNameInMap = "";
 	
 	public UnitTestingRecorder_Button(FVButton button) {
 		this.button = button;
@@ -20,18 +21,36 @@ public class UnitTestingRecorder_Button implements ClickListener {
 	
 	public void dispose() {
 		if(button != null) {
+			//Sometimes we dispose before being called for listener  
+			getNameFromButtonIfEmpty();
 			button.removeClickListener(this);
 			button = null;
+		}
+	}
+
+	private void getNameFromButtonIfEmpty() {
+		if(button != null && Utils.isStringEmpty(buttonNameInMap)) {
+			FocXMLGuiComponentDelegate delegate = button.getDelegate(); 
+			if(delegate != null){
+				buttonNameInMap = delegate.getNameInMap();
+			}
 		}
 	}
 	
 	@Override
 	public void buttonClick(ClickEvent event) {
+		getNameFromButtonIfEmpty();
+		if(!Utils.isStringEmpty(buttonNameInMap)){
+			FocUnitRecorder.recordLine("button_Click(\""+buttonNameInMap+"\")");
+		}
+
+		/*
 		if(button != null) {
 			FocXMLGuiComponentDelegate delegate = button.getDelegate(); 
 			if(delegate != null && !Utils.isStringEmpty(delegate.getNameInMap())){
 				FocUnitRecorder.recordLine("button_Click(\""+delegate.getNameInMap()+"\")");
 			}
 		}
+		*/
 	}
 }
