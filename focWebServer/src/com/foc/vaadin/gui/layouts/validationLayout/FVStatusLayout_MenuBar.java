@@ -103,16 +103,18 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 				getRootMenuItem().addItem(ITEM_TITLE_RESET_TO_APPROVED, iconResource, statusMenuItemClicKListener);
 			}
 		}
-//		if(allowModification && FocWebApplication.getFocUser().getGroup().allowStatusManualModif()){
 	}
 	
 	private void selectCurrentStatus() {
 		FProperty property = focObject != null ? (FProperty) focObject.iFocData_getDataByPath(StatusHolderDesc.FNAME_STATUS) : null;
-		if(property != null){
-			getRootMenuItem().setText(property.getString());
+		if(property != null && getRootMenuItem() != null){
 			FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(property.getInteger()));
+
+			if(getRootMenuItem().getSize() <= 0) {
+				getRootMenuItem().addItem(property.getString(), iconResource, null);
+			}
+			getRootMenuItem().setText(property.getString());
 			getRootMenuItem().setIcon(iconResource);
-//			addStatusIfNeededAndSelectIt(property);
 		}
 	}
 	
