@@ -1213,6 +1213,10 @@ public class FocUnitTestingCommand {
   	component_SetValueOrAssert(layoutName, componentName, componentValue, false); 
   }
   
+  public void component_SetValue(String layoutName, String componentName, String componentValue, boolean isAssertOnly) throws Exception {
+  	component_SetValueOrAssert(layoutName, componentName, componentValue, isAssertOnly); 
+  }
+  
   public void component_AssertValue(String layoutName, String componentName, String componentValue) throws Exception {
   	component_SetValueOrAssert(layoutName, componentName, componentValue, true);
   }
@@ -1338,6 +1342,25 @@ public class FocUnitTestingCommand {
     if (component != null) {
     	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
     }
+  }
+
+  public void componentInTable_SetValue(String layoutName, String tableName, long objRef, String fieldName, String componentValue, String priorityToCaptionProperty) throws Exception {
+  	String originalLayout = null;
+  	originalLayout = getLayoutName();
+  	
+  	if(!Utils.isStringEmpty(layoutName)) {
+	  	setLayoutName(layoutName);
+  	}
+
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if (component != null) {
+    	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
+    }
+    
+    setLayoutName(originalLayout);
   }
   
   public void componentInTable_AssertValue(String tableName, long objRef, String fieldName, String componentValue) throws Exception {
