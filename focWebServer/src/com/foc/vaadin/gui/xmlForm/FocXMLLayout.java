@@ -1224,7 +1224,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 	private boolean copyGuiToMemoryForASingleComponent(FocXMLGuiComponent obj) {
 		boolean error = false;
-		if(obj != null && obj.getFocData() instanceof FProperty){
+		if(			obj != null 
+				&& 	obj.getFocData() instanceof FProperty
+				&&  (obj.getDelegate() == null || !obj.getDelegate().isSuspended())){
 			if(ConfigInfo.comboBoxShowDropDownEvenWhenDisabled() && !obj.getDelegate().isEditable()){
 				obj.copyMemoryToGui();
 				if(obj.getFormField() != null) obj.getFormField().markAsDirty();
@@ -1415,6 +1417,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		boolean error = false;
 		
 		try{
+			if(componentModified != null && componentModified.getDelegate() != null) componentModified.getDelegate().setSuspended(false);
 			propertyChangeSuspended = false;
 			error = scanComponentsAndcopyGuiToMemory();
 			// Because if we have 2 components CODE and NAME for the same datapath
@@ -1454,6 +1457,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			boolean backup = setReactToGuiChangeDisable(true);
 			componentModified.copyMemoryToGui();
 			setReactToGuiChangeDisable(backup);
+			if(componentModified.getDelegate() != null) componentModified.getDelegate().setSuspended(false);
 		}
 	}
 	
@@ -1470,6 +1474,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					if(!error && propertyOfEvent != null) {
 						FocObject fatherObj = propertyOfEvent.getFocObject();
 						propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
+						if(propertyChangeSuspended && componentModified.getDelegate() != null) {
+							componentModified.getDelegate().setSuspended(true);
+						}
 					}
 				}
 			}
