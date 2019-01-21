@@ -62,6 +62,11 @@ public class WFLogDesc extends FocDesc {
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
+	public static final String FNAME_EVENT_STATUS = "EVENT_STATUS";
+	public static final String FNAME_MASTER_REF   = "MASTER_REF";
+	public static final String FNAME_EVENT_TYPE   = "EVENT_TYPE";
+	public static final String FNAME_DATE_TIME    = "DATE_TIME";
+	
 	public WFLogDesc(ILoggableDesc iWFDesc){
 		this(iWFDesc, ((FocDesc) iWFDesc).getStorageName());
 	}
@@ -95,7 +100,7 @@ public class WFLogDesc extends FocDesc {
 			addField(objFld);
 		}
 		
-		FMultipleChoiceField statusFld = new FMultipleChoiceField("EVENT_STATUS", "Event Status", FLD_EVENT_STATUS, false, 2);
+		FMultipleChoiceField statusFld = new FMultipleChoiceField(FNAME_EVENT_STATUS, "Event Status", FLD_EVENT_STATUS, false, 2);
 		statusFld.setSortItems(false);
 		statusFld.addChoice(FocLogEvent.STATUS_EXCLUDED , "Excluded");
 		statusFld.addChoice(FocLogEvent.STATUS_INCLUDED , "Included");
@@ -104,7 +109,7 @@ public class WFLogDesc extends FocDesc {
 		statusFld.addChoice(FocLogEvent.STATUS_ERROR    , "Error");
 		addField(statusFld);
 		
-		FMultipleChoiceField mFld = new FMultipleChoiceField("EVENT_TYPE", "Event Type", FLD_EVENT_TYPE, false, 2);
+		FMultipleChoiceField mFld = new FMultipleChoiceField(FNAME_EVENT_TYPE, "Event Type", FLD_EVENT_TYPE, false, 2);
 		mFld.addChoice(EVENT_NONE, ConfigInfo.isArabic() ? "-" : "none");
 		mFld.addChoice(EVENT_SIGNATURE, ConfigInfo.isArabic() ? "موافقة" : "Signature");
 		mFld.addChoice(EVENT_CANCELLATION, ConfigInfo.isArabic() ? "الغاء" : "Cancellation");
@@ -119,7 +124,7 @@ public class WFLogDesc extends FocDesc {
 		mFld.addChoice(EVENT_OPENED, ConfigInfo.isArabic() ? "اطلاع" : "Opened");
 		addField(mFld);
 
-    FDateTimeField dateTimeFld = new FDateTimeField("DATE_TIME", "Date|Time", FLD_DATE_TIME, false);
+    FDateTimeField dateTimeFld = new FDateTimeField(FNAME_DATE_TIME, "Date|Time", FLD_DATE_TIME, false);
     dateTimeFld.setMandatory(true);    
     dateTimeFld.setTimeRelevant(true);
     dateTimeFld.setAllwaysLocked(true);

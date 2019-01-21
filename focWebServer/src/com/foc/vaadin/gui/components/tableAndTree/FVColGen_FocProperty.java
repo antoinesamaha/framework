@@ -19,6 +19,7 @@ import com.foc.property.FMultipleChoice;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.property.FString;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
@@ -419,7 +420,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 				if(lbl != null && getFocXMLLayout() != null) getFocXMLLayout().putComponent(compName, lbl);				
 				FocXMLAttributes attributes = column.getAttributes();
 				if(attributes != null && attributes.getValue(FXML.ATT_LINK) != null && attributes.getValue(FXML.ATT_LINK).equals("true")){
-					HyperLinkButton button = new HyperLinkButton(focObject, objReturned);
+					HyperLinkButton button = new HyperLinkButton(focObject, objReturned, compName);
 					button.addClickListener(hyperLinkButtonListener);
 					button.addStyleName("focLinkInTable");
 					objReturned = button;
@@ -602,7 +603,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 
 		private Object objReturned = null;
 
-		public HyperLinkButton(FocObject focObject, Object objReturned) {
+		public HyperLinkButton(FocObject focObject, Object objReturned, String buttonName) {
 			super(objReturned instanceof String ? (String) objReturned : "");
 			if(objReturned instanceof Label){
 				setCaption(((Label)objReturned).getValue());
@@ -610,6 +611,10 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 			this.focObject = focObject;
 			this.objReturned = objReturned;
 			init();
+			FocXMLLayout focXMLLayout = getFocXMLLayout();
+			if(focXMLLayout != null && !Utils.isStringEmpty(buttonName)) {
+				focXMLLayout.putComponent(buttonName, HyperLinkButton.this);
+			}
 		}
 
 		private void init() {
