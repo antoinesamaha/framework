@@ -56,6 +56,10 @@ import com.vaadin.event.DataBoundTransferable;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
+import com.vaadin.event.dd.DropTarget;
+import com.vaadin.event.dd.TargetDetails;
+import com.vaadin.event.dd.TargetDetailsImpl;
+import com.vaadin.event.dd.acceptcriteria.TargetDetailIs;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
@@ -92,7 +96,8 @@ public class FocUnitTestingCommand {
   	return getAttributes() != null ? getAttributes().getValue(FXMLUnit.ATT_LAYOUT_NAME) : null;
   }
   
-  public void setLayoutName(String layoutName){
+  public String setLayoutName(String layoutName){
+  	String backupName = getLayoutName();
   	boolean nodeCreated = !getLogger().openCommand("Change Layout : "+layoutName);
   	if(layoutName != null){
   		getAttributes().addAttribute(FXMLUnit.ATT_LAYOUT_NAME, layoutName);
@@ -100,6 +105,7 @@ public class FocUnitTestingCommand {
   		getAttributes().removeAttribute(FXMLUnit.ATT_LAYOUT_NAME);
   	}
   	if(nodeCreated) getLogger().closeNode();
+  	return backupName;
   }
 
   public String getMethodName() {
@@ -1247,6 +1253,16 @@ public class FocUnitTestingCommand {
     }
 	}
   
+  public void component_AssertEditable(String componentName, boolean editable) throws Exception {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if(component != null && component.getDelegate().isEditable() == editable){
+    	getLogger().addInfo("Component "+componentName+(editable ? " is Editable" : " is not editable"));
+    }else{
+    	getLogger().addFailure("Component "+componentName+(editable ? " should be Editable" : " should not be editable"));
+    }
+	}
+  
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, String priorityToCaptionProperty) throws Exception {
   	return setComponentValue(component, compNameForTheMessage, componentValue, false, priorityToCaptionProperty);
   }
@@ -1843,12 +1859,8 @@ public class FocUnitTestingCommand {
   	if(navigationLayout != null){
   		
   		FVTableWrapperLayout sourceWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, sourceName);
-  		FVTableWrapperLayout targetWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, targetName);
-  		
   		ITableTree sourceTableOrTree = sourceWrapper == null ? null : sourceWrapper.getTableOrTree();
-  		ITableTree targetTableOrTree = targetWrapper == null ? null : targetWrapper.getTableOrTree();
-  		
-  		Object sourceItemId = null, targetItemId = null;
+  		Object sourceItemId = null;
   		
   		if(sourceTableOrTree != null){
   			FocObject sourceObject = sourceTableOrTree.getTableTreeDelegate().selectByFocProperty(sourcePropertyName, sourcePropertyValue);
@@ -1862,24 +1874,48 @@ public class FocUnitTestingCommand {
   				sourceTableOrTree.getTableTreeDelegate().debug_ListOfColumns();
   			}
   		}
-  		
-  		if(targetTableOrTree != null){
-  			if(targetPropertyName != null && targetPropertyValue != null){
-  				FocObject targetObject = targetTableOrTree.getTableTreeDelegate().selectByFocProperty(targetPropertyName, targetPropertyValue);
-  				
-  				if(targetObject != null){
-  					targetItemId = targetObject.getReference().getLong();
-  				}
-  			}
+
+  		FocXMLGuiComponent targetComponent = findComponent(navigationLayout, targetName);
+  		if(targetComponent instanceof FVTableWrapperLayout) {
+	  		FVTableWrapperLayout targetWrapper = (FVTableWrapperLayout) findComponent(navigationLayout, targetName);
+	  		ITableTree targetTableOrTree = targetWrapper == null ? null : targetWrapper.getTableOrTree();
+	  		Object targetItemId = null;
+	
+	  		if(targetTableOrTree != null){
+	  			if(targetPropertyName != null && targetPropertyValue != null){
+	  				FocObject targetObject = targetTableOrTree.getTableTreeDelegate().selectByFocProperty(targetPropertyName, targetPropertyValue);
+	  				
+	  				if(targetObject != null){
+	  					targetItemId = targetObject.getReference().getLong();
+	  				}
+	  			}
+	  		}
+	  		
+	  		dragAndDropLowLevel(sourceTableOrTree, sourceItemId, targetTableOrTree, targetItemId);
+  		} else if(targetComponent instanceof DropTarget) {
+  			DataBoundTransferable dbt = buildDragTransferable(sourceTableOrTree, sourceItemId);
+  			DropTarget dropTarget = (DropTarget) targetComponent;
+  			DropHandler dropHandler = dropTarget.getDropHandler();
+
+				HashMap<String, Object> rawVariables = new HashMap<String, Object>();
+
+  			TargetDetailsImpl details = new TargetDetailsImpl(rawVariables, dropTarget); 
+				DragAndDropEvent dde = new DragAndDropEvent(dbt, details);
+				if(dropHandler != null){
+					dropHandler.drop(dde);
+				}
   		}
-  		
-  		dragAndDropLowLevel(sourceTableOrTree, sourceItemId, targetTableOrTree, targetItemId);
   	}
   }
-  
-  private void dragAndDropLowLevel(ITableTree source, Object sourceItemId, ITableTree target, Object targetItemId) throws Exception {
 
-  	if(source != null && sourceItemId != null && target != null){
+  public void dragAndDropHighLevel(String sourceName, String sourcePropertyName, String sourcePropertyValue, String targetName) throws Exception {
+  	dragAndDropHighLevel(sourceName, sourcePropertyName, sourcePropertyValue, targetName, null, null);
+  }
+  
+  private DataBoundTransferable buildDragTransferable(ITableTree source, Object sourceItemId) throws Exception {
+  	DataBoundTransferable dbt = null;
+  	
+  	if(source != null && sourceItemId != null){
 
   		Map<String, Object> rawVariables = new HashMap<String, Object>();
 
@@ -1888,7 +1924,7 @@ public class FocUnitTestingCommand {
   		rawVariables.put("propertyId", null);
   		rawVariables.put("itemId", null);
 
-  		DataBoundTransferable dbt = null;
+  		dbt = null;
 
   		if(source instanceof FVTable){
   			FVTable sourceTable = (FVTable) source;
@@ -1899,7 +1935,15 @@ public class FocUnitTestingCommand {
   		}
   		dbt.setData("propertyId", propertyId);
 			dbt.setData("itemId", sourceItemId);
-
+  	}
+  	
+  	return dbt;
+  }
+  
+  private void dragAndDropLowLevel(ITableTree source, Object sourceItemId, ITableTree target, Object targetItemId) throws Exception {
+  	DataBoundTransferable dbt = buildDragTransferable(source, sourceItemId);
+  	
+  	if(dbt != null && target != null){
   		DropHandler dropHandler = null;
   		AbstractSelectTargetDetails astd = null;
   		
@@ -1907,7 +1951,7 @@ public class FocUnitTestingCommand {
   			FVTable targetTable = (FVTable) target;
   			dropHandler = targetTable.getDropHandler();
   			
-  			rawVariables = new HashMap<String, Object>();
+  			HashMap<String, Object> rawVariables = new HashMap<String, Object>();
   			rawVariables.put("itemIdOver", null);
   			astd = targetTable.translateDropTargetDetails(rawVariables);
   		} else if (target instanceof FVTreeTable){
@@ -1915,7 +1959,7 @@ public class FocUnitTestingCommand {
   			dropHandler = targetTree.getDropHandler();
   			
   			if(targetItemId != null){
-  				rawVariables = new HashMap<String, Object>();
+  				HashMap<String, Object> rawVariables = new HashMap<String, Object>();
   				rawVariables.put("itemIdOver", null);
   				astd = targetTree.translateDropTargetDetails(rawVariables);
   				astd.setData("itemIdOver", targetItemId);
@@ -1927,8 +1971,7 @@ public class FocUnitTestingCommand {
   			dropHandler.drop(dde);
   			getLogger().addInfo("Drag and drop successful");
   		}
-  	}
-  	else{
+  	} else {
   		getLogger().addFailure("Drag and drop failure.");
   	}
   }

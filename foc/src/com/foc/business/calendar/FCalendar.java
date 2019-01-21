@@ -75,7 +75,7 @@ public class FCalendar extends FocObject {
 		holidayList = null;
 	}
 	
-	public static boolean isDateZero(Date date){
+	public static boolean isDateZero(java.util.Date date){
 		return date == null || date.getTime() < Globals.DAY_TIME;
 	}
 	
