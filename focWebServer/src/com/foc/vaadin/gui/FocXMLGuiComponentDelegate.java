@@ -266,7 +266,9 @@ public class FocXMLGuiComponentDelegate {
     	fld.setReadOnly(false);
     }
     boolean pause = FocUnitRecorder.pause();
-    component.setFocData(data);
+    if(!isSuspended()) {
+    	component.setFocData(data);
+    }
     FocUnitRecorder.resume(pause);
     if(fld != null && backupReadOnly){
     	fld.setReadOnly(backupReadOnly);
@@ -311,8 +313,10 @@ public class FocXMLGuiComponentDelegate {
 		return suspended;
 	}
 
-	public void setSuspended(boolean suspended) {
+	public boolean setSuspended(boolean suspended) {
+		boolean backup = this.suspended; 
 		this.suspended = suspended;
+		return backup;
 	}
 	
 //  public UnitTestingRecorder_CommonField getRecorder() {

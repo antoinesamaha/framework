@@ -1454,10 +1454,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void propertyChangeIntention_Rejected(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
 		propertyChangeSuspended = false;
 		if(componentModified != null) {
+			if(componentModified.getDelegate() != null) componentModified.getDelegate().setSuspended(false);			
 			boolean backup = setReactToGuiChangeDisable(true);
 			componentModified.copyMemoryToGui();
 			setReactToGuiChangeDisable(backup);
-			if(componentModified.getDelegate() != null) componentModified.getDelegate().setSuspended(false);
 		}
 	}
 	
@@ -1473,9 +1473,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					String valueAfter  = componentModified.getValueString(); 
 					if(!error && propertyOfEvent != null) {
 						FocObject fatherObj = propertyOfEvent.getFocObject();
+						
+						boolean componentSuspendedBackup = componentModified.getDelegate() != null ? componentModified.getDelegate().setSuspended(true) : false;
 						propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
-						if(propertyChangeSuspended && componentModified.getDelegate() != null) {
-							componentModified.getDelegate().setSuspended(true);
+						if(!propertyChangeSuspended && componentModified.getDelegate() != null) {
+							componentModified.getDelegate().setSuspended(componentSuspendedBackup);
 						}
 					}
 				}
@@ -1548,7 +1550,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		    	backupReadOnly = fld.isReadOnly();
 		    	fld.setReadOnly(false);
 		    }
-				obj.copyMemoryToGui();
+		    if(obj.getDelegate() == null || !obj.getDelegate().isSuspended()) {
+		    	obj.copyMemoryToGui();
+		    }
 		    if(fld != null && backupReadOnly){
 		    	fld.setReadOnly(backupReadOnly);
 		    }
