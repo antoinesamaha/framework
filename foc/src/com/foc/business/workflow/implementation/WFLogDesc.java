@@ -106,7 +106,9 @@ public class WFLogDesc extends FocDesc {
 		statusFld.addChoice(FocLogEvent.STATUS_INCLUDED , "Included");
 		statusFld.addChoice(FocLogEvent.STATUS_POSTED   , "Posted");
 		statusFld.addChoice(FocLogEvent.STATUS_COMMITTED, "Committed");
-		statusFld.addChoice(FocLogEvent.STATUS_ERROR    , "Error");
+		for(int i=FocLogEvent.STATUS_ERROR_START; i<FocLogEvent.STATUS_ERROR_END; i++) {
+			statusFld.addChoice(i, "Error "+i);
+		}
 		addField(statusFld);
 		
 		FMultipleChoiceField mFld = new FMultipleChoiceField(FNAME_EVENT_TYPE, "Event Type", FLD_EVENT_TYPE, false, 2);

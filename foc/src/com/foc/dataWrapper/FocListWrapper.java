@@ -39,7 +39,7 @@ public class FocListWrapper extends FocDataWrapper implements Container.Indexed 
 	    
 	    if(getFocList().getFocDesc() == null || getFocList().getFocDesc().isSiteRestrictionAccess()) {
 		    if(getFocList().getFocDesc() instanceof IWorkflowDesc){
-		      WorkflowDesc workflowDesc = ((IWorkflowDesc)getFocList().getFocDesc()).iWorkflow_getWorkflowDesc();
+		      WorkflowDesc workflowDesc = ((IWorkflowDesc) getFocList().getFocDesc()).iWorkflow_getWorkflowDesc();
 		      if(workflowDesc != null){
 		        siteFieldID_1 = workflowDesc.getFieldID_Site_1();
 		        siteFieldID_2 = workflowDesc.getFieldID_Site_2();

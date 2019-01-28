@@ -20,7 +20,8 @@ public interface FocLogEvent {
 	public static final int STATUS_INCLUDED       =  1;
 	public static final int STATUS_POSTED         =  2;
 	public static final int STATUS_COMMITTED      =  3;
-	public static final int STATUS_ERROR          =  4;
+	public static final int STATUS_ERROR_START    =100;
+	public static final int STATUS_ERROR_END      =120;
 	
 	//This indicates the Log Event primary key itself. It is not unique. 
 	//If becomes unique when combined with the [EntityName]
