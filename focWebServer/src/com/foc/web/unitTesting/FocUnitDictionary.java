@@ -276,6 +276,9 @@ public class FocUnitDictionary {
   		  currentTest = -1;
   		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
   		  FocUnitDictionary.getInstance().popupLogger(window);
+  		} else if(FocLogger.getInstance().isHasFailure()) {
+  		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
+  		  FocUnitDictionary.getInstance().popupLogger(window);
   		}
   	}
   }
