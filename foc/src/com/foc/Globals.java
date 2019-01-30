@@ -167,14 +167,15 @@ public class Globals{
   	}
     PrintStream logFile = getLogFile();
     if(logFile != null){
+    	logString(" -- Exception: "+e.getMessage());
       e.printStackTrace(logFile);
     }else{
-    	Globals.logString("Log File is NULL");
+    	logString("Log File is NULL");
     }
-    String mess = e.getMessage();
-    if(mess == null || mess.compareTo("") == 0){
-      mess = new String("Exception occured");
-    }
+//    String mess = e.getMessage();
+//    if(mess == null || mess.compareTo("") == 0){
+//      mess = new String("Exception occured");
+//    }
     
     if(getApp() != null && getApp().isUnitTesting()){
       getApp().exit(true);
