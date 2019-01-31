@@ -116,7 +116,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   // oooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
   
-  public void init(FocObject masterObject, FocLink focLink, SQLFilter filter) {
+  public synchronized void init(FocObject masterObject, FocLink focLink, SQLFilter filter) {
     this.focLink = focLink;
     this.masterObject = masterObject;
     this.filter = filter;
@@ -136,7 +136,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     }
   }
 
-  private void initForForeignKeyLink(HashMap<Integer, FocObject> foreignObjectsMap, FocLinkForeignKey focLinkForeignKey, SQLFilter filter){
+  private synchronized void initForForeignKeyLink(HashMap<Integer, FocObject> foreignObjectsMap, FocLinkForeignKey focLinkForeignKey, SQLFilter filter){
     setForeignObjectsMap(foreignObjectsMap);
     if(this.foreignObjectsMap.size() == 1){
       Iterator iter = this.foreignObjectsMap.keySet().iterator();
@@ -673,13 +673,13 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return arrayList;
   }
 
-  public void rebuildArrayList() {
+  public synchronized void rebuildArrayList() {
   	arrayList = null;
   	getArrayList();
   }
   
   @SuppressWarnings("unchecked")
-	public void sort(){
+	public synchronized void sort(){
   	if(!isSortDisabled()){
   		if(arrayList == null){
   			rebuildArrayList();

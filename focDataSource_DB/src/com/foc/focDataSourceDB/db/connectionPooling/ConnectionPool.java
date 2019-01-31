@@ -8,7 +8,6 @@ import java.util.Hashtable;
 
 import com.foc.Globals;
 import com.foc.db.DBManager;
-import com.foc.focDataSourceDB.db.DBManagerServer;
 
 public class ConnectionPool {
 	private ConnectionCredentials        credentials     = null;
@@ -144,7 +143,9 @@ public class ConnectionPool {
 	}
 	
 	public void closeReopenConnection(){
-		getConnectionWrapper(true);
+		if(getConnectionWrapper() == null || !getConnectionWrapper().isValid()) {
+			getConnectionWrapper(true);
+		}
 	}
 
 	private ConnectionWrapper recreateConnectionWrapper(ConnectionWrapper connectionWrapper){

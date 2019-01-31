@@ -89,6 +89,16 @@ public class ConnectionWrapper {
 		return getPool() != null ? getPool().getProvider() : 0;
 	}
 	
+	public boolean isValid() {
+		boolean valid = false;
+		try {
+			valid = getConnection().isValid(5);
+		} catch(Exception e) {
+			Globals.logException(e);
+		}
+		return valid;
+	}
+	
   public synchronized StatementWrapper lockStatement() {
   	StatementWrapper stmtWrapper = null;
     if (freeStatements.size() > 0) {

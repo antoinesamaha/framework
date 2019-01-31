@@ -10,7 +10,7 @@ import com.foc.web.server.session.FocWebSession;
 public class FocThreadWithSession extends Thread {
 	
 	public static final String BATCH_USER = "BATCH LAUNCHER";
-	
+	private long         initiallSleep = 120000;
 	private String       classNameFocWebApplication = null;
 	private FocWebServer webServer = null;
 	
@@ -26,7 +26,7 @@ public class FocThreadWithSession extends Thread {
 	
 	public void run() {
 		try{
-			sleep(120000);
+			sleep(initiallSleep);
 			while(!webServer.isReady()) {
 				sleep(10000);
 			}
@@ -77,5 +77,9 @@ public class FocThreadWithSession extends Thread {
 			}
 		}
 		return error;
+	}
+
+	public void setInitiallSleep(long initiallSleep) {
+		this.initiallSleep = initiallSleep;
 	}
 }

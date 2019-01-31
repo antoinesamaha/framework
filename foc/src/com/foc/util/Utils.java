@@ -296,7 +296,8 @@ public class Utils {
 	//		    unzipped = new String(decom, "UTF-8");
     		}
 			}catch (Exception e){
-				Globals.logExceptionWithoutPopup(e);
+				Globals.logString("Exception while Utils.decompressString() : "+e.getMessage());
+				unzipped = zipped;
     	}
     }
     		

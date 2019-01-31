@@ -1,6 +1,7 @@
 package com.foc.web.unitTesting;
 
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +19,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.foc.Globals;
 import com.foc.access.FocLogger;
+import com.foc.annotations.unit.FUSuite;
+import com.foc.annotations.unit.FUTest;
 import com.vaadin.server.ClassResource;
 
 public class FocUnitTestingSuite {
@@ -57,6 +60,12 @@ public class FocUnitTestingSuite {
 		setParsingDone(true);
 		dictionary.putAndSequence(this);
 		
+		String description = "";
+		FUSuite suiteAnnotation = getClass().getAnnotation(FUSuite.class);
+		if(suiteAnnotation != null) {
+			description = suiteAnnotation.description();
+		}
+		dictionary.unitDoc_AddSuite(name, description);
     declareAllTestMethods();
   }
 
@@ -97,10 +106,23 @@ public class FocUnitTestingSuite {
   	for(int i=0; i<methodArray.length; i++) {
   		Method m = methodArray[i];
   		try{
-  			if(m.getName().startsWith("test_")) {
-		      Class[] clss = new Class[0];
-		      Object[] args = new Object[0];
-  				m.invoke(this, clss);
+  			boolean isATestMethod = m.getName().startsWith("test_");
+  			boolean isImplemented = true;
+  			String description = "";
+				FUTest ann = m.getAnnotation(FUTest.class);
+				if(ann != null) {
+					isATestMethod = true;
+					isImplemented = ann.implemented();
+					description = ann.description();
+				}
+  			
+  			if(isATestMethod) {
+  				getDictionary().unitDoc_AddTest(m.getName(), description, isImplemented);
+  				if(isImplemented) {
+			      Class[] clss = new Class[0];
+			      Object[] args = new Object[0];
+	  				m.invoke(this, clss);
+  				}
   			}
 			}catch (Exception e){
 				Globals.logException(e);

@@ -10,6 +10,7 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import com.foc.ConfigInfo;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -204,12 +205,21 @@ public class IntegerCondition extends FilterCondition {
     
     if(focDesc != null){
     	FPropertyListener colorListener = new ColorPropertyListener(this, firstID + FLD_OPERATOR);
-      FMultipleChoiceField multipleChoice = new FMultipleChoiceField(getFieldPrefix()+FNAME_OP, "Operation", firstID + FLD_OPERATOR, false, 1);
-      multipleChoice.addChoice(OPERATOR_INDIFERENT, "None ");
-      multipleChoice.addChoice(OPERATOR_BETWEEN, "Between");
-      multipleChoice.addChoice(OPERATOR_GREATER_THAN, " >= ");
-      multipleChoice.addChoice(OPERATOR_LESS_THAN, " <= ");
-      multipleChoice.addChoice(OPERATOR_EQUALS, " = ");
+      FMultipleChoiceField multipleChoice = new FMultipleChoiceField(getFieldPrefix()+FNAME_OP, "Operation", firstID + FLD_OPERATOR, false, 1); 
+      if(ConfigInfo.isArabic()){
+	      multipleChoice.addChoice(OPERATOR_INDIFERENT, "لا شرط");
+	      multipleChoice.addChoice(OPERATOR_BETWEEN, "بين");
+	      multipleChoice.addChoice(OPERATOR_GREATER_THAN, " >= ");
+	      multipleChoice.addChoice(OPERATOR_LESS_THAN, " <= ");
+	      multipleChoice.addChoice(OPERATOR_EQUALS, " = ");
+      }
+      else {
+        multipleChoice.addChoice(OPERATOR_INDIFERENT, "None ");
+        multipleChoice.addChoice(OPERATOR_BETWEEN, "Between");
+        multipleChoice.addChoice(OPERATOR_GREATER_THAN, " >= ");
+        multipleChoice.addChoice(OPERATOR_LESS_THAN, " <= ");
+        multipleChoice.addChoice(OPERATOR_EQUALS, " = ");
+      }
       multipleChoice.setSortItems(false);
       focDesc.addField(multipleChoice);
       multipleChoice.addListener(colorListener);

@@ -57,9 +57,7 @@ import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.DropTarget;
-import com.vaadin.event.dd.TargetDetails;
 import com.vaadin.event.dd.TargetDetailsImpl;
-import com.vaadin.event.dd.acceptcriteria.TargetDetailIs;
 import com.vaadin.shared.MouseEventDetails;
 import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
@@ -1810,23 +1808,28 @@ public class FocUnitTestingCommand {
    * @return the FocXMLGuiComponent
    */
   protected FocXMLGuiComponent findComponent(FocXMLLayout navigationLayout, final String componentName, boolean failIfNotFound) throws Exception {
-  	FocXMLGuiComponent component = (FocXMLGuiComponent) navigationLayout.getComponentByName(componentName);
-
-  	if(component == null){
-  		if(failIfNotFound){
-  			Globals.logString("Could not find component " + componentName + ".");
-  			navigationLayout.debug_PrintAllComponents();
-	  		getLogger().addFailure("Could not find component " + componentName + ".");
-  		}
+  	FocXMLGuiComponent component = null;
+  	if(navigationLayout == null){
+  		getLogger().addFailure("NavigationLayout null in findComponent: " + componentName);
   	}else{
-			AbstractComponent comp = (AbstractComponent) component;
-			
-			FVMoreLayout moreLayout = comp.findAncestor(FVMoreLayout.class);
-			
-			if(moreLayout != null && !moreLayout.isExtended()){
-				moreLayout.setExtended(true);
-			}
-  		getLogger().addInfo("Component " + componentName + " found.");
+	  	component = (FocXMLGuiComponent) navigationLayout.getComponentByName(componentName);
+	
+	  	if(component == null){
+	  		if(failIfNotFound){
+	  			Globals.logString("Could not find component " + componentName + ".");
+	  			navigationLayout.debug_PrintAllComponents();
+		  		getLogger().addFailure("Could not find component " + componentName + ".");
+	  		}
+	  	}else{
+				AbstractComponent comp = (AbstractComponent) component;
+				
+				FVMoreLayout moreLayout = comp.findAncestor(FVMoreLayout.class);
+				
+				if(moreLayout != null && !moreLayout.isExtended()){
+					moreLayout.setExtended(true);
+				}
+	  		getLogger().addInfo("Component " + componentName + " found.");
+	  	}
   	}
   	return component;
   }

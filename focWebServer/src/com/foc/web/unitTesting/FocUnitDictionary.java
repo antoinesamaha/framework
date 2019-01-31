@@ -13,10 +13,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.access.FocLogLineDesc;
 import com.foc.access.FocLogLineTree;
 import com.foc.access.FocLogger;
+import com.foc.htmldoc.HTMLDocumentation;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.util.Utils;
@@ -30,8 +32,9 @@ import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 public class FocUnitDictionary {
   private Map<String, FocUnitTestingSuite> testSuiteMap  = null;
   private LinkedList<FocUnitTestingSuite>  suiteSequence = null;
-  private Map<String, Object> xmlVariables               = null;
-  
+  private Map<String, Object>              xmlVariables  = null;
+  private HTMLDocumentation                documentation = null;
+
   private FocUnitExpectedNotification expectedNotification = null;  
 
   private boolean                 nextTestExist = false;
@@ -273,6 +276,9 @@ public class FocUnitDictionary {
   		  currentTest = -1;
   		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
   		  FocUnitDictionary.getInstance().popupLogger(window);
+  		} else if(FocLogger.getInstance().isHasFailure()) {
+  		  INavigationWindow window = FocWebApplication.getInstanceForThread().getNavigationWindow();
+  		  FocUnitDictionary.getInstance().popupLogger(window);
   		}
   	}
   }
@@ -400,5 +406,39 @@ public class FocUnitDictionary {
 
 	public void setCurrentTest(int currentTest) {
 		this.currentTest = currentTest;
+	}
+	
+	public void unitDoc_BodyClose() {
+		if(documentation != null) {
+			documentation.close();
+		}
+	}
+	
+	public void unitDoc_CreateIfNeeded() {
+	  try{
+	  	if(ConfigInfo.isUnitAllowed() && documentation == null) {
+	  		documentation = new HTMLDocumentation(ConfigInfo.getLogDir(), "UnitTestingDefinition");
+	  	}
+		}catch (Exception e){
+			Globals.logException(e);
+		}
+	}
+	
+	public void unitDoc_AddSuite(String suiteName, String description) {
+		unitDoc_CreateIfNeeded();
+		if(documentation != null) {
+			documentation.addSection(suiteName, description);
+		}
+	}
+	
+	public void unitDoc_AddTest(String testName, String description, boolean implemented) {
+		unitDoc_CreateIfNeeded();
+		if(documentation != null) {
+			String title = testName;
+			if(!implemented) {
+				title += "   !NOT IMPLEMENTED!";
+			}
+			documentation.addCollapsible(title, description);
+		}
 	}
 }
