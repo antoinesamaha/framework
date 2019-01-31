@@ -42,6 +42,7 @@ import com.foc.desc.field.FField;
 import com.foc.ecomerce.EComConfiguration;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
+import com.foc.list.FocListElement;
 import com.foc.list.FocListOrder;
 import com.foc.property.FImageProperty;
 import com.foc.property.FMultipleChoice;
@@ -53,6 +54,7 @@ import com.foc.tree.FNode;
 import com.foc.tree.TreeScanner;
 import com.foc.util.ASCII;
 import com.foc.util.Encryptor;
+import com.foc.util.IFocIterator;
 import com.foc.util.Utils;
 
 /**
@@ -220,15 +222,29 @@ public class FocUser extends FocObject {
 			if(company != null){
 //				FocList listAll = company.getSiteList();
 				FocList listAll = WFSiteDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
-				for(int i=0; i<listAll.size(); i++){
-					WFSite currSite = (WFSite) listAll.getFocObject(i);
-					if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
-						FocList listOpperators = currSite.getOperatorList();
-						if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
-							sitesList.add(currSite);
+				listAll.iterate(new IFocIterator() {
+					@Override
+					public boolean treatElement(Object element) {
+						FocListElement listElem = (FocListElement) element;
+						WFSite currSite = (WFSite) listElem.getFocObject();
+						if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
+							FocList listOpperators = currSite.getOperatorList();
+							if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
+								sitesList.add(currSite);
+							}
 						}
+						return false;
 					}
-				}
+				});
+//				for(int i=0; i<listAll.size(); i++){
+//					WFSite currSite = (WFSite) listAll.getFocObject(i);
+//					if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
+//						FocList listOpperators = currSite.getOperatorList();
+//						if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
+//							sitesList.add(currSite);
+//						}
+//					}
+//				}
 			}
 		}
 		return sitesList;
