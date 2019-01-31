@@ -90,6 +90,7 @@ public class FocLogger {
 		  line = addInfo(message);
 		  line.setFatherObject(currentNode);
 		  currentNode = line;
+		  Globals.logString(" FocUnitTest OpenNode: "+message);
   	}
   	return line;
   }
