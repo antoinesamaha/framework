@@ -14,6 +14,7 @@ import com.foc.OptionDialog;
 import com.foc.access.FocLogger;
 import com.foc.admin.FocUserDesc;
 import com.foc.dataWrapper.FocDataWrapper;
+import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.menuStructure.FocMenuItemConst;
 import com.foc.saas.manager.SaaSConfigDesc;
@@ -2100,4 +2101,17 @@ public class FocUnitTestingCommand {
   		getDictionary().getLogger().addFailure("Expected Notification Did Not Occure");
   	}
   }
+  
+	public void memory_FocObjectCount(String storageName) {
+		memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName));
+	}
+	
+	public void memory_FocObjectCount(FocDesc focDesc) {
+		if(focDesc != null) {
+	  	ArrayList<FocObject> array = focDesc.allFocObjectArray_get();
+	  	if(array != null) {
+	  		Globals.logString(" ----- FocObjects In ARRAY "+focDesc.getStorageName()+" SIZE=" + array.size());
+	  	}
+		}
+	}
 }
