@@ -2120,6 +2120,14 @@ public class Application {
 		return logListener != null;
 	}
 	
+	public boolean logListenerIsEventIncluded(FocLogEvent event) {
+		return logListener != null && logListener.isLogEventIncluded(event);
+	}
+	
+	public boolean logListenerWillVerifyLastHash() {
+		return logListener != null && logListener.iVerifyLastHash();
+	}
+	
 	public void logListenerNotification(FocLogEvent event) {
 		if(logListener != null && event != null && 
 				(event.logEvent_GetStatus() == FocLogEvent.STATUS_INCLUDED || event.logEvent_GetStatus() == FocLogEvent.STATUS_POSTED)) {
