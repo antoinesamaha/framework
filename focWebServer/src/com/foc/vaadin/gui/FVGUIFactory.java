@@ -126,6 +126,7 @@ public class FVGUIFactory extends HashMap<String, FocXMLGuiComponentCreator> {
 		if (field != null) {
 			switch (field.getFabType()) {
 			case FieldDefinition.SQL_TYPE_ID_INT:
+			case FieldDefinition.SQL_TYPE_ID_LONG:
 				tag = FXML.TAG_INTEGER_FIELD;
 				break;
 			case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:

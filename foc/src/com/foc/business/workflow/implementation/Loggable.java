@@ -19,6 +19,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FListField;
 import com.foc.list.FocList;
 import com.foc.list.FocListElement;
+import com.foc.log.FocLogEvent;
 import com.foc.log.ILoggedHashContainer;
 import com.foc.property.FDate;
 import com.foc.property.FDateTime;
@@ -190,6 +191,10 @@ public class Loggable {
 			if(event == WFLogDesc.EVENT_MODIFICATION || event == WFLogDesc.EVENT_CREATION) {
 				updateLastModified(log.getUser(), log.getDateTime());
 			}
+			
+			if(Globals.getApp() != null && Globals.getApp().logListenerIsEventIncluded(log)) {
+				log.setEventStatus(FocLogEvent.STATUS_INCLUDED);
+			}
 		}
 	}
 
@@ -256,7 +261,7 @@ public class Loggable {
 												log.getDocZip(), 
 												log.getDocHash(), 
 												log.getDocVersion());
-						if(Globals.getApp().hasLogListener()) {
+						if(Globals.getApp().logListenerWillVerifyLastHash()) {
 							handler.setSynchronous(false);
 							Globals.getApp().logListenerGetLastHash(handler);
 						} else {
