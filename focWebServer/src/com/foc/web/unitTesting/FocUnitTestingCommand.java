@@ -2102,16 +2102,24 @@ public class FocUnitTestingCommand {
   	}
   }
   
-	public void memory_FocObjectCount(String storageName) {
-		memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName));
+	public int memory_FocObjectCount(String storageName, int expectedCount) throws Exception {
+		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount);
 	}
 	
-	public void memory_FocObjectCount(FocDesc focDesc) {
+	public int memory_FocObjectCount(FocDesc focDesc, int expectedCount) throws Exception {
+		int count = 0;
 		if(focDesc != null) {
 	  	ArrayList<FocObject> array = focDesc.allFocObjectArray_get();
 	  	if(array != null) {
-	  		Globals.logString(" ----- FocObjects In ARRAY "+focDesc.getStorageName()+" SIZE=" + array.size());
+	  		count = array.size();
+	  		Globals.logString(" ----- FocObjects In ARRAY "+focDesc.getStorageName()+" SIZE=" + count);
+	  		if(expectedCount >= 0 && count != expectedCount) {
+	  			getDictionary().getLogger().addFailure("Expected instances "+expectedCount+" found "+ count+" for "+focDesc.getStorageName());
+	  		}else {
+	  			getDictionary().getLogger().addInfo("Found "+count+" instances for "+focDesc.getStorageName());
+	  		}
 	  	}
 		}
+		return count;
 	}
 }
