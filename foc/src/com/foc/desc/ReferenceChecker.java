@@ -21,4 +21,5 @@ public interface ReferenceChecker extends Cloneable {
   public boolean applyForThisObject(FocObject focObj);
   public void    setVoidObject(Object Obj);
   public Object  getVoidObject();
+  public void    dispose_Content();
 }

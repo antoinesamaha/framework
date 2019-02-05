@@ -4,6 +4,7 @@
 package com.foc.desc;
 
 import com.foc.Globals;
+import com.foc.db.SQLFilter;
 import com.foc.desc.field.FObjectField;
 
 /**
@@ -22,7 +23,7 @@ public class ReferenceCheckerAdapter implements ReferenceChecker, Cloneable {
   
 	public void dispose(){
 		focDesc    = null;
-		voidObject = null;
+		dispose_Content();
 		referenceCheckerFilter = null;
 	}
 	
@@ -140,5 +141,13 @@ public class ReferenceCheckerAdapter implements ReferenceChecker, Cloneable {
 
 	public void setVoidObject(Object voidObject) {
 		this.voidObject = voidObject;
+	}
+
+	@Override
+	public void dispose_Content() {
+		if(voidObject != null && voidObject instanceof SQLFilter) {
+			((SQLFilter)voidObject).dispose(); 
+		}
+		voidObject = null;		
 	}
 }

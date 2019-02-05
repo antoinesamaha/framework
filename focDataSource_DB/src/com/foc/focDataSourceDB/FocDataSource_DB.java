@@ -712,6 +712,9 @@ public class FocDataSource_DB implements IFocDataSource {
   	filter.addWhereToRequest_WithoutWhere(sqlWhere, refCheck.getFocDesc());
   	SQLSelectExistance selectExistance = new SQLSelectExistance(refCheck.getFocDesc(), sqlWhere);
   	selectExistance.execute();
+  	
+  	refCheck.dispose_Content();
+  	
   	if(selectExistance.getExist() == SQLSelectExistance.EXIST_YES){
 	  	FocConstructor constr = new FocConstructor(refCheck.getFocDesc(), null);
 	  	FocObject newFocObject = constr.newItem();
@@ -783,6 +786,8 @@ public class FocDataSource_DB implements IFocDataSource {
 	    	selectExistance.execute();
 	    	nbRef = selectExistance.getCount();
 	    	selectExistance.dispose();
+	    	
+	    	refCheck.dispose_Content();
 	      
 	      if(nbRef > 0 && message != null){
 	        message.append("\n"+refCheck.getFocDesc().getStorageName()+", "+objField.getTitle()+", "+nbRef+" times");
@@ -1208,9 +1213,10 @@ public class FocDataSource_DB implements IFocDataSource {
       String selectRequest = "SELECT " + imageFieldName + "  FROM " + focDesc.getStorageName_ForSQL() + " WHERE REF = " + focObject.getReference().getInteger();
       Globals.logString(selectRequest);
 
+      ResultSet rs = null;
       try{
 	      PreparedStatement preparedStmt = getDBManagerServer().getConnection().prepareStatement(selectRequest);
-	      ResultSet rs = preparedStmt.executeQuery();
+	      rs = preparedStmt.executeQuery();
 	      while (rs.next()) {
 	        InputStream is = rs.getBinaryStream(imageFieldName);
 	        if(is != null){
@@ -1218,10 +1224,22 @@ public class FocDataSource_DB implements IFocDataSource {
 		        is.close();
 	        }
 	      }
-	      if(rs != null) rs.close();
+	      if(rs != null) {
+	      	rs.close();
+	      	rs = null;
+	      }
       }catch(Exception e){
       	Globals.logException(e);
-      }
+      }finally {
+      	if(rs != null) {
+					try{
+						rs.close();
+						rs = null;
+					}catch (SQLException e){
+						Globals.logException(e);
+					}
+      	}
+			}
     }
     
 		return imageValue;

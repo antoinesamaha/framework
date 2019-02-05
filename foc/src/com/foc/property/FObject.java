@@ -710,6 +710,9 @@ public class FObject extends FProperty implements FPropertyListener{
   }
 
   public void backup() {
+  	if(backupObject != focObjValue) {
+  		disposeLocallyConstructedBackup(backupObject);
+  	}
     backupObject = focObjValue;
     setBackupValueLocalyConstructed(isObjectValueLocalyConstructed());
     //backupLocalSourceList = localSourceList;
