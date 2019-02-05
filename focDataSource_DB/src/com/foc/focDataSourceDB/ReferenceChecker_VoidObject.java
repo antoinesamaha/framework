@@ -27,8 +27,24 @@ public class ReferenceChecker_VoidObject {
 	public void setSqlFilter(SQLFilter sqlFilter) {
 		this.sqlFilter = sqlFilter;
 	}
-
 	
+	public static SQLFilter getReferenceChecker_getSQLFilter(ReferenceChecker refCheck){
+		SQLFilter sqlFilter = refCheck != null ? (SQLFilter) refCheck.getVoidObject() : null;
+		if(sqlFilter == null){
+	    FocConstructor constr         = new FocConstructor(refCheck.getFocDesc(), null, null);
+	    FocObject 		 templateFocObj = constr.newItem();
+	    if(templateFocObj != null){
+	    	templateFocObj.setDbResident(false);
+	    	sqlFilter = new SQLFilter(templateFocObj, SQLFilter.FILTER_ON_SELECTED);
+	    	sqlFilter.setOwnerOfTemplate(true);
+	    	sqlFilter.addSelectedField(refCheck.getObjectFieldID());
+	    	refCheck.setVoidObject(sqlFilter);
+	    }
+		}
+		return sqlFilter;
+	}
+	
+	/*
 	public static ReferenceChecker_VoidObject getReferenceChecker_VoidObject(ReferenceChecker refCheck){
 		ReferenceChecker_VoidObject voidObj = null;
 		if(refCheck != null){
@@ -50,10 +66,12 @@ public class ReferenceChecker_VoidObject {
 	    if(templateFocObj != null){
 	    	templateFocObj.setDbResident(false);
 	    	sqlFilter = new SQLFilter(templateFocObj, SQLFilter.FILTER_ON_SELECTED);
+	    	sqlFilter.setOwnerOfTemplate(true);
 	    	sqlFilter.addSelectedField(refCheck.getObjectFieldID());
 	    	voidObj.setSqlFilter(sqlFilter);
 	    }
 		}
 		return sqlFilter;
 	}
+	*/
 }
