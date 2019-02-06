@@ -82,14 +82,9 @@ public class DBManagerServer {
   }
   
   public void unlockStatement(StatementWrapper stm) {
-  	stm.unlockStatement();
-//  	unlockStatement(null, stm);
+  	if(stm != null) stm.unlockStatement();
   }
 
-//  public void unlockStatement(String dbSourceKey, StatementWrapper stm) {
-//  	getConnectionPool(dbSourceKey).unlockStatement(stm);
-//  }
-  
   public Connection getConnection() {
   	return getConnectionPool() != null ? getConnectionPool().getConnection() : null;
   }
