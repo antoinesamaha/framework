@@ -712,9 +712,7 @@ public class FocDataSource_DB implements IFocDataSource {
   	filter.addWhereToRequest_WithoutWhere(sqlWhere, refCheck.getFocDesc());
   	SQLSelectExistance selectExistance = new SQLSelectExistance(refCheck.getFocDesc(), sqlWhere);
   	selectExistance.execute();
-  	
-  	refCheck.dispose_Content();
-  	
+  	  	
   	if(selectExistance.getExist() == SQLSelectExistance.EXIST_YES){
 	  	FocConstructor constr = new FocConstructor(refCheck.getFocDesc(), null);
 	  	FocObject newFocObject = constr.newItem();
@@ -731,6 +729,8 @@ public class FocDataSource_DB implements IFocDataSource {
 	  		Globals.logException(e);
 	  	}
   	}
+  	
+  	refCheck.dispose_Content();
   }
 
 	//-----------------------------------------------------
