@@ -1448,7 +1448,7 @@ public class FocUnitTestingCommand {
    		getLogger().addError("Component " + tableName + " is not an FVTableWrapperLayout");
    	}
   }
-  
+
   /**
    * Stores the value of a component in a hash map at the level of the
    * dictionary
@@ -1471,7 +1471,32 @@ public class FocUnitTestingCommand {
     if(created) getLogger().closeNode();
     return value;
   }
-
+  
+  /**
+   * Stores the value of a component in a hash map at the level of the
+   * dictionary
+   * 
+   * @param layoutName 
+   *          Specifies the layout name where the component is to be searched for.
+   *          This is only useful if there is possible ambiguity where 2 components might have the same name
+   *          due to XMLInclude  
+   * @param componentName
+   *          The name of the component.
+   * @param variableName
+   *          The name of the key that will contain the value in the hash map.
+   */
+  public String component_GetValue(String layoutName, String componentName, String variableName) throws Exception {
+  	String originalLayout = getLayoutName();
+  	if(!Utils.isStringEmpty(layoutName)) {
+	  	setLayoutName(layoutName);
+  	}
+  	String value = component_GetValue(componentName, variableName);
+  	if(!Utils.isStringEmpty(layoutName)) {
+  		setLayoutName(originalLayout);
+  	}
+  	return value;
+  }
+  
   public void button_Click(String layoutName, String buttonName) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
   	String backup = getLayoutName();
