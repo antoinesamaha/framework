@@ -29,6 +29,7 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 
 			FVVerticalLayout vLay = (FVVerticalLayout) getComponentByName("VLAY");
 			FVTextArea textArea = new FVTextArea(null, null);
+			textArea.setCaption("Document");
 			textArea.setWidth("100%");
 			textArea.setHeight("200px");
 			textArea.setValue(val);
@@ -38,10 +39,12 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 			val = jsonObj.toString(4);
 
 			textArea = new FVTextArea(null, null);
+			textArea.setCaption("Changes");
 			textArea.setWidth("100%");
 			textArea.setHeight("200px");
-			textArea.setValue(changes);
-			vLay.addComponent(textArea);			
+			textArea.setValue(val);
+			textArea.addStyleName("focXMLEditor");
+			vLay.addComponent(textArea);
 			
 //			FVLabel jsonTextArea = (FVLabel) getComponentByName("JSON_PRETTY");
 //	    if(jsonTextArea != null && val != null) {

@@ -45,6 +45,10 @@ public class JSONLog {
 		return focObject;
 	}
 	
+	public boolean isEmptyLog() {
+		return json == null || json.trim().equals("{}");
+	}
+	
 	public class SQLBucket {
 		private ArrayList<String> sqlArray = null;
 		

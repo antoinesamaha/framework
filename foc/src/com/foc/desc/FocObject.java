@@ -102,6 +102,7 @@ import com.foc.gui.table.FTable;
 import com.foc.gui.table.IFocCellPainter;
 import com.foc.link.FocLinkOutRights;
 import com.foc.list.FocList;
+import com.foc.list.FocListElement;
 import com.foc.plugin.IFocObjectPlugIn;
 import com.foc.property.FBoolean;
 import com.foc.property.FCloudImageProperty;
@@ -129,6 +130,7 @@ import com.foc.property.IFDescProperty;
 import com.foc.property.PropertyFocObjectLocator;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.util.IFocIterator;
 import com.foc.util.Utils;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
@@ -4528,8 +4530,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public void toJson(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginObject();
+			if(builder.isPrintCRUD()) {
+				String statusValue = null;
+				if(isDeleted()) {
+					statusValue = "D";
+				} else if(isCreated()) {
+					statusValue = "C";
+				} else if(isModified()) {
+					statusValue = "U";
+				}
+				if(statusValue != null) {
+					builder.appendKeyValue("CRUD", statusValue);
+				}
+			}
 			FReference fRef = getReference();
-			if(fRef != null && builder.isPrintRootRef()){
+			if(fRef != null && builder.isPrintRootRef() && !isCreated()){//If created the REF<0 means nothing
 				builder.appendKeyValue(fRef.getFocField().getName(), fRef.getInteger());
 			}
 			FocFieldEnum fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_ALL, FocFieldEnum.LEVEL_PLAIN);
@@ -4574,24 +4589,61 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						FList prop = (FList) fieldEnum.getProperty();
 						FocList list = prop != null ? prop.getListWithoutLoad() : null;
 						if(list != null && list.getFocDesc() != null && !(list.getFocDesc() instanceof WFLogDesc)) {
-							boolean listStarted = false;//This boolean allows not to add the list tag at all when empty
-
 							if(!builder.isModifiedOnly()) list.loadIfNotLoadedFromDB();
-							for(int i=0; i<list.size(); i++) {
-								FocObject focObj = list.getFocObject(i);
-								if(focObj != null && (!builder.isModifiedOnly() || focObj.isModified())) {
-									if(!listStarted) {
-										builder.appendKey(fld.getName());
-										builder.beginList();
-										listStarted = true;
+							
+							boolean isCRUD    = builder.isPrintCRUD();
+							boolean isRootRef = builder.isPrintRootRef();
+							boolean listStarted = false;
+							
+							Iterator iter = list.newSubjectIterator(); 
+							while(iter != null && iter.hasNext()) {
+								AccessSubject subject = (AccessSubject) iter.next();
+								if(subject != null && subject instanceof FocObject) {
+									FocObject focObj = (FocObject) subject;
+									
+//									if(			focObj != null 
+//											&& (!builder.isModifiedOnly() 
+//													|| (    focObj.isModified() 
+//															||  focObj.isDeleted()
+//															|| (focObj.isCreated() && !focObj.isEmpty()) 
+//													)))
+									
+									boolean doWrite = focObj != null;
+									if(doWrite && builder.isModifiedOnly()) {
+										doWrite =     focObj.isModified() 
+															||  focObj.isDeleted()
+															|| (focObj.isCreated() && !focObj.isEmpty());
+									} else if(doWrite && !builder.isModifiedOnly()) {
+										doWrite = !(focObj.isCreated() && focObj.isEmpty());	
 									}
 									
-									focObj.toJson(builder);
+									if(doWrite) {
+										if(!listStarted) {
+											builder.appendKey(fld.getName());
+											builder.beginList();
+											listStarted = true;
+										}
+										if(builder.isModifiedOnly()) {
+											builder.setPrintCRUD(true);
+											builder.setPrintRootRef(true);
+										}
+										focObj.toJson(builder);
+									}
 								}
 							}
+							
+							builder.setPrintCRUD(isCRUD);
+							builder.setPrintRootRef(isRootRef);
 							if(listStarted) {
 								builder.endList();
 							}
+							
+//							ToJsonListIterator listIterator = new ToJsonListIterator(builder, fld.getName());
+//							list.iterate(listIterator);
+//							if(listIterator.isListStarted()) {
+//								builder.endList();
+//							}
+//							listIterator.dispose();
 						}
 					}
 				}
@@ -4603,6 +4655,43 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 	}
 
+	private class ToJsonListIterator implements IFocIterator {
+
+		private String  fieldName = null;
+		private boolean listStarted= false;
+		private B01JsonBuilder builder = null;
+		
+		public ToJsonListIterator(B01JsonBuilder builder, String fieldName) {
+			this.builder = builder;
+			this.fieldName = fieldName;
+		}
+		
+		public void dispose() {
+			builder = null;
+		}
+		
+		@Override
+		public boolean treatElement(Object element) {
+			FocObject focObj = ((FocListElement)element).getFocObject();
+			if(focObj != null && (!builder.isModifiedOnly() || (focObj.isModified() || focObj.isCreated() || focObj.isDeleted()))) {
+				if(!listStarted) {
+					builder.appendKey(fieldName);
+					builder.beginList();
+					listStarted = true;
+				}
+				
+				focObj.toJson(builder);
+			}
+			
+			return false;
+		}
+
+		public boolean isListStarted() {
+			return listStarted;
+		}
+		
+	}
+	
   /**
    * Gets the Property corresponding to the given Property ID stored in the
    * Item. If the Item does not contain the Property, <code>null</code> is

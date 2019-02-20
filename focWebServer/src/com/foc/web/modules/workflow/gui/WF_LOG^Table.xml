@@ -1,7 +1,7 @@
 <VerticalLayout>
   <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
   <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="-1px" openEnabled="true" addEnabled="false" deleteEnabled="false">
-    <OpenForm containerWindow="same window" />
+    <OpenForm containerWindow="same window" storage="WF_LOG" context="JSON" />
     <TableColumn name="DATE_TIME" caption="Date Time" width="-1px" />
     <TableColumn name="EVENT_TYPE" caption="Event Type" width="-1px" />
     <TableColumn name="EVENT_UNDONE" caption="Undone" width="-1px" />
