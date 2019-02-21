@@ -2150,10 +2150,18 @@ public class FocUnitTestingCommand {
   }
   
 	public int memory_FocObjectCount(String storageName, int expectedCount) throws Exception {
-		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount);
+		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount, false);
+	}
+	
+	public int memory_FocObjectCount(String storageName, int expectedCount, boolean doNotPrintWhenEqual) throws Exception {
+		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount, doNotPrintWhenEqual);
 	}
 	
 	public int memory_FocObjectCount(FocDesc focDesc, int expectedCount) throws Exception {
+		return memory_FocObjectCount(focDesc, expectedCount, false);
+	}
+	
+	public int memory_FocObjectCount(FocDesc focDesc, int expectedCount, boolean doNotPrintWhenEqual) throws Exception {
 		int count = 0;
 		if(focDesc != null) {
 	  	ArrayList<FocObject> array = focDesc.allFocObjectArray_get();
@@ -2163,7 +2171,9 @@ public class FocUnitTestingCommand {
 	  		if(expectedCount >= 0 && count != expectedCount) {
 	  			getDictionary().getLogger().addFailure("Expected instances "+expectedCount+" found "+ count+" for "+focDesc.getStorageName());
 	  		}else {
-	  			getDictionary().getLogger().addInfo("Found "+count+" instances for "+focDesc.getStorageName());
+	  			if(!doNotPrintWhenEqual) {
+	  				getDictionary().getLogger().addInfo("Found "+count+" instances for "+focDesc.getStorageName());
+	  			}
 	  		}
 	  	}
 		}
