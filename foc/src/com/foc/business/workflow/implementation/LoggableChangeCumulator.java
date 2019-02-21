@@ -56,12 +56,12 @@ public class LoggableChangeCumulator {
 	public void insertLogLine_IfNotInsertedYet(ILoggable loggable) {
 		String jsonLog = null; 
 		JSONLog log = get(loggable);
-		if(log != null) {
+		if(log != null && !log.isEmptyLog()) {
 			jsonLog = log.getJson();
-		}
-		Loggable loggableHandler = (loggable).iWorkflow_getWorkflow();
-		if(loggableHandler != null) {
-			loggableHandler.insertLogLine(WFLogDesc.EVENT_MODIFICATION, null, jsonLog);
+			Loggable loggableHandler = loggable.iWorkflow_getWorkflow();
+			if(loggableHandler != null) {
+				loggableHandler.insertLogLine(WFLogDesc.EVENT_MODIFICATION, null, jsonLog);
+			}
 		}
 		remove(loggable);
 	}

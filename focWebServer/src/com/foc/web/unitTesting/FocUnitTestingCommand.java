@@ -75,6 +75,10 @@ public class FocUnitTestingCommand {
   private FocUnitXMLAttributes attributes = null;
   private FocUnitTest unitTest = null;
 
+  private static final int ASSERT_ONLY            =  1;
+  private static final int SET_VALUE_AND_ASSERT =  0;
+  private static final int DO_NOT_ASSERT          = -1;
+  
   public FocUnitTestingCommand(FocUnitTest unitTest, String methodName, Attributes attributes) {
   	setUnitTest(unitTest);
     setMethodName(methodName);
@@ -1202,6 +1206,14 @@ public class FocUnitTestingCommand {
    *          The value to be set (String)
    */
   public void component_SetValue(String componentName, String componentValue, boolean isAssert) throws Exception {
+  	component_SetValue(componentName, componentValue, isAssert ? ASSERT_ONLY : SET_VALUE_AND_ASSERT);
+  }
+
+  public void component_SetValue_DoNotVerify(String componentName, String componentValue) throws Exception {
+  	component_SetValue(componentName, componentValue, DO_NOT_ASSERT);
+  }
+
+  private void component_SetValue(String componentName, String componentValue, int isAssert) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Set "+componentName+" = "+componentValue);
   	
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
@@ -1263,14 +1275,14 @@ public class FocUnitTestingCommand {
 	}
   
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, String priorityToCaptionProperty) throws Exception {
-  	return setComponentValue(component, compNameForTheMessage, componentValue, false, priorityToCaptionProperty);
+  	return setComponentValue(component, compNameForTheMessage, componentValue, SET_VALUE_AND_ASSERT, priorityToCaptionProperty);
   }
   
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, boolean isAssert) throws Exception {
+  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int isAssert) throws Exception {
   	return setComponentValue(component, compNameForTheMessage, componentValue, isAssert, null);
   }
   
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, boolean isAssert, String priorityToCaptionProperty) throws Exception {
+  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
     boolean error = false;
     if(component != null){
     	if(component instanceof Component){
@@ -1281,7 +1293,7 @@ public class FocUnitTestingCommand {
     	}
     	if(!error){
     		if(component instanceof FVMultipleChoiceOptionGroupPopupView){
-    			if(!isAssert){
+    			if(assertOnly != ASSERT_ONLY){
     				component.setValueString(componentValue);
     			}
     		}else if(component instanceof FVObjectPopupView){
@@ -1294,20 +1306,20 @@ public class FocUnitTestingCommand {
 					((FVObjectComboBox) component).setValueString(null);
 					componentValue = null;
     		}else{
-    			if(!isAssert){
+    			if(assertOnly != ASSERT_ONLY){
     				component.setValueString(componentValue);
     			}
-        
+
     			String retValue = component.getValueString();
-    			if(Utils.isEqual_String(retValue, componentValue)){
-    				if(isAssert){
+    			if(assertOnly == DO_NOT_ASSERT || Utils.isEqual_String(retValue, componentValue)){
+    				if(assertOnly == ASSERT_ONLY){
     					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is equal to " + componentValue + ".");
     				}else{
     					getLogger().addInfo("Set component " + compNameForTheMessage + " to " + componentValue + ".");
     				}
     			}else{
     				error = true;
-    				if(isAssert){
+    				if(assertOnly == ASSERT_ONLY){
     					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
     				}else{
         			retValue = component.getValueString();
@@ -1358,7 +1370,17 @@ public class FocUnitTestingCommand {
     	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
     }
   }
+  
+  public void componentInTable_SetValue_DoNotVerify(String tableName, long objRef, String fieldName, String componentValue) throws Exception {
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if (component != null) {
+    	setComponentValue(component, componentName, componentValue, DO_NOT_ASSERT);
+    }
+  }
+  
   public void componentInTable_SetValue(String layoutName, String tableName, long objRef, String fieldName, String componentValue, String priorityToCaptionProperty) throws Exception {
   	String originalLayout = null;
   	originalLayout = getLayoutName();
@@ -1384,7 +1406,7 @@ public class FocUnitTestingCommand {
     String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
-    	setComponentValue(component, componentName, componentValue, true);
+    	setComponentValue(component, componentName, componentValue, ASSERT_ONLY);
     }
   }
   
@@ -1448,7 +1470,7 @@ public class FocUnitTestingCommand {
    		getLogger().addError("Component " + tableName + " is not an FVTableWrapperLayout");
    	}
   }
-  
+
   /**
    * Stores the value of a component in a hash map at the level of the
    * dictionary
@@ -1471,7 +1493,32 @@ public class FocUnitTestingCommand {
     if(created) getLogger().closeNode();
     return value;
   }
-
+  
+  /**
+   * Stores the value of a component in a hash map at the level of the
+   * dictionary
+   * 
+   * @param layoutName 
+   *          Specifies the layout name where the component is to be searched for.
+   *          This is only useful if there is possible ambiguity where 2 components might have the same name
+   *          due to XMLInclude  
+   * @param componentName
+   *          The name of the component.
+   * @param variableName
+   *          The name of the key that will contain the value in the hash map.
+   */
+  public String component_GetValue(String layoutName, String componentName, String variableName) throws Exception {
+  	String originalLayout = getLayoutName();
+  	if(!Utils.isStringEmpty(layoutName)) {
+	  	setLayoutName(layoutName);
+  	}
+  	String value = component_GetValue(componentName, variableName);
+  	if(!Utils.isStringEmpty(layoutName)) {
+  		setLayoutName(originalLayout);
+  	}
+  	return value;
+  }
+  
   public void button_Click(String layoutName, String buttonName) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Button click : "+buttonName);
   	String backup = getLayoutName();
@@ -1649,7 +1696,7 @@ public class FocUnitTestingCommand {
     if (forEachLayout != null) {
       FocXMLGuiComponent component = bannerFindLineByIndexComponentByName(bannerLayoutName, componentName, index);
       if (component != null) {
-      	setComponentValue(component, componentName, componentValue, IsAssert);
+      	setComponentValue(component, componentName, componentValue, IsAssert ? ASSERT_ONLY : SET_VALUE_AND_ASSERT);
       } else {
         getLogger().addFailure("Component " + componentName + " not found in banner layout.");
       }
@@ -2103,10 +2150,18 @@ public class FocUnitTestingCommand {
   }
   
 	public int memory_FocObjectCount(String storageName, int expectedCount) throws Exception {
-		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount);
+		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount, false);
+	}
+	
+	public int memory_FocObjectCount(String storageName, int expectedCount, boolean doNotPrintWhenEqual) throws Exception {
+		return memory_FocObjectCount(Globals.getApp().getFocDescByName(storageName), expectedCount, doNotPrintWhenEqual);
 	}
 	
 	public int memory_FocObjectCount(FocDesc focDesc, int expectedCount) throws Exception {
+		return memory_FocObjectCount(focDesc, expectedCount, false);
+	}
+	
+	public int memory_FocObjectCount(FocDesc focDesc, int expectedCount, boolean doNotPrintWhenEqual) throws Exception {
 		int count = 0;
 		if(focDesc != null) {
 	  	ArrayList<FocObject> array = focDesc.allFocObjectArray_get();
@@ -2116,7 +2171,9 @@ public class FocUnitTestingCommand {
 	  		if(expectedCount >= 0 && count != expectedCount) {
 	  			getDictionary().getLogger().addFailure("Expected instances "+expectedCount+" found "+ count+" for "+focDesc.getStorageName());
 	  		}else {
-	  			getDictionary().getLogger().addInfo("Found "+count+" instances for "+focDesc.getStorageName());
+	  			if(!doNotPrintWhenEqual) {
+	  				getDictionary().getLogger().addInfo("Found "+count+" instances for "+focDesc.getStorageName());
+	  			}
 	  		}
 	  	}
 		}

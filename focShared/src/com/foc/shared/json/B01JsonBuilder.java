@@ -11,6 +11,7 @@ public class B01JsonBuilder {
 	private boolean printObjectNamesNotRefs = false;
 	private boolean scanSubList             = false;
 	private boolean printRootRef            = true;
+	private boolean printCRUD             = false;
 	
 	public B01JsonBuilder(){
 		buffer = new StringBuffer();
@@ -158,5 +159,15 @@ public class B01JsonBuilder {
 
 	public void setPrintRootRef(boolean printRootRef) {
 		this.printRootRef = printRootRef;
+	}
+
+	public boolean isPrintCRUD() {
+		return printCRUD;
+	}
+
+	public boolean setPrintCRUD(boolean printStatus) {
+		boolean backupValue = this.printCRUD;
+		this.printCRUD = printStatus;
+		return backupValue;
 	}
 }

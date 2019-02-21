@@ -128,6 +128,17 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 		loginAs(name, "");
 	}
 
+	protected void memoryCheck() throws Exception {
+		
+	}
+	
+	public void logoutWithMemoryCheck() throws Exception {
+		getDictionary().incrementTestIndexes();
+		getMainWindow().logout();
+		memoryCheck();
+		FocUnitDictionary.getInstance().setExitTesting(true);
+	}
+	
 	public void changeSite(String station, String title) throws Exception {
 		FocLogger.getInstance().openNode("Change Site and Writer : "+station+" - "+title);
 		{
