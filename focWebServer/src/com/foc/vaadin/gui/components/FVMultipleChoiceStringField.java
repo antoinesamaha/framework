@@ -124,7 +124,7 @@ public class FVMultipleChoiceStringField extends FVMultipleChoiceComboBox implem
 		      if(choices != null){
 		        while(choices.hasNext()){
 		          FMultipleChoiceItem choiceItem = choices.next();
-		          if(choiceItem != null){
+		          if(choiceItem != null && choiceItem.getTitle() != null){
 		            addItem(choiceItem.getTitle());
 		            if(currentValue != null && choiceItem.getTitle().equals(currentValue)){
 		            	currentValue = null;
