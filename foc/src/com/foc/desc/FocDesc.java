@@ -43,6 +43,7 @@ import com.foc.business.status.IStatusHolderDesc;
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFSiteDesc;
+import com.foc.business.workflow.implementation.ILoggableDesc;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.LoggableDesc;
@@ -2530,8 +2531,8 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	
 	public FocDesc getWFLogDesc() {
 		FocDesc logFocDesc = null;
-		if(this instanceof IWorkflowDesc) {
-			WorkflowDesc workflowDesc = ((IWorkflowDesc)this).iWorkflow_getWorkflowDesc();
+		if(this instanceof ILoggableDesc) {
+			LoggableDesc workflowDesc = ((ILoggableDesc)this).iWorkflow_getWorkflowDesc();
 			if(workflowDesc != null){
 				FListField listField = (FListField) getFieldByID(workflowDesc.getFieldID_LogList());
 				if(listField != null) {
