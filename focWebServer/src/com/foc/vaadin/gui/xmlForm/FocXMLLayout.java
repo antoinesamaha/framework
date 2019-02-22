@@ -814,7 +814,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				property = (FProperty) propFocData;
 			}
 
-			guiComponent = vField.newGuiComponent(FocXMLLayout.this, iFocData_SentToObject, attributes, rootFocData, dataPath);
+			try {
+				guiComponent = vField.newGuiComponent(FocXMLLayout.this, iFocData_SentToObject, attributes, rootFocData, dataPath);
+			} catch (Exception e) {
+				Globals.logException(e);
+			}
 			
 			// If the dataPath contains . then this means that the component needs to
 			// recall the setDataPath when some properties change.
@@ -955,7 +959,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 		FocXMLGuiComponentCreator guiCreator = FVGUIFactory.getInstance().get(compTypeName);
 		if(guiCreator != null){
-			FocXMLGuiComponent guiComp = guiCreator.newGuiComponent(FocXMLLayout.this, focData, impl, getFocData(), dataPath);
+			FocXMLGuiComponent guiComp = null;
+			try {
+				guiComp = guiCreator.newGuiComponent(FocXMLLayout.this, focData, impl, getFocData(), dataPath);
+			} catch(Exception e) {
+				Globals.logException(e);
+			}
+			
 			component = (Component) guiComp;
 		}else{
 			Globals.showNotification("Gui XML Tag unknown", "" + compTypeName, FocWebEnvironment.TYPE_ERROR_MESSAGE);
