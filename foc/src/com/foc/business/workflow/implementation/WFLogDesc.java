@@ -34,7 +34,7 @@ public class WFLogDesc extends FocDesc {
 	public static final int FLD_DESCERIPTION           = FField.FLD_DESCRIPTION;
 	public static final int FLD_COMMENT                = 10;
 	public static final int FLD_SIGNED_TRANSACTION_XML = 11;
-	public static final int FLD_EVENT_STATUS           = 12;//0, 1-Posted, 2-Committed
+	public static final int FLD_EVT_STATUS             = 12;//0, 1-Posted, 2-Committed
 	public static final int FLD_EVENT_STATUS_ERROR     = 13;
 	public static final int FLD_CHANGES                = 14;
 	public static final int FLD_DOC_ZIP                = 15;
@@ -62,7 +62,7 @@ public class WFLogDesc extends FocDesc {
 	
 	public static final String WF_LOG_VIEW_KEY = "WF_LOG";
 	
-	public static final String FNAME_EVENT_STATUS = "EVENT_STATUS";
+	public static final String FNAME_EVT_STATUS   = "EVT_STATUS";
 	public static final String FNAME_MASTER_REF   = "MASTER_REF";
 	public static final String FNAME_EVENT_TYPE   = "EVENT_TYPE";
 	public static final String FNAME_DATE_TIME    = "DATE_TIME";
@@ -100,7 +100,7 @@ public class WFLogDesc extends FocDesc {
 			addField(objFld);
 		}
 		
-		FMultipleChoiceField statusFld = new FMultipleChoiceField(FNAME_EVENT_STATUS, "Event Status", FLD_EVENT_STATUS, false, 2);
+		FMultipleChoiceField statusFld = new FMultipleChoiceField(FNAME_EVT_STATUS, "Event Status", FLD_EVT_STATUS, false, 4);
 		statusFld.setSortItems(false);
 		statusFld.addChoice(FocLogEvent.STATUS_EXCLUDED , "Excluded");
 		statusFld.addChoice(FocLogEvent.STATUS_INCLUDED , "Included");
@@ -183,11 +183,11 @@ public class WFLogDesc extends FocDesc {
 			
 			FBoolField bFld = new FBoolField("EVENT_UNDONE", "Event Undone", FLD_EVENT_UNDONE, false);
 			addField(bFld);
-	    
-			chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, LEN_STATUS_ERROR);
-	    addField(chfld);
 		}
-		
+
+		chfld = new FStringField("STATUS_ERROR", "Status error", FLD_EVENT_STATUS_ERROR, false, LEN_STATUS_ERROR);
+    addField(chfld);
+
 		/*
 		objFld = new FObjectField("TARGET_STAGE", "Target|Stage", FLD_TARGET_STAGE, false, WFStageDesc.getInstance(), "TARGET_STAGE_");
 		objFld.setSelectionList(WFStageDesc.getList(FocList.NONE));

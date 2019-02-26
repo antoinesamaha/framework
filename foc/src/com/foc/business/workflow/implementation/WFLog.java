@@ -54,11 +54,11 @@ public class WFLog extends FocObject implements FocLogEvent {
 	}
 
 	public int getEventStatus(){
-		return getPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS);
+		return getPropertyMultiChoice(WFLogDesc.FLD_EVT_STATUS);
 	}
 	
 	public void setEventStatus(int status){
-		setPropertyMultiChoice(WFLogDesc.FLD_EVENT_STATUS, status);
+		setPropertyMultiChoice(WFLogDesc.FLD_EVT_STATUS, status);
 	}
 
 	public String getEventTypeTitle(){
