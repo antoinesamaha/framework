@@ -17,7 +17,7 @@ public class WFLogJoinList extends FocListWithFilter {
 
 	public void setFilter_ByStatus(){
 		SQLFilter filter = getFilter();
-		filter.putAdditionalWhere("STATUS", "NOT(EVENT_STATUS="+FocLogEvent.STATUS_EXCLUDED+" OR EVENT_STATUS="+FocLogEvent.STATUS_COMMITTED+" OR (EVENT_STATUS>="+FocLogEvent.STATUS_ERROR_START+" AND EVENT_STATUS<"+FocLogEvent.STATUS_ERROR_END+"))");
+		filter.putAdditionalWhere("STATUS", "EVT_STATUS="+FocLogEvent.STATUS_INCLUDED+" OR EVT_STATUS="+FocLogEvent.STATUS_POSTED+" OR (EVT_STATUS>="+FocLogEvent.STATUS_ERROR_START+" AND EVT_STATUS<"+FocLogEvent.STATUS_ERROR_END+")");
 	}
 	
 }

@@ -11,7 +11,7 @@
     <TableColumn name="TITLE" caption="Title" width="-1px" />
     <TableColumn name="COMMENT" caption="Comment" expandRation="0.5" />
     <TableColumn name="CHANGES" caption="Changes" expandRatio="0.5" />    
-    <TableColumn name="EVENT_STATUS" caption="Status" width="-1px" />
+    <TableColumn name="EVT_STATUS" caption="Status" width="-1px" />
     <TableColumn name="STATUS_ERROR" caption="Status Error" width="-1px" />
     <TableColumn name="PREVIOUS_STAGE" caption="From Stage" width="-1px" />
     <TableColumn name="TARGET_STAGE" caption="To Stage" width="-1px" />

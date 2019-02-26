@@ -96,7 +96,7 @@ public class WFLogJoinDesc extends FocDesc {
 			addLogFieldToRequest(WFLogDesc.FLD_DOC_HASH);
 			addLogFieldToRequest(WFLogDesc.FLD_DOC_VERSION);
 			addLogFieldToRequest(WFLogDesc.FLD_DOC_ZIP);
-			addLogFieldToRequest(WFLogDesc.FLD_EVENT_STATUS);
+			addLogFieldToRequest(WFLogDesc.FLD_EVT_STATUS);
 			addLogFieldToRequest(WFLogDesc.FLD_EVENT_TYPE);
 			addLogFieldToRequest(WFLogDesc.FLD_USER);
 

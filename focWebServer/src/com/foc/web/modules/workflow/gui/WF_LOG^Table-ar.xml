@@ -11,7 +11,7 @@
     <TableColumn name="TITLE" caption="العنوان" /> -->
     <TableColumn name="COMMENT" caption="ملاحظات" expandRatio="0.5"/>
     <TableColumn name="CHANGES" caption="التعديلات" expandRatio="0.5" />
-    <TableColumn name="EVENT_STATUS" caption="الوضع" width="-1px" />
+    <TableColumn name="EVT_STATUS" caption="الوضع" width="-1px" />
     <TableColumn name="STATUS_ERROR" caption="الخطأ" width="-1px" />
     <TableColumn name="PREVIOUS_STAGE" caption="المرحلة السابقة" width="-1px"/>
     <TableColumn name="TARGET_STAGE" caption="المرحلة المستهدفة" width="-1px"/>

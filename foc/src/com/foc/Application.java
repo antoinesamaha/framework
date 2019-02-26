@@ -636,7 +636,7 @@ public class Application {
    	BusinessModule.getInstance().declare();
    	PhotoAlbumManagmentModule.getInstance().declare();
    	
-    FocVersion.addVersion("FOC", "foc1.6" , 1626);
+    FocVersion.addVersion("FOC", "foc1.6" , 1628);
     
     //if(withDatabase && !isDoNotCheckTables()){
     //  adminModule.checkTables();
@@ -2177,11 +2177,11 @@ public class Application {
 				StringBuffer buffer = null;
 				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
-					buffer.append("set EVENT_STATUS = "+status+" , STATUS_ERROR = \""+statusCommitError+"\"");
+					buffer.append("set EVT_STATUS = "+status+" , STATUS_ERROR = \""+statusCommitError+"\"");
 					buffer.append(" where "+logFocDesc.getRefFieldName()+" = "+logEventRef+" ");						
 				} else {
 					buffer = new StringBuffer("UPDATE \"" + logFocDesc.getStorageName_ForSQL() + "\" ");
-					buffer.append("set \"EVENT_STATUS\" = "+status+" , \"STATUS_ERROR\" = \'"+statusCommitError+"\'");
+					buffer.append("set \"EVT_STATUS\" = "+status+" , \"STATUS_ERROR\" = \'"+statusCommitError+"\'");
 					buffer.append(" where \""+logFocDesc.getRefFieldName()+"\" = "+logEventRef+" ");
 				}					
 				error = Globals.getApp().getDataSource().command_ExecuteRequest(buffer);

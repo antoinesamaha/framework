@@ -1,6 +1,7 @@
 package com.foc.util;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,6 +11,7 @@ import java.io.InputStreamReader;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -192,6 +194,18 @@ public class Utils {
 			e.printStackTrace();
 		}
 	  return out.toString();
+	}
+	
+	public static InputStream stringToinputStream(String str) {
+		InputStream stream = null;
+		try{
+			if(str != null) {
+				stream = new ByteArrayInputStream(str.getBytes(StandardCharsets.UTF_8));
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	  return stream;
 	}
 	
 	public static int compareObjects_NullityOnly(Object o1, Object o2){
