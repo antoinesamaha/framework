@@ -18,6 +18,7 @@ import com.foc.Globals;
 import com.foc.access.FocLogLineDesc;
 import com.foc.access.FocLogLineTree;
 import com.foc.access.FocLogger;
+import com.foc.annotations.unit.FUTest;
 import com.foc.htmldoc.HTMLDocumentation;
 import com.foc.loader.FocFileLoader;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -431,12 +432,26 @@ public class FocUnitDictionary {
 		}
 	}
 	
-	public void unitDoc_AddTest(String testName, String description, boolean implemented) {
+	public void unitDoc_AddTest(FUTest ann, String methodName, String description, boolean implemented) {
 		unitDoc_CreateIfNeeded();
 		if(documentation != null) {
-			String title = testName;
+			String title = methodName;
+			String author = null;
+			if(ann != null) {
+				if(!Utils.isStringEmpty(ann.title())) {
+					title = ann.title();
+				}
+				author = ann.author();
+			}
 			if(!implemented) {
 				title += "   !NOT IMPLEMENTED!";
+			}
+			if(description == null) description ="";
+			if(!Utils.isStringEmpty(methodName)) {
+				description += "<br><b>Method:</b> "+methodName;
+			}
+			if(!Utils.isStringEmpty(author)) {
+				description += "<br><b>Author:</b> "+author;
 			}
 			documentation.addCollapsible(title, description);
 		}

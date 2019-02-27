@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 public @interface FUTest {
 	public boolean implemented() default true;
 	public String description() default "";
+	public String title() default "";
+	public String author() default "";
 }
