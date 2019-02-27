@@ -127,7 +127,7 @@ public class FocXMLFilterConditionBuilder {
 					
 					//Operation
 					newFieldTag(handler, prefix+"_OP", "120px");
-					newFieldTag(handler, prefix+"_OBJREF", "270px", "OR("+prefix+"_OP>0)", captionProperty);
+					newFieldTag(handler, prefix+"_OBJREF", "270px", "OR("+prefix+"_OP=3,"+prefix+"_OP=6,"+prefix+"_OP=7)", captionProperty);
 
 				}else if(condition instanceof IntegerCondition){
 					String fldNameOP = prefix+IntegerCondition.FNAME_OP;
