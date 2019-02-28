@@ -8,6 +8,8 @@ import com.foc.util.Utils;
 public class HTMLDocumentation {
 	
 	private PrintStream unitDoc = null;
+	private int classNumber = 1;
+	private static final int MAX_CLASS_NBR = 4;
 	
 	public HTMLDocumentation(String dir, String fileName) {
 		open(dir, fileName);
@@ -47,19 +49,18 @@ public class HTMLDocumentation {
 			unitDoc.println("      <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">");
 			unitDoc.println("      <style>");
 			unitDoc.println("        .collapsible {");
-			unitDoc.println("          background-color: #777;");
+//			unitDoc.println("          background-color: rgb(97, 175, 254);");
+			unitDoc.println("          margin-top: 10px;");
+			unitDoc.println("          border-radius: 5px;");
+			unitDoc.println("          border: 2px solid;");
 			unitDoc.println("          color: white;");
 			unitDoc.println("          cursor: pointer;");
-			unitDoc.println("          padding: 18px;");
+			unitDoc.println("          padding: 10px;");
 			unitDoc.println("          width: 100%;");
-			unitDoc.println("          border: none;");
+//			unitDoc.println("          border: none;");
 			unitDoc.println("          text-align: left;");
 			unitDoc.println("          outline: none;");
 			unitDoc.println("          font-size: 15px;");
-			unitDoc.println("        }");
-			unitDoc.println();
-			unitDoc.println("        .active, .collapsible:hover {");
-			unitDoc.println("          background-color: #555;");
 			unitDoc.println("        }");
 			unitDoc.println();
 			unitDoc.println("        .collapsible:after {");
@@ -69,18 +70,77 @@ public class HTMLDocumentation {
 			unitDoc.println("          float: right;");
 			unitDoc.println("          margin-left: 5px;");
 			unitDoc.println("        }");
-			unitDoc.println();
+			
 			unitDoc.println("        .active:after {");
 			unitDoc.println("          content: \"\\2212\";");
 			unitDoc.println("        }");
+				
 			unitDoc.println();
 			unitDoc.println("        .content {");
-			unitDoc.println("           padding: 0 18px;");
+			unitDoc.println("           padding: 0 10px;");
 			unitDoc.println("           max-height: 0;");
 			unitDoc.println("           overflow: hidden;");
+			unitDoc.println("           font-weight: normal;");
 			unitDoc.println("           transition: max-height 0.2s ease-out;");
-			unitDoc.println("           background-color: #f1f1f1;");
+//			unitDoc.println("           background-color: rgb(235, 243, 251);");
 			unitDoc.println("        }");
+			
+			//Blue
+			unitDoc.println("        .collapsible1 {");
+			unitDoc.println("          background-color: rgb(97, 175, 254);");
+			unitDoc.println("          border-color: rgb(80, 80, 254);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .collapsible1:hover {");
+			unitDoc.println("          background-color: rgb(80, 80, 254);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .content1 {");
+			unitDoc.println("           background-color: rgb(235, 243, 251);");
+			unitDoc.println("        }");
+
+			//Orange
+			unitDoc.println("        .collapsible2 {");
+			unitDoc.println("          background-color: rgb(252, 161, 48);");
+			unitDoc.println("          border-color: rgb(240, 140, 48);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .collapsible2:hover {");
+			unitDoc.println("          background-color: rgb(240, 140, 48);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .content2 {");
+			unitDoc.println("           background-color: rgb(251, 242, 230);");
+			unitDoc.println("        }");
+
+			//Green
+			unitDoc.println("        .collapsible3 {");
+			unitDoc.println("          background-color: rgb(73, 204, 144);");
+			unitDoc.println("          border-color: rgb(73, 180, 120);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .collapsible3:hover {");
+			unitDoc.println("          background-color: rgb(73, 180, 120);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .content3 {");
+			unitDoc.println("           background-color: rgb(233, 246, 240);");
+			unitDoc.println("        }");
+
+			//Red
+			unitDoc.println("        .collapsible4 {");
+			unitDoc.println("          background-color: rgb(249, 62, 62);");
+			unitDoc.println("          border-color: rgb(210, 30, 30);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .collapsible4:hover {");
+			unitDoc.println("          background-color: rgb(210, 30, 30);");
+			unitDoc.println("        }");
+			unitDoc.println();
+			unitDoc.println("        .content4 {");
+			unitDoc.println("           background-color: rgb(251, 232, 232);");
+			unitDoc.println("        }");
+			
 			unitDoc.println();
 			unitDoc.println("      </style>");
 			unitDoc.println("    </head>");
@@ -111,6 +171,8 @@ public class HTMLDocumentation {
 	}
 	
 	public void addSection(String suiteName, String description) {
+		classNumber++;
+		if(classNumber > MAX_CLASS_NBR) classNumber = 1;
 		if(unitDoc != null && !Utils.isStringEmpty(suiteName)) {
 			unitDoc.println("<H1>"+suiteName+"</H1>");
 			if(!Utils.isStringEmpty(description)) {
@@ -121,8 +183,8 @@ public class HTMLDocumentation {
 	
 	public void addCollapsible(String title, String description) {
 		if(unitDoc != null && !Utils.isStringEmpty(title)) {
-			unitDoc.println("<button class=\"collapsible\">"+title+"</button>");
-			unitDoc.println("<div class=\"content\">");
+			unitDoc.println("<button class=\"collapsible collapsible"+classNumber+"\">"+title+"</button>");
+			unitDoc.println("<div class=\"content content"+classNumber+"\">");
 			unitDoc.println("   <p>"+description+"</p>");
 			unitDoc.println("</div>");
 		}
