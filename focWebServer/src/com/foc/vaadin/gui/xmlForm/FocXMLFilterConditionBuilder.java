@@ -101,7 +101,7 @@ public class FocXMLFilterConditionBuilder {
 				}else if(condition instanceof StringCondition){
 					//Operation
 					newFieldTag(handler, prefix+"_OP", "120px");
-					newFieldTag(handler, prefix+"_TXT", "270px", "OR("+prefix+"_OP>0)");
+					newFieldTag(handler, prefix+"_TXT", "270px", "OR("+prefix+"_OP=1,"+prefix+"_OP=2,"+prefix+"_OP=3)");
 				}else if(condition instanceof BooleanCondition){
 					//Operation
 					newFieldTag(handler, prefix+"_VAL", "120px");
