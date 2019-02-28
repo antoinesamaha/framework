@@ -124,6 +124,24 @@ public class B01JsonBuilder {
 		}
 	}
 	
+	public void appendKeyValueIfNotNull(String key, String value){
+		if(buffer != null && key != null && value != null){
+			appendKey(key);
+			appendValue(value);
+		}
+	}
+	
+	public void appendKeyValueCheckNull(String key, String value){
+		if(buffer != null){
+			appendKey(key);
+			if(value == null) {
+				appendValue("");
+			} else {
+				appendValue(value);
+			}
+		}
+	}
+	
 	@Override
 	public String toString(){
 		return buffer != null ? buffer.toString() : "";

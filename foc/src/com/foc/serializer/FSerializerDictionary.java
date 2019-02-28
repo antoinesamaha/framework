@@ -87,7 +87,11 @@ public class FSerializerDictionary {
 		StringBuffer buff = new StringBuffer();
 		FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObject, buff, FSerializer.TYPE_JSON);
 		if(ser != null) {
-			ser.serializeToBuffer();
+			try {
+				ser.serializeToBuffer();
+			} catch(Exception e) {
+				Globals.logException(e);
+			}
 			fullJson = buff.toString();
 			ser.dispose();
 		}

@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import com.foc.access.AccessControl;
+import com.foc.access.FocLogger;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.gui.DisplayManager;
@@ -177,8 +178,13 @@ public class Globals{
 //      mess = new String("Exception occured");
 //    }
     
-    if(getApp() != null && getApp().isUnitTesting()){
-      getApp().exit(true);
+    if(getApp() != null && getApp().isUnitTest()){
+    	try {
+    		FocLogger.getInstance().addFailure(e.getMessage());
+    	}catch(Exception elog) {
+    		logString("Exception while Unit failure log");
+    	}
+//      getApp().exit(true);
       //getApp().getFocTestSuite().exceptionOccured(e);
     }
   }
