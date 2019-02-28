@@ -243,7 +243,11 @@ public class Loggable {
 				StringBuffer buff = new StringBuffer();
 				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON);
 				if(ser != null) {
-					ser.serializeToBuffer();
+					try {
+						ser.serializeToBuffer();
+					} catch(Exception e) {
+						Globals.logException(e);
+					}
 					String fullJson = buff.toString();
 					if(!Utils.isStringEmpty(fullJson)) {
 						log.setDocZip(fullJson);
