@@ -1,6 +1,6 @@
-<VerticalLayout >
+<VerticalLayout height="100%" captionMargin="0"> 
   <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-  <GuiTable title="User Titles" name="WF_TITLE" dataPath="DATAROOT" caption="" width="100%" height="-1px" inLineEditable="true" >
+  <GuiTable title="User Titles" name="WF_TITLE" dataPath="DATAROOT" caption="" width="100%" expandRatio="1" inLineEditable="true" >
     <TableColumn name="NAME" caption="Name" />
     <TableColumn name="DESCRIP" caption="Description" />
     <TableColumn name="PROJECT_SPECIFIC" caption="Project specific" />
