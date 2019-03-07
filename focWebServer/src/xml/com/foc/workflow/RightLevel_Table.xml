@@ -1,6 +1,6 @@
-<VerticalLayout margin="true" captionMargin="0">
+<VerticalLayout margin="true" captionMargin="0" height="100%">
     <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-    <GuiTable name="WF_RIGHT_LEVEL" dataPath="DATAROOT" caption="" width="100%" height="-1px" inLineEditable="true"  >
+    <GuiTable name="WF_RIGHT_LEVEL" dataPath="DATAROOT" caption="" width="100%" expandRatio="1" inLineEditable="true"  >
         <OpenForm containerWindow="same window" />
         <TableColumn name="NAME" caption="Right Level Name"  />
         <TableColumn name="READ_RIGHT" caption="Read"  />

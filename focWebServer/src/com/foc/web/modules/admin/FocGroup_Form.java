@@ -2,6 +2,7 @@ package com.foc.web.modules.admin;
 
 import java.util.ArrayList;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocAppGroup;
 import com.foc.admin.FocGroup;
@@ -13,6 +14,7 @@ import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVLabel;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
@@ -112,24 +114,34 @@ public class FocGroup_Form extends FocXMLLayout {
   
   private void getRightsButton(){
     FVVerticalLayout buttonsLayout = (FVVerticalLayout) getComponentByName("APP_GROUPS_BUTTONS_LAYOUT");
-  	
-  	if(FocGroupDesc.getInstance().getNumberOfAppGroupListFieldID() > 0){
-	    for(int i=0; i< FocGroupDesc.getInstance().getNumberOfAppGroupListFieldID(); i++){
-	    	FocAppGroup appGroup = (FocAppGroup) getGroup().getAppGroupAt(FocGroupDesc.FLD_START_APP_GROUPS + i);
-	    	if(appGroup != null){
-	    		FVButton grpButton = new FVButton(appGroup.getTitle());
-	    		grpButton.setWidth("200px");
-	  			putComponent(appGroup.getTitle(), grpButton);
-	    		buttonsLayout.addComponent(grpButton);
-	    		AppGroupButtonListener listener = new AppGroupButtonListener(grpButton, appGroup);
-	    		if(listener_Array == null){
-	    			listener_Array = new ArrayList<FocGroup_Form.AppGroupButtonListener>(); 
-	    		}
-	    		listener_Array.add(listener);
-	     	}
-	    }
-  	}
-  	
+		if (buttonsLayout != null) {
+	    String configTitle = "Configuration";
+	    if(ConfigInfo.isArabic()) configTitle = "الأعدادات";
+	    
+	    FVLabel configLabel = new FVLabel(configTitle);
+	    configLabel.setWidth("200px");
+	    if(ConfigInfo.isArabic()) configLabel.addStyleName("foc-f18");
+	    configLabel.addStyleName("foc-bold");
+	    configLabel.addStyleName("foc-text-center");
+			buttonsLayout.addComponent(configLabel);
+			
+	  	if(FocGroupDesc.getInstance().getNumberOfAppGroupListFieldID() > 0){
+		    for(int i=0; i< FocGroupDesc.getInstance().getNumberOfAppGroupListFieldID(); i++){
+		    	FocAppGroup appGroup = (FocAppGroup) getGroup().getAppGroupAt(FocGroupDesc.FLD_START_APP_GROUPS + i);
+		    	if(appGroup != null){
+		    		FVButton grpButton = new FVButton(appGroup.getTitle());
+		    		grpButton.setWidth("200px");
+		  			putComponent(appGroup.getTitle(), grpButton);
+		    		buttonsLayout.addComponent(grpButton);
+		    		AppGroupButtonListener listener = new AppGroupButtonListener(grpButton, appGroup);
+		    		if(listener_Array == null){
+		    			listener_Array = new ArrayList<FocGroup_Form.AppGroupButtonListener>(); 
+		    		}
+		    		listener_Array.add(listener);
+		     	}
+		    }
+	  	}
+		}  	
   }
   
   private class AppGroupButtonListener implements Button.ClickListener{
