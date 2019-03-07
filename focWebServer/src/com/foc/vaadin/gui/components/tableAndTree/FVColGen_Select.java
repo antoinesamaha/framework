@@ -142,8 +142,15 @@ public class FVColGen_Select extends FVColumnGenerator {
 						arrayList.add(itemId);
 						tableTreeDelegate.selectionColumn_copyMemoryToGui();
 					}
-				}else{
-					arrayList.clear();
+				} else {
+					if (arrayList.size() > 0) {
+						Object itemId = getItemId();
+						if (itemId != null) {
+							if (arrayList.contains(itemId)) {
+								arrayList.remove(itemId);
+							}
+						}
+					}			
 				}
 			}
 		}
