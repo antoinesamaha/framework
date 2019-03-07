@@ -346,15 +346,19 @@ public class ObjectCondition extends FilterCondition {
 	@Override
 	public String buildDescriptionText(FocListFilter filter) {
 		String description = null;
-
+		String empty = " Is Empty";
+		String notEmpty = " Not Empty";
+		if (ConfigInfo.isArabic()) {
+			empty = " فارغ";
+			notEmpty = " غير فارغ";
+		}		
 		int operation = getOperation(filter);
 		if (operation != OPERATION_NONE) {
 			String fieldName = getFieldLabel();
 			FocObject condObject = getObject(filter);
-
 			switch (operation) {
 			case OPERATION_EMPTY:
-				description = fieldName + " Is Empty";
+				description = fieldName + empty;
 				break;
 			case OPERATION_EQUALS:
 			case OPERATION_DIFFERENT_THEN:
@@ -369,7 +373,7 @@ public class ObjectCondition extends FilterCondition {
 				}
 				break;
 			case OPERATION_NOT_EMPTY:
-				description = fieldName + " Not Empty";
+				description = fieldName + notEmpty;
 				break;
 			}
 		}
