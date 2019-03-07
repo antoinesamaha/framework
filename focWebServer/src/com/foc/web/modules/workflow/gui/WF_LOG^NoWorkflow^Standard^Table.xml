@@ -1,6 +1,6 @@
-<VerticalLayout>
+<VerticalLayout height="100%" captionMargin="0">
   <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
-  <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="-1px" openEnabled="false" addEnabled="false" deleteEnabled="false">
+  <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="100%" openEnabled="false" addEnabled="false" deleteEnabled="false">
     <OpenForm containerWindow="same window" />
     <TableColumn name="DATE_TIME" caption="Date Time" width="-1px" />
     <TableColumn name="EVENT_TYPE" caption="Event Type" width="-1px" />

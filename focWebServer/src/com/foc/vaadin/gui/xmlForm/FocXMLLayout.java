@@ -3111,8 +3111,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				h = guiComp.getAttributes().getValue(FXML.ATT_HEIGHT);
 			}
 			
-			if(w != null && !w.endsWith("%")) width = w;
-			if(h != null && !h.endsWith("%")){
+			if(w != null) {
+				width = w;
+			}
+			
+			if(h != null){
 				if(h.endsWith("px")){
 					h = h.replace("px", "");
 					int hInt = Utils.parseInteger(h, 0);
@@ -3121,8 +3124,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 					}
 //					hInt += 35;
 					height = String.valueOf(hInt)+"px";
-				}else{
-					height = h+20;	
+				} else if(h.endsWith("%")){
+					height = h;
+				} else {
+					height = h+20;
 				}
 			}
 		}

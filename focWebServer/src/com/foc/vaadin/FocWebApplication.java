@@ -15,6 +15,7 @@ import com.foc.admin.FocUser;
 import com.foc.dataSource.IExecuteResultSet;
 import com.foc.db.DBManager;
 import com.foc.util.Utils;
+import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.layouts.validationLayout.FVHelpLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.web.gui.INavigationWindow;
@@ -206,33 +207,36 @@ public abstract class FocWebApplication extends UI {
 		}
 		
 		applyUserThemeSelection();
-		Globals.logString("FocWebApplication.init 10");
 		if(Globals.isValo() && !isPrintUI()){
-			Globals.logString("FocWebApplication.init 11");
-			Panel bodyPanel = new Panel();
-			bodyPanel.setSizeFull();
-			Globals.logString("FocWebApplication.init 12");
+			
 			navigationWindow.setHeightUndefined();
-			bodyPanel.setContent(navigationWindow);
-			Globals.logString("FocWebApplication.init 13");
+			navigationWindow.setHeight("100%");
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(navigationWindow);
+
+			//PANEL
+//			Panel bodyPanel = new Panel();
+//			bodyPanel.setSizeFull();
+//			bodyPanel.setContent(navigationWindow);
+			//-----
+			
 			footerLayout = new VerticalLayout();
 			footerLayout.setHeight("-1px");
-			Globals.logString("FocWebApplication.init 14");
 			//footerLayout.addComponent(new Label(""));
 
 			VerticalLayout mainVerticalLayout = new VerticalLayout();
 			mainVerticalLayout.setSizeFull();// Main Layout is set to size Full so that it fills all the height
-			mainVerticalLayout.addComponent(bodyPanel);
+			
+			//PANEL
+//			mainVerticalLayout.addComponent(bodyPanel);
+//			mainVerticalLayout.setExpandRatio(bodyPanel, 1);
+			//-----
+			mainVerticalLayout.addComponent(navigationWindow);
+			mainVerticalLayout.setExpandRatio(navigationWindow, 1);
 			mainVerticalLayout.addComponent(footerLayout);
-			mainVerticalLayout.setExpandRatio(bodyPanel, 1);
-			Globals.logString("FocWebApplication.init 15");
 			setContent(mainVerticalLayout);
-			Globals.logString("FocWebApplication.init 16");
 		}else{
-			Globals.logString("FocWebApplication.init 1000");
 			setContent(navigationWindow);
 			footerLayout = null;
-			Globals.logString("FocWebApplication.init 1001");
 		}
 
 		initAccountFromDataBase();

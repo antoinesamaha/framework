@@ -104,6 +104,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.JavaScript;
 import com.vaadin.ui.MenuBar;
 import com.vaadin.ui.MenuBar.MenuItem;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.BaseTheme;
@@ -2499,7 +2500,15 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 				addComponentAsFirst(logLayout);
 			} else { 
 				if(mainWindow instanceof FocWebVaadinWindow) {
-					FVVerticalLayout mainVerticalLayout = mainWindow != null ? ((FocWebVaadinWindow)mainWindow).getCentralPanelWrapper() : null;
+					FVVerticalLayout mainVerticalLayout = null;
+					Component comp = mainWindow != null ? ((FocWebVaadinWindow)mainWindow).getCentralPanelWrapper() : null;
+					if(comp instanceof FVVerticalLayout) {
+						mainVerticalLayout = (FVVerticalLayout) comp;	
+					} else if(comp instanceof Panel) {
+						if(((Panel)comp).getContent() instanceof FVVerticalLayout) {
+							mainVerticalLayout = (FVVerticalLayout)(((Panel)comp).getContent());
+						}
+					}
 					if(mainVerticalLayout != null) {
 						logLayout = newLogLayout(mainWindow);
 						mainVerticalLayout.addComponent(logLayout);

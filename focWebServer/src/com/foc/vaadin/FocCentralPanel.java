@@ -18,6 +18,7 @@ import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.Window;
 
 @SuppressWarnings("serial")
@@ -27,8 +28,8 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	public static final int PREVIOUS_KEEP       = 1;
 	public static final int PREVIOUS_REMOVE_ALL = 2;
 
-//	private Panel                    centralPanel             = null;
-	private FVVerticalLayout         centralPanel             = null;
+	private Panel                    centralPanel             = null;
+//	private FVVerticalLayout         centralPanel             = null;
 	private ArrayList<ICentralPanel> arrayOfCentralComponents = null;
   private FVMenuTree               menuTree                 = null;
 
@@ -83,18 +84,33 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		return arrayOfCentralComponents;
 	}
 	
-	public FVVerticalLayout getCentralPanelWrapper(){
+	public Component getCentralPanelWrapper(){
 		if(centralPanel == null){
-//			centralPanel = new Panel();
-			centralPanel = new FVVerticalLayout();
+			centralPanel = new Panel();
+//			centralPanel = new FVVerticalLayout();
 			centralPanel.setSizeFull();
 //			centralPanel.setHeight("-1px");
-			centralPanel.setWidth("-1px");
+//			centralPanel.setWidth("-1px");
 			centralPanel.setStyleName("focCentralPanel");
 			if(Globals.isValo()) centralPanel.removeStyleName("focNoCaptionMargin");
 		}
 		return centralPanel; 
 	}
+
+	/*
+	public FVVerticalLayout getCentralPanelWrapper_VerticalLayout(){
+		if(centralPanel == null){
+//			centralPanel = new Panel();
+			centralPanel = new FVVerticalLayout();
+			centralPanel.setSizeFull();
+//			centralPanel.setHeight("-1px");
+//			centralPanel.setWidth("-1px");
+			centralPanel.setStyleName("focCentralPanel");
+			if(Globals.isValo()) centralPanel.removeStyleName("focNoCaptionMargin");
+		}
+		return centralPanel; 
+	}
+	*/
 	
 	public void centralPanel_setPadding(boolean padding){
 		if(centralPanel != null){
@@ -199,13 +215,25 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 					if(centralPanel != null){
 						centralPanel.setWidth(rootComp.getWidth(), rootComp.getWidthUnits());
 //						centralPanel.setHeight("-1px");
-						centralPanel.setHeight("100%");//NO_PANEL
-						//centralPanel.setHeight(rootComp.getHeight(), rootComp.getHeightUnits());
+//						centralPanel.setHeight("100%");//NO_PANEL
+						//When the main layout is 100% this means that there will be no vertical srcoll
+						//When the main layout is -1px this means that there will be a  vertical srcoll
+						//    And then we can use expandRatio to the table or any other component inside
+						if(this instanceof FocWebVaadinWindow) {
+							centralPanel.setHeight(rootComp.getHeight(), rootComp.getHeightUnits());
+							setHeight("100%");//NO_PANEL
+						} else {
+							centralPanel.setHeight(rootComp.getHeight(), rootComp.getHeightUnits());
+							setHeight(rootComp.getHeight(), rootComp.getHeightUnits());
+							//This means we are in a Popup 
+//							centralPanel.setHeight("100%");
+//							setHeight("100%");//NO_PANEL
+						}
 					}
 //					setWidth(rootComp.getWidth(), rootComp.getWidthUnits());
 					//setHeight(rootComp.getHeight(), rootComp.getHeightUnits());
 					
-					setHeight("-1px");
+//					setHeight("-1px");
 //					setHeight("100%");//NO_PANEL					
 					markAsDirty();
 //					requestRepaint();
@@ -325,13 +353,19 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	
 	public void removeGuiCentralComponent(ICentralPanel currentCentralPanelContent){
 		if(currentCentralPanelContent != null){
-			currentCentralPanelContent.removedFromNavigator();				
-			centralPanel.removeAllComponents();
+			currentCentralPanelContent.removedFromNavigator();
+			//Panel-Vertical
+//			centralPanel.removeAllComponents();
+			centralPanel.setContent(null);
+			//----
 		}
 	}
 	
 	public void addGuiCentralComponent(ICentralPanel newCentralPanel, boolean showValidationLayout){
-		centralPanel.addComponent((Component) newCentralPanel);
+		//Panel-Vertical
+//		centralPanel.addComponent((Component) newCentralPanel);
+		centralPanel.setContent((Component) newCentralPanel);
+		//----
 		
 		centralPanel.markAsDirty();
 //				centralPanel.addComponent((Component) newCentralPanel);
