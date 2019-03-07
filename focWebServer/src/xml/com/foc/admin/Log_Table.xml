@@ -1,6 +1,6 @@
-<VerticalLayout width="100%"  >
+<VerticalLayout width="100%" height="100%">
     <ValidationSettings formTitle="User profiles" withApply="false" withAttach="true" withPrint="true" commitData="false"/>
-    <GuiTree name="TABLE" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="30"  >
+    <GuiTree name="TABLE" expandRatio="1" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="10" >
         <OpenForm containerWindow="same window" />
         <TableColumn name="DATE_TIME" caption="Date"    />
         <TableColumn name="TYPE" caption="Message Type"    />

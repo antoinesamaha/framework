@@ -1,5 +1,6 @@
 package com.foc.business.photoAlbum;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocAppGroup;
 import com.foc.admin.FocGroupDesc;
@@ -81,6 +82,6 @@ public class PhotoAlbumAppGroup extends FocAppGroup {
 
 	@Override
 	public String getTitle() {
-		return "Document Management";
+		return ConfigInfo.isArabic() ? "الوثائق و الصور" : "Document Management";
 	}
 }
