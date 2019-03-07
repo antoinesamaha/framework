@@ -1,6 +1,6 @@
-<VerticalLayout width="100%"  margin="true" >
+<VerticalLayout captionMargin="0" width="100%"  margin="true" height="100%">
     <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
-    <GuiTable title="User Groups" name="TABLE" dataPath="DATAROOT" >
+    <GuiTable title="User Groups" name="TABLE" dataPath="DATAROOT" expandRatio="1">
         <OpenForm containerWindow="same window" />
         <TableColumn name="NAME" caption="Name" />
         <TableColumn name="DESCRIP" caption="Description" />

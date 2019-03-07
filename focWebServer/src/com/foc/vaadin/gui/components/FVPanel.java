@@ -274,14 +274,13 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 
 	@Override
 	public void addComponent(Component comp, Attributes attributes) {
-		// TODO Auto-generated method stub
-		
+    addComponent(comp);
 	}
 
 	@Override
 	public void addComponent(Component comp) {
-		// TODO Auto-generated method stub
-		
+		setContent(comp);
+//		addComponent(comp);
 	}
 
 	@Override
@@ -305,8 +304,7 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 
 	@Override
 	public FocCentralPanel getWindow() {
-		// TODO Auto-generated method stub
-		return null;
+		return findAncestor(FocCentralPanel.class);
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import com.foc.business.workflow.map.WFTransactionConfig;
 import com.foc.desc.FocObject;
 import com.foc.property.FProperty;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.workflow.WorkflowWebModule;
@@ -108,13 +109,18 @@ public class FVStatusLayout_MenuBar extends MenuBar {
 	private void selectCurrentStatus() {
 		FProperty property = focObject != null ? (FProperty) focObject.iFocData_getDataByPath(StatusHolderDesc.FNAME_STATUS) : null;
 		if(property != null && getRootMenuItem() != null){
-			FontAwesome iconResource = FontAwesome.valueOf(StatusHolderDesc.getFontAwesomeIconNameForValue(property.getInteger()));
-
+			FontAwesome iconResource = null;
+			String iconName = StatusHolderDesc.getFontAwesomeIconNameForValue(property.getInteger());
+			if(!Utils.isStringEmpty(iconName)) {
+				iconResource = FontAwesome.valueOf(iconName);
+			}
 			if(getRootMenuItem().getSize() <= 0) {
 				getRootMenuItem().addItem(property.getString(), iconResource, null);
 			}
 			getRootMenuItem().setText(property.getString());
-			getRootMenuItem().setIcon(iconResource);
+			if(iconResource != null) {
+				getRootMenuItem().setIcon(iconResource);
+			}
 		}
 	}
 	

@@ -96,7 +96,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	public static final int FORMAT_LANDSCAPE   = 1;
 	public static final int FORMAT_FULL_SCREEN = 2;
 	
-	private int     format        = 0;
+	private int     format        = FORMAT_FULL_SCREEN;
 	private boolean menuBarFilled = false;
 	
 	private HashMap<String, NativeButton> menuBarIconsMap = null;
@@ -156,8 +156,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		return false;
 	}
 	
-	protected boolean isCropMarginPanels(){
+	protected boolean isCropMarginPanelsInHeaderBanner(){
 		return FocWebApplication.getInstanceForThread().isMobile();
+	}
+	
+	protected boolean isCropMarginPanels(){
+		return true;//FocWebApplication.getInstanceForThread().isMobile();
 	}
 
 	@Override
@@ -173,7 +177,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		headerMenuBar.setSpacing(false);
 		
 		AbsoluteLayout emptyLeftPanel  = null;
-		if(!isCropMarginPanels()){
+		if(!isCropMarginPanelsInHeaderBanner()){
 			emptyLeftMarginPanel  = new AbsoluteLayout();
 			
 			emptyLeftPanel  = new AbsoluteLayout();
@@ -188,7 +192,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		centerHeaderLayout = new HorizontalLayout();
 		centerHeaderLayout.setMargin(false);
 		centerHeaderLayout.setSpacing(false);
-		if(!isCropMarginPanels()){//The condition should be about mobile not crop
+		if(!isCropMarginPanelsInHeaderBanner()){//The condition should be about mobile not crop
 			centerHeaderLayout.setWidth(getPreferredWidth());
 		}
 
@@ -197,7 +201,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		centerHeaderLayout.setStyleName("focBanner");
 		headerMenuBar.setStyleName("focBanner");
 		
-		if(!isCropMarginPanels()){
+		if(!isCropMarginPanelsInHeaderBanner()){
 			AbsoluteLayout emptyRightPanel = new AbsoluteLayout();
 			emptyRightPanel.setSizeFull();
 			emptyRightPanel.setStyleName("focBannerButton");
@@ -236,6 +240,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			
 			hMainLayout.setExpandRatio(emptyLeftMarginPanel, 0.5f);
 			hMainLayout.setExpandRatio(emptyRightMarginPanel, 0.5f);
+		} else {
+			hMainLayout.setExpandRatio(getCentralPanelWrapper(), 1);
+			hMainLayout.setComponentAlignment(getCentralPanelWrapper(), Alignment.TOP_CENTER);
+			getCentralPanelWrapper().setWidth("100%");
 		}
 	}
 	

@@ -5,7 +5,7 @@ import com.foc.business.workflow.implementation.Loggable;
 import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
-import com.foc.vaadin.ICentralPanel;
+import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -46,8 +46,13 @@ public class WF_LOG_NoWorkflow_Standard_Form extends FocXMLLayout {
 		FocList logList = getLogList();
 		if (logList != null) {
 			XMLViewKey key = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_TABLE, getLogContext(), XMLViewKey.VIEW_DEFAULT);
-			ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, logList);
-			addComponent((Component) centralPanel);
+			FocXMLLayout centralPanel = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, logList);
+			centralPanel.setParentLayout(this);
+			Component mainLayout = getComponentByName("_MAIN");
+			if(mainLayout != null && mainLayout instanceof FVVerticalLayout) {
+				((FVVerticalLayout)mainLayout).addComponent((Component) centralPanel);
+				((FVVerticalLayout)mainLayout).setExpandRatio(centralPanel, 1);
+			}
 			// getMainWindow().changeCentralPanelContent(centralPanel, true);
 		}
 	}
