@@ -179,19 +179,22 @@ public class BooleanCondition extends FilterCondition{
   
 	@Override
 	public String buildDescriptionText(FocListFilter filter) {
-    String description = null;
-    
-    int valueCondition = getValue(filter);
-    if(valueCondition != VALUE_INDIFFERENT){
-    	String fieldName = getFieldLabel();
-    	
-      if(valueCondition == VALUE_TRUE){
-      	description = (fieldName+" = TRUE");
-      }else{
-      	description = (fieldName+" = FALSE");
-      }
-    }
-    		
+		String description = null;
+		String trueTxt = " = TRUE";
+		String falseTxt = " = FALSE";
+		if (ConfigInfo.isArabic()) {
+			trueTxt = " = نعم";
+			falseTxt = " = لا";
+		}
+		int valueCondition = getValue(filter);
+		if (valueCondition != VALUE_INDIFFERENT) {
+			String fieldName = getFieldLabel();
+			if (valueCondition == VALUE_TRUE) {
+				description = (fieldName + trueTxt);
+			} else {
+				description = (fieldName + falseTxt);
+			}
+		}
 		return description;
 	}
 }

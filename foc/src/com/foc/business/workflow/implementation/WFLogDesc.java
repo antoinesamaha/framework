@@ -8,6 +8,7 @@ import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.WorkflowTransactionFactory;
 import com.foc.business.workflow.map.WFStageDesc;
 import com.foc.business.workflow.signing.WFTransactionWrapperDesc;
+import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FBoolField;
@@ -111,19 +112,7 @@ public class WFLogDesc extends FocDesc {
 		}
 		addField(statusFld);
 		
-		FMultipleChoiceField mFld = new FMultipleChoiceField(FNAME_EVENT_TYPE, "Event Type", FLD_EVENT_TYPE, false, 2);
-		mFld.addChoice(EVENT_NONE, ConfigInfo.isArabic() ? "-" : "none");
-		mFld.addChoice(EVENT_SIGNATURE, ConfigInfo.isArabic() ? "موافقة" : "Signature");
-		mFld.addChoice(EVENT_CANCELLATION, ConfigInfo.isArabic() ? "الغاء" : "Cancellation");
-		mFld.addChoice(EVENT_MODIFICATION, ConfigInfo.isArabic() ? "تعديل" : "Modification");
-		mFld.addChoice(EVENT_CREATION, ConfigInfo.isArabic() ? "ادخال" : "Creation");
-		mFld.addChoice(EVENT_APPROVED, ConfigInfo.isArabic() ? "تصديق" : "Approval");
-		mFld.addChoice(EVENT_CLOSED, ConfigInfo.isArabic() ? "ختم" : "Closure");
-		mFld.addChoice(EVENT_UNDO_SIGNATURE, ConfigInfo.isArabic() ? "الغاء الموافقة" : "Undo Signature");
-		mFld.addChoice(EVENT_CUSTOM, ConfigInfo.isArabic() ? "Custom" : "Custom");
-		mFld.addChoice(EVENT_COMMENT, ConfigInfo.isArabic() ? "ملاحظة" : "Comment");
-		mFld.addChoice(EVENT_REJECT, ConfigInfo.isArabic() ? "الغاء الموافقات السابقة" : "Reject");
-		mFld.addChoice(EVENT_OPENED, ConfigInfo.isArabic() ? "اطلاع" : "Opened");
+		FMultipleChoiceField mFld = newEventTypeField(FNAME_EVENT_TYPE, FLD_EVENT_TYPE);
 		addField(mFld);
 
     FDateTimeField dateTimeFld = new FDateTimeField(FNAME_DATE_TIME, "Date|Time", FLD_DATE_TIME, false);
@@ -152,11 +141,15 @@ public class WFLogDesc extends FocDesc {
 		FStringField chfld = new FStringField("COMMENT", "Comment", FLD_COMMENT, false, LEN_FLD_COMMENT);
     addField(chfld);
 
-		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, LEN_FLD_CHANGES);
+    int changesLength = LEN_FLD_CHANGES;
+    if(getProvider() == DBManager.PROVIDER_MYSQL) changesLength = 4000;
+		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, changesLength);
 		chfld.setCompress(true);
     addField(chfld);
     
-    FStringField zipfld = new FStringField("DocZip", "Document Zipped", FLD_DOC_ZIP, false, LEN_FLD_ZIPPED_DOC);
+    int zippedLength = LEN_FLD_ZIPPED_DOC;
+    if(getProvider() == DBManager.PROVIDER_MYSQL) zippedLength = 4000;
+    FStringField zipfld = new FStringField("DocZip", "Document Zipped", FLD_DOC_ZIP, false, zippedLength);
     zipfld.setAllwaysLocked(true);
     zipfld.setCompress(true);
     addField(zipfld);
@@ -203,6 +196,23 @@ public class WFLogDesc extends FocDesc {
 		addField(objFld);
 		*/
   }
+
+	public static FMultipleChoiceField newEventTypeField(String fieldName, int fldID) {
+		FMultipleChoiceField mFld = new FMultipleChoiceField(fieldName, "Event Type", fldID, false, 2);
+		mFld.addChoice(EVENT_NONE, ConfigInfo.isArabic() ? "-" : "none");
+		mFld.addChoice(EVENT_SIGNATURE, ConfigInfo.isArabic() ? "موافقة" : "Signature");
+		mFld.addChoice(EVENT_CANCELLATION, ConfigInfo.isArabic() ? "الغاء" : "Cancellation");
+		mFld.addChoice(EVENT_MODIFICATION, ConfigInfo.isArabic() ? "تعديل" : "Modification");
+		mFld.addChoice(EVENT_CREATION, ConfigInfo.isArabic() ? "ادخال" : "Creation");
+		mFld.addChoice(EVENT_APPROVED, ConfigInfo.isArabic() ? "تصديق" : "Approval");
+		mFld.addChoice(EVENT_CLOSED, ConfigInfo.isArabic() ? "ختم" : "Closure");
+		mFld.addChoice(EVENT_UNDO_SIGNATURE, ConfigInfo.isArabic() ? "الغاء الموافقة" : "Undo Signature");
+		mFld.addChoice(EVENT_CUSTOM, ConfigInfo.isArabic() ? "Custom" : "Custom");
+		mFld.addChoice(EVENT_COMMENT, ConfigInfo.isArabic() ? "ملاحظة" : "Comment");
+		mFld.addChoice(EVENT_REJECT, ConfigInfo.isArabic() ? "الغاء الموافقات السابقة" : "Reject");
+		mFld.addChoice(EVENT_OPENED, ConfigInfo.isArabic() ? "اطلاع" : "Opened");
+		return mFld;
+	}
 	
 	public static String getStorageName_ForWorkflowDesc(IWorkflowDesc iWFDesc){
 		return getStorageName_ForTransactionStorageName(((FocDesc) iWFDesc).getStorageName());
