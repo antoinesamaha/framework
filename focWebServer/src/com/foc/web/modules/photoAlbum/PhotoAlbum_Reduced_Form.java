@@ -1,6 +1,7 @@
 package com.foc.web.modules.photoAlbum;
 
 import com.foc.OptionDialog;
+import com.foc.business.photoAlbum.PhotoAlbumAppGroup;
 import com.foc.desc.FocObject;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.FVIconFactory;
@@ -57,22 +58,25 @@ public class PhotoAlbum_Reduced_Form extends PhotoAlbum_Form {
 		FVValidationLayout vLay = getValidationLayout();
 		if(vLay != null && getFocObject() != null && !getFocObject().isCreated()) {
 			
-			Embedded valo_DeleteEmbedded = new Embedded();
-  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-			if(FocWebApplication.getInstanceForThread().isMobile()){
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
-			}else{
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
-			}
-			valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {
-				@Override
-				public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
-					deleteButtonClickListener();					
+			if(			PhotoAlbumAppGroup.getCurrentAppGroup() != null 
+					&& 	PhotoAlbumAppGroup.getCurrentAppGroup().isAllowDelete()) {
+				Embedded valo_DeleteEmbedded = new Embedded();
+	  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+				if(FocWebApplication.getInstanceForThread().isMobile()){
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+				}else{
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
 				}
-			});
-			if(valo_DeleteEmbedded != null){
-				vLay.addComponent(valo_DeleteEmbedded);
-				vLay.setComponentAlignment(valo_DeleteEmbedded, Alignment.BOTTOM_LEFT);
+				valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {
+					@Override
+					public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
+						deleteButtonClickListener();					
+					}
+				});
+				if(valo_DeleteEmbedded != null){
+					vLay.addComponent(valo_DeleteEmbedded);
+					vLay.setComponentAlignment(valo_DeleteEmbedded, Alignment.BOTTOM_LEFT);
+				}
 			}
 		}
 	}

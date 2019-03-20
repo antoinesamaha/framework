@@ -2864,7 +2864,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	
 	public boolean isEditable() {
 		boolean retEditable = editable;
-		if(getParentLayout() != null){
+		if(retEditable && getParentLayout() != null){
 			retEditable = getParentLayout().isEditable();
 		}
 		return retEditable;

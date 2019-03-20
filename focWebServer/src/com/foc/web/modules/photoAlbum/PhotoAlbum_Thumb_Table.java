@@ -1,6 +1,7 @@
 package com.foc.web.modules.photoAlbum;
 
 import com.foc.business.photoAlbum.PhotoAlbum;
+import com.foc.business.photoAlbum.PhotoAlbumAppGroup;
 import com.foc.business.photoAlbum.PhotoAlbumDesc;
 import com.foc.business.photoAlbum.PhotoAlbumListWithFilter;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -91,10 +92,13 @@ public class PhotoAlbum_Thumb_Table extends PhotoAlbum_Table {
 				}
 			}
 			
-			FVUpload_Image uploadButton = newUploadButton();
-			if(uploadButton != null) {
-				uploadButton.setMaxSizeAllowed(8388608);
-				vLay.addComponent(uploadButton);
+			PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
+			if(isEditable() && group != null && group.isAllowUpload()) {
+				FVUpload_Image uploadButton = newUploadButton();
+				if(uploadButton != null) {
+					uploadButton.setMaxSizeAllowed(8388608);
+					vLay.addComponent(uploadButton);
+				}
 			}
 		}
 	}
