@@ -117,6 +117,14 @@ public class PhotoAlbum_Table extends FocXMLLayout {
     	addUploadButton();
     }
     
+    if(!showDeleteButton()) {
+    	FVTableWrapperLayout treeWrapper = getTableWrapperLayout();
+    	if(treeWrapper != null && treeWrapper.getTableTreeDelegate() != null) {
+	    	treeWrapper.getTableTreeDelegate().setDeleteEnabled(false);
+	    	treeWrapper.refreshEditable();
+    	}
+    }
+    
     if(showDetachedGallery()){
     	//If he cannot upload he cannot assotiate unrelated documents
     	addUnrelatedAttachmentsButton();
@@ -230,6 +238,11 @@ public class PhotoAlbum_Table extends FocXMLLayout {
 		return group != null && group.isAllowUpload();
 	}
 
+	protected boolean showDeleteButton(){
+		PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
+		return group != null && group.isAllowDelete();
+	}
+	
 	protected boolean showDetachedGallery(){
 		PhotoAlbumAppGroup group = PhotoAlbumAppGroup.getCurrentAppGroup();
 		return group != null && group.isAllowAccessToDetachedGallery();
