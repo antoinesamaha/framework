@@ -116,6 +116,7 @@ public interface FXMLDesc {
   public static final String TAG_GROUP_FIELD      = "GroupField";
   
   public static final String ATT_GROUP_BY_FORMULA = "groupByFormula";
+  public static final String ATT_GROUP_BY_FORMULA_ADDITIONAL_FIELDS = "groupByFormulaAdditionalFields";
   //-------------------------
   
   //Group By

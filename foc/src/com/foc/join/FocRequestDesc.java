@@ -159,7 +159,7 @@ public class FocRequestDesc {
 								if (!Utils.isStringEmpty(groupByFormula)) {
 									FocListGroupBy groupBy = focDesc.getGroupBy();
 									if (groupBy != null) {
-										newField = groupBy.addField_FormulaSingleText(focDesc, newField, groupByFormula);
+										newField = groupBy.addField_FormulaSingleText(focDesc, newField, groupByFormula, reqField.getGroupByFormula_AdditionalField());
 									} else {
 										Globals.logString("Missing Group By expression.");
 									}

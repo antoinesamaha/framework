@@ -9,4 +9,5 @@ public @interface FocJoinField {
 	public String sourceFieldName() default "";
 	public String targetFieldName() default "";
 	public String groupByFormula() default "";
+	public String groupByFormulaAdditionalFields() default "";
 }

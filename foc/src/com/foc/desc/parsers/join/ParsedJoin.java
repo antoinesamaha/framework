@@ -181,6 +181,9 @@ public class ParsedJoin implements FXMLDesc {
 								
 				    		String groupByFormula = xmlReqFld.getGroupByFormula();
 				    		reqFld.setGroupByFormula(groupByFormula);
+				    		
+				    		String groupByFormulaAdditionalField = xmlReqFld.getGroupByFormula_AdditionalFields();
+				    		reqFld.setGroupByFormula_AdditionalField(groupByFormulaAdditionalField);
 							}
 						}
 					}

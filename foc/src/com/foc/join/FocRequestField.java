@@ -13,6 +13,7 @@ public class FocRequestField {
   private TableAlias tableAlias     = null;
   private int        fieldId        = FField.NO_FIELD_ID;
   private String     groupByFormula = null;
+  private String     groupByFormula_AdditionalField = null;
   
   public FocRequestField(int id, TableAlias tableAlias, int fieldId){
     this.id         = id;
@@ -42,5 +43,13 @@ public class FocRequestField {
 
 	public void setGroupByFormula(String groupByFormula) {
 		this.groupByFormula = groupByFormula;
+	}
+
+	public String getGroupByFormula_AdditionalField() {
+		return groupByFormula_AdditionalField;
+	}
+
+	public void setGroupByFormula_AdditionalField(String groupByFormula_AdditionalField) {
+		this.groupByFormula_AdditionalField = groupByFormula_AdditionalField;
 	}
 }

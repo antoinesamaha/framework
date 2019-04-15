@@ -248,6 +248,7 @@ public class PhotoAlbumWebModule extends FocWebModule {
 	    PhotoAlbumListWithFilter focList = new PhotoAlbumListWithFilter(focObject);
 	    XMLViewKey key = new XMLViewKey(PhotoAlbumDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
 	    centralPanel = XMLViewDictionary.getInstance().newCentralPanel(navigationWindow, key, focList);
+	    if(centralPanel != null) centralPanel.setFocDataOwner(true);
   	}
     return centralPanel;
   }
