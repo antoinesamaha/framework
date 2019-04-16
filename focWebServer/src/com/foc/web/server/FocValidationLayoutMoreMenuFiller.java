@@ -1,14 +1,10 @@
 package com.foc.web.server;
 
 import com.foc.business.workflow.implementation.ILoggable;
-import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.Loggable;
 import com.foc.business.workflow.implementation.WFLogDesc;
-import com.foc.business.workflow.implementation.Workflow;
 import com.foc.desc.FocObject;
-import com.foc.list.FocList;
 import com.foc.shared.xmlView.XMLViewKey;
-import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.menuBar.FVMenuBarCommand;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
@@ -51,7 +47,7 @@ public class FocValidationLayoutMoreMenuFiller implements IValidationLayoutMoreM
                     	
                       INavigationWindow mainWindow = (INavigationWindow) getValidationLayout().getCentralPanel().getMainWindow();
                       XMLViewKey xmlViewKey = new XMLViewKey(WFLogDesc.WF_LOG_VIEW_KEY, XMLViewKey.TYPE_FORM, context, XMLViewKey.VIEW_DEFAULT);
-                      ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, focObject);
+                      ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel(mainWindow, xmlViewKey, focObject);
                       mainWindow.changeCentralPanelContent(centralPanel, true);
                     }
                   }
