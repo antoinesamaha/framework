@@ -1,6 +1,8 @@
 package com.foc.business.notifier;
 
+import com.foc.Globals;
 import com.foc.admin.FocVersion;
+import com.foc.db.DBManager;
 import com.foc.desc.FocModule;
 import com.foc.list.FocList;
 import com.foc.menu.FMenuList;
@@ -8,11 +10,13 @@ import com.foc.menu.FMenuList;
 public class NotifierModule extends FocModule {
 	
 	public static final String MODULE_NAME = "NOTIFIER";
-	public static final int VERSION = 1002;
+	public static final int VERSION = 1003;
 	
 	public static final int VERSION_MULTI_REPORT_IN_TRIGGER = 1002;
+	public static final int VERSION_ID_MIGRATE_TO_CLOB = 1003;
 	
 	private boolean copyMonoReportToSlaveTable = false;
+	private boolean migrateToCLOB = false;
 	
 	public NotifierModule(){
 	  FocVersion.addVersion(MODULE_NAME, "notfier 1.0", VERSION);
@@ -53,6 +57,17 @@ public class NotifierModule extends FocModule {
 		if (version != null && version.getId() < VERSION_MULTI_REPORT_IN_TRIGGER) {
 			copyMonoReportToSlaveTable = true;
 		}
+		
+		if (version == null || version.getId() < VERSION_ID_MIGRATE_TO_CLOB) {
+			if(Globals.getDBManager() != null && Globals.getDBManager().getProvider(null) == DBManager.PROVIDER_ORACLE) {
+				migrateToCLOB = true;
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("ALTER TABLE \"NOTIF_EMAIL\" RENAME COLUMN \"TEXT\" TO \"TEXTOLD\"");
+				Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+			}
+		} else {
+			migrateToCLOB = false;
+		}
 	}
 
 	public void afterAdaptDataModel() {
@@ -72,6 +87,12 @@ public class NotifierModule extends FocModule {
 				}
 				trigger.validate(true);
 			}
+		}
+		
+		if (migrateToCLOB) {
+			StringBuffer buffer = new StringBuffer();
+			buffer.append("UPDATE \"NOTIF_EMAIL\" SET \"TEXT\" = \"TEXTOLD\"");
+			Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
 		}
 	}
 

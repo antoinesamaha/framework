@@ -1591,4 +1591,10 @@ public class FocDataSource_DB implements IFocDataSource {
 		}
 		return provider;
 	}
+
+	@Override
+	public boolean command_AdaptDataModel_Reindex() {
+		getDBAdaptor().adaptDataModel_ReorganzeIndexes();
+		return false;
+	}
 }

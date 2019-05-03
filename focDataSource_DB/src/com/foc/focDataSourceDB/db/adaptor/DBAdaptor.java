@@ -89,6 +89,13 @@ public class DBAdaptor {
 		return result;
 	}
 	
+  public void adaptDataModel_ReorganzeIndexes(){
+		ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
+		if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE){
+			rebuildConstrains_Oracle(null);
+		}
+  }
+	
   public boolean adaptDataModel(boolean forceAlterTables, boolean schemaEmpty){
   	alterAllFields = forceAlterTables;
   	DBManager dbManager = Globals.getDBManager(); 
@@ -129,8 +136,7 @@ public class DBAdaptor {
 		  	}
 	    }
 	  	//--------------------------------------------------
-	    
-	    
+
 	    //Do the adapt for the 2 FAB tables
 	    //If Altered we need to redo this process after Desc reload from FAB
 	    boolean oneOrMoreTableOfFabBasicTableAltered = false;
@@ -493,6 +499,41 @@ public class DBAdaptor {
 	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
 	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
 	    }
+    }catch(Exception e){
+    	Globals.logException(e);
+    }
+  }
+  
+  private void rebuildConstrains_Oracle(String dbSourceKey){
+    try{
+    	ArrayList<String> constraintsDropRequests = new ArrayList<String>();
+    	
+    	ConnectionPool pool = DBManagerServer.getInstance() != null ? DBManagerServer.getInstance().getConnectionPool(dbSourceKey) : null;
+    	String ownerName = pool != null ? pool.getCredentials().getUsername() : null;
+    	if(ownerName != null){
+				StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+				String request = "SELECT table_name, constraint_name FROM user_constraints WHERE INDEX_OWNER='"+ownerName+"'";
+		    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+		    ResultSet resSet = stmt.getResultSet();
+		    if(resSet != null){
+		    	while(resSet.next()){
+		  			String tableName     = resSet.getString(1);
+		  			String contraintName = resSet.getString(2);
+		  			if(Globals.getApp().getFocDescByName(tableName) != null) {
+		  				constraintsDropRequests.add("ALTER INDEX \""+contraintName+"\" REBUILD");//REORGANIZE
+		  			}
+		    	}
+		    	resSet.close();
+		    }
+		    DBManagerServer.getInstance().unlockStatement(stmt);
+		    
+		    for(int i=0; i<constraintsDropRequests.size(); i++){
+		    	request = constraintsDropRequests.get(i);
+		    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+	    		constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
+		    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+		    }
+    	}
     }catch(Exception e){
     	Globals.logException(e);
     }
