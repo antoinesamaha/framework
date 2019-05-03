@@ -467,8 +467,31 @@ public class AdminWebModule extends FocWebModule {
 
   public void menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuItem) {
   	FocMenuItem systemMenu = menuTree.pushRootMenu("System", "System");
-    
-    FocMenuItem menuItem = systemMenu.pushMenu("ADAPT_DATA_MODEL", "Adapt Data Model");
+
+    FocMenuItem menuItem = systemMenu.pushMenu("REINDEX_ALL", "Reindex all indexes");
+    menuItem.setMenuAction(new IFocMenuItemAction() {
+
+			@Override
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				OptionDialog dialog = new OptionDialog("Reindex all","This may take a few minutes to reindex all indexes") {
+					
+					@Override
+					public boolean executeOption(String optionName) {
+						if(optionName != null && optionName.equals("ADAPT")){
+							Globals.getApp().getDataSource().command_AdaptDataModel_Reindex();
+						}
+						return false;
+					}
+				};
+				dialog.addOption("ADAPT", "Yes Reindex");
+				dialog.addOption("CANCEL", "No Cancel Reindexing");
+				dialog.setWidth("500px");
+				dialog.setHeight("200px");
+				Globals.popupDialog(dialog);
+			}
+		});
+  	
+    menuItem = systemMenu.pushMenu("ADAPT_DATA_MODEL", "Adapt Data Model");
     menuItem.setMenuAction(new IFocMenuItemAction() {
 
 			@Override

@@ -26,6 +26,7 @@ public interface IFocDataSource {
 	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
 	public boolean       command_ExecuteRequest(StringBuffer sqlRequest);
 	public boolean       command_AdaptDataModel_SingleTable(FocDesc focDesc);
+	public boolean       command_AdaptDataModel_Reindex();
 	public boolean       command_AdaptDataModel(boolean forceAlterTables, boolean schemaEmpty);
 	public boolean       command_executeRequestForModulesSP(String spFileName);
 	public ArrayList     command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression);
