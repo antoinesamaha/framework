@@ -107,6 +107,7 @@ public class WorkflowModule extends FocModule {
 					}
 				}
 			}
+			Globals.getApp().getDataSource().command_AdaptDataModel_Reindex();
 		}
 	}
 	
