@@ -3,12 +3,16 @@ package com.foc.business.workflow;
 import com.foc.Application;
 import com.foc.Globals;
 import com.foc.admin.FocVersion;
+import com.foc.business.workflow.implementation.ILoggableDesc;
+import com.foc.business.workflow.implementation.LoggableDesc;
+import com.foc.business.workflow.implementation.WFLogDesc;
 import com.foc.business.workflow.map.WFMapDesc;
 import com.foc.business.workflow.map.WFSignatureDesc;
 import com.foc.business.workflow.map.WFStageDesc;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.business.workflow.rights.RightLevelDesc;
 import com.foc.business.workflow.rights.UserTransactionRightDesc;
+import com.foc.db.DBManager;
 import com.foc.desc.FocModule;
 import com.foc.menu.FMenuList;
 
@@ -16,9 +20,12 @@ public class WorkflowModule extends FocModule {
   
 	public static final String MODULE_NAME = "WORKFLOW";
 	
-	public static final int VERSION_ID = 157;
+	public static final int VERSION_ID = 158;
 	
 	public static final int VERSION_ID_LAST_BEFORE_FLD_NAME_CUT = 152;
+	public static final int VERSION_ID_CHANGE_CLOB_TO_SECURED_FILE_SYSTEM_IN_ORACLE = 158;
+
+	private boolean changeCLOB2SecuredFileSystem_Oracle = false;
 	
 	private WorkflowModule(){
 	}
@@ -38,18 +45,12 @@ public class WorkflowModule extends FocModule {
   public void addConfigurationMenu(FMenuList menuList) {
   }
   
-  public void afterAdaptDataModel() {
-  }
-
   public void afterApplicationEntry() {
   }
 
   public void afterApplicationLogin() {
   }
 
-  public void beforeAdaptDataModel() {
-  }
-  
 	public void declareFocObjectsOnce() {
 		declareFocDescClass(WFSiteDesc.class);		
 		declareFocDescClass(WFTitleDesc.class);
@@ -66,6 +67,49 @@ public class WorkflowModule extends FocModule {
 		//declareFocDescClass(WFAssignFunctionalStageCorrespondanceDesc.class);
 	}
 
+	@Override
+	public void beforeAdaptDataModel() {
+		FocVersion dbVersion = FocVersion.getDBVersionForModule(MODULE_NAME);
+		if (		dbVersion != null 
+				&& 	dbVersion.getId() < VERSION_ID_CHANGE_CLOB_TO_SECURED_FILE_SYSTEM_IN_ORACLE
+				&&  Globals.getApp() != null 
+				&&  Globals.getApp().getDBManager() != null 
+				&&  Globals.getApp().getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
+			changeCLOB2SecuredFileSystem_Oracle = true;
+		}
+		super.beforeAdaptDataModel();
+	}
+
+	private StringBuffer newAlterTableMoveLOB2Secure(String tableName, String fieldName) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("ALTER TABLE \""+tableName+"\" MOVE LOB(\""+fieldName+"\") STORE AS SECUREFILE");
+		return buffer;
+	}
+	
+	@Override
+	public void afterAdaptDataModel() {
+		super.afterAdaptDataModel();
+		if (changeCLOB2SecuredFileSystem_Oracle) {
+			for(int i=0; i<LoggableFactory.getInstance().getFocDescCount(); i++) {
+				ILoggableDesc iWorkflowDesc = LoggableFactory.getInstance().getIWorkflowDesc(i);
+				LoggableDesc loggableDesc = (iWorkflowDesc != null) ? iWorkflowDesc.iWorkflow_getWorkflowDesc() : null;
+				WFLogDesc logDesc = loggableDesc != null ? loggableDesc.getWFLogDesc() : null;
+					
+				if(logDesc != null) {
+					StringBuffer buffer = null;
+					if(logDesc.getFieldByName(WFLogDesc.FNAME_CHANGES) != null) {
+						buffer = newAlterTableMoveLOB2Secure(logDesc.getStorageName_ForSQL(), WFLogDesc.FNAME_CHANGES);
+						Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+					}
+					if(logDesc.getFieldByName(WFLogDesc.FNAME_DocZip) != null) {
+						buffer = newAlterTableMoveLOB2Secure(logDesc.getStorageName_ForSQL(), WFLogDesc.FNAME_DocZip);
+						Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+					}
+				}
+			}
+		}
+	}
+	
   private static WorkflowModule module = null;
   public static WorkflowModule getInstance(){
     if(module == null){

@@ -68,6 +68,9 @@ public class WFLogDesc extends FocDesc {
 	public static final String FNAME_EVENT_TYPE   = "EVENT_TYPE";
 	public static final String FNAME_DATE_TIME    = "DATE_TIME";
 	
+	public static final String FNAME_CHANGES      = "CHANGES";
+	public static final String FNAME_DocZip       = "DocZip";
+	
 	public WFLogDesc(ILoggableDesc iWFDesc){
 		this(iWFDesc, ((FocDesc) iWFDesc).getStorageName());
 	}
@@ -143,13 +146,13 @@ public class WFLogDesc extends FocDesc {
 
     int changesLength = LEN_FLD_CHANGES;
     if(getProvider() == DBManager.PROVIDER_MYSQL) changesLength = 4000;
-		chfld = new FStringField("CHANGES", "Changes", FLD_CHANGES, false, changesLength);
+		chfld = new FStringField(FNAME_CHANGES, "Changes", FLD_CHANGES, false, changesLength);
 		chfld.setCompress(true);
     addField(chfld);
     
     int zippedLength = LEN_FLD_ZIPPED_DOC;
     if(getProvider() == DBManager.PROVIDER_MYSQL) zippedLength = 4000;
-    FStringField zipfld = new FStringField("DocZip", "Document Zipped", FLD_DOC_ZIP, false, zippedLength);
+    FStringField zipfld = new FStringField(FNAME_DocZip, "Document Zipped", FLD_DOC_ZIP, false, zippedLength);
     zipfld.setAllwaysLocked(true);
     zipfld.setCompress(true);
     addField(zipfld);
