@@ -166,12 +166,20 @@ public class FocListGroupBy {
 				
 				field.addListener(new ListAggListener(selectionList, captionProperty));
 			}
-		}else if(   formula.toUpperCase().startsWith("MAX") 
-				     && focDesc.getProvider() == DBManager.PROVIDER_MSSQL
-				     && field instanceof FBoolField){
-			String formulaBefore = "MAX(CAST(";
-			String formulaAfter  = " AS tinyint))";
-      addField_Formulas(fieldID, formulaBefore, formulaAfter);
+		}else if(   formula.toUpperCase().startsWith("MAX")) {
+			if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE
+					&& 	field instanceof FStringField
+					&&  ((FStringField)field).isClob()
+					) {
+				addField_Formulas(fieldID, "MAX(TO_CHAR(", "))");
+			} else if(    focDesc.getProvider() == DBManager.PROVIDER_MSSQL
+				         && field instanceof FBoolField){
+				String formulaBefore = "MAX(CAST(";
+				String formulaAfter  = " AS tinyint))";
+	      addField_Formulas(fieldID, formulaBefore, formulaAfter);
+			} else {
+				addField_Formulas(fieldID, formula+"(", ")");
+			}
 		}else{
 			addField_Formulas(fieldID, formula+"(", ")");
 		}

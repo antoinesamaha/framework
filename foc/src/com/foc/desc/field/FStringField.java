@@ -47,7 +47,7 @@ public class FStringField extends FField {
     return FieldDefinition.SQL_TYPE_ID_CHAR_FIELD;
   }
 
-  private boolean isClob() {
+  public boolean isClob() {
   	boolean clob = false;
   	if(getProvider() == DBManager.PROVIDER_ORACLE) {
   		clob = getSize() > 4000;
