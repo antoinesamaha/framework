@@ -1,5 +1,7 @@
 package com.foc.business.notifier;
 
+import com.foc.Globals;
+import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FField;
@@ -30,8 +32,10 @@ public class FocNotificationEmailDesc extends FocDesc implements FocNotification
     focFld = new FStringField("SUBJECT", "Subject", FLD_SUBJECT, false, 1000);
     addField(focFld);
     
-    focFld = new FStringField("TEXTOLD", "TextOld", FLD_TEXT_OLD, false, 4000);
-    addField(focFld);
+		if(getProvider() == DBManager.PROVIDER_ORACLE) {
+		  focFld = new FStringField("TEXTOLD", "TextOld", FLD_TEXT_OLD, false, 4000);
+		  addField(focFld);
+		}
     
     focFld = new FStringField("TEXT", "Text", FLD_TEXT, false, 5000);
     addField(focFld);

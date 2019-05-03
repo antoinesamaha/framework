@@ -2,6 +2,7 @@ package com.foc.business.notifier;
 
 import com.foc.Globals;
 import com.foc.admin.FocVersion;
+import com.foc.db.DBManager;
 import com.foc.desc.FocModule;
 import com.foc.list.FocList;
 import com.foc.menu.FMenuList;
@@ -58,10 +59,12 @@ public class NotifierModule extends FocModule {
 		}
 		
 		if (version == null || version.getId() < VERSION_ID_MIGRATE_TO_CLOB) {
-			migrateToCLOB = true;
-			StringBuffer buffer = new StringBuffer();
-			buffer.append("ALTER TABLE \"NOTIF_EMAIL\" RENAME COLUMN \"TEXT\" TO \"TEXTOLD\"");
-			Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+			if(Globals.getDBManager() != null && Globals.getDBManager().getProvider(null) == DBManager.PROVIDER_ORACLE) {
+				migrateToCLOB = true;
+				StringBuffer buffer = new StringBuffer();
+				buffer.append("ALTER TABLE \"NOTIF_EMAIL\" RENAME COLUMN \"TEXT\" TO \"TEXTOLD\"");
+				Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+			}
 		} else {
 			migrateToCLOB = false;
 		}
