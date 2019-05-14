@@ -13,4 +13,5 @@ public @interface FUTest {
 	public String description() default "";
 	public String title() default "";
 	public String author() default "";
+	public boolean show() default true;
 }
