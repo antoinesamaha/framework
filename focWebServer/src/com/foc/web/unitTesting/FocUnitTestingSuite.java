@@ -117,7 +117,9 @@ public class FocUnitTestingSuite {
 				}
   			
   			if(isATestMethod) {
-  				getDictionary().unitDoc_AddTest(ann, m.getName(), description, isImplemented);
+  				if(ann == null || ann.show()) {
+  					getDictionary().unitDoc_AddTest(ann, m.getName(), description, isImplemented);
+  				}
   				if(isImplemented) {
 			      Class[] clss = new Class[0];
 			      Object[] args = new Object[0];
