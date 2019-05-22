@@ -52,6 +52,8 @@ public class FocUnitDictionary {
   public static int MODE_CLEAR   = 0;
   public static int MODE_DISPOSE = 1;
   
+  private boolean memoryCheckActive = false;
+  
   public FocUnitDictionary() {
   	suiteSequence = new LinkedList<FocUnitTestingSuite>();
   	
@@ -78,6 +80,14 @@ public class FocUnitDictionary {
   	declareFolderFiles(rootDirectory);
   }
   
+  public boolean isMemoryCheckActive() {
+  	return memoryCheckActive;
+  }
+
+  public void setMemoryCheckActive(boolean memoryCheckActive) {
+  	this.memoryCheckActive = memoryCheckActive;
+  }
+
   public void declareFolderFiles(String rootDirectory) {
   	if(!Utils.isStringEmpty(rootDirectory)){
   		if(!rootDirectory.endsWith("/")) {

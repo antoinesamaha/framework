@@ -75,9 +75,11 @@ public class FocUnitTestingCommand {
   private FocUnitXMLAttributes attributes = null;
   private FocUnitTest unitTest = null;
 
-  private static final int ASSERT_ONLY            =  1;
+  private static final int ASSERT_ONLY          =  1;
   private static final int SET_VALUE_AND_ASSERT =  0;
-  private static final int DO_NOT_ASSERT          = -1;
+  private static final int DO_NOT_ASSERT        = -1;
+  
+  private boolean memoryCheckActive = false;
   
   public FocUnitTestingCommand(FocUnitTest unitTest, String methodName, Attributes attributes) {
   	setUnitTest(unitTest);
@@ -237,6 +239,12 @@ public class FocUnitTestingCommand {
 
   public void popupUserAccount() {
   	FocUser_HomePage_Form.popupUserCredintionals(getMainWindow());
+  }
+  
+  public void logout_IfMemoryCheckActive() throws Exception {
+  	if(getDictionary().isMemoryCheckActive()) {
+  		logout();
+  	}
   }
   
   /**
