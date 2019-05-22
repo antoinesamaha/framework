@@ -124,6 +124,12 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 		button_Click("LOGIN");
 	}
 	
+	public void loginAs_IfMemoryCheckActive(String name) throws Exception {
+		if(getSuite().getDictionary().isMemoryCheckActive()) {
+			loginAs(name);
+		}
+	}
+	
 	public void loginAs(String name) throws Exception {
 		loginAs(name, "");
 	}
