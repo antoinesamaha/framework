@@ -118,6 +118,12 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
     this.callerArguments = callerArguments;
   }
      
+	public void loginAs_IfMemoryCheckActive(String name, String password) throws Exception {
+		if(getSuite().getDictionary().isMemoryCheckActive()) {
+			loginAs(name, password);
+		}
+	}
+	
 	public void loginAs(String name, String password) throws Exception {
 		component_SetValue("NAME", name, false);
 		component_SetValue("PASSWORD", password, false);
