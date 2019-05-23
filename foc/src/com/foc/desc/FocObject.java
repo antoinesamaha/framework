@@ -1144,6 +1144,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	}
   }
 
+  public long getPropertyObjectLocalReference(String fieldName){
+		FObject prop = (FObject) getFocPropertyByName(fieldName);
+		return prop != null ? prop.getLocalReferenceInt() : 0;
+  }
+  
+  public void setPropertyObjectLocalReference(String fieldName, long reference){
+  	FObject prop = (FObject) getFocPropertyByName(fieldName);
+  	if(prop != null){
+  		prop.setLocalReferenceInt(reference);
+  	}
+  }
+  
   public BufferedImage getPropertyImage(int fieldID){
   	FImageProperty prop = (FImageProperty) getFocProperty(fieldID);  	
   	return prop != null ? (BufferedImage) prop.getImageValue() : null;
