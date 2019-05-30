@@ -1597,4 +1597,10 @@ public class FocDataSource_DB implements IFocDataSource {
 		getDBAdaptor().adaptDataModel_ReorganzeIndexes();
 		return false;
 	}
+
+	@Override
+	public StringBuffer getMonitoringText() {
+		DBManagerServer dbServer = getDBManagerServer();
+		return dbServer != null ? dbServer.getMonitoringText() : null;
+	}
 }
