@@ -265,29 +265,31 @@ public class SQLRequest {
   public boolean doExecute() throws Exception{
     boolean error = false;
     
-    StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(getDBSourceKey());
-    if (stmt != null && focDesc.isPersistent()) {
-      error = buildRequest();
-      if(error){
-      	Globals.logString("DB Error Preparing Request : "+request);
-      }else if(request != null && request.length()>0){
-	      try {
-	        String req = getRequestAdaptedToProvider();
-	        
-	        PerfManager.startDBExec();
-          stmt      = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, req, getSQLRequestType(), getFocObject());
-          if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
-          	if(getFocObject() != null){
-          		getFocObject().backup();
-          	}
-          }
-	        PerfManager.endDBExecForRequest(req);
-	      } catch (Exception e) {
-	        error = true;
-	        Globals.logException(e);
+    if (focDesc.isPersistent()) {
+    	StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(getDBSourceKey());
+    	if (stmt != null) {
+	      error = buildRequest();
+	      if(error){
+	      	Globals.logString("DB Error Preparing Request : "+request);
+	      }else if(request != null && request.length()>0){
+		      try {
+		        String req = getRequestAdaptedToProvider();
+		        
+		        PerfManager.startDBExec();
+	          stmt      = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, req, getSQLRequestType(), getFocObject());
+	          if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
+	          	if(getFocObject() != null){
+	          		getFocObject().backup();
+	          	}
+	          }
+		        PerfManager.endDBExecForRequest(req);
+		      } catch (Exception e) {
+		        error = true;
+		        Globals.logException(e);
+		      }
 	      }
-      }
-      DBManagerServer.getInstance().unlockStatement(stmt);
+	      DBManagerServer.getInstance().unlockStatement(stmt);
+    	}
     }
 
     return error;
