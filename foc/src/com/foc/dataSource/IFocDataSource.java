@@ -64,4 +64,5 @@ public interface IFocDataSource {
 	public void          executeCustomQuery(StringBuffer sqlRequest, IExecuteResultSet iExecuteResultSet);
 	
 	public String command_DataModel2Code();
+	public StringBuffer getMonitoringText();
 }

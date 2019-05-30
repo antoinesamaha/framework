@@ -346,6 +346,27 @@ public class DBManagerServer {
 		scanner.scanDirectory(this);
 		scanner.dispose();
   }
+
+  public StringBuffer getMonitoringText() {
+  	StringBuffer buffer = new StringBuffer();
+  	
+  	if(getConnectionPool() != null) {
+	  	StringBuffer poolBuffer = getConnectionPool().getMonitoringText();
+	  	buffer.append(poolBuffer);
+	  		
+		  Iterator<ConnectionPool> iter = auxPools_Iterator();
+		  while(iter != null && iter.hasNext()) {
+		  	ConnectionPool pool = iter.next();
+		  	
+		  	if(pool != null) {
+			  	poolBuffer = pool.getMonitoringText();
+			  	buffer.append(poolBuffer);
+		  	}
+		  }
+  	}
+  	
+  	return buffer;
+  }
   
   //------------------------------------------------------------------
   // DBManagerServer

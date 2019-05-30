@@ -75,6 +75,11 @@ public class ConnectionPool {
 		}
 	}
 
+	public StringBuffer getMonitoringText() {
+		ConnectionWrapper wrapper = getConnectionWrapper();
+		return wrapper != null ? wrapper.getMonitoringText() : null;
+	}
+	
   private synchronized ConnectionWrapper lockConnectionWrapper() {
     ConnectionWrapper connection = null;
     if (freeConnections.size() > 0) {

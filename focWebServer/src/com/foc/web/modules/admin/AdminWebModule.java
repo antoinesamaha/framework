@@ -536,7 +536,34 @@ public class AdminWebModule extends FocWebModule {
 				Globals.popupDialog(dialog);
 			}
 		});
-    
+
+    menuItem = systemMenu.pushMenu("DB_CONNECTION_MONITORING", "DB Connection monitoring");
+    menuItem.setMenuAction(new IFocMenuItemAction() {
+
+			@Override
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				String message = "";
+				if(Globals.getApp() != null && Globals.getApp().getDataSource() != null) {
+					StringBuffer buff = Globals.getApp().getDataSource().getMonitoringText();
+					if(buff != null) {
+						message = buff.toString();
+						
+						OptionDialog dialog = new OptionDialog("DB connection monitoring", message) {
+							@Override
+							public boolean executeOption(String optionName) {
+								return false;
+							}
+							
+						};
+						dialog.addOption("OK", "Ok");
+						dialog.setWidth("1000px");
+						dialog.setHeight("500px");
+						Globals.popupDialog(dialog);
+					}
+				}
+			}
+		});
+
     menuItem = systemMenu.pushMenu("ACTIVE_USERS", "Active Users");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {

@@ -12,8 +12,8 @@ import java.util.Properties;
 import com.foc.ConfigInfoWizardPanel;
 import com.foc.Globals;
 import com.foc.GuiConfigInfo;
-import com.foc.focDataSourceDB.db.DBManagerServer;
 import com.foc.performance.PerfManager;
+import com.foc.util.Utils;
 
 public class ConnectionWrapper {
 	private ConnectionPool pool       = null; 
@@ -54,6 +54,17 @@ public class ConnectionWrapper {
   		setAutoCommit(autoCommit);
   	}
 		return connection;
+	}
+	
+	public StringBuffer getMonitoringText() {
+		StringBuffer buffer = new StringBuffer();
+		String sourceKey = getDBSourceKey();
+		
+		if(Utils.isStringEmpty(sourceKey)) sourceKey = "Main";
+		if (freeStatements != null && busyStatements != null) {
+			buffer.append("DB pool: <b>" + sourceKey + "</b> locked: <b>" + busyStatements.size() + "</b> free: <b>" + freeStatements.size() + "</b><br>");
+		}
+		return buffer;
 	}
 	
 	public void setAutoCommit(boolean autoCommit){
@@ -122,7 +133,7 @@ public class ConnectionWrapper {
   public synchronized void unlockStatement(StatementWrapper stmtWrapper) {
     if (stmtWrapper != null) {
       busyStatements.remove(stmtWrapper);
-      if(freeStatements.size() < 5){
+      if(freeStatements.size() < 0){
       	freeStatements.add(stmtWrapper);	
       }else{
       	try{
