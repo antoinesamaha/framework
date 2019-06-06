@@ -308,7 +308,12 @@ public abstract class FField implements Cloneable, IFocData {
   }
   
   public int getProvider(){
-  	return Globals.getDBManager().getProvider(getDBSourceKey());
+  	int provider = DBManager.PROVIDER_NONE;
+		FocDesc focDescHolder = getFocDescParent();
+		if(focDescHolder != null){
+			provider = focDescHolder.getProvider();
+		}
+  	return provider;
   }
 	
   public void setTitle(String title){

@@ -110,6 +110,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   // oooooooooooooooooooooooooooooooooo
 
 	private String dbSourceKey = null;//Auxiliary Pools
+	private int    providerCached = DBManager.PROVIDER_NONE;
 	
   private Class<FocObject> focObjectClass = null;
   private Class guiBrowsePanelClass  = null;
@@ -2484,8 +2485,12 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	}
 	
 	public int getProvider() {
-		String dbSourceKey = getDbSourceKey();
-		return Globals.getDBManager().getProvider(dbSourceKey);
+		//#PERF cahce the Provider pointer because taking 6% of a select conacts
+		if(providerCached == DBManager.PROVIDER_NONE) {
+			String dbSourceKey = getDbSourceKey();
+			providerCached = Globals.getDBManager().getProvider(dbSourceKey);
+		}		
+		return providerCached;
 	}
 
 	public String getName() {

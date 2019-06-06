@@ -980,7 +980,13 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   }
   
   public int getProvider(){
-  	return Globals.getDBManager().getProvider(getDBSourceKey());
+  	//#PERF Use the getProvider of the FocDesc which will be optimised by caching
+  	int provider = DBManager.PROVIDER_NONE;
+  	FField fld = getFocField();
+  	if(fld != null){
+  		provider = fld.getProvider();
+  	}  	
+  	return provider;
   }
   
   private static class ValueChangeEvent extends java.util.EventObject implements Property.ValueChangeEvent {
