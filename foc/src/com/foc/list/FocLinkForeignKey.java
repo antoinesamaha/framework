@@ -238,6 +238,11 @@ public class FocLinkForeignKey extends FocLink {
 
   @Override
   public boolean loadDB(FocList focList) {
+  	return loadDB(focList, 0);
+  }
+  		
+  @Override
+  public boolean loadDB(FocList focList, long refToUpdateIncementally) {
     boolean bool = false;
     if(isPossibleToLoadList(focList)){
     	//we need to adpate the filter an other time because maybe at creation 
@@ -246,7 +251,7 @@ public class FocLinkForeignKey extends FocLink {
     	//so we make adaptSQLFilter now(before loading because now the master object have a real ref)
     	//so the filter condition will becom "where m_ref = the real ref"
     	adaptSQLFilter(focList, focList.getFilter());
-      bool = loadDBDefault(focList);
+      bool = loadDBDefault(focList, refToUpdateIncementally);
     }
     return bool ;
   }

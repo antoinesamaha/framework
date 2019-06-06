@@ -32,12 +32,16 @@ public class FocLinkOne2N extends FocLink {
     return  false;
   }
 
-  public boolean loadDB(FocList focList) {
+  public boolean loadDB(FocList focList, long refToUpdateIncementally) {
     boolean bool = false;
     if(focList.getMasterObject() != null && !focList.getMasterObject().isCreated() && focList.getMasterObject().getThisFocDesc().isPersistent()){
-      bool = loadDBDefault(focList);
+      bool = loadDBDefault(focList, refToUpdateIncementally);
     }
     return bool ;
+  }
+  
+  public boolean loadDB(FocList focList) {
+    return loadDB(focList, 0);
   }
 
   public boolean canDeleteDB(FocList focList) {

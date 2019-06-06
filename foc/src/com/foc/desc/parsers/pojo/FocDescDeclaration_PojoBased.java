@@ -13,7 +13,6 @@ import com.foc.annotations.model.FocJoin;
 import com.foc.annotations.model.FocWorkflow;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
-import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.parsers.fields.FocFieldFactory;
 import com.foc.desc.parsers.fields.IFocFieldType;
@@ -122,14 +121,9 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	      	
 	      }
 	      if(entity.joins() != null) {
-	      	boolean refFieldNotDBResident = false;
 	      	for(FocJoin joinAnn : entity.joins()) {
 	  	    	ParsedJoin join = new ParsedJoin(focDesc, joinAnn);
 	  	    	focDesc.putJoin(join);
-	  	    	refFieldNotDBResident = true;
-	      	}
-	      	if(refFieldNotDBResident) {
-	      		focDesc.setRefFieldNotDBRsident();
 	      	}
 	      }
 

@@ -518,16 +518,39 @@ public class FocDataSource_DB implements IFocDataSource {
 	//-----------------------------------------------------
   
   @Override
-  public boolean focList_Load(FocList focList){
+  public boolean focList_Load(FocList focList, long refToBeReloaded){
   	boolean error = true;
   	if(focList != null && !isEmptyDatabaseJustCreated()){
   		FocDesc slaveDesc = focList.getFocDesc();
 		  focList.setLoaded(true);
+		  
+		  //We remove first
+		  //this way if the incremental where condition was stuck from before
+		  //it is removed
+		  if(focList.getFilter() != null) {
+			  focList.getFilter().removeAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE);
+			  if(refToBeReloaded > 0) {//ForIncremental only
+	      	String fldName = slaveDesc.getRefFieldName();
+	      	if(!Utils.isStringEmpty(fldName)) {
+		      	if(slaveDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ; 
+		      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(slaveDesc.getProvider())) fldName = "\""+fldName+"\"" ;
+				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded));
+	      	}
+			  }
+		  }
+		  //-------------
+		  
 		  SQLSelect select = new SQLSelect(focList, slaveDesc, focList.getFilter());
 		  select.setSqlGroupBy(focList.getSqlGroupBy());
 		  focList.putSiteReadRightConditionIfRequired();
 		  focList.setLoading(true);
+		  
 		  error = select.execute();
+		  
+		  if(focList.getFilter() != null) {
+			  focList.getFilter().removeAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE);
+		  }
+			  
 		  focList.setLoading(false);
 		  FocList loadedFocList = select.getFocList();
 		  focList.synchronize(loadedFocList);
@@ -544,16 +567,40 @@ public class FocDataSource_DB implements IFocDataSource {
 	//-----------------------------------------------------
 
   @Override
-  public boolean focList_Join_Load(FocList focList){
+  public boolean focList_Join_Load(FocList focList, long refToBeReloaded){
   	boolean error = true;
   	FocLinkJoinRequest link = (FocLinkJoinRequest) focList.getFocLink();
   	
   	if(link != null){
 	    focList.setLoaded(true);
+	    
+		  //We remove first
+		  //this way if the incremental where condition was stuck from before
+		  //it is removed
+		  if(focList.getFilter() != null && focList.getFocDesc() != null) {
+		  	FocDesc focDesc = focList.getFocDesc();
+			  focList.getFilter().removeAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE);
+			  if(refToBeReloaded > 0) {//ForIncremental only
+	      	String fldName = focDesc.getRefFieldName();
+	      	if(!Utils.isStringEmpty(fldName)) {
+		      	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ;
+		      	fldName = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fldName);
+//		      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())) fldName = "\""+fldName+"\"" ;
+				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded));
+	      	}
+			  }
+		  }
+		  //-------------
+	    
 	    SQLSelect select = new SQLSelectJoinRequest(focList, link.getRequestDesc(), focList.getFilter());
 	    select.setSqlGroupBy(focList.getSqlGroupBy());
 		  focList.setLoading(true);
 	    error = !select.execute();
+	    
+		  if(focList.getFilter() != null) {
+			  focList.getFilter().removeAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE);
+		  }	    
+	    
 		  focList.setLoading(false);
 	    FocList loadedFocList = select.getFocList();
 	    focList.synchronize(loadedFocList);

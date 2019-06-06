@@ -52,8 +52,8 @@ public interface IFocDataSource {
 	public boolean       focObject_addBlobFromFilePath(FocObject obj, int fieldID, String filePath);
 	public boolean       focObject_addBlobFromInputStream(FocObject obj, int fieldID, InputStream inputStream);
 		
-  public boolean       focList_Load(FocList focList);
-  public boolean       focList_Join_Load(FocList focList);
+  public boolean       focList_Load(FocList focList, long refToBeReloaded);
+  public boolean       focList_Join_Load(FocList focList, long refToBeReloaded);
   public boolean       focList_Delete(FocList focList);
   
 	public void          transaction_SeeIfShouldCommit();

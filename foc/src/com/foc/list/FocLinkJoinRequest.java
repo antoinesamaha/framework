@@ -30,8 +30,14 @@ public class FocLinkJoinRequest extends FocLinkSimple {
   	return requestDesc;
   }
   
+	@Override
+	public boolean loadDB(FocList focList, long refToUpdateIncementally) {
+    boolean loaded = Globals.getApp().getDataSource().focList_Join_Load(focList, refToUpdateIncementally);
+    return loaded;		
+	}
+	
   public boolean loadDB(FocList focList) {
-    boolean loaded = Globals.getApp().getDataSource().focList_Join_Load(focList);
+    boolean loaded = Globals.getApp().getDataSource().focList_Join_Load(focList, 0);
     return loaded;
   }
 }

@@ -176,7 +176,15 @@ public class ParsedJoin implements FXMLDesc {
 							Globals.showNotification("Could not find Field", getThisFocDesc().getStorageName()+"."+xmlReqFld.getSourceFieldName(), IFocEnvironment.TYPE_ERROR_MESSAGE);
 						}else{
 							if(getFocDesc() != null && getFocDesc().getFocRequestDesc() != null){
-								FocRequestField reqFld = new FocRequestField(getFocDesc().nextFldID(), tableAlias, fld.getID());
+								int fieldID = 0;
+								
+								if(fld.getID() == FField.REF_FIELD_ID && isPrimaryKey()) {
+									fieldID = FField.REF_FIELD_ID;
+								} else {
+									fieldID = getFocDesc().nextFldID();
+								}
+								
+								FocRequestField reqFld = new FocRequestField(fieldID, tableAlias, fld.getID());
 								getFocDesc().getFocRequestDesc().addField(reqFld);
 								
 				    		String groupByFormula = xmlReqFld.getGroupByFormula();
