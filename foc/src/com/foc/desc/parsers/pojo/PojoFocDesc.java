@@ -8,15 +8,25 @@ public class PojoFocDesc extends ParsedFocDesc implements IFocDescForFilter {
 
 	public PojoFocDesc(Class<PojoFocObject> focObjectClass, boolean dbResident, String storageName, boolean isKeyUnique){
 		super(focObjectClass, dbResident, storageName, isKeyUnique, false);
-		addReferenceField();
 	}
 	
 	public void dispose(){
 		super.dispose();
 	}
 	
+	@Override
+	public void afterParsing() {
+		if(!hasReferenceFromAJoinTable()) {
+			addReferenceField();
+		}
+		super.afterParsing();
+  	if(hasJoinNode()) {
+  		setRefFieldNotDBRsident();
+  	}
+	}
+	
 	public void setRefFieldNotDBRsident() {
 		FField fld = getFieldByID(FField.REF_FIELD_ID);
-		fld.setDBResident(false);
+		if(fld != null) fld.setDBResident(false);
 	}
 }

@@ -59,7 +59,8 @@ import com.vaadin.data.Property;
  */
 @SuppressWarnings("serial")
 public class FocList extends AccessSubject implements IFocList, Container {
-  
+	public static final String FILTER_KEY_FOR_INCREMENTAL_UPDATE = "_INCREMENTAL_UPDATE";
+	
   public static final int NONE           = 0;
   public static final int LOAD_IF_NEEDED = 1;
   public static final int FORCE_RELOAD   = 2;
@@ -1581,6 +1582,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
   // oooooooooooooooooooooooooooooooooo  
 
   public void reloadFromDB() {
+  	reloadFromDB(0);//0 because not incremental
+  }
+  
+  public void reloadFromDB(long refToUpdateIncementally) {
     //this.fireEvent(FocEvent.ID_BEFORE_LOAD);
   	if(isDbResident()){
     	Globals.setMouseComputing(true);
@@ -1589,7 +1594,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	    if(fatherProperty != null && fatherProperty.getFocObject() != null){
 	      backup = fatherProperty.getFocObject().isModified();
 	    }
-      boolean loaded = focLink.loadDB(this);
+      boolean loaded = focLink.loadDB(this, refToUpdateIncementally);
       setLoaded(loaded);
       resetNextOrder();
 	    //fireEvent(null, FocEvent.ID_ITEM_MODIFY);//attention attention

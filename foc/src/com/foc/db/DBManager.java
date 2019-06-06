@@ -22,6 +22,7 @@ public class DBManager {
 
 //  private int provider = 1;
 
+  public static final int PROVIDER_NONE       = 0;
   public static final int PROVIDER_MYSQL      = 1;
   public static final int PROVIDER_HSQLDB     = 2;
   public static final int PROVIDER_ORACLE     = 3;

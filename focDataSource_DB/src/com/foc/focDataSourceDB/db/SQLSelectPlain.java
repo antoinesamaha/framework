@@ -31,7 +31,8 @@ public class SQLSelectPlain extends SQLRequest {
   protected final static int LOAD_IN_OBJECT        = 0;
   protected final static int LOAD_IN_EMPTY_LIST    = 1;
   protected final static int LOAD_IN_EXISTING_LIST = 2;
-  
+  protected final static int LOAD_IN_EXISTING_LIST_INCREMENTAL = 3;
+
   protected int          loadMode            = LOAD_IN_OBJECT;// We have 2 modes: 1-Updating an
   																				                    // existing FocList 2-Creating a new
                                         	                    // FocList as a result
@@ -56,6 +57,12 @@ public class SQLSelectPlain extends SQLRequest {
     }else{
       //loadMode = LOAD_IN_EMPTY_LIST;
       loadMode = LOAD_IN_EXISTING_LIST;
+    }
+    
+    if(loadMode == LOAD_IN_EXISTING_LIST) {
+    	if(filter != null && filter.getAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE) != null) {
+    		loadMode = LOAD_IN_EXISTING_LIST_INCREMENTAL;
+    	}
     }
   }
   
@@ -219,7 +226,8 @@ public class SQLSelectPlain extends SQLRequest {
     	
       //HashMap<FocObject, FocObject> visitedObjects = null;
     	VisitedObjectsContainer visitedObjects = null;
-      if (loadMode == LOAD_IN_EXISTING_LIST) {
+      if (   loadMode == LOAD_IN_EXISTING_LIST
+      		|| loadMode == LOAD_IN_EXISTING_LIST_INCREMENTAL) {
         // If we are in update list mode, we should keep track of visited objects
         // to remove unvisited objects from initial list
         //visitedObjects = new HashMap<FocObject, FocObject>();
@@ -240,11 +248,11 @@ public class SQLSelectPlain extends SQLRequest {
           
       //This temp object is only to read the identifier property
       FocObject tempObject = null;
-      if (loadMode == LOAD_IN_EXISTING_LIST) {
+      if (   loadMode == LOAD_IN_EXISTING_LIST
+      		|| loadMode == LOAD_IN_EXISTING_LIST_INCREMENTAL) {
         FocConstructor constr = new FocConstructor(focDesc, null, focList.getMasterObject());
         tempObject = constr.newItem();
         if(tempObject == null){
-        	int debug = 2;
         	tempObject = constr.newItem();
         }
         tempObject.setDbResident(false);
@@ -263,10 +271,14 @@ public class SQLSelectPlain extends SQLRequest {
         }
         //-------------------------------------------
         
-        if (loadMode == LOAD_IN_EXISTING_LIST || loadMode == LOAD_IN_EMPTY_LIST) {
+        if (   loadMode == LOAD_IN_EXISTING_LIST
+        		|| loadMode == LOAD_IN_EXISTING_LIST_INCREMENTAL
+        		|| loadMode == LOAD_IN_EMPTY_LIST
+        		) {
           FProperty identifierProp = null;
           
-          if(loadMode == LOAD_IN_EXISTING_LIST){            
+          if(    loadMode == LOAD_IN_EXISTING_LIST
+          		|| loadMode == LOAD_IN_EXISTING_LIST_INCREMENTAL){            
             identifierProp = tempObject.getIdentifierProperty();
             if(identifierProp != null){
               identifierProp.setSqlString(identifierValue);
@@ -319,7 +331,8 @@ public class SQLSelectPlain extends SQLRequest {
 
       //Re-Scan properties and notify listeners
       //---------------------------------------
-      if (loadMode == LOAD_IN_EXISTING_LIST){
+      if (   loadMode == LOAD_IN_EXISTING_LIST
+      		|| loadMode == LOAD_IN_EXISTING_LIST_INCREMENTAL){
         if (visitedObjects != null) {
           //Iterator iter = visitedObjects.keySet().iterator();
         	Iterator iter = visitedObjects.valuesIterator();
@@ -382,7 +395,7 @@ public class SQLSelectPlain extends SQLRequest {
   
   public boolean execute() {
     boolean error = Globals.getDBManager() == null;  
-    if(!error && focDesc != null && focDesc.isPersistent() == FocDesc.DB_RESIDENT){
+    if(!error && focDesc != null && focDesc.isPersistent() == FocDesc.DB_RESIDENT){   	
       StatementWrapper stmtWrapper = DBManagerServer.getInstance().lockStatement(getDBSourceKey());
   
       ResultSet resultSet = null;

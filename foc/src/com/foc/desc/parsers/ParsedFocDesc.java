@@ -187,6 +187,16 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
   	return (joinMap != null && joinMap.size() > 0) ? joinMap.values().iterator() : null;
   }
   
+  public boolean hasReferenceFromAJoinTable() {
+  	boolean foundPrimaryKeyJoin = false;
+  	Iterator<ParsedJoin> iter = newJoinIterator();
+  	while(iter != null && iter.hasNext() && !foundPrimaryKeyJoin) {
+  		ParsedJoin join     = iter.next();
+  		foundPrimaryKeyJoin = join.isPrimaryKey();
+  	}
+  	return foundPrimaryKeyJoin;
+  }
+  
 	@Override
   public boolean isJoin(){
 		boolean join = super.isJoin();

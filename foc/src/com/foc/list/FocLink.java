@@ -20,6 +20,7 @@ public abstract class FocLink {
 
   public abstract boolean saveDB(FocList focList);
   public abstract boolean loadDB(FocList focList);
+  public abstract boolean loadDB(FocList focList, long refToUpdateIncementally);
   public abstract boolean deleteDB(FocList focList);
 
   public abstract void copy(FocList targetList, FocList sourceList);
@@ -35,22 +36,13 @@ public abstract class FocLink {
     this.slaveDesc = slaveDesc;
   }
   
-  protected boolean loadDBDefault(FocList focList) {
+  protected boolean loadDBDefault(FocList focList, long refToUpdateIncementally) {
     boolean loaded = false;
     FocDesc slaveDesc = getSlaveDesc();
     if (slaveDesc != null) {
       if(Globals.getApp() != null){
-        loaded = !Globals.getApp().getDataSource().focList_Load(focList);
+        loaded = !Globals.getApp().getDataSource().focList_Load(focList, refToUpdateIncementally);
       }
-    	
-//      focList.setLoaded(true);
-//      SQLSelect select = new SQLSelect(focList, slaveDesc, focList.getFilter());
-//      select.setSqlGroupBy(focList.getSqlGroupBy());
-//      focList.putSiteReadRightConditionIfRequired();
-//      loaded = !select.execute();
-//      FocList loadedFocList = select.getFocList();
-//      focList.synchronize(loadedFocList);
-//      focList.resetStatusWithPropagation();
     }
     return loaded;
   }

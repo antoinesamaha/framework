@@ -5,6 +5,7 @@ import com.foc.IFocEnvironment;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.ITableTree;
@@ -40,6 +41,27 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		}
 	}
 	
+	protected void refreshJoinTableIncrementally(FVValidationLayout validationLayout){
+		long refToBeRefreshed = 0;
+		if(			validationLayout != null 
+				&& 	validationLayout.getCentralPanel() != null 
+				&&  validationLayout.getCentralPanel().getFocData() != null
+				&&  validationLayout.getCentralPanel().getFocData() instanceof FocObject) {
+			FocObject focObj = (FocObject)validationLayout.getCentralPanel().getFocData();
+			if(getFocList() != null && getFocList().getFocDesc() != null) {
+				FField fld = getFocList().getFocDesc().getFieldByID(FField.REF_FIELD_ID);
+				if(fld != null && fld.isDBResident()) refToBeRefreshed = focObj.getReferenceInt();
+			}
+		}
+		refreshJoinTableIncrementally(refToBeRefreshed);
+	}
+	
+	protected void refreshJoinTableIncrementally(long refToBeReloaded){
+		if(getFocList() != null){
+			getFocList().reloadFromDB(refToBeReloaded);
+		}
+	}
+	
 	@Override
 	public FocObject table_OpenItem_GetObjectToOpen(String tableName, ITableTree table, FocObject focObject) {
 		FocConstructor constr = new FocConstructor(getOriginalFocDesc(), null);
@@ -68,6 +90,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
+			
 			@Override
 			public void validationDiscard(FVValidationLayout validationLayout) {
 			}
@@ -79,12 +102,12 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-				refreshJoinTable();
+				refreshJoinTableIncrementally(validationLayout);
+				//refreshJoinTable();
 			}
 
 			@Override
 			public boolean validationCommit(FVValidationLayout validationLayout) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		});
@@ -116,6 +139,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		getParentNavigationWindow().changeCentralPanelContent(formLayout, true);
 		
 		formLayout.getValidationLayout().addValidationListener(new IValidationListener() {
+			
 			@Override
 			public void validationDiscard(FVValidationLayout validationLayout) {
 			}
@@ -127,12 +151,12 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
-				refreshJoinTable();
+				refreshJoinTableIncrementally(validationLayout);
+				//refreshJoinTable(); This refreshes the whole list
 			}
 
 			@Override
 			public boolean validationCommit(FVValidationLayout validationLayout) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		});

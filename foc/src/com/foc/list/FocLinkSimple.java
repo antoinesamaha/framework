@@ -40,8 +40,13 @@ public class FocLinkSimple extends FocLink {
     return false;
   }
 
+	@Override
+	public boolean loadDB(FocList focList, long refToUpdateIncementally) {
+		return loadDBDefault(focList, refToUpdateIncementally);
+	}
+	
   public boolean loadDB(FocList focList) {
-    return loadDBDefault(focList);
+    return loadDB(focList, 0);
   }
   
   public boolean disposeList(FocList list){
@@ -59,4 +64,5 @@ public class FocLinkSimple extends FocLink {
   public FocObject getSingleTableDisplayObject(FocList list){
     return null;
   }
+
 }
