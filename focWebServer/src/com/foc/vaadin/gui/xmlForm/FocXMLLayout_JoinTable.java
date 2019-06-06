@@ -180,6 +180,10 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			if(!error){
 				super.table_DeleteItem(table, focObject);
+				//Had to add this lione for the case where we delete a just newly added item
+				//In that case the delete line remains visible with empty cells.
+				table.getFocDataWrapper().refreshGuiForContainerChanges();
+				//--------------------------------------------------------------
 			}
 		}
 		newObject.dispose();
