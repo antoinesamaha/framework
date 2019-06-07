@@ -70,6 +70,7 @@ public class FMultipleChoiceStringField extends FStringField {
 		if(isChoicesAreFromSameColumn()){
 			arrayList = arrayList == null || isNeedRefresh() ? Globals.getApp().getDataSource().command_Select(getChoicesSelection_FocDesc(), getChoicesSelection_FieldID(), true, getFilterExpressionForChoicesSelect()) : arrayList;
 //			arrayList = Globals.getApp().getDataSource().command_Select(focDescForChoicesSelect, this.getID(), true, getFilterExpressionForChoicesSelect());
+			arrayList.remove(null);//Remove the null value otherwise it will cause an exception on sorting.
 			setChoicesArrayList(arrayList);
 			if(isNeedRefresh()){
 				setNeedRefresh(false);
