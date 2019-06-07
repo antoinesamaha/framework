@@ -340,10 +340,19 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
     }
   }
   
+  UserSession userSession = null;
+  public UserSession getUserSession() {
+  	if(userSession == null) {
+  		userSession = UserSession.getInstanceForThread();
+  	}
+  	return userSession;
+  }
+  
   protected boolean includeFocObject(FocObject focObj){
     boolean include = focObj != null ? true : false;
 //    FocUser user = FocWebApplication.getFocWebSession_Static().getUserSession().getUser();
-    FocUser user = Globals.getApp().getUser_ForThisSession();
+    UserSession userSession = getUserSession();
+    FocUser user = userSession != null ? userSession.getUser() : null;
     if(user != null && user.isGuest()){
     	if(focObj.hasAdrBookParty()){
         include = false;
@@ -371,16 +380,16 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
         include = false;      
         if(focObj.getCompany() == null || focObj.getCompany().equalsRef(company)){
           
-          if(siteFieldID_1 != FField.NO_FIELD_ID){
+          if(siteFieldID_1 != FField.NO_FIELD_ID && userSession != null){
             WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_1);
-            if(site != null && site.hasAncestorOrEqualTo(UserSession.getInstanceForThread().getSite())){
+            if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
               include = true;
             }
           }
           
-          if(siteFieldID_2 != FField.NO_FIELD_ID){
+          if(siteFieldID_2 != FField.NO_FIELD_ID && userSession != null){
             WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_2);
-            if(site != null && site.hasAncestorOrEqualTo(UserSession.getInstanceForThread().getSite())){
+            if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
               include = true;
             }
           }
@@ -392,7 +401,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
       }
     }
 
-    if(include && UserSession.getInstanceForThread() != null && !UserSession.getInstanceForThread().isSimulation()){
+    if(include && userSession != null && !userSession.isSimulation()){
     	if(focObj.workflow_IsWorkflowSubject()){
     		Workflow workflow = ((IWorkflow)focObj).iWorkflow_getWorkflow();
     		if(workflow != null && workflow.isSimulation()){
