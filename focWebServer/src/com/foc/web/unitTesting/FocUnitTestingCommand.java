@@ -1173,7 +1173,9 @@ public class FocUnitTestingCommand {
 
     FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
     if (obj != null) {
-      ((ITableTree) table).getTableTreeDelegate().delete_NoPopupConfirmation(obj);
+    	tableWrapper.deleteItemClickListenerContent();
+    	button_Click("DELETE");
+      //((ITableTree) table).getTableTreeDelegate().delete_NoPopupConfirmation(obj);
       getLogger().addInfo("Deleing selected item in table " + tableName + ".");
     } else {
       getLogger().addFailure("No object selected. Could not delete in table " + tableName + ".");

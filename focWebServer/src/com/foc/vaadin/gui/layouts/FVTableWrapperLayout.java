@@ -606,7 +606,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		return recordedWithRefSelection;
 	}
 		
-	private void deleteItemClickListenerContent() {
+	public void deleteItemClickListenerContent() {
 		if(FocUnitRecorder.isRecording() && getDelegate() != null) {
 			recordTableLineSelection(null);
 			FocUnitRecorder.recordLine("table_Delete(\""+getDelegate().getNameInMap()+"\");");
