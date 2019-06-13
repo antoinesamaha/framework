@@ -12,7 +12,6 @@ import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.unitTesting.FocUnitRecorder;
-import com.foc.web.unitTesting.recording.UnitTestingRecorder_CommonField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 
@@ -132,7 +131,8 @@ public class FocXMLGuiComponentDelegate {
   	if(editable){//&& component != null && component.getFormField() != null
 	  	
 	  	//First we check if programmatically the FocXMLLayout has been set as not editable
-	    editable = getFocXMLLayout() != null ? getFocXMLLayout().isEditable() : true;
+  		FocXMLLayout focXMLayout = getFocXMLLayout(); 
+	    editable = focXMLayout != null ? focXMLayout.isEditable() : true;
 	    
 	    //Check if the Property Value is Locked
 	    //1- Either by flag
