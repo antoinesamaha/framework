@@ -1508,6 +1508,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				Globals.logException(e);
 				error = true;
 			}
+//		} else {
+//			Globals.logString("@@@ JUST DISABLED COPY GUI TO MEMORY @@@");
 		}
 		
 		return error;
