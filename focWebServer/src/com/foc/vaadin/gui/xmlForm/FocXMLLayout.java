@@ -146,6 +146,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 	private boolean propertyChangeSuspended = false;
 	
+	private boolean disableCopyGuiToMemory = false;
+
 	// This is the only constructor that will be called automatically
 	// After that the init method will be called
 	public FocXMLLayout() {
@@ -412,9 +414,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void parseXMLAndBuildGui() {
 		beforeLayoutConstruction();
 		parseXML();
+		setDisableCopyGuiToMemory(true);
 		mapDataPath2ListenerAction_ApplyVisibilityFormulas();
 		innerLayout_AfterConstruction();
 		afterLayoutConstruction();
+		setDisableCopyGuiToMemory(false);
 	}
 
 	@Override
@@ -1474,34 +1478,40 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public boolean copyGuiToMemory(FocXMLGuiComponent componentModified, FProperty propertyOfEvent) {
 		boolean error = false;
 	
-		try{
-			//PropertyChangeIntention
-			//In This case we want to make sure that FocObject Allows the Change before triggering any listeners
-			if(!propertyChangeSuspended) {
-				if(propertyOfEvent != null && componentModified != null) {
-					Object valueBefore = propertyOfEvent != null ? propertyOfEvent.getObject() : null;
-					String valueAfter  = componentModified.getValueString(); 
-					if(!error && propertyOfEvent != null) {
-						FocObject fatherObj = propertyOfEvent.getFocObject();
-						
-						boolean componentSuspendedBackup = componentModified.getDelegate() != null ? componentModified.getDelegate().setSuspended(true) : false;
-						propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
-						if(!propertyChangeSuspended && componentModified.getDelegate() != null) {
-							componentModified.getDelegate().setSuspended(componentSuspendedBackup);
+		if(!isDisableCopyGuiToMemory()) {
+			
+			try{
+				//PropertyChangeIntention
+				//In This case we want to make sure that FocObject Allows the Change before triggering any listeners
+				if(!propertyChangeSuspended) {
+					if(propertyOfEvent != null && componentModified != null) {
+						Object valueBefore = propertyOfEvent != null ? propertyOfEvent.getObject() : null;
+						String valueAfter  = componentModified.getValueString(); 
+						if(!error && propertyOfEvent != null) {
+							FocObject fatherObj = propertyOfEvent.getFocObject();
+							
+							boolean componentSuspendedBackup = componentModified.getDelegate() != null ? componentModified.getDelegate().setSuspended(true) : false;
+							propertyChangeSuspended = propertyChangeIntention(fatherObj, propertyOfEvent, valueBefore, valueAfter, componentModified);
+							if(!propertyChangeSuspended && componentModified.getDelegate() != null) {
+								componentModified.getDelegate().setSuspended(componentSuspendedBackup);
+							}
 						}
 					}
 				}
-			}
-			
-			if(propertyChangeSuspended) {
+				
+				if(propertyChangeSuspended) {
+					error = true;
+				} else {
+					error = propertyChangeIntention_Accepted(componentModified, propertyOfEvent);
+				}
+			}catch (Exception e){
+				Globals.logException(e);
 				error = true;
-			} else {
-				error = propertyChangeIntention_Accepted(componentModified, propertyOfEvent);
 			}
-		}catch (Exception e){
-			Globals.logException(e);
-			error = true;
+//		} else {
+//			Globals.logString("@@@ JUST DISABLED COPY GUI TO MEMORY @@@");
 		}
+		
 		return error;
 	}
 
@@ -3275,6 +3285,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		if(active) {
 			scanComponentsAndSetWYSIWYGDropHandlers();
 		}
+	}
+
+	public boolean isDisableCopyGuiToMemory() {
+		return disableCopyGuiToMemory;
+	}
+
+	public void setDisableCopyGuiToMemory(boolean disableCopyGuiToMemory) {
+		this.disableCopyGuiToMemory = disableCopyGuiToMemory;
 	}
 	
 }
