@@ -67,13 +67,17 @@ public class EXCELSheet implements Cloneable {
 
 	public void addCellValue(Object paramObject) {
 		try{
-			XSSFCell localXSSFCell = this.row.createCell(this.columnCount++);
+			int currentColumn = this.columnCount++;
 			if((paramObject instanceof String)){
-				if(Utils.isNumeric((String) paramObject)){
-					double d = Double.parseDouble((String) paramObject);
-					localXSSFCell.setCellValue(d);
-				}else{
-					localXSSFCell.setCellValue((String) paramObject);
+				String value = (String) paramObject;
+				if(value != null && !value.isEmpty()) {
+					XSSFCell localXSSFCell = this.row.createCell(currentColumn);
+					if(Utils.isNumeric(value)){
+						double d = Double.parseDouble(value);
+						localXSSFCell.setCellValue(d);
+					}else{
+						localXSSFCell.setCellValue(value);
+					}
 				}
 			}
 		}catch (Exception localException){
