@@ -532,7 +532,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 	
 	public boolean isOpenEnabled(){
-		return isEditable() && isOpenEnabled_Attribute() && openEnabled;
+		return isOpenEnabled(isEditable());
+	}
+	
+	public boolean isOpenEnabled(boolean isEditable){
+		return isEditable && isOpenEnabled_Attribute() && openEnabled;
 	}
 
 	public void setExportToExcelEnabled(boolean enabled){
@@ -636,9 +640,13 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 	
 	public boolean isAddEnabled(){
-		return isEditable() && isAddEnabled_Attribute() && addEnabled && (getFocDesc() == null || getFocDesc().workflow_IsAllowInsert()) && isAllowListModification();
+		return isAddEnabled(isEditable());
 	}
-	
+
+	public boolean isAddEnabled(boolean isEditable){
+		return isEditable && isAddEnabled_Attribute() && addEnabled && (getFocDesc() == null || getFocDesc().workflow_IsAllowInsert()) && isAllowListModification();
+	}
+
 	public boolean isDuplicateEnabled(){
 		return duplicateEnabled && isDuplicateEnabled_Attribute();
 	}
@@ -657,7 +665,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 	
 	public boolean isDeleteEnabled(){
-		return isEditable() && isDeleteEnabled_Attribute() && deleteEnabled && (getFocDesc() == null || getFocDesc().workflow_IsAllowDelete(null)) && isAllowListModification();
+		return isDeleteEnabled(isEditable());
+	}
+	
+	public boolean isDeleteEnabled(boolean isEditable){
+		return isEditable && isDeleteEnabled_Attribute() && deleteEnabled && (getFocDesc() == null || getFocDesc().workflow_IsAllowDelete(null)) && isAllowListModification();
 	}
 	
 	public boolean isPopupMenuEnabled() {
@@ -2449,7 +2461,9 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	public void fillButtonsAndPopupMenus(){
 		if(attributes != null){
 			
-			if(isOpenEnabled()){
+			boolean isEditable = isEditable();
+			
+			if(isOpenEnabled(isEditable)){
 				addPopupMenu_Open();
 			}else if(isDoubleClickEnabled()){
 				//If the open is enabled the double click listener is managed in the open otherwise double click
@@ -2468,11 +2482,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				getTreeOrTable().addItemClickListener(doubleClickListener);
 			}
 
-			if(isAddEnabled()){
+			if(isAddEnabled(isEditable)){
 				addPopupMenu_Add();
 			}
 
-			if(isDeleteEnabled()){
+			if(isDeleteEnabled(isEditable)){
 				addPopupMenu_Delete();
 			}
 			

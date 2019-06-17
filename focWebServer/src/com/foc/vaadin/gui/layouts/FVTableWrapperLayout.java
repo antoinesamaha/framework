@@ -469,8 +469,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
-	private Embedded valo_GetOpenEmbedded() {
-		if(valo_OpenEmbedded == null && getTableTreeDelegate().isAddEnabled() && !isPrintingUI()){
+	private Embedded valo_GetOpenEmbedded(boolean isEditable) {
+		if(valo_OpenEmbedded == null && getTableTreeDelegate().isAddEnabled(isEditable) && !isPrintingUI()){
 			valo_OpenEmbedded = new Embedded("", FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_EDIT));
 			valo_OpenEmbedded.setStyleName(BaseTheme.BUTTON_LINK);
 			valo_OpenEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
@@ -517,8 +517,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
-	private Embedded valo_GetAddEmbedded() {
-		if(valo_AddEmbedded == null && getTableTreeDelegate().isAddEnabled() && !isPrintingUI()){
+	private Embedded valo_GetAddEmbedded(boolean isEditable) {
+		if(valo_AddEmbedded == null && getTableTreeDelegate().isAddEnabled(isEditable) && !isPrintingUI()){
 			valo_AddEmbedded = new Embedded("", FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_ADD));
 			valo_AddEmbedded.setStyleName(BaseTheme.BUTTON_LINK);
 			valo_AddEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
@@ -626,8 +626,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
-	private Embedded valo_GetDeleteEmbedded() {
-		if(valo_DeleteEmbedded == null && getTableTreeDelegate().isDeleteEnabled()){
+	private Embedded valo_GetDeleteEmbedded(boolean isEditable) {
+		if(valo_DeleteEmbedded == null && getTableTreeDelegate().isDeleteEnabled(isEditable)){
 			valo_DeleteEmbedded = new Embedded("", FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_DELETE));
 			valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
@@ -862,18 +862,20 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	}
 
 	public void adjustTableEditingToolsVisiblity() {
+		boolean isEditable = getTableTreeDelegate() != null ? getTableTreeDelegate().isEditable() : false;
+		
 		if(Globals.isValo()){
-			Embedded addEmbedded = valo_GetAddEmbedded();
+			Embedded addEmbedded = valo_GetAddEmbedded(isEditable);
 			if(addEmbedded != null){
-				addEmbedded.setVisible(getTableTreeDelegate().isAddEnabled());
+				addEmbedded.setVisible(getTableTreeDelegate().isAddEnabled(isEditable));
 			}
-			Embedded openEmbedded = valo_GetOpenEmbedded();
+			Embedded openEmbedded = valo_GetOpenEmbedded(isEditable);
 			if(openEmbedded != null){
-				openEmbedded.setVisible(getTableTreeDelegate().isOpenEnabled());
+				openEmbedded.setVisible(getTableTreeDelegate().isOpenEnabled(isEditable));
 			}
-			Embedded deleteEmbedded = valo_GetDeleteEmbedded();
+			Embedded deleteEmbedded = valo_GetDeleteEmbedded(isEditable);
 			if(deleteEmbedded != null){
-				deleteEmbedded.setVisible(getTableTreeDelegate().isDeleteEnabled());
+				deleteEmbedded.setVisible(getTableTreeDelegate().isDeleteEnabled(isEditable));
 			}
 			Embedded duplicateEmbedded = valo_GetDuplicateEmbedded();
 			if(duplicateEmbedded != null){
@@ -881,13 +883,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			}
 		}else{
 			if(getAddButton() != null){
-				getAddButton().setVisible(getTableTreeDelegate().isAddEnabled());
+				getAddButton().setVisible(getTableTreeDelegate().isAddEnabled(isEditable));
 			}
 			if(getOpenButton() != null){
-				getOpenButton().setVisible(getTableTreeDelegate().isOpenEnabled());
+				getOpenButton().setVisible(getTableTreeDelegate().isOpenEnabled(isEditable));
 			}
 			if(getDeleteButton() != null){
-				getDeleteButton().setVisible(getTableTreeDelegate().isDeleteEnabled());
+				getDeleteButton().setVisible(getTableTreeDelegate().isDeleteEnabled(isEditable));
 			}
 			if(getDuplicateButton() != null){
 				getDuplicateButton().setVisible(getTableTreeDelegate().isDuplicateEnabled());
@@ -924,17 +926,19 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			if(title != null && !title.isEmpty()){
 				setTitle(title);
 			}
-
+			
+			boolean isEditable = getTableTreeDelegate() != null ? getTableTreeDelegate().isEditable() : null;
+			
 			if(Globals.isValo()){
-				Embedded open = valo_GetOpenEmbedded();
+				Embedded open = valo_GetOpenEmbedded(isEditable);
 				if(open != null){
 					addHeaderComponent(open);
 				}
-				Embedded add = valo_GetAddEmbedded();
+				Embedded add = valo_GetAddEmbedded(isEditable);
 				if(add != null){
 					addHeaderComponent(add);
 				}
-				Embedded delete = valo_GetDeleteEmbedded();
+				Embedded delete = valo_GetDeleteEmbedded(isEditable);
 				if(delete != null){
 					addHeaderComponent(delete);
 				}
