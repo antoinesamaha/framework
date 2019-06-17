@@ -1421,6 +1421,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
         if(this.isDirectImpactOnDatabase()){
           subject.commitStatusToDatabase();
           this.removeSubject(subject);
+          subject.setFatherSubject(null);//2019-06-17 Without this line the deleted object in DirectImpactDatabases are never disposed
           doRemove = subject.isDeletionExecuted();
         }else{
         	doRemove = true;
