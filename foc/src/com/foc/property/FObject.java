@@ -553,7 +553,7 @@ public class FObject extends FProperty implements FPropertyListener{
         while (fieldsEnum.hasNext()) {
           FField keyField = (FField) fieldsEnum.next();
           FProperty objProp = focObjValue.getFocProperty(keyField.getID());
-          str += objProp != null ? objProp.getSqlString() : "";
+          str += objProp != null ? objProp.getString() : "";
         }
       }
     }
