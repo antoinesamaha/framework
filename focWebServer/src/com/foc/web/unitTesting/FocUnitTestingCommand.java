@@ -1305,6 +1305,29 @@ public class FocUnitTestingCommand {
     	getLogger().addFailure("Component "+componentName+(editable ? " should be Editable" : " should not be editable"));
     }
 	}
+  
+  public void component_AssertVisible(String componentName, boolean visible) throws Exception {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if(component == null) {
+    	getLogger().addFailure("Component "+componentName+" not found");
+    } else {
+    	if(component instanceof Component) {
+    		Component comp = (Component) component;
+    		boolean compVisible = comp.isVisible();
+    		while(compVisible && comp != null) {
+    			comp = comp.getParent();
+    			if(comp != null) compVisible = comp.isVisible();
+    		}
+    		
+        if(compVisible == visible){
+        	getLogger().addInfo("Component "+componentName+(visible ? " is Visible " : " is not Visible"));
+        }else{
+        	getLogger().addFailure("Component "+componentName+(visible ? " should be Visible " : " should not be Visible"));
+        }    		
+    	}
+    }
+	}
     
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
     boolean error = false;
