@@ -44,6 +44,7 @@ import com.foc.vaadin.gui.layouts.FVForEachLayout.DeleteButtonForEach;
 import com.foc.vaadin.gui.layouts.FVForEachLayout.FVBannerLayout;
 import com.foc.vaadin.gui.layouts.FVMoreLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
+import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStageLayout_Button;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_MenuBar;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
@@ -1332,8 +1333,13 @@ public class FocUnitTestingCommand {
   private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
     boolean error = false;
     if(component != null){
+    	//Editable
     	if(component instanceof Component){
-    		if(!((Component)component).isEnabled()){
+    		Component componentToCheck = (Component) component;
+    		if(component instanceof FVWrapperLayout) {
+    			componentToCheck = ((FVWrapperLayout)component).getFormField();
+    		}
+    		if(!componentToCheck.isEnabled()){
     			getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to "+ componentValue + " because not enabled");
     			error = true;
     		}
