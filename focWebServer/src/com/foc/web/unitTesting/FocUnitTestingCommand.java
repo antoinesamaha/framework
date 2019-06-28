@@ -1339,7 +1339,8 @@ public class FocUnitTestingCommand {
     		if(component instanceof FVWrapperLayout) {
     			componentToCheck = ((FVWrapperLayout)component).getFormField();
     		}
-    		if(!componentToCheck.isEnabled()){
+    		//If we are not in assertOnly this means the component has to be enabled
+    		if(!componentToCheck.isEnabled() && assertOnly != ASSERT_ONLY){
     			getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to "+ componentValue + " because not enabled");
     			error = true;
     		}
