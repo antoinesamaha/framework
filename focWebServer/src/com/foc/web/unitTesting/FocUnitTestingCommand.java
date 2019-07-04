@@ -1209,15 +1209,24 @@ public class FocUnitTestingCommand {
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FocXMLGuiComponent component  = findComponent(navigationLayout, componentName);
     
-    if(component != null && component.getDelegate() != null){
-	    boolean isComponentEditable = ((Component)component).isEnabled();
-	    
-	    if(isComponentEditable != assertEnabled){
-	    	String strg = assertEnabled ? " not Enabled" : " is Enabled";
-	    	getLogger().addFailure("Component '" + componentName + "' " + strg);
-	    }
+    component_AssertEnabled(component, componentName, assertEnabled);
+  }
+  
+  private void component_AssertEnabled(FocXMLGuiComponent component, String fieldNameForMessage, boolean assertEnabled) throws Exception {
+    //Editable
+    if(component != null && component instanceof Component){
+      Component componentToCheck = (Component) component;
+      if(componentToCheck instanceof FVWrapperLayout) {
+        componentToCheck = ((FVWrapperLayout)component).getFormField();
+      }
+      //If we are not in assertOnly this means the component has to be enabled
+      if(componentToCheck.isEnabled() != assertEnabled){
+        getLogger().addFailure("Component "+fieldNameForMessage+" enable status: "+componentToCheck.isEnabled()+" different then expected: "+assertEnabled);
+      } else {
+        getLogger().addInfo("Component "+fieldNameForMessage+" enable status: "+componentToCheck.isEnabled()+" as expected");
+      }
     }else{
-    	getLogger().addFailure("Faild to find component '" + componentName + "'");
+      getLogger().addFailure("Faild to check component "+fieldNameForMessage+" enabled because either null or not instanceof Component");
     }
   }
   
@@ -1330,61 +1339,47 @@ public class FocUnitTestingCommand {
     }
 	}
     
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
-    boolean error = false;
+  private void setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
     if(component != null){
-    	//Editable
-    	if(component instanceof Component){
-    		Component componentToCheck = (Component) component;
-    		if(component instanceof FVWrapperLayout) {
-    			componentToCheck = ((FVWrapperLayout)component).getFormField();
-    		}
-    		//If we are not in assertOnly this means the component has to be enabled
-    		if(!componentToCheck.isEnabled() && assertOnly != ASSERT_ONLY){
-    			getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to "+ componentValue + " because not enabled");
-    			error = true;
-    		}
-    	}
-    	if(!error){
-    		if(component instanceof FVMultipleChoiceOptionGroupPopupView){
-    			if(assertOnly != ASSERT_ONLY){
-    				component.setValueString(componentValue);
-    			}
-    		}else if(component instanceof FVObjectPopupView){
-    			FVObjectPopupView choiceOptionGroupPopupView = (FVObjectPopupView) component;
-    			boolean value = priorityToCaptionProperty == null || priorityToCaptionProperty.equals("true") ? true : false;
-    			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
-    			component.setValueString(componentValue);
-    		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
-    			((FVObjectComboBox) component).setValue(null);
-					((FVObjectComboBox) component).setValueString(null);
-					componentValue = null;
-    		}else{
-    			if(assertOnly != ASSERT_ONLY){
-    				component.setValueString(componentValue);
-    			}
+      if(assertOnly != ASSERT_ONLY) {
+        component_AssertEnabled(component, compNameForTheMessage, true);
+      }
+      
+  		if(component instanceof FVMultipleChoiceOptionGroupPopupView){
+  			if(assertOnly != ASSERT_ONLY){
+  				component.setValueString(componentValue);
+  			}
+  		}else if(component instanceof FVObjectPopupView){
+  			FVObjectPopupView choiceOptionGroupPopupView = (FVObjectPopupView) component;
+  			boolean value = priorityToCaptionProperty == null || priorityToCaptionProperty.equals("true") ? true : false;
+  			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
+  			component.setValueString(componentValue);
+  		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
+  			((FVObjectComboBox) component).setValue(null);
+				((FVObjectComboBox) component).setValueString(null);
+				componentValue = null;
+  		}else{
+  			if(assertOnly != ASSERT_ONLY){
+  				component.setValueString(componentValue);
+  			}
 
-    			String retValue = component.getValueString();
-    			if(assertOnly == DO_NOT_ASSERT || Utils.isEqual_String(retValue, componentValue)){
-    				if(assertOnly == ASSERT_ONLY){
-    					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is equal to " + componentValue + ".");
-    				}else{
-    					getLogger().addInfo("Set component " + compNameForTheMessage + " to " + componentValue + ".");
-    				}
-    			}else{
-    				error = true;
-    				if(assertOnly == ASSERT_ONLY){
-    					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
-    				}else{
-        			retValue = component.getValueString();
-
-    					getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to '" + componentValue + "' value remained = '"+retValue+"'");
-    				}
-    			}
-    		}
-    	}
+  			String retValue = component.getValueString();
+  			if(assertOnly == DO_NOT_ASSERT || Utils.isEqual_String(retValue, componentValue)){
+  				if(assertOnly == ASSERT_ONLY){
+  					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is equal to " + componentValue + ".");
+  				}else{
+  					getLogger().addInfo("Set component " + compNameForTheMessage + " to " + componentValue + ".");
+  				}
+  			}else{
+  				if(assertOnly == ASSERT_ONLY){
+  					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
+  				}else{
+      			retValue = component.getValueString();
+  					getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to '" + componentValue + "' value remained = '"+retValue+"'");
+  				}
+  			}
+  		}
     }
-    return error;
   }
   
   /**
