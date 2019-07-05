@@ -9,6 +9,7 @@ import org.xml.sax.Attributes;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.access.FocDataMap;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -19,6 +20,7 @@ import com.foc.desc.dataModelTree.DataModelNodeTree;
 import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.property.FProperty;
+import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.tree.FNode;
 import com.foc.tree.FTree;
@@ -1691,6 +1693,24 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		if(previousCentralPanel != null && previousCentralPanel.isPropertyChangeSuspended()) {
 			Globals.logString("Could not process innerLayout_Replace_Internal because PropertyChangeSuspended !!!");
 		} else {
+			//If the object added in this panel is created then we need to remove it before 
+			//making the panel disapear.
+			if(previousCentralPanel != null){
+				FocObject focObject = null;
+				IFocData  focData   = previousCentralPanel.getFocData();
+				if(focData instanceof FocDataMap) {
+					focData = ((FocDataMap) focData).getMainFocData();
+				}
+				if(focData instanceof FocObject) {
+				  focObject = (FocObject) focData;
+				}
+				if(focObject != null && focObject.isCreated()) {
+					FocList list = getTableOrTree() != null ? getTableOrTree().getFocList() : null;
+					if(list != null) {
+						list.remove(focObject);
+					}
+				}
+			}
 			if(getFocXMLLayout() != null && previousCentralPanel != null && previousCentralPanel instanceof FocXMLLayout){
 				getFocXMLLayout().childXMLLayoutArray_Remove((FocXMLLayout)previousCentralPanel);
 				previousCentralPanel.dispose();
@@ -1755,6 +1775,12 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				
 				FocObject focObj = (FocObject) previousCentralPanel.getFocData();
 				if(focObj != null){
+					if(focObj.isCreated()){
+						focObj.setDeleted(true);
+					}
+					innerLayout_Replace_Internal(centralPanel);
+					
+					/*
 					if(focObj.isCreated() && focObj.isEmpty()){
 						focObj.setDeleted(true);
 						innerLayout_Replace_Internal(centralPanel);
@@ -1772,6 +1798,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 						}
 						
 					}
+					*/
 				}				
 			}else{
 				innerLayout_Replace_Internal(centralPanel);
