@@ -176,7 +176,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			Globals.showNotification("Cannot Delete", checkDeletion.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);
 		}else{
 			newObject.setDeleted(true);
-			boolean error = !newObject.validate(true);
+			boolean error = !newObject.validate(false);
 			
 			if(!error){
 				super.table_DeleteItem(table, focObject);

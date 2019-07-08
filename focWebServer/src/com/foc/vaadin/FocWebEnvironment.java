@@ -121,8 +121,10 @@ public class FocWebEnvironment implements IFocEnvironment {
 
 				Window window = focCentralWindow.newWrapperWindow();
 				FocWebApplication.getInstanceForThread().addWindow(window);
-			}else{
-				navigationWindow.changeCentralPanelContent(centralPanel, true);
+			} else {
+				if (centralPanel != null) {
+					navigationWindow.changeCentralPanelContent(centralPanel, true);
+				}
 			}
 		}
 	}
