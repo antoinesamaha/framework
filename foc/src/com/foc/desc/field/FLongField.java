@@ -45,7 +45,8 @@ public class FLongField extends FField {
 
   public String getCreationString(String name) {
   	if(getProvider() == DBManager.PROVIDER_ORACLE){
-  		return " \"" + name + "\" LONG" ;//+ "(" + getSize() + ")";
+  		return " \"" + name + "\" NUMBER(38)";
+//  		return " \"" + name + "\" LONG" ;//+ "(" + getSize() + ")";
   	}else{
   		return " " + name + " LONG" ;//+ "(" + getSize() + ")";
   	}
