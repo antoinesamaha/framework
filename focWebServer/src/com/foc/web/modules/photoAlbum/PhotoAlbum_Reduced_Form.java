@@ -20,6 +20,9 @@ public class PhotoAlbum_Reduced_Form extends PhotoAlbum_Form {
 	@Override
 	public void dispose() {
 		super.dispose();
+		if (thumbForm != null) {
+			thumbForm.refresh();
+		}
 		thumbForm = null;
 	}
 	
