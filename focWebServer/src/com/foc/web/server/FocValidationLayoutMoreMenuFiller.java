@@ -33,7 +33,7 @@ public class FocValidationLayoutMoreMenuFiller implements IValidationLayoutMoreM
             if (key != null) {
               String storageName = key.getStorageName();
 
-              if (!storageName.contains("WF_LOG")) {
+              if (!storageName.contains("WF_LOG") && (validationLayout.getValidationSettings() != null && validationLayout.getValidationSettings().isWithLog())) {
                 validationLayout.addMoreItem("View Logs", new FVMenuBarCommand() {
                   public void menuSelected(MenuItem selectedItem) {
                     ILoggable iLoggable = (ILoggable) focObject;

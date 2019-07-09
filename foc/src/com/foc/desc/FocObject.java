@@ -2794,65 +2794,26 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   }
   
   public boolean delete(ReferenceChecker referenceCjeckerToIgnore) {
-    boolean succcess = !Globals.getApp().getDataSource().focObject_Delete(this, referenceCjeckerToIgnore);
-    
-    ArrayList<Integer> cloudStorageFields = getThisFocDesc().getCloudStorageFields(false);
-    
-    if(cloudStorageFields != null){
-    	for(int i=0; i<cloudStorageFields.size(); i++){
-    		FCloudStorageProperty csProp = (FCloudStorageProperty) getFocProperty(cloudStorageFields.get(i));
-    		
-    		if(csProp != null){
-    			csProp.deleteObject();
-    		}
-    	}
-    }
-    
-    return succcess;
-    /*
-    boolean succcess = canDelete(referenceCjeckerToIgnore);
-
-    FocDesc focDesc = getThisFocDesc();
-    if(succcess){
-      FocFieldEnum fieldsIterator = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
-      while (succcess && fieldsIterator.hasNext()) {
-        FField focField = (FField) fieldsIterator.next();
-  
-        if(focField.isDBResident() && focField instanceof FObjectField121){
-        	FObjectField121 field121  = (FObjectField121) focField;
-          FFieldPath      fieldPath = fieldsIterator.getFieldPath();
-          FObject121 obj = (FObject121) fieldPath.getPropertyFromObject(this);
-          if(obj.getLocalReferenceInt() > 0){
-          	succcess = obj.getObject_CreateIfNeeded().delete(field121.getReferenceCheckerAdater());
-          }
-        }
-      }
-    }
-
-    if(hasRealReference()){
-	    if(succcess){
-	    	FocFieldEnum fieldsIterator = focDesc.newFocFieldEnum(FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
-	      fieldsIterator.reverseOrder();
-	      while (fieldsIterator.hasNext()) {
-	        FListField focField = (FListField) fieldsIterator.next();
-	  
-	        if (focField.isDBResident() && focField.isDeleteListWhenMasterDeleted()) {
-	          FFieldPath fieldPath = fieldsIterator.getFieldPath();
-	          FList list = (FList) fieldPath.getPropertyFromObject(this);
-	          FocList focListToDelete = list.getList();
-	          focListToDelete.deleteFromDB();
-	        }
-	      }
+  	boolean succcess = true;
+  	
+  	if(getThisFocDesc().isJoin()) {
+  		//In this case we should not try to delete
+  	} else {
+	    succcess = !Globals.getApp().getDataSource().focObject_Delete(this, referenceCjeckerToIgnore);
+	    
+	    ArrayList<Integer> cloudStorageFields = getThisFocDesc().getCloudStorageFields(false);
+	    
+	    if(cloudStorageFields != null){
+	    	for(int i=0; i<cloudStorageFields.size(); i++){
+	    		FCloudStorageProperty csProp = (FCloudStorageProperty) getFocProperty(cloudStorageFields.get(i));
+	    		
+	    		if(csProp != null){
+	    			csProp.deleteObject();
+	    		}
+	    	}
 	    }
-    }
-    
-    if(succcess){
-      dbDelete(referenceCjeckerToIgnore);
-      fireEvent(FocEvent.ID_DELETE);      
-    }
-
+  	}
     return succcess;
-    */
   }
 
   public boolean load() {

@@ -6,14 +6,13 @@ import com.foc.SrvConst_ServerSide;
 import com.foc.admin.FocUser;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FDateField;
-import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FLongField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FReferenceField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
 

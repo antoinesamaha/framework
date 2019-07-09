@@ -102,7 +102,6 @@ public class FocWebEnvironment implements IFocEnvironment {
 	@Override
 	public void popup(FocObject focObject, boolean dialog) {
 		if(focObject != null){
-
 			/*
 	    Window localWindow = (Window) FocThreadLocal.getWindow();
 	    if(localWindow != null){
@@ -110,19 +109,19 @@ public class FocWebEnvironment implements IFocEnvironment {
 	    		localWindow = (Window) localWindow.getParent();
 	    	}
 			 */
-
 			INavigationWindow navigationWindow = (INavigationWindow) FocWebApplication.getInstanceForThread().getNavigationWindow();
-			XMLViewKey    key          = new XMLViewKey(focObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM, focObject.getThisFocDesc().focDesc_getGuiContext(), XMLViewKey.VIEW_DEFAULT);
+			XMLViewKey key = new XMLViewKey(focObject.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM, focObject.getThisFocDesc().focDesc_getGuiContext(), XMLViewKey.VIEW_DEFAULT);
 			ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((INavigationWindow) navigationWindow, key, focObject);
-			if(dialog){
-				FocCentralPanel focCentralWindow = new FocCentralPanel();
-				focCentralWindow.fill();
-				focCentralWindow.changeCentralPanelContent(centralPanel, false);
-
-				Window window = focCentralWindow.newWrapperWindow();
-				FocWebApplication.getInstanceForThread().addWindow(window);
-			}else{
-				navigationWindow.changeCentralPanelContent(centralPanel, true);
+			if (centralPanel != null) {
+				if (dialog) {
+					FocCentralPanel focCentralWindow = new FocCentralPanel();
+					focCentralWindow.fill();
+					focCentralWindow.changeCentralPanelContent(centralPanel, false);
+					Window window = focCentralWindow.newWrapperWindow();
+					FocWebApplication.getInstanceForThread().addWindow(window);
+				} else {
+					navigationWindow.changeCentralPanelContent(centralPanel, true);
+				}
 			}
 		}
 	}

@@ -42,13 +42,13 @@ public class WFLogJoin extends WFLog {
 	
 	@Override
 	public String logEvent_GetEntityCompanyName() {
-		return getCompany() != null ? getCompany().getName() : null;   
+		return getCompany() != null ? getCompany().getName() : "";   
 	}
 
 	@Override
 	public String logEvent_GetEntitySiteName() {
 		WFSite site = (WFSite) getPropertyObject("T-SITE");
-		String siteName = site != null ? site.getName() : null;   
+		String siteName = site != null ? site.getName() : "";   
 		return siteName;
 	}
 

@@ -254,6 +254,11 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     	enumer_KeyPlain.dispose();
     	enumer_KeyPlain = null;
     }
+    
+    if(descFocObjects != null) {
+    	descFocObjects.clear();
+    	descFocObjects = null;
+    }
   }
   
   public void dispose_MandatoryFieldsArray(){
@@ -2273,20 +2278,28 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   }	
   
   public ArrayList<FocObject> allFocObjectArray_get(){
-  	if(descFocObjects == null){
+  	return allFocObjectArray_get(false);
+  }
+  
+  private ArrayList<FocObject> allFocObjectArray_get(boolean createIfNeeded){
+  	if(createIfNeeded && descFocObjects == null && ConfigInfo.isKeepFocObjectArrayInFocDesc()){
   		descFocObjects = new ArrayList<FocObject>();
   	}
   	return descFocObjects;
   }
   
   public void allFocObjectArray_Add(FocObject focObj){
-  	ArrayList<FocObject> array = allFocObjectArray_get();
-  	array.add(focObj);
+  	ArrayList<FocObject> array = allFocObjectArray_get(true);
+  	if(array != null) {
+  		array.add(focObj);
+  	}
   }
 
   public void allFocObjectArray_Remove(FocObject focObj){
   	ArrayList<FocObject> array = allFocObjectArray_get();
-  	array.remove(focObj);
+  	if(array != null) {
+  		array.remove(focObj);
+  	}
   }
 
   public void allFocObjectArray_AdjustPropertyArray(){

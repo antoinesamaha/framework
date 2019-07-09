@@ -27,7 +27,6 @@ public class ActiveUser extends FocObject{
   
   public static final int VIEW_READ_ONLY = 2;  
   
-  
   public ActiveUser(FocConstructor constr) {
     super(constr);
     newFocProperties();

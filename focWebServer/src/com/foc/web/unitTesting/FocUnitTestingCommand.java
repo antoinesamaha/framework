@@ -44,6 +44,7 @@ import com.foc.vaadin.gui.layouts.FVForEachLayout.DeleteButtonForEach;
 import com.foc.vaadin.gui.layouts.FVForEachLayout.FVBannerLayout;
 import com.foc.vaadin.gui.layouts.FVMoreLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
+import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStageLayout_Button;
 import com.foc.vaadin.gui.layouts.validationLayout.FVStatusLayout_MenuBar;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
@@ -1023,6 +1024,28 @@ public class FocUnitTestingCommand {
     return referenceOfSelectedItem;
   }
 
+  public long table_AddOrSelect(String tableName, String propertyName, String propertyValue, boolean assertOnly) throws Exception {
+  	long ref = 0;
+  	if(assertOnly) {
+    	ref = table_Select(tableName, propertyName, propertyValue);
+  	}else{
+  		ref = table_Add(tableName);
+  	}
+  	
+  	return ref;
+  }
+  	
+  public long table_AddOrOpen(String tableName, String propertyName, String propertyValue, boolean assertOnly) throws Exception {
+  	long ref = 0;
+  	if(assertOnly) {
+    	ref = table_Open(tableName, propertyName, propertyValue);
+  	}else{
+  		ref = table_Add(tableName);
+  	}
+  	
+  	return ref;
+  }
+  
   /**
    * Simulates adding an item in an open table (right-click then Add). Also stores
    * the id of the created object in a variable.
@@ -1186,15 +1209,24 @@ public class FocUnitTestingCommand {
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
     FocXMLGuiComponent component  = findComponent(navigationLayout, componentName);
     
-    if(component != null && component.getDelegate() != null){
-	    boolean isComponentEditable = ((Component)component).isEnabled();
-	    
-	    if(isComponentEditable != assertEnabled){
-	    	String strg = assertEnabled ? " not Enabled" : " is Enabled";
-	    	getLogger().addFailure("Component '" + componentName + "' " + strg);
-	    }
+    component_AssertEnabled(component, componentName, assertEnabled);
+  }
+  
+  private void component_AssertEnabled(FocXMLGuiComponent component, String fieldNameForMessage, boolean assertEnabled) throws Exception {
+    //Editable
+    if(component != null && component instanceof Component){
+      Component componentToCheck = (Component) component;
+      if(componentToCheck instanceof FVWrapperLayout) {
+        componentToCheck = ((FVWrapperLayout)component).getFormField();
+      }
+      //If we are not in assertOnly this means the component has to be enabled
+      if(componentToCheck.isEnabled() != assertEnabled){
+        getLogger().addFailure("Component "+fieldNameForMessage+" enable status: "+componentToCheck.isEnabled()+" different then expected: "+assertEnabled);
+      } else {
+        getLogger().addInfo("Component "+fieldNameForMessage+" enable status: "+componentToCheck.isEnabled()+" as expected");
+      }
     }else{
-    	getLogger().addFailure("Faild to find component '" + componentName + "'");
+      getLogger().addFailure("Faild to check component "+fieldNameForMessage+" enabled because either null or not instanceof Component");
     }
   }
   
@@ -1231,7 +1263,7 @@ public class FocUnitTestingCommand {
     	navigationLayout = getCurrentCentralPanel();
     }
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
-   	setComponentValue(component, componentName, componentValue, isAssert);
+   	setComponentValue(component, componentName, componentValue, isAssert, null);
    	
    	if(nodeCreated) getLogger().closeNode();
   }
@@ -1284,63 +1316,70 @@ public class FocUnitTestingCommand {
     }
 	}
   
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, String priorityToCaptionProperty) throws Exception {
-  	return setComponentValue(component, compNameForTheMessage, componentValue, SET_VALUE_AND_ASSERT, priorityToCaptionProperty);
-  }
-  
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int isAssert) throws Exception {
-  	return setComponentValue(component, compNameForTheMessage, componentValue, isAssert, null);
-  }
-  
-  private boolean setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
-    boolean error = false;
-    if(component != null){
-    	if(component instanceof Component){
-    		if(!((Component)component).isEnabled()){
-    			getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to "+ componentValue + " because not enabled");
-    			error = true;
+  public void component_AssertVisible(String componentName, boolean visible) throws Exception {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if(component == null) {
+    	getLogger().addFailure("Component "+componentName+" not found");
+    } else {
+    	if(component instanceof Component) {
+    		Component comp = (Component) component;
+    		boolean compVisible = comp.isVisible();
+    		while(compVisible && comp != null) {
+    			comp = comp.getParent();
+    			if(comp != null) compVisible = comp.isVisible();
     		}
-    	}
-    	if(!error){
-    		if(component instanceof FVMultipleChoiceOptionGroupPopupView){
-    			if(assertOnly != ASSERT_ONLY){
-    				component.setValueString(componentValue);
-    			}
-    		}else if(component instanceof FVObjectPopupView){
-    			FVObjectPopupView choiceOptionGroupPopupView = (FVObjectPopupView) component;
-    			boolean value = priorityToCaptionProperty == null || priorityToCaptionProperty.equals("true") ? true : false;
-    			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
-    			component.setValueString(componentValue);
-    		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
-    			((FVObjectComboBox) component).setValue(null);
-					((FVObjectComboBox) component).setValueString(null);
-					componentValue = null;
-    		}else{
-    			if(assertOnly != ASSERT_ONLY){
-    				component.setValueString(componentValue);
-    			}
-
-    			String retValue = component.getValueString();
-    			if(assertOnly == DO_NOT_ASSERT || Utils.isEqual_String(retValue, componentValue)){
-    				if(assertOnly == ASSERT_ONLY){
-    					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is equal to " + componentValue + ".");
-    				}else{
-    					getLogger().addInfo("Set component " + compNameForTheMessage + " to " + componentValue + ".");
-    				}
-    			}else{
-    				error = true;
-    				if(assertOnly == ASSERT_ONLY){
-    					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
-    				}else{
-        			retValue = component.getValueString();
-
-    					getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to '" + componentValue + "' value remained = '"+retValue+"'");
-    				}
-    			}
-    		}
+    		
+        if(compVisible == visible){
+        	getLogger().addInfo("Component "+componentName+(visible ? " is Visible " : " is not Visible"));
+        }else{
+        	getLogger().addFailure("Component "+componentName+(visible ? " should be Visible " : " should not be Visible"));
+        }    		
     	}
     }
-    return error;
+	}
+    
+  private void setComponentValue(FocXMLGuiComponent component, String compNameForTheMessage, String componentValue, int assertOnly, String priorityToCaptionProperty) throws Exception {
+    if(component != null){
+      if(assertOnly != ASSERT_ONLY) {
+        component_AssertEnabled(component, compNameForTheMessage, true);
+      }
+      
+  		if(component instanceof FVMultipleChoiceOptionGroupPopupView){
+  			if(assertOnly != ASSERT_ONLY){
+  				component.setValueString(componentValue);
+  			}
+  		}else if(component instanceof FVObjectPopupView){
+  			FVObjectPopupView choiceOptionGroupPopupView = (FVObjectPopupView) component;
+  			boolean value = priorityToCaptionProperty == null || priorityToCaptionProperty.equals("true") ? true : false;
+  			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
+  			component.setValueString(componentValue);
+  		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
+  			((FVObjectComboBox) component).setValue(null);
+				((FVObjectComboBox) component).setValueString(null);
+				componentValue = null;
+  		}else{
+  			if(assertOnly != ASSERT_ONLY){
+  				component.setValueString(componentValue);
+  			}
+
+  			String retValue = component.getValueString();
+  			if(assertOnly == DO_NOT_ASSERT || Utils.isEqual_String(retValue, componentValue)){
+  				if(assertOnly == ASSERT_ONLY){
+  					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is equal to " + componentValue + ".");
+  				}else{
+  					getLogger().addInfo("Set component " + compNameForTheMessage + " to " + componentValue + ".");
+  				}
+  			}else{
+  				if(assertOnly == ASSERT_ONLY){
+  					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " = '" + retValue+ "' <> '"+ componentValue + "'");
+  				}else{
+      			retValue = component.getValueString();
+  					getLogger().addFailure("Failed to Set component " + compNameForTheMessage + " to '" + componentValue + "' value remained = '"+retValue+"'");
+  				}
+  			}
+  		}
+    }
   }
   
   /**
@@ -1377,17 +1416,41 @@ public class FocUnitTestingCommand {
     String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
-    	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
+    	setComponentValue(component, componentName, componentValue, SET_VALUE_AND_ASSERT, priorityToCaptionProperty);
     }
   }
-  
+
+  /**
+   * Simulates setting the value of a component in a table.
+   * 
+   * @param tableName
+   *          The name of the table.
+   * @param objRef
+   *          The reference of the object to change as an integer.
+   * @param fieldName
+   *          The name of the field.
+   * @param componentValue
+   *          The value to set in the field.
+   * @param assertOnly
+   *          Do not set the value, only assert that the value is equal to this
+   */
+  public void componentInTable_SetValue(String tableName, long objRef, String fieldName, String componentValue, boolean assertOnly) throws Exception {
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    if (component != null) {
+    	setComponentValue(component, componentName, componentValue, assertOnly ? ASSERT_ONLY : SET_VALUE_AND_ASSERT, null);
+    }
+  }
+
   public void componentInTable_SetValue_DoNotVerify(String tableName, long objRef, String fieldName, String componentValue) throws Exception {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
     String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
-    	setComponentValue(component, componentName, componentValue, DO_NOT_ASSERT);
+    	setComponentValue(component, componentName, componentValue, DO_NOT_ASSERT, null);
     }
   }
   
@@ -1399,24 +1462,31 @@ public class FocUnitTestingCommand {
 	  	setLayoutName(layoutName);
   	}
 
-    FocXMLLayout navigationLayout = getCurrentCentralPanel();
-
-    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
-    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
-    if (component != null) {
-    	setComponentValue(component, componentName, componentValue, priorityToCaptionProperty);
-    }
+  	componentInTable_SetValue(tableName, objRef, fieldName, componentValue, priorityToCaptionProperty);  	
     
     setLayoutName(originalLayout);
   }
-  
+
+  public void componentInTable_SetValue(String layoutName, String tableName, long objRef, String fieldName, String componentValue, boolean assertOnly) throws Exception {
+  	String originalLayout = null;
+  	originalLayout = getLayoutName();
+  	
+  	if(!Utils.isStringEmpty(layoutName)) {
+	  	setLayoutName(layoutName);
+  	}
+
+  	componentInTable_SetValue(tableName, objRef, fieldName, componentValue, assertOnly);  	
+    
+    setLayoutName(originalLayout);
+  }
+
   public void componentInTable_AssertValue(String tableName, long objRef, String fieldName, String componentValue) throws Exception {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
 
     String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
     FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
     if (component != null) {
-    	setComponentValue(component, componentName, componentValue, ASSERT_ONLY);
+    	setComponentValue(component, componentName, componentValue, ASSERT_ONLY, null);
     }
   }
   
@@ -1677,7 +1747,7 @@ public class FocUnitTestingCommand {
     if (forEachLayout != null) {
       FocXMLGuiComponent component = bannerFindLineByReferenceComponentByName(bannerLayoutName, componentName, objRef);
       if (component != null) {
-      	setComponentValue(component, componentName, componentValue, null);
+      	setComponentValue(component, componentName, componentValue, SET_VALUE_AND_ASSERT, null);
       } else {
         getLogger().addFailure("Component " + componentName + " not found in banner layout.");
       }
@@ -1706,7 +1776,7 @@ public class FocUnitTestingCommand {
     if (forEachLayout != null) {
       FocXMLGuiComponent component = bannerFindLineByIndexComponentByName(bannerLayoutName, componentName, index);
       if (component != null) {
-      	setComponentValue(component, componentName, componentValue, IsAssert ? ASSERT_ONLY : SET_VALUE_AND_ASSERT);
+      	setComponentValue(component, componentName, componentValue, IsAssert ? ASSERT_ONLY : SET_VALUE_AND_ASSERT, null);
       } else {
         getLogger().addFailure("Component " + componentName + " not found in banner layout.");
       }

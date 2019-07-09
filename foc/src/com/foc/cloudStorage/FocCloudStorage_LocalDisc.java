@@ -1,5 +1,6 @@
 package com.foc.cloudStorage;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,8 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import com.foc.Application;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.api.IFocFileEncryptor;
+import com.foc.util.FocFileUtil;
 
 public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 
@@ -77,7 +81,56 @@ public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 			}
 		}
 	}
+	
+	//FILE_ENCRYPTION
+	/*
+	@Override
+	public void uploadInputStream(String key, InputStream stream) throws FocCloudStorageException {
+		OutputStream outputStream = null;
+	 
+		try {
+			String fileName = getFileName(key); 
+			if(fileName != null){
+//				//TO REMOVE
+//				DEBUG++;
+//				fileName = fileName.replace(".xlsx", DEBUG+".xlsx");
+//				//TO REMOVE
+				File theFile = new File(fileName);
+				if(!theFile.isDirectory()){
+					createDirectory(fileName);				
+					outputStream = new FileOutputStream(fileName);
+					
+					byte[] allBytes = FocFileUtil.inputStreamToByteArray(stream);
+					
+					//Encryption
+					Application app = Globals.getApp();
+					IFocFileEncryptor encryptor =  (app != null) ? app.getFileEncryptor() : null;
+					if(encryptor != null) {
+						allBytes = encryptor.encrypt(1, allBytes);
+					}
+					//----------
+					
+					if(outputStream != null && allBytes != null) outputStream.write(allBytes);
+				}else{
+					Globals.showNotification("Error uploading", "File name not specified, could not upload", IFocEnvironment.TYPE_ERROR_MESSAGE);
+				}
+			}else{
+				Globals.showNotification("Error uploading", "File name not specified, could not upload", IFocEnvironment.TYPE_ERROR_MESSAGE);
+			}
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
 
+		if (outputStream != null) {
+			try {
+				outputStream.close();
+			} catch (IOException e) {
+				Globals.logException(e);
+			}
+		}
+	}
+	*/
+	
 	private File newDirectory(String fileName){
 		File dirFile = null;
 		int lastIdx = fileName.lastIndexOf('/');
@@ -113,6 +166,21 @@ public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 				if(file.isFile()){
 					inputStream = new FileInputStream(file);
 				}
+				
+				/*
+				//FILE_ENCRYPTION
+				Application app = Globals.getApp();
+				IFocFileEncryptor encryptor =  (app != null) ? app.getFileEncryptor() : null;
+				if(encryptor != null) {
+					byte[] allBytes = FocFileUtil.inputStreamToByteArray(inputStream);
+					inputStream.close();
+					
+					allBytes = encryptor.decrypt(1, allBytes);
+					
+					inputStream = new ByteArrayInputStream(allBytes);
+				}
+				//----------
+				*/
 			}
 		}catch(Exception e){
 			Globals.logException(e);

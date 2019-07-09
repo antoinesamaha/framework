@@ -50,38 +50,41 @@ public class ConfigInfo {
   private static int guiNavigatorHeight = 0;
   private static int fontSize = 14;
 
-  private static String  dataModelFileName    = null;
-  private static String  helpURL              = null;
-  private static String  logDir               = null;
-  private static boolean rtl                  = false;
-  private static String  language             = null;
-	private static boolean logDetails           = false;
-  private static boolean logDebug             = false;
-  private static boolean logConsoleActive     = true;
-  private static boolean logDBRequest         = true;
-  private static boolean logDBSelect          = true;
-  private static boolean logFileActive        = false;
-  private static boolean logMemoryUsage       = false;
-  private static boolean logFileWithTime      = false;
-  private static boolean unitDevMode          = true;
-  private static boolean devMode              = false;
-  private static boolean contextHelpActive    = false;
-  private static boolean unitAllowed          = false;
-  private static boolean popupExceptionDialog = false;  
-  private static boolean showStatusColumn     = false;
-  private static boolean performanceActive    = false;
-  private static boolean withLicenseBooking   = true;
-  private static boolean showFullScreenButton = false;
-  private static boolean showSignatureButton  = true;
-  private static String  codeProjectPath      = null;
-  private static String  focDataServletURL    = null;
-  private static String  focWebServerClassName = null;
-  private static boolean adaptDataModelAtStartup = true;
-  private static boolean adaptEnabled            = true;
-  private static boolean adaptIndexesEnabled     = true;
-  private static boolean adaptConstraints        = true;
-  private static String  cloudStorageClassName = null;
-  private static String  logListenerClassName = null;
+  private static String  dataModelFileName           = null;
+  private static String  helpURL                     = null;
+  private static String  logDir                      = null;
+  private static boolean rtl                         = false;
+  private static String  language                    = null;
+	private static boolean logDetails                  = false;
+  private static boolean logDebug                    = false;
+  private static boolean logConsoleActive            = true;
+  private static boolean logDBRequest                = true;
+  private static boolean logDBSelect                 = true;
+  private static boolean logFileActive               = false;
+  private static boolean logMemoryUsage              = false;
+  private static boolean logFileWithTime             = false;
+  private static boolean unitDevMode                 = true;
+  private static boolean devMode                     = false;
+  private static boolean contextHelpActive           = false;
+  private static boolean unitAllowed                 = false;
+  private static boolean popupExceptionDialog        = false;  
+  private static boolean showStatusColumn            = false;
+  private static boolean performanceActive           = false;
+  private static boolean withLicenseBooking          = true;
+  private static boolean showFullScreenButton        = false;
+  private static boolean showSignatureButton         = true;
+  private static String  codeProjectPath             = null;
+  private static String  focDataServletURL           = null;
+  private static String  focWebServerClassName       = null;
+  private static boolean adaptDataModelAtStartup     = true;
+  private static boolean adaptEnabled                = true;
+  private static boolean adaptIndexesEnabled         = true;
+  private static boolean adaptConstraints            = true;
+  private static String  cloudStorageClassName       = null;
+  private static String  logListenerClassName        = null;
+  private static String  fileEncryptionClassName     = null;
+  private static boolean keepFocObjectArrayInFocDesc = false;
+  
   private static boolean logListeningEnabled = false;  
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
@@ -227,6 +230,12 @@ public class ConfigInfo {
         }
         setCloudStorageClassName(cloudClassName);
 
+        //FILE_ENCRYPTION
+        /*
+        String fileEncryptionClassName = getProperty("fileEncryptionClass");
+        setFileEncryptionClassName(fileEncryptionClassName);
+        */
+
         String logListenerClassName = getProperty("logListenerClassName");
         setLogListenerClassName(logListenerClassName);
         
@@ -342,6 +351,9 @@ public class ConfigInfo {
   
         str = getProperty("gui.rtl");
         rtl = str != null ? str.compareTo("1") == 0 : false;
+        
+        str = getProperty("keepFocObjectArrayInFocDesc");
+        keepFocObjectArrayInFocDesc = str != null ? str.compareTo("1") == 0 : false;
         
         language = getProperty("gui.language");
         
@@ -753,5 +765,24 @@ public class ConfigInfo {
 
 	public static int getUploadMaxSize() {
 		return uploadMaxSize;
+	}
+
+	//FILE_ENCRYPTION
+	/*
+	public static String getFileEncryptionClassName() {
+		return fileEncryptionClassName;
+	}
+
+	public static void setFileEncryptionClassName(String fileEncryptionClassName) {
+		ConfigInfo.fileEncryptionClassName = fileEncryptionClassName;
+	}
+	*/
+
+	public static boolean isKeepFocObjectArrayInFocDesc() {
+		return keepFocObjectArrayInFocDesc;
+	}
+
+	public static void setKeepFocObjectArrayInFocDesc(boolean keepFocObjectArrayInFocDesc) {
+		ConfigInfo.keepFocObjectArrayInFocDesc = keepFocObjectArrayInFocDesc;
 	}
 }
