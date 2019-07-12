@@ -85,7 +85,9 @@ public class FocNotificationManager {
     if(eventNotifierList != null){
       for (int i = 0; i < eventNotifierList.size(); i++) {
         FNotifTrigger notifier = (FNotifTrigger) eventNotifierList.getFocObject(i);
-        notifier.executeIfSameEvent(eventFired);
+        if(notifier != null) {
+        	notifier.executeIfSameEvent(eventFired);
+        }
       }
     }
   }
