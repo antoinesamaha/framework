@@ -775,6 +775,8 @@ public class FocDataSource_DB implements IFocDataSource {
 	  	}catch(Exception e){
 	  		Globals.logException(e);
 	  	}
+	  	newFocObject.dispose();
+	  	update.dispose();
   	}
   	
   	refCheck.dispose_Content();
