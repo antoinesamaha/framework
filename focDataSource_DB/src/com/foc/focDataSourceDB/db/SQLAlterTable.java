@@ -79,7 +79,18 @@ public class SQLAlterTable extends SQLRequest {
         	if(fieldToAlter instanceof FReferenceField){
         		request.append(((FReferenceField)fieldToAlter).getCreationString(focDesc.getProvider(), fieldToAlterName));
         	}else{
+        		//Oracle CLOB needs
+        		boolean oracleCLOB = 		focDesc.getProvider() == DBManager.PROVIDER_ORACLE 
+								            		&& 	fieldToAlter instanceof FStringField
+								            		&&  ((FStringField) fieldToAlter).isClob();
+        		if(oracleCLOB) request.append(" (");
+        		//-----------------
+        		
         		request.append(fieldToAlter.getCreationString(fieldToAlterName));
+        		
+        		//Oracle CLOB needs
+            if(oracleCLOB) request.append(") LOB(\"+name+\") STORE AS SECUREFILE ");
+            //-----------------
         	}
           if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider()!= DBManager.PROVIDER_MSSQL){
             request.append(" NOT NULL ");

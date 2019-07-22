@@ -8,6 +8,8 @@ import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocFieldEnum;
 import com.foc.desc.field.FField;
+import com.foc.desc.field.FStringField;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -30,17 +32,25 @@ public class SQLCreateTable extends SQLRequest {
 
       boolean firstField = true;
       boolean addPrimaryKeyConstraints = false;
+      String  fieldNames_LobNeedEndDeclaration = null;
 
       FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_DB);
       while (enumer.hasNext()) {
         FField focField = (FField) enumer.next();
         if (focField != null) {
           if (!firstField) request.append(",");
-//          if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_MSSQL){
-//          	request.append("["+focField.getCreationString(enumer.getFieldCompleteName(focDesc))+"]");
-//          }else{
-          	request.append(focField.getCreationString(enumer.getFieldCompleteName(focDesc)));
-//          }
+          request.append(focField.getCreationString(enumer.getFieldCompleteName(focDesc)));
+          
+          //Needed for Oracle CLOB fields only
+          //----------------------------------
+          if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE 
+          		&& 	focField instanceof FStringField
+          		&&  ((FStringField) focField).isClob()) {
+          	if(fieldNames_LobNeedEndDeclaration != null) fieldNames_LobNeedEndDeclaration += ",";
+          	else fieldNames_LobNeedEndDeclaration = "";
+         		fieldNames_LobNeedEndDeclaration += "\""+focField.getDBName()+"\"";  
+          }
+          //----------------------------------
           
           if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider() != DBManager.PROVIDER_MSSQL){
             request.append(" NOT NULL ");
@@ -66,6 +76,12 @@ public class SQLCreateTable extends SQLRequest {
       	}
       }
       request.append(")");
+      
+      if(!Utils.isStringEmpty(fieldNames_LobNeedEndDeclaration)) {
+      	request.append(" LOB(");
+      	request.append(fieldNames_LobNeedEndDeclaration);
+      	request.append(") STORE AS SECUREFILE");
+      }
     }
     return false;
   }

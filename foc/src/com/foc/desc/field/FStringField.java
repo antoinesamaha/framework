@@ -60,14 +60,13 @@ public class FStringField extends FField {
   public String getCreationString(String name) {
     if (getProvider()== DBManager.PROVIDER_ORACLE){
     	if(isClob()) {
-    		//return " \"" + name + "\" CLOB ";
-    		return " (\"" + name + "\" CLOB) LOB(\""+name+"\") STORE AS SECUREFILE ";
-//    		add(TESTCLOB CLOB) LOB(TESTCLOB) STORE AS SECUREFILE;
+    		return " \"" + name + "\" CLOB ";
+    		//return " (\"" + name + "\" CLOB) LOB(\""+name+"\") STORE AS SECUREFILE ";
     	} else {
     		return " \"" + name + "\" VARCHAR2" + "(" + getSize() + ") ";
     	}
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
-    	if(isClob()) {
+    	if(isClob()) { 
     		return " [" + name + "] [ntext] ";
     	} else {
     		return " [" + name + "] [nvarchar]" + "(" + getSize() + ") ";
