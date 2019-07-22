@@ -17,7 +17,7 @@
 		<attribute name="tarDir" default="NOT_SET"/>
 		<element name="justdoit" implicit="yes"/>
 		<sequential>
-			<javac srcdir="${focVaadinTheme.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" >
+			<javac srcdir="${focVaadinTheme.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" encoding="UTF-8" >
 				<classpath>
 					<pathelement path="${java.class.path}/"/>
 				  <pathelement path="${vaadinJAR1}"/>
