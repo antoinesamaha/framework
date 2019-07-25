@@ -13,7 +13,7 @@ public class FValidationSettings {
   public boolean withSave          = true;
   public boolean withDiscard       = false;
   public boolean withPrint         = false;
-  public boolean withLog           = false;
+  public boolean withLog           = true;
   public boolean withPrintAndExit  = false;
   public boolean withAttach        = true;
   public boolean withEmail         = false;
