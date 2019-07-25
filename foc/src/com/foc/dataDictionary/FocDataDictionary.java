@@ -191,7 +191,7 @@ public class FocDataDictionary implements IFocDataDictionary {
 						FDate prop = (FDate) focData.iFocData_getDataByPath(dataPath);
 						if (prop != null) {
 							Date date = (Date) prop.getDate();							
-							SimpleDateFormat RTL_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd");
+							SimpleDateFormat RTL_DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 							String rtl = "\u200F";
 							String ltre = "\u202A";
 							String df = "\u202C";							
