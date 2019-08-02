@@ -583,7 +583,14 @@ public class FocDataSource_DB implements IFocDataSource {
 			  if(refToBeReloaded > 0) {//ForIncremental only
 	      	String fldName = focDesc.getRefFieldName();
 	      	if(!Utils.isStringEmpty(fldName)) {
-		      	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ;
+						if (focDesc.getProvider() == DBManager.PROVIDER_MSSQL) {
+							if (fldName.contains(".")) {
+								int dotIndex = fldName.indexOf(".");
+								fldName = fldName.substring(0, dotIndex + 1) + "[" + fldName.substring(dotIndex + 1) + "]";
+							} else {
+								fldName = "[" + fldName + "]";
+							}
+						}
 		      	fldName = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fldName);
 //		      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())) fldName = "\""+fldName+"\"" ;
 				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded));
