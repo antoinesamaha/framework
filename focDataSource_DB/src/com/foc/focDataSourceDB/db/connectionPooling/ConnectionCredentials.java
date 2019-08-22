@@ -1,10 +1,14 @@
 package com.foc.focDataSourceDB.db.connectionPooling;
 
+import java.nio.charset.Charset;
+import java.util.Base64;
 import java.util.StringTokenizer;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.api.IFocEncryptor;
 import com.foc.db.DBManager;
+import com.foc.util.Utils;
 
 public class ConnectionCredentials {
 	private String dbSourceKey = null;
@@ -146,7 +150,14 @@ public class ConnectionCredentials {
 	}
 
 	public String getPassword() {
-		return password;
+		String returnedPassword = null;
+		if(password == null) {
+			returnedPassword = decrypt(xpassword);
+		} else {
+			returnedPassword = password;
+			Globals.logString("PWD:["+encrypt(returnedPassword)+"]");
+		}
+		return returnedPassword;
 	}
 
 	public String getXpassword() {
@@ -180,5 +191,37 @@ public class ConnectionCredentials {
 
 	public void setXpassword(String xpassword) {
 		this.xpassword = xpassword;
+	}
+
+	private String decrypt(String str) {
+		String b2Str = null;
+		IFocEncryptor fileEncryptor = Globals.getApp().getEncryptor();
+		if(fileEncryptor != null) {
+			byte[] b = str.getBytes(Charset.forName("UTF-8"));
+			try {
+				b = Base64.getDecoder().decode(b);
+				byte[] b2 = fileEncryptor.decrypt(-1, b);
+				b2Str = new String(b2, Charset.forName("UTF-8"));
+			} catch (Exception e) {
+				Globals.logException(e);
+			}
+		}
+		return b2Str;
+	}
+
+	private String encrypt(String str) {
+		String b2Str = null;
+		IFocEncryptor fileEncryptor = Globals.getApp().getEncryptor();
+		if(fileEncryptor != null) {
+			byte[] b = str.getBytes(Charset.forName("UTF-8"));
+			try {
+				byte[] b2 = fileEncryptor.encrypt(-1, b);
+				b2 = Base64.getEncoder().encode(b2);
+				b2Str = new String(b2, Charset.forName("UTF-8"));
+			} catch (Exception e) {
+				Globals.logException(e);
+			}
+		}
+		return b2Str;
 	}
 }

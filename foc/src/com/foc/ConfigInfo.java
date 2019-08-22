@@ -82,7 +82,7 @@ public class ConfigInfo {
   private static boolean adaptConstraints            = true;
   private static String  cloudStorageClassName       = null;
   private static String  logListenerClassName        = null;
-  private static String  fileEncryptionClassName     = null;
+  private static String  encryptionClassName         = null;
   private static boolean keepFocObjectArrayInFocDesc = false;
   
   private static boolean logListeningEnabled = false;  
@@ -231,10 +231,8 @@ public class ConfigInfo {
         setCloudStorageClassName(cloudClassName);
 
         //FILE_ENCRYPTION
-        /*
-        String fileEncryptionClassName = getProperty("fileEncryptionClass");
-        setFileEncryptionClassName(fileEncryptionClassName);
-        */
+        String encryptionClassName = getProperty("encryptionClass");
+        setEncryptionClassName(encryptionClassName);
 
         String logListenerClassName = getProperty("logListenerClassName");
         setLogListenerClassName(logListenerClassName);
@@ -768,15 +766,13 @@ public class ConfigInfo {
 	}
 
 	//FILE_ENCRYPTION
-	/*
-	public static String getFileEncryptionClassName() {
-		return fileEncryptionClassName;
+	public static String getEncryptionClassName() {
+		return encryptionClassName;
 	}
 
-	public static void setFileEncryptionClassName(String fileEncryptionClassName) {
-		ConfigInfo.fileEncryptionClassName = fileEncryptionClassName;
+	public static void setEncryptionClassName(String encryptionClassName) {
+		ConfigInfo.encryptionClassName = encryptionClassName;
 	}
-	*/
 
 	public static boolean isKeepFocObjectArrayInFocDesc() {
 		return keepFocObjectArrayInFocDesc;
