@@ -11,7 +11,7 @@ import java.io.OutputStream;
 import com.foc.Application;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
-import com.foc.api.IFocFileEncryptor;
+import com.foc.api.IFocEncryptor;
 import com.foc.util.FocFileUtil;
 
 public class FocCloudStorage_LocalDisc implements IFocCloudStorage {

@@ -50,7 +50,7 @@ import com.foc.admin.FocUserGuiDetailsPanel;
 import com.foc.admin.FocVersion;
 import com.foc.admin.RightsByLevel;
 import com.foc.admin.UserSession;
-import com.foc.api.IFocFileEncryptor;
+import com.foc.api.IFocEncryptor;
 import com.foc.business.BusinessModule;
 import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
@@ -168,7 +168,7 @@ public class Application {
   private FocLogListener logListener = null;
   
   //FILE_ENCRYPTION
-  //private IFocFileEncryptor iFocFileEncryptor = null;
+  private IFocEncryptor iFocEncryptor = null;
   
   public static final int LOGIN_WAITING = 1;
   public static final int LOGIN_VALID   = 2;
@@ -269,8 +269,11 @@ public class Application {
 			blobStorageFolderPrefix = "foc";
 		}
 		setCloudStorageDirectory(blobStorageFolderPrefix+"."+ConfigInfo.getJdbcSchema());
-    
+
     menuSettings = new FocMenuSettings();
+    
+    //FILE_ENCRYPTION
+    setFocEncryptionIfConfigured();
   }
   
   public FocMenuSettings getFocMenuSettings(){
@@ -1164,8 +1167,6 @@ public class Application {
       module.afterApplicationEntry();
     }
     
-    //FILE_ENCRYPTION
-    //setFocFileEncryptionIfConfigured();
   }
   
   public void reconstructMenu(){
@@ -2214,27 +2215,26 @@ public class Application {
 	}
 	
   //FILE_ENCRYPTION
-	/*
-	public IFocFileEncryptor getFileEncryptor() {
-		return iFocFileEncryptor;
+	public IFocEncryptor getEncryptor() {
+		return iFocEncryptor;
 	}
 
-	public void setFileEncryptor(IFocFileEncryptor iFocFileEncryprtion) {
-		this.iFocFileEncryptor = iFocFileEncryprtion;
+	public void setEncryptor(IFocEncryptor iFocEncryprtion) {
+		this.iFocEncryptor = iFocEncryprtion;
 	}
 	
-	public void setFocFileEncryptionIfConfigured() {
-		String ecryptionClassName = ConfigInfo.getFileEncryptionClassName();
+	public void setFocEncryptionIfConfigured() {
+		String ecryptionClassName = ConfigInfo.getEncryptionClassName();
 		Globals.logString("-FocEncryptionClassName : ConfigInfo.EncryptionClassName = "+ecryptionClassName+".");
 		if(!Utils.isStringEmpty(ecryptionClassName)) {
 			try{
-				Class<IFocFileEncryptor> cls = (Class<IFocFileEncryptor>) Class.forName(ecryptionClassName);
+				Class<IFocEncryptor> cls = (Class<IFocEncryptor>) Class.forName(ecryptionClassName);
 				Class[] param = new Class[0];
 				Constructor constr = cls.getConstructor(param);
 				
 				Object[] argsNew = new Object[0];
 				Object createdObject = constr.newInstance(argsNew);
-				setFileEncryptor((IFocFileEncryptor) createdObject);
+				setEncryptor((IFocEncryptor) createdObject);
 			}catch(Exception e){
 				Globals.logException(e);
 				String message = "!! ERROR: IFocFileEncryptor: Could not Instanciate Log Listener Class named: "+ecryptionClassName;
@@ -2242,6 +2242,5 @@ public class Application {
 			}
 		}
 	}
-	*/
 	
 }
