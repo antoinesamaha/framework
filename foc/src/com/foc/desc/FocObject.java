@@ -1235,6 +1235,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return getPropertyInteger(fieldID);
   }
   
+  public void setPropertyMultiChoice(String fieldName, int value){
+  	FField field = getThisFocDesc().getFieldByName(fieldName);
+  	if(field != null){
+  		setPropertyMultiChoice(field.getID(), value);
+  	}
+  }
+
   public void setPropertyMultiChoice(int fieldID, int choice){
   	setPropertyInteger(fieldID, choice);
   }
