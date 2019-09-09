@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -187,18 +188,31 @@ public class DBManagerServer {
   public Hashtable newAllRealTables(){
     Hashtable<String, String> tables = new Hashtable<String, String>();
     try {
-      DatabaseMetaData dmt = getConnection().getMetaData();
-      Globals.logString(dmt.getTimeDateFunctions());
-      if (dmt != null) {
-        ResultSet resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
-        if (resultSet != null) {
-          while (resultSet.next()) {
-            String tableName = resultSet.getString(3);
-            tables.put(tableName, tableName);
-          }
-          resultSet.close();
-        }
-      }
+    	if (Globals.getDBManager() != null && Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
+    		//The JDBC way can be very slow on Oracle especially 12c with JDBC 8
+    		if(Globals.getApp() != null && Globals.getApp().getDataSource() != null) {
+	    		ArrayList<String> tablesArrayList = Globals.getApp().getDataSource().command_SelectRequest(new StringBuffer("SELECT table_name FROM all_tables"));
+	    		if(tablesArrayList != null) {
+		    		for(int i=0; i<tablesArrayList.size(); i++) {
+		    			String tableName = tablesArrayList.get(i);
+		    			tables.put(tableName, tableName);
+		    		}
+	    		}
+    		}
+    	} else {
+	      DatabaseMetaData dmt = getConnection().getMetaData();
+	      Globals.logString(dmt.getTimeDateFunctions());
+	      if (dmt != null) {
+	        ResultSet resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
+	        if (resultSet != null) {
+	          while (resultSet.next()) {
+	            String tableName = resultSet.getString(3);
+	            tables.put(tableName, tableName);
+	          }
+	          resultSet.close();
+	        }
+	      }
+    	}
     } catch (Exception e) {
       Globals.logException(e);
     }
