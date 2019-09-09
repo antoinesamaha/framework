@@ -81,6 +81,8 @@ public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiCompon
 	      setComponentAlignment(this.caption, Alignment.MIDDLE_RIGHT);
 	      addComponent((Component) field);
 	      setComponentAlignment((Component) field, Alignment.MIDDLE_LEFT);
+	      setSpacing(true);
+	      FocXMLGuiComponentStatic.applyStyle(this.caption, "f12,bold,text-right");
 	    }
 	    
 	    FocXMLGuiComponentStatic.applyStyle(caption, attributes.getValue(FXML.ATT_CAPTION_STYLE));
