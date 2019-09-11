@@ -160,11 +160,11 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
       	String descPart = cond.buildDescriptionText(this);
       	if(!Utils.isStringEmpty(descPart)){
       		if(description.length() > 0){
-      			if(ConfigInfo.isArabic()){
+      			//if(ConfigInfo.isArabic()){
       				description = description + " | ";
-      			}else{
-      				description = " | " + description ;
-      			}
+      			//}else{
+      				//description = " | " + description ;
+      			//}
       		}
       		description = description + descPart;
       	}
