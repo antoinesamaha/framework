@@ -15,12 +15,17 @@
  ******************************************************************************/
 package com.foc.desc.parsers.filter;
 
+import java.util.HashMap;
+
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
+import com.foc.Globals;
 import com.foc.annotations.model.FocFilterCondition;
 import com.foc.desc.parsers.xml.FXMLDesc;
 import com.foc.desc.parsers.xml.XMLFocDescParser;
 import com.foc.list.filter.FocListFilter;
+import com.foc.util.Utils;
 
 public class ParsedFilterCondition {
 	private String  fieldPath       = null;
@@ -28,11 +33,14 @@ public class ParsedFilterCondition {
 	private String  caption         = null;
 	private String  captionProperty = null;
 	private int     level           = FocListFilter.LEVEL_DATABASE;
+	
+	private HashMap<String, String> captionLanguageMap = null;
 
 	public ParsedFilterCondition(FocFilterCondition filterCondAnnotation){
 		this.fieldPath = filterCondAnnotation.fieldPath();
 		this.prefix = filterCondAnnotation.prefix();
 		this.caption = filterCondAnnotation.caption();
+		buildCaptionLanguageMap();
 		this.captionProperty = filterCondAnnotation.captionProperty();
 		this.level = filterCondAnnotation.level();
 	}
@@ -41,6 +49,7 @@ public class ParsedFilterCondition {
 		this.fieldPath = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_ON_FIELD);
 		this.prefix = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_CONDITION_PREFIX);
 		this.caption = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_CONDITION_CAPTION);
+		buildCaptionLanguageMap();
 		this.captionProperty = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_CONDITION_CAPTION_PROPERTY);
 		this.level = FocListFilter.LEVEL_DATABASE;
 		String levelStr = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_LEVEL);
@@ -52,6 +61,29 @@ public class ParsedFilterCondition {
 			this.level = FocListFilter.LEVEL_DATABASE_AND_MEMORY;
 		}			
 	}
+	
+	public void buildCaptionLanguageMap() {
+		try {
+			if(!Utils.isStringEmpty(caption) && caption.startsWith("LANG{")) {
+				String inner = caption.substring(5, caption.length()-1);
+
+				while(inner.length() > 5) {
+					String lang = inner.substring(0, 2);
+					int endCrochet = inner.indexOf("]");
+					String content = inner.substring(4, endCrochet);
+					if(captionLanguageMap == null) captionLanguageMap = new HashMap<String, String>();
+					captionLanguageMap.put(lang, content);
+					if(inner.length() > endCrochet+1) {
+						inner = inner.substring(endCrochet+1);
+					} else {
+						inner="";
+					}
+				}				
+	 		}
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
+	}
 
 	public String getFieldPath() {
 		return fieldPath;
@@ -62,7 +94,13 @@ public class ParsedFilterCondition {
 	}
 
 	public String getCaption() {
-		return caption;
+		String ret = caption;
+		if(captionLanguageMap != null) {
+			String lang = ConfigInfo.getLanguage();
+			if(lang == null) lang = "en";
+			ret = captionLanguageMap.get(lang);
+		}
+		return ret;
 	}
 
 	public String getCaptionProperty() {
