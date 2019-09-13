@@ -27,6 +27,7 @@ public class WFStageDesc extends FocDesc {
 	public static final int FLD_NAME        = FField.FLD_NAME;
 	public static final int FLD_DESCRIPTION = FField.FLD_DESCRIPTION;
 	public static final int FLD_IS_APPROVAL = 1;
+	public static final int FLD_IS_CLOSE    = 2;
 	
 	public static final String DB_TABLE_NAME = "WF_STAGE";
   
@@ -41,6 +42,9 @@ public class WFStageDesc extends FocDesc {
 		addDescriptionField();
 		
 		FBoolField bFld = new FBoolField("IS_APPROVAL", "In Approval", FLD_IS_APPROVAL, false);
+		addField(bFld);
+		
+		bFld = new FBoolField("IS_CLOSE", "Is CLose", FLD_IS_CLOSE, false);
 		addField(bFld);
   }
 	
