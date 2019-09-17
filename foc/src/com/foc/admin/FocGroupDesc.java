@@ -88,6 +88,8 @@ public class FocGroupDesc extends FocDesc{
   
   public static final String DB_TABLE_NAME = "FGROUP";
   
+  public static final String FNAME_GUEST_APPLICABLE = "GUEST_APPLICABLE";
+  
   private static FocLinkOne2One link_AppGroup = null;
   
   public FocLinkOne2One getLink_AppGroup(){
@@ -135,7 +137,7 @@ public class FocGroupDesc extends FocDesc{
     focFld = new FBoolField("ALLOW_EXPORT", "Allow Export", FLD_ALLOW_EXPORT, false);
     addField(focFld);
     
-    focFld = new FBoolField("GUEST_APPLICABLE", "Guest Applicable", FLD_GUEST_APPLICABLE, false);
+    focFld = new FBoolField(FNAME_GUEST_APPLICABLE, "Guest Applicable", FLD_GUEST_APPLICABLE, false);
     addField(focFld);
     
     if(getLink_AppGroup() != null){

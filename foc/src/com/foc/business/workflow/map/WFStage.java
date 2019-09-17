@@ -28,4 +28,8 @@ public class WFStage extends FocObject {
 	public boolean isApprovalStage(){
 		return getPropertyBoolean(WFStageDesc.FLD_IS_APPROVAL);
 	}
+	
+	public boolean isCloseStage(){
+		return getPropertyBoolean(WFStageDesc.FLD_IS_CLOSE);
+	}
 }
