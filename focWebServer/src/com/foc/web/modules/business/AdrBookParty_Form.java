@@ -15,20 +15,32 @@
  ******************************************************************************/
 package com.foc.web.modules.business;
 
-import com.vaadin.data.Container.Filter;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.OptionDialog;
+import com.foc.access.FocDataConstant;
+import com.foc.access.FocDataMap;
+import com.foc.admin.FocGroup;
+import com.foc.admin.FocUser;
+import com.foc.admin.FocUserDesc;
 import com.foc.business.adrBook.AdrBookParty;
 import com.foc.business.adrBook.AdrBookPartyDesc;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.adrBook.ContactDesc;
 import com.foc.business.config.BusinessConfig;
+import com.foc.business.notifier.FocNotificationEmail;
+import com.foc.business.notifier.FocNotificationEmailTemplate;
+import com.foc.business.workflow.WFTitle;
 import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.property.FReference;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Encryptor;
+import com.foc.util.Utils;
+import com.foc.vaadin.FocCentralPanel;
+import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
@@ -38,9 +50,12 @@ import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.modules.admin.AdminWebModule;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
+import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Table;
@@ -281,15 +296,32 @@ public class AdrBookParty_Form extends FocXMLLayout{
   				return button;
   			}
   		};
+  	} else if (tableColumn.getName().equals("USER_MANAGEMENT")) {
+  		columnGenerator = new ColumnGenerator() {
+  			public Object generateCell(Table source, Object itemId, Object columnId) {
+  				long ref = (Long) itemId;  				
+  				Contact contact = getContactByRef(ref);
+		  		if (contact != null && FocUser.findUser(contact) == null) {
+	  				return new CreateUserButton(contact);
+		  		} else if (contact != null && FocUser.findUser(contact) != null) {
+		  			return new EditUserButton(contact);
+		  		}
+		  		return null;
+  			}
+  		};
   	}
-		return columnGenerator;
+  	return columnGenerator;
 	}
 	
 	private Contact getContactByRef(long ref){
   	Contact contact = (Contact) ContactDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED).searchByReference(ref);
   	return contact;
   }
-	
+
+	private FVTableWrapperLayout getContactTableWrapperLayout() {
+		return (FVTableWrapperLayout) getComponentByName("_CONTACTS");
+	}
+
 	public class SetDefaultContactListener implements ClickListener {
   	private long defaultContactRef = 0;
   	
@@ -312,9 +344,79 @@ public class AdrBookParty_Form extends FocXMLLayout{
 				contactTablelayout.getTableTreeDelegate().getTable().refreshRowCache();
 			}
 		}
-
-		private FVTableWrapperLayout getContactTableWrapperLayout() {
-			return (FVTableWrapperLayout) getComponentByName("_CONTACTS");
-		}
   }
+	
+	public class CreateUserButton extends FVButton implements Button.ClickListener {
+		
+		private Contact contact = null;
+		
+		public CreateUserButton(Contact contact) {
+			super("Create User");
+			this.contact = contact;
+			addClickListener(this);
+		}
+		
+		public void dispose() {
+			removeClickListener(this);
+			super.dispose();
+			contact = null;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+    	String message = null;
+      copyGuiToMemory();
+      
+      if(contact != null && contact.validate(true)) {
+      	if(Utils.isStringEmpty(contact.getEMail())) {
+      		OptionDialog option = new OptionDialog("Warning", "This contact does not have an email. If you create a user, no email can be sent to him.") {
+						@Override
+						public boolean executeOption(String optionName) {
+							if(optionName.equals("CREATE_USER")) {
+								contact.createUserAndSendEmailNotification();
+								return false;
+							} else if(optionName.equals("DO_NOT_CREATE")) {
+								return false;
+							}
+							return false;
+						}
+					};
+					option.addOption("CREATE_USER", "Create user anyway");
+					option.addOption("DO_NOT_CREATE", "Do not create user now");
+					option.popup();
+      	} else {
+      		contact.createUserAndSendEmailNotification();
+      	}
+      }
+		}
+	}
+	
+	public class EditUserButton extends FVButton implements Button.ClickListener {
+		
+		private Contact contact = null;
+		
+		public EditUserButton(Contact contact) {
+			super("Edit User");
+			this.contact = contact;
+			addClickListener(this);
+		}
+		
+		public void dispose() {
+			super.dispose();
+			contact = null;
+		}
+
+		@Override
+		public void buttonClick(ClickEvent event) {
+      copyGuiToMemory();
+      
+      if(contact != null){
+        INavigationWindow mainWindow = (INavigationWindow) getMainWindow();
+        XMLViewKey xmlViewKey = new XMLViewKey(FocUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_FORM, AdminWebModule.CONTEXT_CONTACT, XMLViewKey.VIEW_DEFAULT);
+        FocXMLLayout centralPanel = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel((FocCentralPanel) mainWindow, xmlViewKey, FocUser.findUser(contact));
+        centralPanel.popupInDialog();
+//        mainWindow.changeCentralPanelContent(centralPanel, true);
+      }
+		}
+	}
 }
