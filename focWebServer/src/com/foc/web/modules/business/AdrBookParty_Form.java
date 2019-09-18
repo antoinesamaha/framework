@@ -38,10 +38,6 @@ import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 @SuppressWarnings("serial")
 public class AdrBookParty_Form extends AdrBookParty_common_Form {
 
-	private AdrBookParty getAdrBookParty(){
-		return (AdrBookParty) getFocData();
-	}
-	
 	private boolean commitCurrent(){
 		FocXMLLayout lay = this;
 		FVValidationLayout vLay = lay.getValidationLayout();

@@ -30,6 +30,7 @@ import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
+import com.foc.vaadin.gui.components.TableTreeDelegate;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
@@ -46,10 +47,14 @@ import com.vaadin.ui.Table.ColumnGenerator;
 @SuppressWarnings("serial")
 public class AdrBookParty_common_Form extends FocXMLLayout{
 
-	private AdrBookParty getAdrBookParty(){
-		return (AdrBookParty) getFocData();
+	public AdrBookParty getAdrBookParty(){
+		return (AdrBookParty) getFocObject();
 	}
 
+	public FVTableWrapperLayout getContactTableWrapper() {
+		return (FVTableWrapperLayout) getComponentByName("_CONTACTS");
+	}
+	
 	@Override
 	protected void table_BeforeEndElement(String tableName, ITableTree table) {
 		setFilterByPropertyForContactTable();
@@ -62,7 +67,7 @@ public class AdrBookParty_common_Form extends FocXMLLayout{
 			partyRef = selectAdrBkPartyRef.getInteger();
 		}
 		
-		FVTableWrapperLayout tableWrapperLayout = (FVTableWrapperLayout) getComponentByName("_CONTACTS");
+		FVTableWrapperLayout tableWrapperLayout = getContactTableWrapper();
 		if(tableWrapperLayout != null){
 			ITableTree  tableTree = tableWrapperLayout.getTableOrTree();
 			if(tableTree != null){
@@ -100,6 +105,9 @@ public class AdrBookParty_common_Form extends FocXMLLayout{
   				if(getAdrBookParty().getDefaultContact() == null || getAdrBookParty().getDefaultContact().getReferenceInt() != ref){
 	  				button = new FVButton(tableColumn.getCaption());
 	  				button.addClickListener(new SetDefaultContactListener(ref));
+	  				
+	  				String compName = TableTreeDelegate.newComponentName(tableName, String.valueOf(ref), "SET_DEFAULT_CONTACT");
+	  				putComponent(compName, button);
   				}
   				return button;
   			}
@@ -109,12 +117,17 @@ public class AdrBookParty_common_Form extends FocXMLLayout{
   			public Object generateCell(Table source, Object itemId, Object columnId) {
   				long ref = (Long) itemId;  				
   				Contact contact = getContactByRef(ref);
+  				FVButton button = null;
 		  		if (contact != null && FocUser.findUser(contact) == null) {
-	  				return new CreateUserButton(contact);
+		  			button = new CreateUserButton(contact);
+	  				String compName = TableTreeDelegate.newComponentName(tableName, String.valueOf(ref), "CREATE_USER");
+	  				putComponent(compName, button);
 		  		} else if (contact != null && FocUser.findUser(contact) != null) {
-		  			return new EditUserButton(contact);
+		  			button = new EditUserButton(contact);
+	  				String compName = TableTreeDelegate.newComponentName(tableName, String.valueOf(ref), "EDIT_USER");
+	  				putComponent(compName, button);
 		  		}
-		  		return null;
+		  		return button;
   			}
   		};
   	}
