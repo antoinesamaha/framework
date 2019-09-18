@@ -192,7 +192,7 @@ public class FocUser_Form extends FocXMLLayout {
   	}
   }
   
-  public void button_RESET_PASSWORD_Clicked(FVButtonClickEvent event){
+  public void button_RESET_GUEST_PASSWORD_Clicked(FVButtonClickEvent event){
 		FocUser user = getFocUser();
 		if(user != null) {
 			String  newPassword = user.resetPassword();

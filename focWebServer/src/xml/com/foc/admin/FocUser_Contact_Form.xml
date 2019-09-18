@@ -14,7 +14,7 @@
   </HorizontalLayout>
       
   <HorizontalLayout captionMargin="0" spacing="true">
-    <Button name="RESET_PASSWORD" caption="Reset password" width="250px" style="button-dark-05"/>
+    <Button name="RESET_GUEST_PASSWORD" caption="Reset password" width="250px" style="button-dark-05"/>
     <Button name="SUSPEND_USER" caption="Suspend user" width="250px" visibleWhen="NOT(SUSPENDED)" style="button-dark-01" />
     <Button name="ENABLE_USER" caption="Enable user" width="250px" visibleWhen="SUSPENDED" style="button-dark-03" />
   </HorizontalLayout>    
