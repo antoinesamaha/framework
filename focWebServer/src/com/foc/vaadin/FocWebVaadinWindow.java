@@ -182,56 +182,48 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	@Override
 	public void fill() {
 		setSizeFull();
-
 		setSizeFull();
 		setSpacing(false);
 		setMargin(false);
 
-		if (isNavigationVisible()) {
-			headerMenuBar = new HorizontalLayout();
-			headerMenuBar.setMargin(false);
-			headerMenuBar.setSpacing(false);
+		headerMenuBar = new HorizontalLayout();
+		headerMenuBar.setMargin(false);
+		headerMenuBar.setSpacing(false);
 
-			AbsoluteLayout emptyLeftPanel = null;
-			if (!isCropMarginPanelsInHeaderBanner()) {
-				emptyLeftMarginPanel = new AbsoluteLayout();
-
-				emptyLeftPanel = new AbsoluteLayout();
-				emptyLeftPanel.setSizeFull();
-				emptyLeftPanel.setStyleName("focBannerButton");
-
-				emptyLeftPanel.addComponent(newLogoEmbedded(), "top:0.0px;right:10.0px;");
-
-				headerMenuBar.addComponent(emptyLeftPanel);
-			}
-
-			centerHeaderLayout = new HorizontalLayout();
-			centerHeaderLayout.setMargin(false);
-			centerHeaderLayout.setSpacing(false);
-			if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
-				centerHeaderLayout.setWidth(getPreferredWidth());
-			}
-
-			headerMenuBar.addComponent(centerHeaderLayout);
-
-			centerHeaderLayout.setStyleName("focBanner");
-			headerMenuBar.setStyleName("focBanner");
-
-			if (!isCropMarginPanelsInHeaderBanner()) {
-				AbsoluteLayout emptyRightPanel = new AbsoluteLayout();
-				emptyRightPanel.setSizeFull();
-				emptyRightPanel.setStyleName("focBannerButton");
-				headerMenuBar.addComponent(emptyRightPanel);
-
-				headerMenuBar.setExpandRatio(emptyLeftPanel, 0.5f);
-				headerMenuBar.setExpandRatio(emptyRightPanel, 0.5f);
-			}
-
-			headerMenuBar.setWidth("100%");
-			headerMenuBar.setHeight("-1px");
-			addComponent(headerMenuBar);
-			setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
+		AbsoluteLayout emptyLeftPanel = null;
+		if (!isCropMarginPanelsInHeaderBanner()) {
+			emptyLeftMarginPanel = new AbsoluteLayout();
+			emptyLeftPanel = new AbsoluteLayout();
+			emptyLeftPanel.setSizeFull();
+			emptyLeftPanel.setStyleName("focBannerButton");
+			emptyLeftPanel.addComponent(newLogoEmbedded(), "top:0.0px;right:10.0px;");
+			headerMenuBar.addComponent(emptyLeftPanel);
 		}
+
+		centerHeaderLayout = new HorizontalLayout();
+		centerHeaderLayout.setMargin(false);
+		centerHeaderLayout.setSpacing(false);
+		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
+			centerHeaderLayout.setWidth(getPreferredWidth());
+		}
+
+		headerMenuBar.addComponent(centerHeaderLayout);
+		centerHeaderLayout.setStyleName("focBanner");
+		headerMenuBar.setStyleName("focBanner");
+
+		if (!isCropMarginPanelsInHeaderBanner()) {
+			AbsoluteLayout emptyRightPanel = new AbsoluteLayout();
+			emptyRightPanel.setSizeFull();
+			emptyRightPanel.setStyleName("focBannerButton");
+			headerMenuBar.addComponent(emptyRightPanel);
+			headerMenuBar.setExpandRatio(emptyLeftPanel, 0.5f);
+			headerMenuBar.setExpandRatio(emptyRightPanel, 0.5f);
+		}
+
+		headerMenuBar.setWidth("100%");
+		headerMenuBar.setHeight("-1px");
+		addComponent(headerMenuBar);
+		setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
 
 		hMainLayout = new HorizontalLayout();
 		hMainLayout.setSizeFull();
@@ -460,7 +452,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 	
-  public void fillMenuBar_AfterLogin(){
+  public void fillMenuBar_AfterLogin(){  	
+		this.showMenuBar();  	
   	if(!isMenuBarFilled()){
   		setMenuBarFilled(true);
 
@@ -870,7 +863,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-  	showMenuBar();
+  	//showMenuBar();
 
   	addUnitTestingButtonIfAllowed();
   }
