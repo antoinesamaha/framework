@@ -15,17 +15,26 @@
  ******************************************************************************/
 package com.foc.web.modules.admin;
 
+import com.foc.Globals;
+import com.foc.IFocEnvironment;
+import com.foc.access.FocDataConstant;
+import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.company.UserCompanyRights;
+import com.foc.business.config.BusinessConfig;
+import com.foc.business.notifier.FocNotificationEmail;
+import com.foc.business.notifier.FocNotificationEmailTemplate;
 import com.foc.desc.FocObject;
 import com.foc.event.FocEvent;
 import com.foc.event.FocListener;
 import com.foc.list.FocList;
 import com.foc.saas.manager.SaaSApplicationAdaptor;
 import com.foc.saas.manager.SaaSConfig;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.windows.UserChangePasswordWindow;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
@@ -182,4 +191,53 @@ public class FocUser_Form extends FocXMLLayout {
     	}
   	}
   }
+  
+  public void button_RESET_GUEST_PASSWORD_Clicked(FVButtonClickEvent event){
+		FocUser user = getFocUser();
+		if(user != null) {
+			String  newPassword = user.resetPassword();
+			Contact contact     = user.getContact();
+			if(contact != null && !Utils.isStringEmpty(contact.getEMail())) {
+    		FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getEmailTemplatePasswordChange();
+    		if(user != null && !user.isCreated() && template != null && !Utils.isStringEmpty(contact.getEMail())) {
+    			FocDataMap focDataMap = new FocDataMap(user);
+    			focDataMap.put("Contact", contact);
+    			focDataMap.put("CLEAR_PASSWORD", new FocDataConstant(newPassword));
+    			boolean sentSuccessfully = true;
+    			try {
+    		  	FocNotificationEmail email = new FocNotificationEmail(template, focDataMap);
+    			  email.send();
+    			  email.setCreated(true);
+    			  email.validate(true);
+    			} catch (Exception e) {
+    				sentSuccessfully = false;
+    				Globals.logException(e);
+    			}
+    			
+    			if(sentSuccessfully) {
+    				Globals.showNotification("Password changed and notification email sent to "+contact.getEMail(), "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+    			}
+    		}
+
+			}
+		}
+  }
+  
+	public void button_SUSPEND_USER_Clicked(FVButtonClickEvent event){
+		FocUser user = getFocUser();
+		if(user != null) {
+			user.setSuspended(true);
+			user.validate(true);
+			goBack(null);
+		}
+	}
+	
+	public void button_ENABLE_USER_Clicked(FVButtonClickEvent event){
+		FocUser user = getFocUser();
+		if(user != null) {
+			user.setSuspended(false);
+			user.validate(true);
+			goBack(null);
+		}
+	}
 }

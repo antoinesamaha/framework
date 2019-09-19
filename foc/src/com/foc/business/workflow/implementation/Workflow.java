@@ -430,9 +430,12 @@ public class Workflow extends Loggable {
 				
 				if(moveToNextSignature_BecauseLastTitleToSign){
 					WFStage targetStage = signature.getTargetStage();
-					if(targetStage.isApprovalStage() && getFocObject() instanceof IStatusHolder){
+					if(targetStage.isCloseStage() && getFocObject() instanceof IStatusHolder){
 						IStatusHolder statusHolder = (IStatusHolder) getFocObject();
-						statusHolder.getStatusHolder().setStatusToValidated();
+						statusHolder.getStatusHolder().setStatusToClosed();
+					} else if(targetStage.isApprovalStage() && getFocObject() instanceof IStatusHolder) {
+						IStatusHolder statusHolder = (IStatusHolder) getFocObject();
+						statusHolder.getStatusHolder().setStatusToValidated();						
 					}
 					setCurrentStage(targetStage);
 					moveComment2LastComment();

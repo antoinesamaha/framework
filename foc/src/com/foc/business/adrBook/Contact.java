@@ -16,12 +16,21 @@
 package com.foc.business.adrBook;
 
 import com.foc.Globals;
+import com.foc.IFocEnvironment;
+import com.foc.access.FocDataConstant;
+import com.foc.access.FocDataMap;
+import com.foc.admin.FocGroup;
 import com.foc.admin.FocUser;
+import com.foc.business.config.BusinessConfig;
+import com.foc.business.notifier.FocNotificationEmail;
+import com.foc.business.notifier.FocNotificationEmailTemplate;
+import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.desc.ReferenceChecker;
 import com.foc.property.FProperty;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class Contact extends FocObject {
@@ -157,6 +166,53 @@ public class Contact extends FocObject {
   	userCreationData.setUser(user);
   	
   	return userCreationData;
+  }
+  
+  public void createUserAndSendEmailNotification() {
+		if(getAdrBookParty() != null &&	getAdrBookParty().validate(true)) {
+	    if(findUser() != null){
+	      Globals.showNotification("User already exists for this account", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    } else if (BusinessConfig.getInstance() == null) {
+	      Globals.showNotification("No Business Essentials configuration available", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    } else {
+	    	FocGroup group = BusinessConfig.getInstance().getGuestGroup();
+	    	WFTitle title =  BusinessConfig.getInstance().getGuestTitle();
+	    	if(group == null) {
+	        Globals.showNotification("Please set a guest Group in the Business Essentials configuration", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    	} else if (title == null){
+	        Globals.showNotification("Please set a guest Title in the Business Essentials configuration", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    	} else {
+	    		String password = FocUser.newRandomPassword();
+	    		if(Globals.getApp().isUnitTest()){
+	    			password = "ABCDEF";
+	    		}
+	    		String ecryptedPassword = Encryptor.encrypt_MD5(password);
+	    		FocUser user = FocUser.createUserForContact(this, ecryptedPassword, group, null, title);
+
+	    		boolean sentSuccessfully = false;
+	    		FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getEmailTemplateUserCreation();
+	    		if(user != null && !user.isCreated() && template != null && !Utils.isStringEmpty(getEMail())) {
+	    			FocDataMap focDataMap = new FocDataMap(user);
+	    			focDataMap.put("Contact", this);
+	    			focDataMap.put("CLEAR_PASSWORD", new FocDataConstant(password));
+	    			try {
+	    				sentSuccessfully = true;
+	    		  	FocNotificationEmail email = new FocNotificationEmail(template, focDataMap);
+	    			  email.send();
+	    			  email.setCreated(true);
+	    			  email.validate(true);
+	    			} catch (Exception e) {
+	    				sentSuccessfully = false;
+	    				Globals.logException(e);
+	    			}
+	    			
+	    			if(sentSuccessfully) {
+	    				Globals.showNotification("User created and email sent", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    			}
+	    		}
+	      }
+	    }
+		}
   }
   
   public class UserCreationData {

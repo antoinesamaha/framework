@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.foc.web.modules.business;
 
-import com.vaadin.data.Container.Filter;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.business.adrBook.AdrBookParty;
@@ -23,78 +22,21 @@ import com.foc.business.adrBook.AdrBookPartyDesc;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.adrBook.ContactDesc;
 import com.foc.business.config.BusinessConfig;
-import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
-import com.foc.property.FReference;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
-import com.foc.vaadin.gui.components.FVButton;
-import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
-import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
-import com.vaadin.data.Item;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.Table.ColumnGenerator;
 
 @SuppressWarnings("serial")
-public class AdrBookParty_Form extends FocXMLLayout{
-
-	private AdrBookParty getAdrBookParty(){
-		return (AdrBookParty) getFocData();
-	}
-	
-	public void setFilterByPropertyForContactTable(){
-		int partyRef = 0;
-		FReference selectAdrBkPartyRef = getAdrBookParty() != null ? getAdrBookParty().getReference() : null;
-		if(selectAdrBkPartyRef != null){
-			partyRef = selectAdrBkPartyRef.getInteger();
-		}
-		
-		FVTableWrapperLayout tableWrapperLayout = (FVTableWrapperLayout) getComponentByName("_CONTACTS");
-		if(tableWrapperLayout != null){
-			ITableTree  tableTree = tableWrapperLayout.getTableOrTree();
-			if(tableTree != null){
-				FocDataWrapper focDataWrapper = tableTree.getFocDataWrapper();
-				if(focDataWrapper != null){
-					focDataWrapper.addContainerFilter(new Filter(){
-						public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
-							boolean passes = false;
-							AdrBookParty party = getAdrBookParty();
-							Contact contact = (Contact) item;
-							if(party != null && party.getReference() != null && party.getReference().getInteger() > 0 && contact != null && contact.getAdrBookParty() != null && contact.getAdrBookParty().equalsRef(party)){
-								passes = true;
-							}
-							return passes;
-						}
-
-						public boolean appliesToProperty(Object propertyId) {
-							return true;
-						}
-					});
-				}
-			}
-		}
-	}
-	
-	@Override
-	protected void table_BeforeEndElement(String tableName, ITableTree table) {
-		setFilterByPropertyForContactTable();
-	};
-	
-	@Override
-	protected void afterLayoutConstruction() {
-		super.afterLayoutConstruction();
-	}
+public class AdrBookParty_Form extends AdrBookParty_common_Form {
 
 	private boolean commitCurrent(){
 		FocXMLLayout lay = this;
@@ -264,57 +206,4 @@ public class AdrBookParty_Form extends FocXMLLayout{
 		}
 		return error;
 	}
-	
-	@Override
-  public ColumnGenerator table_getGeneratedColumn(String tableName, final FVTableColumn tableColumn) {
-  	ColumnGenerator columnGenerator = null;
-
-  	if(tableColumn.getName().equals("SET_DEFAULT_CONTACT")){
-  		columnGenerator = new ColumnGenerator() {
-  			public Object generateCell(Table source, Object itemId, Object columnId) {
-  				FVButton button = null;
-  				long ref = (Long) itemId;
-  				if(getAdrBookParty().getDefaultContact() == null || getAdrBookParty().getDefaultContact().getReferenceInt() != ref){
-	  				button = new FVButton(tableColumn.getCaption());
-	  				button.addClickListener(new SetDefaultContactListener(ref));
-  				}
-  				return button;
-  			}
-  		};
-  	}
-		return columnGenerator;
-	}
-	
-	private Contact getContactByRef(long ref){
-  	Contact contact = (Contact) ContactDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED).searchByReference(ref);
-  	return contact;
-  }
-	
-	public class SetDefaultContactListener implements ClickListener {
-  	private long defaultContactRef = 0;
-  	
-  	public SetDefaultContactListener(long defaultContactRef){
-  		this.defaultContactRef = defaultContactRef;
-  	}
-  	
-		public void buttonClick(ClickEvent event) {
-			Contact contact = getContactByRef(defaultContactRef);
-			if(contact != null && getAdrBookParty() != null){
-				getAdrBookParty().setDefaultContact(contact);
-				copyMemoryToGui();
-				refreshContactTableButton();
-			}
-		}
-
-		private void refreshContactTableButton() {
-			FVTableWrapperLayout contactTablelayout = getContactTableWrapperLayout();
-			if(contactTablelayout!= null && contactTablelayout.getTableTreeDelegate() != null && contactTablelayout.getTableTreeDelegate().getTable() != null){
-				contactTablelayout.getTableTreeDelegate().getTable().refreshRowCache();
-			}
-		}
-
-		private FVTableWrapperLayout getContactTableWrapperLayout() {
-			return (FVTableWrapperLayout) getComponentByName("_CONTACTS");
-		}
-  }
 }

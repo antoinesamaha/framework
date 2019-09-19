@@ -16,9 +16,11 @@
 package com.foc.business.config;
 
 import com.foc.Globals;
+import com.foc.admin.FocGroupDesc;
 import com.foc.admin.FocVersion;
 import com.foc.business.BusinessModule;
 import com.foc.business.notifier.FocNotificationEmailTemplateDesc;
+import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FStringField;
@@ -41,6 +43,12 @@ public class BusinessConfigDesc extends FocDesc {
   public static final int FLD_CONTACT_IN_PARTY_MANDATORY                        =  9;//"Is Contact mandatory in address book party"
   public static final int FLD_GENERAL_EMAIL_TEMPLATE                            =  10;
   
+  //Guest account creation
+  public static final int FLD_EmailTmplUserCreation                             =  11;
+  public static final int FLD_EmailTmplPwdChange                                =  12;
+  public static final int FLD_GuestUserGroup                                    =  13;
+  public static final int FLD_GuestUserTitle                                    =  14;
+  
   public static final String DB_TABLE_NAME = "CONFIG_BUSINESS";
   
   public BusinessConfigDesc(){
@@ -58,6 +66,21 @@ public class BusinessConfigDesc extends FocDesc {
     
     FObjectField oFld = new FObjectField("GENERAL_EMAIL_TEMPLATE", "General Email Template", FLD_GENERAL_EMAIL_TEMPLATE, FocNotificationEmailTemplateDesc.getInstance());
     addField(oFld);
+
+    oFld = new FObjectField("EmailTmplUserCreation", "User Creation Email Template", FLD_EmailTmplUserCreation, FocNotificationEmailTemplateDesc.getInstance());
+    addField(oFld);
+
+    oFld = new FObjectField("EmailTmplPwdChange", "Password Change Email Template", FLD_EmailTmplPwdChange, FocNotificationEmailTemplateDesc.getInstance());
+    addField(oFld);
+
+    oFld = new FObjectField("GuestUserGroup", "FocUser Group", FLD_GuestUserGroup, FocGroupDesc.getInstance());
+    FocList focList = FocGroupDesc.getInstance().getFocList(FocList.NONE);
+    oFld.setSelectionList(focList);
+    addField(oFld);
+    
+		FObjectField objFld = new FObjectField("GuestUserTitle", "Guest Title", FLD_GuestUserTitle, WFTitleDesc.getInstance());
+		objFld.setSelectionList(WFTitleDesc.getList(FocList.NONE));
+		addField(objFld);
     
     FCompanyField companyField = new FCompanyField(false, true);
     addField(companyField);

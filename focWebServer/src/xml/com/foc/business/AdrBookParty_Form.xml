@@ -62,7 +62,8 @@
 		            <TableColumn name="PHONE1" caption="phone1" width="-1px"/>        
 		            <TableColumn name="EMAIL" caption="email" width="-1px"/>
 		            <TableColumn name="INTRODUCTION" caption="Intro." width="-1px"/>
-		            <TableColumn name="SET_DEFAULT_CONTACT" caption="Set Default Contact" />
+		            <TableColumn name="SET_DEFAULT_CONTACT" caption="Set as Default" />
+		            <TableColumn name="USER_MANAGEMENT" caption="User Management" />
 		                    
 		        </GuiTable>    
         </VerticalLayout>

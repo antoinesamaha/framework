@@ -16,9 +16,12 @@
 package com.foc.business.config;
 
 import com.foc.Globals;
+import com.foc.admin.FocGroup;
+import com.foc.admin.FocGroupDesc;
 import com.foc.admin.UserSession;
 import com.foc.business.company.Company;
 import com.foc.business.notifier.FocNotificationEmailTemplate;
+import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
@@ -31,6 +34,15 @@ public class BusinessConfig extends FocObject {
     newFocProperties();
   }
 
+	@Override
+	public String getSelectionFilterExpressionFor_ObjectProperty(int fieldID) {
+		String filter = super.getSelectionFilterExpressionFor_ObjectProperty(fieldID);
+		if(fieldID == BusinessConfigDesc.FLD_GuestUserGroup) { 
+			filter = FocGroupDesc.FNAME_GUEST_APPLICABLE; 
+		}
+		return filter; 
+	}
+	
 	public String getPartyPrefix(){
 		String codePrefix = getPropertyString(BusinessConfigDesc.FLD_ADR_BOOK_PARTY_PREFIX);
 		if(codePrefix != null){
@@ -54,7 +66,31 @@ public class BusinessConfig extends FocObject {
   public void setGeneralEmailTemplate(FocNotificationEmailTemplate emailTemplate){
   	setPropertyObject(BusinessConfigDesc.FLD_GENERAL_EMAIL_TEMPLATE, emailTemplate);
   }
+  
+	public FocNotificationEmailTemplate getEmailTemplateUserCreation(){
+  	return (FocNotificationEmailTemplate) getPropertyObject(BusinessConfigDesc.FLD_EmailTmplUserCreation);
+  }
+  
+  public void setEmailTemplateUserCreation(FocNotificationEmailTemplate emailTemplate){
+  	setPropertyObject(BusinessConfigDesc.FLD_EmailTmplUserCreation, emailTemplate);
+  }
+  
+	public FocNotificationEmailTemplate getEmailTemplatePasswordChange(){
+  	return (FocNotificationEmailTemplate) getPropertyObject(BusinessConfigDesc.FLD_EmailTmplPwdChange);
+  }
+  
+  public void setEmailTemplatePasswordChange(FocNotificationEmailTemplate emailTemplate){
+  	setPropertyObject(BusinessConfigDesc.FLD_EmailTmplPwdChange, emailTemplate);
+  }
 
+	public FocGroup getGuestGroup(){
+  	return (FocGroup) getPropertyObject(BusinessConfigDesc.FLD_GuestUserGroup);
+  }
+	
+	public WFTitle getGuestTitle(){
+  	return (WFTitle) getPropertyObject(BusinessConfigDesc.FLD_GuestUserTitle);
+  }
+  
 	public String getPartySeparator(){
   	return getPropertyString(BusinessConfigDesc.FLD_ADR_BOOK_PARTY_SEPERATOR);
   }

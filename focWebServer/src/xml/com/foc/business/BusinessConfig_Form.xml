@@ -1,21 +1,27 @@
 <VerticalLayout width="100%" height="-1px"  >
   <ValidationSettings formTitle="Business essentials settings" withApply="true" withAttach="false" withPrint="true" />
-  <Line />
-  <Label value="Party code generation settings" style="h3"/>
-  <Line />
-  <GuiField name="PARTY_PREFIX" caption="Code prefix"/>
-  <GuiField name="PARTY_NBR_DIGITS" caption="Number of digits"/>
-  <GuiField name="PARTY_CODE_SEPARATOR" caption="Code / digit separator"/>
-  <GuiField name="PARTY_RESET_NBR" caption="Reset the digit part when the prefix changes"/>
-  <GuiField name="ALLOW_MODIF_UND_DESC_WHEN_FILL" caption="Allow underlying description customisation in transactions even when set in the Underlying" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-	<GuiField name="ADR_BOOK_TO_PARTY_ONE_2_ONE" caption="Create an Address book by party without prompt" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-  <GuiField name="CONTACT_IN_PARTY_MANDATORY" caption="Is Contact mandatory in address book party" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-  <GuiField name="GENERAL_EMAIL_TEMPLATE" captionProperty="NAME" caption="General Reporting Email Template" width="250px" />
-
-  <Line />
-  <Label value="Project Id code generation settings" style="h3"/>
-  <Line />
-  <GuiField name="PROJECT_ID_PREFIX" caption="Code prefix"/>
-  <GuiField name="PROJECT_ID_NBR_DIGITS" caption="Number of digits"/>
+  
+  <TabLayout style="tabStyle" name="_TabLayout" captionMargin="0" margin="true" height="100%">
+     <VerticalLayout name="Party" margin="true" spacing="true" height="-1px">
+			  <GuiField name="PARTY_PREFIX" caption="Code prefix"/>
+			  <GuiField name="PARTY_NBR_DIGITS" caption="Number of digits"/>
+			  <GuiField name="PARTY_CODE_SEPARATOR" caption="Code / digit separator"/>
+			  <GuiField name="PARTY_RESET_NBR" caption="Reset the digit part when the prefix changes"/>
+			  <GuiField name="ALLOW_MODIF_UND_DESC_WHEN_FILL" caption="Allow underlying description customisation in transactions even when set in the Underlying" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+			  <GuiField name="ADR_BOOK_TO_PARTY_ONE_2_ONE" caption="Create an Address book by party without prompt" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+			  <GuiField name="CONTACT_IN_PARTY_MANDATORY" caption="Is Contact mandatory in address book party" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+			  <GuiField name="GENERAL_EMAIL_TEMPLATE" captionProperty="NAME" caption="General Reporting Email Template" width="250px" />
+     </VerticalLayout>
+     <VerticalLayout name="Project" margin="true" spacing="true" height="-1px">
+			  <GuiField name="PROJECT_ID_PREFIX" caption="Code prefix"/>
+			  <GuiField name="PROJECT_ID_NBR_DIGITS" caption="Number of digits"/>
+     </VerticalLayout>
+     <VerticalLayout name="Guest Accounts" margin="true" spacing="true" height="-1px">
+        <GuiField name="GuestUserGroup>NAME" caption="Guest User Group" width="300px"/>
+        <GuiField name="GuestUserTitle>NAME" caption="Guest User Title" width="300px"/>
+        <GuiField name="EmailTmplUserCreation>NAME" caption="User creation email template" width="300px"/>
+        <GuiField name="EmailTmplPwdChange>NAME" caption="Password change email template" width="300px"/>
+     </VerticalLayout>     
+  </TabLayout>
 </VerticalLayout>
 

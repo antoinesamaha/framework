@@ -4,5 +4,6 @@
     <TableColumn name="NAME" caption="Name" />
     <TableColumn name="DESCRIP" caption="Description" />
     <TableColumn name="IS_APPROVAL" caption="Approves Document" />
+    <TableColumn name="IS_CLOSE" caption="Close Document" />
   </GuiTable>
 </VerticalLayout>
