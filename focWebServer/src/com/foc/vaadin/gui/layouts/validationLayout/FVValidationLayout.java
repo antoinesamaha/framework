@@ -2129,6 +2129,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     	valo_ApplyButton.setClickShortcut(KeyCode.ENTER, ModifierKey.CTRL);
     	valo_ApplyButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
     	
+    	valo_ApplyButton.addStyleName("foc-doneButton");
+    	
     	if(validationSettings != null && validationSettings.getApplyLink() != null && !validationSettings.getApplyLink().isEmpty()){
     		valo_ApplyButton.setCaption(validationSettings.getApplyLink());
   		}
@@ -2254,6 +2256,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   		valo_DiscardButton.addStyleName("noPrint");
   		valo_DiscardButton.setDescription("Discard Changes");
   		valo_DiscardButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+  		valo_DiscardButton.addStyleName("foc-cancelButton");
   		
   		if(validationSettings.getDiscardLink() != null && !validationSettings.getDiscardLink().isEmpty()){
   			valo_DiscardButton.setCaption(validationSettings.getDiscardLink());
@@ -2297,6 +2300,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_SaveButton);
     	}
   		valo_SaveButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+  		valo_SaveButton.addStyleName("foc-saveButton");
+  		
   		valo_SaveButton.setClickShortcut(KeyCode.S, ModifierKey.CTRL);
   		valo_SaveButton.setDescription("Save changes and stay in this form");
   		valo_SaveButton.addClickListener(new ClickListener() {
