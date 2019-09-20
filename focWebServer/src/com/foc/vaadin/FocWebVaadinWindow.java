@@ -338,15 +338,22 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	public NativeButton newButtonInHeaderBar(String caption, boolean asFirst, boolean addButton){
 		NativeButton nBut = new NativeButton(caption);
-		adjustButton(nBut, asFirst, addButton);
+		adjustButtonStyleInHeaderBar(nBut, asFirst, addButton);
 		return nBut;
 	}
 
 	private void adjustButton(NativeButton nBut, boolean addButton){
-		adjustButton(nBut, false, addButton);
+		adjustButtonStyleInHeaderBar(nBut, false, addButton);
 	}
 	
-	private void adjustButton(NativeButton nBut, boolean asFirst, boolean addButton){
+	/**
+	 * adjustButtonStyleInHeaderBar allows to customize the look of a button displayed in header menu bar 
+	 * 
+	 * @param nBut
+	 * @param asFirst
+	 * @param addButton
+	 */
+	protected void adjustButtonStyleInHeaderBar(NativeButton nBut, boolean asFirst, boolean addButton){
 		nBut.setHeight("40px");
 		nBut.setStyleName("focBannerButton");
 		if(addButton){
@@ -489,6 +496,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				}
 			});
+			
 			if(isNavigationVisible()){
 //				navigation = newButtonInHeaderBar("Navigation", true);
 				navigation = newButtonInHeaderBar("", true);
@@ -744,8 +752,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	companyNameLabel.addStyleName("foc-text-center");
   	companyNameLabel.addStyleName("foc-text-middle");
   	companyNameLabel.addStyleName("foc-CompanyTitle");
-//	  companyNameLabel.addStyleName("foc-text-bottom");
-//  	companyNameLabel.setHeight("40px");
   	return companyNameLabel;
   }
   
@@ -773,7 +779,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	if(companyName == null) companyName = "";
   	if(centerHeaderLayout != null){
 	  	companyNameLabel = newMidleTitleLabel(companyName);
-//	  	companyNameLabel.setHeight("40px");
 	  	centerHeaderLayout.setHeight("40px");
 			centerHeaderLayout.addComponent(companyNameLabel);
 			centerHeaderLayout.setExpandRatio(companyNameLabel, 1);	
