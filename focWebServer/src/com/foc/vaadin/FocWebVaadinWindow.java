@@ -113,6 +113,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	private int     format        = FORMAT_FULL_SCREEN;
 	private boolean menuBarFilled = false;
+	private boolean hideMenuInLogin = false;
 	
 	private HashMap<String, NativeButton> menuBarIconsMap = null;
 	
@@ -453,7 +454,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
   public void fillMenuBar_AfterLogin(){  	
-		this.showMenuBar();  	
+  	if (isHideMenuInLogin()) {
+  		showMenuBar();  
+		}			
   	if(!isMenuBarFilled()){
   		setMenuBarFilled(true);
 
@@ -863,7 +866,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-  	//showMenuBar();
+		if (!isHideMenuInLogin()) {
+			showMenuBar();
+		}
 
   	addUnitTestingButtonIfAllowed();
   }
@@ -1182,6 +1187,14 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}
 			}
 		}
+	}
+
+	public boolean isHideMenuInLogin() {
+		return hideMenuInLogin;
+	}
+
+	public void setHideMenuInLogin(boolean hideMenuInLogin) {
+		this.hideMenuInLogin = hideMenuInLogin;
 	}
 
 	public class ButtonWithPendingSignature extends FVButton {
