@@ -2150,16 +2150,21 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   
   public Embedded valo_GetDeleteEmbedded(boolean createIfNeeded){
   	if(valo_DeleteEmbedded == null && createIfNeeded && !isObjectLocked()){
-  		valo_DeleteEmbedded = new Embedded();
-  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-			if(FocWebApplication.getInstanceForThread().isMobile()){
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+  		INavigationWindow mainWindow = getNavigationWindow();
+  		if(mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook()) {				
+				valo_DeleteEmbedded = new Embedded("Delete");	    	
+	    	valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
+	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
 			}else{
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
-			}
-			
-			valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {
-				
+				valo_DeleteEmbedded = new Embedded();
+	  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
+				if(FocWebApplication.getInstanceForThread().isMobile()){
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+				}else{
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
+				}
+			}			
+			valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {				
 				@Override
 				public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
 					deleteButtonClickListener();					
