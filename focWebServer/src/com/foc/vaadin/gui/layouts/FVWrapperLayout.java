@@ -98,8 +98,11 @@ public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiCompon
 	      setComponentAlignment((Component) field, Alignment.MIDDLE_LEFT);
 	      setSpacing(true);
 	      FocXMLGuiComponentStatic.applyStyle(this.caption, "f12,bold,text-right");
-	    }
-	    
+	    }else if (captionPosition.equals(FXML.VAL_CAPTION_POS__TOP)) {
+	    	removeAllComponents();
+	      addComponent((Component) field);
+	      setSpacing(true);    
+	    }	    
 	    FocXMLGuiComponentStatic.applyStyle(caption, attributes.getValue(FXML.ATT_CAPTION_STYLE));
   	}
   }
@@ -143,7 +146,9 @@ public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiCompon
 	  		if(encapsulate != null && encapsulate.trim().toLowerCase().equals("true")){ 
 	  			retComp = new FVEncapsulatorLayout(atomicComponent, attributes);
 		  	}else if (attributes.getValue(FXML.ATT_CAPTION_POSITION) != null) {
-		      if (attributes.getValue(FXML.ATT_CAPTION_POSITION).equals("left") || attributes.getValue(FXML.ATT_CAPTION_POSITION).equals("right")) {
+		      if (attributes.getValue(FXML.ATT_CAPTION_POSITION).equals("left") 
+		      		|| attributes.getValue(FXML.ATT_CAPTION_POSITION).equals("right")
+		      		|| attributes.getValue(FXML.ATT_CAPTION_POSITION).equals("top")) {
 		        retComp = new FVWrapperLayout(atomicComponent, attributes);
 		      }
 		    }
