@@ -1,9 +1,9 @@
-<VerticalLayout captionMargin="0" height="100%" >
-    <ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="true" />
-    <GuiTree title="Recently visited menus" name="MENU_TREE" dataPath="DATAROOT" width="100%" height="100%" checkBox="true" addEnabled="false" deleteEnabled="false" openEnabled="false" pageLength="10" withFilter="false" refreshEnabled="false">
-        <OpenForm containerWindow="same window" />
-        <TableColumn name="TITLE" caption="Title" width="-1px" expandRatio="1"/>
-        <TableColumn name="EXTRA_ACTION_0" caption="Shortcut" width="-1px" style="link"/>         
-    </GuiTree>
+<VerticalLayout captionMargin="0" height="100%" style="tableContainer">
+  <ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="true" />
+  <GuiTree title="Recently Visited Menus" name="MENU_TREE" dataPath="DATAROOT" width="100%" height="100%" checkBox="true" addEnabled="false" deleteEnabled="false" openEnabled="false" pageLength="10" withFilter="false" refreshEnabled="false">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="TITLE" caption="Title" width="-1px" expandRatio="1" />
+    <TableColumn name="EXTRA_ACTION_0" caption="Shortcut" width="-1px" style="link" />
+  </GuiTree>
 </VerticalLayout>
 

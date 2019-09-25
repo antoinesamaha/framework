@@ -2129,6 +2129,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     	valo_ApplyButton.setClickShortcut(KeyCode.ENTER, ModifierKey.CTRL);
     	valo_ApplyButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
     	
+    	valo_ApplyButton.addStyleName("foc-doneButton");
+    	
     	if(validationSettings != null && validationSettings.getApplyLink() != null && !validationSettings.getApplyLink().isEmpty()){
     		valo_ApplyButton.setCaption(validationSettings.getApplyLink());
   		}
@@ -2148,16 +2150,21 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   
   public Embedded valo_GetDeleteEmbedded(boolean createIfNeeded){
   	if(valo_DeleteEmbedded == null && createIfNeeded && !isObjectLocked()){
-  		valo_DeleteEmbedded = new Embedded();
-  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-			if(FocWebApplication.getInstanceForThread().isMobile()){
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+  		INavigationWindow mainWindow = getNavigationWindow();
+  		if(mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook()) {				
+				valo_DeleteEmbedded = new Embedded("Delete");	    	
+	    	valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
+	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
 			}else{
-				valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
-			}
-			
-			valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {
-				
+				valo_DeleteEmbedded = new Embedded();
+	  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
+				if(FocWebApplication.getInstanceForThread().isMobile()){
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+				}else{
+					valo_DeleteEmbedded.setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
+				}
+			}			
+			valo_DeleteEmbedded.addClickListener(new MouseEvents.ClickListener() {				
 				@Override
 				public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
 					deleteButtonClickListener();					
@@ -2254,6 +2261,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   		valo_DiscardButton.addStyleName("noPrint");
   		valo_DiscardButton.setDescription("Discard Changes");
   		valo_DiscardButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+  		valo_DiscardButton.addStyleName("foc-cancelButton");
   		
   		if(validationSettings.getDiscardLink() != null && !validationSettings.getDiscardLink().isEmpty()){
   			valo_DiscardButton.setCaption(validationSettings.getDiscardLink());
@@ -2297,6 +2305,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_SaveButton);
     	}
   		valo_SaveButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+  		valo_SaveButton.addStyleName("foc-saveButton");
+  		
   		valo_SaveButton.setClickShortcut(KeyCode.S, ModifierKey.CTRL);
   		valo_SaveButton.setDescription("Save changes and stay in this form");
   		valo_SaveButton.addClickListener(new ClickListener() {

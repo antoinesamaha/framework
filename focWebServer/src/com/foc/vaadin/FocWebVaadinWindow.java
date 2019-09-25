@@ -62,6 +62,7 @@ import com.foc.web.unitTesting.FocUnitDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.server.ExternalResource;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Resource;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinService;
@@ -113,6 +114,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	private int     format        = FORMAT_FULL_SCREEN;
 	private boolean menuBarFilled = false;
+	
+	private static boolean isNewLook = false;
 	
 	private HashMap<String, NativeButton> menuBarIconsMap = null;
 	
@@ -180,9 +183,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 
 	@Override
-	public void fill(){
+	public void fill() {
 		setSizeFull();
-		
 		setSizeFull();
 		setSpacing(false);
 		setMargin(false);
@@ -190,47 +192,42 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		headerMenuBar = new HorizontalLayout();
 		headerMenuBar.setMargin(false);
 		headerMenuBar.setSpacing(false);
-		
-		AbsoluteLayout emptyLeftPanel  = null;
-		if(!isCropMarginPanelsInHeaderBanner()){
-			emptyLeftMarginPanel  = new AbsoluteLayout();
-			
-			emptyLeftPanel  = new AbsoluteLayout();
+
+		AbsoluteLayout emptyLeftPanel = null;
+		if (!isCropMarginPanelsInHeaderBanner()) {
+			emptyLeftMarginPanel = new AbsoluteLayout();
+			emptyLeftPanel = new AbsoluteLayout();
 			emptyLeftPanel.setSizeFull();
 			emptyLeftPanel.setStyleName("focBannerButton");
-			
 			emptyLeftPanel.addComponent(newLogoEmbedded(), "top:0.0px;right:10.0px;");
-
 			headerMenuBar.addComponent(emptyLeftPanel);
 		}
 
 		centerHeaderLayout = new HorizontalLayout();
 		centerHeaderLayout.setMargin(false);
 		centerHeaderLayout.setSpacing(false);
-		if(!isCropMarginPanelsInHeaderBanner()){//The condition should be about mobile not crop
+		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
 			centerHeaderLayout.setWidth(getPreferredWidth());
 		}
 
 		headerMenuBar.addComponent(centerHeaderLayout);
-		
 		centerHeaderLayout.setStyleName("focBanner");
 		headerMenuBar.setStyleName("focBanner");
-		
-		if(!isCropMarginPanelsInHeaderBanner()){
+
+		if (!isCropMarginPanelsInHeaderBanner()) {
 			AbsoluteLayout emptyRightPanel = new AbsoluteLayout();
 			emptyRightPanel.setSizeFull();
 			emptyRightPanel.setStyleName("focBannerButton");
 			headerMenuBar.addComponent(emptyRightPanel);
-			
 			headerMenuBar.setExpandRatio(emptyLeftPanel, 0.5f);
 			headerMenuBar.setExpandRatio(emptyRightPanel, 0.5f);
 		}
-		
+
 		headerMenuBar.setWidth("100%");
 		headerMenuBar.setHeight("-1px");
 		addComponent(headerMenuBar);
 		setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
-		
+
 		hMainLayout = new HorizontalLayout();
 		hMainLayout.setSizeFull();
 		hMainLayout.addStyleName("focMainHorizontal");
@@ -238,21 +235,21 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		hMainLayout.setSpacing(false);
 		addComponent(hMainLayout);
 		setExpandRatio(hMainLayout, 1);
-		
-		if(!isCropMarginPanels()){
+
+		if (!isCropMarginPanels()) {
 			emptyLeftMarginPanel.setSizeFull();
-	    emptyLeftMarginPanel.setStyleName("focLeftRight");
-	    
+			emptyLeftMarginPanel.setStyleName("focLeftRight");
+
 			hMainLayout.addComponent(emptyLeftMarginPanel);
 		}
-		
+
 		hMainLayout.addComponent(getCentralPanelWrapper());
-		if(!isCropMarginPanels()){
-			emptyRightMarginPanel  = new AbsoluteLayout();
+		if (!isCropMarginPanels()) {
+			emptyRightMarginPanel = new AbsoluteLayout();
 			emptyRightMarginPanel.setSizeFull();
-	    emptyRightMarginPanel.setStyleName("focRightLeft");
+			emptyRightMarginPanel.setStyleName("focRightLeft");
 			hMainLayout.addComponent(emptyRightMarginPanel);
-			
+
 			hMainLayout.setExpandRatio(emptyLeftMarginPanel, 0.5f);
 			hMainLayout.setExpandRatio(emptyRightMarginPanel, 0.5f);
 		} else {
@@ -343,15 +340,22 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	
 	public NativeButton newButtonInHeaderBar(String caption, boolean asFirst, boolean addButton){
 		NativeButton nBut = new NativeButton(caption);
-		adjustButton(nBut, asFirst, addButton);
+		adjustButtonStyleInHeaderBar(nBut, asFirst, addButton);
 		return nBut;
 	}
 
 	private void adjustButton(NativeButton nBut, boolean addButton){
-		adjustButton(nBut, false, addButton);
+		adjustButtonStyleInHeaderBar(nBut, false, addButton);
 	}
 	
-	private void adjustButton(NativeButton nBut, boolean asFirst, boolean addButton){
+	/**
+	 * adjustButtonStyleInHeaderBar allows to customize the look of a button displayed in header menu bar 
+	 * 
+	 * @param nBut
+	 * @param asFirst
+	 * @param addButton
+	 */
+	protected void adjustButtonStyleInHeaderBar(NativeButton nBut, boolean asFirst, boolean addButton){
 		nBut.setHeight("40px");
 		nBut.setStyleName("focBannerButton");
 		if(addButton){
@@ -458,28 +462,47 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 	
-  public void fillMenuBar_AfterLogin(){
-  	if(!isMenuBarFilled()){
-  		setMenuBarFilled(true);
+	
+	
+	protected Resource getHomeIcon(){
+		return FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_HOME);
+	}
+	
+	protected Resource getNavigationIcon(){
+		return FontAwesome.TH_LIST;
+	}
+	
+	protected Resource getSettingsIcon(){
+		return FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_SETTINGS);
+	}
+	
+	public void fillMenuBar_AfterLogin() {
+		if (isNewLook()) {
+			showMenuBar();
+		}
+		
+		if (!isMenuBarFilled()) {
+			setMenuBarFilled(true);
 
-  		if(FocWebApplication.getInstanceForThread().isMobile()){
-  			mobileOptionsButton = newButtonInHeaderBar("", FocWebApplication.getInstanceForThread().isMobile());
-  			mobileOptionsButton.setStyleName("mobileOptionsButton");
-  			mobileOptionsButton.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_MENU));
-  			mobileOptionsButton.setHeight("40px");
-  			mobileOptionsButton.setStyleName("focBannerButton");
-  			mobileOptionsButton.addClickListener(new ClickListener() {
+			if (FocWebApplication.getInstanceForThread().isMobile()) {
+				mobileOptionsButton = newButtonInHeaderBar("", FocWebApplication.getInstanceForThread().isMobile());
+				mobileOptionsButton.setStyleName("mobileOptionsButton");
+				mobileOptionsButton.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_MENU));
+				mobileOptionsButton.setHeight("40px");
+				mobileOptionsButton.setStyleName("focBannerButton");
+				mobileOptionsButton.addClickListener(new ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-						if(getCentralPanel() != null){
+						if (getCentralPanel() != null) {
 							getCentralPanel().optionButtonClicked();
 						}
 					}
 				});
-  		}
-  		
-  		home = newButtonInHeaderBar("", true);//Home
-			home.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_HOME));
+			}
+
+			// Add Home Icon
+			home = newButtonInHeaderBar("", true);
+			home.setIcon(getHomeIcon());
 			home.addClickListener(new Button.ClickListener() {
 				public void buttonClick(ClickEvent event) {
 					menuBarIcons_Highlight((NativeButton)null);
@@ -491,13 +514,13 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				}
 			});
+
+			// Add Navigation Icon
 			if(isNavigationVisible()){
-//				navigation = newButtonInHeaderBar("Navigation", true);
 				navigation = newButtonInHeaderBar("", true);
-				navigation.setIcon(FontAwesome.TH_LIST);
+				navigation.setIcon(getNavigationIcon());
 				menuBarIcons_Add("_NAVIGATION_", navigation);
 				navigation.addStyleName("foc-bold");
-
 				if(FocWebApplication.getInstanceForThread().isMobile()){
 					navigation.setCaption("");
 					navigation.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_NAVIGATION));
@@ -510,33 +533,34 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				});
 			}
-			
+
+			// Add Unit Testing Icon
 			addUnitTestingButtonIfAllowed();
-  	
+
+			// Add Header Buttons
 			addButtonsInMenuBar();
-			
-			if(!FocWebApplication.getInstanceForThread().isMobile()){
+
+			// Add Company Name
+			if (!FocWebApplication.getInstanceForThread().isMobile()) {
 				addCompanyNameLabel();
 			}
-			
-			if(ConfigInfo.isShowSignatureButton()) {
+
+			// Add Signature Button
+			if (ConfigInfo.isShowSignatureButton()) {
 				pendingSignature = new FSignatureButton(this);
 				adjustButton(pendingSignature, !FocWebApplication.getInstanceForThread().isMobile());
 			}
-			
-			//NOTIF_DEV
-			/*
-			notificatonButton = new FNotificationButton(this);
-			adjustButton(notificatonButton, !FocWebApplication.getInstanceForThread().isMobile());
-			*/
 
-			if(!FocWebApplication.getInstanceForThread().isMobile() && ConfigInfo.isContextHelpActive()){
-				helpButton = new FVHelpButton(this);//Help
+			// Add Help Icon
+			if (!FocWebApplication.getInstanceForThread().isMobile() && ConfigInfo.isContextHelpActive()) {
+				helpButton = new FVHelpButton(this);
 				adjustButton(helpButton, !FocWebApplication.getInstanceForThread().isMobile());
 			}
+
+			// Add Settings Icon
 			if(isNavigationVisible()){
-				admin = newButtonInHeaderBar("", !FocWebApplication.getInstanceForThread().isMobile());//"Admin"
-				admin.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_SETTINGS));
+				admin = newButtonInHeaderBar("", !FocWebApplication.getInstanceForThread().isMobile());
+				admin.setIcon(getSettingsIcon());
 				admin.addClickListener(new Button.ClickListener() {
 					public void buttonClick(ClickEvent event) {
 						menuBarIcons_Highlight((NativeButton)null);
@@ -545,54 +569,30 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 					}
 				});
 			}
-			
-			if(!FocWebApplication.getInstanceForThread().isMobile()){
-				add_NewUserMenuBar();
 
-//				if(FChatModule.userHasChat()) {
-//					chatAlerts = newButtonInHeaderBar("", true);
-//					chatAlerts.setIcon(FontAwesome.BELL);
-//					updateChatAlertCount();
-//					chatAlerts.addClickListener(new Button.ClickListener() {
-//						public void buttonClick(ClickEvent event) {
-//							buttonArray_Highlight(null);
-//							
-//							XMLViewKey key = new XMLViewKey(FChatJoin.DBNAME, XMLViewKey.TYPE_TABLE);
-//							FChatJoin_Table table = (FChatJoin_Table) XMLViewDictionary.getInstance().newCentralPanel(FocWebVaadinWindow.this, key, null);
-//							FocWebVaadinWindow.this.changeCentralPanelContent(table, true);
-//							updateChatAlertCount();
-////							if(isGuestUser()){
-////								changeCentralPanelIntoGuestHomePage();
-////							}else{
-////								ICentralPanel centralPanel = newCentralPanel_AfterLogin();
-////				        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
-////							}
-//						}
-//					});
-//				}
-			}else{
+			//Add User Menu
+			if (!FocWebApplication.getInstanceForThread().isMobile()) {
+				add_NewUserMenuBar();
+			} else {
 				logout = newButtonInHeaderBar("Log Out", !FocWebApplication.getInstanceForThread().isMobile());
-	    
-		    logout.addClickListener(new Button.ClickListener() {
-		      public void buttonClick(ClickEvent event) {
-		        if (getFocWebApplication() != null && getFocWebApplication().getFocWebSession() != null) {
-		        	removeFocAllWindows();
+				logout.addClickListener(new Button.ClickListener() {
+					public void buttonClick(ClickEvent event) {
+						if (getFocWebApplication() != null && getFocWebApplication().getFocWebSession() != null) {
+							removeFocAllWindows();
 							Globals.logString("DEBUG_SESSION_NOT_VALID FocWebVaadinWindow.buttonClick() calling Session Logout");
-		        	getFocWebApplication().logout(FocWebVaadinWindow.this);
-//		        	if(!Globals.getApp().isUnitTest()){
-		        		getUI().getPage().setLocation( getUI().getPage().getLocation() );
-//		        	}
-		        	
-		  	    	PerfManager.print();
-		        }
-		      }
-		    });
+							getFocWebApplication().logout(FocWebVaadinWindow.this);
+							getUI().getPage().setLocation(getUI().getPage().getLocation());
+							PerfManager.print();
+						}
+					}
+				});
 			}
-  	}
-  }
+		}
+	}
   
   private boolean isNavigationVisible() {
-		return Globals.getApp().isUnitTest() || Globals.getApp().getUser_ForThisSession().getSaasApplicationRole() == FocUserDesc.APPLICATION_ROLE_NONE;
+		return Globals.getApp().isUnitTest() || 
+				(Globals.getApp().getUser_ForThisSession() != null && Globals.getApp().getUser_ForThisSession().getSaasApplicationRole() == FocUserDesc.APPLICATION_ROLE_NONE);
 	}
 
 	public FVMenuBar getUserMenuBar(){
@@ -745,8 +745,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	companyNameLabel.addStyleName("foc-text-center");
   	companyNameLabel.addStyleName("foc-text-middle");
   	companyNameLabel.addStyleName("foc-CompanyTitle");
-//	  companyNameLabel.addStyleName("foc-text-bottom");
-//  	companyNameLabel.setHeight("40px");
   	return companyNameLabel;
   }
   
@@ -774,7 +772,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	if(companyName == null) companyName = "";
   	if(centerHeaderLayout != null){
 	  	companyNameLabel = newMidleTitleLabel(companyName);
-//	  	companyNameLabel.setHeight("40px");
 	  	centerHeaderLayout.setHeight("40px");
 			centerHeaderLayout.addComponent(companyNameLabel);
 			centerHeaderLayout.setExpandRatio(companyNameLabel, 1);	
@@ -867,7 +864,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-  	showMenuBar();
+		if (!isNewLook()) {
+			showMenuBar();
+		}
 
   	addUnitTestingButtonIfAllowed();
   }
@@ -1186,6 +1185,14 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				}
 			}
 		}
+	}
+
+	public boolean isNewLook() {
+		return isNewLook;
+	}
+
+	public static void setNewLook(boolean newLook) {
+		isNewLook = newLook;
 	}
 
 	public class ButtonWithPendingSignature extends FVButton {
