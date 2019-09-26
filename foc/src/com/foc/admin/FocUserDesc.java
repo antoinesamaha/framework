@@ -200,7 +200,7 @@ public class FocUserDesc extends FocDesc {
     addField(bFld);
 
     bFld = new FBoolField("IS_GUEST", "Is Guest", FLD_IS_GUEST, false);
-    bFld.setAllwaysLocked(true);
+    //bFld.setAllwaysLocked(true);
     addField(bFld);
     
     bFld = new FBoolField("SIMULATION_ACTIVE", "Simulation Active", FLD_CURRENT_SIMULATION_ACTIVE, false);
