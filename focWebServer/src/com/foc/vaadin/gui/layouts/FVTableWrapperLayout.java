@@ -928,6 +928,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			titleLabel.setHeight("-1px");
 			titleLabel.addStyleName("foc-f16");
 			titleLabel.addStyleName("foc-bold");
+			titleLabel.addStyleName("foc-darkBlue");
 			addHeaderComponent_ToLeft(titleLabel);
 		}else{
 			titleLabel.setValueString(title);
