@@ -51,6 +51,10 @@ public abstract class FocWorkflowObject extends FocObject implements IWorkflow, 
     }
   }
   
+  public boolean hasAdrBookParty() {
+  	return false;
+  }
+  
   public boolean isWorkflowActivatedInFocDesc(){
   	return workflow_IsWorkflowSubject();
   }
