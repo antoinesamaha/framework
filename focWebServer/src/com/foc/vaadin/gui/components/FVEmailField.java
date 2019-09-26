@@ -22,6 +22,7 @@ import org.xml.sax.Attributes;
 import com.foc.desc.field.FEMailField;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
@@ -151,6 +152,13 @@ public class FVEmailField extends HorizontalLayout implements FocXMLGuiComponent
     if(emailText != null){
     	emailText.setCaption(caption);
     }
+    
+		if(atr != null) {
+      String style = atr.getValue(FXML.ATT_STYLE);
+      if(!Utils.isStringEmpty(style)) {
+      	FocXMLGuiComponentStatic.applyStyle(emailText, style);
+      }
+		}
   }
   
   @Override
