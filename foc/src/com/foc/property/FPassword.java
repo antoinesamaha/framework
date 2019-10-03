@@ -44,6 +44,7 @@ public class FPassword extends FProperty {
   public String getSqlString() {
   	if(			getProvider() == DBManager.PROVIDER_MSSQL 
   			|| 	getProvider() == DBManager.PROVIDER_ORACLE
+  			|| 	getProvider() == DBManager.PROVIDER_POSTGRES
   			|| 	getProvider() == DBManager.PROVIDER_H2
   			){
   		return "\'" + getString() + "\'";

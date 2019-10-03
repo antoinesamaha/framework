@@ -19,7 +19,6 @@ import java.awt.Component;
 import java.sql.Types;
 
 import com.fab.model.table.FieldDefinition;
-import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.gui.FGTextArea;
@@ -64,10 +63,21 @@ public class FBlobStringField extends FStringField {
   		return " " + name + " nvarchar(MAX)";
   	}else if(getProvider()== DBManager.PROVIDER_ORACLE){
   		return " \"" + name + "\" BLOB";
+  	}else if(getProvider()== DBManager.PROVIDER_POSTGRES){
+  		return " \"" + name + "\" TEXT";
   	}else if(getProvider()== DBManager.PROVIDER_H2){
   		return " " + name + " VARCHAR";
   	}else{
   		return " " + name + " BLOB";
+  	}
+  }
+  
+  @Override
+  public int compareSQLDeclaration(FField field){
+  	if(getProvider() == DBManager.PROVIDER_POSTGRES) {
+  		return 0;
+  	} else {
+  		return super.compareSQLDeclaration(field);
   	}
   }
   

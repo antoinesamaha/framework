@@ -260,6 +260,7 @@ public class DBManagerServer {
 		      					   focDesc.getProvider() == DBManager.PROVIDER_MYSQL
 		      					|| focDesc.getProvider() == DBManager.PROVIDER_MSSQL
 		      					|| focDesc.getProvider() == DBManager.PROVIDER_H2
+		      					|| focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
 		      					)
 		      			){
 		      		//We are here if we are MySQL and Insert

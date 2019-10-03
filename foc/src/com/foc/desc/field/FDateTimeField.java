@@ -50,6 +50,8 @@ public class FDateTimeField extends FDateField {
   public String getCreationString(String name) {
   	if(getProvider()== DBManager.PROVIDER_ORACLE){
   		return " \"" + name + "\" DATE";
+  	}else if(getProvider()== DBManager.PROVIDER_POSTGRES) {
+  		return " \"" + name + "\" TIMESTAMP";
   	}else{
   		return " " + name + " DATETIME";
   	}

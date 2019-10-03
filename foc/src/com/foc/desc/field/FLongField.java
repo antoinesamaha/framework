@@ -47,6 +47,8 @@ public class FLongField extends FField {
   	if(getProvider() == DBManager.PROVIDER_ORACLE){
   		return " \"" + name + "\" NUMBER(38)";
 //  		return " \"" + name + "\" LONG" ;//+ "(" + getSize() + ")";
+  	}else if(getProvider() == DBManager.PROVIDER_POSTGRES){
+  		return " \"" + name + "\" INT";
   	}else{
   		return " " + name + " LONG" ;//+ "(" + getSize() + ")";
   	}

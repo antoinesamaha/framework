@@ -60,6 +60,8 @@ public class ConnectionCredentials {
 				setProvider(DBManager.PROVIDER_ORACLE);
 			}else if(url.startsWith("jdbc:h2")){
 				setProvider(DBManager.PROVIDER_H2);
+			}else if(url.startsWith("jdbc:postgresql")){
+				setProvider(DBManager.PROVIDER_POSTGRES);				
 			}else{
 				setProvider(DBManager.PROVIDER_MYSQL);
 			}

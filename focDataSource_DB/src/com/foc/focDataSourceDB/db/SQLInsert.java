@@ -33,6 +33,7 @@ public class SQLInsert extends SQLRequest {
   	return fieldName.equals(focDesc.getRefFieldName()) && 
   			(  focDesc.getProvider() == DBManager.PROVIDER_MYSQL
   			|| focDesc.getProvider() == DBManager.PROVIDER_MSSQL
+  			|| focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
   			|| focDesc.getProvider() == DBManager.PROVIDER_H2
   			) ;
   }

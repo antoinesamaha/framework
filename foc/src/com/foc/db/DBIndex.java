@@ -22,6 +22,7 @@ public class DBIndex {
     if (modifyIndexName && 
     		(		focDesc.getProvider() == DBManager.PROVIDER_ORACLE
     		|| 	focDesc.getProvider() == DBManager.PROVIDER_H2
+    		|| 	focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
     		)){
       this.name = name+"_"+focDesc.getStorageName_ForSQL();
       if(this.name.length() > 30){

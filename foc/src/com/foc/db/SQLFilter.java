@@ -190,6 +190,7 @@ public class SQLFilter {
       
       String fieldName = fldName;
       if(    provider == DBManager.PROVIDER_ORACLE
+      		|| provider == DBManager.PROVIDER_POSTGRES
       		|| provider == DBManager.PROVIDER_H2) fieldName = "\""+fieldName+"\"";
       if(hasJoinMap() && !fieldName.contains(".")){
       	fieldName = getJoinMap().getMainTableAlias()+"."+fldName; 
@@ -348,6 +349,11 @@ public class SQLFilter {
       if(includeCompanyConditionIfApplicable && requestFocDesc.isByCompany() && isFilterByCompany()){
       	FField companyField = requestFocDesc.getFieldByID(FField.FLD_COMPANY);
         String fieldName = companyField.getDBName();
+        
+        if(requestFocDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+        	fieldName = "\""+fieldName+"\"";
+        }
+        
         if(hasJoinMap() && !fieldName.contains(".")){
         	fieldName = getJoinMap().getMainTableAlias()+"."+fieldName; 
         }
@@ -371,6 +377,9 @@ public class SQLFilter {
         		(UserSession.getInstanceForThread() == null || !UserSession.getInstanceForThread().isSimulation())){
         	requestBuffer.append("and(");
           fieldName = WorkflowDesc.FNAME_SIMULATION;
+          if(DBManager.provider_FieldNamesBetweenSpeachmarks(requestFocDesc.getProvider())) {
+          	fieldName = "\"" + fieldName + "\"";
+          }
           if(hasJoinMap() && !fieldName.contains(".")){
           	fieldName = getJoinMap().getMainTableAlias()+"."+fieldName; 
           }

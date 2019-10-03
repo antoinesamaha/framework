@@ -387,7 +387,8 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   			storageName_ForSQL = storageName;
   		}else if(getProvider() == DBManager.PROVIDER_H2){
   			storageName_ForSQL = storageName;
-  		}else if(getProvider() == DBManager.PROVIDER_ORACLE){
+  		}else if(getProvider() == DBManager.PROVIDER_ORACLE
+  				  || getProvider() == DBManager.PROVIDER_POSTGRES){
 //  			storageName_ForSQL = storageName.toUpperCase();
   			storageName_ForSQL = storageName;
 //  			if(storageName_ForSQL.length() > 30){
@@ -674,7 +675,9 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   // oooooooooooooooooooooooooooooooooo
 
   private void indexFill(){
-  	if(getProvider() != DBManager.PROVIDER_ORACLE && getProvider() != DBManager.PROVIDER_H2){
+  	if(			getProvider() != DBManager.PROVIDER_ORACLE 
+  			&& 	getProvider() != DBManager.PROVIDER_H2
+  			&& 	getProvider() != DBManager.PROVIDER_POSTGRES){
 	  	String indexRef = Globals.getDBManager().getINDEX_NAME_IDENTIFIER(); 
 	    if(indexes.get(indexRef) == null){
 	      //IDENTIFIER field

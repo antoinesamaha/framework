@@ -118,6 +118,8 @@ public class FDateTime extends FDate {
   public static String getSqlString_Static(int provider, Date date) {
     if (provider == DBManager.PROVIDER_ORACLE){
       return "TO_DATE (" + "'" + convertDateToSQLString_Static(date) + "'" + " , "+ "'YYYY-MM-DD HH24:MI:SS')";
+    }else if (provider == DBManager.PROVIDER_POSTGRES){
+        return "'" + convertDateToSQLString_Static(date) + "'";      
     }else if (provider == DBManager.PROVIDER_MSSQL){
     	return "CAST(N\'"+convertDateToSQLString_Static(date)+".000\' AS DateTime)";
     }else if (provider == DBManager.PROVIDER_H2){

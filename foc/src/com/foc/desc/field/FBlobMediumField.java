@@ -34,6 +34,8 @@ public class FBlobMediumField extends FBlobField{
   public String getCreationString(String name) {
     if (getProvider()== DBManager.PROVIDER_ORACLE){
       return " \"" + name + "\" BLOB";
+    }else if (getProvider()== DBManager.PROVIDER_POSTGRES){
+      return " \"" + name + "\" BYTEA";
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
     	return " " + name + " varbinary(max)";
     }else{

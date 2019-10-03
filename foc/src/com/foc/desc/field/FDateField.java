@@ -47,7 +47,9 @@ public class FDateField extends FField {
   
   public String getCreationString(String name) {
   	if(    getProvider() == DBManager.PROVIDER_ORACLE
-  			|| getProvider() == DBManager.PROVIDER_H2){
+  			|| getProvider() == DBManager.PROVIDER_H2
+  			|| getProvider() == DBManager.PROVIDER_POSTGRES
+  			){
   		return " \"" + name + "\" DATE";
   	}else{
   		return " " + name + " DATE";

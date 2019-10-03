@@ -181,19 +181,9 @@ public class FTime extends FProperty {
 
   public String getSqlString() {
       if (getProvider() == DBManager.PROVIDER_ORACLE){
-        /*String sysdate ="";
-        try{
-          String select = "SELECT TO_CHAR(SYSDATE,'DD-MON-YYYY') FROM DUAL";
-          Statement stmt = DBManagerServer.getInstance().lockStatement();
-          ResultSet resultSet = stmt.executeQuery(select);
-          if (resultSet.next()){
-            sysdate = resultSet.getString(1);
-          }
-          DBManagerServer.getInstance().unlockStatement(stmt);
-        }catch(Exception e){
-          Globals.logException(e);
-        }*/
         return "TO_DATE (" + "'" + convertTimeToSQLString(time) + "'" + " , "+ "'DD-MON-YYYY HH24:MI:SS')";
+      }else if(getProvider() == DBManager.PROVIDER_POSTGRES){
+      	return "'" + convertTimeToSQLString(time) + "'";
       }else if(getProvider() == DBManager.PROVIDER_MSSQL){
       	return "CAST(N'"+time.toString()+"' AS Time)";
       }else if(getProvider() == DBManager.PROVIDER_H2){

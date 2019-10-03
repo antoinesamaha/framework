@@ -636,7 +636,8 @@ public class DBAdaptor {
 	        Globals.logException(e);
 	        */
 	      } else if (isAlterAllFields() || focField.compareSQLDeclaration(realField) != 0) {
-	        //focField.compareSQLDeclaration(realField);
+	        focField.compareSQLDeclaration(realField);
+	      	
 	      	String fieldCompleteName = enumer.getFieldCompleteName(focDesc);
 	        SQLAlterTable alter = new SQLAlterTable(focDesc, focField, fieldCompleteName, SQLAlterTable.MODIFY);
 	        if(ConfigInfo.isAdaptEnabled()){

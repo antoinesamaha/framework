@@ -49,7 +49,7 @@ public class FStringField extends FField {
 
   public boolean isClob() {
   	boolean clob = false;
-  	if(getProvider() == DBManager.PROVIDER_ORACLE) {
+  	if(			getProvider() == DBManager.PROVIDER_ORACLE) {
   		clob = getSize() > 4000;
   	} else if(getProvider() == DBManager.PROVIDER_MSSQL) {
   		clob = getSize() > 4000;
@@ -65,6 +65,12 @@ public class FStringField extends FField {
     	} else {
     		return " \"" + name + "\" VARCHAR2" + "(" + getSize() + ") ";
     	}
+    }else if (getProvider()== DBManager.PROVIDER_POSTGRES){
+      	if(isClob()) {
+      		return " \"" + name + "\" TEXT ";
+      	} else {
+      		return " \"" + name + "\" VARCHAR" + "(" + getSize() + ") ";
+      	}    	
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
     	if(isClob()) { 
     		return " [" + name + "] [ntext] ";

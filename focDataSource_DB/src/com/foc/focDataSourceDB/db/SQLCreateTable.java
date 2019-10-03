@@ -39,33 +39,40 @@ public class SQLCreateTable extends SQLRequest {
         FField focField = (FField) enumer.next();
         if (focField != null) {
           if (!firstField) request.append(",");
-          request.append(focField.getCreationString(enumer.getFieldCompleteName(focDesc)));
           
-          //Needed for Oracle CLOB fields only
-          //----------------------------------
-          if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE 
-          		&& 	focField instanceof FStringField
-          		&&  ((FStringField) focField).isClob()) {
-          	if(fieldNames_LobNeedEndDeclaration != null) fieldNames_LobNeedEndDeclaration += ",";
-          	else fieldNames_LobNeedEndDeclaration = "";
-         		fieldNames_LobNeedEndDeclaration += "\""+focField.getDBName()+"\"";  
-          }
-          //----------------------------------
+          boolean isTheREFField = enumer.getFieldCompleteName(focDesc).equals(focDesc.getRefFieldName());
           
-          if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider() != DBManager.PROVIDER_MSSQL){
-            request.append(" NOT NULL ");
-          }
-          if(enumer.getFieldCompleteName(focDesc).equals(focDesc.getRefFieldName())){
-          	if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
-          		request.append(" PRIMARY KEY ");
-          	}else if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL){
-          		request.append(" IDENTITY(1,1) PRIMARY KEY ");
-          	}else if(focDesc.getProvider() == DBManager.PROVIDER_H2){
-          		request.append(" AUTO_INCREMENT PRIMARY KEY ");
-          	}else if(focDesc.getProvider()== DBManager.PROVIDER_MYSQL){
-          		request.append("AUTO_INCREMENT ");
-          		addPrimaryKeyConstraints = true;
-          	}
+          if(isTheREFField && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+        		request.append(" \"" + focDesc.getRefFieldName() + "\" SERIAL PRIMARY KEY ");
+          } else {
+	          request.append(focField.getCreationString(enumer.getFieldCompleteName(focDesc)));
+	          
+	          //Needed for Oracle CLOB fields only
+	          //----------------------------------
+	          if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE 
+	          		&& 	focField instanceof FStringField
+	          		&&  ((FStringField) focField).isClob()) {
+	          	if(fieldNames_LobNeedEndDeclaration != null) fieldNames_LobNeedEndDeclaration += ",";
+	          	else fieldNames_LobNeedEndDeclaration = "";
+	         		fieldNames_LobNeedEndDeclaration += "\""+focField.getDBName()+"\"";  
+	          }
+	          //----------------------------------
+	          
+	          if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider() != DBManager.PROVIDER_MSSQL){
+	            request.append(" NOT NULL ");
+	          }
+	          if(enumer.getFieldCompleteName(focDesc).equals(focDesc.getRefFieldName())){
+	          	if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+	          		request.append(" PRIMARY KEY ");
+	          	}else if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL){
+	          		request.append(" IDENTITY(1,1) PRIMARY KEY ");
+	          	}else if(focDesc.getProvider() == DBManager.PROVIDER_H2){
+	          		request.append(" AUTO_INCREMENT PRIMARY KEY ");
+	          	}else if(focDesc.getProvider()== DBManager.PROVIDER_MYSQL){
+	          		request.append("AUTO_INCREMENT ");
+	          		addPrimaryKeyConstraints = true;
+	          	}
+	          }
           }
           firstField = false;
         }

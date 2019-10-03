@@ -67,7 +67,8 @@ public class FNumField extends FField {
   }
 
   public String getCreationString(String name) {//BINARY_
-    if (getProvider()== DBManager.PROVIDER_ORACLE){
+    if (	 getProvider()== DBManager.PROVIDER_ORACLE
+    		|| getProvider()== DBManager.PROVIDER_POSTGRES){
       return " \"" + name + "\" NUMERIC" + "(" + getSize() + "," + getDecimals() + ")";
     }else if (getProvider()== DBManager.PROVIDER_MSSQL){
     	return " " + name + " [float]";

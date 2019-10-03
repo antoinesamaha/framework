@@ -29,6 +29,7 @@ public class DBManager {
   public static final int PROVIDER_MSSQL      = 4;
   public static final int PROVIDER_ORACLE_OLD = 5;
   public static final int PROVIDER_H2         = 6;
+  public static final int PROVIDER_POSTGRES   = 7;
 
   private String INDEX_NAME_IDENTIFIER = "IDENTIFIER";
   
@@ -172,12 +173,15 @@ public class DBManager {
 	
 	public static boolean provider_TableNamesBetweenSpeachmarks(int provider){
 		return provider == DBManager.PROVIDER_ORACLE 
-				|| provider == DBManager.PROVIDER_H2; 
+				|| provider == DBManager.PROVIDER_H2
+				|| provider == DBManager.PROVIDER_POSTGRES
+				; 
 	}
 	
 	public static boolean provider_FieldNamesBetweenSpeachmarks(int provider){
 		return provider == DBManager.PROVIDER_ORACLE 
-				|| provider == DBManager.PROVIDER_H2; 
+				|| provider == DBManager.PROVIDER_H2 
+				|| provider == DBManager.PROVIDER_POSTGRES;
 	}
 	
 	public static String provider_ConvertFieldName(int provider, String fieldName){
