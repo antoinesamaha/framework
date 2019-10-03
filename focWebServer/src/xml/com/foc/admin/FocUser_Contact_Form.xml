@@ -1,22 +1,19 @@
-<VerticalLayout height="-1px" margin="true" spacing="true" width="600px">
-  <ValidationSettings formTitle="Guest User for $F{CONTACT.FULL_NAME}" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
-
-  <Label value="User Info" style="f14,H2,text-center" />
-    
-  <HorizontalLayout captionMargin="0" spacing="true">
-    <GuiField name="NAME" caption="Name" width="250px" height="-1px" />
-    <GuiField name="FULL_NAME" caption="Full name" width="250px" height="-1px" editable="false"/>
-  </HorizontalLayout>
-  
-  <HorizontalLayout captionMargin="0" spacing="true">
-    <GuiField name="UGROUP" caption="Group" width="250px" height="-1px" editable="false"/>
-    <GuiField name="CONTACT" caption="Related contact" width="250px" height="-1px" editable="false" />
-  </HorizontalLayout>
-      
-  <HorizontalLayout captionMargin="0" spacing="true">
-    <Button name="RESET_GUEST_PASSWORD" caption="Reset password" width="250px" style="button-dark-05"/>
-    <Button name="SUSPEND_USER" caption="Suspend user" width="250px" visibleWhen="NOT(SUSPENDED)" style="button-dark-01" />
-    <Button name="ENABLE_USER" caption="Enable user" width="250px" visibleWhen="SUSPENDED" style="button-dark-03" />
-  </HorizontalLayout>    
+<VerticalLayout captionMargin="0" margin="true" spacing="true" width="600px" height="-1px">
+  <ValidationSettings formTitle="Guest User for $F{CONTACT.FULL_NAME}" withApply="true" withAttach="false" withPrint="false" viewSelector="false" />
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" height="-1px">
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <GuiField name="NAME" caption="Name" width="250px" height="-1px" />
+      <GuiField name="FULL_NAME" caption="Full Name" width="250px" height="-1px" editable="false" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <GuiField name="UGROUP" caption="Group" width="250px" height="-1px" editable="false" />
+      <GuiField name="CONTACT" caption="Related contact" width="250px" height="-1px" editable="false" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <Button name="RESET_GUEST_PASSWORD" caption="Reset password" width="250px" style="button-dark-05" />
+      <Button name="SUSPEND_USER" caption="Suspend user" width="250px" visibleWhen="NOT(SUSPENDED)" style="button-dark-01" />
+      <Button name="ENABLE_USER" caption="Enable user" width="250px" visibleWhen="SUSPENDED" style="button-dark-03" />
+    </HorizontalLayout>
+  </VerticalLayout>
 </VerticalLayout>
 
