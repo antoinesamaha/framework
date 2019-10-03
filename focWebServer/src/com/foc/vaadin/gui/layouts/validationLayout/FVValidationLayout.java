@@ -2123,7 +2123,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     if(valo_ApplyButton == null && createIfNeeded){
     	valo_ApplyButton = new Button("Done");
     	if(isRTL()){
-    		valo_ApplyButton.setCaption("حذف");	
+    		valo_ApplyButton.setCaption("إنتهاء");	
     		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_ApplyButton);
     	}
     	valo_ApplyButton.setClickShortcut(KeyCode.ENTER, ModifierKey.CTRL);
@@ -2154,8 +2154,8 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   		if(mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook()) {				
 				valo_DeleteEmbedded = new Embedded("Delete");	   
 	    	if(isRTL()){
-	    		valo_ApplyButton.setCaption("إنتهاء");	
-	    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_ApplyButton);
+	    		valo_DeleteEmbedded.setCaption("حذف");	
+	    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_DeleteEmbedded);
 	    	}
 	    	valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
 	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
