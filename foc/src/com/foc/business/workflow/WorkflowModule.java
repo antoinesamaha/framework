@@ -35,7 +35,7 @@ public class WorkflowModule extends FocModule {
   
 	public static final String MODULE_NAME = "WORKFLOW";
 	
-	public static final int VERSION_ID = 159;
+	public static final int VERSION_ID = 160;
 	
 	public static final int VERSION_ID_LAST_BEFORE_FLD_NAME_CUT = 152;
 	public static final int VERSION_ID_CHANGE_CLOB_TO_SECURED_FILE_SYSTEM_IN_ORACLE = 158;

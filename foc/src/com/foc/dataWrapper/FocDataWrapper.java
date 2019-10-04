@@ -31,7 +31,10 @@ import com.foc.business.company.Company;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
+import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.Workflow;
+import com.foc.business.workflow.map.WFTransactionConfig;
+import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -80,8 +83,9 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   protected FocListener     focListener     = null;
   private   FocListListener focListPropertyListener_ToRefreshGui = null;
 
-  private ReferencesCollection referencesCollection = null;
-  private boolean              refreshGuiDisabled   = false;
+  private ReferencesCollection referencesCollection     = null;
+  private boolean              refreshGuiDisabled       = false;
+  private int                  forbidAncestorSiteAccess = -1;
   
   public FocDataWrapper(IFocData data){
   	this(data, true);
@@ -363,6 +367,16 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   	return userSession;
   }
   
+  public boolean isForbidAncestorsSitesFromAccess() {
+  	if(forbidAncestorSiteAccess == -1) {
+  		if(getFocList() != null && getFocList().getFocDesc() != null && getFocList().getFocDesc() instanceof IWorkflowDesc) {
+  			WFTransactionConfig config = WFTransactionConfigDesc.getTransactionConfig_ForTransaction((IWorkflowDesc)getFocList().getFocDesc());
+  			forbidAncestorSiteAccess = config != null && config.isForbidAncestorSiteAccess() ? 1 : 0;
+  		}
+  	}
+  	return forbidAncestorSiteAccess == 1;
+  }
+  
   protected boolean includeFocObject(FocObject focObj){
     boolean include = focObj != null ? true : false;
 //    FocUser user = FocWebApplication.getFocWebSession_Static().getUserSession().getUser();
@@ -397,15 +411,15 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
           
           if(siteFieldID_1 != FField.NO_FIELD_ID && userSession != null){
             WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_1);
-            if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
-              include = true;
+            if(site != null){
+              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
             }
           }
           
           if(siteFieldID_2 != FField.NO_FIELD_ID && userSession != null){
             WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_2);
             if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
-              include = true;
+              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
             }
           }
           

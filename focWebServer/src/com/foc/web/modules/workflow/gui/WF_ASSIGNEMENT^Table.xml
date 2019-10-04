@@ -21,6 +21,7 @@
         <TableColumn name="PROMPT_APPROVE_UPON_VALID" caption="Prompt for Aprv. Upon Save"   editable="true" width="100px"/>
         <TableColumn name="INCLUDE_PROJECT_CODE" caption="Include Project Code"   editable="true" width="100px"/>
         <TableColumn name="CODE_BY_SITE" caption="Code By Site" editable="true" width="-1px"/>
+        <TableColumn name="FORBID_ANCESTOR_ACCESS" caption="Forbid Ancestor Site access" editable="true" width="-1px"/>
     </GuiTable>
 </VerticalLayout>
 

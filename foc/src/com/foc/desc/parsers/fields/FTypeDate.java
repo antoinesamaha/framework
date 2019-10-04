@@ -33,6 +33,7 @@ public class FTypeDate extends FocFieldTypAbstract<FocDate> {
 		FField focField = null;
 		focField = new FDateField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setDBResident(a.dbResident());
+		focField.setMandatory(a.mandatory());
 		return focField;
 	}
 

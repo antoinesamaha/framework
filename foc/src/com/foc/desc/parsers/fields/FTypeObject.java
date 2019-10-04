@@ -40,7 +40,7 @@ public class FTypeObject extends FocFieldTypAbstract<FocForeignEntity> {
   	focField.setFocDescStorageName(a.table(), cascade, directlyEditable);
   	focField.setWithList(a.cachedList());
   	focField.setDBResident(a.dbResident());
-//  	focField.setMandatory(a.mandatory());
+  	focField.setMandatory(a.mandatory());
   	if(detach && !cascade){
   		focField.setReferenceChecker_PutToZeroWhenReferenceDeleted(true);
   	}else if(detach && cascade){
