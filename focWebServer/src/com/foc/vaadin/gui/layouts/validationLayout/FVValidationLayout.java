@@ -2156,9 +2156,12 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	    	if(isRTL()){
 	    		valo_DeleteEmbedded.setCaption("حذف");	
 	    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_DeleteEmbedded);
+	    		valo_DeleteEmbedded.addStyleName("foc-deleteButtonAr");
+	    	}else{
+	    		valo_DeleteEmbedded.addStyleName("foc-deleteButton");
 	    	}
 	    	valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
-	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
+	    	
 			}else{
 				valo_DeleteEmbedded = new Embedded();
 	  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
