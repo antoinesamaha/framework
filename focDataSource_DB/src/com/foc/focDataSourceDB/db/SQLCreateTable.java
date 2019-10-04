@@ -58,7 +58,10 @@ public class SQLCreateTable extends SQLRequest {
 	          }
 	          //----------------------------------
 	          
-	          if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider() != DBManager.PROVIDER_MSSQL){
+	          if (		focDesc.getProvider() != DBManager.PROVIDER_ORACLE 
+	          		&& 	focDesc.getProvider() != DBManager.PROVIDER_MSSQL
+	          		&& 	focDesc.getProvider() != DBManager.PROVIDER_POSTGRES
+	          		){
 	            request.append(" NOT NULL ");
 	          }
 	          if(enumer.getFieldCompleteName(focDesc).equals(focDesc.getRefFieldName())){

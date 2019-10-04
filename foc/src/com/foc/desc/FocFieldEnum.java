@@ -5,6 +5,7 @@ package com.foc.desc;
 
 import java.util.*;
 
+import com.foc.Globals;
 import com.foc.desc.field.*;
 import com.foc.property.*;
 
@@ -79,6 +80,9 @@ public class FocFieldEnum implements Iterator {
         doShowField = level == LEVEL_PLAIN && field.getClass() != FInLineObjectField.class ;
         if (!doShowField) {
           addFieldToPath(field);
+          if(field.getFocDesc() == null) {
+          	Globals.logString("!! BAD MODEL !! Desc is null for field: "+field.getName()+" in table "+field.getFocDescParent().getStorageName());
+          }
           new FocFieldEnum(field.getFocDesc(), null, fields, currentFieldPath, newEnumFieldCategory, this.level);
           removeFieldFromPath();
         }
