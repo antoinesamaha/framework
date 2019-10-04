@@ -54,6 +54,7 @@ public class FReferenceField extends FField {
     if(provider == DBManager.PROVIDER_MSSQL){
     	str = " [" + name + "] BIGINT" ;
     }else if(   provider == DBManager.PROVIDER_ORACLE
+    		     || provider == DBManager.PROVIDER_POSTGRES
     		     || provider == DBManager.PROVIDER_H2){
     	str = " \"" + name + "\" INT" ;
     }else{

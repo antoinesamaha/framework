@@ -125,7 +125,9 @@ public class FString extends FProperty implements Cloneable{
 //			}
   		if(!isCompress()) sqlStr = sqlStr.replace("'", "''");
   		sqlStr = "N\'" + sqlStr + "\'";
-  	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
+  	}else if(getProvider() == DBManager.PROVIDER_ORACLE
+  			|| getProvider() == DBManager.PROVIDER_POSTGRES
+  			){
   		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
   		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
   		sqlStr = "\'" + sqlStr + "\'";

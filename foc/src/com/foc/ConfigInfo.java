@@ -85,6 +85,8 @@ public class ConfigInfo {
   private static String  encryptionClassName         = null;
   private static boolean keepFocObjectArrayInFocDesc = false;
   
+  private static boolean comboBoxShowDropDownEvenWhenDisabled = false;
+  
   private static boolean logListeningEnabled = false;  
   private static boolean useLocalEmailClientForNotification = false;
   private static boolean allowAddInsideComboBox  = true;
@@ -352,6 +354,9 @@ public class ConfigInfo {
         
         str = getProperty("keepFocObjectArrayInFocDesc");
         keepFocObjectArrayInFocDesc = str != null ? str.compareTo("1") == 0 : false;
+        
+        str = getProperty("comboBoxShowDropDownEvenWhenDisabled");
+        comboBoxShowDropDownEvenWhenDisabled = str != null ? str.compareTo("1") == 0 : false;
         
         language = getProperty("gui.language");
         
@@ -706,7 +711,7 @@ public class ConfigInfo {
 	}
 	
 	public static boolean comboBoxShowDropDownEvenWhenDisabled(){
-		return true;
+		return comboBoxShowDropDownEvenWhenDisabled;
 	}
 	
   public static String getLanguage() {

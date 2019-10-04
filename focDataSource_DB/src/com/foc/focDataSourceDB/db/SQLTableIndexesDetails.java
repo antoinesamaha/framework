@@ -56,7 +56,61 @@ public class SQLTableIndexesDetails{
         }
         rs.close();
         DBManagerServer.getInstance().unlockStatement(stmt);
-      }else{
+        
+      } else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+      	StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
+      	String query = "SELECT indexname, indexdef FROM pg_indexes WHERE schemaname = 'public' AND tablename= '"+focDesc.getStorageName_ForSQL()+"'";
+      	Globals.logString(query);
+      	ResultSet rs = stmt.executeQuery(query);
+
+        int nameIdx = 1;
+        int definitionIdx  = 2;
+        
+        while(rs.next()){
+          String nameValue = rs.getString(nameIdx);
+          String definitionString = rs.getString(definitionIdx);
+          boolean uniqueValue = definitionString != null && definitionString.toUpperCase().contains("UNIQUE");
+
+          if (nameValue != null){
+            DBIndex dbIndex = (DBIndex) indexesContainer.get(nameValue);
+            if(dbIndex == null){
+              dbIndex = new DBIndex(nameValue, focDesc, uniqueValue, false);
+              indexesContainer.put(nameValue, dbIndex);
+            }
+            
+            int parenthesisOpen  = definitionString.lastIndexOf("(");
+            int parenthesisClose = definitionString.lastIndexOf(")");
+            if(parenthesisOpen > 0 && parenthesisClose > parenthesisOpen) {
+            	String fieldsStr = definitionString.substring(parenthesisOpen+1, parenthesisClose);
+            	StringTokenizer tokzer = new StringTokenizer(fieldsStr, ",\"", false);
+            	while(tokzer != null && tokzer.hasMoreTokens()) {
+            		String columnValue = tokzer.nextToken();
+                FField field = focDesc.getFieldByDBCompleteName(columnValue); 
+                if(field == null){
+                  Globals.logString("COl value : "+columnValue+" table:"+focDesc.getStorageName_ForSQL());
+                  field = focDesc.getFieldByName(columnValue);
+                }
+                if(field != null){
+                	dbIndex.addField(field.getID());
+                }
+            	}
+            }
+            
+            /*
+            FField field = focDesc.getFieldByDBCompleteName(columnValue); 
+            if(field == null){
+              Globals.logString("COl value : "+columnValue+" table:"+focDesc.getStorageName_ForSQL());
+              field = focDesc.getFieldByName(columnValue);
+            }
+            if(field != null){
+            	dbIndex.addField(field.getID());
+            }
+            */
+          }
+        }
+        rs.close();
+        DBManagerServer.getInstance().unlockStatement(stmt);
+      } else {
 	      DatabaseMetaData dbmd = DBManagerServer.getInstance().getConnection().getMetaData();
 	      ResultSet rs = dbmd.getIndexInfo(null, null, focDesc.getStorageName_ForSQL(), false, false);
 	

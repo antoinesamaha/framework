@@ -18,6 +18,7 @@ package com.foc.focDataSourceDB.db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -260,6 +261,7 @@ public class DBManagerServer {
 		      					   focDesc.getProvider() == DBManager.PROVIDER_MYSQL
 		      					|| focDesc.getProvider() == DBManager.PROVIDER_MSSQL
 		      					|| focDesc.getProvider() == DBManager.PROVIDER_H2
+		      					|| focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
 		      					)
 		      			){
 		      		//We are here if we are MySQL and Insert
@@ -267,8 +269,25 @@ public class DBManagerServer {
 		      		if(s != null){
 			    	  	s.executeUpdate(req, Statement.RETURN_GENERATED_KEYS);
 			    	  	ResultSet rs = s.getGeneratedKeys();
+
+			    	  	int indexOfREF = 1;
+			    	  	if(focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+//				    	  	ResultSetMetaData metaData = rs.getMetaData();
+//				    	  	indexOfREF = metaData.getColumnCount();
+				    	  	
+			    	  		indexOfREF = -1;
+				    	  	ResultSetMetaData metaData = rs.getMetaData();
+				    	  	for(int i=1; i<=metaData.getColumnCount() && indexOfREF < 0; i++) {
+				    	  		String colName = metaData.getColumnName(i);
+				    	  		if(colName.equals(focDesc.getRefFieldName())) {
+				    	  			indexOfREF = i;
+				    	  		}
+//				    	  		Globals.logString("Column["+i+"]="+colName);
+				    	  	}
+			    	  	}
+			    	  	
 			    	  	while(rs.next()){
-			    	  		int ref = rs.getInt(1);
+			    	  		int ref = rs.getInt(indexOfREF);
 	
 			    	  		focObject.setReference_WithFocListRefHashMapAdjustment(ref);
 			    	  	}

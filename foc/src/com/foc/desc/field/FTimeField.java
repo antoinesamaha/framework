@@ -54,7 +54,8 @@ public class FTimeField extends FDateField {
   public String getCreationString(String name) {
   	if(getProvider() == DBManager.PROVIDER_ORACLE){
   		return super.getCreationString(name);
-  	}else if(getProvider() == DBManager.PROVIDER_H2){
+  	}else if(getProvider() == DBManager.PROVIDER_H2
+  			|| getProvider() == DBManager.PROVIDER_POSTGRES){
   		return " \"" + name + "\" TIME";
   	}else{
   		return " " + name + " TIME";

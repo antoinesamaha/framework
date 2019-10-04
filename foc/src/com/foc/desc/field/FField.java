@@ -271,6 +271,7 @@ public abstract class FField implements Cloneable, IFocData {
     case Types.BLOB:
     case Types.LONGVARBINARY:  
     case Types.VARBINARY:
+    case Types.BINARY://This is for Postgres BYTEA
       field = new FBlobStringField(name, name, id, false, 0, 0);
       break;
     case Types.DATE:
@@ -860,7 +861,8 @@ public abstract class FField implements Cloneable, IFocData {
   			fieldNameString = "["+ fieldNameString +"]"; //This is to cover for fields with names like keywords (TRANSACTION for example)
   		}
   	}else if(  provider == DBManager.PROVIDER_ORACLE
-  			    || provider == DBManager.PROVIDER_H2){
+  			    || provider == DBManager.PROVIDER_H2
+  			    || provider == DBManager.PROVIDER_POSTGRES){
 			int dotIndex = fieldNameString.indexOf('.');
 			if(dotIndex > 0){//If there is a dot we put the " after the .
 				String initial = fieldNameString;
@@ -876,9 +878,9 @@ public abstract class FField implements Cloneable, IFocData {
 		String speachMarks_Start = "\"";
 		if(dbProvider == DBManager.PROVIDER_MSSQL){
 			speachMarks_Start = "N\'";
-		}else if(dbProvider == DBManager.PROVIDER_ORACLE){
-	  	speachMarks_Start = "'";
-		}else if(dbProvider == DBManager.PROVIDER_H2){
+		}else if(			dbProvider == DBManager.PROVIDER_ORACLE
+				      ||  dbProvider == DBManager.PROVIDER_H2
+							||  dbProvider == DBManager.PROVIDER_POSTGRES){
 	  	speachMarks_Start = "'";
 		}
 		return speachMarks_Start;
@@ -888,9 +890,9 @@ public abstract class FField implements Cloneable, IFocData {
 		String speachMarks_End   = "\"";
 		if(dbProvider == DBManager.PROVIDER_MSSQL){
 			speachMarks_End = "\'";
-		}else if(dbProvider == DBManager.PROVIDER_ORACLE){
-	  	speachMarks_End   = "'";
-		}else if(dbProvider == DBManager.PROVIDER_H2){
+		}else if(			dbProvider == DBManager.PROVIDER_ORACLE
+	      ||  dbProvider == DBManager.PROVIDER_H2
+				||  dbProvider == DBManager.PROVIDER_POSTGRES){
 	  	speachMarks_End   = "'";
 		}
 		return speachMarks_End;

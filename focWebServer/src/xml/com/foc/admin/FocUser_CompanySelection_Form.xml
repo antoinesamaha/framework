@@ -1,14 +1,22 @@
-<VerticalLayout title ="User Settings" spacing="true" margin="true" captionMargin="0">
-    <ValidationSettings title="Login details" withApply="true" withAttach="false" withPrint="false" withEmail="false" viewSelector="false"/>
-    <GuiField name="CURRENT_COMPANY" caption="Company Name" captionPos="top" captionWidth="100px" width="250px" height="-1px" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
-    <GuiField name="CURRENT_SITE" caption="Site Name" captionPos="top" captionWidth="100px" width="250px" height="-1px" visibleWhen="NOT(CURRENT_COMPANY=null)" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
-    <GuiField name="CURRENT_TITLE" caption="Title" captionPos="top" captionWidth="100px" width="250px" height="-1px" visibleWhen="AND(NOT(CURRENT_SITE=null),NOT(CURRENT_COMPANY=null))" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false"/>
-    <GuiField name="CONTEXT_HELP_ACTIVATION" caption="Context Help Activation" />
-    <Line />
+<VerticalLayout title="User Settings" spacing="true" margin="true" captionMargin="0">
+  <ValidationSettings title="Login details" withApply="true" withAttach="false" withPrint="false" withEmail="false" viewSelector="false" />
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" height="-1px">
+
     <HorizontalLayout captionMargin="0" spacing="true">
-        <GuiField name="SIMULATION_ACTIVE" caption="Simulation active" captionPos="top" width="-1px" height="-1px" immediate="true" gearEnabled="false" alignment="bottom_left"/>
-        <!-- GuiField name="THEME" caption="Theme" captionPos="top" width="-1px" height="-1px" immediate="true" gearEnabled="false" / -->
-        <Button name="CHANGE_PASSWORD" caption="Change Password" alignment="bottom_left"/>
-        <GuiField name="REPLACEMENT_USER" captionProperty="NAME" caption="Current Replacement User" captionPos="top" width="-1px" height="-1px" immediate="true" gearEnabled="false" />
+      <GuiField name="CURRENT_COMPANY" caption="Company Name" width="250px" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false" />
+      <GuiField name="CURRENT_SITE" caption="Site Name" width="250px" visibleWhen="NOT(CURRENT_COMPANY=null)" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false" />
+      <Button name="CHANGE_PASSWORD" caption="Change Password" alignment="bottom_left" />
     </HorizontalLayout>
+
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <GuiField name="CURRENT_TITLE" caption="Title" width="250px" visibleWhen="AND(NOT(CURRENT_SITE=null),NOT(CURRENT_COMPANY=null))" immediate="true" gearEnabled="false" refreshEnabled="false" addEnabled="false" />
+      <GuiField name="REPLACEMENT_USER" captionProperty="NAME" caption="Current Replacement User" width="250px" immediate="true" gearEnabled="false" />
+    </HorizontalLayout>
+
+    <HorizontalLayout captionMargin="0" spacing="true">
+      <GuiField name="CONTEXT_HELP_ACTIVATION" caption="Context Help Activation" captionPos="top" width="250px" immediate="true" gearEnabled="false" alignment="bottom_left" />
+      <GuiField name="SIMULATION_ACTIVE" caption="Simulation active" captionPos="top" width="250px" immediate="true" gearEnabled="false" alignment="bottom_left" />
+    </HorizontalLayout>
+
+  </VerticalLayout>
 </VerticalLayout>

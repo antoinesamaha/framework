@@ -3587,7 +3587,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     	if(desc.getProvider() == DBManager.PROVIDER_MSSQL){
     		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \'"+prefixWithSeperator+"%\'");
     	}else if(desc.getProvider() == DBManager.PROVIDER_ORACLE
-    			  || desc.getProvider() == DBManager.PROVIDER_H2){
+    			  || desc.getProvider() == DBManager.PROVIDER_H2
+    			  || desc.getProvider() == DBManager.PROVIDER_POSTGRES
+    			  ){
       	buff = new StringBuffer("\""+desc.getFieldByID(fieldID).getName()+"\" like \'"+prefixWithSeperator+"%\'");
     	}else{
     		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \""+prefixWithSeperator+"%\"");
@@ -3597,7 +3599,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
       Company company = getCompany();
       if(company != null){
       	String expression = "";
-      	if(desc.getProvider() == DBManager.PROVIDER_ORACLE){
+      	if(			desc.getProvider() == DBManager.PROVIDER_ORACLE
+      			|| 	desc.getProvider() == DBManager.PROVIDER_POSTGRES){
       		expression = "\""+desc.getFieldByID(FField.FLD_COMPANY).getDBName()+"\"="+company.getReferenceInt();
       	}else{
       		expression = desc.getFieldByID(FField.FLD_COMPANY).getDBName()+"="+company.getReferenceInt();
@@ -3625,7 +3628,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	  					FField fld = getThisFocDesc().getFieldByID(workflowDesc.getFieldID_Site_1());
 	  					if(fld != null && !Utils.isStringEmpty(fld.getDBName())){
 			  	    	String expression = "";
-			  	    	if(desc.getProvider() == DBManager.PROVIDER_ORACLE){
+			  	    	if(    desc.getProvider() == DBManager.PROVIDER_ORACLE
+			  	    			|| desc.getProvider() == DBManager.PROVIDER_POSTGRES){
 			  	    		expression = "\""+fld.getDBName()+"\"="+area.getReferenceInt();
 			  	    	}else{
 			  	    		expression = fld.getDBName()+"="+area.getReferenceInt();

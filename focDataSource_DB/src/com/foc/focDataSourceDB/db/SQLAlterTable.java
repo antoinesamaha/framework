@@ -92,7 +92,9 @@ public class SQLAlterTable extends SQLRequest {
             if(oracleCLOB) request.append(") LOB(\"+name+\") STORE AS SECUREFILE ");
             //-----------------
         	}
-          if (focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider()!= DBManager.PROVIDER_MSSQL){
+          if (		focDesc.getProvider() != DBManager.PROVIDER_ORACLE 
+          		&& 	focDesc.getProvider() != DBManager.PROVIDER_MSSQL
+          		&& 	focDesc.getProvider() != DBManager.PROVIDER_POSTGRES){
             request.append(" NOT NULL ");
           }
           

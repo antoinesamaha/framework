@@ -199,6 +199,8 @@ public class FDate extends FProperty {
   public String getSqlString() {
     if (getProvider() == DBManager.PROVIDER_ORACLE){
       return "TO_DATE (" + "'" + convertDateToSQLString(date) + "'" + " , "+ "'DD-MON-YYYY')";
+    }else if (getProvider() == DBManager.PROVIDER_POSTGRES){
+    	return "'" + convertDateToSQLString(date) + "'";
     }else if (getProvider() == DBManager.PROVIDER_MSSQL){
     	return "CAST(N\'"+convertDateToSQLString(date)+"\' AS Date)";
     }else if (getProvider() == DBManager.PROVIDER_H2){

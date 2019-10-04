@@ -52,7 +52,8 @@ public class FBlobProperty extends FProperty{
   		sqlStr = "CAST('" + sqlStr + "\' AS VARBINARY(MAX))";//CAST('wahid' AS VARBINARY(MAX))
   		return sqlStr;
   	}else if(			getProvider() == DBManager.PROVIDER_ORACLE
-  						||  getProvider() == DBManager.PROVIDER_H2){
+  						||  getProvider() == DBManager.PROVIDER_H2
+  						||  getProvider() == DBManager.PROVIDER_POSTGRES){
   		return "\'" + getString() + "\'";
   	}else{
   		return "\"" + getString() + "\"";

@@ -2152,7 +2152,11 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	if(valo_DeleteEmbedded == null && createIfNeeded && !isObjectLocked()){
   		INavigationWindow mainWindow = getNavigationWindow();
   		if(mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook()) {				
-				valo_DeleteEmbedded = new Embedded("Delete");	    	
+				valo_DeleteEmbedded = new Embedded("Delete");	   
+	    	if(isRTL()){
+	    		valo_DeleteEmbedded.setCaption("حذف");	
+	    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_DeleteEmbedded);
+	    	}
 	    	valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
 	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
 			}else{
