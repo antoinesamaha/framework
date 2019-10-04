@@ -490,7 +490,7 @@ public class FocUnitTestingCommand {
        FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 
        if (validationLayout != null) {
-         Embedded delete = validationLayout.valo_GetDeleteEmbedded(false);      		
+         AbstractComponent delete = validationLayout.valo_GetDeleteEmbedded(false);      		
          if (delete != null) {
         	 validationLayout.deleteButtonClickAction();
          } else {
