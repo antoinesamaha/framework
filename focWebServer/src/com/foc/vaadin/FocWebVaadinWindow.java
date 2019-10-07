@@ -100,17 +100,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 
 	private HorizontalLayout centerHeaderLayout    = null;
 	private HorizontalLayout headerMenuBar         = null;
-	private AbsoluteLayout   emptyLeftMarginPanel  = null;
 	
 	protected HorizontalLayout hMainLayout           = null; 
 	
-	private AbsoluteLayout   emptyRightMarginPanel;
-  private MenuItem         logoutMenuItem = null;
+	private MenuItem         logoutMenuItem = null;
   private MenuItem         macroRecordingItem = null;
   
 	public static final int FORMAT_PORTRAIT    = 0;
 	public static final int FORMAT_LANDSCAPE   = 1;
 	public static final int FORMAT_FULL_SCREEN = 2;
+	public static final String WIDTH_PORTRAIT  = "80%";
 	
 	private int     format        = FORMAT_FULL_SCREEN;
 	private boolean menuBarFilled = false;
@@ -189,74 +188,44 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		setSpacing(false);
 		setMargin(false);
 
+		//Adding the Header
+		//-----------------
 		headerMenuBar = new HorizontalLayout();
 		headerMenuBar.setMargin(false);
 		headerMenuBar.setSpacing(false);
-
-		AbsoluteLayout emptyLeftPanel = null;
-		if (!isCropMarginPanelsInHeaderBanner()) {
-			emptyLeftMarginPanel = new AbsoluteLayout();
-			emptyLeftPanel = new AbsoluteLayout();
-			emptyLeftPanel.setSizeFull();
-			emptyLeftPanel.setStyleName("focBannerButton");
-			emptyLeftPanel.addComponent(newLogoEmbedded(), "top:0.0px;right:10.0px;");
-			headerMenuBar.addComponent(emptyLeftPanel);
-		}
-
+		headerMenuBar.setStyleName("focBanner");
+		
 		centerHeaderLayout = new HorizontalLayout();
 		centerHeaderLayout.setMargin(false);
 		centerHeaderLayout.setSpacing(false);
-		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
-			centerHeaderLayout.setWidth(getPreferredWidth());
-		}
-
-		headerMenuBar.addComponent(centerHeaderLayout);
 		centerHeaderLayout.setStyleName("focBanner");
-		headerMenuBar.setStyleName("focBanner");
-
-		if (!isCropMarginPanelsInHeaderBanner()) {
-			AbsoluteLayout emptyRightPanel = new AbsoluteLayout();
-			emptyRightPanel.setSizeFull();
-			emptyRightPanel.setStyleName("focBannerButton");
-			headerMenuBar.addComponent(emptyRightPanel);
-			headerMenuBar.setExpandRatio(emptyLeftPanel, 0.5f);
-			headerMenuBar.setExpandRatio(emptyRightPanel, 0.5f);
+		
+		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
+			centerHeaderLayout.setWidth(WIDTH_PORTRAIT);
 		}
+		headerMenuBar.addComponent(centerHeaderLayout);
+		headerMenuBar.setComponentAlignment(centerHeaderLayout, Alignment.MIDDLE_CENTER);
 
 		headerMenuBar.setWidth("100%");
 		headerMenuBar.setHeight("-1px");
 		addComponent(headerMenuBar);
 		setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
-
+		//-----------------
+		
+		// Central Layout
+		// --------------
 		hMainLayout = new HorizontalLayout();
 		hMainLayout.setSizeFull();
 		hMainLayout.addStyleName("focMainHorizontal");
 		hMainLayout.setMargin(false);
 		hMainLayout.setSpacing(false);
 		addComponent(hMainLayout);
-		setExpandRatio(hMainLayout, 1);
-
-		if (!isCropMarginPanels()) {
-			emptyLeftMarginPanel.setSizeFull();
-			emptyLeftMarginPanel.setStyleName("focLeftRight");
-
-			hMainLayout.addComponent(emptyLeftMarginPanel);
-		}
+		setExpandRatio(hMainLayout, 1.0f);
 
 		hMainLayout.addComponent(getCentralPanelWrapper());
-		if (!isCropMarginPanels()) {
-			emptyRightMarginPanel = new AbsoluteLayout();
-			emptyRightMarginPanel.setSizeFull();
-			emptyRightMarginPanel.setStyleName("focRightLeft");
-			hMainLayout.addComponent(emptyRightMarginPanel);
-
-			hMainLayout.setExpandRatio(emptyLeftMarginPanel, 0.5f);
-			hMainLayout.setExpandRatio(emptyRightMarginPanel, 0.5f);
-		} else {
-			hMainLayout.setExpandRatio(getCentralPanelWrapper(), 1);
-			hMainLayout.setComponentAlignment(getCentralPanelWrapper(), Alignment.TOP_CENTER);
-			getCentralPanelWrapper().setWidth("100%");
-		}
+		hMainLayout.setComponentAlignment(getCentralPanelWrapper(), Alignment.TOP_CENTER);
+		getCentralPanelWrapper().setWidth("100%");
+		// --------------		
 	}
 	
 	public void setMenuBarSpacing(boolean spacing){
@@ -315,8 +284,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 	
+	@Deprecated
 	public void setLeftPanelContent(AbsoluteLayout lefPanelLayout){
-	  emptyLeftMarginPanel.addComponent(lefPanelLayout, "top:10px; left:0px");
+//	  emptyLeftMarginPanel.addComponent(lefPanelLayout, "top:10px; left:0px");
   }
 	
 	public NativeButton newButtonInHeaderBar(String caption, boolean addButton){
@@ -500,6 +470,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				});
 			}
 
+			Component logoComp = newLogoEmbedded();
+			if(logoComp != null) {
+				centerHeaderLayout.addComponent(logoComp);
+				centerHeaderLayout.setComponentAlignment(logoComp, Alignment.TOP_LEFT);
+			}
+			
 			// Add Home Icon
 			home = newButtonInHeaderBar("", true);
 			home.setIcon(getHomeIcon());
@@ -1049,16 +1025,18 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
 	@Override
+	@Deprecated
 	public void addUtilityPanel(IRightPanel utilityPanel) {
 		if(utilityPanel != null){
-			emptyRightMarginPanel.addComponent((Component) utilityPanel);
+//			emptyRightMarginPanel.addComponent((Component) utilityPanel);
 		}
 	}
 
 	@Override
+	@Deprecated
 	public void removeUtilityPanel(IRightPanel utilityPanel) {
 		if(utilityPanel != null){
-			emptyRightMarginPanel.removeComponent((Component) utilityPanel);
+//			emptyRightMarginPanel.removeComponent((Component) utilityPanel);
 		}
 	}
 	
@@ -1073,29 +1051,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	public void setFullScreenMode(int format) {
 		this.format = format;
 		if(format == FORMAT_FULL_SCREEN){
-			if(emptyLeftMarginPanel != null && emptyRightMarginPanel != null){
-				emptyLeftMarginPanel.setWidth("0px");
-				emptyRightMarginPanel.setWidth("0px");
-			}
 			getCentralPanelWrapper().setWidth("100%");
-
-			if(hMainLayout != null && emptyLeftMarginPanel != null && emptyRightMarginPanel != null){
-				hMainLayout.setExpandRatio(getCentralPanelWrapper(), 1f);
-				hMainLayout.setExpandRatio(emptyLeftMarginPanel, 0f);
-				hMainLayout.setExpandRatio(emptyRightMarginPanel, 0f);
-			}
 		}else if(format == FORMAT_PORTRAIT){
-			if(emptyLeftMarginPanel != null && emptyRightMarginPanel != null){
-				emptyLeftMarginPanel.setWidth("100%");
-				emptyRightMarginPanel.setWidth("100%");
-			}
-			getCentralPanelWrapper().setWidth(getPreferredWidth());
-			
-			if(hMainLayout != null && emptyLeftMarginPanel != null && emptyRightMarginPanel != null){
-				hMainLayout.setExpandRatio(getCentralPanelWrapper(), 0f);
-				hMainLayout.setExpandRatio(emptyLeftMarginPanel, 0.5f);
-				hMainLayout.setExpandRatio(emptyRightMarginPanel, 0.5f);
-			}
+			getCentralPanelWrapper().setWidth(WIDTH_PORTRAIT);
+			//getCentralPanelWrapper().setWidth(getPreferredWidth());
 		}
 	}
 	
