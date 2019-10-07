@@ -137,6 +137,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private boolean focDataOwner = false;
 	private FocDataDictionary   focDataDictionary  = null;
 	private FVMenuLayout        menuLayout         = null; 
+	private Component           firstRootComponent = null;
 	private FValidationSettings validationSettings = null;
 	private FVValidationLayout  validationLayout   = null;
 	private Map<String, FocXMLGuiComponent> compMap = null;
@@ -389,7 +390,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void addComponent(Component c) {
 		boolean firstComponent = getComponentCount() == 0;
 		super.addComponent(c);
-		if(firstComponent) setExpandRatio(c, 1);
+		if(firstComponent) {
+			setExpandRatio(c, 1);
+			firstRootComponent = c;
+		}
+	}
+
+	public Component getFirstRootComponent() {
+		return firstRootComponent;
 	}
 
 	public void setDataToPrintingLayout(FocXMLLayout printingLayout) {

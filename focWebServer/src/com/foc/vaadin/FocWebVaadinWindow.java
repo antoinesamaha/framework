@@ -219,12 +219,12 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		headerMenuLayout = new HorizontalLayout();
 		headerMenuLayout.setMargin(false);
 		headerMenuLayout.setSpacing(false);
-		headerMenuLayout.setStyleName("focBanner");
+		headerMenuLayout.setStyleName("foc-menuLayout");
 		
 		centerHeaderMenuLayout = new HorizontalLayout();
 		centerHeaderMenuLayout.setMargin(false);
 		centerHeaderMenuLayout.setSpacing(false);
-		centerHeaderMenuLayout.setStyleName("focBanner");
+		centerHeaderMenuLayout.setStyleName("foc-menuLayout");
 		
 		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
 			centerHeaderMenuLayout.setWidth(WIDTH_PORTRAIT);
@@ -1076,8 +1076,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		return format;
 	}
 
-	protected void adjustToFullScreen(boolean fullScreen) {
-		super.adjustToFullScreen(fullScreen);
+	protected void adjustToFullScreen(ICentralPanel centralPanel, boolean fullScreen) {
+		super.adjustToFullScreen(centralPanel, fullScreen);
 		if(fullScreen) {
 			if(centerHeaderMenuLayout != null) centerHeaderMenuLayout.setWidth("100%");
 		} else {
