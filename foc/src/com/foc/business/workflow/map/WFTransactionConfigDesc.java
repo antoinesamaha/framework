@@ -52,6 +52,7 @@ public class WFTransactionConfigDesc extends FocDesc {
 	public static final int FLD_INCLUDE_PROJECT_CODE                    = 12;
 	public static final int FLD_LEAVE_CODE_EMPTY                        = 13;
 	public static final int FLD_CODE_BY_STE                             = 14;
+	public static final int FLD_FORBID_ANCESTOR_TO_ACCESS               = 15;
 	
 	public static final int FLD_WF_FIELD_LOCK_STAGE_LIST                = 19;
 	public static final int FLD_FUNCTIONAL_STAGE_LIST                   = 20;
@@ -112,6 +113,9 @@ public class WFTransactionConfigDesc extends FocDesc {
 		addField(bFld);
 
 		bFld = new FBoolField("CODE_BY_SITE", "Code By Site", FLD_CODE_BY_STE, false);
+		addField(bFld);
+		
+		bFld = new FBoolField("FORBID_ANCESTOR_ACCESS", "Allow ancestor access", FLD_FORBID_ANCESTOR_TO_ACCESS, false);
 		addField(bFld);
 
 		bFld = new FBoolField("LEAVE_CODE_EMPTY", "Leave Code Empty", FLD_LEAVE_CODE_EMPTY, false);

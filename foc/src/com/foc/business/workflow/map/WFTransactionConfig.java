@@ -90,6 +90,10 @@ public class WFTransactionConfig extends FocObject {
 	public boolean isCodeBySITE(){
 		return getPropertyBoolean(WFTransactionConfigDesc.FLD_CODE_BY_STE);
 	}
+	
+	public boolean isForbidAncestorSiteAccess(){
+		return getPropertyBoolean(WFTransactionConfigDesc.FLD_FORBID_ANCESTOR_TO_ACCESS);
+	}
 
 	public boolean codePrefix_isUseSitePrefix(){
 		return getPropertyBoolean(WFTransactionConfigDesc.FLD_CODE_PREFIX_USE_SITE_PREFIX);
