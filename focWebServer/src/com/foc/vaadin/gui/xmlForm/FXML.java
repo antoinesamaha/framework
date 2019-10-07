@@ -218,7 +218,7 @@ public interface FXML {
   public static final String TAG_MORE_LAYOUT               = "MoreLayout"        ;
   public static final String TAG_GRID_LAYOUT               = "GridLayout"        ;
   public static final String TAG_TAB_LAYOUT                = "TabLayout"         ;
-  public static final String TAG_CHOOSER_LAYOUT            = "ChooserLayout"     ;
+  public static final String TAG_MENU_LAYOUT               = "MenuLayout"        ;
   public static final String TAG_PANEL                     = "Panel"             ;
   public static final String TAG_VALIDATION_SETTINGS       = "ValidationSettings";
   public static final String TAG_VERTICAL_SPLIT_LAYOUT     = "VerticalSplitLayout";

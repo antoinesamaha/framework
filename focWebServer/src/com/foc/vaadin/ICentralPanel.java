@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.layouts.FVLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.web.gui.INavigationWindow;
@@ -40,6 +41,7 @@ public interface ICentralPanel {
   public ArrayList<FVLayout> getLayouts();
   public INavigationWindow   getMainWindow();
   public FValidationSettings getValidationSettings(boolean createIfNeeded);
+  public FVMenuLayout        getMenuLayout();
   public FVValidationLayout  getValidationLayout();
   public void                showValidationLayout(boolean showBackButton);
   public void                print();

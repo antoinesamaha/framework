@@ -245,6 +245,7 @@ public abstract class FocWebApplication extends UI {
 //			mainVerticalLayout.addComponent(bodyPanel);
 //			mainVerticalLayout.setExpandRatio(bodyPanel, 1);
 			//-----
+			
 			mainVerticalLayout.addComponent(navigationWindow);
 			mainVerticalLayout.setExpandRatio(navigationWindow, 1);
 			mainVerticalLayout.addComponent(footerLayout);

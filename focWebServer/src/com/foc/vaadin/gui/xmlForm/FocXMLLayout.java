@@ -95,6 +95,7 @@ import com.foc.vaadin.gui.layouts.FVChartWrapperLayout;
 import com.foc.vaadin.gui.layouts.FVEncapsulatorLayout;
 import com.foc.vaadin.gui.layouts.FVHTMLLayout;
 import com.foc.vaadin.gui.layouts.FVLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVHelpLayout;
@@ -134,9 +135,10 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	private INavigationWindow mainWindow = null;
 	private IFocData focData = null;
 	private boolean focDataOwner = false;
-	private FocDataDictionary focDataDictionary = null;
+	private FocDataDictionary   focDataDictionary  = null;
+	private FVMenuLayout        menuLayout         = null; 
 	private FValidationSettings validationSettings = null;
-	private FVValidationLayout validationLayout = null;
+	private FVValidationLayout  validationLayout   = null;
 	private Map<String, FocXMLGuiComponent> compMap = null;
 	private Stack<Component> stack = null;
 	private RightPanel rightPanel = null;
@@ -2332,6 +2334,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}else{
 				FVLayout layout = getCurrentLayout();
 				comp = newGuiPaletteComponent(layout, qName, name, dataPath, getDataByPath(dataPath), attributes);
+				
+				if(comp instanceof FVMenuLayout) {
+					menuLayout = (FVMenuLayout) comp;
+				}
+				
 				if(fullScreen == FullScreen.NOT_SET) {
 					fullScreen = FullScreen.TRUE;//Default is Full Screen
 					if(attributes != null) {
@@ -3330,6 +3337,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	@Override
 	public boolean isFullScreen() {
 		return fullScreen != FullScreen.FALSE;
+	}
+
+	@Override
+	public FVMenuLayout getMenuLayout() {
+		return menuLayout;		
 	}
 	
 }

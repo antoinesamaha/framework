@@ -44,6 +44,7 @@ import com.foc.vaadin.gui.components.report.FVReportCreator;
 import com.foc.vaadin.gui.manipulators.FVAbsoluteLayoutCreator;
 import com.foc.vaadin.gui.manipulators.FVButtonCreator;
 import com.foc.vaadin.gui.manipulators.FVChartCreator;
+import com.foc.vaadin.gui.manipulators.FVMenuLayoutCreator;
 import com.foc.vaadin.gui.manipulators.FVCustomLayoutCreator;
 import com.foc.vaadin.gui.manipulators.FVGridLayoutCreator;
 import com.foc.vaadin.gui.manipulators.FVHTMLLayoutCreator;
@@ -84,6 +85,7 @@ public class FVGUIFactory extends HashMap<String, FocXMLGuiComponentCreator> {
     put(FXML.TAG_ABSOLUTE_LAYOUT, new FVAbsoluteLayoutCreator());
     put(FXML.TAG_GRID_LAYOUT, new FVGridLayoutCreator());
     put(FXML.TAG_TAB_LAYOUT, new FVTabLayoutCreator());
+    put(FXML.TAG_MENU_LAYOUT, new FVMenuLayoutCreator());
     put(FXML.TAG_BUTTON, new FVButtonCreator());
     put(FXML.TAG_NATIVE_BUTTON, new FVNativeButtonCreator());
     put(FXML.TAG_LABEL, new FVLabelCreator());

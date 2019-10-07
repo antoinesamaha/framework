@@ -327,6 +327,11 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				FocWebApplication webApp = findAncestor(FocWebApplication.class);
 				if(webApp != null){
 					webApp.replaceFooterLayout(centralPanel.getValidationLayout());
+					Component headerLayout = null;
+					if(centralPanel.getMenuLayout() != null && centralPanel.getMenuLayout().getButtonsLayout() != null) {
+						headerLayout = centralPanel.getMenuLayout().getButtonsLayout();
+					}
+					showHeaderLayout(headerLayout);
 				}
 			}
 		}
@@ -348,6 +353,14 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 			//----
 		}
 	}
+
+	protected void adjustToFullScreen(boolean fullScreen) {
+		if(fullScreen) {
+			getCentralPanelWrapper().setWidth("100%");
+		} else {
+			getCentralPanelWrapper().setWidth(WIDTH_PORTRAIT);
+		}
+	}
 	
 	public void addGuiCentralComponent(ICentralPanel newCentralPanel, boolean showValidationLayout){
 		//Panel-Vertical
@@ -358,11 +371,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		centralPanel.markAsDirty();
 //				centralPanel.addComponent((Component) newCentralPanel);
 		
-		if(newCentralPanel.isFullScreen()) {
-			getCentralPanelWrapper().setWidth("100%");
-		} else {
-			getCentralPanelWrapper().setWidth(WIDTH_PORTRAIT);
-		}
+		adjustToFullScreen(newCentralPanel.isFullScreen());
 		
 //		String preferedWidth = newCentralPanel.getPreferredPageWidth();
 //		if (preferedWidth != null && preferedWidth.endsWith("px")) {
@@ -612,5 +621,9 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	  	menuTree.fill();
 		}
 		return menuTree;
+	}
+
+	@Override
+	public void showHeaderLayout(Component headerComponent) {
 	}
 }

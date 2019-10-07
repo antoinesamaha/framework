@@ -100,6 +100,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 
 	private HorizontalLayout centerHeaderLayout    = null;
 	private HorizontalLayout headerMenuBar         = null;
+
+	private HorizontalLayout centerHeaderMenuLayout  = null;
+	private HorizontalLayout headerMenuLayout        = null;
 	
 	protected HorizontalLayout hMainLayout           = null; 
 	
@@ -210,6 +213,31 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		addComponent(headerMenuBar);
 		setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
 		//-----------------
+
+		//Adding the Header
+		//-----------------
+		headerMenuLayout = new HorizontalLayout();
+		headerMenuLayout.setMargin(false);
+		headerMenuLayout.setSpacing(false);
+		headerMenuLayout.setStyleName("focBanner");
+		
+		centerHeaderMenuLayout = new HorizontalLayout();
+		centerHeaderMenuLayout.setMargin(false);
+		centerHeaderMenuLayout.setSpacing(false);
+		centerHeaderMenuLayout.setStyleName("focBanner");
+		
+		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
+			centerHeaderMenuLayout.setWidth(WIDTH_PORTRAIT);
+		}
+		centerHeaderMenuLayout.addStyleName("foc-red");
+		headerMenuLayout.addComponent(centerHeaderMenuLayout);
+		headerMenuLayout.setComponentAlignment(centerHeaderMenuLayout, Alignment.MIDDLE_CENTER);
+
+		headerMenuLayout.setWidth("100%");
+		headerMenuLayout.setHeight("-1px");
+		addComponent(headerMenuLayout);
+		setComponentAlignment(headerMenuLayout, Alignment.TOP_CENTER);
+		//-----------------
 		
 		// Central Layout
 		// --------------
@@ -268,6 +296,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			buttonsWithSignatureArray.clear();
 			buttonsWithSignatureArray = null;
 		}
+		centerHeaderMenuLayout = null;
 		dispose_MenuTree();
 	}
 	
@@ -1047,6 +1076,15 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		return format;
 	}
 
+	protected void adjustToFullScreen(boolean fullScreen) {
+		super.adjustToFullScreen(fullScreen);
+		if(fullScreen) {
+			if(centerHeaderMenuLayout != null) centerHeaderMenuLayout.setWidth("100%");
+		} else {
+			if(centerHeaderMenuLayout != null) centerHeaderMenuLayout.setWidth(WIDTH_PORTRAIT);
+		}
+	}
+	
 	public void setFullScreenMode(int format) {
 		this.format = format;
 		if(format == FORMAT_FULL_SCREEN){
@@ -1151,6 +1189,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 
 	public static void setNewLook(boolean newLook) {
 		isNewLook = newLook;
+	}
+	
+	@Override
+	public void showHeaderLayout(Component headerComponent) {
+		if(centerHeaderMenuLayout != null) {
+			centerHeaderMenuLayout.removeAllComponents();
+			if(headerComponent != null) {
+				centerHeaderMenuLayout.addComponent(headerComponent);
+			}
+		}
 	}
 
 	public class ButtonWithPendingSignature extends FVButton {

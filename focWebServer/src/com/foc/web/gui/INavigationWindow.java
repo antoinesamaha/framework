@@ -37,4 +37,5 @@ public interface INavigationWindow {
 	public void removeUtilityPanel(IRightPanel utilityPanel);
 	public void fillHomepageShortcutMenu(FocXMLLayout centralPanel);
 	public void showValidationLayout(Component validationLayout);
+	public void showHeaderLayout(Component headerLayout);
 }
