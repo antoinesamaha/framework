@@ -13,30 +13,27 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package com.foc.vaadin.fields;
+package com.foc.vaadin.gui.manipulators;
 
 import org.xml.sax.Attributes;
 
-import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.vaadin.fields.FocXMLGuiComponentCreator;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
-import com.foc.vaadin.gui.components.FVEmailField;
-import com.foc.vaadin.gui.components.FVTextField;
-import com.foc.vaadin.gui.layouts.FVWrapperLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
-public class FVEmail implements FocXMLGuiComponentCreator {
+public class FVMenuLayoutCreator implements FocXMLGuiComponentCreator {
 
   @Override
   public FocXMLGuiComponent newGuiComponent(FocXMLLayout xmlLayout, IFocData focData, Attributes attributes, IFocData rootFocData, String dataPathFromRootFocData) {
-  	FProperty property = (FProperty) focData;
-  	
-  	FVTextField tx = new FVTextField(property, attributes);
-  	
-//  	FVEmailField tx = new FVEmailField(property, attributes);
-  	FocXMLGuiComponentStatic.setRootFocDataWithDataPath(tx, rootFocData, dataPathFromRootFocData);
-    return FVWrapperLayout.wrapIfNecessary(tx);
+    FVMenuLayout layout = new FVMenuLayout(attributes);
+    layout.setType(FXML.TAG_MENU_LAYOUT);
+  	FocXMLGuiComponentStatic.setRootFocDataWithDataPath(layout, rootFocData, dataPathFromRootFocData);
+
+    return layout;
   }
 
 }

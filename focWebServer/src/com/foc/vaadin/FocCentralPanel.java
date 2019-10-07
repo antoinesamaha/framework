@@ -17,6 +17,8 @@ package com.foc.vaadin;
 
 import java.util.ArrayList;
 
+import org.xml.sax.Attributes;
+
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.business.workflow.implementation.ILoggable;
@@ -27,12 +29,17 @@ import com.foc.list.FocList;
 import com.foc.log.FocLogEvent;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.vaadin.gui.FocXMLGuiComponent;
+import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Window;
 
@@ -53,6 +60,9 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	
 	private String preferredWidth = null;
 	public static final int PAGE_WIDTH               = 700;
+	
+	public static final String WIDTH_PORTRAIT  = "80%";
+	
 //	public static final int MARGIN_FOR_CENTRAL_PANEL = 18;
 //  public static final int MARGIN_FOR_CENTRAL_PANEL = 0;
   private int marginOfCentralPanel = 18;
@@ -112,21 +122,6 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		return centralPanel; 
 	}
 
-	/*
-	public FVVerticalLayout getCentralPanelWrapper_VerticalLayout(){
-		if(centralPanel == null){
-//			centralPanel = new Panel();
-			centralPanel = new FVVerticalLayout();
-			centralPanel.setSizeFull();
-//			centralPanel.setHeight("-1px");
-//			centralPanel.setWidth("-1px");
-			centralPanel.setStyleName("focCentralPanel");
-			if(Globals.isValo()) centralPanel.removeStyleName("focNoCaptionMargin");
-		}
-		return centralPanel; 
-	}
-	*/
-	
 	public void centralPanel_setPadding(boolean padding){
 		if(centralPanel != null){
 			if(padding){
@@ -149,22 +144,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		wrapperWindow = new Window();
 		wrapperWindow.setClosable(false);
 		wrapperWindow.setResizable(true);
-		/*
-		window.addCloseListener(new CloseListener() {
-      @Override
-      public void windowClose(CloseEvent e) {
-        if(getCentralPanel() instanceof FocXMLLayout){
-          if(((FocXMLLayout)getCentralPanel()).getValidationLayout() != null){
-          	((FocXMLLayout)getCentralPanel()).getValidationLayout().cancel();
-          }
-          else{
-          	goBack();
-          }
-        }
-      }
-    });
-    */
-	  
+
 		wrapperWindow.setWidth(getPreferredWidth());
 		wrapperWindow.addStyleName("focCentralPanel");
 		wrapperWindow.center();
@@ -354,6 +334,11 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				FocWebApplication webApp = findAncestor(FocWebApplication.class);
 				if(webApp != null){
 					webApp.replaceFooterLayout(centralPanel.getValidationLayout());
+					Component headerLayout = null;
+					if(centralPanel.getMenuLayout() != null && centralPanel.getMenuLayout().getButtonsLayout() != null) {
+						headerLayout = centralPanel.getMenuLayout().getButtonsLayout();
+					}
+					showHeaderLayout(headerLayout);
 				}
 			}
 		}
@@ -375,22 +360,60 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 			//----
 		}
 	}
+
+	protected void adjustToFullScreen(ICentralPanel newCentralPanel, boolean fullScreen) {
+		//Panel-Vertical
+
+		if(newCentralPanel != null && newCentralPanel instanceof Component) {
+			if(fullScreen) {
+				centralPanel.setContent((Component) newCentralPanel);
+				centralPanel.markAsDirty();
+				((Component)newCentralPanel).setWidth("100%");
+				//getCentralPanelWrapper().setWidth("100%");
+			} else {
+				Component newCentralPanleComponent = (Component) newCentralPanel;
+				
+				HorizontalLayout wrapperOfCentralLayout = new HorizontalLayout();
+				wrapperOfCentralLayout.addComponent(newCentralPanleComponent);
+				wrapperOfCentralLayout.setComponentAlignment(newCentralPanleComponent, Alignment.TOP_CENTER);
+				centralPanel.setContent(wrapperOfCentralLayout);
+				centralPanel.markAsDirty();
+				newCentralPanleComponent.setWidth(WIDTH_PORTRAIT);
+				wrapperOfCentralLayout.setWidth("100%");
+
+				//Apply same style to the wrapper
+				if(newCentralPanleComponent instanceof FocXMLLayout) {
+					Component firstComp = ((FocXMLLayout) newCentralPanleComponent).getFirstRootComponent();
+					if(firstComp != null && firstComp instanceof FocXMLGuiComponent) {
+						Attributes attrib = ((FocXMLGuiComponent)firstComp).getAttributes();
+						
+						String style = attrib != null ? attrib.getValue(FXML.ATT_STYLE) : null;
+						if(style != null) {
+							FocXMLGuiComponentStatic.applyStyle(wrapperOfCentralLayout, style);
+						}
+					}
+				}
+				
+//				centralPanel.setContent((Component) newCentralPanel);
+//				centralPanel.markAsDirty();
+//				((Component)newCentralPanel).setWidth(WIDTH_PORTRAIT);
+			}
+		}
+	}
 	
 	public void addGuiCentralComponent(ICentralPanel newCentralPanel, boolean showValidationLayout){
 		//Panel-Vertical
-//		centralPanel.addComponent((Component) newCentralPanel);
-		centralPanel.setContent((Component) newCentralPanel);
-		//----
+//		centralPanel.setContent((Component) newCentralPanel);
+//		centralPanel.markAsDirty();
 		
-		centralPanel.markAsDirty();
-//				centralPanel.addComponent((Component) newCentralPanel);
-		String preferedWidth = newCentralPanel.getPreferredPageWidth();
+		adjustToFullScreen(newCentralPanel, newCentralPanel.isFullScreen());
 		
-		if (preferedWidth != null && preferedWidth.endsWith("px")) {
-		  setPreferredWidth(preferedWidth);
-		}else{
-			setPreferredWidth(null);
-		}
+//		String preferedWidth = newCentralPanel.getPreferredPageWidth();
+//		if (preferedWidth != null && preferedWidth.endsWith("px")) {
+//		  setPreferredWidth(preferedWidth);
+//		}else{
+//			setPreferredWidth(null);
+//		}
 		if(showValidationLayout) {
 		  newCentralPanel.showValidationLayout(getCentralPanelsArrayList().size()>0);
 		}
@@ -633,5 +656,9 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	  	menuTree.fill();
 		}
 		return menuTree;
+	}
+
+	@Override
+	public void showHeaderLayout(Component headerComponent) {
 	}
 }

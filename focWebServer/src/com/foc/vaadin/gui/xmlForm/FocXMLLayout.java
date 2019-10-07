@@ -95,6 +95,7 @@ import com.foc.vaadin.gui.layouts.FVChartWrapperLayout;
 import com.foc.vaadin.gui.layouts.FVEncapsulatorLayout;
 import com.foc.vaadin.gui.layouts.FVHTMLLayout;
 import com.foc.vaadin.gui.layouts.FVLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVHelpLayout;
@@ -126,14 +127,19 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public static final String DEFAULT_DIALOG_WIDTH  = "1300px"; 
 	public static final String DEFAULT_DIALOG_HEIGHT = "700px";
 
+	public static enum FullScreen {NOT_SET, TRUE, FALSE};
+	private FullScreen fullScreen = FullScreen.NOT_SET;
+	
 	private XMLView xmlView = null;
 	private int viewRights = GroupXMLViewDesc.ALLOW_CREATION;
 	private INavigationWindow mainWindow = null;
 	private IFocData focData = null;
 	private boolean focDataOwner = false;
-	private FocDataDictionary focDataDictionary = null;
+	private FocDataDictionary   focDataDictionary  = null;
+	private FVMenuLayout        menuLayout         = null; 
+	private Component           firstRootComponent = null;
 	private FValidationSettings validationSettings = null;
-	private FVValidationLayout validationLayout = null;
+	private FVValidationLayout  validationLayout   = null;
 	private Map<String, FocXMLGuiComponent> compMap = null;
 	private Stack<Component> stack = null;
 	private RightPanel rightPanel = null;
@@ -384,7 +390,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public void addComponent(Component c) {
 		boolean firstComponent = getComponentCount() == 0;
 		super.addComponent(c);
-		if(firstComponent) setExpandRatio(c, 1);
+		if(firstComponent) {
+			setExpandRatio(c, 1);
+			firstRootComponent = c;
+		}
+	}
+
+	public Component getFirstRootComponent() {
+		return firstRootComponent;
 	}
 
 	public void setDataToPrintingLayout(FocXMLLayout printingLayout) {
@@ -2329,6 +2342,25 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}else{
 				FVLayout layout = getCurrentLayout();
 				comp = newGuiPaletteComponent(layout, qName, name, dataPath, getDataByPath(dataPath), attributes);
+				
+				if(comp instanceof FVMenuLayout) {
+					menuLayout = (FVMenuLayout) comp;
+				}
+				
+				if(fullScreen == FullScreen.NOT_SET) {
+					fullScreen = FullScreen.TRUE;//Default is Full Screen
+					if(attributes != null) {
+						String fullScreenAttribute = attributes.getValue(FXML.ATT_FULL_SCREEN);
+						if (fullScreenAttribute != null) {
+							if(			!Utils.isStringEmpty(fullScreenAttribute) 
+									&& 	(		fullScreenAttribute.toLowerCase().equals("false")
+											||	fullScreenAttribute.toLowerCase().equals("0")
+											)) { 
+								fullScreen = FullScreen.FALSE;
+							}
+						}
+					}
+				}
 				addComponentToStack(comp, name, focXmlAttributes);
 			}
 		}
@@ -3308,6 +3340,16 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 	public void setDisableCopyGuiToMemory(boolean disableCopyGuiToMemory) {
 		this.disableCopyGuiToMemory = disableCopyGuiToMemory;
+	}
+
+	@Override
+	public boolean isFullScreen() {
+		return fullScreen != FullScreen.FALSE;
+	}
+
+	@Override
+	public FVMenuLayout getMenuLayout() {
+		return menuLayout;		
 	}
 	
 }

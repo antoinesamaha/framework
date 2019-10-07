@@ -212,25 +212,24 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	
   	mainHorizontalLayout = new HorizontalLayout();
   	addComponent(mainHorizontalLayout);
+  	setComponentAlignment(mainHorizontalLayout, Alignment.MIDDLE_CENTER);
   	
   	mainHorizontalLayout.setMargin(false);
   	mainHorizontalLayout.setSpacing(true);
   	mainHorizontalLayout.setCaption(null);
-  	mainHorizontalLayout.setWidth("100%");
+  	if(centralPanel != null && !centralPanel.isFullScreen()) {
+  		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
+  	} else {
+  		mainHorizontalLayout.setWidth("100%");
+  	}
   	mainHorizontalLayout.setHeight("-1px");
   	mainHorizontalLayout.setStyleName("foc-validation");
-    
-    if(Globals.isValo()){
-//    	We get problems when we apply this style
-//    	in trees the scroll bar is hidden so we can't scroll over the tree 
-//    	addStyleName("floatPosition");
-    }
-    
-    if(Globals.isValo()){
-    	mainHorizontalLayout.addStyleName("foc-footerLayout");
-    }
+  	mainHorizontalLayout.addStyleName("foc-footerLayout");
     mainHorizontalLayout.addStyleName("noPrint");
+    
     addStyleName("noPrint");
+    addStyleName("foc-validation");
+    addStyleName("foc-footerLayout");
     
   	initButtonsLayout(showBackButton);
     validationListeners = new ArrayList<IValidationListener>();

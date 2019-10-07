@@ -31,6 +31,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.layouts.FVLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.web.gui.INavigationWindow;
@@ -367,5 +368,15 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 	@Override
 	public boolean isPropertyChangeSuspended() {
 		return false;
+	}
+
+	@Override
+	public boolean isFullScreen() {
+		return true;
+	}
+
+	@Override
+	public FVMenuLayout getMenuLayout() {
+		return null;
 	}
 }
