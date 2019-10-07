@@ -54,7 +54,6 @@ public class FVEmailField extends HorizontalLayout implements FocXMLGuiComponent
 	public FVEmailField(FProperty property, Attributes attributes) {
     delegate = new FocXMLGuiComponentDelegate(this);
   	setFocData(property);
-  	setAttributes(attributes);
   	
   	if(property != null && property.getFocField() instanceof FEMailField){
 	  	FEMailField eFld = (FEMailField) property.getFocField();
@@ -64,6 +63,8 @@ public class FVEmailField extends HorizontalLayout implements FocXMLGuiComponent
 	  		getEmailText().addValidator(strValidator);
 	  	}
   	}
+  	
+  	setAttributes(attributes);
   	init();
   }
   
