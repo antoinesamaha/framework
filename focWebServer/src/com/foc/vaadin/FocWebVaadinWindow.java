@@ -220,11 +220,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		headerMenuLayout.setMargin(false);
 		headerMenuLayout.setSpacing(false);
 		headerMenuLayout.setStyleName("foc-menuLayout");
+		headerMenuLayout.setHeight("-1px");
+		FocXMLGuiComponentStatic.setCaptionMargin_Zero(headerMenuLayout);
 		
 		centerHeaderMenuLayout = new HorizontalLayout();
 		centerHeaderMenuLayout.setMargin(false);
 		centerHeaderMenuLayout.setSpacing(false);
 		centerHeaderMenuLayout.setStyleName("foc-menuLayout");
+		centerHeaderMenuLayout.setCaption(null);
+		centerHeaderMenuLayout.setHeight("-1px");
+		FocXMLGuiComponentStatic.setCaptionMargin_Zero(centerHeaderMenuLayout);
 		
 		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
 			centerHeaderMenuLayout.setWidth(WIDTH_PORTRAIT);
