@@ -53,6 +53,9 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	
 	private String preferredWidth = null;
 	public static final int PAGE_WIDTH               = 700;
+	
+	public static final String WIDTH_PORTRAIT  = "80%";
+	
 //	public static final int MARGIN_FOR_CENTRAL_PANEL = 18;
 //  public static final int MARGIN_FOR_CENTRAL_PANEL = 0;
   private int marginOfCentralPanel = 18;
@@ -112,21 +115,6 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		return centralPanel; 
 	}
 
-	/*
-	public FVVerticalLayout getCentralPanelWrapper_VerticalLayout(){
-		if(centralPanel == null){
-//			centralPanel = new Panel();
-			centralPanel = new FVVerticalLayout();
-			centralPanel.setSizeFull();
-//			centralPanel.setHeight("-1px");
-//			centralPanel.setWidth("-1px");
-			centralPanel.setStyleName("focCentralPanel");
-			if(Globals.isValo()) centralPanel.removeStyleName("focNoCaptionMargin");
-		}
-		return centralPanel; 
-	}
-	*/
-	
 	public void centralPanel_setPadding(boolean padding){
 		if(centralPanel != null){
 			if(padding){
@@ -149,22 +137,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		wrapperWindow = new Window();
 		wrapperWindow.setClosable(false);
 		wrapperWindow.setResizable(true);
-		/*
-		window.addCloseListener(new CloseListener() {
-      @Override
-      public void windowClose(CloseEvent e) {
-        if(getCentralPanel() instanceof FocXMLLayout){
-          if(((FocXMLLayout)getCentralPanel()).getValidationLayout() != null){
-          	((FocXMLLayout)getCentralPanel()).getValidationLayout().cancel();
-          }
-          else{
-          	goBack();
-          }
-        }
-      }
-    });
-    */
-	  
+
 		wrapperWindow.setWidth(getPreferredWidth());
 		wrapperWindow.addStyleName("focCentralPanel");
 		wrapperWindow.center();
@@ -384,13 +357,19 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		
 		centralPanel.markAsDirty();
 //				centralPanel.addComponent((Component) newCentralPanel);
-		String preferedWidth = newCentralPanel.getPreferredPageWidth();
 		
-		if (preferedWidth != null && preferedWidth.endsWith("px")) {
-		  setPreferredWidth(preferedWidth);
-		}else{
-			setPreferredWidth(null);
+		if(newCentralPanel.isFullScreen()) {
+			getCentralPanelWrapper().setWidth("100%");
+		} else {
+			getCentralPanelWrapper().setWidth(WIDTH_PORTRAIT);
 		}
+		
+//		String preferedWidth = newCentralPanel.getPreferredPageWidth();
+//		if (preferedWidth != null && preferedWidth.endsWith("px")) {
+//		  setPreferredWidth(preferedWidth);
+//		}else{
+//			setPreferredWidth(null);
+//		}
 		if(showValidationLayout) {
 		  newCentralPanel.showValidationLayout(getCentralPanelsArrayList().size()>0);
 		}

@@ -44,6 +44,7 @@ public interface ICentralPanel {
   public void                showValidationLayout(boolean showBackButton);
   public void                print();
   public String              getPreferredPageWidth();
+  public boolean             isFullScreen();
   public void                addMoreMenuItems(FVValidationLayout validationLayout);
   public boolean             copyGuiToMemory();
   public int                 getViewRights();

@@ -126,6 +126,9 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public static final String DEFAULT_DIALOG_WIDTH  = "1300px"; 
 	public static final String DEFAULT_DIALOG_HEIGHT = "700px";
 
+	public static enum FullScreen {NOT_SET, TRUE, FALSE};
+	private FullScreen fullScreen = FullScreen.NOT_SET;
+	
 	private XMLView xmlView = null;
 	private int viewRights = GroupXMLViewDesc.ALLOW_CREATION;
 	private INavigationWindow mainWindow = null;
@@ -2329,6 +2332,20 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}else{
 				FVLayout layout = getCurrentLayout();
 				comp = newGuiPaletteComponent(layout, qName, name, dataPath, getDataByPath(dataPath), attributes);
+				if(fullScreen == FullScreen.NOT_SET) {
+					fullScreen = FullScreen.TRUE;//Default is Full Screen
+					if(attributes != null) {
+						String fullScreenAttribute = attributes.getValue(FXML.ATT_FULL_SCREEN);
+						if (fullScreenAttribute != null) {
+							if(			!Utils.isStringEmpty(fullScreenAttribute) 
+									&& 	(		fullScreenAttribute.toLowerCase().equals("false")
+											||	fullScreenAttribute.toLowerCase().equals("0")
+											)) { 
+								fullScreen = FullScreen.FALSE;
+							}
+						}
+					}
+				}
 				addComponentToStack(comp, name, focXmlAttributes);
 			}
 		}
@@ -3308,6 +3325,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 	public void setDisableCopyGuiToMemory(boolean disableCopyGuiToMemory) {
 		this.disableCopyGuiToMemory = disableCopyGuiToMemory;
+	}
+
+	@Override
+	public boolean isFullScreen() {
+		return fullScreen != FullScreen.FALSE;
 	}
 	
 }

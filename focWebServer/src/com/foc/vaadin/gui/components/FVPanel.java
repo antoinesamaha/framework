@@ -368,4 +368,9 @@ public class FVPanel extends Panel implements ICentralPanel, FocXMLGuiComponent,
 	public boolean isPropertyChangeSuspended() {
 		return false;
 	}
+
+	@Override
+	public boolean isFullScreen() {
+		return true;
+	}
 }

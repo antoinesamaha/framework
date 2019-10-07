@@ -66,6 +66,7 @@ public interface FXML {
   public static final String ATT_HELP                     = "help"             ;
   public static final String TAG_SCREEN_HELP              = "ScreenHelp"       ;
   
+  public static final String ATT_FULL_SCREEN              = "fullScreen"       ;
   public static final String ATT_TAB_POSITION             = "position"         ;
   public static final String ATT_AVOID_ROW_BREAK          = "avoidRowBreak"    ;
   public static final String ATT_CAPTION_MODE             = "captionMode"      ;
@@ -217,6 +218,7 @@ public interface FXML {
   public static final String TAG_MORE_LAYOUT               = "MoreLayout"        ;
   public static final String TAG_GRID_LAYOUT               = "GridLayout"        ;
   public static final String TAG_TAB_LAYOUT                = "TabLayout"         ;
+  public static final String TAG_CHOOSER_LAYOUT            = "ChooserLayout"     ;
   public static final String TAG_PANEL                     = "Panel"             ;
   public static final String TAG_VALIDATION_SETTINGS       = "ValidationSettings";
   public static final String TAG_VERTICAL_SPLIT_LAYOUT     = "VerticalSplitLayout";
