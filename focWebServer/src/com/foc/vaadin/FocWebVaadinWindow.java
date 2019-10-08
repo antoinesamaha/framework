@@ -501,6 +501,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 	
+	protected boolean isWithHomeIcon() {
+		return true;
+	}
+	
 	public void fillMenuBar_AfterLogin() {
 		if (isNewLook()) {
 			showMenuBar();
@@ -552,14 +556,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				centerHeaderLayout.setComponentAlignment(logoComp, Alignment.TOP_LEFT);
 			}			
 
-			// Add Home Icon
-			home = newButtonInHeaderBar("", true);
-			home.setIcon(getHomeIcon());
-			home.addClickListener(new Button.ClickListener() {
-				public void buttonClick(ClickEvent event) {
-					homeIconClicked();					
-				}
-			});			
+			if(isWithHomeIcon()) {
+				// Add Home Icon
+				home = newButtonInHeaderBar("", true);
+				home.setIcon(getHomeIcon());
+				home.addClickListener(new Button.ClickListener() {
+					public void buttonClick(ClickEvent event) {
+						homeIconClicked();					
+					}
+				});
+			}
 
 			// Add Unit Testing Icon
 			addUnitTestingButtonIfAllowed();
