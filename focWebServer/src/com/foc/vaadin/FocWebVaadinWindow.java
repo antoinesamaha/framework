@@ -269,6 +269,18 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
 	protected Component newLogoEmbedded(){
+//		Button iconButton = new Button();
+//		setStyleName(BaseTheme.BUTTON_LINK);
+//		iconButton.addClickListener(new ClickListener() {
+//			@Override
+//			public void buttonClick(ClickEvent event) {
+//				
+//			}
+//		});
+//		iconButton.setIcon(new ThemeResource("img/logo.png"));
+//		iconButton.addStyleName("foc-UpperLogo");
+//		return iconButton;
+		
 		Link iconLink = new Link();
 //		iconLink.setIcon(new ThemeResource("img/everpro_logo.png"));
 		
@@ -479,6 +491,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		return FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_SETTINGS);
 	}
 	
+	protected void homeIconClicked() {
+		menuBarIcons_Highlight((NativeButton)null);
+		if(isGuestUser()){
+			changeCentralPanelIntoGuestHomePage();
+		}else{
+			ICentralPanel centralPanel = newCentralPanel_AfterLogin();
+      changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
+		}
+	}
+	
 	public void fillMenuBar_AfterLogin() {
 		if (isNewLook()) {
 			showMenuBar();
@@ -535,13 +557,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 			home.setIcon(getHomeIcon());
 			home.addClickListener(new Button.ClickListener() {
 				public void buttonClick(ClickEvent event) {
-					menuBarIcons_Highlight((NativeButton)null);
-					if(isGuestUser()){
-						changeCentralPanelIntoGuestHomePage();
-					}else{
-						ICentralPanel centralPanel = newCentralPanel_AfterLogin();
-		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
-					}
+					homeIconClicked();					
 				}
 			});			
 
