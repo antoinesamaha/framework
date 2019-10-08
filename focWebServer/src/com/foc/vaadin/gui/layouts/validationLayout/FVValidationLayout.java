@@ -217,15 +217,16 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	mainHorizontalLayout.setMargin(false);
   	mainHorizontalLayout.setSpacing(true);
   	mainHorizontalLayout.setCaption(null);
-  	if(centralPanel != null && !centralPanel.isFullScreen()) {
-  		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
-  	} else {
-  		mainHorizontalLayout.setWidth("100%");
-  	}
-  	mainHorizontalLayout.setHeight("-1px");
   	mainHorizontalLayout.setStyleName("foc-validation");
   	mainHorizontalLayout.addStyleName("foc-footerLayout");
     mainHorizontalLayout.addStyleName("noPrint");
+  	if(centralPanel != null && !centralPanel.isFullScreen()) {
+  		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
+  		mainHorizontalLayout.addStyleName("foc-footerMargin");
+  	} else {
+  		mainHorizontalLayout.setWidth("100%");
+  	}
+  	mainHorizontalLayout.setHeight("-1px");  	
     
     addStyleName("noPrint");
     addStyleName("foc-validation");
