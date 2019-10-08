@@ -487,6 +487,26 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		if (!isMenuBarFilled()) {
 			setMenuBarFilled(true);
 
+			// Add Navigation Icon
+			if (isNavigationVisible()) {
+				navigation = newButtonInHeaderBar("", true);
+				navigation.setIcon(getNavigationIcon());
+				menuBarIcons_Add("_NAVIGATION_", navigation);
+				navigation.addStyleName("foc-bold");
+				navigation.addStyleName("foc-navigationIcon");
+				if (FocWebApplication.getInstanceForThread().isMobile()) {
+					navigation.setCaption("");
+					navigation.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_NAVIGATION));
+				}
+				navigation.addClickListener(new Button.ClickListener() {
+					public void buttonClick(ClickEvent event) {
+						menuBarIcons_Highlight((NativeButton) event.getButton());
+						ICentralPanel centralPanel = newNavigationPanel();
+						changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
+					}
+				});
+			}
+
 			if (FocWebApplication.getInstanceForThread().isMobile()) {
 				mobileOptionsButton = newButtonInHeaderBar("", FocWebApplication.getInstanceForThread().isMobile());
 				mobileOptionsButton.setStyleName("mobileOptionsButton");
@@ -503,12 +523,13 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 				});
 			}
 
+			//Add Logo
 			Component logoComp = newLogoEmbedded();
 			if(logoComp != null) {
 				centerHeaderLayout.addComponent(logoComp);
 				centerHeaderLayout.setComponentAlignment(logoComp, Alignment.TOP_LEFT);
-			}
-			
+			}			
+
 			// Add Home Icon
 			home = newButtonInHeaderBar("", true);
 			home.setIcon(getHomeIcon());
@@ -522,26 +543,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
 					}
 				}
-			});
-
-			// Add Navigation Icon
-			if(isNavigationVisible()){
-				navigation = newButtonInHeaderBar("", true);
-				navigation.setIcon(getNavigationIcon());
-				menuBarIcons_Add("_NAVIGATION_", navigation);
-				navigation.addStyleName("foc-bold");
-				if(FocWebApplication.getInstanceForThread().isMobile()){
-					navigation.setCaption("");
-					navigation.setIcon(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_NAVIGATION));
-				}
-				navigation.addClickListener(new Button.ClickListener() {
-					public void buttonClick(ClickEvent event) {
-						menuBarIcons_Highlight((NativeButton) event.getButton());
-		        ICentralPanel centralPanel = newNavigationPanel();
-		        changeCentralPanelContent(centralPanel, FocCentralPanel.PREVIOUS_REMOVE_ALL);
-					}
-				});
-			}
+			});			
 
 			// Add Unit Testing Icon
 			addUnitTestingButtonIfAllowed();
