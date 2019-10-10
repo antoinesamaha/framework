@@ -222,9 +222,10 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     mainHorizontalLayout.addStyleName("noPrint");
   	if(centralPanel != null && !centralPanel.isFullScreen()) {
   		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
-  		mainHorizontalLayout.addStyleName("foc-footerMargin");
+  		mainHorizontalLayout.addStyleName("foc-footerPortraitMargin");
   	} else {
   		mainHorizontalLayout.setWidth("100%");
+  		mainHorizontalLayout.addStyleName("foc-footerFullScreenMargin");
   	}
   	mainHorizontalLayout.setHeight("-1px");  	
     
@@ -1562,7 +1563,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 					AbstractComponent deleteButtton = valo_GetDeleteEmbedded(true);
 	  			if(deleteButtton != null){
 	  				mainHorizontalLayout.addComponent(deleteButtton);
-	  				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
+	  				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.MIDDLE_LEFT);
 	  			}
   			}else{
   				Button deleteButtton = getDeleteButton(true);
@@ -2119,79 +2120,69 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	return valo_FullScreenEmbedded;
   }
   
-  public Button valo_GetApplyButton(boolean createIfNeeded){
-    if(valo_ApplyButton == null && createIfNeeded){
-    	valo_ApplyButton = new Button("Done");
-    	if(isRTL()){
-    		valo_ApplyButton.setCaption("إنتهاء");	
-    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_ApplyButton);
-    	}
-    	valo_ApplyButton.setClickShortcut(KeyCode.ENTER, ModifierKey.CTRL);
-    	valo_ApplyButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
-    	
-    	valo_ApplyButton.addStyleName("foc-doneButton");
-    	
-    	if(validationSettings != null && validationSettings.getApplyLink() != null && !validationSettings.getApplyLink().isEmpty()){
-    		valo_ApplyButton.setCaption(validationSettings.getApplyLink());
-  		}
-    	valo_ApplyButton.addClickListener(new ClickListener() {
-				
+	public Button valo_GetApplyButton(boolean createIfNeeded) {
+		if (valo_ApplyButton == null && createIfNeeded) {
+			valo_ApplyButton = new Button("Done");
+			if (isRTL()) {
+				valo_ApplyButton.setCaption("إنتهاء");
+				FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_ApplyButton);
+			}
+			valo_ApplyButton.setClickShortcut(KeyCode.ENTER, ModifierKey.CTRL);
+			valo_ApplyButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+			valo_ApplyButton.addStyleName("foc-doneButton");
+			if (validationSettings != null && validationSettings.getApplyLink() != null && !validationSettings.getApplyLink().isEmpty()) {
+				valo_ApplyButton.setCaption(validationSettings.getApplyLink());
+			}
+			valo_ApplyButton.addClickListener(new ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
-					if(FocUnitRecorder.isRecording()) {
+					if (FocUnitRecorder.isRecording()) {
 						FocUnitRecorder.recordLine("button_ClickApply();");
 					}
 					applyButtonClickListener();
 				}
 			});
-    }
-    return valo_ApplyButton;
-  }
+		}
+		return valo_ApplyButton;
+	}
   
   public boolean isNewLook() {
   	INavigationWindow mainWindow = getNavigationWindow();
   	return mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook();
   }
   
-  public AbstractComponent valo_GetDeleteEmbedded(boolean createIfNeeded){
-  	if(valo_DeleteEmbedded == null && createIfNeeded && !isObjectLocked()){
-  		if(isNewLook()) {
-				valo_DeleteEmbedded = new Button("Delete");	   
-	    	if(isRTL()){
-	    		valo_DeleteEmbedded.setCaption("حذف");	
-	    		FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_DeleteEmbedded);
-//	    		valo_DeleteEmbedded.addStyleName("foc-deleteButtonAr");
-	    	}
-	    	valo_DeleteEmbedded.addStyleName("foc-deleteButton");
-				((Button)valo_DeleteEmbedded).addClickListener(new Button.ClickListener() {
+	public AbstractComponent valo_GetDeleteEmbedded(boolean createIfNeeded) {
+		if (valo_DeleteEmbedded == null && createIfNeeded && !isObjectLocked()) {
+			if (isNewLook()) {
+				valo_DeleteEmbedded = new Button("Delete");
+				if (isRTL()) {
+					valo_DeleteEmbedded.setCaption("حذف");
+					FocXMLGuiComponentStatic.applyStyleForArabicLabel(valo_DeleteEmbedded);
+				}
+				valo_DeleteEmbedded.addStyleName("foc-deleteButton");
+				((Button) valo_DeleteEmbedded).addClickListener(new Button.ClickListener() {
 					@Override
 					public void buttonClick(ClickEvent event) {
-						deleteButtonClickListener();					
+						deleteButtonClickListener();
 					}
 				});
-	    	//valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
-  		} else {
+			} else {
 				valo_DeleteEmbedded = new Embedded();
-	  		valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);  	
-				if(FocWebApplication.getInstanceForThread().isMobile()){
-					((Embedded)valo_DeleteEmbedded).setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
-				}else{
-					((Embedded)valo_DeleteEmbedded).setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
+				valo_DeleteEmbedded.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+				if (FocWebApplication.getInstanceForThread().isMobile()) {
+					((Embedded) valo_DeleteEmbedded).setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_WHITE));
+				} else {
+					((Embedded) valo_DeleteEmbedded).setSource(FVIconFactory.getInstance().getFVIcon_Big(FVIconFactory.ICON_TRASH_BLACK));
 				}
-				((Embedded)valo_DeleteEmbedded).addClickListener(new MouseEvents.ClickListener() {				
+				((Embedded) valo_DeleteEmbedded).addClickListener(new MouseEvents.ClickListener() {
 					@Override
 					public void click(com.vaadin.event.MouseEvents.ClickEvent event) {
-						deleteButtonClickListener();					
+						deleteButtonClickListener();
 					}
 				});
-  		}
-  		
-//  		INavigationWindow mainWindow = getNavigationWindow();
-//  		if(mainWindow instanceof FocWebVaadinWindow && ((FocWebVaadinWindow) mainWindow).isNewLook()) {				
-//			}else{
-//			}			
-  	}
-  	return valo_DeleteEmbedded;
+			}
+		}
+		return valo_DeleteEmbedded;
 	}
 
   public void setDeleteButtonVisible(boolean visible){
