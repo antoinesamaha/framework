@@ -20,6 +20,7 @@ import java.util.LinkedList;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
@@ -77,6 +78,10 @@ public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
     	tabList.clear();
     	tabList = null;
     }
+  }
+  
+  private boolean isGuiRTL() {
+  	return ConfigInfo.isGuiRTL();
   }
   
   public HorizontalLayout getButtonsLayout() {
@@ -153,7 +158,11 @@ public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
 
     MenuLayoutItem lay = new MenuLayoutItem(tabList.size(), title, comp);
     tabList.add(lay);
-    buttonsLayout.addComponent(lay.getButton());
+    if(isGuiRTL()) {
+    	buttonsLayout.addComponentAsFirst(lay.getButton());
+    } else {
+    	buttonsLayout.addComponent(lay.getButton());
+    }
     
     if(tabList.size() == 1) {
     	changeSelection(0);

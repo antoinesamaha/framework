@@ -201,6 +201,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		centerHeaderLayout.setMargin(false);
 		centerHeaderLayout.setSpacing(false);
 		centerHeaderLayout.setStyleName("focBanner");
+		if(ConfigInfo.isGuiRTL()) centerHeaderLayout.addStyleName("foc-float-none"); 
 		
 		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
 			centerHeaderLayout.setWidth(WIDTH_PORTRAIT);
@@ -227,6 +228,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		centerHeaderMenuLayout.setMargin(false);
 		centerHeaderMenuLayout.setSpacing(false);
 		centerHeaderMenuLayout.setStyleName("foc-menuLayout");
+		centerHeaderMenuLayout.addStyleName("foc-float-none");
 		centerHeaderMenuLayout.setCaption(null);
 		centerHeaderMenuLayout.setHeight("-1px");
 		FocXMLGuiComponentStatic.setCaptionMargin_Zero(centerHeaderMenuLayout);
@@ -234,7 +236,6 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
 			centerHeaderMenuLayout.setWidth(WIDTH_PORTRAIT);
 		}
-		centerHeaderMenuLayout.addStyleName("foc-red");
 		headerMenuLayout.addComponent(centerHeaderMenuLayout);
 		headerMenuLayout.setComponentAlignment(centerHeaderMenuLayout, Alignment.MIDDLE_CENTER);
 
@@ -1238,7 +1239,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 
-	public boolean isNewLook() {
+	public static boolean isNewLook() {
 		return isNewLook;
 	}
 

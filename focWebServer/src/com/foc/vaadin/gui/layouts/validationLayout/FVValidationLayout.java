@@ -223,6 +223,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	if(centralPanel != null && !centralPanel.isFullScreen()) {
   		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
   		mainHorizontalLayout.addStyleName("foc-footerMargin");
+  		if(ConfigInfo.isGuiRTL()) mainHorizontalLayout.addStyleName("foc-float-none");
   	} else {
   		mainHorizontalLayout.setWidth("100%");
   	}

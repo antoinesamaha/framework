@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.business.workflow.implementation.ILoggable;
@@ -379,6 +380,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				centralPanel.setContent(wrapperOfCentralLayout);
 				centralPanel.markAsDirty();
 				newCentralPanleComponent.setWidth(WIDTH_PORTRAIT);
+				if(ConfigInfo.isGuiRTL()) newCentralPanleComponent.addStyleName("foc-float-none");
 				wrapperOfCentralLayout.setWidth("100%");
 
 				//Apply same style to the wrapper

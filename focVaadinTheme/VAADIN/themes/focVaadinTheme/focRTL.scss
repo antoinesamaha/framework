@@ -1,5 +1,21 @@
 @mixin focRTL {
 	/* RTL */ 
+	
+	/* Overwrite Vaadin Table Styles   */
+  .v-table-header-wrap {
+    text-align: right;    
+  }  
+
+  .v-table-cell-content{
+    text-align: right !important;    
+    direction: rtl !important;
+  }
+  
+  .v-table-cell-wrapper{
+    text-align: right !important;
+    /*direction: rtl !important;*/
+  } 
+	
 	.v-caption .v-captiontext { 
 		float:right;
 	}

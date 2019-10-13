@@ -22,6 +22,7 @@ import java.util.StringTokenizer;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
@@ -42,6 +43,7 @@ import com.foc.tree.FTree;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.FocWebApplication;
+import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.FVIconFactory;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -225,27 +227,24 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		if(headerRootLayout == null){
 			headerRootLayout = new FVHorizontalLayout(null);
 			headerRootLayout.setWidth("100%");
-			// headerRootLayout.addStyleName("foc-blue");
-			// headerRootLayout.addStyleName("noPrint");
-			// headerRootLayout.setCaption(null);
-			
-			//BAntoineS - Horizontal
-			//verticalTableLayout.addComponentAsFirst(headerRootLayout);;
 			addComponentAsFirst(headerRootLayout);
-			//EAntoineS - Horizontal
 
 			headerLeftLayout = new FVHorizontalLayout(null);
+			headerLeftLayout.setCaption(null);
 			headerRootLayout.addComponent(headerLeftLayout);
 			headerRootLayout.setComponentAlignment(headerLeftLayout, Alignment.BOTTOM_LEFT);
-			headerLeftLayout.setCaption(null);
-			headerRootLayout.setExpandRatio(headerLeftLayout, 1);
-			// headerLeftLayout.addStyleName("noPrint");
 
 			headerRightLayout = new FVHorizontalLayout(null);
 			headerRightLayout.setCaption(null);
+			headerRightLayout.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			headerRootLayout.addComponent(headerRightLayout);
 			headerRootLayout.setComponentAlignment(headerRightLayout, Alignment.BOTTOM_RIGHT);
-			headerRightLayout.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
+			
+			if(isGuiRTLAndNewLook()) {
+				headerRootLayout.setExpandRatio(headerRightLayout, 1);
+			} else {
+				headerRootLayout.setExpandRatio(headerLeftLayout, 1);
+			}			
 		}
 	}
 
@@ -282,9 +281,16 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	}
 
 	public void addHeaderComponent_AsFirst(Component comp) {
-		if(getHeaderRightLayout() != null){
-			getHeaderRightLayout().addComponentAsFirst(comp);
-			getHeaderRightLayout().setComponentAlignment(comp, Alignment.BOTTOM_RIGHT);
+		FVHorizontalLayout hLay = getHeaderRightLayout();
+		Alignment alignment = Alignment.BOTTOM_RIGHT;
+		if(isGuiRTLAndNewLook()) {
+			hLay = getHeaderLeftLayout();
+			alignment = Alignment.BOTTOM_LEFT;
+		}
+		if(hLay != null){
+			if(isGuiRTLAndNewLook()) hLay.addComponent(comp);
+			else hLay.addComponentAsFirst(comp);
+			hLay.setComponentAlignment(comp, alignment);
 			addComponentToFocXMLLayoutMap(comp);
 		}
 	}
@@ -305,18 +311,37 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 	}
 
+	public boolean isGuiRTLAndNewLook() {
+		return ConfigInfo.isGuiRTL() && FocWebVaadinWindow.isNewLook();
+	}
+	
 	public void addHeaderComponent(Component comp) {
-		if(getHeaderRightLayout() != null){
-			getHeaderRightLayout().addComponent(comp);
-			getHeaderRightLayout().setComponentAlignment(comp, Alignment.BOTTOM_RIGHT);
-			addComponentToFocXMLLayoutMap(comp);
+		Alignment alignment = Alignment.BOTTOM_RIGHT;
+		FVHorizontalLayout horizontalLayoutToAddIn = getHeaderRightLayout();
+		
+		if(isGuiRTLAndNewLook()) {
+			horizontalLayoutToAddIn = getHeaderLeftLayout();
+			alignment = Alignment.BOTTOM_LEFT;
 		}
+		
+		if(horizontalLayoutToAddIn != null){
+			if(isGuiRTLAndNewLook()) horizontalLayoutToAddIn.addComponentAsFirst(comp);
+			else horizontalLayoutToAddIn.addComponent(comp);
+			horizontalLayoutToAddIn.setComponentAlignment(comp, alignment);
+			addComponentToFocXMLLayoutMap(comp);
+		}			
 	}
 
 	public void addHeaderComponent_ToLeft(Component comp) {
-		if(getHeaderLeftLayout() != null){
-			getHeaderLeftLayout().addComponent(comp);
-			getHeaderLeftLayout().setComponentAlignment(comp, Alignment.BOTTOM_LEFT);
+		Alignment alignment = Alignment.BOTTOM_LEFT;
+		FVHorizontalLayout hLay = getHeaderLeftLayout();
+		if(isGuiRTLAndNewLook()) {
+			hLay = getHeaderRightLayout();
+			alignment = Alignment.BOTTOM_RIGHT;
+		}
+		if(hLay != null){
+			hLay.addComponent(comp);
+			hLay.setComponentAlignment(comp, alignment);
 			addComponentToFocXMLLayoutMap(comp);
 		}
 	}
@@ -881,45 +906,22 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	public void adjustTableEditingToolsVisiblity() {
 		boolean isEditable = getTableTreeDelegate() != null ? getTableTreeDelegate().isEditable() : false;
 		
-		if(Globals.isValo()){
-			Embedded addEmbedded = valo_GetAddEmbedded(isEditable);
-			if(addEmbedded != null){
-				addEmbedded.setVisible(getTableTreeDelegate().isAddEnabled(isEditable));
-			}
-			Embedded openEmbedded = valo_GetOpenEmbedded(isEditable);
-			if(openEmbedded != null){
-				openEmbedded.setVisible(getTableTreeDelegate().isOpenEnabled(isEditable));
-			}
-			Embedded deleteEmbedded = valo_GetDeleteEmbedded(isEditable);
-			if(deleteEmbedded != null){
-				deleteEmbedded.setVisible(getTableTreeDelegate().isDeleteEnabled(isEditable));
-			}
-			Embedded duplicateEmbedded = valo_GetDuplicateEmbedded();
-			if(duplicateEmbedded != null){
-				duplicateEmbedded.setVisible(getTableTreeDelegate().isDuplicateEnabled());
-			}
-		}else{
-			if(getAddButton() != null){
-				getAddButton().setVisible(getTableTreeDelegate().isAddEnabled(isEditable));
-			}
-			if(getOpenButton() != null){
-				getOpenButton().setVisible(getTableTreeDelegate().isOpenEnabled(isEditable));
-			}
-			if(getDeleteButton() != null){
-				getDeleteButton().setVisible(getTableTreeDelegate().isDeleteEnabled(isEditable));
-			}
-			if(getDuplicateButton() != null){
-				getDuplicateButton().setVisible(getTableTreeDelegate().isDuplicateEnabled());
-			}
+		Embedded addEmbedded = valo_GetAddEmbedded(isEditable);
+		if(addEmbedded != null){
+			addEmbedded.setVisible(getTableTreeDelegate().isAddEnabled(isEditable));
 		}
-		// if(getTableStatusStyleButton() != null){
-		//// getTableStatusStyleButton().setVisible(getTableTreeDelegate().isTableStatusStyleEnabled());
-		// getTableStatusStyleButton().setVisible(true);
-		// }
-		// if(getTransactionFilterButton() != null){
-		//// getTableStatusStyleButton().setVisible(getTableTreeDelegate().isTableStatusStyleEnabled());
-		// getTableStatusStyleButton().setVisible(true);
-		// }
+		Embedded openEmbedded = valo_GetOpenEmbedded(isEditable);
+		if(openEmbedded != null){
+			openEmbedded.setVisible(getTableTreeDelegate().isOpenEnabled(isEditable));
+		}
+		Embedded deleteEmbedded = valo_GetDeleteEmbedded(isEditable);
+		if(deleteEmbedded != null){
+			deleteEmbedded.setVisible(getTableTreeDelegate().isDeleteEnabled(isEditable));
+		}
+		Embedded duplicateEmbedded = valo_GetDuplicateEmbedded();
+		if(duplicateEmbedded != null){
+			duplicateEmbedded.setVisible(getTableTreeDelegate().isDuplicateEnabled());
+		}
 	}
 
 	public void setTitle(String title) {
@@ -947,60 +949,29 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 			
 			boolean isEditable = getTableTreeDelegate() != null ? getTableTreeDelegate().isEditable() : null;
 			
-			if(Globals.isValo()){
-				Embedded open = valo_GetOpenEmbedded(isEditable);
-				if(open != null){
-					addHeaderComponent(open);
-				}
-				Embedded add = valo_GetAddEmbedded(isEditable);
-				if(add != null){
-					addHeaderComponent(add);
-				}
-				Embedded delete = valo_GetDeleteEmbedded(isEditable);
-				if(delete != null){
-					addHeaderComponent(delete);
-				}
-				Embedded duplicate = valo_GetDuplicateEmbedded();
-				if(duplicate != null){
-					addHeaderComponent(duplicate);
-				}
-				Embedded statusStyle = valo_GetStatusStyleEmbedded();
-				if(statusStyle != null){
-					addHeaderComponent(statusStyle);
-				}
-				Embedded transactionFilter = valo_GetTransactionFilterEmbedded();
-				if(transactionFilter != null){
-					addHeaderComponent(transactionFilter);
-				}
-			}else{
-				FVButton openButton = getOpenButton();
-				if(openButton != null){
-					addHeaderComponent(openButton);
-				}
-
-				FVButton addButton = getAddButton();
-				if(addButton != null){
-					addHeaderComponent(addButton);
-				}
-
-				FVButton deleteButton = getDeleteButton();
-				if(deleteButton != null){
-					addHeaderComponent(deleteButton);
-				}
-
-				FVButton duplicateButton = getDuplicateButton();
-				if(duplicateButton != null){
-					addHeaderComponent(duplicateButton);
-				}
-
-				FVButton statusStyleButton = getStatusStyleButton();
-				if(statusStyleButton != null){
-					addHeaderComponent(statusStyleButton);
-				}
-				FVButton transactionFilterButton = getTransactionFilterButton();
-				if(transactionFilterButton != null){
-					addHeaderComponent(transactionFilterButton);
-				}
+			Embedded open = valo_GetOpenEmbedded(isEditable);
+			if(open != null){
+				addHeaderComponent(open);
+			}
+			Embedded add = valo_GetAddEmbedded(isEditable);
+			if(add != null){
+				addHeaderComponent(add);
+			}
+			Embedded delete = valo_GetDeleteEmbedded(isEditable);
+			if(delete != null){
+				addHeaderComponent(delete);
+			}
+			Embedded duplicate = valo_GetDuplicateEmbedded();
+			if(duplicate != null){
+				addHeaderComponent(duplicate);
+			}
+			Embedded statusStyle = valo_GetStatusStyleEmbedded();
+			if(statusStyle != null){
+				addHeaderComponent(statusStyle);
+			}
+			Embedded transactionFilter = valo_GetTransactionFilterEmbedded();
+			if(transactionFilter != null){
+				addHeaderComponent(transactionFilter);
 			}
 
 			// FVButton exportButton = getExportToExcelButton();
@@ -1207,8 +1178,13 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				  quickFilterExecute(newFilterString);
 				}
 			});
-			getHeaderRightLayout().addComponent(filterTextField);
-			getHeaderRightLayout().setComponentAlignment(filterTextField, Alignment.BOTTOM_RIGHT);
+			if(isGuiRTLAndNewLook()) {
+				getHeaderLeftLayout().addComponentAsFirst(filterTextField);
+				getHeaderLeftLayout().setComponentAlignment(filterTextField, Alignment.BOTTOM_LEFT);
+			} else {
+				getHeaderRightLayout().addComponent(filterTextField);
+				getHeaderRightLayout().setComponentAlignment(filterTextField, Alignment.BOTTOM_RIGHT);
+			}
 		}
 	}
 
