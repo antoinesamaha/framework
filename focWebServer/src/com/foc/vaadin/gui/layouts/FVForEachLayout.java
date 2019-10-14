@@ -317,39 +317,48 @@ public class FVForEachLayout extends FVVerticalLayout {
   	}
   	return enabled;
   }  
-
+  
   public void addBannerForFocObject(FocObject focObj){
-    String userView = getAttributes().getValue(FXML.ATT_VIEW_KEY_VIEW);
-    if(userView != null){
-    	xmlViewKey.setUserView(userView);
-    }
-    FocXMLLayout centralPanel = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel_NoAdjustmentToLastSelectedView(null, xmlViewKey, focObj);
-    if(centralPanel != null){
-      FVBannerLayout bannerLayout = new FVBannerLayout(null);
-	    centralPanel.setParentLayout(xmlLayout);
-
-	    bannerLayout.addCentralPanel(centralPanel);
-	    if(isDeleteEnabled()){
-		    DeleteButtonForEach deleteButtonForEach = new DeleteButtonForEach(bannerLayout, focObj);
-		    bannerLayout.addDeleteComponent(deleteButtonForEach);
-	    }
-	    if(isOpenEnabled()){
-		    OpenButtonForEach openButtonForEach = new OpenButtonForEach(focObj);
-		    bannerLayout.addOpenComponent(openButtonForEach);
-	    }
-	    bannerContainer.addComponent(bannerLayout);
-	    getBannerList(true).add(bannerLayout);
-
-      if(			getAttributes() != null 
-      		&& 	getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR) != null
-      		&& 	getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR).toUpperCase().equals("FALSE")
-      		){
-      	
-      } else {
-      	bannerContainer.addComponent(new FVLine());
-      }
-    }
+  	addBannerForFocObject(focObj, false);
   }
+
+	public void addBannerForFocObject(FocObject focObj, boolean addOnTop) {
+		String userView = getAttributes().getValue(FXML.ATT_VIEW_KEY_VIEW);
+		if (userView != null) {
+			xmlViewKey.setUserView(userView);
+		}
+		FocXMLLayout centralPanel = (FocXMLLayout) XMLViewDictionary.getInstance().newCentralPanel_NoAdjustmentToLastSelectedView(null, xmlViewKey, focObj);
+		if (centralPanel != null) {
+			FVBannerLayout bannerLayout = new FVBannerLayout(null);
+			centralPanel.setParentLayout(xmlLayout);
+			bannerLayout.addCentralPanel(centralPanel);
+			if (isDeleteEnabled()) {
+				DeleteButtonForEach deleteButtonForEach = new DeleteButtonForEach(bannerLayout, focObj);
+				bannerLayout.addDeleteComponent(deleteButtonForEach);
+			}
+			if (isOpenEnabled()) {
+				OpenButtonForEach openButtonForEach = new OpenButtonForEach(focObj);
+				bannerLayout.addOpenComponent(openButtonForEach);
+			}
+			if (!addOnTop) {
+				bannerContainer.addComponent(bannerLayout);
+			} else {
+				bannerContainer.addComponentAsFirst(bannerLayout);
+			}
+			getBannerList(true).add(bannerLayout);
+			if (getAttributes() != null 
+					&& getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR) != null 
+					&& getAttributes().getValue(FXML.ATT_FOR_EACH_SEPARATOR).toUpperCase().equals("FALSE")) {
+			} else {
+				
+				if (!addOnTop) {
+					bannerContainer.addComponent(new FVLine());
+				}else{
+					bannerContainer.addComponentAsFirst(new FVLine());
+				}
+			}
+		}
+	}
 
   public FocListWrapper getFocListWrapper() {
   	return focListWrapper;
