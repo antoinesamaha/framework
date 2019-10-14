@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.layouts;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.shared.dataStore.IFocData;
@@ -102,6 +103,15 @@ public class FVGridLayout extends DDGridLayout implements FVLayout {
         
     try{
     	if(row1 >= 0 && col1 >=0 && row2>=0 && col2>=0){
+    		if(ConfigInfo.isGuiRTL()) {
+    			int cols = getColumns() - 1;
+    			col1 = cols-col1;
+    			col2 = cols-col2;
+    			
+    			int temp = col1;
+    			col1 = col2;
+    			col2 = temp;
+    		}
     		addComponent(comp, col1, row1, col2, row2);
     	}
     }catch(GridLayout.OverlapsException e){

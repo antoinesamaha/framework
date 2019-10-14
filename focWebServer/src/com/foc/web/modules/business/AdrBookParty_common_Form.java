@@ -115,6 +115,7 @@ public class AdrBookParty_common_Form extends FocXMLLayout {
 					long ref = (Long) itemId;
 					if (getAdrBookParty().getDefaultContact() == null || getAdrBookParty().getDefaultContact().getReferenceInt() != ref) {
 						button = new FVButton(tableColumn.getCaption());
+						button.setStyleName("foc-tableButtonDark");
 						button.addClickListener(new SetDefaultContactListener(ref));
 						String compName = TableTreeDelegate.newComponentName(tableName, String.valueOf(ref), "SET_DEFAULT_CONTACT");
 						putComponent(compName, button);
@@ -130,6 +131,7 @@ public class AdrBookParty_common_Form extends FocXMLLayout {
 					FVButton button = null;
 					if (contact != null && FocUser.findUser(contact) == null) {
 						button = new CreateUserButton(contact);
+						
 						String compName = TableTreeDelegate.newComponentName(tableName, String.valueOf(ref), "CREATE_USER");
 						putComponent(compName, button);
 					} else if (contact != null && FocUser.findUser(contact) != null) {
@@ -166,6 +168,8 @@ public class AdrBookParty_common_Form extends FocXMLLayout {
 
 		public CreateUserButton(Contact contact) {
 			super("Create User");
+			setStyleName("foc-tableButtonBlue");
+			setWidth("100px");
 			this.contact = contact;
 			addClickListener(this);
 		}
@@ -212,6 +216,8 @@ public class AdrBookParty_common_Form extends FocXMLLayout {
 
 		public EditUserButton(Contact contact) {
 			super("Edit User");
+			setStyleName("foc-tableButtonBlue");
+			setWidth("100px");
 			this.contact = contact;
 			addClickListener(this);
 		}
