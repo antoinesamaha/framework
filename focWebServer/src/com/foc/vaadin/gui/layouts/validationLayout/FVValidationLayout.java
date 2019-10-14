@@ -214,20 +214,22 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	addComponent(mainHorizontalLayout);
   	setComponentAlignment(mainHorizontalLayout, Alignment.MIDDLE_CENTER);
   	
-  	mainHorizontalLayout.setMargin(false);
-  	mainHorizontalLayout.setSpacing(true);
-  	mainHorizontalLayout.setCaption(null);
-  	mainHorizontalLayout.setStyleName("foc-validation");
-  	mainHorizontalLayout.addStyleName("foc-footerLayout");
-    mainHorizontalLayout.addStyleName("noPrint");
-  	if(centralPanel != null && !centralPanel.isFullScreen()) {
-  		mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
-  		mainHorizontalLayout.addStyleName("foc-footerMargin");
-  		if(ConfigInfo.isGuiRTL()) mainHorizontalLayout.addStyleName("foc-float-none");
-  	} else {
-  		mainHorizontalLayout.setWidth("100%");
-  	}
-  	mainHorizontalLayout.setHeight("-1px");  	
+		mainHorizontalLayout.setMargin(false);
+		mainHorizontalLayout.setSpacing(true);
+		mainHorizontalLayout.setCaption(null);
+		mainHorizontalLayout.setStyleName("foc-validation");
+		mainHorizontalLayout.addStyleName("foc-footerLayout");
+		mainHorizontalLayout.addStyleName("noPrint");
+		if (centralPanel != null && !centralPanel.isFullScreen()) {
+			mainHorizontalLayout.setWidth(FocCentralPanel.WIDTH_PORTRAIT);
+			mainHorizontalLayout.addStyleName("foc-footerPortraitMargin");
+			if (ConfigInfo.isGuiRTL())
+				mainHorizontalLayout.addStyleName("foc-float-none");
+		} else {
+			mainHorizontalLayout.setWidth("100%");
+			mainHorizontalLayout.addStyleName("foc-footerFullScreenMargin");
+		}
+		mainHorizontalLayout.setHeight("-1px");	
     
     addStyleName("noPrint");
     addStyleName("foc-validation");
@@ -1563,7 +1565,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 					AbstractComponent deleteButtton = valo_GetDeleteEmbedded(true);
 	  			if(deleteButtton != null){
 	  				mainHorizontalLayout.addComponent(deleteButtton);
-	  				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.BOTTOM_LEFT);
+	  				mainHorizontalLayout.setComponentAlignment(deleteButtton, Alignment.MIDDLE_LEFT);
 	  			}
   			}else{
   				Button deleteButtton = getDeleteButton(true);
