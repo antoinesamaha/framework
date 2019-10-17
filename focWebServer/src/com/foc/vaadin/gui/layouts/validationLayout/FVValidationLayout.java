@@ -131,6 +131,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	private ICentralPanel                  centralPanel         = null;
 //	private ChatSlider                    chatSlider           = null;
 	private HorizontalLayout               mainHorizontalLayout = null;
+	private HorizontalLayout               subHorizontalLayout = null;
 //  private FVHorizontalLayout buttonsLayout = null;
 	/*
 	private Button nextContextHelpButton     = null;
@@ -208,7 +209,11 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
   	setSpacing(false);
   	setCaption(null);
   	setWidth("100%");
-  	setHeight("-1px");
+  	if(isNewLook()) {
+  		setHeight("70px");
+  	}else{
+  		setHeight("-1px");
+  	}
   	
   	mainHorizontalLayout = new HorizontalLayout();
   	addComponent(mainHorizontalLayout);
@@ -229,7 +234,11 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 			mainHorizontalLayout.setWidth("100%");
 			mainHorizontalLayout.addStyleName("foc-footerFullScreenMargin");
 		}
-		mainHorizontalLayout.setHeight("-1px");	
+		if(isNewLook()) {
+			mainHorizontalLayout.setHeight("50px");	
+		}else{
+			mainHorizontalLayout.setHeight("-1px");	
+		}
     
     addStyleName("noPrint");
     addStyleName("foc-validation");
@@ -237,7 +246,22 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     
   	initButtonsLayout(showBackButton);
     validationListeners = new ArrayList<IValidationListener>();
-    addTransactionToRecentVisited();
+    addTransactionToRecentVisited();    
+    
+    if(isNewLook()) {
+	    subHorizontalLayout = new HorizontalLayout();
+	    addComponent(subHorizontalLayout);
+	  	setComponentAlignment(subHorizontalLayout, Alignment.BOTTOM_CENTER);
+	  	subHorizontalLayout.setWidth("100%");
+	  	subHorizontalLayout.setHeight("20px");  	
+	  	subHorizontalLayout.setMargin(false);
+	  	subHorizontalLayout.setSpacing(true);
+	  	subHorizontalLayout.setStyleName("foc-poweredBySection");
+	  	if (centralPanel != null && !centralPanel.isFullScreen()) {
+	  		subHorizontalLayout.addStyleName("foc-poweredBySectionPortrait");
+	  	}
+    }
+  	
   }
   
   public void dispose(){
@@ -2608,5 +2632,13 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		if(stageLayout != null) {
 			stageLayout.adjustButtonsCaption();
 		}
+	}
+
+	public HorizontalLayout getSubHorizontalLayout() {
+		return subHorizontalLayout;
+	}
+
+	public void setSubHorizontalLayout(HorizontalLayout subHorizontalLayout) {
+		this.subHorizontalLayout = subHorizontalLayout;
 	}
 }
