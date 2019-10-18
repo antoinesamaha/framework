@@ -60,11 +60,15 @@ import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.FocWebModule;
 import com.foc.vaadin.IApplicationConfigurator;
+import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.IFocMobileModule;
 import com.foc.vaadin.IFocWebModule;
 import com.foc.vaadin.NotificationScheduledThread;
+import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationMore;
+import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.vaadin.gui.layouts.validationLayout.IValidationLayoutMoreMenuFiller;
+import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.admin.AdminWebModule;
 import com.foc.web.modules.downloadableContent.DownloadableContentWebModule;
 import com.foc.web.modules.fab.FabEndUserWebModule;
@@ -314,6 +318,10 @@ public class FocWebServer implements Serializable {
 	  }	  
 	}
 
+	public FVValidationLayout newValidationLayout(INavigationWindow focVaadinMainWindow, ICentralPanel centralPanel, FValidationSettings validationSettings, boolean showBackButton) {
+		return null;
+	}
+	
 	protected FocMainClass newMainClass(){
 		Globals.logString("Init Web Server");
   	String[] args = { "/IS_SERVER:1", "/nol:1"};
