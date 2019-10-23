@@ -3142,6 +3142,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 	
 	public static void popupInDialog(ICentralPanel contentPanel, String title, String width, String height){
+				
 		FocCentralPanel centralPanel = new FocCentralPanel();
 		centralPanel.fill();
 		centralPanel.changeCentralPanelContent(contentPanel, false);
