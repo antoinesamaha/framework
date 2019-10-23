@@ -54,7 +54,7 @@ public class JoinUsingObjectField extends Join{
           FField objField = (FField)tarDesc.getFieldByID(objectFieldID);
 
           if(srcDesc.getWithReference() && objField != null){
-          	if(provider == DBManager.PROVIDER_ORACLE){
+          	if(DBManager.provider_FieldNamesBetweenSpeachmarks(provider)){
           		ret = getTargetAlias().getAlias()+".\""+objField.getDBName()+"\"="+getSourceAlias().getAlias()+".\""+srcDesc.getRefFieldName()+"\"";
           	}else{
           		ret = getTargetAlias().getAlias()+"."+objField.getDBName()+"="+getSourceAlias().getAlias()+"."+srcDesc.getRefFieldName();

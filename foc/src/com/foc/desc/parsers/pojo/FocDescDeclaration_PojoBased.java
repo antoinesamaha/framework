@@ -23,6 +23,7 @@ import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
 import com.foc.annotations.model.FocEntity;
 import com.foc.annotations.model.FocFilterCondition;
+import com.foc.annotations.model.FocFilterLevel;
 import com.foc.annotations.model.FocGroupByField;
 import com.foc.annotations.model.FocJoin;
 import com.foc.annotations.model.FocWorkflow;
@@ -37,6 +38,7 @@ import com.foc.desc.parsers.join.ParsedJoin;
 import com.foc.desc.parsers.predefinedFields.FocPredefinedFieldFactory;
 import com.foc.desc.parsers.predefinedFields.IFocPredefinedFieldType;
 import com.foc.list.FocListGroupBy;
+import com.foc.list.filter.FocListFilter;
 import com.foc.util.FocAnnotationUtil;
 import com.foc.util.Utils;
 
@@ -153,6 +155,14 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	      			ParsedFilterCondition parsedConditon = new ParsedFilterCondition(cond);
 	      			parsedFilter.addCondition(parsedConditon);
 	      		}
+	      	}
+	      	
+	      	if(entity.filterLevel() == FocFilterLevel.Database) {
+	      		parsedFilter.setFilterLevel(FocListFilter.LEVEL_DATABASE);
+	      	} else if(entity.filterLevel() == FocFilterLevel.Memory) {
+	      		parsedFilter.setFilterLevel(FocListFilter.LEVEL_MEMORY);
+	      	} else if(entity.filterLevel() == FocFilterLevel.DatabaseAndMemory) {
+	      		parsedFilter.setFilterLevel(FocListFilter.LEVEL_DATABASE_AND_MEMORY);
 	      	}
 	      }
 

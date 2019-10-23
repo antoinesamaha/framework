@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 
 @Retention(RUNTIME)
 @Target(TYPE)
-public @interface FocEntity {	
+public @interface FocEntity {
 	public String name() default "";
 	public String storageName() default "";
 	public boolean dbResident() default true;
@@ -36,4 +36,5 @@ public @interface FocEntity {
 	public FocGroupByField[] groupByFields() default {};
 	public String reportContext() default "";
 	public boolean cached() default true;
+	public FocFilterLevel filterLevel() default FocFilterLevel.Database;
 }
