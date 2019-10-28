@@ -662,6 +662,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   private void add_NewUserMenuBar(){
   	menuBar_User = new FVMenuBar(null);
   	menuBar_User.setHeight("40px");
+  	if(isNewLook()) {
+  		menuBar_User.setHeight("60px");
+  	}
   	menuBar_User.setStyleName("focBannerButton");
     centerHeaderLayout.addComponent(menuBar_User);
     centerHeaderLayout.setComponentAlignment(menuBar_User, Alignment.MIDDLE_CENTER);
@@ -805,6 +808,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	companyNameLabel.addStyleName("foc-text-center");
   	companyNameLabel.addStyleName("foc-text-middle");
   	companyNameLabel.addStyleName("foc-CompanyTitle");
+  	if(isNewLook()) {
+  		companyNameLabel.addStyleName("foc-float-none");
+  		companyNameLabel.setHeight("60px");
+  	}
   	return companyNameLabel;
   }
   

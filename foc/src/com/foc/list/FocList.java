@@ -1136,6 +1136,11 @@ public class FocList extends AccessSubject implements IFocList, Container {
           if(objProp.getLocalReferenceInt() == ref){
           	foundObj = currObj;
           }
+        } else if(FReference.class.isInstance(prop)){
+          FReference objProp = (FReference) prop;
+          if(objProp.getLong() == ref){
+          	foundObj = currObj;
+          }
         }
       }
     }
