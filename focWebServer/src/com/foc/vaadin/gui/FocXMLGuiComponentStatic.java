@@ -255,26 +255,34 @@ public class FocXMLGuiComponentStatic {
 	}
 	
 	public static void applyAlignment(AbstractOrderedLayout layout, Component component, String alignment){
+		Alignment align = convertAlignment(alignment);
+		if(align != null) {
+			layout.setComponentAlignment(component, align);
+		}
+	}
+	
+	public static Alignment convertAlignment(String alignment){
 	  alignment = alignment.toLowerCase();
     if(alignment.equals("right") || alignment.equals("middle_right")) {
-      layout.setComponentAlignment(component, Alignment.MIDDLE_RIGHT);
+      return Alignment.MIDDLE_RIGHT;
     } else if(alignment.equals("left") || alignment.equals("middle_left")) {
-      layout.setComponentAlignment(component, Alignment.MIDDLE_LEFT);
+      return Alignment.MIDDLE_LEFT;
     } else if(alignment.equals("center") || alignment.equals("middle_center")) {
-      layout.setComponentAlignment(component, Alignment.MIDDLE_CENTER);
+      return Alignment.MIDDLE_CENTER;
     } else if(alignment.equals("top_right")) {
-      layout.setComponentAlignment(component, Alignment.TOP_RIGHT);
+      return Alignment.TOP_RIGHT;
     } else if(alignment.equals("top_left")) {
-      layout.setComponentAlignment(component, Alignment.TOP_LEFT);
+      return Alignment.TOP_LEFT;
     } else if(alignment.equals("top_center")) {
-      layout.setComponentAlignment(component, Alignment.TOP_CENTER);
+      return Alignment.TOP_CENTER;
     } else if(alignment.equals("bottom_right")) {
-      layout.setComponentAlignment(component, Alignment.BOTTOM_RIGHT);
+      return Alignment.BOTTOM_RIGHT;
     } else if(alignment.equals("bottom_left")) {
-      layout.setComponentAlignment(component, Alignment.BOTTOM_LEFT);
+      return Alignment.BOTTOM_LEFT;
     } else if(alignment.equals("bottom_center")) {
-      layout.setComponentAlignment(component, Alignment.BOTTOM_CENTER);
+      return Alignment.BOTTOM_CENTER;
     }
+    return null;
 	}
 	
 	public static void setRootFocDataWithDataPath(FocXMLGuiComponent comp, IFocData rootFocData, String dataPath){
