@@ -31,9 +31,11 @@ import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.GridLayout;
+import com.vaadin.ui.VerticalLayout;
 
 import fi.jasoft.dragdroplayouts.DDGridLayout;
 import fi.jasoft.dragdroplayouts.client.ui.LayoutDragMode;
@@ -112,7 +114,35 @@ public class FVGridLayout extends DDGridLayout implements FVLayout {
     			col1 = col2;
     			col2 = temp;
     		}
-    		addComponent(comp, col1, row1, col2, row2);
+    		
+    		if(ConfigInfo.isGuiRTL()) {
+    			//This case is because we could not set the caption of components in gridlayout to align right
+    			//As a work arround we decided to encapsulate the components in a verticallayout
+    			VerticalLayout verticalLayout = new VerticalLayout();
+    			verticalLayout.setSpacing(false);
+    			verticalLayout.setMargin(false);
+    			verticalLayout.setCaption(null);
+    			verticalLayout.setWidth("100%");
+    			verticalLayout.addComponent(comp);
+    			addComponent(verticalLayout, col1, row1, col2, row2);
+    			
+    			if(attributes.getValue(FXML.ATT_ALIGNMENT) != null) {
+    				Alignment align = FocXMLGuiComponentStatic.convertAlignment(attributes.getValue(FXML.ATT_ALIGNMENT));
+    				if(align != null) {
+    					setComponentAlignment(verticalLayout, align);
+    				}
+    			}
+    			
+    		} else {
+    			addComponent(comp, col1, row1, col2, row2);
+    			
+    			if(attributes.getValue(FXML.ATT_ALIGNMENT) != null) {
+    				Alignment align = FocXMLGuiComponentStatic.convertAlignment(attributes.getValue(FXML.ATT_ALIGNMENT));
+    				if(align != null) {
+    					setComponentAlignment(comp, align);
+    				}
+    			}
+    		}
     	}
     }catch(GridLayout.OverlapsException e){
     	Globals.logException(e);

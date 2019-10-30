@@ -900,6 +900,34 @@ public class FCalendar extends FocObject {
 		return res;
 	}
 
+	public Date getNeerestEndOpenDateForDurationInDays(Date startDate, double duration){
+		Date res = null;
+		int one = 1;
+		if(startDate != null && duration >= 0){
+			Date realStartingDate = startDate;
+			Date endDate = new Date(realStartingDate.getTime());
+			res = endDate;
+			
+			//move until first working day
+			while(!isWorkingDay(endDate)){
+				endDate.setTime(endDate.getTime() + FCalendar.MILLISECONDS_IN_DAY);
+			}
+			
+			if(duration > 0){
+				duration = duration-1;
+				endDate.setTime(endDate.getTime() + (FCalendar.MILLISECONDS_IN_DAY - 1));
+				
+				while(duration > 0){
+					endDate.setTime(endDate.getTime() + FCalendar.MILLISECONDS_IN_DAY);					
+					if(isWorkingDay(endDate)){
+						duration--;
+					}
+				}
+			}
+		}
+		return res;
+	}
+	
 	/*
  	public Date[] getNeerestStartEndDateForDuration(Date startDate, double duration, Unit durationUnit, boolean allowBreakingThroughtDays){
 		Date[] res = null;
