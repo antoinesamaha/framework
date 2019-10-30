@@ -103,6 +103,7 @@ import com.foc.vaadin.gui.layouts.validationLayout.FVOptionMobileLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FValidationSettings;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitDictionary;
@@ -1744,6 +1745,14 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	public static final int POSITION_RIGHT  = 2;
 	public static final int POSITION_LEFT   = 3;
 	
+	protected FVValidationLayout newValidationLayout(boolean showBackButton) {
+		FVValidationLayout valLay = FocWebServer.getInstance() != null ? FocWebServer.getInstance().newValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton) : null;
+		if(valLay == null) {
+			valLay = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
+		}
+		return valLay;
+	}
+	
 	@Override
 	public void showValidationLayout(boolean showBackButton) {
 		showValidationLayout(showBackButton, POSITION_BOTTOM);
@@ -1756,7 +1765,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				validationSettings.setWithTips(true);
 			}
 			
-			validationLayout = new FVValidationLayout((INavigationWindow) getNavigationWindow(), this, validationSettings, showBackButton);
+			validationLayout = newValidationLayout(showBackButton);
 //			if(!FocWebApplication.getInstanceForThread().isMobile()){
 				if(Globals.isValo()){
 					INavigationWindow navigationindow = getParentNavigationWindow();
@@ -3133,6 +3142,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	}
 	
 	public static void popupInDialog(ICentralPanel contentPanel, String title, String width, String height){
+				
 		FocCentralPanel centralPanel = new FocCentralPanel();
 		centralPanel.fill();
 		centralPanel.changeCentralPanelContent(contentPanel, false);

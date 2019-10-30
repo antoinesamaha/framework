@@ -154,6 +154,8 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 	      			parsedFilter.addCondition(parsedConditon);
 	      		}
 	      	}
+	      	
+	      	parsedFilter.setFilterLevel(entity.filterLevel());
 	      }
 
       	if(entity.groupByFields() != null && entity.groupByFields().length > 0) {

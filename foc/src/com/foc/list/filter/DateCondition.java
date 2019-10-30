@@ -168,7 +168,7 @@ public class DateCondition extends FilterCondition {
   }
 
   public static int adjustTheOperation(int op, Date firstDate, Date lastDate) {
-    if (op != OPERATOR_INDIFERENT){
+    if (op != OPERATOR_INDIFERENT) {
     	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
     	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
 	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
@@ -191,14 +191,14 @@ public class DateCondition extends FilterCondition {
 //    	
 //    }
     String firstDateFormat = "";
-    String lastDateFormat = "";
-    if (provider == DBManager.PROVIDER_ORACLE){
+    String lastDateFormat  = "";
+    if (provider == DBManager.PROVIDER_ORACLE) {
     	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
       firstDateFormat = dateFormat.format(firstDate);
-      lastDateFormat = dateFormat.format(lastDate);
-    }else{
+      lastDateFormat  = dateFormat.format(lastDate);
+    } else {
       firstDateFormat = String.valueOf(firstDate);
-      lastDateFormat = String.valueOf(lastDate);
+      lastDateFormat  = String.valueOf(lastDate);
     }
     
     op = adjustTheOperation(op, firstDate, lastDate); 
@@ -227,7 +227,7 @@ public class DateCondition extends FilterCondition {
 	      }else if (op == OPERATOR_EQUALS){
 	        buffer.append("TRUNC(" + fieldName + ") = TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy')");
 	      }
-	    }else if(provider == DBManager.PROVIDER_H2){
+	    }else if(provider == DBManager.PROVIDER_H2 || provider == DBManager.PROVIDER_POSTGRES){
 	      if (op == OPERATOR_GREATER_THAN){
 	        buffer.append(fieldName + ">= '" + firstDateFormat + "'");
 	      }else if (op == OPERATOR_LESS_THAN) {

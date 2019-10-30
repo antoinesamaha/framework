@@ -131,6 +131,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 	private ICentralPanel                  centralPanel         = null;
 //	private ChatSlider                    chatSlider           = null;
 	private HorizontalLayout               mainHorizontalLayout = null;
+
 //  private FVHorizontalLayout buttonsLayout = null;
 	/*
 	private Button nextContextHelpButton     = null;
@@ -237,7 +238,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
     
   	initButtonsLayout(showBackButton);
     validationListeners = new ArrayList<IValidationListener>();
-    addTransactionToRecentVisited();
+    addTransactionToRecentVisited();    
   }
   
   public void dispose(){
@@ -2609,4 +2610,9 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 			stageLayout.adjustButtonsCaption();
 		}
 	}
+
+	public HorizontalLayout getMainHorizontalLayout() {
+		return mainHorizontalLayout;
+	}
+
 }

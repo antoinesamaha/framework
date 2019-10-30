@@ -45,7 +45,7 @@ public class SQLJoin {
   }
   
   public String getLinkCondition() {
-  	if(provider == DBManager.PROVIDER_ORACLE || provider == DBManager.PROVIDER_H2){
+  	if(provider == DBManager.PROVIDER_ORACLE || provider == DBManager.PROVIDER_H2 || provider == DBManager.PROVIDER_POSTGRES){
   		return prevAlias+".\""+sourceField+"\"="+newAlias+".\""+targetField+"\"";
   	}else{
   		return prevAlias+"."+sourceField+"="+newAlias+"."+targetField;

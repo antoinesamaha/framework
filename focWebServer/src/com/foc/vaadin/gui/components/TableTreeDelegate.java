@@ -1092,7 +1092,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 
 	public boolean isRTL(){
-		return getFocXMLLayout() != null ? getFocXMLLayout().isRTL() : false;
+		return getFocXMLLayout() != null ? getFocXMLLayout().isRTL() : ConfigInfo.isGuiRTL();
 	}
 	
 	public FocXMLLayout getFocXMLLayout() {
