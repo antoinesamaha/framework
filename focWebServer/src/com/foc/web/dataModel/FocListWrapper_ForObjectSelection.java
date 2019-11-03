@@ -204,9 +204,10 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
   @Override
   public Item getItem(Object itemId) {
   	Item item = null;
-  	if(itemId != null && ((Long)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
+  	long itemIdlong = itemId != null ? (Long)itemId : 0;
+  	if(itemIdlong != 0 && itemIdlong == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
   		item = item4AddAction;
-  	}else if(itemId != null && ((Long)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
+  	}else if(itemIdlong != 0 && itemIdlong == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
   		item = item4RefreshAction;
   	}else{
   		item = super.getItem(itemId);
@@ -217,9 +218,10 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
   @Override
   protected FocObject getContainerProperty_GetFocObject(Object itemId){
   	FocObject focObj = null;
-  	if(((Long)itemId) == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
+  	long itemIdlong = itemId != null ? (Long)itemId : 0; 
+  	if(itemIdlong != 0 && itemIdlong == getFocObjectRef_ForTheADDIcon() && isWithNewItemOptionInList()){
   		focObj = item4AddAction;
-  	}else if(((Long)itemId) == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
+  	}else if(itemIdlong != 0 && itemIdlong == getFocObjectRef_ForTheREFRESHIcon() && isWithNewItemOptionInList()){
   		focObj = item4RefreshAction;
   	}else{
   		focObj = super.getContainerProperty_GetFocObject(itemId);

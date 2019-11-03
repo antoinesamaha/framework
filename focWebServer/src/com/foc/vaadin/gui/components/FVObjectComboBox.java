@@ -133,8 +133,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 					if(event != null && event.getProperty() != null && event.getProperty().getValue() instanceof Long){
 						long valueInteger = Long.valueOf(event.getProperty().getValue()+"");
 						
-//						if(valueString == FocListWrapper_ForObjectSelection.REF_ADD_NEW_ITEM && getMainWindow() != null){
-						if(isSelected(getFocObjectRef_ForTheADDIcon()) && getMainWindow() != null){
+						if(valueInteger == getFocObjectRef_ForTheADDIcon() && getMainWindow() != null){
+//						if(isSelected(getFocObjectRef_ForTheADDIcon()) && getMainWindow() != null){
 //							addNewObject();
 							//We need it like this when we add a new unit then we do cancel, the combo has the 'Add new item' selected.   
 							copyMemoryToGui();
@@ -467,7 +467,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 		}
 		
 		if(openedCentralPanel != null){
-			getMainWindow().changeCentralPanelContent(openedCentralPanel, true);
+			FocXMLLayout.popupInDialog(openedCentralPanel);
+//			getMainWindow().changeCentralPanelContent(openedCentralPanel, true);
 			copyMemoryToGui();
 			if(openedCentralPanel.getValidationLayout() != null){
 				((FocXMLLayout) openedCentralPanel).getValidationLayout().addValidationListener(new IValidationListener() {

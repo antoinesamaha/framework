@@ -29,7 +29,7 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 
 	private String               propertyPath = null; 
 	private FString              property     = null;
-	private ArrayList<FProperty> coll         = null; 
+	private ArrayList<String>    coll         = null; 
 	
 	public static final int    ACTION_TYPE_ADD        = 0;
 	public static final int    ACTION_TYPE_REFRESH    = 1;
@@ -70,8 +70,8 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 	@Override
 	public Collection getItemPropertyIds() {
 		if(coll == null){
-			coll = new ArrayList<FProperty>();
-			coll.add(property);
+			coll = new ArrayList<String>();
+			coll.add(propertyPath);
 		}
 		return coll;
 	}
