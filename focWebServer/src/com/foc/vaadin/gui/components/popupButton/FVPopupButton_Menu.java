@@ -71,8 +71,12 @@ public class FVPopupButton_Menu extends FVPopupButton {
 		return contentButton;
   }
 	*/
-	
+
 	public static FVPopupButton_Menu newPopupButton_ForMenu(INavigationWindow window, String menuTitle, String[] menuItemCodes, int buttonIndex){
+		return newPopupButton_ForMenu(window, menuTitle, menuItemCodes ,FocXMLGuiComponentStatic.getButtonStyleForIndex(buttonIndex));
+	}
+	
+	public static FVPopupButton_Menu newPopupButton_ForMenu(INavigationWindow window, String menuTitle, String[] menuItemCodes, String buttonStyle){
 		FVPopupButton_Menu button = null;
 		
 		if(menuItemCodes != null && menuItemCodes.length > 0){
@@ -86,10 +90,12 @@ public class FVPopupButton_Menu extends FVPopupButton {
 					if(menuItems[i] != null){
 	//					if(button == null) button = new FVPopupButton_Menu(menuTree, menuTitle, buttonIndex);
 	//					button.newButton(window, menuItems[i]);
-						if(button == null) button = new FVPopupButton_Menu(window, menuTitle, buttonIndex);
+						if(button == null) button = new FVPopupButton_Menu(window, menuTitle, buttonStyle);
 						FVPopupContentButton subMenu = button.newButton(window, menuItems[i].getTitle(), menuItems[i].getCode());
 						subMenu.setPopupButtonClickListener(new PopupClickListener(button, menuItems[i].getCode()));
-						subMenu.addStyleName(button.getStyleName());
+						if(button.getStyleName() != null) {
+							subMenu.addStyleName(button.getStyleName());
+						}
 					}
 				}
 			}
