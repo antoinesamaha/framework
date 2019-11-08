@@ -89,7 +89,7 @@ public class SQLAlterTable extends SQLRequest {
         		request.append(fieldToAlter.getCreationString(fieldToAlterName));
         		
         		//Oracle CLOB needs
-            if(oracleCLOB) request.append(") LOB(\"+name+\") STORE AS SECUREFILE ");
+            if(oracleCLOB) request.append(") LOB(\""+fieldToAlterName+"\") STORE AS SECUREFILE ");
             //-----------------
         	}
           if (		focDesc.getProvider() != DBManager.PROVIDER_ORACLE 
