@@ -17,33 +17,24 @@ package com.foc.vaadin.gui.components.multipleChoiceOptionGroupHorizontal;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 
 import org.xml.sax.Attributes;
 
 import com.foc.Globals;
 import com.foc.desc.field.FMultipleChoiceField;
-import com.foc.desc.field.FMultipleChoiceItem;
 import com.foc.desc.field.FMultipleChoiceItemInterface;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
-import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
 import com.foc.vaadin.gui.xmlForm.FXML;
-import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.OptionGroup;
 
 @SuppressWarnings("serial")
 public class FVMultipleChoiceOptionGroupHorizontal extends HorizontalLayout implements FocXMLGuiComponent {
@@ -115,6 +106,20 @@ public class FVMultipleChoiceOptionGroupHorizontal extends HorizontalLayout impl
   public void setAttributes(Attributes attributes) {
     this.attributes = attributes;
     FocXMLGuiComponentStatic.applyAttributes(this, attributes);
+    if(attributes != null) {
+    	String immediate = attributes.getValue(FXML.ATT_IMMEDIATE);
+    	if(			 immediate != null 
+    			&&  (immediate.equals("1") || immediate.toLowerCase().equals("true"))) {
+    		if(checkBoxArray != null){
+    			for(int i=0; i<checkBoxArray.size(); i++){
+    				OptionGroupHorizontalCheckBox box = checkBoxArray.get(i);
+    				if(box != null && box.getMultipleChoiceItem() != null){
+    					box.setImmediate(true);
+    				}
+    			}
+    		}
+    	}
+    }
 //    if(attributes != null){
 //    	String direction = attributes.getValue(FXML.ATT_DIRECTION);
 //    	if(direction != null && direction.toLowerCase().equals(FXML.VAL_DIRECTION_HORIZONTAL)){
