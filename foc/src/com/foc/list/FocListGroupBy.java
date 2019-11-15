@@ -131,6 +131,30 @@ public class FocListGroupBy {
 				}
 				
 				addField_Formulas(fieldID, formulaBefore, formulaAfter);
+			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_POSTGRES) {
+				formulaBefore = "STRING_AGG(";
+				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"' ORDER BY "+fieldName+")";
+
+				/*
+				if(!Utils.isStringEmpty(concatenationFields)) {
+					String concats = "";
+					formulaBefore += "CONCAT(";
+					String[] parts = concatenationFields.split(LISTAGG_SUB_SEPARATOR);
+					for(int p=parts.length-1; p>=0; p--) {
+						String subfield = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), parts[p]);
+
+						if(!Utils.isStringEmpty(concats)) {
+							concats = addAConcat(subfield, concats);
+						} else {
+							concats = subfield;
+						}
+						concats = addAConcat("'~'", concats);
+					}
+					formulaAfter = "," + concats + ")" + formulaAfter; 
+				}
+				*/
+				
+				addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_MSSQL) {
 //			,STUFF((SELECT ',' + Number FROM ContactPhones FOR XML PATH ('')), 1, 1, '')
 				FField originalField = field;
