@@ -20,7 +20,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import com.foc.Globals;
-import com.foc.IFocDescDeclaration;
 import com.foc.annotations.model.FocEntity;
 import com.foc.annotations.model.FocFilterCondition;
 import com.foc.annotations.model.FocGroupByField;
@@ -29,6 +28,7 @@ import com.foc.annotations.model.FocWorkflow;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
 import com.foc.desc.field.FField;
+import com.foc.desc.parsers.FocDescDeclaration_ParsedBased;
 import com.foc.desc.parsers.fields.FocFieldFactory;
 import com.foc.desc.parsers.fields.IFocFieldType;
 import com.foc.desc.parsers.filter.ParsedFilter;
@@ -40,37 +40,18 @@ import com.foc.list.FocListGroupBy;
 import com.foc.util.FocAnnotationUtil;
 import com.foc.util.Utils;
 
-public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
+public class FocDescDeclaration_PojoBased extends FocDescDeclaration_ParsedBased {
 
-	private FocModule            module      = null; 
 	private Class<PojoFocDesc>   descClass   = null;
 	private Class<PojoFocObject> objClass    = null;
-	private String               name        = null;
-	private String               storageName = null;
 	private PojoFocDesc          focDesc     = null;
 	
 	public FocDescDeclaration_PojoBased(FocModule module, String name, String storageName, Class<PojoFocDesc> descClass, Class<PojoFocObject> objClass){
-		this.name        = name;
-		this.module      = module;
+		super(module, name, storageName);
 		this.descClass   = descClass;
 		this.objClass    = objClass;
-		this.storageName = storageName;
 	}
 	
-	@Override
-	public FocModule getFocModule() {
-		return module;
-	}
-
-	@Override
-	public int getPriority() {
-		return IFocDescDeclaration.PRIORITY_FIRST;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	@Override
 	public FocDesc getFocDescription() {
 		if(focDesc == null){
@@ -99,7 +80,7 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 		      	args[1] = entity.dbResident();
 		      	
 		      	clss[2] = String.class;
-		      	args[2] = storageName;
+		      	args[2] = getStorageName();
 		      	
 		      	clss[3] = boolean.class;
 		      	args[3] = Boolean.FALSE;
@@ -112,9 +93,9 @@ public class FocDescDeclaration_PojoBased implements IFocDescDeclaration {
 		      }
 		      if(methodGetFocDesc != null){
 		      	focDesc = (PojoFocDesc) methodGetFocDesc.newInstance(args);
-		      	focDesc.setName(name);
+		      	focDesc.setName(getName());
 		      	
-						Globals.getApp().putIFocDescDeclaration(name, this);
+						Globals.getApp().putIFocDescDeclaration(getName(), this);
 		      }
 		    }
 	    }

@@ -25,42 +25,24 @@ import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocModule;
+import com.foc.desc.parsers.FocDescDeclaration_ParsedBased;
 import com.foc.util.Utils;
 import com.vaadin.server.ClassResource;
 
-public class FocDescDeclaration_XMLBased implements IFocDescDeclaration {
+public class FocDescDeclaration_XMLBased extends FocDescDeclaration_ParsedBased {
 
-	private FocModule           module      = null; 
 	private Class<XMLFocDesc>   descClass   = null;
 	private Class<XMLFocObject> objClass    = null;
 	private String              xmlFileName = null;
-	private String              name        = null;
-	private String              storageName = null;
 	private XMLFocDesc          focDesc     = null;
 	
 	public FocDescDeclaration_XMLBased(FocModule module, String name, String storageName, String xmlFileName, Class<XMLFocDesc> descClass, Class<XMLFocObject> objClass){
-		this.name        = name;
-		this.module      = module;
+		super(module, name, storageName);
 		this.xmlFileName = xmlFileName;
 		this.descClass   = descClass;
 		this.objClass    = objClass;
-		this.storageName = storageName;
 	}
 	
-	@Override
-	public FocModule getFocModule() {
-		return module;
-	}
-
-	@Override
-	public int getPriority() {
-		return IFocDescDeclaration.PRIORITY_FIRST;
-	}
-
-	public String getName() {
-		return name;
-	}
-
 	@Override
 	public FocDesc getFocDescription() {
 		if(focDesc == null){
@@ -72,7 +54,7 @@ public class FocDescDeclaration_XMLBased implements IFocDescDeclaration {
 	
 	public XMLFocDesc newFocDesc(String forcedStorageName){
 		if(!Utils.isStringEmpty(forcedStorageName)){
-			storageName = forcedStorageName;
+			setStorageName(forcedStorageName);
 		}
 	  try {
 	    if (descClass != null) {
@@ -83,7 +65,7 @@ public class FocDescDeclaration_XMLBased implements IFocDescDeclaration {
 	      	args[0] = getFocModule();
 	      	
 	      	clss[1] = String.class;
-	      	args[1] = storageName;
+	      	args[1] = getStorageName();
 	      	
 	      	clss[2] = String.class;
 	      	args[2] = xmlFileName;
@@ -99,9 +81,9 @@ public class FocDescDeclaration_XMLBased implements IFocDescDeclaration {
 	      }
 	      if(methodGetFocDesc != null){
 	      	focDesc = (XMLFocDesc) methodGetFocDesc.newInstance(args);
-	      	focDesc.setName(name);
+	      	focDesc.setName(getName());
 	      	
-					Globals.getApp().putIFocDescDeclaration(name, this);
+					Globals.getApp().putIFocDescDeclaration(getName(), this);
 	      }
 	    }
 	  } catch (Exception e) {
