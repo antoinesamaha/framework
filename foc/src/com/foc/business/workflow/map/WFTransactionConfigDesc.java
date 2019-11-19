@@ -122,7 +122,7 @@ public class WFTransactionConfigDesc extends FocDesc {
 		addField(bFld);
 
     FIntField intFocFld = new FIntField("CODE_PREFIX_NUMBER_OF_DIGITS", "Code|Nbr|Digits|(<=6)", FLD_CODE_PREFIX_NUMBER_OF_DIGITS, false, 1);
-    intFocFld.setPropertyValidator(new FNumLimitValidator(3, 6));
+    intFocFld.setPropertyValidator(new FNumLimitValidator(0, 6));
     addField(intFocFld);
   }
 	
