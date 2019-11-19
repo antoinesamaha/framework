@@ -18,6 +18,7 @@ package com.foc.web.dataModel;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.foc.ConfigInfo;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.property.FProperty;
@@ -34,6 +35,7 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 	public static final int    ACTION_TYPE_ADD        = 0;
 	public static final int    ACTION_TYPE_REFRESH    = 1;
 	public static final String ACTION_CAPTION_ADD     = "Add New...";
+	public static final String ACTION_CAPTION_ADD_AR  = "اضافة جديدة"+"...";
 	public static final String ACTION_CAPTION_REFRESH = "Refresh";
 	
 	public static final long   REF_ADD           = -1000000;
@@ -43,7 +45,7 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 		super(new FocDataItem_FocDesc_ForComboBoxActions());
 		this.propertyPath = propertyPath;
 		if(actionType == ACTION_TYPE_ADD){
-			property = new FString(null, -1, ACTION_CAPTION_ADD);
+			property = new FString(null, -1, ConfigInfo.isArabic() ? ACTION_CAPTION_ADD_AR : ACTION_CAPTION_ADD);
 			setReference(REF_ADD);
 		}else if(actionType == ACTION_TYPE_REFRESH){
 			property = new FString(null, -2, ACTION_CAPTION_REFRESH);
