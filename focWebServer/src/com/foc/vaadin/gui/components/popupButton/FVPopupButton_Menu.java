@@ -16,6 +16,7 @@
 package com.foc.vaadin.gui.components.popupButton;
 
 import com.foc.menuStructure.FocMenuItem;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
 import com.foc.web.gui.INavigationWindow;
@@ -31,6 +32,11 @@ public class FVPopupButton_Menu extends FVPopupButton {
 	
 	public FVPopupButton_Menu(INavigationWindow window, String content, String styleName) {
 		super(content, styleName);
+		this.window = window;
+	}
+	
+	public FVPopupButton_Menu(INavigationWindow window, String content, String[] styleNames) {
+		super(content, styleNames);
 		this.window = window;
 	}
 	
@@ -73,10 +79,19 @@ public class FVPopupButton_Menu extends FVPopupButton {
 	*/
 
 	public static FVPopupButton_Menu newPopupButton_ForMenu(INavigationWindow window, String menuTitle, String[] menuItemCodes, int buttonIndex){
-		return newPopupButton_ForMenu(window, menuTitle, menuItemCodes ,FocXMLGuiComponentStatic.getButtonStyleForIndex(buttonIndex));
+		return newPopupButton_ForMenu(window, menuTitle, menuItemCodes, FocXMLGuiComponentStatic.getButtonStyleForIndex(buttonIndex));
 	}
 	
 	public static FVPopupButton_Menu newPopupButton_ForMenu(INavigationWindow window, String menuTitle, String[] menuItemCodes, String buttonStyle){
+		if(!Utils.isStringEmpty(buttonStyle)) {
+			String[] styles = {buttonStyle};
+			return newPopupButton_ForMenu(window, menuTitle, menuItemCodes, styles);
+		} else {
+			return newPopupButton_ForMenu(window, menuTitle, menuItemCodes, (String[]) null);
+		}
+	}
+	
+	public static FVPopupButton_Menu newPopupButton_ForMenu(INavigationWindow window, String menuTitle, String[] menuItemCodes, String[] buttonStyles){
 		FVPopupButton_Menu button = null;
 		
 		if(menuItemCodes != null && menuItemCodes.length > 0){
@@ -90,12 +105,17 @@ public class FVPopupButton_Menu extends FVPopupButton {
 					if(menuItems[i] != null){
 	//					if(button == null) button = new FVPopupButton_Menu(menuTree, menuTitle, buttonIndex);
 	//					button.newButton(window, menuItems[i]);
-						if(button == null) button = new FVPopupButton_Menu(window, menuTitle, buttonStyle);
+						if(button == null) button = new FVPopupButton_Menu(window, menuTitle, buttonStyles);
 						FVPopupContentButton subMenu = button.newButton(window, menuItems[i].getTitle(), menuItems[i].getCode());
 						subMenu.setPopupButtonClickListener(new PopupClickListener(button, menuItems[i].getCode()));
-						if(button.getStyleName() != null) {
-							subMenu.addStyleName(button.getStyleName());
+						if (buttonStyles != null) {
+							for(int s=0; s<buttonStyles.length; s++) {
+								subMenu.addStyleName(buttonStyles[s]);
+							}
 						}
+//						if(button.getStyleName() != null) {
+//							subMenu.addStyleName(button.getStyleName());
+//						}
 					}
 				}
 			}

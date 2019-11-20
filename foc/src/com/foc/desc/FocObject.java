@@ -3642,8 +3642,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			  	      	buff.append(expression);
 			  	      }
 			  	      
-	  					}		  	      
-	  				}	  				
+	  					}
+	  				}
 	  			}
 	  		}
 	  	}
