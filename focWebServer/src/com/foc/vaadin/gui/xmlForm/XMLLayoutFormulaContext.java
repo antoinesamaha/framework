@@ -64,7 +64,7 @@ public class XMLLayoutFormulaContext extends FocSimpleFormulaContext {
 	
 	@Override
 	public void plugListeners(String expression) {
-	  if(expression != null && !expression.isEmpty()){
+	  if(expression != null && !expression.isEmpty() && xmlLayout != null && xmlLayout.getFocData() != null){
 	    IFocData propFocData = xmlLayout.getFocData().iFocData_getDataByPath(expression);
 	    if(propFocData != null){
 	      xmlLayout.mapDataPath2ListenerAction_PutFormulaContext(expression, this);
