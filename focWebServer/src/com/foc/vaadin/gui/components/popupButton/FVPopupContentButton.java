@@ -15,12 +15,13 @@
  ******************************************************************************/
 package com.foc.vaadin.gui.components.popupButton;
 
+import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVNativeButton;
 import com.foc.web.gui.INavigationWindow;
 import com.vaadin.ui.Button.ClickListener;
 
 @SuppressWarnings("serial")
-public class FVPopupContentButton extends FVNativeButton implements ClickListener{
+public class FVPopupContentButton extends FVButton implements ClickListener{
 
 	private INavigationWindow iNavigationWindow = null;
 	private FVPopupWindow popupWindow = null;

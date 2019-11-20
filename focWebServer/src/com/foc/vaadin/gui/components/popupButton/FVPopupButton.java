@@ -17,23 +17,23 @@ package com.foc.vaadin.gui.components.popupButton;
 
 import java.util.HashMap;
 
-import com.vaadin.ui.Button.ClickListener;
-import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
+import com.foc.vaadin.gui.components.FVButton;
 import com.foc.vaadin.gui.components.FVNativeButton;
 import com.foc.vaadin.gui.layouts.FVHorizontalLayout;
 import com.foc.web.gui.INavigationWindow;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.UI;
 
 @SuppressWarnings("serial")
-public class FVPopupButton extends FVNativeButton implements ClickListener {
+public class FVPopupButton extends FVButton implements ClickListener {
 
-	private FVPopupWindow popupWindow = null;
-	private String        styleName   = null;
+	private FVPopupWindow popupWindow    = null;
+	private String[]      styleNameArray = null;
 	private HashMap<String, FVPopupContentButton> buttonMap = null;//Basically used for Unit testing
 	
 	public FVPopupButton(String content) {
-		this(content, null);
+		this(content, (String[]) null);
 	}
 
 	public FVPopupButton(String content, int styleIndex) {
@@ -42,16 +42,24 @@ public class FVPopupButton extends FVNativeButton implements ClickListener {
 	
 	public FVPopupButton(String content, String styleName) {
 		super(content);
-		init(styleName);
+		String[] styleNames = {styleName};
+		init(styleNames);
 	}
 	
-	private void init(String styleName){
-		this.styleName = styleName;
+	public FVPopupButton(String content, String[] styleNames) {
+		super(content);
+		init(styleNames);
+	}
+	
+	private void init(String[] styleName){
+		this.styleNameArray = styleName;
 		buttonMap = new HashMap<String, FVPopupContentButton>();
 		
 		popupWindow = new FVPopupWindow(this);
-		if(!Utils.isStringEmpty(styleName)){
-			addStyleName(styleName);
+		if(styleNameArray != null && styleNameArray.length > 0){
+			for(int i=0; i<styleNameArray.length; i++) {
+				addStyleName(styleNameArray[i]);
+			}
 		}else{
 			addStyleName("foc-button-orange");
 		}
@@ -84,7 +92,11 @@ public class FVPopupButton extends FVNativeButton implements ClickListener {
 		menuItemHorizontalLayout.setWidth("100%");
 		
 		FVPopupContentButton contentButton = new FVPopupContentButton(getPopupWindow(), iNavigationWindow, caption);
-		contentButton.addStyleName(styleName);
+		if(styleNameArray != null) {
+			for(int i=0; i<styleNameArray.length; i++) {
+				contentButton.addStyleName(styleNameArray[i]);
+			}
+		}
 		contentButton.setWidth("100%");
 		contentButton.setHeight("40px");
 
@@ -110,8 +122,8 @@ public class FVPopupButton extends FVNativeButton implements ClickListener {
 		return popupWindow;
 	}
 
-	public String getStyleName() {
-		return styleName;
+	public String[] getStyleNameArray() {
+		return styleNameArray;
 	}
 	
 	public FVPopupContentButton getContentButton(String code){
