@@ -87,7 +87,7 @@ public class SQLAlterTable extends SQLRequest {
         		if(oracleCLOB) request.append(" (");
         		//-----------------
         		
-        		if(action == MODIFY && focDesc.getProvider() != DBManager.PROVIDER_POSTGRES) {
+        		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
         			request.append(" TYPE ");
         		}
         		
