@@ -1370,8 +1370,17 @@ public class FocUnitTestingCommand {
   			choiceOptionGroupPopupView.setPriorityToCaptionProperty(value);
   			component.setValueString(componentValue);
   		}else if(component instanceof FVObjectComboBox && componentValue.equalsIgnoreCase("")){
-  			((FVObjectComboBox) component).setValue(null);
-				((FVObjectComboBox) component).setValueString(null);
+  			if(assertOnly == ASSERT_ONLY){
+  				String retValue = component.getValueString();
+  				if(retValue == null) {
+  					getLogger().addInfo("Asserted component " + compNameForTheMessage + " is empty");
+  				} else {
+  					getLogger().addFailure("Failed Assertion component " + compNameForTheMessage + " != ''");
+  				}
+  			} else {
+	  			((FVObjectComboBox) component).setValue(null);
+					((FVObjectComboBox) component).setValueString(null);
+  			}				
 				componentValue = null;
   		}else{
   			if(assertOnly != ASSERT_ONLY){
