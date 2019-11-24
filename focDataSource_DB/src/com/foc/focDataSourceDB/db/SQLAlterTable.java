@@ -57,7 +57,8 @@ public class SQLAlterTable extends SQLRequest {
         request.append(" ADD ");
         break;
       case MODIFY:
-      	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL){
+      	if(   focDesc.getProvider() == DBManager.PROVIDER_MSSQL
+      		 || focDesc.getProvider() == DBManager.PROVIDER_POSTGRES){
       		request.append(" ALTER COLUMN ");
       	}else{
       		request.append(" MODIFY ");
@@ -85,6 +86,10 @@ public class SQLAlterTable extends SQLRequest {
 								            		&&  ((FStringField) fieldToAlter).isClob();
         		if(oracleCLOB) request.append(" (");
         		//-----------------
+        		
+        		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+        			request.append(" TYPE ");
+        		}
         		
         		request.append(fieldToAlter.getCreationString(fieldToAlterName));
         		

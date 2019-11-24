@@ -15,6 +15,9 @@
  ******************************************************************************/
 package com.foc.vaadin.gui.components;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.xml.sax.Attributes;
 
 import com.fab.gui.xmlView.IAddClickSpecialHandler;
@@ -23,6 +26,8 @@ import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
 import com.foc.dataWrapper.FocListWrapper;
+import com.foc.dataWrapper.FocDataWrapper.ListFilterUsingAFormulaExpression;
+import com.foc.dataWrapper.FocDataWrapper.ListFilterUsingPropertyValue;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -48,6 +53,7 @@ import com.foc.web.dataModel.FocListWrapper_ForObjectSelection;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.recording.UnitTestingRecorder_ObjectComboBox;
+import com.vaadin.data.Container.Filter;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
@@ -257,8 +263,37 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
       	if(objFld.getNullValueDisplayString() != null && !objFld.getNullValueDisplayString().isEmpty()){
       		setInputPrompt(objFld.getNullValueDisplayString());
       	}
+
+      	// Preserver Filters - 2019-11-20
+      	//The filters set by developers and other that the Formula expression and property equality filters
+      	//Should be transported to the new wrapper list
+      	ArrayList<Filter> filtersToPreserve = null;
+      	if(selectionWrapperList != null) {
+      		ArrayList<Filter> filterCollection = selectionWrapperList.getFilterArrayList(false);
+      		if(filterCollection != null) {
+      			for(int i=0; i<filterCollection.size(); i++) {
+      				Filter filter = filterCollection.get(i);
+      				if(    !(filter instanceof ListFilterUsingAFormulaExpression)
+      						&& !(filter instanceof ListFilterUsingPropertyValue)) {
+      					if(filtersToPreserve == null) filtersToPreserve = new ArrayList<Filter>();
+      					filtersToPreserve.add(filter);
+      				}
+      			}
+      		}
+      	}
+	      // -----------------
+      	
 	      FocListWrapper selectionWrapperList = newSelectionFocListWrapper();
+	      
 	      if(selectionWrapperList != null){
+	      	// Preserver Filters - 2019-11-20
+		      if(filtersToPreserve != null) {
+		      	for(int i=0; i<filtersToPreserve.size(); i++) {
+		      		selectionWrapperList.addContainerFilter(filtersToPreserve.get(i));
+		      	}
+		      }
+		      // -----------------
+	      	
 	        if (captionFieldName == null) {
             int captionFieldID = objFld.getDisplayField();
             FField captionField = objFld.getFocDesc() != null ? objFld.getFocDesc().getFieldByID(captionFieldID) : null;
