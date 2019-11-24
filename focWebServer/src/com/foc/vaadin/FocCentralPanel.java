@@ -87,6 +87,11 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		}
 	}
 	
+	@Override
+	public void setWidth(float width, Unit unit) {
+		super.setWidth(width, unit);
+	}
+	
 	public void dispose_MenuTree(){
 		if(menuTree != null){
 			menuTree.dispose();
@@ -380,9 +385,15 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 				centralPanel.setContent(wrapperOfCentralLayout);
 				centralPanel.markAsDirty();
 				newCentralPanleComponent.setWidth(WIDTH_PORTRAIT);
+				String preferedWidth = newCentralPanel.getPreferredPageWidth();
+				if (preferedWidth != null && preferedWidth.endsWith("px")) {
+					newCentralPanleComponent.setWidth(preferedWidth);
+				  setPreferredWidth(preferedWidth);
+				}
+				
 				if(ConfigInfo.isGuiRTL()) newCentralPanleComponent.addStyleName("foc-float-none");
 				wrapperOfCentralLayout.setWidth("100%");
-
+				
 				//Apply same style to the wrapper
 				if(newCentralPanleComponent instanceof FocXMLLayout) {
 					Component firstComp = ((FocXMLLayout) newCentralPanleComponent).getFirstRootComponent();
