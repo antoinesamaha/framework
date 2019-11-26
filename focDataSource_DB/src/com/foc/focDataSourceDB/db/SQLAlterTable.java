@@ -87,11 +87,16 @@ public class SQLAlterTable extends SQLRequest {
         		if(oracleCLOB) request.append(" (");
         		//-----------------
         		
-        		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
-        			request.append(" TYPE ");
+        		String creationString = fieldToAlter.getCreationString(fieldToAlterName);
+        		
+        		if(			action == MODIFY 
+        				&& 	focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
+        				&&  fieldToAlter instanceof FStringField
+        				&&  creationString.contains("VARCHAR")) {
+        			creationString = creationString.replace("VARCHAR", "TYPE VARCHAR");
         		}
         		
-        		request.append(fieldToAlter.getCreationString(fieldToAlterName));
+        		request.append(creationString);
         		
         		//Oracle CLOB needs
             if(oracleCLOB) request.append(") LOB(\""+fieldToAlterName+"\") STORE AS SECUREFILE ");
