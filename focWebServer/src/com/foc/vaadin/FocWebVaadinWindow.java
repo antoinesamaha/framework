@@ -931,7 +931,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-		if (!isNewLook()) {
+		if (!isNewLook() || ConfigInfo.isUnitAllowed()) {
 			showMenuBar();
 		}
 

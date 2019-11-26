@@ -1,11 +1,12 @@
 <VerticalLayout width="100%" height="100%">
     <ValidationSettings formTitle="User profiles" withApply="false" withAttach="true" withPrint="true" commitData="false"/>
-    <GuiTree name="TABLE" expandRatio="1" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="10" >
+    <GuiTree name="TABLE" expandRatio="1" dataPath="DATAROOT" openEnabled="false" deleteEnabled="false" addEnabled="false" width="100%" pageLength="10" colorByLevel="true" >
         <OpenForm containerWindow="same window" />
         <TableColumn name="DATE_TIME" caption="Date"    />
         <TableColumn name="TYPE" caption="Message Type"    />
         <TableColumn name="SUCCESSFUL" caption="Successful"    />
         <TableColumn name="MESSAGE" caption="Message"    />
+        <TableColumn name="DUMMY" caption=""  width="30px"  />
     </GuiTree>
 </VerticalLayout>
 
