@@ -10,6 +10,7 @@ import com.foc.db.DBIndex;
 import com.foc.db.DBManager;
 import com.foc.desc.*;
 import com.foc.desc.field.*;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -87,16 +88,26 @@ public class SQLAlterTable extends SQLRequest {
         		if(oracleCLOB) request.append(" (");
         		//-----------------
         		
-        		String creationString = fieldToAlter.getCreationString(fieldToAlterName);
+        		boolean appended = false;
+        		String fieldCreationString = fieldToAlter.getCreationString(fieldToAlterName);
+        		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+        			if(!Utils.isStringEmpty(fieldCreationString)) {//Normally this is not empty
+        				int indexOfSecondSpeachMark = fieldCreationString.indexOf("\"", 2);
+        				if(indexOfSecondSpeachMark > 0 && indexOfSecondSpeachMark + 1 < fieldCreationString.length()) {
+  	        			String columnType = fieldCreationString.substring(indexOfSecondSpeachMark + 1);
+  	        			String columnName = fieldCreationString.substring(0, indexOfSecondSpeachMark + 1);
+  	        			if(!Utils.isStringEmpty(columnType) && !Utils.isStringEmpty(columnName)) {
+  		        			String result = " " + columnName + " TYPE " + columnType;
+  		        			request.append(result);
+  		        			appended = true;
+  	        			}
+        				}
+        			}
+        		} 
         		
-        		if(			action == MODIFY 
-        				&& 	focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
-        				&&  fieldToAlter instanceof FStringField
-        				&&  creationString.contains("VARCHAR")) {
-        			creationString = creationString.replace("VARCHAR", "TYPE VARCHAR");
+        		if(!appended){
+        			request.append(fieldCreationString);
         		}
-        		
-        		request.append(creationString);
         		
         		//Oracle CLOB needs
             if(oracleCLOB) request.append(") LOB(\""+fieldToAlterName+"\") STORE AS SECUREFILE ");
