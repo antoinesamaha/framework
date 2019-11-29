@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import com.foc.Globals;
 import com.foc.access.FocLogLine;
 import com.foc.access.FocLogger;
+import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
+import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 
@@ -142,7 +144,14 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 	public void loginAs(String name, String password) throws Exception {
 		component_SetValue("NAME", name, false);
 		component_SetValue("PASSWORD", password, false);
-		button_Click("LOGIN");
+		
+		FocXMLLayout navigationLayout = getCurrentCentralPanel();
+		FocXMLGuiComponent component = findComponent(navigationLayout, "LOGIN", false);
+		if(component != null) {
+			button_Click("LOGIN");
+		} else {
+			button_Click("login");
+		}
 	}
 	
 	public void loginAs_IfMemoryCheckActive(String name) throws Exception {

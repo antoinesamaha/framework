@@ -30,10 +30,10 @@ import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.ui.AbsoluteLayout.ComponentPosition;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.themes.BaseTheme;
 
 @SuppressWarnings("serial")
 public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
@@ -129,6 +129,18 @@ public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
     setCaption("");
   }
   
+  public void changeSelection(String newSelectionName) {
+  	MenuLayoutItem foundTabLay = null; 
+  	for(int i=0; i<tabList.size() && foundTabLay == null; i++) {
+  		MenuLayoutItem tabLay = tabList.get(i);
+  		if(tabLay != null && tabLay.getTitle() != null && tabLay.getTitle().equals(newSelectionName)) {
+  			foundTabLay = tabLay;
+  		}
+  	}
+  	
+  	changeSelection(foundTabLay);
+  }
+  
   public void changeSelection(int newSelection) {
   	if(newSelection != currentIndex && newSelection >= 0) {
   		if(currentIndex >=0 ) {
@@ -141,14 +153,18 @@ public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
   		currentIndex = newSelection;
 
 			MenuLayoutItem oneLay = tabList.get(currentIndex);
-			if(oneLay != null) {
-				notifyListener(oneLay);
-  			addComponent(oneLay.getComponent());
-  			oneLay.setSelected(true);
-			}
+			changeSelection(oneLay);
   	}
   }
 
+  private void changeSelection(MenuLayoutItem oneLay) {
+		if(oneLay != null) {
+			notifyListener(oneLay);
+			addComponent(oneLay.getComponent());
+			oneLay.setSelected(true);
+		}
+  }
+  
   @Override
   public void addComponent(Component comp, Attributes attributes) {
     String title = attributes.getValue(FXML.ATT_TITLE);
@@ -167,6 +183,11 @@ public class FVMenuLayout extends FVVerticalLayout implements FVLayout {
     if(tabList.size() == 1) {
     	changeSelection(0);
     }
+    
+//    FocXMLLayout parentLayout = findAncestor(FocXMLLayout.class);
+//    if (parentLayout != null) {
+//    	parentLayout.putComponent(getName() + "_" + title, lay.getButton());
+//    }
     
   	/*
     comp.addStyleName("padding");

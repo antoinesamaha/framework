@@ -931,7 +931,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	    });
 		}
   	
-		if (!isNewLook()) {
+		if (!isNewLook() || ConfigInfo.isUnitAllowed()) {
 			showMenuBar();
 		}
 
@@ -1194,6 +1194,27 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   	FVHorizontalLayout horizontalLayout = centralPanel != null ? (FVHorizontalLayout) centralPanel.getComponentByName("MENU_ITEMS_LAYOUT") : null;
   	return horizontalLayout;
   }
+  
+  public Button newButtonForMenuItem(String menuItemCode) {
+  	return newButtonForMenuItem(null, menuItemCode); 
+  }
+  
+	public Button newButtonForMenuItem(String caption, String menuItemCode) {
+		Button button = null;
+		FocMenuItem menuItem = FVMenuTree.getMenuTree_ForThisSession().findMenuItem(menuItemCode);
+		if (menuItem != null) {
+			if(caption == null) caption = menuItem.getTitle();
+			button = new FVButton(caption);
+			button.setSizeFull();			
+			button.addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					FVMenuTree.getMenuTree_ForThisSession().clickMenuItem(FocWebVaadinWindow.this, menuItemCode);
+				}
+			});
+		}
+		return button;
+	}
   
 	@Override
 	public void fillHomepageShortcutMenu(FocXMLLayout centralPanel) {
