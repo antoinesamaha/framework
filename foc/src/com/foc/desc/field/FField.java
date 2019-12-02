@@ -289,6 +289,9 @@ public abstract class FField implements Cloneable, IFocData {
     case Types.JAVA_OBJECT:
       // field = FObjectField(name, name, id, false, size, decimals);
       break;
+    case Types.STRUCT:
+    	field = new FSDOGeometryPointField(name, name, id, false);
+    	break;
     case Types.ARRAY:
       // field = FIntField(name, name, id, false, size, decimals);
       break;

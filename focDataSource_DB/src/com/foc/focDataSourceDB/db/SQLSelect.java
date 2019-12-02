@@ -13,16 +13,20 @@ import com.foc.business.company.CompanyDesc;
 import com.foc.db.DBManager;
 import com.foc.db.SQLFilter;
 import com.foc.db.SQLJoin;
-import com.foc.desc.*;
+import com.foc.desc.FocDesc;
+import com.foc.desc.FocFieldEnum;
+import com.foc.desc.FocObject;
 import com.foc.desc.field.FBlobStringField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
 import com.foc.desc.field.FObjectField121;
-import com.foc.list.*;
+import com.foc.list.FocList;
+import com.foc.list.FocListGroupBy;
 import com.foc.property.FBlobProperty;
 import com.foc.property.FBlobStringProperty;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
+import com.foc.property.FSDOGeometryPoint;
 import com.foc.util.Utils;
 
 /**
@@ -248,6 +252,8 @@ public class SQLSelect extends SQLSelectPlain {
 	      			}else{
 	      				value = "";
 	      			}
+	      		}else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE && prop instanceof FSDOGeometryPoint) {
+	      			
 	      		}else{
 	      			value = resultSet.getString(i+1);
 	      		}
@@ -267,7 +273,11 @@ public class SQLSelect extends SQLSelectPlain {
       		//buffer.append(value);
       		//buffer.append(',');
 
-	        prop.setSqlString(value);
+//	        if(prop instanceof FSDOGeometryPoint) {
+//	        	oracle.sql.STRUCT struct = resultSet.getObject(i+1);	        	
+//	        } else {
+	        	prop.setSqlString(value);
+//	        }
 	        
 	        if(loadedFocObjForProperty != null){
 	        	//Attention this is added after the FObject modif to make it require less memory
