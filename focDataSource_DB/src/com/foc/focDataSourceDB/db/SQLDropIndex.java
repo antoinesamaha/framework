@@ -28,7 +28,7 @@ public class SQLDropIndex extends SQLRequest {
       	request.append(index.getName());
       }
       
-      if(focDesc.getProvider() != DBManager.PROVIDER_ORACLE){
+      if(focDesc.getProvider() != DBManager.PROVIDER_ORACLE && focDesc.getProvider() != DBManager.PROVIDER_POSTGRES){
         request.append(" ON ");
         request.append(focDesc.getStorageName_ForSQL());
       }
