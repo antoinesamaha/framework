@@ -135,17 +135,22 @@ public class DBAdaptor {
 	    //Drop all FFK_ constraints on all Oracle connections
 	    if(ConfigInfo.isAdaptConstraints()) {
 		  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
-		  	if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE){
+		  	if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE ){
 		  		dropConstrains_Oracle(null);	
+		  	} else if (defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES) {
+		  		dropConstrains_Postgres(null);
 		  	}
-		  	
 		  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
 		  	while(auxConnIter != null && auxConnIter.hasNext()){
 		  		ConnectionPool connectionPool = auxConnIter.next();
-		  		if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE){
+		  		if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE || defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES){
 			  		String sourceKey = connectionPool.getDBSourceKey();
 			  		if(connectionPool != null && sourceKey != null){
-			  			dropConstrains_Oracle(sourceKey);		
+			  			if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE ){
+					  		dropConstrains_Oracle(sourceKey);	
+					  	} else if (defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES) {
+					  		dropConstrains_Postgres(sourceKey);
+					  	}
 			  		}
 		  		}
 		  	}
@@ -519,6 +524,35 @@ public class DBAdaptor {
     }
   }
   
+  private void dropConstrains_Postgres(String dbSourceKey){
+    try{
+    	ArrayList<String> constraintsDropRequests = new ArrayList<String>();
+    	
+			StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+			String request = "SELECT conname, relname FROM pg_catalog.pg_constraint con INNER JOIN pg_catalog.pg_class rel ON rel.oid = con.conrelid INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace where conname like 'FFK_%'";
+	    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+	    ResultSet resSet = stmt.getResultSet();
+	    if(resSet != null){
+	    	while(resSet.next()){
+	  			String tableName     = resSet.getString(1);
+	  			String contraintName = resSet.getString(2);
+	  			constraintsDropRequests.add("alter table \""+tableName+"\" drop constraint if exists \""+contraintName+"\"");
+	    	}
+	    	resSet.close();
+	    }
+	    DBManagerServer.getInstance().unlockStatement(stmt);
+	    
+	    for(int i=0; i<constraintsDropRequests.size(); i++){
+	    	request = constraintsDropRequests.get(i);
+	    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
+	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+	    }
+    }catch(Exception e){
+    	Globals.logException(e);
+    }
+  }
+  
   private void rebuildConstrains_Oracle(String dbSourceKey){
     try{
     	ArrayList<String> constraintsDropRequests = new ArrayList<String>();
@@ -555,7 +589,7 @@ public class DBAdaptor {
   }
   
   private void adaptDBTable_Constraints_Oracle(FocDesc focDesc){
-  	if(focDesc != null && focDesc.isDbResident() && focDesc.getProvider() == DBManager.PROVIDER_ORACLE){
+  	if(focDesc != null && focDesc.isDbResident() && (focDesc.getProvider() == DBManager.PROVIDER_ORACLE || focDesc.getProvider() == DBManager.PROVIDER_POSTGRES)){
 	    FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
 	    while (enumer.hasNext()) {
 	      FField field = (FField) enumer.next();
@@ -584,9 +618,14 @@ public class DBAdaptor {
 								StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
 								String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
 								request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
-								request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") novalidate";
-						    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
-						    DBManagerServer.getInstance().unlockStatement(stmt);
+								request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
+								if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
+									request += " novalidate";
+									stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+							    DBManagerServer.getInstance().unlockStatement(stmt);
+								} else {
+							    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
+								}
 				  		}
 			  		}
 		      }catch(Exception e){
