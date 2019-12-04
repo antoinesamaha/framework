@@ -11,6 +11,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.focDataSourceDB.db.util.DBUtil;
 import com.foc.property.FProperty;
+import com.foc.property.FReference;
 
 /**
  * @author 01Barmaja
@@ -110,7 +111,15 @@ public class SQLInsert extends SQLRequest {
           }
 
           try {
-         		request.append(prop.getSqlString());
+          	if(prop instanceof FReference) {
+          		if(prop.getSqlString().equals("0")) {
+          			request.append("NULL");
+          		} else {
+          			request.append(prop.getSqlString());
+          		}
+          	} else {
+          		request.append(prop.getSqlString());
+          	}
           } catch (Exception e) {
             if (prop == null) {
               Globals.logString("prop null for " + focDesc.getFocObjectClass() + " id = " + id);
