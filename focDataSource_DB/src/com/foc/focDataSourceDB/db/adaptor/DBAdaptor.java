@@ -534,8 +534,8 @@ public class DBAdaptor {
 	    ResultSet resSet = stmt.getResultSet();
 	    if(resSet != null){
 	    	while(resSet.next()){
-	  			String tableName     = resSet.getString(1);
-	  			String contraintName = resSet.getString(2);
+	  			String contraintName = resSet.getString(1);
+	  			String tableName = resSet.getString(2);
 	  			constraintsDropRequests.add("alter table \""+tableName+"\" drop constraint if exists \""+contraintName+"\"");
 	    	}
 	    	resSet.close();
@@ -545,7 +545,9 @@ public class DBAdaptor {
 	    for(int i=0; i<constraintsDropRequests.size(); i++){
 	    	request = constraintsDropRequests.get(i);
 	    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
-	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
+//	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
+//	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+	    	constraintStmt.executeUpdate(request);
 	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
 	    }
     }catch(Exception e){
