@@ -155,7 +155,9 @@ public class FReference extends FProperty {
   	if(sqlRef <= 0){
   		if(Globals.getDBManager().isProviderSupportNullValues()){
   			str = null;
-  		}else{
+  		}else if(str.equals("0")){
+  			str = "NULL";
+  		} else {
   			str = String.valueOf(sqlRef);
   		}
   	}

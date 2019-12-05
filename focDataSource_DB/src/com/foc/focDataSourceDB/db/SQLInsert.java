@@ -111,15 +111,7 @@ public class SQLInsert extends SQLRequest {
           }
 
           try {
-          	if(prop instanceof FReference) {
-          		if(prop.getSqlString().equals("0")) {
-          			request.append("NULL");
-          		} else {
-          			request.append(prop.getSqlString());
-          		}
-          	} else {
-          		request.append(prop.getSqlString());
-          	}
+          	request.append(prop.getSqlString());
           } catch (Exception e) {
             if (prop == null) {
               Globals.logString("prop null for " + focDesc.getFocObjectClass() + " id = " + id);
