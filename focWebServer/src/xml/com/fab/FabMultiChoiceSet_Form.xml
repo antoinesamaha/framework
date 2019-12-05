@@ -1,9 +1,21 @@
-<VerticalLayout  >
- <ValidationSettings formTitle="Fab Multi Choice Set" withApply="true" withAttach="true" withPrint="true" />
- <GuiField name="NAME" caption="Name" captionPos="left"  />
- <GuiTable name="FAB_MULTIPLE_CHOICE_LIST" dataPath="FAB_MULTIPLE_CHOICE_LIST" caption="" width="700px" height="-1px" top="50px" left="20px" checkBox="true"  >
-  <TableColumn name="INT_VALUE" caption="Choice Integer Value" />
-  <TableColumn name="DISPLAY_TEXT" caption="Display Text" />
- </GuiTable>
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="MULTIPLE CHOICE VALUES" name="FAB_MULTIPLE_CHOICE_LIST" dataPath="FAB_MULTIPLE_CHOICE_LIST" width="100%" height="100%" inLineEditable="true" withFilter="false">
+      <TableColumn name="INT_VALUE" caption="Integer Value" />
+      <TableColumn name="DISPLAY_TEXT" caption="Display Text" />
+    </GuiTable>
+  </VerticalLayout>
+
 </VerticalLayout>
+
+
+
 

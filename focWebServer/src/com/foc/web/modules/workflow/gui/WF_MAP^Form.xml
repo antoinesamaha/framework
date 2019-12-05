@@ -1,27 +1,28 @@
-<VerticalLayout captionMargin="0" margin="true">
-  <ValidationSettings formTitle="" withApply="true" withAttach="false" withPrint="false" />
-  <Label value="Workflow Stage Map" style="H2,text-center" width="100%"/>
-  <HorizontalLayout captionMargin="0" spacing="true" margin="true">
-      <GuiField name="NAME" caption="Name" width="150px" height="-1px" />
-      <GuiField name="DESCRIP" caption="Description" width="250px" height="-1px" />
-      <GuiField name="TITLE_INITIAL_EDIT>NAME" caption="Title of initial edit" width="250px" height="-1px" />
-      <GuiField name="STAGE_OF_LOCK_BEGIN>NAME" caption="Stage of Lock Begin" width="250px" height="-1px" prompt="keep empty to lock after first signature"/>
-  </HorizontalLayout>
-  <!-- IncludeXML captionMargin="0" name="WF_SIGNATURE_TABLE_LIST" dataPath="WF_SIGNATURE_LIST" storage="WF_SIGNATURE" type="table" / -->
-  
-  <GuiTable title="Transition sequence" name="WFSIGNATURE_TABLE" dataPath="WF_SIGNATURE_LIST" width="100%" height="-1px" inLineEditable="true" >
-    <TableColumn name="PREVIOUS_STAGE" caption="Previous Stage" />
-    <TableColumn name="TARGET_STAGE" caption="Target Stage" />
-    <!-- TableColumn name="FOC_USER" caption="User" / -->
-    <TableColumn name="TITLE_1" caption="Title 1" />
-    <!-- TableColumn name="TITLE_2" caption="Title 2" />
-    <TableColumn name="TITLE_3" caption="Title 3" / -->
-    <TableColumn name="TRANSACTION_CONTEXT" caption="Transaction Context" />
-    <TableColumn name="TRANSACTION_VIEW" caption="Transaction View" />
-    <TableColumn name="CONDITION_TO_REQUIRE_SIGNATURE" caption="Condition" />
-    <TableColumn name="SignCaption" caption="Sign Caption" />
-    <TableColumn name="RejectCaption" caption="Reject Caption" />
-    <TableColumn name="RejectHidden" caption="Reject Hidden" />
-  </GuiTable>
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <Label value="Map Info" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="DESCRIP" caption="Description" width="180px" />
+      <GuiField name="TITLE_INITIAL_EDIT>NAME" caption="Title of Initial Edit" width="180px" />
+      <GuiField name="STAGE_OF_LOCK_BEGIN>NAME" caption="Stage of Lock Begin" prompt="keep empty to lock after first signature" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="Transition Sequence" name="WFSIGNATURE_TABLE" dataPath="WF_SIGNATURE_LIST" inLineEditable="true" pageLength="10" width="100%" height="-1px">
+      <TableColumn name="PREVIOUS_STAGE" caption="Previous Stage" />
+      <TableColumn name="TARGET_STAGE" caption="Target Stage" />
+      <TableColumn name="TITLE_1" caption="Title 1" />
+      <TableColumn name="TRANSACTION_CONTEXT" caption="Transaction Context" />
+      <TableColumn name="TRANSACTION_VIEW" caption="Transaction View" />
+      <TableColumn name="CONDITION_TO_REQUIRE_SIGNATURE" caption="Condition" />
+      <TableColumn name="SignCaption" caption="Sign Caption" />
+      <TableColumn name="RejectCaption" caption="Reject Caption" />
+      <TableColumn name="RejectHidden" caption="Reject Hidden" />
+    </GuiTable>
+  </VerticalLayout>
   
 </VerticalLayout>

@@ -1,41 +1,34 @@
-<VerticalLayout width="100%" captionMargin="0">
-   <ValidationSettings formTitle="Site" withApply="true" withAttach="true" withPrint="true" />
-   
-   <HorizontalLayout width="98%" border="false"  >
-    <VerticalLayout captionMargin="0">
-	    <GuiField name="NAME" caption="Name:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
-	    <GuiField name="DESCRIP" caption="Description:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px"  />
-	    <GuiField name="TRANSACTION_PREFIX" captionStyle="f12,bold" caption="Transaction Prefix:" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
-	    <GuiField name="COMPANY" caption="Company:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
-	    <GuiField name="FATHER_NODE>NAME" caption="Parent Site:" captionStyle="f12,bold" captionPos="left" captionWidth="110px" width="-1px" height="-1px" />
-    </VerticalLayout>
-    <VerticalLayout captionMargin="0" >
-      <Label value="Address:" />
-      <GuiField name="ADDRESS" caption="" captionPos="left" captionWidth="-1px" width="100%" height="-1px" />
-    </VerticalLayout>
-   </HorizontalLayout>
-  
-   <Line />
-   
-   <GuiTable name="WF_OPERATOR_LIST" caption="" width="100%" height="-1px" inLineEditable="true" pageLength="fit" >
-     <TableColumn name="USER"  caption="User" />
-     <TableColumn name="TITLE" caption="Title" />
-     <TableColumn name="DEPARTMENT" caption="Department" />
-   </GuiTable>
-   
-   <GuiTable name="WF_USER_TRANS_RIGHT_LIST" caption="" width="100%" height="-1px" inLineEditable="true" pageLength="fit" >
-     <TableColumn name="TRANSACTION" caption="Transaction" />
-     <TableColumn name="USER" caption="User" />
-     <TableColumn name="TITLE" caption="Title" />
-     <TableColumn name="RIGHT_LEVEL" caption="Right Level" />
-   </GuiTable>
-    
-  <!-- MoreLayout moreCaption="Warehouses" >
-    <GuiTable name="STK_WAREHOUSE_LIST" caption="" width="100%" height="-1px" inLineEditable="true" >
-      <TableColumn name="NAME" caption="Warehouse" />
-      <TableColumn name="DESCRIP" caption="Description" />
-      <TableColumn name="WRHS_TYPE" caption="Type" />
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <Label value="Site Info" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="DESCRIP" caption="Description" width="180px" />
+      <GuiField name="COMPANY" caption="Company" width="180px" immediate="true" />
+      <GuiField name="FATHER_NODE>NAME" caption="Parent Site" width="180px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="ADDRESS" caption="Address" width="756px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="USERS" name="WF_OPERATOR_LIST" inLineEditable="true" pageLength="10" width="100%" height="-1px">
+      <TableColumn name="USER" caption="User" />
+      <TableColumn name="TITLE" caption="Title" />
+      <TableColumn name="DEPARTMENT" caption="Department" />
     </GuiTable>
-  </MoreLayout -->
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="USERS TRANSACTION RIGHTS" name="WF_USER_TRANS_RIGHT_LIST" inLineEditable="true" pageLength="10" width="100%" height="-1px">
+      <TableColumn name="TRANSACTION" caption="Transaction" />
+      <TableColumn name="USER" caption="User" />
+      <TableColumn name="TITLE" caption="Title" />
+      <TableColumn name="RIGHT_LEVEL" caption="Right Level" />
+    </GuiTable>
+  </VerticalLayout>
 
 </VerticalLayout>

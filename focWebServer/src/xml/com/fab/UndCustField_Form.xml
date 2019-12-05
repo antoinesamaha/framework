@@ -1,51 +1,42 @@
-<VerticalLayout name="H1" width="100%" >
-    <ValidationSettings formTitle="Field" withApply="true" withAttach="true" withPrint="true" />
-    <HorizontalLayout  width="100%"  >
-        <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="100px" alignment="left"  />
-        <GuiField name="TITLE" caption="Title" captionPos="top" captionWidth="100px"  />
-        <GuiField name="NOT_PHYSICAL_DIFFERENCE" caption="Not Physical Difference" captionPos="top" captionWidth="100px"  />
-    </HorizontalLayout>
-    
-    
-    <Label value="Type" style="h1"  />
-    <HorizontalLayout  width="100%"  >
-        <GuiField name="PREDEFINED_FIELD" caption="Predefined" captionPos="top" captionWidth="100px" alignment="left"  />
-        <GuiField name="SQL_TYPE" caption="Type" captionPos="top" width="-1px" height="25px" visibleWhen="PREDEFINED_FIELD=0" />
-        <GuiField name="IDENTIFICATION_PREFIX" caption="Identification Prefix" captionPos="top" captionWidth="100px"  />
-    </HorizontalLayout>
-    
-    
-    <Label value="Numerical" style="h1"  />
-    <HorizontalLayout  width="100%">
-        <GuiField name="LENGTH" caption="Size" captionPos="top" captionWidth="100px" alignment="left"  />
-        <GuiField name="DCIMALS" caption="Decimals" captionPos="top" captionWidth="100px"  />
-        <GuiField name="IDENTIFICATION_SUFFIX" caption="Identification Suffix" captionPos="top" captionWidth="100px"  />
-    </HorizontalLayout>
-    
-    
-    <Label value="Multiple choice" style="h1"  />
-    <VerticalLayout  width="100%"  >
-        <GuiField name="MULTIPLE_CHOICE_SET" caption="Multiple Choice Set" captionPos="top" captionWidth="100px" width="" height=""  />
-    </VerticalLayout>
-    
-    
-    <Label name="Object Label" value="Object field" style="h1" visibleWhen="SQL_TYPE=7"/>
-    <HorizontalLayout name="Object Horizontal Layout" width="100%"  visibleWhen="SQL_TYPE=7">
-        <VerticalLayout spacing="true">
-            <GuiField name="KEY_PREFIX" caption="Prefix" captionPos="top" captionWidth="" width="" height=""  />
-            <GuiField name="FOCDESC_NAME" caption="Table" captionPos="top" captionWidth="" width="" height=""  />
-        </VerticalLayout>    
-        <VerticalLayout spacing="true">
-            <GuiField name="OBJECT_EDITOR_TYPE" caption="Editor type" captionPos="top" captionWidth="" width="" height=""  />
-            <GuiField name="CELL_EDITOR_FIELD_ID_3" caption="Cell editor field 3" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-        </VerticalLayout> 
-    </HorizontalLayout>
-    
-    
-    <Label value="Advanced" style="h1"  />
-    <HorizontalLayout spacing="true">
-        <GuiField name="IS_KEY" caption="Is Key" captionPos="top" captionWidth="100px"  />
-        <GuiField name="DB_RESIDENT" caption="DB Resident" captionPos="top" captionWidth="100px"  />
-    </HorizontalLayout>
-</VerticalLayout>
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
 
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="TITLE" caption="Title" width="180px" />      
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NOT_PHYSICAL_DIFFERENCE" caption="Not Physical Difference" width="180px" />
+    </HorizontalLayout>
+    <Label value="Type" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="PREDEFINED_FIELD" caption="Predefined" width="180px" />
+      <GuiField name="SQL_TYPE" caption="Type" visibleWhen="PREDEFINED_FIELD=0" width="180px" />
+      <GuiField name="IDENTIFICATION_PREFIX" caption="Identification Prefix" width="180px" />
+    </HorizontalLayout>
+    <Label value="Numerical" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="LENGTH" caption="Size" width="180px" />
+      <GuiField name="DCIMALS" caption="Decimals" width="180px" />
+      <GuiField name="IDENTIFICATION_SUFFIX" caption="Identification Suffix" width="180px" />
+    </HorizontalLayout>
+    <Label value="Multiple Choice" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="MULTIPLE_CHOICE_SET" caption="Multiple Choice Set" width="180px" />
+    </HorizontalLayout>
+    <Label name="Object Label" value="Object field" visibleWhen="SQL_TYPE=7" style="black,bold,f16" />
+    <HorizontalLayout name="Object Horizontal Layout" visibleWhen="SQL_TYPE=7" captionMargin="0" margin="true" spacing="true">
+      <GuiField name="KEY_PREFIX" caption="Prefix" width="180px" />
+      <GuiField name="FOCDESC_NAME" caption="Table" width="180px" />
+      <GuiField name="OBJECT_EDITOR_TYPE" caption="Editor Type" width="180px" />
+      <GuiField name="CELL_EDITOR_FIELD_ID_3" caption="Cell Editor Field 3" width="180px" />
+    </HorizontalLayout>
+    <Label value="Advanced" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="IS_KEY" caption="Is Key" width="180px" />
+      <GuiField name="DB_RESIDENT" caption="Database Resident" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+</VerticalLayout>
