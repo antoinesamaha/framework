@@ -3575,7 +3575,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return code;
   }
   
-  private int code_getNextCodeIndex_Internal(int fieldID, String prefix, String separator, int nbrOfCodeDigits, boolean resetWhenPrefixChange){
+  protected int code_getNextCodeIndex_Internal(int fieldID, String prefix, String separator, int nbrOfCodeDigits, boolean resetWhenPrefixChange){
     int     next = 1;
     FocDesc desc = getThisFocDesc();
     
