@@ -2,7 +2,6 @@
   <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
 
   <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
-    <Label value="Table Info" style="black,bold,f16" />
     <HorizontalLayout captionMargin="0" margin="true" spacing="true">
       <GuiField name="NAME" caption="Name" width="180px" />
       <GuiField name="TITLE" caption="Title" width="180px" />
