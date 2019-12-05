@@ -288,16 +288,18 @@ public class FabWebModule extends FocWebModule {
       }
     });
 
-    menuItem = mainMenu.pushMenu("FAB_PARAMETER_OBJECTS_TABLE", "Parameter Objects/Table");
-    menuItem.setMenuAction(new IFocMenuItemAction() {
-      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
-        INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
-        FocList focList = ParameterSheetSelectorDesc.getInstance().getFocList();
-        XMLViewKey key = new XMLViewKey(ParameterSheetSelectorDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
-        ICentralPanel central = XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focList);
-        mainWindow.changeCentralPanelContent(central, true);
-      }
-    });
+		menuItem = mainMenu.pushMenu("FAB_PARAMETER_OBJECTS_TABLE", "Parameter Objects/Table");
+		menuItem.setMenuAction(new IFocMenuItemAction() {
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
+				FocList focList = ParameterSheetSelectorDesc.getInstance().getFocList();
+				XMLViewKey key = new XMLViewKey(ParameterSheetSelectorDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
+				if (key != null) {
+					ICentralPanel central = XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focList);
+					mainWindow.changeCentralPanelContent(central, true);
+				}
+			}
+		});
     
     menuItem = mainMenu.pushMenu("FAB_XML_VIEW_DEFINITION", "XML View Definition");
     menuItem.setMenuAction(new IFocMenuItemAction() {
