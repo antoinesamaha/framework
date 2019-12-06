@@ -1,44 +1,38 @@
-<VerticalLayout>
-    <ValidationSettings formTitle="Table" withApply="true" withAttach="true"
-        withPrint="true" />
-    <HorizontalLayout>
-        <VerticalLayout>
-            <GuiField name="NAME" caption="Name" captionPos="left" width="250px" height="-1px"
-                captionWidth="110px" />
-            <GuiField name="TITLE" caption="Title" captionPos="left" captionWidth="110px"
-                width="250px" height="" />
-            <GuiField name="FATHER_NODE" captionProperty="NAME" caption="Header table"
-                captionPos="left" captionWidth="110px" width="250px" height="" />
-            <GuiField name="EXISTING_TABLE" caption="Existing table" captionPos="left"
-                captionWidth="110px" width="250px" height="-1px" />
-        </VerticalLayout>
-        <VerticalLayout>
-            <GuiField name="HAS_WORFLOW" caption="Has Work Flow" captionPos="left" width="-1px"
-                height="-1px" captionWidth="110px" maskDataFoundError="true" />
-            <GuiField name="SHOW_IN_MENU" caption="Show in menu" captionPos="left"
-                captionWidth="110px" width="-1px" height="-1px" maskDataFoundError="true" />
-            <GuiField name="NOT_DIRECTLY_EDITABLE"
-                caption="When this table is details of a Father object, Not Directly editable"
-                captionPos="left" captionWidth="110px" width="-1px" height="-1px"
-                maskDataFoundError="true" />
-        </VerticalLayout>                
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="TITLE" caption="Title" width="180px" />
+      <GuiField name="FATHER_NODE>NAME" caption="Header Table" width="180px" />
+      <GuiField name="EXISTING_TABLE" caption="Existing Table" width="180px" />
     </HorizontalLayout>
-    <GuiTable name="FIELD_DEFINITION_LIST" dataPath="FIELD_DEFINITION_LIST" caption=""
-        width="100%" height="-1px" top="50px" left="20px" checkBox="true" duplicateEnabled="true">
-        <OpenForm containerWindow="same window" />
-        <TableColumn name="ID" caption="ID" />
-        <TableColumn name="NAME" caption="Name" />
-        <TableColumn name="DB_RESIDENT" caption="DB resident" />
-        <TableColumn name="TITLE" caption="Title" />
-        <TableColumn name="PREDEFINED_FIELD" caption="Predefined Field" />
-        <TableColumn name="SQL_TYPE" caption="SQL Type" />
-        <TableColumn name="IS_KEY" caption="Is key" />
-        <TableColumn name="LENGTH" caption="Length" />
-        <TableColumn name="DCIMALS" caption="Decimals" />
-        <TableColumn name="WITH_INHERITANCE" caption="Inherit" />
-        <TableColumn name="DEFAULT_VALUE" caption="Default Value" />
-        <TableColumn name="FATHER_NODE" caption="null" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="HAS_WORFLOW" caption="Has Workflow" maskDataFoundError="true" width="180px" />
+      <GuiField name="SHOW_IN_MENU" caption="Show in menu" maskDataFoundError="true" width="180px" />
+      <GuiField name="NOT_DIRECTLY_EDITABLE" caption="When this table is details of a father object, not directly editable" maskDataFoundError="true" width="-1px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="FIELDS" name="FIELD_DEFINITION_LIST" dataPath="FIELD_DEFINITION_LIST" width="100%" height="100%" checkBox="true" duplicateEnabled="true">
+      <OpenForm containerWindow="same window" />
+      <TableColumn name="ID" caption="ID" />
+      <TableColumn name="NAME" caption="Name" />
+      <TableColumn name="DB_RESIDENT" caption="Database Resident" />
+      <TableColumn name="TITLE" caption="Title" />
+      <TableColumn name="PREDEFINED_FIELD" caption="Predefined Field" />
+      <TableColumn name="SQL_TYPE" caption="SQL Type" />
+      <TableColumn name="IS_KEY" caption="Is key" />
+      <TableColumn name="LENGTH" caption="Length" />
+      <TableColumn name="DCIMALS" caption="Decimals" />
+      <TableColumn name="WITH_INHERITANCE" caption="Inherit" />
+      <TableColumn name="DEFAULT_VALUE" caption="Default Value" />
+      <TableColumn name="FATHER_NODE" caption="Header Table" />
     </GuiTable>
+  </VerticalLayout>
+  
 </VerticalLayout>
 
 

@@ -548,6 +548,7 @@ public class DBAdaptor {
 //	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
 //	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
 	    	constraintStmt.executeUpdate(request);
+	    	Globals.logString(request);
 	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
 	    }
     }catch(Exception e){

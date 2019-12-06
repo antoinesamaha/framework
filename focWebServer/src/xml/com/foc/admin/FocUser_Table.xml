@@ -1,14 +1,14 @@
-<VerticalLayout width="100%" height="99%" spacing ="false" margin="false" captionMargin="0">
-    <ValidationSettings withApply="false" withAttach="false" withPrint="true" />
-    <GuiTable title="Users" name="USER_TABLE" dataPath="DATAROOT" height="99%" sortingExpression="NAME" >
-        <OpenForm containerWindow="same window" />
-        <TableColumn name="NAME" caption="Name"    />
-        <TableColumn name="FULL_NAME" caption="full_name"    />
-        <TableColumn name="DESCRIP" caption="Description"    />
-        <TableColumn name="UGROUP" caption="ugroup"    />
-        <TableColumn name="SAAS_APPLICATION_ROLE" caption="Role"    />
-        <TableColumn name="CONTACT" caption="contact"    />
-        <TableColumn name="SUSPENDED" caption="suspended"    />
-    </GuiTable>
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="false" withPrint="false" />
+  <GuiTable title="USERS" name="USER_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" link="true"/>
+    <TableColumn name="FULL_NAME" caption="Full Name" link="true"/>
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="UGROUP" caption="Group" />
+    <TableColumn name="SAAS_APPLICATION_ROLE" caption="Role" />
+    <TableColumn name="CONTACT" caption="Contact" />
+    <TableColumn name="SUSPENDED" caption="Suspended" />
+  </GuiTable>
 </VerticalLayout>
 

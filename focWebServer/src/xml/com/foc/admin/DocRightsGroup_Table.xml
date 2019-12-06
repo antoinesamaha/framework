@@ -1,6 +1,10 @@
-<VerticalLayout>
-  <ValidationSettings formTitle="" withApply="false" withAttach="true" withPrint="true" />
-  <GuiTable name="DOC_RIGHTS_GROUP_TABLE" dataPath="DATAROOT" width="100%" height="-1px" addEnabled="true" openEnabled="true" viewSelector="true">
-    <TableColumn name="NAME" caption="Name" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="false" withPrint="false" />
+  <GuiTable title="DOCUMENT RIGHTS GROUP" name="TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" link="true" />
   </GuiTable>
 </VerticalLayout>
+
+
+

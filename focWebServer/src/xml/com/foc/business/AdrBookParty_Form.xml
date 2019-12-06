@@ -1,92 +1,84 @@
-<VerticalLayout spacing="true" captionMargin="0" margin="true" width="90%">
-    <ValidationSettings formTitle="Address Book Company" withApply="true" withAttach="true" withPrint="true" />
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
 
-	<Label value="Company Info" style="H1"/>    
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <Label value="Company Info" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="CODE" caption="Code" width="180px" />
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="EXTERNAL_CODE" caption="External Code" width="180px" immediate="true" />
+      <GuiField name="MOF_REG_NO" caption="MoF No." width="180px" />
+      <GuiField name="INDUSTRY" caption="Industry" width="180px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="INTRODUCTION" caption="Introduction" width="372px" />
+      <GuiField name="COMMENT" caption="Comment" width="564px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="PHONE1" caption="Phone 1" width="180px" />
+      <GuiField name="EXTENTION1" caption="Ext. 1" width="180px" />
+      <GuiField name="PHONE2" caption="Phone 2" width="180px" />
+      <GuiField name="EXTENTION2" caption="Ext. 2" width="180px" />
+      <GuiField name="MOBILE" caption="Mobile" width="180px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="PO_BOX" caption="P.O.Box" width="180px" />
+      <GuiField name="FAX" caption="Fax" width="180px" />
+      <GuiField name="EMAIL" caption="Email" width="180px" />
+      <GuiField name="WEB" caption="Web" width="372px" />
+    </HorizontalLayout>
+  </VerticalLayout>
 
-	<VerticalLayout captionMargin="0" spacing="false">    
-      <HorizontalLayout spacing="true" width="-1px" captionMargin="0" >
-        <GuiField name="CODE" caption="Code" width="150px" height="-1px"  />
-        <GuiField name="NAME" caption="Name" width="300px" height="-1px"  />
-        <GuiField name="EXTERNAL_CODE" caption="Ext Code" width="100px" height="-1px" immediate="true" />
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <Label value="Main Contact" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="DEFAULT_CONTACT.TITLE" caption="Title" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.FIRST_NAME" caption="First Name" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.FAMILY_NAME" caption="Family Name" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.POSITION_DESC" caption="Position" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.INTRODUCTION" caption="Introduction" width="180px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="DEFAULT_CONTACT.MOBILE" caption="Mobile" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.PHONE1" caption="Phone (Primary)" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.PHONE2" caption="Phone (Secondary)" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.EMAIL" caption="Email (Primary)" width="180px" />
+      <GuiField name="DEFAULT_CONTACT.EMAIL2" caption="Email (Secondary)" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <GuiTable title="CONTACTS" name="_CONTACTS" dataPath="DATASTORE[ADR_BK_CONTACT]" width="100%" pageLength="fit">
+      <TableColumn name="TITLE" caption="Title" />
+      <TableColumn name="FULL_NAME" caption="Full Name" link="true" />
+      <TableColumn name="POSITION_DESC" caption="Position" />
+      <TableColumn name="MOBILE" caption="Mobile" />
+      <TableColumn name="PHONE1" caption="Phone" />
+      <TableColumn name="EMAIL" caption="Email" />
+      <TableColumn name="INTRODUCTION" caption="Introduction" />
+      <TableColumn name="SET_DEFAULT_CONTACT" caption="Set as Default" />
+      <TableColumn name="USER_MANAGEMENT" caption="User Management" />
+    </GuiTable>
+  </VerticalLayout>
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <Label value="Addresses" style="black,bold,f16" />
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="COUNTRY" caption="Country" width="180px" />      
+      <GuiField name="CITY" caption="City" width="180px" />
+      <GuiField name="REGION" caption="Region" width="180px" />
+      <GuiField name="LANGUAGE" caption="Language" width="180px" />
+      <GuiField name="COMPANY" caption="Company" width="180px" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="INVOICING_ADDRESS" caption="Invoicing Address" width="942px" height="90px" textArea="true" />
+    </HorizontalLayout>
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="DIFFERENT_ADDRESSES" caption="Delivery Address Different From Invoicing Addresses"/>
       </HorizontalLayout>
-      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
-        <GuiField name="MOF_REG_NO" caption="MOF Reg. No." width="150px" height="-1px"  />      
-        <GuiField name="COMMENT" caption="Comment" width="300px" height="-1px"  />
-        <GuiField name="INDUSTRY" caption="Industry" width="200px" height="-1px"  />
-      </HorizontalLayout>
-      <GuiField name="INTRODUCTION" caption="Introduction" width="100%" height="-1px"  />
-      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
-        <GuiField name="PHONE1" caption="Phone 1" width="140px" height="-1px"  />
-        <GuiField name="EXTENTION1" caption="Ext. 1" width="80px" height="-1px"  />    
-        <GuiField name="PHONE2" caption="Phone 2" width="140px" height="-1px"  />
-        <GuiField name="EXTENTION2" caption="Ext. 2" width="80px" height="-1px"  />
-        <GuiField name="MOBILE" caption="Mobile" captionPos="top" captionWidth="130px" width="200px " height="-1px"  />
-      </HorizontalLayout>
-      <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
-        <GuiField name="FAX" caption="Fax" width="140px" height="-1px"  />
-        <GuiField name="EMAIL" caption="Email" width="300px" height="-1px"  />
-        <GuiField name="WEB" caption="Web" width="300px" height="-1px"  />
-        <GuiField name="PO_BOX" caption="P.O.Box" width="100px" height="-1px"  />                              
-      </HorizontalLayout>      
-    </VerticalLayout>
-			<Label value="Main Contact Person" style="H1"/>
-        <!-- <GuiField name="DEFAULT_CONTACT_FULL_NAME" dataPath="DEFAULT_CONTACT" captionProperty="FULL_NAME" caption="Main contact" width="200px" height="-1px"  /> -->
-        <VerticalLayout captionMargin="0" spacing="false">        
-				    <HorizontalLayout width="-1px" spacing="true">
-				        <GuiField name="DEFAULT_CONTACT.TITLE" caption="Title" width="100px" height="-1px"  />
-				        <GuiField name="DEFAULT_CONTACT.FIRST_NAME" caption="First Name" width="200px" height="-1px"  />
-				        <GuiField name="DEFAULT_CONTACT.FAMILY_NAME" caption="Family Name" width="200px" height="-1px"  />    
-				        <GuiField name="DEFAULT_CONTACT.POSITION_DESC" caption="Position" width="200px" height="-1px"  />
-				    </HorizontalLayout>
-			      <HorizontalLayout width="-1px" spacing="true" >
-				        <GuiField name="DEFAULT_CONTACT.MOBILE" caption="Mobile" width="150px" height="-1px"  />
-				        <GuiField name="DEFAULT_CONTACT.PHONE1" caption="Phone (Primary)" width="150px" height="-1px"  />
-				        <GuiField name="DEFAULT_CONTACT.PHONE2" caption="Phone (Secondary)" width="150px" height="-1px"  />
-				    </HorizontalLayout>   
-				    <HorizontalLayout width="-1px" spacing="true" >
-				        <GuiField name="DEFAULT_CONTACT.EMAIL" caption="Email (Primary)" width="300px" height="-1px"  />
-				        <GuiField name="DEFAULT_CONTACT.EMAIL2" caption="Email (Secondary)" width="300px" height="-1px"  />            
-				    </HorizontalLayout>
-				    <HorizontalLayout width="-1px" spacing="true" >
-				        <GuiField name="DEFAULT_CONTACT.INTRODUCTION" caption="Introduction" width="600px" height="-1px"  />    
-				    </HorizontalLayout>        
-				</VerticalLayout>
-				
-				<Label value="All Company Contacts" style="H1"/>
-        <VerticalLayout captionMargin="0" spacing="false">					      
-		        <GuiTable title="Contacts" name="_CONTACTS" dataPath="DATASTORE[ADR_BK_CONTACT]" width="100%" pageLength="fit" ><!-- filterExpression="ADR_BK_PARTY.REF=$F{REF}" -->
-		            <TableColumn name="TITLE" caption="Ttl" />
-		            <TableColumn name="FULL_NAME" caption="first_name" link="true" expandRatio="1"/>
-		            <TableColumn name="POSITION_DESC" caption="position" width="-1px"/>
-		            <TableColumn name="MOBILE" caption="mobile" width="-1px"/>
-		            <TableColumn name="PHONE1" caption="phone1" width="-1px"/>        
-		            <TableColumn name="EMAIL" caption="email" width="-1px"/>
-		            <TableColumn name="INTRODUCTION" caption="Intro." width="-1px"/>
-		            <TableColumn name="SET_DEFAULT_CONTACT" caption="Set as Default" />
-		            <TableColumn name="USER_MANAGEMENT" caption="User Management" />
-		                    
-		        </GuiTable>    
-        </VerticalLayout>
-        
-				<Label value="Company Addresses" style="H1"/>
-        
-        <VerticalLayout captionMargin="0" spacing="false">
-	        <HorizontalLayout spacing="true" width="-1px" captionMargin="0">
-  	          <GuiField name="COUNTRY" caption="Country" width="-1px" height="-1px"  />       
-	            <GuiField name="LANGUAGE" caption="Language" width="-1px" height="-1px"  />
-	            <GuiField name="CITY" caption="City" width="-1px" height="-1px"  />
-	        </HorizontalLayout>                
-	        <HorizontalLayout spacing="true" width="-1px" captionMargin="0">                
-	            <GuiField name="REGION" caption="Region" captionPos="top" captionWidth="100px" width="-1px" height="-1px"  />          
-	            <GuiField name="COMPANY" caption="Company" captionPos="top" captionWidth="100px" width="-1px" height="-1px"  />                     
-	        </HorizontalLayout>
-	        <HorizontalLayout spacing="true" >
-	            <GuiField name="INVOICING_ADDRESS" caption="Invoicing Address" width="-1px" height="90px" style="bold"/>
-	            <VerticalLayout captionMargin="0" >
-			            <GuiField name="DIFFERENT_ADDRESSES" caption="Delivery Address Different From Invoicing Addresses" width="-1px" height="24px" />
-			            <GuiField name="DELIVERY_ADDRESS" width="-1px" height="90px" visibleWhen="DIFFERENT_ADDRESSES=true" />
-	            </VerticalLayout>
-	        </HorizontalLayout>
-        </VerticalLayout>        
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="DELIVERY_ADDRESS" caption="Delivery Address" width="942px" height="90px" textArea="true" />
+    </HorizontalLayout>
+  </VerticalLayout>
 
 </VerticalLayout>
