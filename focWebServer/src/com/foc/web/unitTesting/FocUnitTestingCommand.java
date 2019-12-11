@@ -57,6 +57,7 @@ import com.foc.vaadin.gui.components.popupButton.FVPopupContentButton;
 import com.foc.vaadin.gui.layouts.FVForEachLayout;
 import com.foc.vaadin.gui.layouts.FVForEachLayout.DeleteButtonForEach;
 import com.foc.vaadin.gui.layouts.FVForEachLayout.FVBannerLayout;
+import com.foc.vaadin.gui.layouts.FVMenuLayout;
 import com.foc.vaadin.gui.layouts.FVMoreLayout;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
@@ -80,7 +81,6 @@ import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.AbstractSelect.AbstractSelectTargetDetails;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Embedded;
 import com.vaadin.ui.MenuBar.MenuItem;
 import com.vaadin.ui.NativeButton;
 import com.vaadin.ui.Table;
@@ -1312,13 +1312,7 @@ public class FocUnitTestingCommand {
   }
   
   public void component_AssertEditable(String componentName) throws Exception {
-  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
-    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
-    if(component != null && component.getDelegate().isEditable()){
-    	getLogger().addInfo("Component "+componentName+" is Editable");
-    }else{
-    	getLogger().addFailure("Component "+componentName+" is not Editable");
-    }
+  	component_AssertEditable(componentName, true);
 	}
   
   public void component_AssertEditable(String componentName, boolean editable) throws Exception {
@@ -1518,6 +1512,19 @@ public class FocUnitTestingCommand {
     String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
   	component_AssertEnabled(componentName, assertEnabled);
   }
+
+  public FocXMLGuiComponent componentInTable_Find(String tableName, long objRef, String fieldName) throws Exception {
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+
+    String componentName = TableTreeDelegate.newComponentName(tableName, String.valueOf(objRef), fieldName);
+    FocXMLGuiComponent component = findComponent(navigationLayout, componentName);
+    return component;
+  }
+
+  public void componentInTable_ComboBoxSelectAdd(String tableName, long objRef, String fieldName) throws Exception {
+  	FVObjectComboBox objectComboBox = (FVObjectComboBox) componentInTable_Find(tableName, objRef, fieldName);
+  	objectComboBox.unitTesting_AddItemSelected();
+  }
   
   /**
    * Simulates selecting a component in a table.
@@ -1575,6 +1582,13 @@ public class FocUnitTestingCommand {
    	}
   }
 
+  public void component_ComboBoxSelectAdd(String componentName) throws Exception {
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    FVObjectComboBox objectComboBox = (FVObjectComboBox) findComponent(navigationLayout, componentName);
+    component_AssertEditable(componentName);
+    objectComboBox.unitTesting_AddItemSelected();
+  }
+  
   /**
    * Stores the value of a component in a hash map at the level of the
    * dictionary
@@ -2282,5 +2296,14 @@ public class FocUnitTestingCommand {
 	  	}
 		}
 		return count;
+	}
+	
+	public void menuLayout_ClickMenu(String componentName, String menuSelected) throws Exception {
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    
+  	if(componentName != null){
+	    FVMenuLayout tableWrapper = (FVMenuLayout) findComponent(navigationLayout, componentName);
+	    tableWrapper.changeSelection(menuSelected);
+  	}
 	}
 }

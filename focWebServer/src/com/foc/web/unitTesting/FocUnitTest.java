@@ -17,12 +17,14 @@ package com.foc.web.unitTesting;
 
 import java.util.ArrayList;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.access.FocLogLine;
 import com.foc.access.FocLogger;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.xmlForm.FocXMLAttributes;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
+import com.foc.web.dataModel.FocDataItem_ForComboBoxActions;
 
 public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 
@@ -58,6 +60,14 @@ public class FocUnitTest extends FocUnitTestingCommand implements ITestCase {
 	    arrayCommands = null;
     }
     callerArguments = null;
+  }
+  
+  public String getAddCaption_InsideCombobox() {
+		String captionOfTheAdd = FocDataItem_ForComboBoxActions.ACTION_CAPTION_ADD;
+		if (ConfigInfo.isArabic()) {
+			captionOfTheAdd = FocDataItem_ForComboBoxActions.ACTION_CAPTION_ADD_AR;
+		}
+		return captionOfTheAdd;
   }
   
   public String getName() {
