@@ -1,5 +1,5 @@
 <VerticalLayout margin="true" width="100%" spacing="true">
-  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+  <ValidationSettings withApply="true" withSave="false" withAttach="true" withPrint="false" />
 
   <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
     <HorizontalLayout captionMargin="0" margin="true" spacing="true">
