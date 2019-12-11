@@ -1,29 +1,41 @@
-<VerticalLayout width="98%" height="-1px" spacing="true" >
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="-1px" spacing="true">
   <ValidationSettings formTitle="User profile" withApply="true" withAttach="true" withPrint="true" />
-  <Label value="User Definition" style="H2" />
-  <HorizontalLayout spacing="true">
-      <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="180px" height="-1px"  />
-      <GuiField name="FULL_NAME" caption="Full name" captionPos="top" captionWidth="-1px" width="180px" height="-1px"  />
-      <GuiField name="UGROUP" caption="Group" captionPos="top" captionWidth="-1px" width="180px" height="-1px"  />
-      <GuiField name="SUSPENDED" caption="Suspended" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" alignment="bottom_left" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="FULL_NAME" caption="Full Name" width="180px" />
+      <GuiField name="UGROUP" caption="Group" width="180px" />
       <Button name="CHANGE_PASSWORD" caption="Change Password" alignment="bottom_left" />
-  </HorizontalLayout>
-  <VerticalLayout height="200px" width="200px" border="true" >
-    <Label value="Signature Image" />
-    <GuiField name="SIGNATURE" caption="Signature scan" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  >
-    </GuiField>
+      <GuiField name="SUSPENDED" caption="Suspended" width="180px" alignment="bottom_left" />
+    </HorizontalLayout>
   </VerticalLayout>
-  <GuiTable name="COMAPNY_LIST" dataPath="COMPANY_USER_LIST" title="Rights on Companies" width="100%" height="-1px" pageLength="3" >
-    <TableColumn name="COMPANY" caption="Company" />
-    <TableColumn name="ACCESS_RIGHT" caption="Right" />
-  </GuiTable>
-  <MoreLayout captionMargin="0">
-    <HorizontalLayout captionMargin="0" spacing="true">
-	    <GuiField name="CONTACT" caption="Related contact" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-	    <GuiField name="SAAS_APPLICATION_ROLE" caption="Role" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-	    <GuiField name="IS_SAAS_ADMIN" caption="Is Admin" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" alignment="bottom_left"/>
-	    <GuiField name="IS_GUEST" caption="Is Guest" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" alignment="bottom_left" />
-	  </HorizontalLayout>
-    <!-- GuiField name="PAGE_WIDTH" caption="Preferred page width" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  / -->
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true" width="100%">
+      <GuiTable title="RIGHTS ON COMPANIES" name="COMAPNY_LIST" dataPath="COMPANY_USER_LIST" width="100%" height="-1px" pageLength="3" withFilter="false">
+        <TableColumn name="COMPANY" caption="Company" link="true" />
+        <TableColumn name="ACCESS_RIGHT" caption="Right" />
+      </GuiTable>
+    </HorizontalLayout>
+  </VerticalLayout>
+
+  <MoreLayout captionMargin="0" margin="true" spacing="true" width="100%">
+    <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+      <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+        <VerticalLayout captionMargin="0" margin="true" spacing="true" height="200px" width="200px" border="true">
+          <Label value="Signature Image" />
+          <GuiField name="SIGNATURE" caption="Signature scan" captionWidth="-1px" width="-1px" height="-1px">
+          </GuiField>
+        </VerticalLayout>
+      </HorizontalLayout>
+      <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+        <GuiField name="CONTACT" caption="Related contact" width="180px" />
+        <GuiField name="SAAS_APPLICATION_ROLE" caption="Role" width="180px" />
+        <GuiField name="IS_SAAS_ADMIN" caption="Is Admin" width="100px" alignment="bottom_left" />
+        <GuiField name="IS_GUEST" caption="Is Guest" width="100px" alignment="bottom_left" />
+      </HorizontalLayout>
+    </VerticalLayout>    
   </MoreLayout>
+  
 </VerticalLayout>

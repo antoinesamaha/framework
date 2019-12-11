@@ -1,27 +1,23 @@
-<VerticalLayout height="-1px" margin="true" captionMargin="0" spacing="true">
-    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-    <Label value="Transaction Configuration" style="H2,text-center" width="100%"/>
-    <GuiTable name="WF_ASSIGNEMENT" dataPath="DATAROOT" caption="" height="-1px" width="100%" inLineEditable="true" pageLength="fit" addEnabled="false" deleteEnabled="false" openEnabled="true">
-        <OpenForm containerWindow="same window" />
-        <TableColumn name="_LINE_NUMBER" caption="Ln" width="50px"/>
-        <TableColumn name="TRANSACTION" caption="Transaction"   editable="true" width="100px"/>
-        <TableColumn name="TRANS_TITLE_PREFIX" caption="Title When Proposal"   editable="true" width="100px"/>
-        <TableColumn name="TRANS_TITLE" caption="Title After Approve"   editable="true" width="100px"/>
-        <TableColumn name="LEAVE_CODE_EMPTY" caption="Code Empty" editable="true" width="100px"/>
-        <TableColumn name="CODE_PREFIX_TRANSACTION_PREFIX" caption="Prefix"   editable="true" width="100px"/>
-        <TableColumn name="CODE_PREFIX_PROPOSAL" caption="Proposal Prefix"   editable="true" width="100px"/>
- 
-        <TableColumn name="CODE_PREFIX_NUMBER_OF_DIGITS" caption="Code Digits (max 6)"   editable="true" width="100px"/>
-        <TableColumn name="CODE_PREFIX_USE_SITE_PREFIX" caption="Use Site Prefix"   editable="true" width="100px"/>
-
-        <TableColumn name="APPROVAL_METHOD" caption="Approval Method"   editable="true" width="100px"/>
-        <TableColumn name="MAP" caption="Map" captionProperty="NAME" captionProperty2="DESCRIP" editable="true" width="100px" usePopupView="true"/>
-        <TableColumn name="WF_AREA" caption="WF Area" captionProperty="NAME" editable="true" width="100px" usePopupView="true"/>
-        
-        <TableColumn name="PROMPT_APPROVE_UPON_VALID" caption="Prompt for Aprv. Upon Save"   editable="true" width="100px"/>
-        <TableColumn name="INCLUDE_PROJECT_CODE" caption="Include Project Code"   editable="true" width="100px"/>
-        <TableColumn name="CODE_BY_SITE" caption="Code By Site" editable="true" width="-1px"/>
-        <TableColumn name="FORBID_ANCESTOR_ACCESS" caption="Forbid Ancestor Site access" editable="true" width="-1px"/>
-    </GuiTable>
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable title="TRANSACTION CONFIGURATION" name="WF_ASSIGNEMENT" dataPath="DATAROOT" inLineEditable="true" addEnabled="false" deleteEnabled="false" openEnabled="true" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="_LINE_NUMBER" caption="#" width="50px" />
+    <TableColumn name="TRANSACTION" caption="Transaction" editable="true" width="100px" />
+    <TableColumn name="TRANS_TITLE_PREFIX" caption="Title When Proposal" editable="true" width="100px" />
+    <TableColumn name="TRANS_TITLE" caption="Title After Approve" editable="true" width="100px" />
+    <TableColumn name="LEAVE_CODE_EMPTY" caption="Code Empty" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_TRANSACTION_PREFIX" caption="Prefix" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_PROPOSAL" caption="Proposal Prefix" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_NUMBER_OF_DIGITS" caption="Code Digits (max 6)" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_USE_SITE_PREFIX" caption="Use Site Prefix" editable="true" width="100px" />
+    <TableColumn name="APPROVAL_METHOD" caption="Approval Method" editable="true" width="100px" />
+    <TableColumn name="MAP" caption="Map" captionProperty="NAME" captionProperty2="DESCRIP" editable="true" width="100px" usePopupView="true" />
+    <TableColumn name="WF_AREA" caption="Area" captionProperty="NAME" editable="true" width="100px" usePopupView="true" />
+    <TableColumn name="PROMPT_APPROVE_UPON_VALID" caption="Prompt for Aprv. Upon Save" editable="true" width="100px" />
+    <TableColumn name="INCLUDE_PROJECT_CODE" caption="Include Project Code" editable="true" width="100px" />
+    <TableColumn name="CODE_BY_SITE" caption="Code By Site" editable="true" width="-1px" />
+    <TableColumn name="FORBID_ANCESTOR_ACCESS" caption="Forbid Ancestor Site Access" editable="true" width="-1px" />
+  </GuiTable>
 </VerticalLayout>
 

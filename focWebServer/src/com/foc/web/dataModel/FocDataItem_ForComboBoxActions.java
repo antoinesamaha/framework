@@ -41,6 +41,7 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 	public static final long   REF_ADD           = -1000000;
 	public static final long   REF_REFRESH       = -2000000;
 	
+//FieldID added only to allow automated testing
 	public FocDataItem_ForComboBoxActions(String propertyPath, int actionType){
 		super(new FocDataItem_FocDesc_ForComboBoxActions());
 		this.propertyPath = propertyPath;
@@ -54,6 +55,7 @@ public class FocDataItem_ForComboBoxActions extends FocObject {
 	}
 	
 	public void dispose(){
+		super.dispose();
 		if(property != null){
 			property.dispose();
 			property = null;

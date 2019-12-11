@@ -1,9 +1,13 @@
-<VerticalLayout >
-  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
-  <GuiTable title="Stages" name="WFSTAGE_TABLE" dataPath="DATAROOT" width="100%" height="-1px" >
-    <TableColumn name="NAME" caption="Name" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="true" withPrint="true" />
+  <GuiTable title="STAGES" name="WFSTAGE_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" link="true" />
     <TableColumn name="DESCRIP" caption="Description" />
     <TableColumn name="IS_APPROVAL" caption="Approves Document" />
-    <TableColumn name="IS_CLOSE" caption="Close Document" />
+    <TableColumn name="IS_CLOSE" caption="Closes Document" />
   </GuiTable>
 </VerticalLayout>
+
+
+

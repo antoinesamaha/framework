@@ -43,6 +43,7 @@ public class FocFieldFactory {
 		put(new FTypeObject());
 		put(new FTypeTableName());
 		put(new FTypeCloudImage());
+		put(new FTypeSDOGeometryPoint());
 /*		
 		put(FieldDefinition.SQL_TYPE_ID_INT, new FDInteger());
 		put(FieldDefinition.SQL_TYPE_ID_CHAR_FIELD, new FDChar());

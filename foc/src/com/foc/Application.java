@@ -1329,11 +1329,9 @@ public class Application {
 
   public void declaredObjectList_DeclareObject(IFocDescDeclaration declaration) {
     ArrayList<IFocDescDeclaration> focObjectsArrayList = getFocObjectsList();
-    //if(!focObjectsArrayList.contains(declaration)){
     if(declaration != null){
-      focObjectsArrayList.add(declaration);
+   		focObjectsArrayList.add(declaration);
     }
-    //}
   }
   
   public void declaredObjectList_DeclareObject(FocModule module, Class classObject) {
@@ -1355,7 +1353,7 @@ public class Application {
   public void declaredObjectList_DeclareDescription(IFocDescDeclaration focDescDeclaration){
   	ArrayList<IFocDescDeclaration> focObjectsArrayList = getFocObjectsList();
   	if(focDescDeclaration != null){
-  		focObjectsArrayList.add(focDescDeclaration);
+     	focObjectsArrayList.add(focDescDeclaration);
   	}
   }
 

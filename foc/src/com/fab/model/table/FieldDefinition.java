@@ -78,6 +78,7 @@ public class FieldDefinition extends FocObject {
 	public static final int SQL_TYPE_ID_PASSWORD                     = IDataStoreConst.FIELD_TYPE_PASSWORD;
 	public static final int SQL_TYPE_ID_BLOB_STRING                  = IDataStoreConst.FIELD_TYPE_BLOB_STRING;
 	public static final int SQL_TYPE_ID_BLOB_FILE                    = IDataStoreConst.FIELD_TYPE_BLOB_FILE;
+	public static final int SQL_TYPE_ID_STRUCT                       = IDataStoreConst.FIELD_TYPE_STRUCT;
 	
 	public static final String SQL_TYPE_NAME_CHAR_FIELD      = "TEXT";
 	public static final String SQL_TYPE_NAME_EMAIL_FIELD     = "EMAIL";

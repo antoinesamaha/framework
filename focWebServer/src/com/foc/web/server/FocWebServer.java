@@ -246,10 +246,12 @@ public class FocWebServer implements Serializable {
 				webModuleRight.validate(true);
 			}
 	
-			barmajaGroup.getWebModuleRightsList().validate(true);
+			if(barmajaGroup.getWebModuleRightsList() != null) {
+				barmajaGroup.getWebModuleRightsList().validate(true);
+			}
 			barmajaGroup.validate(true);
 			FocList listOfGroups = FocGroup.getList(FocList.LOAD_IF_NEEDED);
-			listOfGroups.validate(true);
+			if(listOfGroups != null) listOfGroups.validate(true);
 		}
 		//-----------------------------------
 	

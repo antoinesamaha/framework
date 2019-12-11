@@ -1,58 +1,65 @@
-<VerticalLayout width="100%" margin="true" captionMargin="0">
-    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-    <HorizontalLayout captionMargin="0" spacing="true">
-      <VerticalLayout spacing="true">
-        <GuiField name="NAME" caption="Name"  />
-        <GuiField name="DESCRIP" caption="Description"  />
-        <GuiField name="DASHBOARD_CONTEXT" caption="Dashboard context"  />
-        <GuiField name="STARTUP_MENU" caption="Startup Menu"  />
-        <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title"  />
-      </VerticalLayout>
-      <VerticalLayout spacing="true">
-        <GuiField name="NAME_MODF" caption="Allow Naming Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-        <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-        <GuiField name="FX_RTE_MODIF" caption="Allow Currency rates modification" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" maskDataFoundError="true" />
-        <GuiField name ="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        <GuiField name ="ALLOW_IMPORT" caption="Allow Imports" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        <GuiField name ="REPORT_ACCESS" caption="Allow report access" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        <GuiField name ="ALLOW_REPORT_CREATION" caption="Allow report creation" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        
-        <GuiField name ="LINK_OUT_RIGHTS" captionProperty="NAME" caption="Link Out Rights" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        <GuiField name ="LINK_IN_RIGHTS" captionProperty="NAME" caption="Link In Rights" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-        <HorizontalLayout captionMargin="0" spacing="true">
-        	<GuiField name ="VIEWS_RIGHT" caption="Views Right" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-          <Button name="VIEW_RIGHTS_BUTTON" caption="View Rights" alignment="bottom_left"/>	
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+  <MenuLayout style="tabStyle" name="_TabLayout" captionMargin="0" margin="true" height="100%">
+
+    <VerticalLayout name="Group Info" margin="true" spacing="true" height="-1px" width="100%" captionMargin="0">
+      <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+        <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+          <GuiField name="NAME" caption="Name" captionPos="top" width="180px" />
+          <GuiField name="DESCRIP" caption="Description" captionPos="top" width="180px" />
+          <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title" captionPos="top" width="180px" />
+          <GuiField name="STARTUP_MENU" caption="Dashboard Context" captionPos="top" width="180px" />
+          <GuiField name="DASHBOARD_CONTEXT" caption="Startup Menu" captionPos="top" width="180px" />
+        </HorizontalLayout>
+        <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+          <GuiField name="LINK_OUT_RIGHTS" captionProperty="NAME" caption="Link Out Rights" captionPos="top" width="180px" />
+          <GuiField name="LINK_IN_RIGHTS" captionProperty="NAME" caption="Link In Rights" captionPos="top" width="180px" />
+          <GuiField name="VIEWS_RIGHT" caption="Views Right" captionPos="top" width="180px" />
+          <Button name="VIEW_RIGHTS_BUTTON" caption="View Rights" alignment="bottom_left" />
+        </HorizontalLayout>
+        <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+          <GuiField name="NAME_MODF" caption="Allow Naming Modification" />
+          <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" />
+          <GuiField name="FX_RTE_MODIF" caption="Allow Currency Rates Modification" />
+          <GuiField name="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" />
+        </HorizontalLayout>
+        <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+          <GuiField name="ALLOW_IMPORT" caption="Allow Imports" captionPos="top" />
+          <GuiField name="REPORT_ACCESS" caption="Allow Report Access" captionPos="top" />
+          <GuiField name="ALLOW_REPORT_CREATION" caption="Allow Report Creation" captionPos="top" />
         </HorizontalLayout>
       </VerticalLayout>
-      
-      <VerticalLayout spacing="true">
-        <Button name="MENU_RIGHTS_BUTTON" caption="Menu Rights"/>
+      <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+        <Button name="MENU_RIGHTS_BUTTON" caption="Menu Rights" />
+        <VerticalLayout name="APP_GROUPS_BUTTONS_LAYOUT" spacing="true">
+        </VerticalLayout>
       </VerticalLayout>
+    </VerticalLayout>
 
-      <VerticalLayout name="APP_GROUPS_BUTTONS_LAYOUT" spacing="true">
+    <VerticalLayout name="Web Modules" margin="true" spacing="true" height="-1px" width="100%" captionMargin="0">
+      <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+        <GuiTable title="WEB MODULES" name="MODULES_TABLE" dataPath="GROUP_WEB_MODULE_LIST" width="100%" inLineEditable="true" pageLength="fit" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
+          <OpenForm containerWindow="same window" />
+          <TableColumn name="MODULE_NAME" caption="Name" editable="false" />
+          <TableColumn name="MODULE_TITLE" caption="Title" editable="false" />
+          <TableColumn name="ACCESS" caption="Access" />
+          <TableColumn name="IS_ADMIN" caption="Admin Console" editable="false" />
+        </GuiTable>
       </VerticalLayout>
-      
-    </HorizontalLayout>
-    
-    <TabLayout width="100%" margin="true">
-	    <VerticalLayout name="Web Modules" width="100%">
-		    <GuiTable name="MODULES_TABLE" dataPath="GROUP_WEB_MODULE_LIST" width="100%" inLineEditable="true" pageLength="fit" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
-		      <OpenForm containerWindow="same window" />
-		      <TableColumn name="REF" caption="Ref" editable="false" />
-		      <TableColumn name="MODULE_NAME" caption="Module Name" editable="false" />
-		      <TableColumn name="MODULE_TITLE" caption="Module Title" editable="false" />
-		      <TableColumn name="IS_ADMIN" caption="Admin Console" editable="false" />
-		      <TableColumn name="ACCESS" caption="Access" />
-		    </GuiTable>
-	    </VerticalLayout>
-	    
-	    <VerticalLayout name="Mobile Modules" width="100%">
-		    <GuiTable name="MOBILE_MODULES_TABLE" dataPath="GROUP_MOBILE_MODULE_LIST" width="100%" inLineEditable="true" height="99%" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
-		      <OpenForm containerWindow="same window" />
-		      <TableColumn name="MODULE_NAME" caption="Module Name" editable="false" />
-		      <TableColumn name="MODULE_TITLE" caption="Module Title" editable="false" />
-		      <TableColumn name="ACCESS" caption="Access" />
-		    </GuiTable>
-	    </VerticalLayout>
-    </TabLayout>
+    </VerticalLayout>
+
+    <VerticalLayout name="Mobile Modules" margin="true" spacing="true" height="-1px" width="100%" captionMargin="0">
+      <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
+        <GuiTable title="MOBILE MODULES" name="MOBILE_MODULES_TABLE" dataPath="GROUP_MOBILE_MODULE_LIST" width="100%" inLineEditable="true" pageLength="fit" sortingExpression="ACCESS,IS_ADMIN,MODULE_NAME" openEnabled="false">
+          <OpenForm containerWindow="same window" />
+          <TableColumn name="MODULE_NAME" caption="Module Name" editable="false" />
+          <TableColumn name="MODULE_TITLE" caption="Module Title" editable="false" />
+          <TableColumn name="ACCESS" caption="Access" />
+        </GuiTable>
+      </VerticalLayout>
+    </VerticalLayout>
+
+  </MenuLayout>
 </VerticalLayout>
+
+

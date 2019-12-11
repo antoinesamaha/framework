@@ -57,5 +57,6 @@ public interface IDataStoreConst {
 	public static final int FIELD_TYPE_XML_VIEW_SELECTOR            = 17;
 	public static final int FIELD_TYPE_BLOB_FILE                    = 18;
 	public static final int FIELD_TYPE_DATE_TIME                    = 19;
+	public static final int FIELD_TYPE_STRUCT                       = 20;
 }
 

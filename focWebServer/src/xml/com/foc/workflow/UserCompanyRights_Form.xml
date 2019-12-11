@@ -1,8 +1,8 @@
-<VerticalLayout width="100%" >
-   <ValidationSettings formTitle="User Company Rights" withApply="true" withAttach="true" withPrint="true" />
-   
-   <GuiField name="USER" caption="User" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-   <GuiField name="COMPANY" captionProperty="NAME" caption="Company" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" immediate="true" />
-   <GuiField name="ACCESS_RIGHT" caption="Access right" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-   
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="-1px" spacing="true">
+  <ValidationSettings formTitle="User Company Rights" withApply="true" withAttach="true" withPrint="true" />
+  <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+    <GuiField name="USER" caption="User" width="180px" />
+    <GuiField name="COMPANY" caption="Company" captionProperty="NAME" width="180px" />
+    <GuiField name="ACCESS_RIGHT" caption="Access Right" width="180px" />
+  </HorizontalLayout>
 </VerticalLayout>
