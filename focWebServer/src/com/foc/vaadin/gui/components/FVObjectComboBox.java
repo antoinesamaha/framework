@@ -16,7 +16,6 @@
 package com.foc.vaadin.gui.components;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.xml.sax.Attributes;
 
@@ -25,9 +24,9 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.access.FocDataMap;
-import com.foc.dataWrapper.FocListWrapper;
 import com.foc.dataWrapper.FocDataWrapper.ListFilterUsingAFormulaExpression;
 import com.foc.dataWrapper.FocDataWrapper.ListFilterUsingPropertyValue;
+import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -53,7 +52,6 @@ import com.foc.web.dataModel.FocListWrapper_ForObjectSelection;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.recording.UnitTestingRecorder_ObjectComboBox;
-import com.vaadin.data.Container.Filter;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
@@ -128,6 +126,19 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   	return ref;
   }
   
+  private void addItemToFocListAction() {
+		copyMemoryToGui();
+		Object backupValue = getValue();
+		addNewObject();
+		Object newValue = getValue();
+		if(newValue instanceof Long){
+			long newSeletedValue = (Long) newValue;
+			if(newSeletedValue == FocDataItem_ForComboBoxActions.REF_ADD){
+				setValue(backupValue);
+			}
+		}
+  }
+  
   private void init(){
   	if(Globals.isValo()){
   		valueChangeListener = new ValueChangeListener() {
@@ -142,17 +153,8 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 						if(valueInteger == getFocObjectRef_ForTheADDIcon() && getMainWindow() != null){
 //						if(isSelected(getFocObjectRef_ForTheADDIcon()) && getMainWindow() != null){
 //							addNewObject();
-							//We need it like this when we add a new unit then we do cancel, the combo has the 'Add new item' selected.   
-							copyMemoryToGui();
-							Object backupValue = getValue();
-							addNewObject();
-							Object newValue = getValue();
-							if(newValue instanceof Long){
-								long newSeletedValue = (Long) newValue;
-								if(newSeletedValue == FocDataItem_ForComboBoxActions.REF_ADD){
-									setValue(backupValue);
-								}
-							}
+							//We need it like this when we add a new unit then we do cancel, the combo has the 'Add new item' selected.
+							addItemToFocListAction();
 						}else if(isSelected(getFocObjectRef_ForTheREFRESHIcon()) && getMainWindow() != null){
 							copyMemoryToGui();
 							Object previousValue = getValue();
@@ -198,6 +200,15 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 			selectionWrapperList.dispose();
 			selectionWrapperList = null;
 		}
+	}
+	
+	public void unitTesting_AddItemSelected() throws Exception {
+		long refOfAddIcon = getFocObjectRef_ForTheADDIcon();
+		if(getItem(refOfAddIcon) == null) {
+			throw new Exception("Could not find the ADD icon");
+		}
+				
+		addItemToFocListAction();
 	}
 	
 	public void reloadList(){
@@ -418,7 +429,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
   @Override
   public void setValueString(String value) {
   	FocListWrapper listWrapper = getListWrapper();
-    if(listWrapper != null){
+    if(listWrapper != null){int r=2;
     	FocObject obj = listWrapper.searchByPropertyValue(getItemCaptionPropertyId().toString(), value);
       if(obj == null){
     		select((long)0);
