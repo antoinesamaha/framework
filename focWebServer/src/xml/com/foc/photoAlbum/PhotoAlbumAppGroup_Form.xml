@@ -1,5 +1,9 @@
-<VerticalLayout spacing="true" maring="true" width="95%">
-    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="false" />    
-    <GuiField name="DOC_RIGHT" caption="Document access right" width="220px" height="-1px" />
-    <GuiField name="ACCESS_DETACHED_GALLERY" caption="Access detached gallery" width="220px" height="-1px" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="-1px" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <VerticalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="DOC_RIGHT" caption="Document Access Right" captionPos="top" width="360px" />
+      <GuiField name="ACCESS_DETACHED_GALLERY" caption="Access Detached Gallery" />
+    </VerticalLayout>
+  </VerticalLayout>
 </VerticalLayout>

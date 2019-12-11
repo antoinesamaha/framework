@@ -1,10 +1,13 @@
-<VerticalLayout width="100%" >
-  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-      
-  <GuiField name="TYPE" caption="Type" />
-  <GuiField name="CONTEXT" caption="Context" />
-  <GuiField name="VIEW" caption="View" />
-  <GuiField name="STORAGE_NAME" caption="Storage Name" />
-  <GuiField name="FLD_JAVA_CLASS_NAME" caption="Java Class Name" width="100%"/>
-  
+<VerticalLayout margin="true" width="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="TYPE" caption="Type" width="180px" />
+      <GuiField name="CONTEXT" caption="Context" width="180px" />
+      <GuiField name="VIEW" caption="View" width="180px" />
+      <GuiField name="STORAGE_NAME" caption="Storage Name" width="180px" />
+      <GuiField name="FLD_JAVA_CLASS_NAME" caption="Java Class Name" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
 </VerticalLayout>
+ 

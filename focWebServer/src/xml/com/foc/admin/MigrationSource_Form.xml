@@ -1,6 +1,12 @@
-<VerticalLayout>
-	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-  <GuiField name="NAME" caption="Name" width="-1px" height="-1px"  />
-  <GuiField name="DESCRIP" caption="Description" width="-1px" height="-1px"  />
-  <GuiField name="DESTINATION_TABLE" caption="Destination table" width="-1px" height="-1px"  />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="-1px" spacing="true">
+  <ValidationSettings formTitle="Migration Source" withApply="true" withAttach="true" withPrint="true" />
+
+  <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="NAME" caption="Name" width="180px" />
+      <GuiField name="DESCRIP" caption="Description" width="180px" />
+      <GuiField name="DESTINATION_TABLE" caption="Destination Table" width="180px" />
+    </HorizontalLayout>
+  </VerticalLayout>
+
 </VerticalLayout>

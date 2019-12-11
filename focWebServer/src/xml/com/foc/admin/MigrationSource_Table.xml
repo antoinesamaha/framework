@@ -1,8 +1,10 @@
-<VerticalLayout >
-	<ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-  <GuiTable title="Import source for data migration" name="MIG_SOURCE_TABLE" dataPath="DATAROOT">
-  	<TableColumn name="NAME" caption="Name" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable title="MIGRATION SOURCE" name="MIG_SOURCE_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" />
     <TableColumn name="DESCRIP" caption="Description" />
-  	<TableColumn name="DESTINATION_TABLE" caption="Destination Table" />
-	</GuiTable>
+    <TableColumn name="DESTINATION_TABLE" caption="Destination Table" />
+  </GuiTable>
 </VerticalLayout>
+

@@ -1,11 +1,13 @@
-<VerticalLayout captionMargin="0" width="100%"  margin="true" height="100%">
-    <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
-    <GuiTable title="User Groups" name="TABLE" dataPath="DATAROOT" expandRatio="1">
-        <OpenForm containerWindow="same window" />
-        <TableColumn name="NAME" caption="Name" />
-        <TableColumn name="DESCRIP" caption="Description" />
-        <TableColumn name="DASHBOARD_CONTEXT" caption="Dashboard Context" />
-        <TableColumn name="GUEST_APPLICABLE" caption="Guest" />
-    </GuiTable>
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="false" withPrint="false" />
+  <GuiTable title="GROUPS" name="TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" link="true" />
+    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="DASHBOARD_CONTEXT" caption="Dashboard Context" />
+    <TableColumn name="GUEST_APPLICABLE" caption="Guest" />
+  </GuiTable>
 </VerticalLayout>
+
+
 

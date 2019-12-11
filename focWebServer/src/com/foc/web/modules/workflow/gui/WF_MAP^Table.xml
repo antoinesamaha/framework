@@ -1,8 +1,11 @@
-<VerticalLayout margin="true" spacing="true" captionMargin="0">
-  <ValidationSettings formTitle="" withApply="false" withAttach="false" withPrint="true" />
-  <Label value="Workflow signature sequence maps" style="H2,text-center" width="100%"/>
-  <GuiTable name="WFMAP_TABLE" dataPath="DATAROOT" width="100%" height="-1px" openInNewTabEnabled="true" >
-    <TableColumn name="NAME" caption="Name"    />
-    <TableColumn name="DESCRIP" caption="Description"    />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="true" withPrint="true" />
+  <GuiTable title="WORKFLOW SEQUENCE MAPS" name="WFMAP_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+    <OpenForm containerWindow="same window" />
+    <TableColumn name="NAME" caption="Name" link="true" />
+    <TableColumn name="DESCRIP" caption="Description" />
   </GuiTable>
 </VerticalLayout>
+
+
+

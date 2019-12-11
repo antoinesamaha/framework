@@ -1,9 +1,12 @@
-<VerticalLayout height="100%" captionMargin="0"> 
-  <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
-  <GuiTable title="User Titles" name="WF_TITLE" dataPath="DATAROOT" caption="" width="100%" expandRatio="1" inLineEditable="true" >
-    <TableColumn name="NAME" caption="Name" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
+  <GuiTable title="USER TITLES" name="WF_TITLE" dataPath="DATAROOT" width="100%" expandRatio="1" inLineEditable="true">
+    <TableColumn name="NAME" caption="Name" link="true"/>
     <TableColumn name="DESCRIP" caption="Description" />
-    <TableColumn name="PROJECT_SPECIFIC" caption="Project specific" />
+    <TableColumn name="PROJECT_SPECIFIC" caption="Project Specific" />
     <TableColumn name="USER_DATAPATH_FROM_PROJ_WBS" caption="User Datapath From Proj WBS" />
   </GuiTable>
 </VerticalLayout>
+
+
+
