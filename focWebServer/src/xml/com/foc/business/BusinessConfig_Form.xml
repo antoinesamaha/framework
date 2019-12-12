@@ -1,5 +1,5 @@
 <VerticalLayout width="100%" height="-1px"  >
-  <ValidationSettings formTitle="Business essentials settings" withApply="true" withAttach="false" withPrint="true" />
+  <ValidationSettings formTitle="Business essentials settings" withApply="true" withSave="false" withAttach="false" withPrint="true" />
   
   <TabLayout style="tabStyle" name="_TabLayout" captionMargin="0" margin="true" height="100%">
      <VerticalLayout name="Party" margin="true" spacing="true" height="-1px">

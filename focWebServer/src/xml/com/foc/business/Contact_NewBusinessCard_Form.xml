@@ -1,5 +1,5 @@
 <VerticalLayout spacing="true" width="700px" alignment="left" >
-    <ValidationSettings formTitle="Contact" withApply="true" withAttach="false" withPrint="true" />
+    <ValidationSettings formTitle="Contact" withApply="true" withSave="false" withAttach="false" withPrint="true" />
     <Label value="Contact details" style="f16,bold" />
     <HorizontalLayout width="-1px" spacing="true" >
         <GuiField name="NEW_CONTACT.TITLE" caption="Title" width="50px" height="-1px"  />
@@ -37,5 +37,3 @@
     <GuiField dataPath="NEW_COMPANY.INVOICING_ADDRESS" caption="Company Address" width="-1px" height="-1px" />
     <Line />        
 </VerticalLayout>
-
-

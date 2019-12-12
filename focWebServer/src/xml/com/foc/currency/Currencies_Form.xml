@@ -1,5 +1,5 @@
 <VerticalLayout title="Currency Configuration" width="100%" spacing="true" margin="true">
-   <ValidationSettings formTitle="Currency module initialisation" withApply="true" withAttach="false" withPrint="false" withEmail="false" />
+   <ValidationSettings formTitle="Currency module initialisation" withApply="true" withSave="false" withAttach="false" withPrint="false" withEmail="false" />
    <Label name="INSTRUCTION_LABEL" value="This configuration is set once at the beginning and cannot be modified later except for the default view currency" style="instruction" />   
    <GuiField name="BASE_CURR" caption="Base currency - Used for rates" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />   
    <GuiField name="DEFAULT_VIEW_CURRENCY" caption="Default view Currency" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />

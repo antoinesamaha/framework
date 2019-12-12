@@ -1,5 +1,5 @@
 <VerticalLayout width="300px" spacing="true" margin="true" alignment="center">
-   <ValidationSettings formTitle="Currency" withApply="true" withAttach="false" withPrint="false" />
+   <ValidationSettings formTitle="Currency" withApply="true" withSave="false" withAttach="false" withPrint="false" />
    
    <Label value="Currency" style="H2"/>
    

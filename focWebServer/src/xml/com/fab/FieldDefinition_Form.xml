@@ -1,5 +1,5 @@
 <VerticalLayout name="H1" width="100%" >
-    <ValidationSettings formTitle="Field" withApply="true" withAttach="true" withPrint="true" />
+    <ValidationSettings formTitle="Field" withApply="true" withSave="false" withAttach="true" withPrint="true" />
     <HorizontalLayout  width="100%"  >
         <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="100px" alignment="left"  />
         <GuiField name="TITLE" caption="Title" captionPos="top" captionWidth="100px"  />

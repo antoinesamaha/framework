@@ -1,5 +1,5 @@
 <VerticalLayout height="100%" width="100%">
- <ValidationSettings formTitle="Document Table" withApply="true" withAttach="true" withPrint="true" />
+ <ValidationSettings formTitle="Document Table" withApply="true" withSave="false" withAttach="true" withPrint="true" />
  <GuiTable title="Custom Tables" name="FIELD_DEFINITION" dataPath="DATAROOT" caption="" width="700px" height="100%" top="50px" left="20px" checkBox="true" duplicateEnabled="true" >
   <TableColumn name="NAME" caption="Name" />
   <TableColumn name="TITLE" caption="Title" />
