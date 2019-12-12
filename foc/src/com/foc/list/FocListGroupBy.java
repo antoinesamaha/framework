@@ -133,7 +133,7 @@ public class FocListGroupBy {
 				addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_POSTGRES) {
 				formulaBefore = "STRING_AGG(";
-				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"' ORDER BY "+fieldName+")";
+				formulaAfter  = "::character varying, '"+LISTAGG_SEPARATOR+"' ORDER BY "+fieldName+")";
 
 				/*
 				if(!Utils.isStringEmpty(concatenationFields)) {

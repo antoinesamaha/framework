@@ -1,5 +1,5 @@
 <VerticalLayout height="99%">
-    <ValidationSettings formTitle="" withApply="true" withAttach="true" withPrint="true" />
+    <ValidationSettings formTitle="" withApply="true" withSave="false" withAttach="true" withPrint="true" />
     <GuiTable title="Contacts" name="Contact" dataPath="DATAROOT" width="100%" height="99%" >
         <TableColumn name="_LINE_NUMBER" caption="Ln" />
         <TableColumn name="TITLE" caption="title" />

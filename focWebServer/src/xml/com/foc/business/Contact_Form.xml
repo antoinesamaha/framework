@@ -1,5 +1,5 @@
 <VerticalLayout spacing="true" margin="true" width="700px" alignment="left" >
-    <ValidationSettings formTitle="Contact" withApply="true" withAttach="true" withPrint="true" />
+    <ValidationSettings formTitle="Contact" withApply="true" withSave="false" withAttach="true" withPrint="true" />
     <Label value="Contact details" style="f16,bold" />
     <HorizontalLayout width="-1px" spacing="true">
         <GuiField name="TITLE" caption="Title" width="100px" height="-1px"  />
@@ -32,5 +32,3 @@
         <GuiField name="INTRODUCTION" caption="Introduction" width="600px" height="-1px"  />    
     </HorizontalLayout>    
 </VerticalLayout>
-
-

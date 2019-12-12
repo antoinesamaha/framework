@@ -1,5 +1,5 @@
 <VerticalLayout captionMargin="0" height="98%" margin="true">
-  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withPrint="false" />
+  <ValidationSettings title="Upload image" withAttach="false" withApply="true" withSave="false" withPrint="false" />
   <!-- VerticalLayout name="UPLOAD_IMAGE_LAYOUT" width="200px" height="30px" left="20px">
   </VerticalLayout -->  
   <GuiTable name="PHOTO_ALBUM" dataPath="DATAROOT" caption="Photo album" captionMargin="0" width="100%" height="500px" addEnabled="false" inLineEditable="false">

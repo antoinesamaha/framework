@@ -1,5 +1,5 @@
 <VerticalLayout margin="true">
-   <ValidationSettings formTitle="Day Shift" withApply="true" withAttach="true" withPrint="true" />
+   <ValidationSettings formTitle="Day Shift" withApply="true" withSave="false" withAttach="true" withPrint="true" />
    <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
       
    <HorizontalLayout spacing="true">
