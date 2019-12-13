@@ -1,6 +1,7 @@
 <VerticalLayout margin="true" width="100%" spacing="true">
   <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
-  <MenuLayout style="tabStyle" name="_TabLayout" captionMargin="0" margin="true" height="100%">
+
+  <TabLayout name="_MainTab" style="tabStyle" captionMargin="0" margin="true" height="-1px">
 
     <VerticalLayout name="Group Info" margin="true" spacing="true" height="-1px" width="100%" captionMargin="0">
       <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
@@ -18,19 +19,21 @@
           <Button name="VIEW_RIGHTS_BUTTON" caption="View Rights" alignment="bottom_left" />
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-          <GuiField name="NAME_MODF" caption="Allow Naming Modification" />
-          <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" />
-          <GuiField name="FX_RTE_MODIF" caption="Allow Currency Rates Modification" />
-          <GuiField name="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" />
+          <GuiField name="NAME_MODF" caption="Allow Naming Modification" captionPos="left" captionWidth="200px"/>
+          <GuiField name="AREA_MANUAL_MODF" caption="Allow Area Manual Modification" captionPos="left" captionWidth="200px"/>
+          <GuiField name="FX_RTE_MODIF" caption="Allow Currency Rates Modification" captionPos="left" captionWidth="200px"/>
+          <GuiField name="GUEST_APPLICABLE" caption="Allow Guest Users In This Group" captionPos="left" captionWidth="200px"/>
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-          <GuiField name="ALLOW_IMPORT" caption="Allow Imports" captionPos="top" />
-          <GuiField name="REPORT_ACCESS" caption="Allow Report Access" captionPos="top" />
-          <GuiField name="ALLOW_REPORT_CREATION" caption="Allow Report Creation" captionPos="top" />
+          <GuiField name="ALLOW_IMPORT" caption="Allow Imports" captionPos="left" captionWidth="200px"/>
+          <GuiField name="REPORT_ACCESS" caption="Allow Report Access" captionPos="left" captionWidth="200px"/>
+          <GuiField name="ALLOW_REPORT_CREATION" caption="Allow Report Creation" captionPos="left" captionWidth="200px"/>
         </HorizontalLayout>
       </VerticalLayout>
       <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
-        <Button name="MENU_RIGHTS_BUTTON" caption="Menu Rights" />
+        <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+          <Button name="MENU_RIGHTS_BUTTON" caption="Menu Rights" />
+        </HorizontalLayout>
         <VerticalLayout name="APP_GROUPS_BUTTONS_LAYOUT" spacing="true">
         </VerticalLayout>
       </VerticalLayout>
