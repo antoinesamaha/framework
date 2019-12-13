@@ -267,7 +267,7 @@ public class DBAdaptor {
 			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
 			    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
 			    		try{
-			    			adaptDBTable_Constraints_Oracle(focDesc);
+			    			adaptDBTable_Constraints_OraclePostgres(focDesc);
 			        }catch(Exception e){
 			        	Globals.logException(e);
 			    		}
@@ -591,7 +591,7 @@ public class DBAdaptor {
     }
   }
   
-  private void adaptDBTable_Constraints_Oracle(FocDesc focDesc){
+  private void adaptDBTable_Constraints_OraclePostgres(FocDesc focDesc){
   	if(focDesc != null && focDesc.isDbResident() && (focDesc.getProvider() == DBManager.PROVIDER_ORACLE || focDesc.getProvider() == DBManager.PROVIDER_POSTGRES)){
 	    FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
 	    while (enumer.hasNext()) {
@@ -618,6 +618,12 @@ public class DBAdaptor {
 				  		FReferenceField refField = (FReferenceField) otherFocDesc.getFieldByID(FField.REF_FIELD_ID); 
 				  		
 				  		if(refField != null){
+				  			//If the column is already there with zeros instead of null this will rase errors when creating the constraints  
+								String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
+								Globals.logString(replaceRequest);
+								Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
+						    //-------------------------------------------------------------------------------------------------------------
+								
 								StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
 								String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
 								request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
