@@ -68,7 +68,7 @@ public abstract class FocAdminAbstractTest extends FocUnitTest {
 		component_SetValue("NAME", name, false);
 		component_SetValue("DESCRIP", description, false);
 		button_ClickApply();
-		button_ClickApply();
+		button_ClickDiscard();
 	}
 	
 	protected void group_Open(String name) throws Exception {
