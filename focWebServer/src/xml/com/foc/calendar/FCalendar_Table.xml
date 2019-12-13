@@ -1,5 +1,5 @@
 <VerticalLayout >
-    <ValidationSettings formTitle="" withApply="false" withSave="false" withAttach="false" withPrint="false" />
+    <ValidationSettings formTitle="" withApply="true" withSave="false" withAttach="false" withPrint="false" />
     <GuiTable title="Calendars" name="CALENDAR_TABLE" dataPath="DATAROOT" inLineEditable="true" >
         <TableColumn name="ISDEFAULT" caption="isDefault" />    
         <TableColumn name="NAME" caption="Name" editable="false" />
