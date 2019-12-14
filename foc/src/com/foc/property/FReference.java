@@ -5,6 +5,7 @@ package com.foc.property;
 
 import java.text.Format;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocObject;
 import com.foc.desc.FocRef;
@@ -155,7 +156,7 @@ public class FReference extends FProperty {
   	if(sqlRef <= 0){
   		if(Globals.getDBManager().isProviderSupportNullValues()){
   			str = null;
-  		}else if(str.equals("0")){
+  		}else if(str.equals("0") && ConfigInfo.isAdaptConstraints()){
   			str = "NULL";
   		} else {
   			str = String.valueOf(sqlRef);
