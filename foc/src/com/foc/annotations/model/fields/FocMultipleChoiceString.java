@@ -30,4 +30,5 @@ public @interface FocMultipleChoiceString {
 	public boolean useColumnValues() default true;
 	public boolean allowNewValues() default true;
 	public String[] choices() default {};
+	public boolean sortItems() default false;
 }

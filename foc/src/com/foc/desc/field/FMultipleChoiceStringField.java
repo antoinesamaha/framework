@@ -97,7 +97,7 @@ public class FMultipleChoiceStringField extends FStringField {
 			}
 			for(int i=0; i<arrayList.size(); i++){
 				addChoice((String)arrayList.get(i));
-			}
+			}			
 		}
 	}
 	
