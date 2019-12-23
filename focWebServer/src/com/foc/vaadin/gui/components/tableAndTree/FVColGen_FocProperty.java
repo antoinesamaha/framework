@@ -25,6 +25,7 @@ import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FImageField;
 import com.foc.desc.field.FMultipleChoiceItem;
+import com.foc.desc.field.IPropertyStringConverter;
 import com.foc.list.FocList;
 import com.foc.property.FCloudStorageProperty;
 import com.foc.property.FDate;
@@ -296,6 +297,15 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 			}
 			// --------------------------------------------------------------------
 			objReturned = property.vaadin_TableDisplayObject(column.getFormat(), column.getCaptionProp());
+		
+			//If we have a special converter like when we mix Arabic letters...
+			if(field != null && objReturned instanceof String) {
+				IPropertyStringConverter stringConverter = field.getStringConverter();
+				if(stringConverter != null) {
+					objReturned = stringConverter.getGuiStringFromMemory(property);
+				}
+			}
+			//-----------------------------------------------------------------
 			
 			if(objReturned instanceof Boolean){
 				if(((Boolean) objReturned).booleanValue()){
@@ -338,6 +348,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 				if(property instanceof FMultipleChoice) {
 					objReturned = property.getString();
 				}
+				
 				FVLabel lbl = null;
 				String  styleAttrib   = column.getAttributes() != null ? column.getAttributes().getValue(FXML.ATT_STYLE) : null;
 				int     maxCharacters = column.getMaxCharacters();

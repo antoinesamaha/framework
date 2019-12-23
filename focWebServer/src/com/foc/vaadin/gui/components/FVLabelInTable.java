@@ -17,6 +17,8 @@ package com.foc.vaadin.gui.components;
 
 import com.foc.Globals;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.IPropertyStringConverter;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 
@@ -60,6 +62,21 @@ public class FVLabelInTable extends FVLabel {
 		if(focData != null && column != null){
 			try{
 				objReturned = (String) focData.vaadin_TableDisplayObject(column.getFormat(), column.getCaptionProp());
+				
+				if(focData instanceof FProperty) {
+					FProperty property = focData;
+					FField field = property.getFocField();
+					
+					//If we have a special converter like when we mix Arabic letters...
+					if(field != null && objReturned instanceof String) {
+						IPropertyStringConverter stringConverter = field.getStringConverter();
+						if(stringConverter != null) {
+							objReturned = stringConverter.getGuiStringFromMemory(property);
+						}
+					}
+				}
+				//-----------------------------------------------------------------
+				
 			}catch(Exception e){
 				Globals.logException(e);
 			}

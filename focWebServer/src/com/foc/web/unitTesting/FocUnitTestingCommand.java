@@ -437,7 +437,7 @@ public class FocUnitTestingCommand {
     button_ClickDiscard(null);
   }
   
-  public void button_ClickReceive() throws Exception {
+  public void button_Click_InValidationLayout(String caption) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Receive Transfer");
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
     
@@ -448,7 +448,7 @@ public class FocUnitTestingCommand {
       	Button receive = null;
       	for (int i=0; i < validationLayout.getMainHorizontalLayout().getComponentCount(); i++) {
       		Component comp = validationLayout.getMainHorizontalLayout().getComponent(i);
-      		if(comp instanceof Button && ((Button)comp).getCaption().equals("استلام") ) {
+      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) ) {
       			receive = (Button) comp;
       		}
       	}
