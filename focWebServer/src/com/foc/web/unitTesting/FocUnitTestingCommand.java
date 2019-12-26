@@ -437,7 +437,7 @@ public class FocUnitTestingCommand {
     button_ClickDiscard(null);
   }
   
-  public Button find_button_InValidationLayout(String caption, boolean shouldExist) throws Exception {
+  public Button button_AssertEnabled_InValidationLayout2(String caption, boolean shouldExist) throws Exception {
   	FocXMLLayout navigationLayout = getCurrentCentralPanel();
     Button receive = null;
     if (navigationLayout != null) {
@@ -445,7 +445,7 @@ public class FocUnitTestingCommand {
       if (validationLayout != null) {
       	for (int i=0; i < validationLayout.getMainHorizontalLayout().getComponentCount(); i++) {
       		Component comp = validationLayout.getMainHorizontalLayout().getComponent(i);
-      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) ) {
+      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) && ((Button)comp).isEnabled() && ((Button)comp).isVisible()) {
       			receive = (Button) comp;
       		}
       	}
@@ -469,7 +469,7 @@ public class FocUnitTestingCommand {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 
       if (validationLayout != null) {
-      	Button receive = find_button_InValidationLayout(caption, true);      	
+      	Button receive = button_AssertEnabled_InValidationLayout2(caption, true);      	
       	
         if (receive != null) {
         	receive.click();
