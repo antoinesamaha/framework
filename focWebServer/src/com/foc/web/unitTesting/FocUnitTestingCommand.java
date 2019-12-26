@@ -437,6 +437,30 @@ public class FocUnitTestingCommand {
     button_ClickDiscard(null);
   }
   
+  public Button find_button_InValidationLayout(String caption, boolean shouldExist) throws Exception {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    Button receive = null;
+    if (navigationLayout != null) {
+      FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
+      if (validationLayout != null) {
+      	for (int i=0; i < validationLayout.getMainHorizontalLayout().getComponentCount(); i++) {
+      		Component comp = validationLayout.getMainHorizontalLayout().getComponent(i);
+      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) ) {
+      			receive = (Button) comp;
+      		}
+      	}
+      	if(receive == null && shouldExist) {
+          getLogger().addFailure("Button " + caption +" not found in Validation Layout.");
+      	} else if(receive != null && !shouldExist) {
+          getLogger().addFailure("Button " + caption +"  found in Validation Layout.");
+      	} else {
+          getLogger().addInfo("Button " + caption +"  visible = " + shouldExist + "in Validation Layout.");
+        }
+      }
+    }
+    return receive;
+  }
+  
   public void button_Click_InValidationLayout(String caption) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Receive Transfer");
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
@@ -445,13 +469,7 @@ public class FocUnitTestingCommand {
       FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
 
       if (validationLayout != null) {
-      	Button receive = null;
-      	for (int i=0; i < validationLayout.getMainHorizontalLayout().getComponentCount(); i++) {
-      		Component comp = validationLayout.getMainHorizontalLayout().getComponent(i);
-      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) ) {
-      			receive = (Button) comp;
-      		}
-      	}
+      	Button receive = find_button_InValidationLayout(caption, true);      	
       	
         if (receive != null) {
         	receive.click();
