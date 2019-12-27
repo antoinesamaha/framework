@@ -850,6 +850,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 			try {
 				guiComponent = vField.newGuiComponent(FocXMLLayout.this, iFocData_SentToObject, attributes, rootFocData, dataPath);
+				
+				if(			property != null 
+						&& 	property.getFocField() != null 
+						&&  property.getFocField().getStringConverter() != null 
+						&&  guiComponent instanceof Component) {
+					property.getFocField().getStringConverter().addGuiComponentListener((Component) guiComponent);
+				}
 			} catch (Exception e) {
 				Globals.logException(e);
 			}

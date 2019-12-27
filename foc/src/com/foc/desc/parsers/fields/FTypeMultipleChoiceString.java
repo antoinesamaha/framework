@@ -42,6 +42,7 @@ public class FTypeMultipleChoiceString extends FocFieldTypAbstract<FocMultipleCh
 		focField.setDBResident(a.dbResident());
 		focField.setUseSameColumnValues(a.useColumnValues());
 		focField.setAllowOutofListSelection(a.allowNewValues());
+		focField.setSortItems(a.sortItems());
 		if(a.choices() != null){
 			for(String title: a.choices()){
 				focField.addChoice(title);

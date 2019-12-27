@@ -297,6 +297,7 @@ public class StringCondition extends FilterCondition {
 				}
       }else{
         charField = new FStringField(getFieldPrefix()+"_TXT", "Text field", firstID + FLD_CONDITION_TEXT, false, field.getSize());
+        charField.setStringConverter(field.getStringConverter());
       }
       if(charField != null){//Can't be null !! But just in case
 	      focDesc.addField(charField);

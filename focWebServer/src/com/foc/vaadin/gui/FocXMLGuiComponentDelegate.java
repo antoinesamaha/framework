@@ -38,7 +38,7 @@ public class FocXMLGuiComponentDelegate {
   private boolean            editable        = true;
   private String             nameInMap       = null;
   private boolean            suspended       = false;
-
+  
   //These are used in case the component is located in a table.
   private Object columnId = null;
   private Object rowId    = null;
@@ -333,7 +333,7 @@ public class FocXMLGuiComponentDelegate {
 		this.suspended = suspended;
 		return backup;
 	}
-	
+
 //  public UnitTestingRecorder_CommonField getRecorder() {
 //		return recorder;
 //	}

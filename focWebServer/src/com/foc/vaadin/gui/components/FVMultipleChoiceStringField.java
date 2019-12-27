@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.components;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import org.xml.sax.Attributes;
@@ -137,14 +138,25 @@ public class FVMultipleChoiceStringField extends FVMultipleChoiceComboBox implem
 		      }
 
 		      if(choices != null){
+		      	
+		      	ArrayList<String> titleArraysToBeSorted = new ArrayList<String>(); 
 		        while(choices.hasNext()){
 		          FMultipleChoiceItem choiceItem = choices.next();
 		          if(choiceItem != null && choiceItem.getTitle() != null){
-		            addItem(choiceItem.getTitle());
+//		            addItem(choiceItem.getTitle());
+		          	titleArraysToBeSorted.add(choiceItem.getTitle());
 		            if(currentValue != null && choiceItem.getTitle().equals(currentValue)){
 		            	currentValue = null;
 		            }
 		          }
+		        }
+
+		        if (field.isSortItems()) {
+		        	Collections.sort(titleArraysToBeSorted);
+		        }
+		        
+		        for(int i=0; i<titleArraysToBeSorted.size(); i++) {
+		        	addItem(titleArraysToBeSorted.get(i));
 		        }
 		        
 		        if(currentValue != null){
