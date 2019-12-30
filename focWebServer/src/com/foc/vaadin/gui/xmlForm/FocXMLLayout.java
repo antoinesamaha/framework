@@ -62,6 +62,7 @@ import com.foc.pivot.FPivotTable;
 import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.property.FTime;
+import com.foc.property.validators.FPropertyValidator;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.tree.FTree;
@@ -849,6 +850,13 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 
 			try {
 				guiComponent = vField.newGuiComponent(FocXMLLayout.this, iFocData_SentToObject, attributes, rootFocData, dataPath);
+				
+				if(			property != null 
+						&& 	property.getFocField() != null 
+						&&  property.getFocField().getStringConverter() != null 
+						&&  guiComponent instanceof Component) {
+					property.getFocField().getStringConverter().addGuiComponentListener((Component) guiComponent);
+				}
 			} catch (Exception e) {
 				Globals.logException(e);
 			}
@@ -1135,6 +1143,41 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 	}
 	
+	public boolean checkFieldsValidators(){
+		boolean error = false;
+		
+		//Even though we have a data valildation check in the data layer or FocObject, we are doing a check on the GUI component
+		//To be able to give a meaningful message dependent also on the FocXMLLayout language
+		Iterator<FocXMLGuiComponent> iter = getComponentMapIterator();
+		while(iter != null && iter.hasNext()){
+			FocXMLGuiComponent comp = iter.next();
+			if(comp != null){
+				IFocData focData = comp.getFocData();
+				if(focData != null && focData instanceof FProperty){
+					FProperty prop = (FProperty) focData;
+					if(prop != null){
+						FField fld = prop.getFocField();
+						FocObject focObj = prop.getFocObject();
+						if(fld != null && focObj != null && !focObj.isDeleted()) {
+							if (prop.getPropertyValidator() != null) {
+								FPropertyValidator validator = prop.getPropertyValidator();
+								error = !validator.validateProperty(prop);
+								if(error) break;
+							}
+							if (fld.getPropertyValidator() != null) {
+								FPropertyValidator validator = fld.getPropertyValidator();
+								error = !validator.validateProperty(prop);
+								if(error) break;
+							}							
+						}
+					}
+				}
+			}
+		}
+
+		return error;
+	}
+	
 	public boolean checkMandatoryGuiFieldsAreFilled(){
 		boolean error = false;
 		
@@ -1168,6 +1211,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 	
 	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout){
 		boolean error = checkMandatoryGuiFieldsAreFilled();
+		error = error || checkFieldsValidators();
 		return error;
 	}
 	

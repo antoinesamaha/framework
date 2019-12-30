@@ -21,6 +21,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FNumField;
 import com.foc.desc.field.FStringField;
+import com.foc.desc.field.IPropertyStringConverter;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -210,7 +211,14 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 	  if(focData instanceof FProperty){
 	  	if(getDelegate() == null || !getDelegate().hasNoRight()){
 		  	String val = getValue();
-		  	((FProperty)focData).setString(val);
+		  	FProperty property = ((FProperty)focData);
+		  	if(property.getFocField() != null) {
+		  		IPropertyStringConverter converter = property.getFocField().getStringConverter();
+		  		if(converter != null) {
+		  			val = converter.getMemoryStringFromGui(property, val);
+		  		}
+		  	}
+		  	property.setString(val);
 	  	}	  	
 	  	
 //	  	if(true){
@@ -225,7 +233,18 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
   public void copyMemoryToGui() {
     if(focData instanceof FProperty){
 //      setValue((String) ((FProperty)focData).getValue());
-    	setValue(((FProperty)focData).getString());
+    	
+    	FProperty property = (FProperty)focData;
+    	String strFromProperty = property.getString();
+    	
+	  	if(property.getFocField() != null) {
+	  		IPropertyStringConverter converter = property.getFocField().getStringConverter();
+	  		if(converter != null) {
+	  			strFromProperty = converter.getGuiStringFromMemory(property);
+	  		}
+	  	}
+    	
+    	setValue(strFromProperty);
     	if(isDescriptionEqualValue()){
     		setDescription(getValue());
     	}

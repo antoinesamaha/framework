@@ -437,6 +437,54 @@ public class FocUnitTestingCommand {
     button_ClickDiscard(null);
   }
   
+  public Button button_AssertEnabled_InValidationLayout2(String caption, boolean shouldExist) throws Exception {
+  	FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    Button receive = null;
+    if (navigationLayout != null) {
+      FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
+      if (validationLayout != null) {
+      	for (int i=0; i < validationLayout.getMainHorizontalLayout().getComponentCount(); i++) {
+      		Component comp = validationLayout.getMainHorizontalLayout().getComponent(i);
+      		if(comp instanceof Button && ((Button)comp).getCaption().equals(caption) && ((Button)comp).isEnabled() && ((Button)comp).isVisible()) {
+      			receive = (Button) comp;
+      		}
+      	}
+      	if(receive == null && shouldExist) {
+          getLogger().addFailure("Button " + caption +" not found in Validation Layout.");
+      	} else if(receive != null && !shouldExist) {
+          getLogger().addFailure("Button " + caption +"  found in Validation Layout.");
+      	} else {
+          getLogger().addInfo("Button " + caption +"  visible = " + shouldExist + "in Validation Layout.");
+        }
+      }
+    }
+    return receive;
+  }
+  
+  public void button_Click_InValidationLayout(String caption) throws Exception {
+  	boolean nodeCreated = !getLogger().openCommand("Receive Transfer");
+    FocXMLLayout navigationLayout = getCurrentCentralPanel();
+    
+    if (navigationLayout != null) {
+      FVValidationLayout validationLayout = navigationLayout.getValidationLayout();
+
+      if (validationLayout != null) {
+      	Button receive = button_AssertEnabled_InValidationLayout2(caption, true);      	
+      	
+        if (receive != null) {
+        	receive.click();
+        } else {
+          getLogger().addFailure("Receive button not found.");
+        }
+      } else {
+        getLogger().addFailure("Validation layout not found");
+      }
+    } else {
+      getLogger().addFailure("Navigation layout not found");
+    }
+    if(nodeCreated) getLogger().closeNode();
+  }
+  
   /**
    * Simulates a click on the "Discard" button in the validation layout.
    * 
@@ -1000,7 +1048,41 @@ public class FocUnitTestingCommand {
    * @param variableName
    *          The name of the variable to store the line reference in.
    */
+  public long table_Select(String tableName, String propertyName, String propertyValue, boolean doNotFailWhenNotFound) throws Exception {
+    return table_Select(tableName, propertyName, propertyValue, null, 0, doNotFailWhenNotFound);
+  }
+
+  /**
+   * Simulates selecting an item in an open table. Also saves the reference of
+   * the selected object in a variable.
+   * 
+   * @param tableName
+   *          The name of the table to add an item in.
+   * @param propertyName
+   *          The name of the property.
+   * @param propertyValue
+   *          The value of the property.
+   * @param variableName
+   *          The name of the variable to store the line reference in.
+   */
   public long table_Select(String tableName, String propertyName, String propertyValue, String variableName, int ancestor) throws Exception {
+    return table_Select(tableName, propertyName, propertyValue, variableName, ancestor, false);
+  }
+
+  /**
+   * Simulates selecting an item in an open table. Also saves the reference of
+   * the selected object in a variable.
+   * 
+   * @param tableName
+   *          The name of the table to add an item in.
+   * @param propertyName
+   *          The name of the property.
+   * @param propertyValue
+   *          The value of the property.
+   * @param variableName
+   *          The name of the variable to store the line reference in.
+   */
+  public long table_Select(String tableName, String propertyName, String propertyValue, String variableName, int ancestor, boolean noFailIfLineNotFound) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Table select where "+propertyName+" = "+propertyValue +" -> "+variableName);
   	long referenceOfSelectedItem = 0;
   	
@@ -1032,7 +1114,11 @@ public class FocUnitTestingCommand {
 	        getLogger().addInfo("Storing selected item reference in variable " + variableName + ".");
 		    }	    	
 	    }else {
-        getLogger().addFailure("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
+	    	if(noFailIfLineNotFound) {
+	    		getLogger().addInfo("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
+	    	} else {
+	    		getLogger().addFailure("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
+	    	}
       }
 	    if(nodeCreated) getLogger().closeNode();
     }

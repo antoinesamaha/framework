@@ -74,6 +74,7 @@ public abstract class FField implements Cloneable, IFocData {
   private boolean fabField = false;
   private String  defaultStringValue = null;
   private boolean noRights = false;
+  private IPropertyStringConverter stringConverter = null;
   
   private FField  joinOriginalField = null;
   
@@ -934,5 +935,11 @@ public abstract class FField implements Cloneable, IFocData {
 	}
 	public void setJoinOriginalField(FField joinOriginalField) {
 		this.joinOriginalField = joinOriginalField;
+	}
+	public IPropertyStringConverter getStringConverter() {
+		return stringConverter;
+	}
+	public void setStringConverter(IPropertyStringConverter stringConverter) {
+		this.stringConverter = stringConverter;
 	}
 }
