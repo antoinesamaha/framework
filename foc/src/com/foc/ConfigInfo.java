@@ -84,6 +84,8 @@ public class ConfigInfo {
   private static String  logListenerClassName        = null;
   private static String  encryptionClassName         = null;
   private static boolean keepFocObjectArrayInFocDesc = false;
+  private static boolean contextHelpAllowed          = false;
+  private static boolean simulationAllowed          = false;
   
   private static boolean comboBoxShowDropDownEvenWhenDisabled = false;
   
@@ -664,6 +666,14 @@ public class ConfigInfo {
 
 	public static boolean isUseLocalEmailClientForNotification() {
 		return useLocalEmailClientForNotification;
+	}
+	
+	public static boolean isSimulationAllowed(){
+		return simulationAllowed ;
+	}
+	
+	public static boolean isContextHelpAllowed(){
+		return contextHelpAllowed ;
 	}
 
 	public static void setUseLocalEmailClientForNotification(boolean useLocalEmailClientForNotification) {
