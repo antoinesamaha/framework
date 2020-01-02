@@ -28,4 +28,5 @@ public @interface FocString {
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
 	public boolean compress() default false;
+	public boolean lockAfterCreation() default false;	
 }

@@ -26,4 +26,5 @@ import java.lang.annotation.Target;
 public @interface FocDate {
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
+	public boolean lockAfterCreation() default false;
 }

@@ -34,6 +34,7 @@ public class FTypeString extends FocFieldTypAbstract<FocString> {
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
 		focField.setCompress(a.compress());
+		focField.setLockValueAfterCreation(a.lockAfterCreation());
 		return focField;
 	}
 
