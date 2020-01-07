@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.foc.web.modules.admin;
 
-import com.foc.Globals;
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.admin.UserSession;
@@ -33,6 +33,7 @@ import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import com.vaadin.ui.Component;
 
 @SuppressWarnings("serial")
 public class FocUser_CompanySelection_Form extends FocXMLLayout {
@@ -123,6 +124,11 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
 	      }
 	    });
     }
+    
+    Component comp = getComponentByName("CONTEXT_HELP_ACTIVATION");
+    if(comp != null) comp.setVisible(ConfigInfo.isContextHelpAllowed());
+    comp = getComponentByName("SIMULATION_ACTIVE");
+    if(comp != null) comp.setVisible(ConfigInfo.isSimulationAllowed());
   }
   
   @Override

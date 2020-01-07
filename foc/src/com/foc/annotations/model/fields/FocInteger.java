@@ -27,4 +27,5 @@ public @interface FocInteger {
 	public int size() default 10;
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
+	public boolean lockAfterCreation() default false;
 }

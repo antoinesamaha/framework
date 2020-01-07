@@ -356,6 +356,7 @@ public class FVColGen_FocProperty extends FVColumnGenerator {
 				
 				if(styleAttrib != null && !styleAttrib.isEmpty()){
 					lbl = new FVLabel((String) objReturned);
+					if(column.isHtml()) lbl.setContentMode(ContentMode.HTML);
 					lbl.parseStyleAttributeValue(styleAttrib);
 					objReturned = lbl;
 				}else if(property instanceof FDouble || (property instanceof FInt  && !(property instanceof FMultipleChoice))){

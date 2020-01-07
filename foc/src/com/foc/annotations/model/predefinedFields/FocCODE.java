@@ -25,4 +25,5 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 public @interface FocCODE {
 	public int size() default 0;
+	public boolean lockAfterCreation() default false;
 }

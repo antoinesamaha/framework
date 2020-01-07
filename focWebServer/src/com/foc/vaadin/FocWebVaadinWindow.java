@@ -25,6 +25,7 @@ import com.foc.OptionDialog;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.business.downloadableContent.DownloadableContentDesc;
 import com.foc.business.notifier.FocPageLink;
 import com.foc.business.notifier.FocPageLinkDesc;
@@ -579,8 +580,19 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
 	}
 	
+	public boolean hasAdminRights() {
+		boolean hasRights = false;
+		if(Globals.getApp().getUser_ForThisSession() != null) {
+			FocGroup group = Globals.getApp().getUser_ForThisSession().getGroup();
+			if(group != null && group.getWebModuleRights(AdminWebModule.MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION) {
+				hasRights = true;
+			}
+		}
+		return hasRights;
+	}
+	
 	public void addSettingsIcon(){
-		if(isNavigationVisible()){
+		if(isNavigationVisible() && hasAdminRights()){
 			admin = newButtonInHeaderBar("", !FocWebApplication.getInstanceForThread().isMobile());
 			admin.setIcon(getSettingsIcon());
 			admin.addClickListener(new Button.ClickListener() {
