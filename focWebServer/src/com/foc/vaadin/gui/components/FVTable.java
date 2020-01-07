@@ -89,12 +89,25 @@ public class FVTable extends Table implements FocXMLGuiComponent, ITableTree{
 	//    setColumnCollapsed(focListWrapper, true);
 	    setAttributes(getAttributes());
   	} catch (IllegalArgumentException e1) {
+  		logFocData();
   		String value = getAttributes() != null ? getAttributes().getValue(FXML.ATT_MASK_DATA_FOUND_ERROR) : null;
   		if(value == null || (!value.equalsIgnoreCase("true") && !value.equals("1"))){
   			Globals.logException(e1);
   		}
   	} catch (Exception e) {
+  		logFocData();
   		Globals.logException(e);
+  	}
+  }
+  
+  private void logFocData() {
+  	FocList list = getFocList();
+  	if(list == null) {
+  		Globals.logString("!!! FocList is null !!!");
+  	} else if(list.getFocDesc() == null) {
+  		Globals.logString("!!! FocList.FocDesc is null !!!");
+  	} else {
+  		Globals.logString("FocList.FocDesc.getStorageName() = " + list.getFocDesc().getStorageName());
   	}
   }
   

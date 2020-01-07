@@ -21,6 +21,7 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.IPropertyStringConverter;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
+import com.vaadin.shared.ui.label.ContentMode;
 
 @SuppressWarnings("serial")
 public class FVLabelInTable extends FVLabel {
@@ -33,6 +34,7 @@ public class FVLabelInTable extends FVLabel {
   	focData = property;
   	this.column = column;
 		getDelegate().setDataPathWithRoot(focObj, column.getDataPath());
+		if(column.isHtml()) setContentMode(ContentMode.HTML);
   }
 
   public void dispose(){
