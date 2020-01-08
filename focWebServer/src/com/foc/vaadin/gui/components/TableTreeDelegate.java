@@ -1660,7 +1660,19 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				if(isDeleteWithoutConfirmation()) {
 					delete_InternalWithoutAnyPopup(focObject);
 				} else {
-					OptionDialog dialog = new OptionDialog("Delete Confirmation", "Are you sure you want to delete this item", focObject) {
+					String title = "Delete Confirmation";
+					String display = "Are you sure you want to delete this item";
+					String deleteCaption = "Delete";
+					String cancelCaption = "Cancel";
+					
+					if (ConfigInfo.isArabic()) {
+						title = "تاكيد";
+						display = "هل انت متأكد انك تريد حذف هذا البيان نهائيا";
+						deleteCaption = "حذف";
+						cancelCaption = "الغاء الحذف";
+					}
+					
+					OptionDialog dialog = new OptionDialog(title, display, focObject) {
 						
 						@Override
 						public boolean executeOption(String optionName) {
@@ -1671,8 +1683,8 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 							return false;
 						}
 					};
-					dialog.addOption("DELETE", "Delete");
-					dialog.addOption("CANCEL", "Cancel");
+					dialog.addOption("DELETE", deleteCaption);
+					dialog.addOption("CANCEL", cancelCaption);
 					dialog.setWidth("400px");
 					dialog.setHeight("180px");
 					dialog.popup();
