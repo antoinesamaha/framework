@@ -543,6 +543,11 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 								newFocObject = (FocObject) focData;
 								if(newFocObject != null){
 									long ref = newFocObject.getReference().getLong();
+									
+									if(getiObjectSelectWindowListener() != null){
+										getiObjectSelectWindowListener().beforeSetValue(newFocObject);
+									}
+									
 									select(ref);
 								}
 							}
