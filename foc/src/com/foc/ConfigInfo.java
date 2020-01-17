@@ -108,6 +108,8 @@ public class ConfigInfo {
   private static boolean reportingLayout_wordExport = true;
   private static boolean reportingLayout_emailSend  = true;
   
+  private static String tempDownloadFolder = null;
+  
   private static Properties props = null; 
   
   public static String getProperty(String key){
@@ -221,6 +223,8 @@ public class ConfigInfo {
         
         focDataServletURL = getProperty("focDataServletURL");
 
+        tempDownloadFolder = getProperty("tempDownloadFolder");
+        
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
         	serverClassName = "com.foc.web.server.FocWebServer";
@@ -429,6 +433,10 @@ public class ConfigInfo {
   
   public static String getDataModelFileName(){
   	return dataModelFileName;
+  }
+  
+  public static String getTempDownloadFolder(){
+  	return tempDownloadFolder;
   }
   
   public static String getWindowTitle() {

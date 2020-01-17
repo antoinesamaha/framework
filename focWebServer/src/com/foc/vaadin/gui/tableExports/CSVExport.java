@@ -18,6 +18,7 @@ package com.foc.vaadin.gui.tableExports;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.OptionDialog;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.BlobResource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -47,11 +48,24 @@ public abstract class CSVExport
     this.textFile = null;
   }
   
+	public String getFullFileName() {
+		String fullName = "";
+		String tempDownloadFolder = ConfigInfo.getTempDownloadFolder();
+		if (!Utils.isStringEmpty(tempDownloadFolder)) {
+			fullName += tempDownloadFolder;
+			if (!fullName.endsWith("/")) {
+				fullName += "/";
+			}
+		}
+		fullName += getFileName() + ".txt";
+		return fullName;
+	}
+  
   private void createFile()
   {
     try
     {
-      this.textFile = new File(getFileName() + ".txt");
+      this.textFile = new File(getFullFileName());
       this.fileWriter = new FileWriter(this.textFile);
     }
     catch (Exception localException)
