@@ -109,6 +109,7 @@ public class ConfigInfo {
   private static boolean reportingLayout_emailSend  = true;
   
   private static String tempDownloadFolder = null;
+  private static String blobStorageDirectory = null;
   
   private static Properties props = null; 
   
@@ -212,6 +213,10 @@ public class ConfigInfo {
 	          	
 	          	jdbcSchema = jdbcURL.substring(schemaIndex, schemaEnd);
 	          }
+	        }else if( jdbcURL.indexOf("postgresql") != -1 ){//postgresql
+	          String localhost = jdbcURL.substring(jdbcURL.indexOf("//")+2, jdbcURL.indexOf(':', 18));
+	          String port = jdbcURL.substring(jdbcURL.indexOf(':', 18)+1, jdbcURL.indexOf('/', 18));
+	          jdbcSchema = jdbcURL.substring(jdbcURL.indexOf('/', 18)+1, jdbcURL.length());
 	        }
         }catch(Exception e){
         	Globals.logException(e);
@@ -224,6 +229,7 @@ public class ConfigInfo {
         focDataServletURL = getProperty("focDataServletURL");
 
         tempDownloadFolder = getProperty("tempDownloadFolder");
+        blobStorageDirectory = getProperty("blobStorageDirectory");
         
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
@@ -437,6 +443,10 @@ public class ConfigInfo {
   
   public static String getTempDownloadFolder(){
   	return tempDownloadFolder;
+  }
+  
+  public static String getBlobStorageDirectory(){
+  	return blobStorageDirectory;
   }
   
   public static String getWindowTitle() {
