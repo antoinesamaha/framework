@@ -15,7 +15,9 @@
  ******************************************************************************/
 package com.foc.vaadin.gui.tableExports;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.BlobResource;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -56,9 +58,22 @@ public abstract class EXCELExport {
 		}
 	}
 
+	public String getFullFileName() {
+		String fullName = "";
+		String tempDownloadFolder = ConfigInfo.getTempDownloadFolder();
+		if (!Utils.isStringEmpty(tempDownloadFolder)) {
+			fullName += tempDownloadFolder;
+			if (!fullName.endsWith("/")) {
+				fullName += "/";
+			}
+		}
+		fullName += getFileName() + ".xlsx";
+		return fullName;
+	}
+	
 	public void createFile() {
 		try{
-			this.textFile = new File(getFileName() + ".xlsx");
+			this.textFile = new File(getFullFileName());
 			FileWriter localFileWriter = new FileWriter(this.textFile);
 			this.workbook = new XSSFWorkbook();
 			newSheet(getMainSheetName());

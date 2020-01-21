@@ -17,11 +17,13 @@ package com.foc.vaadin.gui.tableExports;
 
 import java.util.ArrayList;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.property.FBoolean;
 import com.foc.property.FProperty;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.components.FVMultipleChoiceOptionGroupPopupView;
 import com.foc.vaadin.gui.components.FVTableColumn;

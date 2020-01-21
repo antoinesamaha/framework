@@ -15,7 +15,6 @@
  ******************************************************************************/
 package com.foc.cloudStorage;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -23,11 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.foc.Application;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
-import com.foc.api.IFocEncryptor;
-import com.foc.util.FocFileUtil;
 
 public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 
@@ -44,7 +40,12 @@ public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 	private String getFileName(String key){
 		String dir = "";
 		try{
-			dir = "c:/"+((String)getDirectory())+"/"+key;
+			String rootDir = (String)getDirectory();
+			if(rootDir.startsWith("/")) {// Thi sis the new mode based on the ConfigInfo.blobStorageDirectory adapted for ubuntu
+				dir = ((String)getDirectory())+"/"+key;
+			} else {
+				dir = "c:/"+((String)getDirectory())+"/"+key;//This is old way that takes c:/foc.null[schema]/
+			}
 		}catch(Exception e){
 			Globals.logException(e);
 		}

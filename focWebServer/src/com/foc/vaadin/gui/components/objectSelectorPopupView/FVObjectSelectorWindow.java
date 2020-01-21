@@ -154,5 +154,11 @@ public class FVObjectSelectorWindow extends Window implements IObjectSelectWindo
 	private FVObjectSelector getObjectSelector(){
 		return objectSelector;
 	}
+
+	@Override
+	public void beforeSetValue(FocObject newFocObject) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

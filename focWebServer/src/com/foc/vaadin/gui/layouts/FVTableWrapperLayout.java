@@ -662,7 +662,11 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				if(focObject != null){
 					getTableTreeDelegate().delete(focObject);
 				}else{
-					Globals.showNotification("Select an Item", "to delete", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+					if (ConfigInfo.isArabic()) {
+						Globals.showNotification("الرجاء اختيار بند", "قبل الإلغاء", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+					} else {
+						Globals.showNotification("Select an Item", "to delete", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+					}
 				}
 			}
 		}

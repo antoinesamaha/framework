@@ -20,4 +20,6 @@ import com.foc.desc.FocObject;
 public interface IObjectSelectWindowListener {
 
 	public void beforeOpenForm(FocObject newFocObject);
+	public void beforeSetValue(FocObject newFocObject);
+	
 }

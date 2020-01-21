@@ -6,8 +6,8 @@ package com.foc.property.validators;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
-import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
@@ -81,7 +81,21 @@ public class UniquePropertyValidator implements FPropertyValidator {
 	            }
 	          } else {
 	            if (focObject.getPropertyString(fieldID).indexOf(FNode.NEW_ITEM) == -1) {
-	              Globals.showNotification("Value '"+focObjectValueString+"' already exist", "Please choose another value.", IFocEnvironment.TYPE_ERROR_MESSAGE);
+	    					String title = "Alert";
+	    					String message = "Value '"+focObjectValueString+"' already exist.";
+	    					if (ConfigInfo.isArabic()) {
+	    						title = "تنبيه";
+	    						message = focObjectValueString + " : "+ "موجودة حاليا, يرجى تبديل الاختيار";
+	    					}
+	    					
+	    					OptionDialog dialog = new OptionDialog(title, message) {
+	    						@Override
+	    						public boolean executeOption(String optionName) {
+	    							return false;
+	    						}
+	    					};
+	    					dialog.addOption("OK", ConfigInfo.isArabic() ? "نعم" : "Ok");
+	    					dialog.popup();
 	            }
 	            property.setString("");
 	          }

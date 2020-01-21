@@ -264,11 +264,18 @@ public class Application {
 			Globals.logException(e);
 		}
 		
-		String blobStorageFolderPrefix = argHash.get(ARG_BLOB_STORAGE_FOLDER_PREFIX);
-		if(Utils.isStringEmpty(blobStorageFolderPrefix)){
-			blobStorageFolderPrefix = "foc";
+		String blobStorageFolderPrefix = ConfigInfo.getBlobStorageDirectory();
+		if(Utils.isStringEmpty(blobStorageFolderPrefix)) {
+			blobStorageFolderPrefix = argHash.get(ARG_BLOB_STORAGE_FOLDER_PREFIX);
+			if(Utils.isStringEmpty(blobStorageFolderPrefix)){
+				blobStorageFolderPrefix = "foc";
+			}
+			setCloudStorageDirectory(blobStorageFolderPrefix+"."+ConfigInfo.getJdbcSchema());
+		} else {
+			//In the new mode we add a / not a .
+			if(!blobStorageFolderPrefix.endsWith("/")) blobStorageFolderPrefix += "/";
+			setCloudStorageDirectory(blobStorageFolderPrefix+ConfigInfo.getJdbcSchema());
 		}
-		setCloudStorageDirectory(blobStorageFolderPrefix+"."+ConfigInfo.getJdbcSchema());
 
     menuSettings = new FocMenuSettings();
     
