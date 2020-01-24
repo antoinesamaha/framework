@@ -449,8 +449,15 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		innerLayout_AfterConstruction();
 		afterLayoutConstruction();
 		setDisableCopyGuiToMemory(false);
+		disableBrowserInputsAutoComplete();
 	}
 
+	private void disableBrowserInputsAutoComplete() {
+		JavaScript.getCurrent().execute("var x = document.getElementsByTagName('input'); "
+			+ "var i; "
+			+ "for (i = 0; i < x.length; i++) { x[i].setAttribute('autocomplete', 'off') } ");
+	}
+	
 	@Override
 	public XMLView getXMLView() {
 		return xmlView;
