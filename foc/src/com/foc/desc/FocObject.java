@@ -1455,7 +1455,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }else if(focObject_IsLocked()){
     	message = new StringBuffer("This item is Locked and cannot be deleted.");
     }else if(!workflow_IsAllowDeletion()){
-    	message = new StringBuffer("You don't have deletion rights on this transaction.");
+    	workflow_IsAllowDeletion();
+    	if (ConfigInfo.isArabic()) {
+    		message = new StringBuffer("لا يحق لك حذف هذا البند");
+			} else {				
+				message = new StringBuffer("You don't have deletion rights on this transaction.");
+			}
     }else{
     	StringBuffer messageInternal = new StringBuffer();
       int refNbr = referenceCheck_GetNumber(messageInternal);
