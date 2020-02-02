@@ -1457,7 +1457,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }else if(!workflow_IsAllowDeletion()){
     	workflow_IsAllowDeletion();
     	if (ConfigInfo.isArabic()) {
-    		message = new StringBuffer("لا يحق لك حذف هذا البند");
+    		message = new StringBuffer("ليس لديك صلحية حذف هذا البيان");
 			} else {				
 				message = new StringBuffer("You don't have deletion rights on this transaction.");
 			}
