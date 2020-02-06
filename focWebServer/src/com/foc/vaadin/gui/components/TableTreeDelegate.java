@@ -1655,7 +1655,11 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		if(focObject != null){
 			StringBuffer message = focObject.checkDeletionWithMessage();
 			if(message != null){
-				Globals.showNotification("Cannot delete Item.", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	
+				if (ConfigInfo.isArabic()) {
+					Globals.showNotification("حذف البيان غير ممكن", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	
+				} else {				
+					Globals.showNotification("Cannot delete Item.", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	
+				}
 			}else{
 				if(isDeleteWithoutConfirmation()) {
 					delete_InternalWithoutAnyPopup(focObject);

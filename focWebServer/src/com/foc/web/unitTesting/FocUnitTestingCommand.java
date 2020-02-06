@@ -1048,8 +1048,8 @@ public class FocUnitTestingCommand {
    * @param variableName
    *          The name of the variable to store the line reference in.
    */
-  public long table_Select(String tableName, String propertyName, String propertyValue, boolean doNotFailWhenNotFound) throws Exception {
-    return table_Select(tableName, propertyName, propertyValue, null, 0, doNotFailWhenNotFound);
+  public long table_Select(String tableName, String propertyName, String propertyValue, boolean failIfNotFound) throws Exception {
+    return table_Select(tableName, propertyName, propertyValue, null, 0, failIfNotFound);
   }
 
   /**
@@ -1066,7 +1066,7 @@ public class FocUnitTestingCommand {
    *          The name of the variable to store the line reference in.
    */
   public long table_Select(String tableName, String propertyName, String propertyValue, String variableName, int ancestor) throws Exception {
-    return table_Select(tableName, propertyName, propertyValue, variableName, ancestor, false);
+    return table_Select(tableName, propertyName, propertyValue, variableName, ancestor, true);
   }
 
   /**
@@ -1082,7 +1082,7 @@ public class FocUnitTestingCommand {
    * @param variableName
    *          The name of the variable to store the line reference in.
    */
-  public long table_Select(String tableName, String propertyName, String propertyValue, String variableName, int ancestor, boolean noFailIfLineNotFound) throws Exception {
+  public long table_Select(String tableName, String propertyName, String propertyValue, String variableName, int ancestor, boolean  failIfNotFound) throws Exception {
   	boolean nodeCreated = !getLogger().openCommand("Table select where "+propertyName+" = "+propertyValue +" -> "+variableName);
   	long referenceOfSelectedItem = 0;
   	
@@ -1114,10 +1114,10 @@ public class FocUnitTestingCommand {
 	        getLogger().addInfo("Storing selected item reference in variable " + variableName + ".");
 		    }	    	
 	    }else {
-	    	if(noFailIfLineNotFound) {
-	    		getLogger().addInfo("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
-	    	} else {
+	    	if(failIfNotFound) {
 	    		getLogger().addFailure("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
+	    	} else {
+	    		getLogger().addInfo("Could not find item in table " + tableName + " where " + propertyName + " = " + propertyValue);
 	    	}
       }
 	    if(nodeCreated) getLogger().closeNode();
@@ -1298,7 +1298,7 @@ public class FocUnitTestingCommand {
     FocObject obj = ((ITableTree) table).getFocList().searchByReference((Long) table.getValue());
     if (obj != null) {
     	tableWrapper.deleteItemClickListenerContent();
-    	button_Click("DELETE");
+    	//button_Click("DELETE");
       //((ITableTree) table).getTableTreeDelegate().delete_NoPopupConfirmation(obj);
       getLogger().addInfo("Deleing selected item in table " + tableName + ".");
     } else {

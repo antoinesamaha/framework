@@ -1455,7 +1455,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }else if(focObject_IsLocked()){
     	message = new StringBuffer("This item is Locked and cannot be deleted.");
     }else if(!workflow_IsAllowDeletion()){
-    	message = new StringBuffer("You don't have deletion rights on this transaction.");
+    	workflow_IsAllowDeletion();
+    	if (ConfigInfo.isArabic()) {
+    		message = new StringBuffer("ليس لديك صلحية حذف هذا البيان");
+			} else {				
+				message = new StringBuffer("You don't have deletion rights on this transaction.");
+			}
     }else{
     	StringBuffer messageInternal = new StringBuffer();
       int refNbr = referenceCheck_GetNumber(messageInternal);
@@ -2791,7 +2796,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     		code_resetCode();
     		String newCode = code_getCode();
     		if(!originalCode.equals(newCode)){
-    			Globals.showNotification("Code already taken", "A new code has been assigned : "+newCode+" because the previous one was taken", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+    			String message = "A new code has been assigned : " + newCode + " because the previous one was taken";
+    			String title = "Code already taken";
+    			if (ConfigInfo.isArabic()) {
+        		message = "إن رقم المعطى لهذا البند قد أخذ من قبل واحدٌ اخر, وقد أعطي هذا البند الرقم التالي : " + newCode;
+        		title = "رقم تسجيل البند مأخوذ";
+    			} 
+    			Globals.showNotification(title, message, IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
     		}
     	}
     	if(this instanceof IStatusHolder){
