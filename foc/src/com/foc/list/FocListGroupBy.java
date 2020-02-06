@@ -110,8 +110,11 @@ public class FocListGroupBy {
 			String formulaAfter  = "";
 			
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
-				formulaBefore = "LISTAGG(";
-				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+//				formulaBefore = "LISTAGG(";
+//				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+				
+				formulaBefore = "RTRIM(XMLAGG(XMLELEMENT(E,";
+			  formulaAfter  = ",'"+LISTAGG_SEPARATOR+"').EXTRACT('//text()') ORDER BY "+fieldName+").GetClobVal(),',') AS LIST";
 
 				if(!Utils.isStringEmpty(concatenationFields)) {
 					String concats = "";
