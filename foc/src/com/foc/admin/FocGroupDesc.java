@@ -67,6 +67,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_ALLOW_REPORT_CREATION      = 17;
   public static final int FLD_DEFAULT_TITLE              = 18;
   public static final int FLD_DASHBOARD_CONTEXT          = 19;
+  public static final int FLD_ALLOW_INSERT_IN_COMBOBOX   = 20;
   
   public static final int FLD_MENU_RIGHTS_LIST            = 50;
   public static final int FLD_VIEWS_RIGHTS_LIST           = 51;
@@ -129,6 +130,9 @@ public class FocGroupDesc extends FocDesc{
     addField(focFld);
 
     focFld = new FBoolField("AREA_MANUAL_MODF", "Allow Area Manual Modification", FLD_ALLOW_AREA_MODIF, false);
+    addField(focFld);
+
+    focFld = new FBoolField("ALLOW_INSERT_IN_COMBOBOX", "Allow Insert In ComboBox", FLD_ALLOW_INSERT_IN_COMBOBOX, false);
     addField(focFld);
 
     focFld = new FBoolField("ALLOW_IMPORT", "Allow Import", FLD_ALLOW_IMPORT, false);

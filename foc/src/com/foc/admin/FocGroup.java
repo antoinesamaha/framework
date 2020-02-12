@@ -106,6 +106,7 @@ public class FocGroup extends FocObject{
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_NAMING_MODIF, false) ;
 //    new FBoolean(this, FocGroupDesc.FLD_ALLOW_STATUS_MANUAL_MODIF, false) ;
     new FBoolean(this, FocGroupDesc.FLD_ALLOW_AREA_MODIF, false) ;
+    new FBoolean(this, FocGroupDesc.FLD_ALLOW_INSERT_IN_COMBOBOX, false) ;
     if(FocGroupDesc.getInstance().getLink_AppGroup() != null){
     	new FList(this, FocGroupDesc.FLD_APP_GROUP, new FocList(this, FocGroupDesc.getInstance().getLink_AppGroup(), null));
     }
@@ -183,6 +184,10 @@ public class FocGroup extends FocObject{
 
   public boolean allowAreaManualModif(){
     return getPropertyBoolean(FocGroupDesc.FLD_ALLOW_AREA_MODIF);
+  }
+
+  public boolean allowInsertInCombobox(){
+    return getPropertyBoolean(FocGroupDesc.FLD_ALLOW_INSERT_IN_COMBOBOX);
   }
 
   public boolean allowImport(){
