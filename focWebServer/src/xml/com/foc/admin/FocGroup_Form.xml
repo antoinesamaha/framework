@@ -1,4 +1,4 @@
-<VerticalLayout margin="true" width="100%" spacing="true">
+<VerticalLayout captionMargin="0" margin="true" width="100%" spacing="true">
   <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
 
   <TabLayout name="_MainTab" style="tabStyle" captionMargin="0" margin="true" height="-1px">
