@@ -231,6 +231,25 @@ public class FocGroupDesc extends FocDesc{
     return (FocGroupDesc) getInstance(DB_TABLE_NAME, FocGroupDesc.class);
   }
   
+  public FocGroup findGroup_ApplicableForGuest(){
+  	FocGroup singleOneFound = null;
+  	
+		FocList groupList = FocGroupDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
+  	for(int i=0; i<groupList.size(); i++) {
+  		FocGroup group = (FocGroup) groupList.getFocObject(i);
+  		if(group.isGuestApplicable()) {
+  			if (singleOneFound == null) {
+  				singleOneFound = group;
+  			} else {
+  				singleOneFound = null;
+  				break;
+  			}
+  		}
+  	}
+  	
+  	return singleOneFound;
+  }
+  
   public FocGroup findGroupAndCreateIfNotExist(String name){
 		FocList groupList = FocGroupDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
 		FocGroup group = (FocGroup) groupList.searchByPropertyStringValue(FocGroupDesc.FLD_NAME, name);
