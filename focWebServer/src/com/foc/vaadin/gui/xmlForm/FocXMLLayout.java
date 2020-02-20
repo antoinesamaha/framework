@@ -1309,6 +1309,8 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				layout.validationAfter(validationLayout, commited); 
 			}
 		}
+		
+		copyMemoryToGui();
 	}
 
 	@Override
