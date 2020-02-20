@@ -20,11 +20,13 @@ import com.foc.IFocEnvironment;
 import com.foc.access.FocDataConstant;
 import com.foc.access.FocDataMap;
 import com.foc.admin.FocGroup;
+import com.foc.admin.FocGroupDesc;
 import com.foc.admin.FocUser;
 import com.foc.business.config.BusinessConfig;
 import com.foc.business.notifier.FocNotificationEmail;
 import com.foc.business.notifier.FocNotificationEmailTemplate;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.desc.ReferenceChecker;
@@ -177,8 +179,13 @@ public class Contact extends FocObject {
 	    } else {
 	    	FocGroup group = BusinessConfig.getInstance().getGuestGroup();
 	    	WFTitle title =  BusinessConfig.getInstance().getGuestTitle();
+	    	
 	    	if(group == null) {
-	        Globals.showNotification("Please set a guest Group in the Business Essentials configuration", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    		group = FocGroupDesc.getInstance().findGroup_ApplicableForGuest();
+	    	}
+	    		    	
+	    	if(group == null) {
+	        Globals.showNotification("Please set a guest Group in the Business Essentials configuration or make sure you only have one group applicable for guests", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
 	    	} else if (title == null){
 	        Globals.showNotification("Please set a guest Title in the Business Essentials configuration", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
 	    	} else {

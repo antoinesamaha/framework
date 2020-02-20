@@ -1,4 +1,4 @@
-<VerticalLayout margin="true" width="100%" spacing="true">
+<VerticalLayout captionMargin="0" margin="true" width="100%" spacing="true">
   <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
 
   <TabLayout name="_MainTab" style="tabStyle" captionMargin="0" margin="true" height="-1px">
@@ -9,8 +9,8 @@
           <GuiField name="NAME" caption="Name" captionPos="top" width="180px" />
           <GuiField name="DESCRIP" caption="Description" captionPos="top" width="180px" />
           <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title" captionPos="top" width="180px" />
-          <GuiField name="STARTUP_MENU" caption="Dashboard Context" captionPos="top" width="180px" />
-          <GuiField name="DASHBOARD_CONTEXT" caption="Startup Menu" captionPos="top" width="180px" />
+          <GuiField name="DASHBOARD_CONTEXT" caption="Dashboard Context" captionPos="top" width="180px" />
+          <GuiField name="STARTUP_MENU" caption="Startup Menu" captionPos="top" width="180px" />
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
           <GuiField name="LINK_OUT_RIGHTS" captionProperty="NAME" caption="Link Out Rights" captionPos="top" width="180px" />
@@ -28,6 +28,7 @@
           <GuiField name="ALLOW_IMPORT" caption="Allow Imports" captionPos="left" captionWidth="200px"/>
           <GuiField name="REPORT_ACCESS" caption="Allow Report Access" captionPos="left" captionWidth="200px"/>
           <GuiField name="ALLOW_REPORT_CREATION" caption="Allow Report Creation" captionPos="left" captionWidth="200px"/>
+          <GuiField name="ALLOW_INSERT_IN_COMBOBOX" caption="Allow Inser in combobox" captionPos="left" captionWidth="200px"/>
         </HorizontalLayout>
       </VerticalLayout>
       <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">

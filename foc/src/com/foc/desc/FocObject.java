@@ -2796,7 +2796,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     		code_resetCode();
     		String newCode = code_getCode();
     		if(!originalCode.equals(newCode)){
-    			Globals.showNotification("Code already taken", "A new code has been assigned : "+newCode+" because the previous one was taken", IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+    			String message = "A new code has been assigned : " + newCode + " because the previous one was taken";
+    			String title = "Code already taken";
+    			if (ConfigInfo.isArabic()) {
+        		message = "إن الرقم المعطى لهذا البيان قد أخذ, فأعطي هذا البيان رقماً جديداً : " + newCode;
+        		title = "رقم تسجيل البيان تبدل";
+    			} 
+    			Globals.showNotification(title, message, IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
     		}
     	}
     	if(this instanceof IStatusHolder){

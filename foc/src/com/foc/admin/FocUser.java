@@ -1043,6 +1043,9 @@ public class FocUser extends FocObject {
   }
   
   public boolean hasRightsToAddItemsFor(FocDesc focDesc){
-  	return ConfigInfo.isAllowAddInsideComboBox();
+  	//ConfigInfo.isAllowAddInsideComboBox();
+  	FocGroup group = getGroup();
+  	return group != null ? group.allowInsertInCombobox() : false;
+  	//return ConfigInfo.isAllowAddInsideComboBox();
   }
 }
