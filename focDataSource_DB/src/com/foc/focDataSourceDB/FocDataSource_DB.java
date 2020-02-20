@@ -1282,6 +1282,10 @@ public class FocDataSource_DB implements IFocDataSource {
 		
     if(focDesc != null && focObject != null && focObject.hasRealReference()){
       String selectRequest = "SELECT " + imageFieldName + "  FROM " + focDesc.getStorageName_ForSQL() + " WHERE REF = " + focObject.getReference().getInteger();
+      if(focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+      	selectRequest = "SELECT \"" + imageFieldName + "\"  FROM \"" + focDesc.getStorageName_ForSQL() + "\" WHERE \"REF\" = " + focObject.getReference().getInteger();
+      }
+      
       Globals.logString(selectRequest);
 
       ResultSet rs = null;
