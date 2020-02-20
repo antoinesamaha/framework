@@ -9,8 +9,8 @@
           <GuiField name="NAME" caption="Name" captionPos="top" width="180px" />
           <GuiField name="DESCRIP" caption="Description" captionPos="top" width="180px" />
           <GuiField name="DEFAULT_TITLE" captionProperty="NAME" caption="Default Title" captionPos="top" width="180px" />
-          <GuiField name="STARTUP_MENU" caption="Dashboard Context" captionPos="top" width="180px" />
-          <GuiField name="DASHBOARD_CONTEXT" caption="Startup Menu" captionPos="top" width="180px" />
+          <GuiField name="DASHBOARD_CONTEXT" caption="Dashboard Context" captionPos="top" width="180px" />
+          <GuiField name="STARTUP_MENU" caption="Startup Menu" captionPos="top" width="180px" />
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
           <GuiField name="LINK_OUT_RIGHTS" captionProperty="NAME" caption="Link Out Rights" captionPos="top" width="180px" />
