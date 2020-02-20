@@ -1058,6 +1058,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		}
 
 		markAsDirtyRecursive();
+		disableBrowserInputsAutoComplete();
 	}
 
 	@Override
@@ -2711,6 +2712,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 				}
 			});
 		}
+		disableBrowserInputsAutoComplete();
 	}
 
 	public void mapDataPath2ListenerAction_ApplyVisibilityFormulas_Local() {
