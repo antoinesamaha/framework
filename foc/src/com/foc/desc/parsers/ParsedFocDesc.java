@@ -105,6 +105,10 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
 //  	}
   }
 
+  public FilterDesc getFilterDesc_WithoutCreation() {
+  	return filterDesc;
+  }
+  
 //	@Override
 	public FilterDesc getFilterDesc() {
 		ParsedFilter xmlFilter = getParsedFilter();
