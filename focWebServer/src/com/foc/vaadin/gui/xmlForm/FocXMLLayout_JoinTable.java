@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.xmlForm;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -24,6 +25,7 @@ import com.foc.desc.field.FField;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.components.ITableTree;
+import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 
@@ -117,7 +119,13 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 			
 			@Override
 			public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+				FVTableWrapperLayout tableWrapper = (FVTableWrapperLayout) getComponentByName(tableName);
+				FocDataWrapper wrapper = tableWrapper != null ? tableWrapper.getFocDataWrapper() : null;
+				boolean refreshBackup = wrapper != null ? wrapper.setRefreshGuiDisabled(true) : false;
+				
 				refreshJoinTableIncrementally(validationLayout);
+				
+				if(wrapper != null) wrapper.setRefreshGuiDisabled(refreshBackup);
 				//refreshJoinTable();
 			}
 
