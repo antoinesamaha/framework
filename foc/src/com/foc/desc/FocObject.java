@@ -2788,6 +2788,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	save(null);
   }
   
+  public boolean code_NotifyWhenCodeTaken() {
+  	return true;
+  }
+
+  public void code_ChangingCodeBecauseTaken(String previousCode, String newCode) {
+  }
+
   public void save(int queryFields[]) {
   	Globals.setMouseComputing(true);
     if (isCreated()) {
@@ -2795,7 +2802,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     		String originalCode = code_getCode();
     		code_resetCode();
     		String newCode = code_getCode();
-    		if(!originalCode.equals(newCode)){
+    		code_ChangingCodeBecauseTaken(originalCode, newCode);
+    		if(!originalCode.equals(newCode) && code_NotifyWhenCodeTaken()){
     			String message = "A new code has been assigned : " + newCode + " because the previous one was taken";
     			String title = "Code already taken";
     			if (ConfigInfo.isArabic()) {
