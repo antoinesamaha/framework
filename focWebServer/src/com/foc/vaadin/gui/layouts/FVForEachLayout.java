@@ -74,6 +74,7 @@ public class FVForEachLayout extends FVVerticalLayout {
   	bannerContainer.setSpacing(false);
   	bannerContainer.setMargin(false);
   	bannerContainer.setCaption(null);
+  	bannerVerticalContainerCreated(bannerContainer);
   	addComponent(bannerContainer);
   	
   	this.xmlLayout  = xmlLayout;
@@ -113,6 +114,15 @@ public class FVForEachLayout extends FVVerticalLayout {
   		listOrder = null;
   	}
   }
+  
+  public void bannerVerticalContainerCreated(FVVerticalLayout bannerContainer) {
+  	
+  }
+  
+  public void bannerLayoutCreated(FVBannerLayout lay) {
+  	
+  }  
+  
   public boolean isEditable(){
     FocXMLGuiComponentDelegate delegate = getDelegate();
     return delegate != null ? delegate.isEditable() : true;
@@ -332,6 +342,7 @@ public class FVForEachLayout extends FVVerticalLayout {
 			FVBannerLayout bannerLayout = new FVBannerLayout(null);
 			centralPanel.setParentLayout(xmlLayout);
 			bannerLayout.addCentralPanel(centralPanel);
+			bannerLayoutCreated(bannerLayout);
 			if (isDeleteEnabled()) {
 				DeleteButtonForEach deleteButtonForEach = new DeleteButtonForEach(bannerLayout, focObj);
 				bannerLayout.addDeleteComponent(deleteButtonForEach);
