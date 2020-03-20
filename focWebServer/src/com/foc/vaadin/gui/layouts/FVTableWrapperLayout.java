@@ -1173,7 +1173,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 
 			filterTextField = new FVTextField();
 
-			filterTextField.setInputPrompt(getFocXMLLayout() != null && getFocXMLLayout().isArabic() ? "بحث سريع" : "Search");
+			filterTextField.setInputPrompt((getFocXMLLayout() != null && getFocXMLLayout().isArabic()) || ConfigInfo.isArabic() ? "بحث سريع" : "Search");
 			filterTextField.setStyleName("filtertextField");
 			filterTextField.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
 			filterTextField.addTextChangeListener(new TextChangeListener() {
