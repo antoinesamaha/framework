@@ -135,6 +135,10 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		//--------------------------------
 	}
 		
+	protected HorizontalLayout getHeaderMenuBar() {
+		return headerMenuBar;
+	}
+	
 	protected void menuBarIcons_Add(String menuItem, NativeButton button){
 		if(menuBarIconsMap == null){
 			menuBarIconsMap = new HashMap<String, NativeButton>();
@@ -202,6 +206,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		centerHeaderLayout.setMargin(false);
 		centerHeaderLayout.setSpacing(false);
 		centerHeaderLayout.setStyleName("focBanner");
+		if(FocWebApplication.getInstanceForThread().isMobile()) {
+			centerHeaderLayout.setWidth("100%");
+		}
 		if(ConfigInfo.isGuiRTL()) centerHeaderLayout.addStyleName("foc-float-none"); 
 		
 		if (!isCropMarginPanelsInHeaderBanner()) {// The condition should be about mobile not crop
@@ -372,7 +379,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	 * @param asFirst
 	 * @param addButton
 	 */
-	protected void adjustButtonStyleInHeaderBar(NativeButton nBut, boolean asFirst, boolean addButton){
+	protected void adjustButtonStyleInHeaderBar(Component nBut, boolean asFirst, boolean addButton){
 		nBut.setHeight("40px");
 		nBut.setStyleName("focBannerButton");
 		if(addButton){
