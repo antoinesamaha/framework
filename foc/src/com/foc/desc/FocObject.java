@@ -76,6 +76,7 @@ import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
+import com.foc.business.status.IStatusHolderDesc;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFFieldLockStage;
@@ -4545,6 +4546,48 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return b;
   }
 	
+	public boolean isFieldWorkflowField(FField fld) {
+		boolean isWorkflow = false;
+		FocDesc focDesc = getThisFocDesc();
+		if(focDesc != null) {
+			if(focDesc instanceof IStatusHolderDesc) {
+				IStatusHolderDesc statusDesc = (IStatusHolderDesc) focDesc;
+				isWorkflow = fld.getID() == statusDesc.getFLD_CLOSURE_DATE();
+				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_DATE();
+				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_USER();
+				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_STATUS();
+				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_VALIDATION_DATE();
+			}
+			if(!isWorkflow && focDesc instanceof IWorkflowDesc) {
+				IWorkflowDesc iWorkflowDesc = (IWorkflowDesc) focDesc;
+				WorkflowDesc   workflowDesc = iWorkflowDesc.iWorkflow_getWorkflowDesc();
+
+				if(workflowDesc != null) {
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_AllSignatures();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Canceled();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_CancelReason();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Comment();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_CurrentStage();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_FunctionalStage();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Hide(0);
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Hide(1);
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Hide(2);
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_LastComment();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_LastModificationDate();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_LastModificationUser();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_LogList();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Simulation();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Site_1();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Site_2();
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Title(0);
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Title(1);
+					isWorkflow = isWorkflow || fld.getID() == workflowDesc.getFieldID_Title(2);
+				}
+			}
+		}
+		return isWorkflow;
+	}
+	
 	public void toJson(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginObject();
@@ -4568,28 +4611,44 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			FocFieldEnum fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_ALL, FocFieldEnum.LEVEL_PLAIN);
 			while(fieldEnum != null && fieldEnum.hasNext()){
 				FField fld = fieldEnum.nextField();
-				if(fld.getID() != FField.REF_FIELD_ID){
+				if(fld.getID() != FField.REF_FIELD_ID && (!builder.isHideWorkflowFields() || !isFieldWorkflowField(fld))){
 					FProperty prop = fieldEnum.getProperty();
 					if(prop != null && (!builder.isModifiedOnly() || prop.isModifiedFlag())){
 						//if(prop.isObjectProperty()){
 						if(prop instanceof FObject){
 							FObjectField objFld  = (FObjectField) prop.getFocField();
 							FObject      objProp = (FObject) prop;
-							String value = String.valueOf(objProp.getLocalReferenceInt());
-							if(builder.isPrintObjectNamesNotRefs()) {
-								FocObject valueFocObject = (FocObject) objProp.getObject();
-								if(valueFocObject != null) {
-									value = valueFocObject.getJSONName() + "[" + value + "]";
+							
+							if(builder.isPrintForeignKeyFullObject()) {
+								FocObject valueObj = objProp.getObject_CreateIfNeeded();
+								if(valueObj != null) {								
+									builder.appendKey(fld.getName());
+									
+									B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
+									valueObj.toJson(newBuilder);
+									String objStr = newBuilder.toString();
+//									builder.append("{");
+									builder.append(objStr);
+//									builder.append("}");
+									newBuilder.dispose();
 								}
-							}
-							builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
-							/*
-							builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
-							if(objFld.getFocDesc() != null && objProp.getObject_CreateIfNeeded() != null){
-								FField displayField = objFld.getFocDesc().getFieldByID(objFld.getDisplayField());
+							} else {
+								String value = String.valueOf(objProp.getLocalReferenceInt());
+								if(builder.isPrintObjectNamesNotRefs()) {
+									FocObject valueFocObject = (FocObject) objProp.getObject();
+									if(valueFocObject != null) {
+										value = valueFocObject.getJSONName() + "[" + value + "]";
+									}
+								}
+								builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
+								/*
 								builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
+								if(objFld.getFocDesc() != null && objProp.getObject_CreateIfNeeded() != null){
+									FField displayField = objFld.getFocDesc().getFieldByID(objFld.getDisplayField());
+									builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
+								}
+								*/
 							}
-							*/
 						}else{
 							builder.appendKeyValue(fld.getName(), prop.getString());
 						}
