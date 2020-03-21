@@ -99,16 +99,16 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 
   private Label        companyNameLabel = null;
 
-	private HorizontalLayout centerHeaderLayout    = null;
-	private HorizontalLayout headerMenuBar         = null;
+  protected HorizontalLayout centerHeaderLayout    = null;
+	protected HorizontalLayout headerMenuBar         = null;
 
 	private HorizontalLayout centerHeaderMenuLayout  = null;
 	private HorizontalLayout headerMenuLayout        = null;
 	
 	protected HorizontalLayout hMainLayout           = null; 
 	
-	private MenuItem         logoutMenuItem = null;
-  private MenuItem         macroRecordingItem = null;
+	protected MenuItem         logoutMenuItem = null;
+  protected MenuItem         macroRecordingItem = null;
   
 	public static final int FORMAT_PORTRAIT    = 0;
 	public static final int FORMAT_LANDSCAPE   = 1;
@@ -194,7 +194,13 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		setSizeFull();
 		setSpacing(false);
 		setMargin(false);
-
+		
+		createHeaderBar();
+		createHeaderBar2();
+		createMainLayout();
+	}
+	
+	protected void createHeaderBar() {
 		//Adding the Header
 		//-----------------
 		headerMenuBar = new HorizontalLayout();
@@ -222,7 +228,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		addComponent(headerMenuBar);
 		setComponentAlignment(headerMenuBar, Alignment.TOP_LEFT);
 		//-----------------
-
+  }
+	
+	protected void createHeaderBar2() {
 		//Adding the Header
 		//-----------------
 		headerMenuLayout = new HorizontalLayout();
@@ -252,7 +260,9 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		addComponent(headerMenuLayout);
 		setComponentAlignment(headerMenuLayout, Alignment.TOP_CENTER);
 		//-----------------
-		
+	}
+	
+	public void createMainLayout() {
 		// Central Layout
 		// --------------
 		hMainLayout = new HorizontalLayout();
@@ -554,11 +564,13 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	}
 	
 	public void addLogo(){
-		Component logoComp = newLogoEmbedded();
-		if(logoComp != null) {
-			centerHeaderLayout.addComponent(logoComp);
-			centerHeaderLayout.setComponentAlignment(logoComp, Alignment.TOP_LEFT);
-		}		
+		if(centerHeaderLayout != null) {
+			Component logoComp = newLogoEmbedded();
+			if(logoComp != null) {
+				centerHeaderLayout.addComponent(logoComp);
+				centerHeaderLayout.setComponentAlignment(logoComp, Alignment.TOP_LEFT);
+			}		
+		}
 	}
 	
 	public void addHomeIcon(){
@@ -811,7 +823,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 	  }
   }
   
-  private MenuItem newUserMenuItem(MenuItem userMenuItem, String caption, Command command){
+  protected MenuItem newUserMenuItem(MenuItem userMenuItem, String caption, Command command){
   	MenuItem menuItem = userMenuItem.addItem(caption, command);
   	menuItem.setStyleName("userMenuItem");
   	return menuItem;
