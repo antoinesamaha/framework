@@ -22,14 +22,27 @@ public class B01JsonBuilder {
 	
 	private ArrayList<Boolean> firstIndicator = new ArrayList<Boolean>();
 	
-	private boolean modifiedPropertiesOnly  = false;
-	private boolean printObjectNamesNotRefs = false;
-	private boolean scanSubList             = false;
-	private boolean printRootRef            = true;
-	private boolean printCRUD             = false;
+	private boolean modifiedPropertiesOnly    = false;
+	private boolean printObjectNamesNotRefs   = false;
+	private boolean scanSubList               = false;
+	private boolean printRootRef              = true;
+	private boolean printCRUD                 = false;
+	private boolean hideWorkflowFields        = false;
+	private boolean printForeignKeyFullObject = false;
 	
 	public B01JsonBuilder(){
 		buffer = new StringBuffer();
+	}
+	
+	public B01JsonBuilder(B01JsonBuilder src){
+		this();
+		setModifiedOnly(src.isModifiedOnly());
+		setPrintCRUD(src.isPrintCRUD());
+		setScanSubList(src.isScanSubList());
+		setPrintForeignKeyFullObject(src.isPrintForeignKeyFullObject());
+		setPrintRootRef(src.isPrintRootRef());
+		setPrintObjectNamesNotRefs(src.isPrintObjectNamesNotRefs());
+		setHideWorkflowFields(src.isHideWorkflowFields());
 	}
 	
 	public B01JsonBuilder(StringBuffer buffer){
@@ -202,5 +215,21 @@ public class B01JsonBuilder {
 		boolean backupValue = this.printCRUD;
 		this.printCRUD = printStatus;
 		return backupValue;
+	}
+
+	public boolean isHideWorkflowFields() {
+		return hideWorkflowFields;
+	}
+
+	public void setHideWorkflowFields(boolean hideWorkflowFields) {
+		this.hideWorkflowFields = hideWorkflowFields;
+	}
+
+	public boolean isPrintForeignKeyFullObject() {
+		return printForeignKeyFullObject;
+	}
+
+	public void setPrintForeignKeyFullObject(boolean printForeignKeyFullObject) {
+		this.printForeignKeyFullObject = printForeignKeyFullObject;
 	}
 }
