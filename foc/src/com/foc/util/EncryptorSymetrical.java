@@ -15,27 +15,70 @@
  ******************************************************************************/
 package com.foc.util;
 
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.foc.Globals;
 
 public class EncryptorSymetrical {
 	private static Cipher cipher = null;
 
+	public static void main(String[] args) throws Exception {
+		sample2();
+	}
+	
+	private static void sample2() throws Exception {
+
+		// uncomment the following line to add the Provider of choice
+		//Security.addProvider(new com.sun.crypto.provider.SunJCE());
+		
+		String keyStr = "egksi354WEsi9QWe";
+		SecretKey secretKey = new SecretKeySpec(keyStr.getBytes(), "AES");
+		
+//		KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+//		// keysize must be equal to 112 or 168 for this provider
+//		keyGenerator.init(128);
+//		SecretKey secretKey = keyGenerator.generateKey();
+		
+		byte[] encoded = secretKey.getEncoded();
+		System.out.println("Encoded Key: " + encoded);
+		cipher = Cipher.getInstance("AES");
+
+		String plainText = "Java Cryptography Extension";
+		System.out.println("Plain Text Before Encryption: " + plainText);
+
+		byte[] plainTextByte = plainText.getBytes("UTF8");
+		byte[] encryptedBytes = encrypt(plainTextByte, secretKey);
+
+		String encryptedText = new String(encryptedBytes, "UTF8");
+		System.out.println("Encrypted Text After Encryption: " + encryptedText);
+
+		byte[] decryptedBytes = decrypt(encryptedBytes, secretKey);
+		String decryptedText = new String(decryptedBytes, "UTF8");
+		System.out.println("Decrypted Text After Decryption: " + decryptedText);
+	}
+
+	
 	private static void sample() throws Exception {
 
 		// uncomment the following line to add the Provider of choice
 		//Security.addProvider(new com.sun.crypto.provider.SunJCE());
 
+		
 		KeyGenerator keyGenerator = KeyGenerator.getInstance("DESede");
 		// keysize must be equal to 112 or 168 for this provider
 		keyGenerator.init(168);
 		SecretKey secretKey = keyGenerator.generateKey();
+		
+		byte[] encoded = secretKey.getEncoded();
+		System.out.println("Encoded Key: " + encoded);
 		cipher = Cipher.getInstance("DESede");
 
 		String plainText = "Java Cryptography Extension";
@@ -65,7 +108,7 @@ public class EncryptorSymetrical {
 		return cipher;
 	}
 	
-	static byte[] encrypt(byte[] plainTextByte, SecretKey secretKey) throws Exception {
+	public static byte[] encrypt(byte[] plainTextByte, SecretKey secretKey) throws Exception {
 		byte[] encryptedBytes = null;
 		if(getCipher() != null) {
 			getCipher().init(Cipher.ENCRYPT_MODE, secretKey);
@@ -74,7 +117,7 @@ public class EncryptorSymetrical {
 		return encryptedBytes;
 	}
 
-	static byte[] decrypt(byte[] encryptedBytes, SecretKey secretKey) throws Exception {
+	public static byte[] decrypt(byte[] encryptedBytes, SecretKey secretKey) throws Exception {
 		byte[] decryptedBytes = null;
 		if(getCipher() != null) {
 			getCipher().init(Cipher.DECRYPT_MODE, secretKey);

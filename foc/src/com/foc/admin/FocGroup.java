@@ -154,6 +154,10 @@ public class FocGroup extends FocObject{
   public String getDashboardContext(){
     return getPropertyString(FocGroupDesc.FLD_DASHBOARD_CONTEXT);
   }
+  
+  public void setDashboardContext(String context){
+    setPropertyString(FocGroupDesc.FLD_DASHBOARD_CONTEXT, context);
+  }
     
   public String getStartupMenu(){
     FString startupMenuProp = (FString) getFocProperty(FocGroupDesc.FLD_STARTUP_MENU);
