@@ -59,7 +59,6 @@ public class FVForEachLayout extends FVVerticalLayout {
   private boolean                 focListWrapper_Owner   = false;	
 	
 	private FVButton                addNewLineButton   = null;
-	
 	private FVVerticalLayout        bannerContainer    = null;
 	
 	private ArrayList<FVBannerLayout> bannerList   = null;
@@ -67,12 +66,20 @@ public class FVForEachLayout extends FVVerticalLayout {
 	private boolean paginate  = false;
 	private int     pageCount = 20;
 	private int     pageStart = 0;
+	private int     numberOfDisplayedElements = 0;
+	private String 									pageNextButtonStyleName = "";
 	
-  public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes) {
+	public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes) {
+		this(xmlLayout, focList, xmlViewKey, attributes, false, "");
+	}
+	
+  public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes, boolean withPagination, String nextButtonStyleName) {
   	super(attributes);
   	setCaption(null);
   	setSpacing(false);
   	setMargin(false);
+  	paginate = withPagination;
+  	pageNextButtonStyleName = nextButtonStyleName;
   	
   	bannerContainer = new FVVerticalLayout(null);
   	bannerContainer.setSpacing(false);
@@ -264,7 +271,7 @@ public class FVForEachLayout extends FVVerticalLayout {
     
     if(paginate) {
       start = pageStart;
-      end   = pageStart + pageCount;
+      end   = pageStart + pageCount -1;
       if(end > focList.size()-1) end = focList.size()-1; 
     }
 
@@ -273,6 +280,7 @@ public class FVForEachLayout extends FVVerticalLayout {
       FVBannerLayout bannerLayout = findBanner(focObj);
       if(bannerLayout == null){
         arrayToDisplay.add(focObj);
+        numberOfDisplayedElements++;
       }
     }
     
@@ -288,6 +296,16 @@ public class FVForEachLayout extends FVVerticalLayout {
       FocObject focObj = arrayToDisplay.get(i);
       addBannerForFocObject(focObj);
     }
+    if(paginate) toogleNextPageButtonVisibility();
+  }
+  
+  private void toogleNextPageButtonVisibility() {
+  	if(paginate && bannerContainer != null ) {
+  		removeNextPageButton();
+  		if(focListWrapper != null && focListWrapper.getFocList() != null && focListWrapper.getFocList().size()-1 > numberOfDisplayedElements) {
+  			addNextPageLayoutButton();
+  		}
+  	}
   }
 
   public void gotoNextPage() {
@@ -301,6 +319,54 @@ public class FVForEachLayout extends FVVerticalLayout {
   	if(paginate) {
   		pageStart -= pageCount;
   		if(pageStart < 0) pageStart = 0;
+  	}
+  }
+  
+  private void addNextPageLayoutButton() {
+  	if(paginate && bannerContainer != null) {
+  		String buttonRefreshValue = "Show more";
+  		if(ConfigInfo.isArabic()) buttonRefreshValue = "إظهار المزيد";
+	    FVButton nextPageButton = new FVButton(buttonRefreshValue);
+			nextPageButton.addStyleName(pageNextButtonStyleName);
+			nextPageButton.setWidth("100%");
+			nextPageButton.addClickListener( new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					insertNextPageToBanner();
+					toogleNextPageButtonVisibility();
+				}
+			});
+			FVBannerLayout bannerLayout = new FVBannerLayout(null);
+			bannerLayout.addComponent(nextPageButton);
+			bannerLayoutCreated(bannerLayout);			
+			bannerContainer.addComponent(bannerLayout);
+			getBannerList(true).add(bannerLayout);
+  	}
+  }
+  
+  private void removeNextPageButton() {
+  	if(paginate && bannerContainer != null) {
+  		for(int i=0; i < bannerContainer.getComponentCount(); i++) {
+  			FVBannerLayout bannerLayout = (FVBannerLayout) bannerContainer.getComponent(i);
+  			if(bannerLayout != null && bannerLayout.getComponent(0) != null && bannerLayout.getComponent(0) instanceof FVButton) {
+  				bannerContainer.removeComponent(bannerLayout);
+  			}  			
+  		}
+  	}
+  }
+  
+  public void insertNextPageToBanner() {
+  	if(paginate && focListWrapper != null && focListWrapper.getFocList() != null) {
+  		int start = numberOfDisplayedElements;
+  		if(numberOfDisplayedElements + pageCount < focListWrapper.getFocList().size()) {
+  			numberOfDisplayedElements += pageCount;  			
+  		} else {
+  			numberOfDisplayedElements = focListWrapper.getFocList().size();
+  		}  		
+			for(int i=start; i < numberOfDisplayedElements; i++){
+	      FocObject focObj = focListWrapper.getFocList().getFocObject(i);
+	      addBannerForFocObject(focObj, false);
+	    }
   	}
   }
   
