@@ -64,6 +64,10 @@ public class FVForEachLayout extends FVVerticalLayout {
 	
 	private ArrayList<FVBannerLayout> bannerList   = null;
 	
+	private boolean paginate  = false;
+	private int     pageCount = 20;
+	private int     pageStart = 0;
+	
   public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes) {
   	super(attributes);
   	setCaption(null);
@@ -254,8 +258,17 @@ public class FVForEachLayout extends FVVerticalLayout {
   	prepareListOrder();
   	
   	ArrayList<FocObject> arrayToDisplay = new ArrayList<FocObject>();
+  	
+    int start = 0;
+    int end   = focList.size()-1; 
+    
+    if(paginate) {
+      start = pageStart;
+      end   = pageStart + pageCount;
+      if(end > focList.size()-1) end = focList.size()-1; 
+    }
 
-    for(int i=0; i<focList.size(); i++){
+    for(int i=start; i<=end; i++){
       FocObject focObj = focList.getAt(i);
       FVBannerLayout bannerLayout = findBanner(focObj);
       if(bannerLayout == null){
@@ -275,6 +288,20 @@ public class FVForEachLayout extends FVVerticalLayout {
       FocObject focObj = arrayToDisplay.get(i);
       addBannerForFocObject(focObj);
     }
+  }
+
+  public void gotoNextPage() {
+  	FocList focList = getFocList();
+  	if(focList != null && paginate && (pageStart + pageCount) < focList.size()) {
+  		pageStart += pageCount;
+  	}
+  }
+  
+  public void gotoPreviousPage() {
+  	if(paginate) {
+  		pageStart -= pageCount;
+  		if(pageStart < 0) pageStart = 0;
+  	}
   }
   
   private FVBannerLayout findBanner(FocObject focObj){
@@ -555,4 +582,28 @@ public class FVForEachLayout extends FVVerticalLayout {
   public void setEnabled(boolean enabled){
     //super.setEnabled(enabled);
   }
+
+	public boolean isPaginate() {
+		return paginate;
+	}
+
+	public void setPaginate(boolean paginate) {
+		this.paginate = paginate;
+	}
+
+	public int getPageCount() {
+		return pageCount;
+	}
+
+	public void setPageCount(int pageCount) {
+		this.pageCount = pageCount;
+	}
+
+	public int getPageStart() {
+		return pageStart;
+	}
+
+	public void setPageStart(int pageStart) {
+		this.pageStart = pageStart;
+	}
 }
