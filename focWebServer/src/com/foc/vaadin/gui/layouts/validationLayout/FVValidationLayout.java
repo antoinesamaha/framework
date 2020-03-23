@@ -1171,7 +1171,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 
   public void cancel(){
   	if(!Globals.getApp().checkSession()){
-			if(isExitWithoutPrompt()) {//Default false
+			if(isExitWithoutPrompt() || ConfigInfo.isExitWithoutValidationPrompt()) {//Default false
 				cancel_ExecutionWithoutPrompt();
 			}else if(isAskForConfirmationForExit() && !isObjectLocked()){
 				confirmBeforeExit();

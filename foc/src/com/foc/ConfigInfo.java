@@ -43,6 +43,7 @@ public class ConfigInfo {
   private static String  encriptedPassword = null;
   private static String  password          = null;
   private static boolean createAdminUserIfNotExist = false;
+  private static boolean exitWithoutValidationPrompt = false;
   
   private static String  windowTitle   = null;  
 
@@ -406,6 +407,12 @@ public class ConfigInfo {
       		encriptedPassword = Encryptor.encrypt_MD5(String.valueOf(encriptedPassword));
       	}
         
+      	String exitWithoutValidationPromptString = getProperty("exitWithoutValidationPrompt");
+      	if(exitWithoutValidationPromptString != null 
+      			&& (exitWithoutValidationPromptString.toLowerCase().equals("true") || exitWithoutValidationPromptString.equals("1"))) {
+      		exitWithoutValidationPrompt = true; 
+      	}
+      	
       	String createAdminUserIfNotExistString = getProperty("createAdminUserIfNotExist");
       	createAdminUserIfNotExist = 		createAdminUserIfNotExistString != null 
       															&& 	(
@@ -813,5 +820,9 @@ public class ConfigInfo {
 
 	public static void setKeepFocObjectArrayInFocDesc(boolean keepFocObjectArrayInFocDesc) {
 		ConfigInfo.keepFocObjectArrayInFocDesc = keepFocObjectArrayInFocDesc;
+	}
+
+	public static boolean isExitWithoutValidationPrompt() {
+		return exitWithoutValidationPrompt;
 	}
 }
