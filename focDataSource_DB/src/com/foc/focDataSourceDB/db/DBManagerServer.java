@@ -344,7 +344,9 @@ public class DBManagerServer {
 		  			stmt = lockStatement(stmt.getDBSourceKey());
 		  		}else{
 		  			Globals.logException(e);
-		  			Globals.showNotification("DB ERROR", ""+e.getMessage(), IFocEnvironment.TYPE_ERROR_MESSAGE);
+		  			if (ConfigInfo.isPopupExceptionDialog()) {
+		  				Globals.showNotification("DB ERROR", ""+e.getMessage(), IFocEnvironment.TYPE_ERROR_MESSAGE);
+		  			}
 		  		}
 		  	}
 	  	}
