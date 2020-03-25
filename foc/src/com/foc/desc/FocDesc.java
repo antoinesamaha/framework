@@ -1527,6 +1527,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	  	focList = (FocList) DataStore.getInstance().getList(getStorageName(), focDesc_getTransactionType());
 	  	if(focList == null){
 	      focList = newFocList();
+	      focList.setCheckIfRecentEnough(ConfigInfo.isRefreshCachedLists());
 	      DataStore.getInstance().putList(getStorageName(), focList, focDesc_getTransactionType());
 	  	}
   	}

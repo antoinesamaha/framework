@@ -127,6 +127,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
   private Object validityCheckObject = null;
   
+  private long    lastLoadTime         = 0;
+  private boolean checkIfRecentEnough  = false;
+  public static final long EXPIRY_TIME = 1 * 60 * 1000; 
+  
   // oooooooooooooooooooooooooooooooooo
   // MAIN
   // oooooooooooooooooooooooooooooooooo
@@ -919,7 +923,11 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return elm;
   }
   
-  public synchronized FocObject searchByReference(long ref){
+  public FocObject searchByReference(long ref){
+  	return searchByReference(ref, true);
+  }
+  
+  public synchronized FocObject searchByReference(long ref, boolean reloadIfCheckIfRecentEnough){
     FocListElement elm = elementHash_GetFocListElement(ref);
     //Globals.logString("dans search by reference : "+ (elm == null ? elm==null : elm.getFocObject().getReference().getInteger()));
     //Globals.logString("elements.size : " + elements.size() + "elementsByRef.size : " + elementsByRef.size()); 
@@ -935,6 +943,12 @@ public class FocList extends AccessSubject implements IFocList, Container {
         }
       }
     }
+    
+    if (reloadIfCheckIfRecentEnough && object == null && isCheckIfRecentEnough()) {
+    	reloadFromDB();
+    	object = searchByReference(ref, false);
+    }
+    
     //Globals.logString("dans search by reference apres while : "+ (object == null));
     return object;
   }
@@ -1609,6 +1623,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   public void reloadFromDB(long refToUpdateIncementally) {
     //this.fireEvent(FocEvent.ID_BEFORE_LOAD);
   	if(isDbResident()){
+  		lastLoadTime = System.currentTimeMillis();
     	Globals.setMouseComputing(true);
     	//putSiteReadRightConditionIfRequired();
 	    boolean backup = false;
@@ -1632,8 +1647,24 @@ public class FocList extends AccessSubject implements IFocList, Container {
     setLoaded(loaded);
   }
   
+  private boolean isCheckIfRecentEnough() {
+  	return checkIfRecentEnough;
+  }
+
+	public void setCheckIfRecentEnough(boolean checkIfRecentEnough) {
+		this.checkIfRecentEnough = checkIfRecentEnough;
+	}
+	
+  public boolean isRecentEnough() {
+  	boolean recentEnough = true;
+  	if (isCheckIfRecentEnough()) {
+  		recentEnough = (System.currentTimeMillis() - lastLoadTime) > EXPIRY_TIME;
+  	}
+  	return recentEnough;
+  }
+  
   public boolean needsToBeLoaded(){
-  	return !isLoaded() && !this.isCreated();
+  	return (!isLoaded() || !isRecentEnough()) && !this.isCreated();
   }
 
   public boolean loadIfNotLoadedFromDB() {
@@ -2495,4 +2526,5 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	public boolean isStoredProcedure(){
 		return !Utils.isStringEmpty(getStoredProcedureName());
 	}
+
 }
