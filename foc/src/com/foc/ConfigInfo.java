@@ -112,6 +112,9 @@ public class ConfigInfo {
   private static String tempDownloadFolder = null;
   private static String blobStorageDirectory = null;
   
+  private static boolean refreshCachedLists = false;
+  private static boolean logOpenEvent       = true;
+  
   private static Properties props = null; 
   
   public static String getProperty(String key){
@@ -398,6 +401,12 @@ public class ConfigInfo {
         
         str = getProperty("reportingLayout.emailSend");
         reportingLayout_emailSend = str != null ? str.compareTo("1") == 0 : true;
+
+        str = getProperty("refreshCachedLists");
+        refreshCachedLists = str != null ? str.compareTo("1") == 0 : false;
+        
+        str = getProperty("logOpenEvent");
+        logOpenEvent = str != null ? str.compareTo("1") == 0 : true;
         
         userName          = getProperty("userLogin");
         password          = getProperty("password");
@@ -825,4 +834,13 @@ public class ConfigInfo {
 	public static boolean isExitWithoutValidationPrompt() {
 		return exitWithoutValidationPrompt;
 	}
+
+	public static boolean isRefreshCachedLists() {
+		return refreshCachedLists;
+	}
+
+	public static boolean isLogOpenEvent() {
+		return logOpenEvent;
+	}
+	
 }
