@@ -18,6 +18,8 @@ package com.foc.util;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -31,7 +33,24 @@ public class EncryptorSymetrical {
 	private static Cipher cipher = null;
 
 	public static void main(String[] args) throws Exception {
-		sample2();
+		//sample2();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+		
+		long time = System.currentTimeMillis();
+		System.out.println(TimeZone.getDefault()+"Time:"+time+" "+sdf.format(time));
+		
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Beirut"));
+		sdf = new SimpleDateFormat("HH:mm");
+//		time = System.currentTimeMillis();
+		sdf.setTimeZone(TimeZone.getTimeZone("Asia/Beirut"));
+		System.out.println(TimeZone.getDefault()+"Time:"+time+" "+sdf.format(time));
+		
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+		sdf = new SimpleDateFormat("HH:mm");		
+		sdf.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
+		time = System.currentTimeMillis();
+		System.out.println(TimeZone.getDefault()+"Time:"+time+" "+sdf.format(time));
 	}
 	
 	private static void sample2() throws Exception {

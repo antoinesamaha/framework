@@ -89,8 +89,8 @@ public class FocWebVaadinWindow extends FocCentralPanel {
   private NativeButton logout        = null;
   private NativeButton home          = null;
 //  private NativeButton chatAlerts    = null;
-  private NativeButton navigation    = null;
-  private NativeButton admin         = null;
+  protected NativeButton navigation    = null;
+  protected NativeButton admin         = null;
   private NativeButton mobileOptionsButton = null;
   private FVHelpButton helpButton    = null;
   private FSignatureButton    pendingSignature  = null;

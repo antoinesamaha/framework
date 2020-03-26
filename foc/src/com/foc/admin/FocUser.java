@@ -1048,4 +1048,44 @@ public class FocUser extends FocObject {
   	return group != null ? group.allowInsertInCombobox() : false;
   	//return ConfigInfo.isAllowAddInsideComboBox();
   }
+  
+	public static String checkPasswordPolicyAbidance(String password) {
+		boolean error = false;
+		if (Utils.isStringEmpty(password)) {
+			error = true;
+		} else if(password.length() < 6) {
+			error = true;
+		} else {
+			boolean hasLetter = false;
+			boolean hasDigit  = false;
+			
+		  for (int i = 0; i < password.length(); i++) {
+        char x = password.charAt(i);
+        if (Character.isLetter(x)) {
+          hasLetter = true;
+        } else if (Character.isDigit(x)) {
+          hasDigit = true;
+        }
+		  }
+		  
+      if(!hasLetter){
+      	error = true;
+      }
+      if(!hasDigit){
+      	error = true;
+      }
+
+    }
+		
+		String errorText = null;
+		if (error) {
+			errorText = "Password should be at least 6 characters with a letters and numbers.";
+			if (ConfigInfo.isArabic()) {
+				errorText = "يجب على كلمة السر ان تكون اكبر من 6 احرف و ان تكون مكونة من احرف و ارقام";
+			}
+		}
+			
+		return errorText;
+	}
+
 }
