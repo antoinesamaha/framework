@@ -44,6 +44,7 @@ public class ConfigInfo {
   private static String  password          = null;
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
+  private static boolean passwordPolicy = false;
   
   private static String  windowTitle   = null;  
 
@@ -384,7 +385,10 @@ public class ConfigInfo {
         
         str = getProperty("debug.showStatusColumn");
         showStatusColumn = str != null ? str.compareTo("1") == 0 : false;     
-  
+        
+        str = getProperty("passwordPolicy");
+        passwordPolicy = str != null ? str.compareTo("1") == 0 : false;
+        
         str = getProperty("statusTitle.proposal");
         if(str != null && !str.isEmpty()){
         	StatusHolderDesc.PRINTED_LABEL_FOR_PROPOSAL = str;
@@ -595,6 +599,10 @@ public class ConfigInfo {
 
   public static boolean isShowStatusColumn() {
     return showStatusColumn;
+  }
+  
+  public static boolean hasPasswordPolicy() {
+    return passwordPolicy;
   }
 
   public static boolean isPopupExceptionDialog() {
