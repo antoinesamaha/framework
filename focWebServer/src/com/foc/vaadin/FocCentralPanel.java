@@ -315,7 +315,7 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 	}
 	
 	public static void logFormOpened(IFocData focData) {
-		if(focData != null) {
+		if(focData != null && ConfigInfo.isLogOpenEvent()) {
 			FocObject focObjToBeViewed = FocXMLLayout.getFocObject(focData);
 			if(focObjToBeViewed != null && focObjToBeViewed.getThisFocDesc() != null && focObjToBeViewed.getThisFocDesc().workflow_IsLoggable() && !focObjToBeViewed.isCreated()) {
 				Loggable loggable = ((ILoggable)focObjToBeViewed).iWorkflow_getWorkflow();

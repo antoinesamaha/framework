@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.foc.vaadin.gui.windows;
 
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.util.Encryptor;
 import com.foc.vaadin.gui.components.FVPasswordField;
@@ -75,6 +76,8 @@ public class UserChangePasswordControl {
 		if(message == null){
 			String newPassStr  = (String) getNewPasswordField(false).getValue();
 	
+			message = FocUser.checkPasswordPolicyAbidance(newPassStr);
+			
 			message = canChangePassword(); 
 			if(message == null){
 				newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
@@ -114,6 +117,10 @@ public class UserChangePasswordControl {
 	    
 	    if(!newPassStr.equals(confPassStr)){
 	    	errorMessage = "Passwords do not match!";
+	    }
+
+	    if(errorMessage == null && ConfigInfo.hasPasswordPolicy()) {
+	    	errorMessage = FocUser.checkPasswordPolicyAbidance(newPassStr);
 	    }
     }
     

@@ -44,6 +44,7 @@ public class ConfigInfo {
   private static String  password          = null;
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
+  private static boolean passwordPolicy = false;
   
   private static String  windowTitle   = null;  
 
@@ -111,6 +112,9 @@ public class ConfigInfo {
   
   private static String tempDownloadFolder = null;
   private static String blobStorageDirectory = null;
+  
+  private static boolean refreshCachedLists = false;
+  private static boolean logOpenEvent       = true;
   
   private static Properties props = null; 
   
@@ -381,7 +385,10 @@ public class ConfigInfo {
         
         str = getProperty("debug.showStatusColumn");
         showStatusColumn = str != null ? str.compareTo("1") == 0 : false;     
-  
+        
+        str = getProperty("passwordPolicy");
+        passwordPolicy = str != null ? str.compareTo("1") == 0 : false;
+        
         str = getProperty("statusTitle.proposal");
         if(str != null && !str.isEmpty()){
         	StatusHolderDesc.PRINTED_LABEL_FOR_PROPOSAL = str;
@@ -398,6 +405,12 @@ public class ConfigInfo {
         
         str = getProperty("reportingLayout.emailSend");
         reportingLayout_emailSend = str != null ? str.compareTo("1") == 0 : true;
+
+        str = getProperty("refreshCachedLists");
+        refreshCachedLists = str != null ? str.compareTo("1") == 0 : false;
+        
+        str = getProperty("logOpenEvent");
+        logOpenEvent = str != null ? str.compareTo("1") == 0 : true;
         
         userName          = getProperty("userLogin");
         password          = getProperty("password");
@@ -586,6 +599,10 @@ public class ConfigInfo {
 
   public static boolean isShowStatusColumn() {
     return showStatusColumn;
+  }
+  
+  public static boolean hasPasswordPolicy() {
+    return passwordPolicy;
   }
 
   public static boolean isPopupExceptionDialog() {
@@ -825,4 +842,13 @@ public class ConfigInfo {
 	public static boolean isExitWithoutValidationPrompt() {
 		return exitWithoutValidationPrompt;
 	}
+
+	public static boolean isRefreshCachedLists() {
+		return refreshCachedLists;
+	}
+
+	public static boolean isLogOpenEvent() {
+		return logOpenEvent;
+	}
+	
 }
