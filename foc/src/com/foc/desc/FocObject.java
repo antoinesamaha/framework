@@ -4588,6 +4588,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		return isWorkflow;
 	}
 	
+	public String buildJsonKey() {
+		return getThisFocDesc() != null ? getThisFocDesc().getStorageName()+"|"+getReferenceInt() : null; 
+	}
+	
 	public void toJson(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginObject();
@@ -4621,7 +4625,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							
 							if(builder.isPrintForeignKeyFullObject()) {
 								FocObject valueObj = objProp.getObject_CreateIfNeeded();
-								if(valueObj != null) {								
+								if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
 									builder.appendKey(fld.getName());
 									
 									B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
@@ -4664,6 +4668,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			fieldEnum = null;
 				
 			if(builder.isScanSubList()) {
+				builder.pushMasterObject(this.buildJsonKey());
+				
 				fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
 				while(fieldEnum != null && fieldEnum.hasNext()){
 					FField fld = fieldEnum.nextField();

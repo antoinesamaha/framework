@@ -36,9 +36,14 @@ public class EncryptorSymetrical {
 		//sample2();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-		
 		long time = System.currentTimeMillis();
 		System.out.println(TimeZone.getDefault()+"Time:"+time+" "+sdf.format(time));
+		
+		TimeZone zone = TimeZone.getTimeZone("Asia/Beirut");
+//		TimeZone tz = TimeZone.getTimeZone("Asia/Beirut");
+//		tz.conv
+		
+		
 		
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Beirut"));
 		sdf = new SimpleDateFormat("HH:mm");
