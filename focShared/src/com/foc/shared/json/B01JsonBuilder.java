@@ -21,7 +21,9 @@ public class B01JsonBuilder {
 	private StringBuffer buffer = null;
 	
 	private ArrayList<Boolean> firstIndicator = new ArrayList<Boolean>();
-	
+
+	private ArrayList<String> masterObjectsPrinted = new ArrayList<String>();
+
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
 	private boolean scanSubList               = false;
@@ -43,6 +45,8 @@ public class B01JsonBuilder {
 		setPrintRootRef(src.isPrintRootRef());
 		setPrintObjectNamesNotRefs(src.isPrintObjectNamesNotRefs());
 		setHideWorkflowFields(src.isHideWorkflowFields());
+		
+		masterObjectsPrinted = new ArrayList<String>(src.masterObjectsPrinted);
 	}
 	
 	public B01JsonBuilder(StringBuffer buffer){
@@ -231,5 +235,13 @@ public class B01JsonBuilder {
 
 	public void setPrintForeignKeyFullObject(boolean printForeignKeyFullObject) {
 		this.printForeignKeyFullObject = printForeignKeyFullObject;
+	}
+	
+	public void pushMasterObject(String masterObject) {
+		masterObjectsPrinted.add(masterObject);
+	}
+	
+	public boolean containsMasterObject(String masterObject) {
+		return masterObjectsPrinted.contains(masterObject);
 	}
 }

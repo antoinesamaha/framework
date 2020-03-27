@@ -140,6 +140,9 @@ public class FocUser_Login_Form extends FocXMLLayout {
     Globals.logString("Username "+username+" Password "+encryptedPassword);
     
     int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+    if (status != com.foc.Application.LOGIN_VALID) {
+    	status = loginAccess.checkUserPassword(username, encryptedPassword, false, true);
+    }
     
     if(status == com.foc.Application.LOGIN_VALID){
     	approvedFocUser = loginAccess.getUser();

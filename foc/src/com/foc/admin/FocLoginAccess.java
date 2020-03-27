@@ -35,19 +35,25 @@ public class FocLoginAccess {
 	}
 	
 	public int checkUserPassword(String userName, String encryptedPassword, boolean setUserAsRootUser){
+		return checkUserPassword(userName, encryptedPassword, setUserAsRootUser, false);
+	}
+	
+	public int checkUserPassword(String userName, String encryptedPassword, boolean setUserAsRootUser, boolean withRefresh){
   	loginStatus   = Application.LOGIN_WRONG;
     user          = FocUser.findUser(userName);
     String  typedPassword = encryptedPassword;
     
     //We have a case for unset Passwords
     if (user != null){
+    	if(withRefresh) user.load();
+    		
     	boolean credentialsCorrect = false;
     	if(user.getPassword().isEmpty()){
     		String emptyEncriptionPassword = Encryptor.encrypt_MD5("");    		
     		credentialsCorrect = typedPassword.startsWith(emptyEncriptionPassword);
     	}else if(typedPassword.startsWith(user.getPassword())){
     		credentialsCorrect = true;
-    	}
+    	}    	
     	if(credentialsCorrect && !user.isSuspended()){
         if(setUserAsRootUser) Globals.getApp().setUser(user);
         if (user.isAdmin()) {
