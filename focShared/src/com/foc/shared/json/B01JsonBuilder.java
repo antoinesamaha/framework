@@ -135,6 +135,13 @@ public class B01JsonBuilder {
 		}
 	}
 	
+	public void appendKeyValue(String key, boolean value){
+		if(buffer != null){
+			appendKey(key);
+			buffer.append(value ? "true" : "false");
+		}
+	}
+	
 	public void appendKeyValue(String key, long value){
 		if(buffer != null){
 			appendKey(key);
