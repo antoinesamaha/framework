@@ -4653,6 +4653,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 								}
 								*/
 							}
+						}else if(prop instanceof FInt){
+							builder.appendKeyValue(fld.getName(), prop.getInteger());
+						}else if(prop instanceof FBoolean){
+							builder.appendKeyValue(fld.getName(), ((FBoolean) prop).getBoolean());							
 						}else{
 							String valStr = prop.getString();
 //							valStr = valStr.replace("/\n/g", "\\\\n").replace("/\r/g", "\\\\r").replace("/\t/g", "\\\\t");
