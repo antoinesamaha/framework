@@ -31,6 +31,7 @@ public class B01JsonBuilder {
 	private boolean printCRUD                 = false;
 	private boolean hideWorkflowFields        = false;
 	private boolean printForeignKeyFullObject = false;
+	private boolean printOrderField           = false;
 	
 	public B01JsonBuilder(){
 		buffer = new StringBuffer();
@@ -250,5 +251,13 @@ public class B01JsonBuilder {
 	
 	public boolean containsMasterObject(String masterObject) {
 		return masterObjectsPrinted.contains(masterObject);
+	}
+
+	public boolean isPrintOrderField() {
+		return printOrderField;
+	}
+
+	public void setPrintOrderField(boolean printOrderField) {
+		this.printOrderField = printOrderField;
 	}
 }

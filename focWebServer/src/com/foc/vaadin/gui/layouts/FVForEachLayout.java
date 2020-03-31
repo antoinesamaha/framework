@@ -261,6 +261,57 @@ public class FVForEachLayout extends FVVerticalLayout {
     }        
   }
   
+  public void redraw(FocList list) {
+  	if(list != null) {
+	  	if(focListWrapper != null){
+	  		if(focListWrapper_Owner) focListWrapper.dispose();
+	  		focListWrapper = null;
+	  	}
+	  	
+	  	if(bannerList != null){
+	      for(int i=0; i<getBannerList(false).size(); i++){
+	        FVBannerLayout lay = getBannerList(false).get(i);        
+	        if(lay != null) {
+	        	lay.dispose();
+	        	lay.removeAllComponents();
+	        	lay = null;
+	        }
+	      }
+	      getBannerList(false).clear();
+	      bannerList = null;
+	  	}
+	  	
+	  	if(bannerContainer != null) {
+	  		for(int i=0; i<bannerContainer.getComponentCount(); i++) {
+	  			FVBannerLayout bannerLayout = (FVBannerLayout) bannerContainer.getComponent(i);
+	  			bannerLayout.dispose();
+	  			bannerLayout.removeAllComponents();
+	  			bannerLayout = null;
+	  		}
+	  		bannerContainer.dispose();
+	  		bannerContainer.removeAllComponents();
+	  	}
+	  	setFocData(list);
+  	}
+  }
+  
+  public void replaceFeedBannerWithNewOne(FocXMLLayout oldBanner, FocXMLLayout newBanner) {
+  	if(oldBanner != null && newBanner != null) {
+  		FVBannerLayout oldBannerLayout = findBanner(oldBanner.getFocObject());
+  		if(oldBannerLayout != null ) {
+  			for(int i=0; i < oldBannerLayout.getComponentCount(); i++) {
+	 			  if(oldBannerLayout.getComponent(i) instanceof FocXMLLayout && ((FocXMLLayout) oldBannerLayout.getComponent(i)).equals(oldBanner)) {
+	 			  	oldBanner.dispose();
+	 			  	oldBannerLayout.removeComponent(oldBanner);
+	 			  	oldBannerLayout.addCentralPanel(newBanner);
+	 			  	newBanner.setParentLayout(xmlLayout);
+	 			  	oldBannerLayout.addComponent(newBanner);
+		 			}
+		 	  }
+  		}
+  	}
+  }
+  
   private void addCentralPanel(FocListWrapper focList){
   	prepareListOrder();
   	
@@ -268,6 +319,7 @@ public class FVForEachLayout extends FVVerticalLayout {
   	
     int start = 0;
     int end   = focList.size()-1; 
+    numberOfDisplayedElements = 0;
     
     if(paginate) {
       start = pageStart;
@@ -302,7 +354,7 @@ public class FVForEachLayout extends FVVerticalLayout {
   private void toogleNextPageButtonVisibility() {
   	if(paginate && bannerContainer != null ) {
   		removeNextPageButton();
-  		if(focListWrapper != null && focListWrapper.getFocList() != null && focListWrapper.getFocList().size()-1 > numberOfDisplayedElements) {
+  		if(focListWrapper != null && focListWrapper.getFocList() != null && focListWrapper.getFocList().size() > numberOfDisplayedElements) {
   			addNextPageLayoutButton();
   		}
   	}
@@ -348,7 +400,7 @@ public class FVForEachLayout extends FVVerticalLayout {
   	if(paginate && bannerContainer != null) {
   		for(int i=0; i < bannerContainer.getComponentCount(); i++) {
   			FVBannerLayout bannerLayout = (FVBannerLayout) bannerContainer.getComponent(i);
-  			if(bannerLayout != null && bannerLayout.getComponent(0) != null && bannerLayout.getComponent(0) instanceof FVButton) {
+  			if(bannerLayout != null && bannerLayout.getComponentCount() > 0 && bannerLayout.getComponent(0) != null && bannerLayout.getComponent(0) instanceof FVButton) {
   				bannerContainer.removeComponent(bannerLayout);
   			}  			
   		}
@@ -377,7 +429,7 @@ public class FVForEachLayout extends FVVerticalLayout {
       for(int i=0; i<bannerList.size() && bannerLayout == null; i++){
         FVBannerLayout layout = bannerList.get(i);
         FocObject currentFocObj = layout.getFocObject();
-        if(currentFocObj.equalsRef(focObj)){
+        if(currentFocObj != null && currentFocObj.equalsRef(focObj)){
           bannerLayout = layout;
         }
       }
