@@ -4663,8 +4663,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						}else{
 							String valStr = prop.getString();
 //							valStr = valStr.replace("/\n/g", "\\\\n").replace("/\r/g", "\\\\r").replace("/\t/g", "\\\\t");
-							valStr = valStr.replace("\n", "\\n");
-							valStr = valStr.replace("\"", "\\\"");
+//							valStr = valStr.replace("\n", "\\n");
+//							valStr = valStr.replace("\"", "\\\"");
 //							valStr = valStr.replaceAll("[\r\n]+", "\\\n");
 							builder.appendKeyValue(fld.getName(), valStr);
 						}

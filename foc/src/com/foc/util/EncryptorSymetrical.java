@@ -33,6 +33,15 @@ public class EncryptorSymetrical {
 	private static Cipher cipher = null;
 
 	public static void main(String[] args) throws Exception {
+		String str = "heelo tab\u0009\u0009\u0009\u0009after tab \u000C AfterEnter \\u000D After";
+		System.out.println(str);
+		str = str.replace("\u0009","|");
+		str = str.replace("\u000C","-");
+		str = str.replace("\\u000D","-");
+		System.out.println(str);		
+	}
+	
+	public static void main2(String[] args) throws Exception {
 		//sample2();
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
