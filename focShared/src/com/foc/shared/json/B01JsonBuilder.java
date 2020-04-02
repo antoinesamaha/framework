@@ -33,6 +33,9 @@ public class B01JsonBuilder {
 	private boolean printForeignKeyFullObject = false;
 	private boolean printOrderField           = false;
 	
+	private int     listStart                 = -1;
+	private int     listCount                 = -1;
+	
 	public B01JsonBuilder(){
 		buffer = new StringBuffer();
 	}
@@ -46,6 +49,12 @@ public class B01JsonBuilder {
 		setPrintRootRef(src.isPrintRootRef());
 		setPrintObjectNamesNotRefs(src.isPrintObjectNamesNotRefs());
 		setHideWorkflowFields(src.isHideWorkflowFields());
+		
+		//DO NOT COPY THE LIST START And COUNT They apply on the first level only
+		//---------------------------------
+		//setListStart(src.getListStart());
+		//setListCount(src.getListCount());
+		//---------------------------------
 		
 		masterObjectsPrinted = new ArrayList<String>(src.masterObjectsPrinted);
 	}
@@ -259,5 +268,21 @@ public class B01JsonBuilder {
 
 	public void setPrintOrderField(boolean printOrderField) {
 		this.printOrderField = printOrderField;
+	}
+
+	public int getListStart() {
+		return listStart;
+	}
+
+	public void setListStart(int listStart) {
+		this.listStart = listStart;
+	}
+
+	public int getListCount() {
+		return listCount;
+	}
+
+	public void setListCount(int listCount) {
+		this.listCount = listCount;
 	}
 }
