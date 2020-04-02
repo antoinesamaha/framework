@@ -2154,7 +2154,20 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	public void toJson(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginList();
-			for(int i=0; i<size(); i++){
+			
+			int start = 0;
+			int end   = size();
+			if(builder.getListStart() >= 0) {
+				start = builder.getListStart();
+			}
+			if(builder.getListCount() > 0) {
+				end = start+builder.getListCount();
+			}
+			
+			if(start < 0     ) start = 0;
+			if(end   > size()) end   = size();
+			
+			for(int i=start; i<end; i++){
 				FocObject focObj = getFocObject(i);
 				if(focObj != null){
 					focObj.toJson(builder);
@@ -2164,41 +2177,40 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		}
 	}
 	
-	
-	 public IFocObject iFocList_searchByIntPropertiesValues(String[] fieldNames, Object[] values) {
-	    FocObject foundObj = null;
-	    FField[]  fld      = null;
-	    
-	    Iterator iter = elements != null ? elements.keySet().iterator() : null;
-	    while(iter!=null && iter.hasNext()){
-	      FocObject currObj = (FocObject)iter.next();
-	      if(currObj != null){
-	        boolean creatingFields = fld == null; 
-	        if(creatingFields){
-	          fld = new FField[fieldNames.length];  
-	        }
-	        
-	        boolean found = true;
-	        for(int i=0; i<fieldNames.length; i++){
-	          FProperty prop = null;
-	          if(creatingFields){
-	            fld[i] = getFocDesc().getFieldByName(fieldNames[i]);
-	          }
-	          prop = fld[i] != null ? currObj.getFocProperty(fld[i].getID()) : null;
+	public IFocObject iFocList_searchByIntPropertiesValues(String[] fieldNames, Object[] values) {
+		FocObject foundObj = null;
+		FField[] fld = null;
 
-	          if(prop == null || !prop.getObject().equals(values[i])){
-	            found = false;
-	          }
-	        }
-	        
-	        if(found){
-	          foundObj = currObj;
-	          break;
-	        }
-	      }
-	    }
-	    return foundObj;
-	  }
+		Iterator iter = elements != null ? elements.keySet().iterator() : null;
+		while (iter != null && iter.hasNext()){
+			FocObject currObj = (FocObject) iter.next();
+			if(currObj != null){
+				boolean creatingFields = fld == null;
+				if(creatingFields){
+					fld = new FField[fieldNames.length];
+				}
+
+				boolean found = true;
+				for(int i = 0; i < fieldNames.length; i++){
+					FProperty prop = null;
+					if(creatingFields){
+						fld[i] = getFocDesc().getFieldByName(fieldNames[i]);
+					}
+					prop = fld[i] != null ? currObj.getFocProperty(fld[i].getID()) : null;
+
+					if(prop == null || !prop.getObject().equals(values[i])){
+						found = false;
+					}
+				}
+
+				if(found){
+					foundObj = currObj;
+					break;
+				}
+			}
+		}
+		return foundObj;
+	}
 
 	//-----------------------------------------------
 	//-----------------------------------------------
