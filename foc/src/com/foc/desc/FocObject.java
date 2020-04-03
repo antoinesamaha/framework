@@ -4618,6 +4618,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				if(			fld.getID() != FField.REF_FIELD_ID 
 						&& (!builder.isHideWorkflowFields() || !isFieldWorkflowField(fld))
 						&& (fld.getID() != FField.FLD_ORDER || builder.isPrintOrderField())
+						&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())
 						){
 					FProperty prop = fieldEnum.getProperty();
 					if(prop != null && (!builder.isModifiedOnly() || prop.isModifiedFlag())){
