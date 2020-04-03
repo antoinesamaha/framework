@@ -20,9 +20,8 @@ import java.util.ArrayList;
 public class B01JsonBuilder {
 	private StringBuffer buffer = null;
 	
-	private ArrayList<Boolean> firstIndicator = new ArrayList<Boolean>();
-
-	private ArrayList<String> masterObjectsPrinted = new ArrayList<String>();
+	private ArrayList<Boolean> firstIndicator       = new ArrayList<Boolean>();
+	private ArrayList<String>  masterObjectsPrinted = new ArrayList<String>();
 
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
@@ -344,4 +343,21 @@ public class B01JsonBuilder {
 		return sb.toString();
 	}
 
+	public boolean includeField(String tableName, String fieldName) {
+		boolean include = true;
+		JSONFieldFilter filter = getFieldFilter();
+		if(filter != null) {
+			include = filter.includeField(tableName, fieldName);
+		}
+		return include;
+	}
+	
+	private static JSONFieldFilter fieldFilter = null;
+	public static JSONFieldFilter getFieldFilter() {
+		return fieldFilter;
+	}
+	
+	public static void setFieldFilter(JSONFieldFilter filter) {
+		fieldFilter = filter;
+	}
 }
