@@ -175,7 +175,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 
 	public SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestSessionID = request.getSession().getId();
-		Globals.logString("SESSION_ID = " + requestSessionID);
+//		Globals.logString("SESSION_ID = " + requestSessionID);
 
 		// Using the Basic authorization HTTP protocol creates an
 		// IllegalArgumentException in Java. Known bug. Apparently fixed in JDK7
@@ -212,6 +212,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			}
 
 			if(webApplication != null){
+				webApplication.setJustSessionID(requestSessionID);
 				webSession = webApplication.getFocWebSession();
 			}
 
@@ -238,21 +239,23 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 					password = (String) request.getAttribute(HEADER_KEY_PASSWORD);
 				}
 
-				Globals.logString(username);
-				Globals.logString(password);
-				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-				FocLoginAccess loginAccess = new FocLoginAccess();
-
-				status = loginAccess.checkUserPassword(username, encryptedPassword, false);
-
-				if(status == com.foc.Application.LOGIN_VALID){
-					// webSession = newApplication.getFocWebSession();
-					webSession.setFocUser(loginAccess.getUser());
-				}
-				if(status == com.foc.Application.LOGIN_WRONG){
-					Globals.logString("Error: Login credentials are incorrect.");
-					// PrintWriter printWriter = response.getWriter();
-					// printWriter.println("Error: Login credentials are incorrect.");
+				if (username != null && password != null) {
+					Globals.logString(username);
+					Globals.logString(password);
+					String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+					FocLoginAccess loginAccess = new FocLoginAccess();
+	
+					status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+	
+					if(status == com.foc.Application.LOGIN_VALID){
+						// webSession = newApplication.getFocWebSession();
+						webSession.setFocUser(loginAccess.getUser());
+					}
+					if(status == com.foc.Application.LOGIN_WRONG){
+						Globals.logString("Error: Login credentials are incorrect.");
+						// PrintWriter printWriter = response.getWriter();
+						// printWriter.println("Error: Login credentials are incorrect.");
+					}
 				}
 			}
 		}

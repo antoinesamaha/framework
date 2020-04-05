@@ -64,6 +64,7 @@ public abstract class FocWebApplication extends UI {
 
 	private FocWebSession focSession_ForNonVaadinAndHTTP = null;
 	
+	private String justSessionID = null;
 	private HttpSession httpSession = null;
 	private boolean isMobile = false;
 	private FocCentralPanel navigationWindow = null;
@@ -160,7 +161,7 @@ public abstract class FocWebApplication extends UI {
 	public void initialize(VaadinRequest vaadinRequest, ServletContext servletContext, HttpSession httpSession, boolean webServicesOnly) {
 //		setTheme(FocVaadinTheme.THEME_NAME);
 //		Page.getCurrent().setUriFragment("01barmaja");
-		Globals.logString("FocWebApplication.init 111");
+		Globals.logString("FocWebApplication.initialize()");
 		setErrorHandler(new DefaultErrorHandler() {
 			@Override
 	    public void error(com.vaadin.server.ErrorEvent event) {
@@ -180,26 +181,18 @@ public abstract class FocWebApplication extends UI {
 		
 		String userAgent = vaadinRequest != null ? vaadinRequest.getHeader("User-Agent") : null;
 		isMobile = Utils.isMobile(userAgent);
-		Globals.logString("FocWebApplication.init 2");
 //		isMobile = Globals.isTouchDevice();
 		
 		String path = vaadinRequest != null ? vaadinRequest.getPathInfo() : null;
-		Globals.logString("FocWebApplication.init 3");
   	if(path != null && !path.isEmpty() && path.length() > 1){
   		path = path.substring(1);
   		isMobile = path.toLowerCase().trim().equals("m");
   	}
-  	Globals.logString("FocWebApplication.init 4");
   	
   	addStyleName("focMainWindow");
   	
-  	Globals.logString("FocWebApplication.init 5");
-  	
-		//		FocWebApplication.setInstanceForThread(this);
 		setSessionIfEmpty(httpSession);
-		Globals.logString("FocWebApplication.init 6");
 		startApplicationServer(servletContext, webServicesOnly);
-		Globals.logString("FocWebApplication.init 7");
 		FocWebServer focWebServer = FocWebServer.getInstance();
 		if(focWebServer == null){
 			Globals.logString("FocWebApplication.init 8 - SERVER IS NULL");
@@ -207,7 +200,6 @@ public abstract class FocWebApplication extends UI {
 			Globals.logString("FocWebApplication.init 8 - SERVER OK");
 		}
 		focWebServer.addApplication(this);
-		Globals.logString("FocWebApplication.init 9");
 	}
 	
 	public void initializeGUI(VaadinRequest vaadinRequest, ServletContext servletContext, HttpSession httpSession) {
@@ -429,7 +421,7 @@ public abstract class FocWebApplication extends UI {
   	}else{
   		VaadinSession vaadinSession = getSession();
   		if(vaadinSession == null){
-  			id = "VAAD_NULL";
+  			id = justSessionID != null ? justSessionID : "VAAD_NULL";
   		}else{
   			if(vaadinSession.getSession() != null){
   				id = "VAAD_"+vaadinSession.getSession().getId();
@@ -602,5 +594,13 @@ public abstract class FocWebApplication extends UI {
 			}
 		}
 		return hasOtherWindow;
+	}
+
+	public String getJustSessionID() {
+		return justSessionID;
+	}
+
+	public void setJustSessionID(String justSessionID) {
+		this.justSessionID = justSessionID;
 	}
 }

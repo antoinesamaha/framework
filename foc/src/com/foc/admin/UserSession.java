@@ -42,7 +42,7 @@ public class UserSession implements Serializable {
   }
 
   public void dispose(){
-  	Globals.logString("DEBUG_SESSION_NOT_VALID UserSession.dispose()");
+//  	Globals.logString("DEBUG_SESSION_NOT_VALID UserSession.dispose()");
     clear();
     if(currentDataStore != null){
     	currentDataStore.dispose();
@@ -51,7 +51,7 @@ public class UserSession implements Serializable {
   }
   
   public void clear(){
-  	Globals.logString("DEBUG_SESSION_NOT_VALID UserSession.clear() maybe after dispose or after close session");  	
+//  	Globals.logString("DEBUG_SESSION_NOT_VALID UserSession.clear() maybe after dispose or after close session");  	
   	user = null;
   }
   
