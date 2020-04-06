@@ -387,7 +387,7 @@ public class FocWebServer implements Serializable {
 	  return focHelpBook;
 	}
 
-	public void removeApplicationsNotRunning(){
+	public synchronized void removeApplicationsNotRunning(){
 		try {
 			ArrayList<FocWebSession> sessionArray = new ArrayList<FocWebSession>();
 			for(int i=getApplicationCount()-1; i>=0; i--){
@@ -424,7 +424,7 @@ public class FocWebServer implements Serializable {
 		}
 	}
 	
-	public void addApplication(FocWebApplication app){
+	public synchronized void addApplication(FocWebApplication app){
 		removeApplicationsNotRunning();
 		if(!applicationArrayList.contains(app)){
 			applicationArrayList.add(app);
@@ -444,7 +444,7 @@ public class FocWebServer implements Serializable {
 		return webServer != null ? findWebApplicationBySessionID(sessionID, webServer) : null;
 	}
 	
-	public static FocWebApplication findWebApplicationBySessionID(String sessionID, FocWebServer webServer){
+	public static synchronized FocWebApplication findWebApplicationBySessionID(String sessionID, FocWebServer webServer){
 		FocWebApplication webApplication_Found = null;
 		
 		webServer.removeApplicationsNotRunning();
