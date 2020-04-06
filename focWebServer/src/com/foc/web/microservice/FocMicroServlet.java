@@ -173,7 +173,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		out.flush();
 	}
 
-	public SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public synchronized SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestSessionID = request.getSession().getId();
 //		Globals.logString("SESSION_ID = " + requestSessionID);
 
