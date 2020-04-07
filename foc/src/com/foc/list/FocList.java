@@ -1658,7 +1658,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   public boolean isRecentEnough() {
   	boolean recentEnough = true;
   	if (isCheckIfRecentEnough()) {
-  		recentEnough = (System.currentTimeMillis() - lastLoadTime) > EXPIRY_TIME;
+  		recentEnough = (System.currentTimeMillis() - lastLoadTime) < EXPIRY_TIME;
   	}
   	return recentEnough;
   }

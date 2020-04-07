@@ -27,6 +27,7 @@ public class FocFieldFactory {
 		
 		put(new FTypeBoolean());
 		put(new FTypeDate());
+		put(new FTypeDateTime());
 		put(new FTypeDouble());
 		put(new FTypeString());
 		put(new FTypePassword());

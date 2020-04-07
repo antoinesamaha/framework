@@ -277,7 +277,7 @@ public class FocUser extends FocObject {
 				if(operatorList != null){
 					for(int i=0; i<operatorList.size(); i++){
 						WFOperator operator = (WFOperator) operatorList.getFocObject(i);
-						if(operator.getUser().equalsRef(Globals.getApp().getUser_ForThisSession())){
+						if(operator.getUser() != null && operator.getUser().equalsRef(Globals.getApp().getUser_ForThisSession())){
 							WFTitle title = operator.getTitle();
 							if(title != null && titlesList.searchByReference(title.getReference().getInteger()) == null){
 								titlesList.add(title);
