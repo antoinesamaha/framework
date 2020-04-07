@@ -66,7 +66,7 @@ public class FocWebSession implements Serializable {
 
 	public void close(){
 		if(userSession != null){
-			Globals.logString("DEBUG_SESSION_NOT_VALID in FocWebSession.close() we are closing the session and clearing the userSession user = null");
+//			Globals.logString("DEBUG_SESSION_NOT_VALID in FocWebSession.close() we are closing the session and clearing the userSession user = null");
 		  userSession.clear();
 			FVMenuTree.resetMenuTree_ForThisSession();
 		}

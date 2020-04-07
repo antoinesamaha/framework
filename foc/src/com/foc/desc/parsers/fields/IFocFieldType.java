@@ -45,6 +45,7 @@ public interface IFocFieldType<A extends Annotation> {
   public static final String TYPE_DOUBLE          = "Double";
   public static final String TYPE_DATE_FIELD      = "Date";
   public static final String TYPE_TIME_FIELD      = "Time";
+  public static final String TYPE_DATETIME_FIELD  = "DateTime";
   public static final String TYPE_MULTIPLE_CHOICE = "MultipleChoice";
   public static final String TYPE_MULTIPLE_CHOICE_STRING = "MultipleChoiceString";
   public static final String TYPE_BLOB            = "Blob";
