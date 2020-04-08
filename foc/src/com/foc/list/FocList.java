@@ -2151,7 +2151,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		return iFocList_searchByPropertiesValues(fieldNames, values);
 	}
 	
-	public void toJson(B01JsonBuilder builder){
+	public synchronized void toJson(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginList();
 			
