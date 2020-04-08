@@ -108,7 +108,8 @@ public class UserSession implements Serializable {
   public void copyCompanyFromUser(){
   	if(user != null){
 
-	    user.dispose_CompanyList();
+  		user.re_buildCompanyList();
+//	    user.dispose_CompanyList();
   		//We copy the company only if we still have the rights for it
 	    if(user.getCompanyList() != null){
 		    Company previousCompany = user.getCurrentCompany();	    	
@@ -119,8 +120,10 @@ public class UserSession implements Serializable {
 	    		user.setCurrentCompany(company);
 	    	}
 	    }
-	    user.dispose_SitesList();
-	    user.dispose_TitlesList();
+//	    user.dispose_SitesList();
+//	    user.dispose_TitlesList();
+	    user.re_buildSitesList();
+	    user.re_buildTitlesList();
 
 	    //We keep the sites as it only if we still have the rights for them otherwize we set to any site we have rights on
 	    //or null if no sites with rights at all.
