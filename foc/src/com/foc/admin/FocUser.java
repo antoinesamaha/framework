@@ -27,6 +27,7 @@ package com.foc.admin;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import com.foc.ConfigInfo;
@@ -226,69 +227,193 @@ public class FocUser extends FocObject {
     }
     return companyList;
   }
+  
+  public synchronized FocList re_buildCompanyList(){
+  	if(companyList == null) {
+  		return buildCompanyList();
+  	} else {
+  		HashMap<Long, Company> toRemove = new HashMap<Long, Company>();
+  		for(int i=0; i<companyList.size(); i++) {
+  			Company comp = (Company) companyList.getFocObject(i);
+  			toRemove.put(comp.getReferenceInt(), comp);
+  		}
+  		
+	    FocList companyRightsList = getCompanyRightsList();
+	    if(companyRightsList != null){
+	      companyRightsList.reloadFromDB();
+	      
+	      for(int i=0; i<companyRightsList.size(); i++){
+	        UserCompanyRights userCompanyRights = (UserCompanyRights) companyRightsList.getFocObject(i);
+	        int accessRight = userCompanyRights.getAccessRight();
+	        
+	        if(accessRight != UserCompanyRightsDesc.ACCESS_RIGHT_NONE){
+	          Company company = userCompanyRights.getCompany();
+	          if(company != null){
+	          	if(toRemove.containsKey(company.getReferenceInt())) {
+	          		toRemove.remove(company.getReferenceInt());
+	          	} else {
+	          		companyList.add(company);
+	          	}
+	          }
+	        }
+	      }
+	    }
+	    
+	    Iterator<Company> iter = toRemove.values().iterator();
+	    while (iter != null && iter.hasNext()) {
+	    	Company company = iter.next();
+	    	companyList.remove(company);
+	    }
+	    
+	    return companyList;
+  	}
+  }
 	
-	public FocList getSitesList(){
-		if(sitesList == null){
+  public void re_buildSitesList() {
+  	if(sitesList == null) {
 			sitesList = new FocList(new FocLinkSimple(WFSiteDesc.getInstance()));
 			sitesList.setCollectionBehaviour(true);
 			sitesList.setDbResident(false);
-
-			Company company = getCurrentCompany();
-			if(company != null){
-//				FocList listAll = company.getSiteList();
-				FocList listAll = WFSiteDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
-				listAll.iterate(new IFocIterator() {
-					@Override
-					public boolean treatElement(Object element) {
-						FocListElement listElem = (FocListElement) element;
-						WFSite currSite = (WFSite) listElem.getFocObject();
-						if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
-							FocList listOpperators = currSite.getOperatorList();
-							if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
+  	}
+  	
+		HashMap<Long, WFSite> toRemove = new HashMap<Long, WFSite>();
+		for(int i=0; i<sitesList.size(); i++) {
+			WFSite site = (WFSite) sitesList.getFocObject(i);
+			toRemove.put(site.getReferenceInt(), site);
+		}
+	
+		Company company = getCurrentCompany();
+		if(company != null){
+	//		FocList listAll = company.getSiteList();
+			FocList listAll = WFSiteDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
+			listAll.iterate(new IFocIterator() {
+				@Override
+				public boolean treatElement(Object element) {
+					FocListElement listElem = (FocListElement) element;
+					WFSite currSite = (WFSite) listElem.getFocObject();
+					if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
+						FocList listOpperators = currSite.getOperatorList();
+						if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
+							if(toRemove.containsKey(currSite.getReferenceInt())) {
+								toRemove.remove(currSite.getReferenceInt());
+							} else {
 								sitesList.add(currSite);
 							}
 						}
-						return false;
 					}
-				});
-//				for(int i=0; i<listAll.size(); i++){
-//					WFSite currSite = (WFSite) listAll.getFocObject(i);
-//					if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
-//						FocList listOpperators = currSite.getOperatorList();
-//						if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
-//							sitesList.add(currSite);
-//						}
-//					}
-//				}
-			}
+					return false;
+				}
+			});
+			
+	    Iterator<WFSite> iter = toRemove.values().iterator();
+	    while (iter != null && iter.hasNext()) {
+	    	WFSite site = iter.next();
+	    	sitesList.remove(site);
+	    }
 		}
+  }
+  
+	public FocList getSitesList(){
+		if(sitesList == null){
+			re_buildSitesList();
+//			sitesList = new FocList(new FocLinkSimple(WFSiteDesc.getInstance()));
+//			sitesList.setCollectionBehaviour(true);
+//			sitesList.setDbResident(false);
+//
+//			Company company = getCurrentCompany();
+//			if(company != null){
+//				FocList listAll = WFSiteDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
+//				listAll.iterate(new IFocIterator() {
+//					@Override
+//					public boolean treatElement(Object element) {
+//						FocListElement listElem = (FocListElement) element;
+//						WFSite currSite = (WFSite) listElem.getFocObject();
+//						if(currSite != null && currSite.getCompany() != null && currSite.getCompany().equalsRef(company)){//20160107
+//							FocList listOpperators = currSite.getOperatorList();
+//							if(listOpperators.searchByPropertyObjectReference(WFOperatorDesc.FLD_USER, getReference().getInteger()) != null){
+//								sitesList.add(currSite);
+//							}
+//						}
+//						return false;
+//					}
+//				});
+//			}
+		}
+		
 		return sitesList;
 	}
-	
-	public FocList getTitlesList(){
+
+	public FocList re_buildTitlesList() {
 		if(titlesList == null){
 			titlesList = new FocList(new FocLinkSimple(WFTitleDesc.getInstance()));
 			titlesList.setCollectionBehaviour(true);
 			titlesList.setDbResident(false);
-			
-			WFSite site = getCurrentSite();
-			while(site != null){
-				FocList operatorList = site.getOperatorList();
-				if(operatorList != null){
-					for(int i=0; i<operatorList.size(); i++){
-						WFOperator operator = (WFOperator) operatorList.getFocObject(i);
-						if(operator.getUser() != null && operator.getUser().equalsRef(Globals.getApp().getUser_ForThisSession())){
-							WFTitle title = operator.getTitle();
-							if(title != null && titlesList.searchByReference(title.getReference().getInteger()) == null){
+		}
+
+		HashMap<Long, WFTitle> toRemove = new HashMap<Long, WFTitle>();
+		for(int i=0; i<titlesList.size(); i++) {
+			WFTitle title = (WFTitle) titlesList.getFocObject(i);
+			toRemove.put(title.getReferenceInt(), title);
+		}
+
+		WFSite site = getCurrentSite();
+		while(site != null){
+			FocList operatorList = site.getOperatorList();
+			if(operatorList != null){
+				for(int i=0; i<operatorList.size(); i++){
+					WFOperator operator = (WFOperator) operatorList.getFocObject(i);
+					if(operator.getUser() != null && operator.getUser().equalsRef(Globals.getApp().getUser_ForThisSession())){
+						WFTitle title = operator.getTitle();
+						if(title != null && titlesList.searchByReference(title.getReference().getInteger()) == null){
+							if(toRemove.containsKey(title.getReferenceInt())) {
+								toRemove.remove(title.getReferenceInt());
+							} else {
 								titlesList.add(title);
 							}
 						}
 					}
 				}
-				WFSite fatherSite = (WFSite) site.getFatherObject();
-				if(fatherSite == null || fatherSite == site) break;
-				site = fatherSite;
 			}
+			
+			WFSite fatherSite = (WFSite) site.getFatherObject();
+			if(fatherSite == null || fatherSite == site) break;
+			site = fatherSite;
+		}
+
+    Iterator<WFTitle> iter = toRemove.values().iterator();
+    while (iter != null && iter.hasNext()) {
+    	WFTitle title = iter.next();
+    	titlesList.remove(title);
+    }
+		
+    return titlesList;
+	}
+	
+	public FocList getTitlesList(){
+		if(titlesList == null){
+			re_buildTitlesList();
+//			titlesList = new FocList(new FocLinkSimple(WFTitleDesc.getInstance()));
+//			titlesList.setCollectionBehaviour(true);
+//			titlesList.setDbResident(false);
+//			
+//			WFSite site = getCurrentSite();
+//			while(site != null){
+//				FocList operatorList = site.getOperatorList();
+//				if(operatorList != null){
+//					for(int i=0; i<operatorList.size(); i++){
+//						WFOperator operator = (WFOperator) operatorList.getFocObject(i);
+//						if(operator.getUser() != null && operator.getUser().equalsRef(Globals.getApp().getUser_ForThisSession())){
+//							WFTitle title = operator.getTitle();
+//							if(title != null && titlesList.searchByReference(title.getReference().getInteger()) == null){
+//								titlesList.add(title);
+//							}
+//						}
+//					}
+//				}
+//				WFSite fatherSite = (WFSite) site.getFatherObject();
+//				if(fatherSite == null || fatherSite == site) break;
+//				site = fatherSite;
+//			}
 		}
 		return titlesList;
 	}
