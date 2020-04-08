@@ -31,6 +31,7 @@ public class B01JsonBuilder {
 	private boolean hideWorkflowFields        = false;
 	private boolean printForeignKeyFullObject = false;
 	private boolean printOrderField           = false;
+	private boolean printDepricatedField      = false;
 	
 	private int     listStart                 = -1;
 	private int     listCount                 = -1;
@@ -269,6 +270,14 @@ public class B01JsonBuilder {
 
 	public void setPrintOrderField(boolean printOrderField) {
 		this.printOrderField = printOrderField;
+	}
+	
+	public boolean isPrintDepricatedField() {
+		return printDepricatedField;
+	}
+
+	public void setPrintDepricatedField(boolean printDepricatedField) {
+		this.printDepricatedField = printDepricatedField;
 	}
 
 	public int getListStart() {
