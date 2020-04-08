@@ -2155,22 +2155,26 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		if(builder != null){
 			builder.beginList();
 			
-			int start = 0;
-			int end   = size();
+			int start    = 0;
+			int maxCount = 0;
 			if(builder.getListStart() >= 0) {
 				start = builder.getListStart();
 			}
 			if(builder.getListCount() > 0) {
-				end = start+builder.getListCount();
+				maxCount = builder.getListCount();
 			}
 			
-			if(start < 0     ) start = 0;
-			if(end   > size()) end   = size();
+			if(start < 0) start = 0;
 			
-			for(int i=start; i<end; i++){
+			FField depricatedField = getFocDesc().getFieldByID(FField.FLD_DEPRECATED_FIELD);
+
+			int count = 0;
+			
+			for(int i=start; i<size() && (maxCount == 0 || count<maxCount); i++){
 				FocObject focObj = getFocObject(i);
-				if(focObj != null){
+				if(focObj != null && (depricatedField == null || !focObj.isDeprecated())){
 					focObj.toJson(builder);
+					count++;
 				}
 			}
 			builder.endList();
