@@ -23,6 +23,8 @@ public class B01JsonBuilder {
 	private ArrayList<Boolean> firstIndicator       = new ArrayList<Boolean>();
 	private ArrayList<String>  masterObjectsPrinted = new ArrayList<String>();
 
+	private JSONObjectFilter objectFilter = null;
+	
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
 	private boolean scanSubList               = false;
@@ -368,5 +370,13 @@ public class B01JsonBuilder {
 	
 	public static void setFieldFilter(JSONFieldFilter filter) {
 		fieldFilter = filter;
+	}
+
+	public JSONObjectFilter getObjectFilter() {
+		return objectFilter;
+	}
+
+	public void setObjectFilter(JSONObjectFilter objectFilter) {
+		this.objectFilter = objectFilter;
 	}
 }

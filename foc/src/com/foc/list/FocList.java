@@ -2172,7 +2172,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			
 			for(int i=start; i<size() && (maxCount == 0 || count<maxCount); i++){
 				FocObject focObj = getFocObject(i);
-				if(focObj != null && (depricatedField == null || !focObj.isDeprecated())){
+				if(			focObj != null 
+						&& (depricatedField == null || !focObj.isDeprecated())
+						&& (builder.getObjectFilter() == null || builder.getObjectFilter().includeObject(focObj))
+						){
 					focObj.toJson(builder);
 					count++;
 				}

@@ -18,6 +18,7 @@ package com.foc.web.microservice;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -271,6 +272,8 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 
 		private int status = com.foc.Application.LOGIN_WRONG;
 
+		private HashMap<String, Object> userDataMap = null;
+		
 		public SessionAndApplication(FocWebSession webSession, FocWebApplication webApplication, int status) {
 			this.webSession = webSession;
 			this.webApplication = webApplication;
@@ -311,6 +314,23 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 
 		public void setStatus(int status) {
 			this.status = status;
+		}
+		
+		public void putUserData(String key, Object value) {
+			if (key != null && value != null) {
+				if(userDataMap == null) {
+					userDataMap = new HashMap<String, Object>();
+				}
+				userDataMap.put(key, value);
+			}
+		}
+		
+		public Object getUserData(String key) {
+			Object value = null;
+			if(userDataMap != null) {
+				value = userDataMap.get(key);
+			}
+			return value;
 		}
 	}
 }
