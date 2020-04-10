@@ -39,6 +39,8 @@ public class StatusHolderDesc {
 	public static final int STATUS_CLOSED   = 50;	
 
 	public static final String FNAME_STATUS = "STATUS";
+	public static final String FNAME_CREATION_USER = "CREATION_USER_";
+	
 	public static String PRINTED_LABEL_FOR_PROPOSAL = "Proposal";
 	
 	private FocDesc           focDesc           = null;
@@ -116,7 +118,7 @@ public class StatusHolderDesc {
 		}
 		
 		if(focDesc.getFieldByID(iStatusHolderDesc.getFLD_CREATION_USER()) == null){
-	    FObjectField fObjectFld = new FObjectField("CREATION_USER", "Creation User", iStatusHolderDesc.getFLD_CREATION_USER(), false, FocUser.getFocDesc(), "CREATION_USER_");
+	    FObjectField fObjectFld = new FObjectField("CREATION_USER", "Creation User", iStatusHolderDesc.getFLD_CREATION_USER(), false, FocUser.getFocDesc(), FNAME_CREATION_USER);
 	    fObjectFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);
 	    fObjectFld.setDisplayField(FocUserDesc.FLD_NAME);
 	    fObjectFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
