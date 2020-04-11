@@ -17,7 +17,9 @@ package com.foc.web.modules.admin;
 
 import java.util.ArrayList;
 
+import com.foc.Globals;
 import com.foc.OptionDialog;
+import com.foc.admin.FocGroup;
 import com.foc.admin.FocUser;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
@@ -51,29 +53,36 @@ public class FocUser_Table extends FocXMLLayout{
 	@Override
 	protected void afterLayoutConstruction() {
 		super.afterLayoutConstruction();
-		
+
 		FVButton button = getButtonForDeleteUselessUsers();
-		button.addClickListener(new ClickListener() {
-			@Override
-			public void buttonClick(ClickEvent event) {
-				OptionDialog dialog = new OptionDialog("WARNING", "This will permanently delete all unused users") {
-					
+		if(button != null) {
+			FocGroup group = Globals.getApp().getGroup_ForThisSession();
+			if (group == null || !group.allowDeleteUnusedUsers()) {
+				button.setVisible(false);
+			} else {
+				button.addClickListener(new ClickListener() {
 					@Override
-					public boolean executeOption(String optionName) {
+					public void buttonClick(ClickEvent event) {
+						OptionDialog dialog = new OptionDialog("WARNING", "This will permanently delete all unused users") {
+							
+							@Override
+							public boolean executeOption(String optionName) {
+								
+								if(optionName != null && optionName.equals("DELETE")) {
+									deleteUnusedUsers();
+								}
+								
+								return false;
+							}
+						};
 						
-						if(optionName != null && optionName.equals("DELETE")) {
-							deleteUnusedUsers();
-						}
-						
-						return false;
+						dialog.addOption("DELETE", "Delete anyway");
+						dialog.addOption("CANCEL", "Cancel");
+						dialog.popup();
 					}
-				};
-				
-				dialog.addOption("DELETE", "Delete anyway");
-				dialog.addOption("CANCEL", "Cancel");
-				dialog.popup();
+				});
 			}
-		});
+		}
 	}
 
 	protected void deleteUnusedUsers() {
