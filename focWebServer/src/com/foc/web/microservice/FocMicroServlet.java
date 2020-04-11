@@ -174,7 +174,15 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		out.flush();
 	}
 
+	public SessionAndApplication pushSessionLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return pushSessionInternal(request, response);
+	}
+	
 	public synchronized SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		return pushSessionInternal(request, response);
+	}
+	
+	public synchronized SessionAndApplication pushSessionInternal(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestSessionID = request.getSession().getId();
 //		Globals.logString("SESSION_ID = " + requestSessionID);
 
@@ -265,6 +273,18 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		return session;
 	}
 
+	protected void setCORS(HttpServletResponse response) {
+		if(response != null){
+			response.setHeader("Content-Type", "application/json; charset=UTF-8");
+			response.setHeader("Access-Control-Allow-Origin", "*");
+			response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS");
+			response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization");
+			response.setHeader("Access-Control-Expose-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization");
+			response.setHeader("Access-Control-Max-Age", "86400");
+			response.setHeader("Allow", "GET, HEAD, POST, TRACE, OPTIONS");
+		}
+	}
+	
 	public class SessionAndApplication {
 		private FocWebSession webSession = null;
 
