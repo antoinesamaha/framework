@@ -1,6 +1,7 @@
 <VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
   <ValidationSettings withApply="false" withAttach="false" withPrint="false" />
-  <GuiTable title="USERS" name="USER_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
+  <Button name="DELETE_UNUSED_USERS" caption="Delete Unused Users" width="150px" style="button-dark-01"/>
+  <GuiTable title="USERS" name="USER_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10" expandRatio="1">
     <OpenForm containerWindow="same window" />
     <TableColumn name="NAME" caption="Name" link="true"/>
     <TableColumn name="FULL_NAME" caption="Full Name" link="true"/>
