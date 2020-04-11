@@ -68,6 +68,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_DEFAULT_TITLE              = 18;
   public static final int FLD_DASHBOARD_CONTEXT          = 19;
   public static final int FLD_ALLOW_INSERT_IN_COMBOBOX   = 20;
+  public static final int FLD_ALLOW_DELETE_ALL_UNUSED_USERS = 21;
   
   public static final int FLD_MENU_RIGHTS_LIST            = 50;
   public static final int FLD_VIEWS_RIGHTS_LIST           = 51;
@@ -192,6 +193,9 @@ public class FocGroupDesc extends FocDesc{
     
     FMultipleChoiceField multipleChoiceField = GroupXMLViewDesc.getViewRightField("VIEWS_RIGHT", "Views Right", FLD_VIEWS_RIGHT, false, 2);
     addField(multipleChoiceField);
+    
+    focFld = new FBoolField("DELETE_UNUSED_USERS", "Allow DB restore", FLD_ALLOW_DELETE_ALL_UNUSED_USERS, false);
+    addField(focFld);
   }
   
   public int getAndIncrementNumberOfAppGroupListFieldID(){

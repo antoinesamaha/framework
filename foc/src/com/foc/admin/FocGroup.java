@@ -234,6 +234,11 @@ public class FocGroup extends FocObject{
     FBoolean pAllowNaingModif = (FBoolean) getFocProperty(FocGroupDesc.FLD_ALLOW_DATABASE_RESTORE);
     return pAllowNaingModif != null ? pAllowNaingModif.getBoolean() : false;
   }
+
+  public boolean allowDeleteUnusedUsers(){
+    FBoolean prop = (FBoolean) getFocProperty(FocGroupDesc.FLD_ALLOW_DELETE_ALL_UNUSED_USERS);
+    return prop != null ? prop.getBoolean() : false;
+  }
   
   public int getCashDeskAccess(){
     FInt pCashDeskAccess = (FInt) getFocProperty(FocGroupDesc.FLD_CASH_DESKS_ACCESS);
