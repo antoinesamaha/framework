@@ -179,7 +179,7 @@ public class FocUser extends FocObject {
     }
     return expression;
   }
-  
+
 	@Override
 	public FocList getObjectPropertySelectionList(int fieldID) {
 		FocList list = null;

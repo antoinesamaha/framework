@@ -127,6 +127,7 @@ import com.foc.property.FColorProperty;
 import com.foc.property.FCurrRate;
 import com.foc.property.FDate;
 import com.foc.property.FDescPropertyStringBased;
+import com.foc.property.FDouble;
 import com.foc.property.FDummyProperty_Boolean;
 import com.foc.property.FDummyProperty_Double;
 import com.foc.property.FDummyProperty_Object;
@@ -4660,6 +4661,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							}
 						}else if(prop instanceof FInt){
 							builder.appendKeyValue(fld.getName(), prop.getInteger());
+						}else if(prop instanceof FDouble){
+							builder.appendKeyValue(fld.getName(), prop.getDouble());							
 						}else if(prop instanceof FBoolean){
 							builder.appendKeyValue(fld.getName(), ((FBoolean) prop).getBoolean());							
 						}else{
