@@ -20,7 +20,6 @@ import com.foc.list.FocList;
 import com.foc.property.FObject;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.Utils;
-import com.foc.web.microservice.FocServletRequest;
 
 public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServlet {
 
@@ -295,6 +294,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 			sessionAndApp.logout();
 		}else{
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			setCORS(response);
 			String responseBody = "{\"message\": \"Unauthorised\"}";
 			response.getWriter().println(responseBody);
 		}
@@ -364,21 +364,33 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 						boolean created = focObj.isCreated();
 						
+						boolean errorSaving = false;
+						
 						if(list != null){
 							list.add(focObj);
-							focObj.validate(true);
-							list.validate(true);
+							errorSaving = !focObj.validate(true);
+							if(!errorSaving) {
+								errorSaving = !list.validate(true);
+							}
 						}else{
-							focObj.validate(true);
+							errorSaving = !focObj.validate(true);
 						}
 
-						afterPost(sessionAndApp, focObj, created);
-
-						focObj.toJson(builder);
-						userJson = builder.toString();
-						response.setStatus(HttpServletResponse.SC_OK);
-						setCORS(response);
-						response.getWriter().println(userJson);
+						if (errorSaving) {
+							userJson = "{\"message\": \"Could not save\"}";
+							response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+							setCORS(response);
+							response.getWriter().println(userJson);
+							
+						} else {
+							afterPost(sessionAndApp, focObj, created);
+	
+							focObj.toJson(builder);
+							userJson = builder.toString();
+							response.setStatus(HttpServletResponse.SC_OK);
+							setCORS(response);
+							response.getWriter().println(userJson);
+						}
 					}else{
 						userJson = "{\"message\": \" Does not exists \"}";
 						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
