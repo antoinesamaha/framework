@@ -231,6 +231,7 @@ public class FDate extends FProperty {
         date = java.sql.Date.valueOf(datteStr);
       }
     } catch (Exception e) {
+    	Globals.logString("!!!! Trying to parse date: "+str);
       Globals.logException(e);
     }
   }
