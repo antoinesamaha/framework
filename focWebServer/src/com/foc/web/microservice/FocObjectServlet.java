@@ -236,6 +236,18 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		FocServletRequest focRequest = new FocServletRequest(sessionAndApp, request, response);
 		return focRequest;
 	}
+
+	protected int getStartParameter(HttpServletRequest request) { 
+		String startStr = request != null ? request.getParameter("start") : null;
+		int    start    = startStr != null ? Integer.valueOf(startStr) : -1;
+		return start; 
+	}
+	
+	protected int getCountParameter(HttpServletRequest request) {
+		String countStr = request != null ? request.getParameter("count") : null;
+		int    count    = countStr != null ? Integer.valueOf(countStr) : -1;
+		return count;
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -265,10 +277,12 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						responseBody = userJson;
 					}
 				} else {
-					String startStr = request != null ? request.getParameter("start") : null;
-					int    start    = startStr != null ? Integer.valueOf(startStr) : -1;
-					String countStr = request != null ? request.getParameter("count") : null;
-					int    count    = countStr != null ? Integer.valueOf(countStr) : -1;					
+					int start = -1;
+					int count = -1;
+					if(useCachedList(null)){
+						start = getStartParameter(request);
+						count = getCountParameter(request);
+					}
 					builder.setListStart(start);
 					builder.setListCount(count);
 					list.toJson(builder);
