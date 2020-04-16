@@ -15,14 +15,16 @@
  ******************************************************************************/
 package com.foc.business.workflow;
 
+import java.util.ArrayList;
+
 import com.foc.business.company.Company;
 import com.foc.business.company.CompanyDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FBlobStringField;
-import com.foc.desc.field.FStringField;
 import com.foc.desc.field.FCompanyField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
 
@@ -158,6 +160,18 @@ public class WFSiteDesc extends FocDesc {
   		}
   	}
   	return foundSite;
+  }
+  
+  public static ArrayList<WFSite> getSiteListForCompany(Company company){
+  	ArrayList<WFSite> siteList = new ArrayList<WFSite>();
+  	if(company != null) {
+	  	FocList list = getList(FocList.LOAD_IF_NEEDED);
+	  	for(int i=0; i<list.size(); i++){
+	  		WFSite site = (WFSite) list.getFocObject(i);
+	  		if(site.getCompany().equalsRef(company)) siteList.add(site);
+	  	}
+  	}
+  	return siteList;
   }
   
   public static WFSite getSiteByName(String name){
