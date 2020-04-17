@@ -220,7 +220,8 @@ public class Globals{
   	if(withTime){
   		if(!insideLogString){
   			insideLogString = true;
-  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " : ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
   			insideLogString = false;
   		}
   	}
