@@ -29,13 +29,14 @@ public class FocThreadLocal implements Serializable{
 	public static void setWebServer(Object webServer){
 		if(webServer == null){
 			Globals.logString("THREAD SET SERVER ThreadID="+Thread.currentThread().getId()+" TO NULL");
-		}else{
-			Globals.logString("THREAD SET SERVER ThreadID="+Thread.currentThread().getId()+" ");
 		}
 		if(UI.getCurrent() != null){
 			UI.getCurrent().setData(webServer);
 		}
 		threadWebServer.set(webServer);
+		if(webServer != null){
+			Globals.logString("THREAD SET SERVER ThreadID="+Thread.currentThread().getId()+" ");
+		}		
 	}
 
 	public static Object getWebServer(){

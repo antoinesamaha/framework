@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.foc.Globals;
 import com.foc.access.AccessSubject;
@@ -80,8 +81,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
   public static final int LOAD_IF_NEEDED = 1;
   public static final int FORCE_RELOAD   = 2;
   
-  private HashMap<FocObject, FocListElement> elements      = null;
-  private HashMap<Long, FocListElement>      elementsByRef = null;
+  private ConcurrentHashMap<FocObject, FocListElement> elements      = null;
+  private ConcurrentHashMap<Long, FocListElement>      elementsByRef = null;
   
   private SQLFilter      filter     = null;
   private FocListGroupBy sqlGroupBy = null;
@@ -1723,8 +1724,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
   
   private void elementHash_Init(){
   	if(elements == null){
-	    elements = new HashMap<FocObject, FocListElement>();
-	    elementsByRef = new HashMap<Long, FocListElement>();
+	    elements = new ConcurrentHashMap<FocObject, FocListElement>();
+	    elementsByRef = new ConcurrentHashMap<Long, FocListElement>();
   	}
   }
     
