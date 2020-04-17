@@ -406,6 +406,7 @@ public class SQLSelectPlain extends SQLRequest {
             String reqAdapted = getRequestAdaptedToProvider();
            
             PerfManager.startDBExec();
+            long startTimeDBRequest = System.currentTimeMillis();
             if(focList != null && focList.isStoredProcedure()){
             	IFocDataSource iFocDataSource = Globals.getApp().getDataSource();
             	if(iFocDataSource != null){
@@ -418,7 +419,8 @@ public class SQLSelectPlain extends SQLRequest {
             }
             //stmt = resultSet.getStatement(); 
             //resultSet = stmt.executeQuery(reqAdapted);
-            
+            long endTimeDBRequest = System.currentTimeMillis();
+            Globals.logString(" - SQL DURATION = "+(endTimeDBRequest-startTimeDBRequest));
             PerfManager.endDBExecForRequest(reqAdapted);
           } catch (Exception e) {
             Globals.logException(e);
@@ -429,8 +431,11 @@ public class SQLSelectPlain extends SQLRequest {
       if(!error){
         if(resultSet != null){
         	PerfManager.startDBRead();
+        	long startTimeDBRead = System.currentTimeMillis();
           treatResultSet(resultSet);
           afterTreatResultSet();
+          long endTimeDBRead = System.currentTimeMillis();
+          Globals.logString(" - SQL READ DURATION = "+(endTimeDBRead-startTimeDBRead));
           PerfManager.endDBRead();
           try{
             resultSet.close();
