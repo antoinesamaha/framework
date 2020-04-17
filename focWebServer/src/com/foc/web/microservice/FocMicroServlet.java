@@ -218,6 +218,9 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 				}catch (Exception e){
 					Globals.logException(e);
 				}
+			} else {
+				FocWebServer.connect(request.getSession().getServletContext(), false);
+				FocWebApplication.setInstanceForThread(webApplication);
 			}
 
 			if(webApplication != null){
@@ -306,8 +309,9 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		}
 		
 		public void logout() {
-			Globals.logString(" FocMicroServlet.logout() Called But COMMENTED OUT. Would remove WebServer from thread"); 
-			/* DISABLE_LOGOUT
+			//Globals.logString(" FocMicroServlet.logout() Called But COMMENTED OUT. Would remove WebServer from thread"); 
+			Globals.logString(" FocMicroServlet.logout()");
+			/*
 			if(getWebApplication() != null){
 				getWebApplication().logout(null);
 			}

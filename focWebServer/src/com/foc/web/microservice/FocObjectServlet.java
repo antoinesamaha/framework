@@ -251,72 +251,80 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SessionAndApplication sessionAndApp = pushSession(request, response);
-		if(sessionAndApp != null){
-			FocServletRequest focRequest = null;
-			try {
-				focRequest = newFocServletRequest(sessionAndApp, request, response);
-				
-				Globals.logString(" => GET Begin "+getNameInPlural());
-				if(allowGet(null)){
-					logRequestHeaders(request);
-					
-					String userJson = "";
-					String responseBody = "";
-					B01JsonBuilder builder = newJsonBuiler(request);
-					
-					//We get this only to see if we return a list or just an object
-					long filterRef = getFilterRef(request);
-					
-					FocList list = newFocList(request, response, true);
-					if(filterRef > 0) {
-						if(list.size() == 1) {
-							list.getFocObject(0).toJson(builder);
-							userJson = builder.toString();
-							responseBody = userJson;
-						} else {
-							userJson = "{}";
-							responseBody = userJson;
-						}
-					} else {
-						int start = -1;
-						int count = -1;
-						if(useCachedList(null)){
-							start = getStartParameter(request);
-							count = getCountParameter(request);
-						}
-						builder.setListStart(start);
-						builder.setListCount(count);
-						list.toJson(builder);
-						userJson = builder.toString();
-						responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
-					}
-					
-					if(!useCachedList(null)){
-						list.dispose();
-						list = null;
-					}
-					
-					response.setStatus(HttpServletResponse.SC_OK);
-					setCORS(response);
-					response.getWriter().println(responseBody);
-					String log = responseBody;
-					if(log.length() > 500) log = log.substring(0, 499)+"...";
-					Globals.logString("  = Returned: "+log);
-				}
-				Globals.logString(" <= GET End "+getNameInPlural()+" "+response.getStatus());
-			} catch (Exception e) {
-				Globals.logException(e);
-			} finally {
-				focRequest.dispose();
-				sessionAndApp.logout();				
+		try {
+			if(request != null && request.getSession() != null) {
+				Globals.logString("Session ID Started request"+request.getSession().getId());
 			}
-
-		}else{
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			setCORS(response);
-			String responseBody = "{\"message\": \"Unauthorised\"}";
-			response.getWriter().println(responseBody);
+			SessionAndApplication sessionAndApp = pushSession(request, response);
+			if(sessionAndApp != null){
+				FocServletRequest focRequest = null;
+				try {
+					focRequest = newFocServletRequest(sessionAndApp, request, response);
+					
+					Globals.logString(" => GET Begin "+getNameInPlural());
+					if(allowGet(null)){
+						logRequestHeaders(request);
+						
+						String userJson = "";
+						String responseBody = "";
+						B01JsonBuilder builder = newJsonBuiler(request);
+						
+						//We get this only to see if we return a list or just an object
+						long filterRef = getFilterRef(request);
+						
+						FocList list = newFocList(request, response, true);
+						if(filterRef > 0) {
+							if(list.size() == 1) {
+								list.getFocObject(0).toJson(builder);
+								userJson = builder.toString();
+								responseBody = userJson;
+							} else {
+								userJson = "{}";
+								responseBody = userJson;
+							}
+						} else {
+							int start = -1;
+							int count = -1;
+							if(useCachedList(null)){
+								start = getStartParameter(request);
+								count = getCountParameter(request);
+							}
+							builder.setListStart(start);
+							builder.setListCount(count);
+							list.toJson(builder);
+							userJson = builder.toString();
+							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
+						}
+						
+						if(!useCachedList(null)){
+							list.dispose();
+							list = null;
+						}
+						
+						response.setStatus(HttpServletResponse.SC_OK);
+						setCORS(response);
+						response.getWriter().println(responseBody);
+						String log = responseBody;
+						if(log.length() > 500) log = log.substring(0, 499)+"...";
+						Globals.logString("  = Returned: "+log);
+					}
+					Globals.logString(" <= GET End "+getNameInPlural()+" "+response.getStatus());
+				} catch (Exception e) {
+					Globals.logException(e);
+				} finally {
+					focRequest.dispose();
+					sessionAndApp.logout();				
+				}
+	
+			}else{
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				setCORS(response);
+				String responseBody = "{\"message\": \"Unauthorised\"}";
+				response.getWriter().println(responseBody);
+			}
+		} catch (Exception e) {
+			Globals.logException(e);
+			throw e;
 		}
 	}
 
