@@ -305,11 +305,14 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			webApplication = null;
 		}
 		
-		public void logout() { 
+		public void logout() {
+			Globals.logString(" FocMicroServlet.logout() Called But COMMENTED OUT. Would remove WebServer from thread"); 
+			/* DISABLE_LOGOUT
 			if(getWebApplication() != null){
 				getWebApplication().logout(null);
 			}
 			FocWebServer.disconnect();
+			*/
 		}
 
 		public FocWebSession getWebSession() {
