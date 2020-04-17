@@ -608,7 +608,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     this.masterObject = masterObject;
   }
    
-  public void backupAllObjects(){
+  public synchronized void backupAllObjects(){
     Iterator iter = this.focObjectIterator();
     while(iter != null && iter.hasNext()){
       FocObject obj = (FocObject) iter.next();
@@ -674,7 +674,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   	}
   }
   
-  private ArrayList getArrayList() {
+  private synchronized ArrayList getArrayList() {
     // if the array list is null we construct it
     // by scaning the elements and putting them in an arrayList.
     // The array List is set to null when a major modification of the real list
@@ -863,11 +863,11 @@ public class FocList extends AccessSubject implements IFocList, Container {
    * @param arg0
    * @return true if contains the key
    */
-  public boolean containsKey(Object arg0) {//Attention
+  public synchronized boolean containsKey(Object arg0) {//Attention
     return (elements != null) ? elements.containsKey(arg0) : false;
   }
   
-  public boolean containsObject(FocObject focObj) {
+  public synchronized boolean containsObject(FocObject focObj) {
     boolean exist = false;
     if (elements != null && focObj != null) {
       exist = elements.containsKey(focObj);
@@ -876,7 +876,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   }
   
   
-  public FocObject searchByPointer(FocObject obj) {
+  public synchronized FocObject searchByPointer(FocObject obj) {
     FocObject foundObj = null;
     FocListElement foundElmt = elements != null ? (FocListElement) elements.get(obj) : null;
     foundObj = foundElmt != null ? foundElmt.getFocObject() : null;
@@ -889,7 +889,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return foundObj;
   }
   
-  public FocObject searchByUniqueKey(FocObject obj){
+  public synchronized FocObject searchByUniqueKey(FocObject obj){
     FocObject foundObj = null;
     Iterator iter = elements != null ? elements.keySet().iterator() : null;
     while(iter!=null && iter.hasNext()){
@@ -909,7 +909,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return elm != null ? elm.getFocObject() : null; 
   }*/
 
-  public FocListElement searchElementByReference(long ref){
+  public synchronized FocListElement searchElementByReference(long ref){
     FocListElement elm = elementHash_GetFocListElement(ref);
     if (elm == null){//Attention la recherche peut etre peut transmis dans elementHash_gtFocListElement(ref)
       Iterator iter = elementHash_GetListElementIterator();
