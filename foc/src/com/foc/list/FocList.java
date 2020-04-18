@@ -1298,7 +1298,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
   public void elementHash_AddToReferencesMap(FocObject focObject) {
 		if(elementsByRef != null && focObject != null && focObject.getReference() != null){
 			FocListElement element = getFocListElement(focObject);
-			elementsByRef.put(focObject.getReference().getLong(), element);
+			if (element != null) {
+				elementsByRef.put(focObject.getReference().getLong(), element);
+			}
 		}
   }
   
