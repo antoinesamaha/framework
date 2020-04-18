@@ -24,6 +24,7 @@ public class B01JsonBuilder {
 	private ArrayList<String>  masterObjectsPrinted = new ArrayList<String>();
 
 	private JSONObjectFilter objectFilter = null;
+	private JSONFieldFilter  additionalFieldFilter = null;
 	
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
@@ -51,6 +52,7 @@ public class B01JsonBuilder {
 		setPrintRootRef(src.isPrintRootRef());
 		setPrintObjectNamesNotRefs(src.isPrintObjectNamesNotRefs());
 		setHideWorkflowFields(src.isHideWorkflowFields());
+		setAdditionalFieldFilter(src.getAdditionalFieldFilter());
 		
 		//DO NOT COPY THE LIST START And COUNT They apply on the first level only
 		//---------------------------------
@@ -360,6 +362,11 @@ public class B01JsonBuilder {
 		if(filter != null) {
 			include = filter.includeField(tableName, fieldName);
 		}
+		
+		filter = getAdditionalFieldFilter();
+		if (include && filter != null) {
+			include = filter.includeField(tableName, fieldName);
+		}
 		return include;
 	}
 	
@@ -371,7 +378,16 @@ public class B01JsonBuilder {
 	public static void setFieldFilter(JSONFieldFilter filter) {
 		fieldFilter = filter;
 	}
+	
+	public JSONFieldFilter getAdditionalFieldFilter() {
+		return additionalFieldFilter;
+	}
+	
+	public void setAdditionalFieldFilter(JSONFieldFilter filter) {
+		additionalFieldFilter = filter;
+	}
 
+	
 	public JSONObjectFilter getObjectFilter() {
 		return objectFilter;
 	}
