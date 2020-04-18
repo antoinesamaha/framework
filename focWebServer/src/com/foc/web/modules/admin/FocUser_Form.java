@@ -16,7 +16,6 @@
 package com.foc.web.modules.admin;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
@@ -32,11 +31,11 @@ import com.foc.business.config.BusinessConfig;
 import com.foc.business.notifier.FocNotificationEmail;
 import com.foc.business.notifier.FocNotificationEmailTemplate;
 import com.foc.business.workflow.WFOperator;
-import com.foc.business.workflow.WFOperatorDesc;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.WFTitleDesc;
+import com.foc.business.workflow.rights.UserTransactionRightDesc;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.desc.FocObject;
 import com.foc.event.FocEvent;
@@ -53,7 +52,6 @@ import com.foc.vaadin.gui.components.FVButtonClickEvent;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.windows.UserChangePasswordWindow;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.foc.vaadin.gui.xmlForm.IValidationListener;
 import com.foc.web.modules.workflow.WFSite_SiteSelection_Table;
 import com.foc.web.modules.workflow.WFTitle_TitleSelection_Table;
 import com.foc.web.modules.workflow.WorkflowWebModule;
@@ -238,7 +236,15 @@ public class FocUser_Form extends FocXMLLayout {
 						op = getSiteOperatorForUser(site);
 					}
 					if(op == null) {
-						result = setSiteOperatorForCompanyRight((UserCompanyRights) companyRightsList.getFocObject(i));
+						WFSite site = setSiteOperatorForCompanyRight((UserCompanyRights) companyRightsList.getFocObject(i));
+						if(site != null) {
+							result = false;
+							if(UserTransactionRightDesc.getInstance() != null) {
+								FocList list = WFTitleDesc.getInstance().getFocList(FocList.LOAD_IF_NEEDED);
+								if(list != null) list.validate(true);
+							}
+							site.validate(true);
+						}
 					}
 				}
 			}
@@ -258,14 +264,15 @@ public class FocUser_Form extends FocXMLLayout {
   	return operator;
   }
 
-	private boolean setSiteOperatorForCompanyRight(UserCompanyRights right) {
-		boolean error = false;
+	private WFSite setSiteOperatorForCompanyRight(UserCompanyRights right) {
+//		boolean error = false;
+		WFSite site = null;
 		if(right != null 
 				&& right.getCompany() != null 
 				&& right.getCompany().getSiteListSize() > 0){
 			if(right.getCompany().getSiteListSize() == 1){
 				if(WFTitleDesc.getInstance().getFocList().size() == 1){
-					WFSite site = (WFSite) right.getCompany().getAnySite();
+					site = (WFSite) right.getCompany().getAnySite();
 					WFTitle title = (WFTitle) WFTitleDesc.getInstance().getFocList().getFocObject(0);
 					WFOperator operator = (WFOperator) site.getOperatorList().newEmptyItem();
 					operator.setCreated(true);
@@ -288,10 +295,10 @@ public class FocUser_Form extends FocXMLLayout {
 					titleSelectionWindow.setPositionY(100);
 					FocWebApplication.getInstanceForThread().addWindow(titleSelectionWindow);
 					titleSelectionWindow.setModal(true);
-					error = true;
+//					error = true;
 				}
 			}else{
-				error = true;
+//				error = true;
 				if(WFTitleDesc.getInstance().getFocList().size()>0 && WFTitleDesc.getInstance().getFocList().size() == 1){
 					popupWorkfloSiteSelectionTable(false, right);
 				}else{
@@ -299,7 +306,7 @@ public class FocUser_Form extends FocXMLLayout {
 				}
 			}
 		}
-		return error;
+		return site;
 	}
 	
 	private void popupWorkfloSiteSelectionTable(boolean hasMultipleTitles, UserCompanyRights compRight){
