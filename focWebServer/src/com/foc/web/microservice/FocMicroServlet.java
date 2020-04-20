@@ -184,6 +184,9 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 	
 	public synchronized SessionAndApplication pushSessionInternal(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String requestSessionID = request.getSession().getId();
+		if(request != null) {
+			request.setCharacterEncoding("UTF-8");
+		}
 //		Globals.logString("SESSION_ID = " + requestSessionID);
 
 		// Using the Basic authorization HTTP protocol creates an
