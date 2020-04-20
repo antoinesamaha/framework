@@ -16,6 +16,7 @@
 package com.foc.vaadin.gui.windows;
 
 import com.foc.ConfigInfo;
+import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.util.Encryptor;
 import com.foc.vaadin.gui.components.FVPasswordField;
@@ -80,6 +81,7 @@ public class UserChangePasswordControl {
 			
 			message = canChangePassword(); 
 			if(message == null){
+				Globals.logString(" = Username "+getUser().getName()+" password "+newPassStr+" encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
 				newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
 				getUser().setPassword(newPassStr);
 				getUser().validate(true);
