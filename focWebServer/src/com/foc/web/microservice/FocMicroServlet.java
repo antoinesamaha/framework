@@ -281,11 +281,13 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 
 	protected void setCORS(HttpServletResponse response) {
 		if(response != null){
+			String specialHeader = "os, browser, device, os_version, browser_version, deviceType";
+			
 			response.setHeader("Content-Type", "application/json; charset=UTF-8");
 			response.setHeader("Access-Control-Allow-Origin", "*");
 			response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS");
-			response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization");
-			response.setHeader("Access-Control-Expose-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization");
+			response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization, "+specialHeader);
+			response.setHeader("Access-Control-Expose-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, X-Pagination, Content-Disposition, showLoader, Authorization, "+specialHeader);
 			response.setHeader("Access-Control-Max-Age", "86400");
 			response.setHeader("Allow", "GET, HEAD, POST, TRACE, OPTIONS");
 		}
