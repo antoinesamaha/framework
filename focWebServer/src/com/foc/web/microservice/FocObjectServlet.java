@@ -13,6 +13,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.foc.Globals;
+import com.foc.business.company.Company;
+import com.foc.business.company.CompanyDesc;
+import com.foc.business.workflow.WFSite;
+import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -391,6 +395,21 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						fillFocObjectFromJson(focObj, jsonObj);
 
 						boolean created = focObj.isCreated();
+						if(created) {
+							if(focObj instanceof FocWorkflowObject && ((FocWorkflowObject) focObj).getSite() == null) {
+								FocList companyList = CompanyDesc.getInstance().getFocList();
+								if(companyList != null) {
+									companyList.loadIfNotLoadedFromDB();
+									if(companyList.size() > 0) {
+										Company company = (Company) companyList.getFocObject(0);
+										WFSite  site    = company != null ? company.getAnySite() : null;
+										if(site != null){
+											((FocWorkflowObject)focObj).setSite(site);
+										}
+									}
+								}
+							}
+						}
 						
 						boolean errorSaving = false;
 						
