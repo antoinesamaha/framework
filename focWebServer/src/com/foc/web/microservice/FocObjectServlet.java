@@ -29,7 +29,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 	public abstract void fillFocObjectFromJson(O focObj, JSONObject jsonObj) throws Exception;
 	
-	public void afterPost(SessionAndApplication sessionAndApplication, O focObj, boolean created) {
+	public void afterPost(FocServletRequest focServletRequest, O focObj, boolean created) {
 		
 	}
 	
@@ -411,7 +411,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							response.getWriter().println(userJson);
 							
 						} else {
-							afterPost(sessionAndApp, focObj, created);
+							afterPost(focRequest, focObj, created);
 	
 							focObj.toJson(builder);
 							userJson = builder.toString();
