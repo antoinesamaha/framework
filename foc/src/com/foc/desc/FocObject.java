@@ -423,7 +423,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     super(accessControl);
   }
 
-  public void dispose(){
+  public synchronized void dispose(){
   	if(thisFocDesc != null) thisFocDesc.allFocObjectArray_Remove(this);
     super.dispose();
     
@@ -531,6 +531,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 
   public Company getCompany(){
   	return (Company) getPropertyObject(FField.FLD_COMPANY);
+  }
+  
+  public long getCompanyRef(){
+  	FObject objProp = (FObject) getFocProperty(FField.FLD_COMPANY);
+  	return objProp != null ? objProp.getLocalReferenceInt() : 0;
   }
 
   public void setCompany(Company company){
@@ -4357,7 +4362,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				if(map == null){
 					map = WFTransactionConfigDesc.getMap_ForTransaction(workflow.getIWorkflowDesc().iWorkflow_getDBTitle());
 				}
-				if(map != null && user != null && user.getTitlesList() != null){
+				if(map != null && user != null /*&& user.getTitlesList() != null*/){//USERREFACTOR
 					WFSignature currentSignature = map.findSignature_PreviousStage(this, currentStage);
 					
 					if(currentSignature != null){
@@ -4406,21 +4411,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						}
 					}
 				}
-				
-				/*
-				ArrayList<SiteStageCouple> siteStageCoupleArray = WorkflowDesc.getSiteStageCoulpeArrayList(workflow.getIWorkflowDesc());
-				if(siteStageCoupleArray != null){
-					for(int i=0; i<siteStageCoupleArray.size() && !signProject; i++){
-						SiteStageCouple couple = siteStageCoupleArray.get(i);
-						if(			FocObject.equal(couple.getSite(), currentSite) 
-								&& 	FocObject.equal(couple.getStage(), currentStage)
-								&&  couple.getDepartment() == null || FocObject.equal(couple.getDepartment(), currentDepartment)
-								){
-							signProject = true;
-						}
-					}
-				}
-				*/
 			}
 		}
 		return signatureNeededResult;

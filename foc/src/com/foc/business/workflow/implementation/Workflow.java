@@ -16,7 +16,6 @@
 package com.foc.business.workflow.implementation;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 import com.foc.Globals;
 import com.foc.access.FocDataMap;
@@ -28,8 +27,6 @@ import com.foc.business.notifier.FocNotificationManager;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.status.StatusHolderDesc;
-import com.foc.business.workflow.WFOperator;
-import com.foc.business.workflow.WFOperatorDesc;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.map.WFMap;
@@ -39,13 +36,9 @@ import com.foc.business.workflow.map.WFStage;
 import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.business.workflow.report.SignatureReportLine;
 import com.foc.business.workflow.report.SignatureReportLineDesc;
-import com.foc.desc.FocConstructor;
-import com.foc.desc.FocDesc;
-import com.foc.desc.FocObject;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
-import com.foc.util.Utils;
 
 public class Workflow extends Loggable {
 
@@ -352,6 +345,8 @@ public class Workflow extends Loggable {
 		return sign;
 	}
 	
+	//USERREFACTOR
+	/*
 	public boolean isAnyUserTitlesAlreadySigned(){
 		ArrayList<WFOperator> arrayList = WFOperatorDesc.newListOfTitlesForUserAndArea(getArea());
 		boolean signed = false;
@@ -377,6 +372,7 @@ public class Workflow extends Loggable {
 		}
 		return signed;
 	}
+	*/
 
 	public WFMap getMap(){
 		return WFTransactionConfigDesc.getMap_ForTransaction(getIWorkflowDesc().iWorkflow_getDBTitle());

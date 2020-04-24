@@ -457,9 +457,11 @@ public class FocUserGuiDetailsPanel extends FPanel{
 				SwingUtilities.invokeLater(new Runnable(){
 					@Override
 					public void run() {
-						user.dispose_SitesList();
+//USERREFACTOR						
+//						user.dispose_SitesList();
 						siteComboBox.refreshList();
-						user.companyChanged();
+//USERREFACTOR						
+//						user.companyChanged();
 					}
 				});
 			}
@@ -476,9 +478,11 @@ public class FocUserGuiDetailsPanel extends FPanel{
 				SwingUtilities.invokeLater(new Runnable(){
 					@Override
 					public void run() {
-						user.dispose_TitlesList();
+//USERREFACTOR						
+//user.dispose_TitlesList();
 						titleComboBox.refreshList();
-						user.siteChanged();
+//USERREFACTOR						
+//						user.siteChanged();
 					}
 				});
 			}

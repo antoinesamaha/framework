@@ -54,6 +54,8 @@ public class Globals{
   
   public static String notificationMessageToAssert = "";
   
+  //static final Logger logger = LogManager.getLogger(Globals.class);
+  
   public static Application newApplication(boolean withDB, boolean withAdmin, boolean mdi){
     return newApplication(withDB, withAdmin, mdi, null, null);
   }
