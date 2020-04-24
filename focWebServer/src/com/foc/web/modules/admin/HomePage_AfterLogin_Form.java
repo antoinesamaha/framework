@@ -48,6 +48,8 @@ public class HomePage_AfterLogin_Form extends FocXMLLayout {
     Application application = Globals.getApp();
     if(application != null){
 	    FocUser user = application.getUser_ForThisSession();
+	    //USERREFACTOR
+	    /*
 	    if(user != null){
 		    user.dispose_CompanyList();
 		    user.dispose_SitesList();
@@ -101,6 +103,7 @@ public class HomePage_AfterLogin_Form extends FocXMLLayout {
 		      }
 		    }
 	    }
+	    */
     }
   }
   
