@@ -37,8 +37,6 @@ import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.business.workflow.rights.UserTransactionRightDesc;
 import com.foc.dataWrapper.FocListWrapper;
-import com.foc.desc.FocObject;
-import com.foc.event.FocEvent;
 import com.foc.event.FocListener;
 import com.foc.list.FocList;
 import com.foc.saas.manager.SaaSApplicationAdaptor;
@@ -74,6 +72,8 @@ public class FocUser_Form extends FocXMLLayout {
   @Override
   public void init(com.foc.web.gui.INavigationWindow window, com.foc.web.server.xmlViewDictionary.XMLView xmlView, com.foc.shared.dataStore.IFocData focData) {
     super.init(window, xmlView, focData);
+  //USERREFACTOR
+    /*
     FocList userCompanyList = getFocUser().getCompanyRightsList();
     userCompanyRightsListener = new FocListener(){
 
@@ -96,6 +96,7 @@ public class FocUser_Form extends FocXMLLayout {
     };
     
     userCompanyList.addFocListener(userCompanyRightsListener);
+    */
     fillCompanyRightsIfUnique();
   };
 

@@ -2549,4 +2549,23 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		return !Utils.isStringEmpty(getStoredProcedureName());
 	}
 
+	public int requestCount() {
+		int count = 0;
+		FocDesc focDesc = getFocDesc();
+		if (focDesc != null) {
+			StringBuffer request = new StringBuffer();
+			request.append("SELECT COUNT(\"" + FField.REF_FIELD_NAME + "\") ");
+			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
+			
+			SQLFilter filter = getFilter();
+			boolean atLeastOneAdded = filter.addWhereToRequest(request, this.getFocDesc(), true, true);
+			
+			ArrayList<String> valuesArray = Globals.getApp().getDataSource().command_SelectRequest(request);
+			if(valuesArray.size() == 1) {
+				String countStr = valuesArray.get(0);
+				count = countStr != null ? Utils.parseInteger(countStr, 0) : 0;
+			}
+		}
+		return count;
+	}
 }
