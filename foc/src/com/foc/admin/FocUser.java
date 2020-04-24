@@ -1054,7 +1054,23 @@ public class FocUser extends FocObject {
   		}
   	}
   	
-  	public UserOperator getTitle(WFTitle title, Department department) {
+  	public synchronized boolean hasTitle(WFTitle title) {
+  		boolean has = false;
+  		
+  		if (operators != null) {
+  			Iterator<UserOperator> iter = operators.values().iterator();
+  			while(iter != null && iter.hasNext() && !has){
+  				UserOperator operator = iter.next();
+  				if(operator.getTitleRef() == title.getReferenceInt()) {
+  					has = true;
+  				}
+  			}
+  		}
+
+			return has;
+  	}
+  	
+  	public synchronized UserOperator getTitle(WFTitle title, Department department) {
   		UserOperator userOperator = null;
   		
   		if (operators != null) {
@@ -1192,7 +1208,7 @@ public class FocUser extends FocObject {
   	return has;
   }
   
-  private synchronized boolean hasSiteTitle(WFSite site, WFTitle title) {
+  public synchronized boolean hasSiteTitle(WFSite site, WFTitle title) {
   	userSites_RebuildIfNeeded();
   	
   	boolean has = false;
