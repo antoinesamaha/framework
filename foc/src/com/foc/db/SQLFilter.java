@@ -39,6 +39,8 @@ public class SQLFilter {
   public static final String KEY_FOREIGN_KEY_ADDITINAL_WHERE   = "FRGN_KEY";
   
   private HashMap<String, String> additionalWhereMap = null;
+
+	private HashMap<String, String> additionalWhereWithoutOffsetMap = null;
   
   //private int aliasCount = 1;
   //BTOADD
@@ -440,11 +442,21 @@ public class SQLFilter {
     }
     additionalWhereMap.put(key, additionnalWhere);
   }
+  public void putAdditionalWhereWithOffset(String key, String additionnalWhere){
+    if(additionalWhereMap == null){
+      additionalWhereMap = new HashMap<String, String>();
+    }
+    additionalWhereWithoutOffsetMap= new HashMap<String, String>(additionalWhereMap);
+    additionalWhereMap.put(key, additionnalWhere);
+  }
 
   public void removeAdditionalWhere(String key){
     if(additionalWhereMap != null){
     	additionalWhereMap.remove(key);
     }
+  }
+  public void removeOffsetFromAdditionalWhere() {
+  	additionalWhereMap=additionalWhereWithoutOffsetMap;
   }
 
   public String getAdditionalWhere(String key){
@@ -480,5 +492,13 @@ public class SQLFilter {
 	 */
 	public void setOwnerOfTemplate(boolean ownerOfTemplate) {
 		this.ownerOfTemplate = ownerOfTemplate;
+	}
+	
+  public void setAdditionalWhereMap(HashMap<String, String> additionalWhereMap) {
+		this.additionalWhereMap = additionalWhereMap;
+	}
+
+	public HashMap<String, String> getAdditionalWhereMap() {
+		return additionalWhereMap;
 	}
 }
