@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.foc.Globals;
@@ -2557,9 +2558,17 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			request.append("SELECT COUNT(\"" + FField.REF_FIELD_NAME + "\") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			
-			SQLFilter filter = getFilter();
-			boolean atLeastOneAdded = filter.addWhereToRequest(request, this.getFocDesc(), true, true);
+			if(filter!=null && filter.getAdditionalWhereMap()!=null) {
+				SQLFilter filter = getFilter();
+				
+				HashMap<String,String> additionalWhereMap = new HashMap<String,String>(filter.getAdditionalWhereMap());
+				filter.removeOffsetFromAdditionalWhere();
+				filter.addWhereToRequest(request, this.getFocDesc(), true, true);
+				
 			
+				filter.setAdditionalWhereMap(additionalWhereMap);
+			}
+
 			ArrayList<String> valuesArray = Globals.getApp().getDataSource().command_SelectRequest(request);
 			if(valuesArray.size() == 1) {
 				String countStr = valuesArray.get(0);
