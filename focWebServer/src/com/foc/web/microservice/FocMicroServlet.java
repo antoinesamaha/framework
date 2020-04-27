@@ -281,7 +281,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 
 	protected void setCORS(HttpServletResponse response) {
 		if(response != null){
-			String specialHeader = "os, browser, device, os_version, browser_version, deviceType";
+			String specialHeader = "os, browser, device, os_version, browser_version, deviceType, App-Version";
 			
 			response.setHeader("Content-Type", "application/json; charset=UTF-8");
 			response.setHeader("Access-Control-Allow-Origin", "*");

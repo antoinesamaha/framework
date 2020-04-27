@@ -113,7 +113,7 @@ public class TimeCondition extends FilterCondition {
   // oooooooooooooooooooooooooooooooooo
   
   public void fillProperties(FocObject focFatherObject){
-  	new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_OPERATOR, OPERATOR_GREATER_THAN);
+  	new FMultipleChoice(focFatherObject, getFirstFieldID() + FLD_OPERATOR, OPERATOR_INDIFERENT);
     new FTime(focFatherObject, getFirstFieldID() + FLD_FIRST_TIME, FTime.getZeroTime_Copy());
     new FTime(focFatherObject, getFirstFieldID() + FLD_LAST_TIME, FTime.getZeroTime_Copy());
   }
@@ -361,7 +361,7 @@ public class TimeCondition extends FilterCondition {
   
   public void resetToDefaultValue(FocListFilter filter){
   	Time date = FTime.getZeroTime_Copy();
-  	setToValue(filter, OPERATOR_GREATER_THAN, date, date);
+  	setToValue(filter, OPERATOR_INDIFERENT, date, date);
   }
   
   @Override
