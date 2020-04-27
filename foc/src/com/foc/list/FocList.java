@@ -1623,7 +1623,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   	reloadFromDB(0);//0 because not incremental
   }
   
-  public void reloadFromDB(long refToUpdateIncementally) {
+  public synchronized void reloadFromDB(long refToUpdateIncementally) {
     //this.fireEvent(FocEvent.ID_BEFORE_LOAD);
   	if(isDbResident()){
   		lastLoadTime = System.currentTimeMillis();
@@ -1645,7 +1645,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     //this.fireEvent(FocEvent.ID_LOAD);    
   }
   
-  public void deleteFromDB() {
+  public synchronized void deleteFromDB() {
     boolean loaded = focLink.deleteDB(this);
     setLoaded(loaded);
   }
@@ -1670,7 +1670,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
   	return (!isLoaded() || !isRecentEnough()) && !this.isCreated();
   }
 
-  public boolean loadIfNotLoadedFromDB() {
+  public synchronized boolean loadIfNotLoadedFromDB() {
     boolean reloaded = false;
     if(needsToBeLoaded()){
       reloadFromDB();
@@ -1679,7 +1679,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return reloaded ;
   }
 
-  public void saveDB() {
+  public synchronized void saveDB() {
     if (focLink != null) {
       focLink.saveDB(this);
       //B-DUP
@@ -2549,4 +2549,23 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		return !Utils.isStringEmpty(getStoredProcedureName());
 	}
 
+	public int requestCount() {
+		int count = 0;
+		FocDesc focDesc = getFocDesc();
+		if (focDesc != null) {
+			StringBuffer request = new StringBuffer();
+			request.append("SELECT COUNT(\"" + FField.REF_FIELD_NAME + "\") ");
+			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
+			
+			SQLFilter filter = getFilter();
+			boolean atLeastOneAdded = filter.addWhereToRequest(request, this.getFocDesc(), true, true);
+			
+			ArrayList<String> valuesArray = Globals.getApp().getDataSource().command_SelectRequest(request);
+			if(valuesArray.size() == 1) {
+				String countStr = valuesArray.get(0);
+				count = countStr != null ? Utils.parseInteger(countStr, 0) : 0;
+			}
+		}
+		return count;
+	}
 }

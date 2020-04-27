@@ -65,9 +65,10 @@ public class WFOperator extends FocObject {
 	public void resetUserOperatorArray(){
 		if(!isDuplicatedForUserArrayOfTitles()){
 			FocUser user = getUser();
-			if(user != null){
-				user.dispose_OperatorsArrayForThisUserAllAreas();
-			}
+//USERREFACTOR
+//			if(user != null){
+//				user.dispose_OperatorsArrayForThisUserAllAreas();
+//			}
 		}
 	}
 

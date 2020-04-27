@@ -107,7 +107,9 @@ public class UserSession implements Serializable {
 
   public void copyCompanyFromUser(){
   	if(user != null){
-
+  		//USERREFACTOR
+  		user.copyCompanySelectionFromUser(this);
+  		/*
   		user.re_buildCompanyList();
 //	    user.dispose_CompanyList();
   		//We copy the company only if we still have the rights for it
@@ -155,6 +157,7 @@ public class UserSession implements Serializable {
 	    }
 	    title = user.getCurrentTitle();
 	    setSimulation(user.isSimulationActive());
+  		 */
   	}
   }
 
@@ -186,11 +189,19 @@ public class UserSession implements Serializable {
   public WFSite getSite() {
     return site;
   }
+  
+  public void setSite(WFSite site) {
+    this.site = site;
+  }
 
   public WFTitle getTitle() {
     return title;
   }
   
+  public void setTitle(WFTitle title) {
+    this.title = title;
+  }
+
   public String getLanguage() {
 		return ConfigInfo.getLanguage();
 	}

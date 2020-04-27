@@ -19,18 +19,24 @@ import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.admin.UserSession;
+import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.property.FProperty;
 import com.foc.property.FPropertyListener;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.components.FVButton;
+import com.foc.vaadin.gui.components.FVObjectComboBox;
+import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.windows.UserChangePasswordWindow;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.server.xmlViewDictionary.XMLView;
+import com.vaadin.data.Container.Filter;
+import com.vaadin.data.Item;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
@@ -89,6 +95,8 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
       }
     });
 
+  //USERREFACTOR
+    /*
     siteProperty.addListener(new FPropertyListener() {
       @Override
       public void propertyModified(FProperty property) {
@@ -109,6 +117,7 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
       public void dispose() {
       }
     });
+    */
   }
 
   @Override
@@ -129,6 +138,49 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
     if(comp != null) comp.setVisible(ConfigInfo.isContextHelpAllowed());
     comp = getComponentByName("SIMULATION_ACTIVE");
     if(comp != null) comp.setVisible(ConfigInfo.isSimulationAllowed());
+    
+    FVWrapperLayout  siteWrapperLay = (FVWrapperLayout) getComponentByName("CURRENT_SITE");
+		FVObjectComboBox siteCombo      = siteWrapperLay != null ? (FVObjectComboBox) siteWrapperLay.getFormField() : null;
+		FocDataWrapper   wrapper        = siteCombo != null ? siteCombo.getListWrapper() : null;
+		if(wrapper != null) {
+			wrapper.addContainerFilter(new Filter() {
+				
+				@Override
+				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+					WFSite  site = (WFSite) item;
+					FocUser user = getUser();
+					return user != null ? user.hasSite(site) : false;
+				}
+	
+				@Override
+				public boolean appliesToProperty(Object propertyId) {
+					return false;
+				}
+			});
+		}
+		
+		FVWrapperLayout  titleLay     = (FVWrapperLayout) getComponentByName("CURRENT_TITLE");
+		FVObjectComboBox titleCombo   = titleLay != null ? (FVObjectComboBox) titleLay.getFormField() : null;
+		FocDataWrapper   titleWrapper = titleCombo != null ? titleCombo.getListWrapper() : null;
+		if(titleWrapper != null) {
+			titleWrapper.addContainerFilter(new Filter() {
+				
+				@Override
+				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+					WFTitle title = (WFTitle) item;
+					FocUser user  = getUser();
+					WFSite  site  = user != null ? user.getCurrentSite() : null;
+					
+					return user != null ? user.hasSiteTitle(site, title) : false;
+				}
+	
+				@Override
+				public boolean appliesToProperty(Object propertyId) {
+					return false;
+				}
+			});
+		}
+    
   }
   
   @Override

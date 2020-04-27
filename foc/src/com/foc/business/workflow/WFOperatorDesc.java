@@ -167,6 +167,8 @@ public class WFOperatorDesc extends FocDesc {
 	}
 	*/
 
+	//USERREFACTOR
+  /*
 	public static ArrayList<WFOperator> newListOfTitlesForUserAndArea(WFSite area){
 		ArrayList<WFOperator> titlesAndAreasForUser = new ArrayList<WFOperator>(); 
 		
@@ -186,6 +188,7 @@ public class WFOperatorDesc extends FocDesc {
 		
 		return titlesAndAreasForUser;
 	}
+	*/
 
 	//ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
