@@ -2762,7 +2762,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     boolean error = true;
     
     if(this.getThisFocDesc().isPersistent()){
-    	error = Globals.getApp().getDataSource().focObject_Load(this);
+    	//error = Globals.getApp().getDataSource().focObject_Load(this);
+    	Globals.getApp().getDataSource().focObject_Load(this);    	
     	
     	//IFocDataSource
       /*
