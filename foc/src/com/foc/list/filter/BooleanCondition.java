@@ -136,7 +136,11 @@ public class BooleanCondition extends FilterCondition{
       if(valueCondition == VALUE_TRUE){
         buffer.append(fieldName+"=1");
       }else{
-        buffer.append(fieldName+"=0");
+      	if(ConfigInfo.isAdaptConstraints()) {
+      		buffer.append(fieldName+" IS NULL OR "+fieldName+"=0");
+      	} else {
+      		buffer.append(fieldName+"=0");
+      	}
       }
     }
     return buffer;

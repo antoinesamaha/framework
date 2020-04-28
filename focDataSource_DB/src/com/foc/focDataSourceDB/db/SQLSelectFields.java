@@ -61,6 +61,8 @@ public class SQLSelectFields extends SQLRequest {
       
       addFrom();
       error = addWhere();
+      addOrderBy();
+      addOffset();
     }
     return error;
   }

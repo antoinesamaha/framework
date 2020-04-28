@@ -57,7 +57,7 @@ public class SQLSelectJoinRequest extends SQLSelect {
   public boolean addWhere() {
     //int length = request.length();
     boolean b = super.addWhere();
-    
+
     if(!b){
     	/*
       boolean withAnd = request.length() != length;

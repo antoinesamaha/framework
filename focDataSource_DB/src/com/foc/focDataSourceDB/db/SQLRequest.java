@@ -196,6 +196,19 @@ public class SQLRequest {
    * if (!isFirst && atLeastOneFieldAdded) { request.append(")"); } } }
    */
 
+  public void addOrderBy() {
+  	if(filter != null) {
+  		filter.addOrderBy(this.request);
+  	}
+  }
+  
+  public void addOffset() {
+  	if(			 filter != null 
+  			&& 	(getSQLRequestType() == TYPE_SELECT || getSQLRequestType() == TYPE_OTHER)) {
+  		filter.addOffsetToRequest(this.request);
+  	}
+  }
+  
   public boolean addWhere(boolean withJoin) {
     boolean requestNotValid = false;
     if (filter != null) {

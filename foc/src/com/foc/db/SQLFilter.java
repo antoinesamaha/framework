@@ -33,6 +33,10 @@ public class SQLFilter {
   private SQLJoinMap         joinMap         = null;
   private boolean            filterByCompany = (Globals.getApp() != null && Globals.getApp().isWebServer()) ? false : true;
   
+  private int offset      = -1;
+  private int offsetCount = -1;
+  private String orderBy  = null;
+  
   public static final String KEY_FILTER_BUTTON_ADDITINAL_WHERE = "FIL_BUT";
   public static final String KEY_MASTER_FIELD_ADDITINAL_WHERE  = "MST_FLD";
   public static final String KEY_NO_KEY_ADDITINAL_WHERE        = "NO_KEY";
@@ -480,5 +484,42 @@ public class SQLFilter {
 	 */
 	public void setOwnerOfTemplate(boolean ownerOfTemplate) {
 		this.ownerOfTemplate = ownerOfTemplate;
+	}
+
+	public void addOrderBy(StringBuffer requestBuffer) {
+		if (requestBuffer != null && !Utils.isStringEmpty(orderBy)) {
+			requestBuffer.append(" ORDER BY ");
+			requestBuffer.append(orderBy);
+		}
+	}
+	
+	public void addOffsetToRequest(StringBuffer requestBuffer) {
+		if (requestBuffer != null && offset >=0 && offsetCount >=0) {
+			requestBuffer.append(" offset ");
+			requestBuffer.append(offset);
+			requestBuffer.append(" limit ");
+			requestBuffer.append(offsetCount);
+		}
+	}
+
+	public int getOffset() {
+		return offset;
+	}
+
+	public void setOffset(int offset, int offsetCount) {
+		this.offset = offset;
+		this.offsetCount = offsetCount;
+	}
+
+	public int getOffsetCount() {
+		return offsetCount;
+	}
+
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
 	}
 }
