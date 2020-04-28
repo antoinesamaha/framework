@@ -24,6 +24,8 @@ import com.foc.list.FocList;
 import com.foc.performance.PerfManager;
 import com.foc.property.FProperty;
 
+import net.sf.jasperreports.components.sort.actions.AddSortFieldCommand;
+
 /**
  * @author 01Barmaja
  */
@@ -120,6 +122,8 @@ public class SQLSelectPlain extends SQLRequest {
       }
       addFrom();
       error = addWhere();
+      addOrderBy();
+      addOffset();
     }
     return error;
   }
