@@ -293,11 +293,19 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 								start = getStartParameter(request);
 								count = getCountParameter(request);
 							}
+							int totalCount = list.size();
+							if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
+								totalCount =	list.requestCount();
+							}
+							
 							builder.setListStart(start);
 							builder.setListCount(count);
 							list.toJson(builder);
 							userJson = builder.toString();
-							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
+							//responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
+						  // add total if start or count is present in the request. If not paginated, no need to do a count query
+							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+//							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
 						}
 						
 						if(!useCachedList(null)){
