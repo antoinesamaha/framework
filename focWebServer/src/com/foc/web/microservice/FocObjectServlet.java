@@ -304,8 +304,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							userJson = builder.toString();
 							//responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
 						  // add total if start or count is present in the request. If not paginated, no need to do a count query
-//							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
-							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+//							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
 						}
 						
 						if(!useCachedList(null)){
