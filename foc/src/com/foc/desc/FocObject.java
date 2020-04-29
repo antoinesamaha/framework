@@ -4538,6 +4538,16 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return b;
   }
 	
+	public boolean isFieldCreationField(FField fld) {
+		boolean isCreationUser = false;
+		FocDesc focDesc = getThisFocDesc();
+		if(focDesc != null && focDesc instanceof IStatusHolderDesc) {
+			IStatusHolderDesc statusDesc = (IStatusHolderDesc) focDesc;
+			isCreationUser = fld.getID() == statusDesc.getFLD_CREATION_USER();
+		}
+		return isCreationUser;
+	}
+	
 	public boolean isFieldWorkflowField(FField fld) {
 		boolean isWorkflow = false;
 		FocDesc focDesc = getThisFocDesc();
@@ -4546,7 +4556,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				IStatusHolderDesc statusDesc = (IStatusHolderDesc) focDesc;
 				isWorkflow = fld.getID() == statusDesc.getFLD_CLOSURE_DATE();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_DATE();
-				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_USER();
+//				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_USER();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_STATUS();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_VALIDATION_DATE();
 			}
@@ -4609,6 +4619,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				FField fld = fieldEnum.nextField();
 				if(			fld.getID() != FField.REF_FIELD_ID 
 						&& (!builder.isHideWorkflowFields() || !isFieldWorkflowField(fld))
+						&& (!builder.isHideCreationUser() || !isFieldCreationField(fld))
 						&& (fld.getID() != FField.FLD_ORDER || builder.isPrintOrderField())
 						&& (fld.getID() != FField.FLD_DEPRECATED_FIELD || builder.isPrintDepricatedField())
 						&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())
@@ -4620,7 +4631,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							FObjectField objFld  = (FObjectField) prop.getFocField();
 							FObject      objProp = (FObject) prop;
 							
-							if(builder.isPrintForeignKeyFullObject()) {
+							if(builder.isPrintForeignKeyFullObject() && !isFieldCreationField(fld)) {
 								FocObject valueObj = objProp.getObject_CreateIfNeeded();
 								if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
 									builder.appendKey(fld.getName());
@@ -4634,21 +4645,17 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 									newBuilder.dispose();
 								}
 							} else {
-								String value = String.valueOf(objProp.getLocalReferenceInt());
 								if(builder.isPrintObjectNamesNotRefs()) {
+									String value = String.valueOf(objProp.getLocalReferenceInt());
 									FocObject valueFocObject = (FocObject) objProp.getObject();
 									if(valueFocObject != null) {
 										value = valueFocObject.getJSONName() + "[" + value + "]";
 									}
+									builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
+								} else {
+									long value = objProp.getLocalReferenceInt();
+									builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
 								}
-								builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
-								/*
-								builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
-								if(objFld.getFocDesc() != null && objProp.getObject_CreateIfNeeded() != null){
-									FField displayField = objFld.getFocDesc().getFieldByID(objFld.getDisplayField());
-									builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
-								}
-								*/
 							}
 						}else if(prop instanceof FInt){
 							builder.appendKeyValue(fld.getName(), prop.getInteger());
@@ -4658,10 +4665,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							builder.appendKeyValue(fld.getName(), ((FBoolean) prop).getBoolean());							
 						}else{
 							String valStr = prop.getString();
-//							valStr = valStr.replace("/\n/g", "\\\\n").replace("/\r/g", "\\\\r").replace("/\t/g", "\\\\t");
-//							valStr = valStr.replace("\n", "\\n");
-//							valStr = valStr.replace("\"", "\\\"");
-//							valStr = valStr.replaceAll("[\r\n]+", "\\\n");
 							builder.appendKeyValue(fld.getName(), valStr);
 						}
 					}

@@ -29,9 +29,10 @@ public class B01JsonBuilder {
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
 	private boolean scanSubList               = false;
-	private boolean printRootRef              = true;
+	private boolean printRootRef              = true ;
 	private boolean printCRUD                 = false;
 	private boolean hideWorkflowFields        = false;
+	private boolean hideCreationUser          = false;	
 	private boolean printForeignKeyFullObject = false;
 	private boolean printOrderField           = false;
 	private boolean printDepricatedField      = false;
@@ -53,6 +54,7 @@ public class B01JsonBuilder {
 		setPrintObjectNamesNotRefs(src.isPrintObjectNamesNotRefs());
 		setHideWorkflowFields(src.isHideWorkflowFields());
 		setAdditionalFieldFilter(src.getAdditionalFieldFilter());
+		setHideCreationUser(src.isHideCreationUser());
 		
 		//DO NOT COPY THE LIST START And COUNT They apply on the first level only
 		//---------------------------------
@@ -394,5 +396,13 @@ public class B01JsonBuilder {
 
 	public void setObjectFilter(JSONObjectFilter objectFilter) {
 		this.objectFilter = objectFilter;
+	}
+
+	public boolean isHideCreationUser() {
+		return hideCreationUser;
+	}
+
+	public void setHideCreationUser(boolean hideCreationUser) {
+		this.hideCreationUser = hideCreationUser;
 	}
 }
