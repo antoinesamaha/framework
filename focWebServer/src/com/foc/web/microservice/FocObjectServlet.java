@@ -151,6 +151,23 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 	}
 	
+	protected void copyLongFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName) && focObj != null){
+			try{
+				focObj.setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+			}catch (Exception e){
+				try {
+					String strValue = jsonObj.getString(fieldName);
+					strValue = arabicToNumbers(strValue);
+					long intValue = Utils.parseLong(strValue, 0);
+					focObj.setPropertyLong(fieldName, intValue);
+				}catch(Exception e2) {
+					Globals.logException(e2);	
+				}
+			}
+		}
+	}
+	
 	protected void copyDoubleFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
 		if(jsonObj.has(fieldName) && focObj != null){
 			try{
@@ -340,6 +357,14 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 	}
 
+	protected B01JsonBuilder newJsonBuilderForPostResponse() {
+		B01JsonBuilder builder = new B01JsonBuilder();
+		builder.setPrintForeignKeyFullObject(true);
+		builder.setHideWorkflowFields(true);
+		builder.setScanSubList(true);
+		return builder;
+	}
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SessionAndApplication sessionAndApp = pushSession(request, response);
@@ -359,10 +384,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					Globals.logString(" = Body: "+reqStr);
 				}
 	
-				B01JsonBuilder builder = new B01JsonBuilder();
-				builder.setPrintForeignKeyFullObject(true);
-				builder.setHideWorkflowFields(true);
-				builder.setScanSubList(true);
+				B01JsonBuilder builder = newJsonBuilderForPostResponse();
 
 				try{
 					JSONObject jsonObj = new JSONObject(reqStr);
