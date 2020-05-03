@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.sql.Date;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,11 +56,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import com.fab.gui.details.GuiDetails;
+import com.fab.model.table.FieldDefinition;
 import com.fab.model.table.UserDefinedObjectGuiDetailsPanel;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -74,6 +78,7 @@ import com.foc.api.IFocObject;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
+import com.foc.business.company.CompanyDesc;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -82,6 +87,7 @@ import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFFieldLockStage;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
@@ -5094,4 +5100,148 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	boolean doNotValidate = isCreated() && isEmpty();
   	return doNotValidate ? true : super.validate(checkValidity, callFromValidationPanel);
   }
+  
+	public void jsonParseString(JSONObject jsonObj, String fieldName) {
+		try{
+			String value = jsonObj.getString(fieldName);
+			setPropertyString(fieldName, value);
+		}catch (JSONException e){
+			Globals.logException(e);
+		}
+	}
+	
+	public void jsonParseDATE(JSONObject jsonObj) {
+		if(jsonObj.has("Date")){
+			try{
+				String dateString = jsonObj.getString("Date");
+				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+				java.util.Date jsonDate = simpleFormat.parse(dateString);
+				setDate(new java.sql.Date(jsonDate.getTime()));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}catch (ParseException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParseDate(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				String dateString = jsonObj.getString(fieldName);
+				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+				java.util.Date jsonDate = simpleFormat.parse(dateString);
+				setPropertyDate(fieldName, new java.sql.Date(jsonDate.getTime()));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}catch (ParseException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParseBoolean(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyBoolean(fieldName, jsonObj.getBoolean(fieldName));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+  
+	public void jsonParseInt(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+			}catch (Exception e){
+				try {
+					String strValue = jsonObj.getString(fieldName);
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					int intValue = Utils.parseInteger(strValue, 0);
+					setPropertyInteger(fieldName, intValue);
+				}catch(Exception e2) {
+					Globals.logException(e2);	
+				}
+			}
+		}
+	}
+	
+	public void jsonParseLong(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+			}catch (Exception e){
+				try {
+					String strValue = jsonObj.getString(fieldName);
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					long intValue = Utils.parseLong(strValue, 0);
+					setPropertyLong(fieldName, intValue);
+				}catch(Exception e2) {
+					Globals.logException(e2);	
+				}
+			}
+		}
+	}
+	
+	public void jsonParseDouble(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+  
+	public void jsonParseForeignKey(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				FObject fObj = (FObject) getFocPropertyByName(fieldName);
+				FocList list = fObj != null ? fObj.getPropertySourceList() : null;
+				if (list != null) {
+					list.loadIfNotLoadedFromDB();
+					FocObject foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));
+					setPropertyObject(fieldName, foundObj);
+				}
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParse(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			FProperty property = getFocPropertyByName(fieldName);
+			if(property != null){
+				FField fld = property.getFocField();
+				
+				if (fld != null) {
+					switch (fld.getFabType()) {
+					case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
+						jsonParseForeignKey(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DATE:
+						jsonParseDate(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
+						jsonParseBoolean(jsonObj, fieldName);
+						break;										
+					case FieldDefinition.SQL_TYPE_ID_INT:
+						jsonParseInt(jsonObj, fieldName);
+						break;					
+					case FieldDefinition.SQL_TYPE_ID_LONG:
+						jsonParseLong(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DOUBLE:
+						jsonParseDouble(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+						jsonParseString(jsonObj, fieldName);
+						break;					
+					}
+				}
+			}
+		}		
+	}
 }

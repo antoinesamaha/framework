@@ -401,4 +401,21 @@ public class Utils {
 		System.out.println("out:"+out);
 		 */
 	}
+	
+	public static String convertIndianNumberstoArabic(String result) {
+		if (result != null) {
+			result = result.replace("١", "1");
+			result = result.replace("٢", "2");
+			result = result.replace("٣", "3");
+			result = result.replace("٤", "4");
+			result = result.replace("٥", "5");
+			result = result.replace("٦", "6");
+			result = result.replace("٧", "7");
+			result = result.replace("٨", "8");
+			result = result.replace("٩", "9");
+			result = result.replace("٠", "0");
+		}
+		return result;
+	}
+
 }
