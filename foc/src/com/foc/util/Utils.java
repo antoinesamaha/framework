@@ -418,4 +418,13 @@ public class Utils {
 		return result;
 	}
 
+	public static String replaceArabicAmbiguityLettersWithPercent(String text) {
+		text = text.replace("ة", "%");
+		text = text.replace("ه", "%");
+		text = text.replace("ا", "%");
+		text = text.replace("أ", "%");
+		text = text.replace("آ", "%");
+		text = text.replace("ء", "%");
+		return text; 
+	}
 }

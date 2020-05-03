@@ -1021,6 +1021,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return field != null ? getPropertyLong(field.getID()) : 0;
   }
   
+  public long getPropertyLong(String aliasName, String fieldName){
+  	FField field = getThisFocDesc().getFieldByName(aliasName+"-"+fieldName);  	
+  	return field != null ? getPropertyLong(field.getID()) : 0;
+  }
+  
   public void setPropertyLong(String fieldName, long val){
   	FField field = getThisFocDesc().getFieldByName(fieldName);  	
   	if(field != null){
