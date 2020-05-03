@@ -189,6 +189,11 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return count;
 	}
 	
+	protected int requestTotalCount(FocList list) {
+		int totalCount = list != null ? list.requestCount() : 0;
+		return totalCount; 
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -231,7 +236,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							}
 							int totalCount = list.size();
 							if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
-								totalCount =	list.requestCount();
+								totalCount =	requestTotalCount(list);
+//								totalCount =	list.requestCount();
 							}
 							
 							builder.setListStart(start);

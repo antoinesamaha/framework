@@ -36,7 +36,7 @@ public class SQLSelect extends SQLSelectPlain {
 	private ArrayList<FFieldPath> fieldsInSelect      = null;
 	private ArrayList<FFieldPath> pathAccumulation    = null;
 	private ArrayList<FFieldPath> fieldsToSetAsLoaded = null;//This array indicates fields that should be marked as loaded so that we do not reload upon the getFocProperty() in this fillPropertFromResults
-	private FocListGroupBy        sqlGroupBy          = null;
+	protected FocListGroupBy        sqlGroupBy          = null;
 	
 	public SQLSelect(FocList initialList, FocDesc focDesc, SQLFilter filter) {
 		super(initialList, focDesc, filter);
@@ -97,7 +97,7 @@ public class SQLSelect extends SQLSelectPlain {
 		return newPath;
 	}
 	
-	private void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){
+	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){
     FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
     while(enumer.hasNext()){
       FField focField = (FField) enumer.next();
