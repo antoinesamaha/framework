@@ -19,7 +19,9 @@ import com.foc.Globals;
 import com.foc.business.BusinessModule;
 import com.foc.business.adrBook.ContactDesc;
 import com.foc.business.company.CompanyDesc;
+import com.foc.business.company.UserCompanyRightsDesc;
 import com.foc.business.multilanguage.MultiLanguage;
+import com.foc.business.workflow.WFOperatorDesc;
 import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
@@ -45,6 +47,8 @@ public class FocUserDesc extends FocDesc {
   public static final String DB_TABLE_NAME = "FUSER";
   public static final String FLDNAME_NAME  = "NAME";
   public static final String FNAME_SUSPENDED = "SUSPENDED";
+  public static final String FNAME_USER_COMPANY_LIST = UserCompanyRightsDesc.DB_TABLE_NAME+"_LIST";
+  public static final String FNAME_OPERATOR_LIST     = WFOperatorDesc.DB_TABLE_NAME+"_LIST";
   
   public static final int FLD_NAME                 		=  1;
   public static final int FLD_PASSWORD             		=  2;

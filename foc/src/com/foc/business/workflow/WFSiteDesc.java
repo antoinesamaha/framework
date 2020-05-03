@@ -43,6 +43,8 @@ public class WFSiteDesc extends FocDesc {
 	
 	public static final String DB_TABLE_NAME = "WF_AREA";
 	
+	public static final String FNAME_ADDRESS = "ADDRESS";
+	
 	public WFSiteDesc(){
 		super(WFSite.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, true);
 		setGuiBrowsePanelClass(WFSiteGuiTreePanel.class);
@@ -61,7 +63,7 @@ public class WFSiteDesc extends FocDesc {
     FStringField cFld = new FStringField("TRANSACTION_PREFIX", "Transaction Prefix", FLD_TRANSACTION_PREFIX, false, LEN_TRANSACTION_PREFIX);
     addField(cFld);
 		
-		FBlobStringField fField = new FBlobStringField("ADDRESS", "Address", FLD_ADDRESS, false, 4, 30);
+		FBlobStringField fField = new FBlobStringField(FNAME_ADDRESS, "Address", FLD_ADDRESS, false, 4, 30);
     addField(fField);
 
 		//FBoolField bFld = new FBoolField("MAIN_OFFICE", "Main Office", FLD_MAIN_OFFICE, false);

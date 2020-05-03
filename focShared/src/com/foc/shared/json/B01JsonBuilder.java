@@ -16,6 +16,7 @@
 package com.foc.shared.json;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class B01JsonBuilder {
 	private StringBuffer buffer = null;
@@ -23,8 +24,9 @@ public class B01JsonBuilder {
 	private ArrayList<Boolean> firstIndicator       = new ArrayList<Boolean>();
 	private ArrayList<String>  masterObjectsPrinted = new ArrayList<String>();
 
-	private JSONObjectFilter objectFilter = null;
+	private JSONObjectFilter objectFilter          = null;
 	private JSONFieldFilter  additionalFieldFilter = null;
+	private HashMap<String, JSONObjectWriter> jsonObjectWriterMap = null;
 	
 	private boolean modifiedPropertiesOnly    = false;
 	private boolean printObjectNamesNotRefs   = false;
@@ -55,6 +57,7 @@ public class B01JsonBuilder {
 		setHideWorkflowFields(src.isHideWorkflowFields());
 		setAdditionalFieldFilter(src.getAdditionalFieldFilter());
 		setHideCreationUser(src.isHideCreationUser());
+		jsonObjectWriterMap = src.jsonObjectWriterMap;
 		
 		//DO NOT COPY THE LIST START And COUNT They apply on the first level only
 		//---------------------------------
@@ -70,7 +73,7 @@ public class B01JsonBuilder {
 	}
 	
 	public void dispose() {
-		
+		jsonObjectWriterMap = null;
 	}
 	
 	public boolean firstIndicator_IsCurrentFirst(){
@@ -404,5 +407,16 @@ public class B01JsonBuilder {
 
 	public void setHideCreationUser(boolean hideCreationUser) {
 		this.hideCreationUser = hideCreationUser;
+	}
+
+	public JSONObjectWriter getJsonObjectWriter(String key) {
+		return jsonObjectWriterMap != null ? jsonObjectWriterMap.get(key) : null;
+	}
+
+	public void putJsonObjectWriter(String key, JSONObjectWriter jsonObjectWriter) {
+		if(jsonObjectWriterMap == null) {
+			jsonObjectWriterMap = new HashMap<String, JSONObjectWriter>();
+		}
+		jsonObjectWriterMap.put(key, jsonObjectWriter);
 	}
 }

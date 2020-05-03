@@ -66,6 +66,9 @@ public class AdrBookPartyDesc extends FocDesc {
   public static final int FLD_INTRODUCTION        = 30;
   public static final int FLD_DIFFERENT_ADDRESSES = 31;
   
+  public static final String FNAME_INVOICING_ADDRESS = "INVOICING_ADDRESS";
+  public static final String FNAME_DELIVERY_ADDRESS  = "DELIVERY_ADDRESS";
+  
 //  public static final int FLD_CONTACT_LIST        = 31;
   
   public static final int LEN_CODE        = 20;
@@ -149,7 +152,7 @@ public class AdrBookPartyDesc extends FocDesc {
     FCompanyField companyFld = new FCompanyField(false, false);
     addField(companyFld);
     
-		fField = new FBlobStringField("INVOICING_ADDRESS", "Invoicing Address", FLD_INVOICE_ADDRESS, false, 4, 30);
+		fField = new FBlobStringField(FNAME_INVOICING_ADDRESS, "Invoicing Address", FLD_INVOICE_ADDRESS, false, 4, 30);
     addField(fField);
     fField.addListener(new FPropertyListener() {
 			@Override
@@ -167,7 +170,7 @@ public class AdrBookPartyDesc extends FocDesc {
 			}
 		});
     
-  	fField = new FBlobStringField("DELIVERY_ADDRESS", "Delivery Address", FLD_DELIVERY_ADDRESS, false, 4, 30);
+  	fField = new FBlobStringField(FNAME_DELIVERY_ADDRESS, "Delivery Address", FLD_DELIVERY_ADDRESS, false, 4, 30);
   	addField(fField);
   	
   	FObjectField objFld = new FObjectField("COUNTRY", "Country", FLD_COUNTRY, CountryDesc.getInstance());

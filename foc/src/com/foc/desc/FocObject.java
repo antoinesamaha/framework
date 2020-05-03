@@ -147,6 +147,7 @@ import com.foc.property.IFDescProperty;
 import com.foc.property.PropertyFocObjectLocator;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.shared.json.JSONObjectWriter;
 import com.foc.util.IFocIterator;
 import com.foc.util.Utils;
 import com.vaadin.data.Item;
@@ -4538,6 +4539,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return b;
   }
 	
+	public boolean isFieldCreationField(String fieldName) {
+		return fieldName != null && fieldName.equals(StatusHolderDesc.FNAME_CREATION_USER);
+	}
+	
+	/*
 	public boolean isFieldCreationField(FField fld) {
 		boolean isCreationUser = false;
 		FocDesc focDesc = getThisFocDesc();
@@ -4547,6 +4553,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 		return isCreationUser;
 	}
+	*/
 	
 	public boolean isFieldWorkflowField(FField fld) {
 		boolean isWorkflow = false;
@@ -4593,8 +4600,64 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public String buildJsonKey() {
 		return getThisFocDesc() != null ? getThisFocDesc().getStorageName()+"|"+getReferenceInt() : null; 
 	}
+
+	public void appendKeyValueForFieldName(B01JsonBuilder builder, String joinAlias, String fieldName) {
+		FProperty prop = null;
+		if(Utils.isStringEmpty(joinAlias)) {
+			prop = getFocPropertyByName(fieldName);
+		} else {
+			prop = getFocPropertyByName(joinAlias+"-"+fieldName);
+		}
+		if(prop != null) {
+			appendKeyValue_ForProperty(builder, fieldName, prop);
+		}
+	}
 	
-	public void toJson(B01JsonBuilder builder){
+	public void appendKeyValue_ForProperty(B01JsonBuilder builder, String fieldName, FProperty prop)	{
+		if(prop != null) {
+			if(prop instanceof FObject){
+				FObject objProp = (FObject) prop;
+				
+				if(builder.isPrintForeignKeyFullObject() && !isFieldCreationField(fieldName)) {
+					FocObject valueObj = objProp.getObject_CreateIfNeeded();
+					if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
+						builder.appendKey(fieldName);
+						
+						B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
+						valueObj.toJson(newBuilder);
+						String objStr = newBuilder.toString();
+	//									builder.append("{");
+						builder.append(objStr);
+	//									builder.append("}");
+						newBuilder.dispose();
+					}
+				} else {
+					if(builder.isPrintObjectNamesNotRefs()) {
+						String value = String.valueOf(objProp.getLocalReferenceInt());
+						FocObject valueFocObject = (FocObject) objProp.getObject();
+						if(valueFocObject != null) {
+							value = valueFocObject.getJSONName() + "[" + value + "]";
+						}
+						builder.appendKeyValue(fieldName/*+".REF"*/, value);
+					} else {
+						long value = objProp.getLocalReferenceInt();
+						builder.appendKeyValue(fieldName/*+".REF"*/, value);
+					}
+				}
+			}else if(prop instanceof FInt){
+				builder.appendKeyValue(fieldName, prop.getInteger());
+			}else if(prop instanceof FDouble){
+				builder.appendKeyValue(fieldName, prop.getDouble());							
+			}else if(prop instanceof FBoolean){
+				builder.appendKeyValue(fieldName, ((FBoolean) prop).getBoolean());							
+			}else{
+				String valStr = prop.getString();
+				builder.appendKeyValue(fieldName, valStr);
+			}
+		}
+	}
+	
+	public void toJsonInternal(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginObject();
 			if(builder.isPrintCRUD()) {
@@ -4619,54 +4682,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				FField fld = fieldEnum.nextField();
 				if(			fld.getID() != FField.REF_FIELD_ID 
 						&& (!builder.isHideWorkflowFields() || !isFieldWorkflowField(fld))
-						&& (!builder.isHideCreationUser() || !isFieldCreationField(fld))
+						&& (!builder.isHideCreationUser() || !isFieldCreationField(fld.getName()))
 						&& (fld.getID() != FField.FLD_ORDER || builder.isPrintOrderField())
 						&& (fld.getID() != FField.FLD_DEPRECATED_FIELD || builder.isPrintDepricatedField())
 						&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())
 						){
 					FProperty prop = fieldEnum.getProperty();
 					if(prop != null && (!builder.isModifiedOnly() || prop.isModifiedFlag())){
-						//if(prop.isObjectProperty()){
-						if(prop instanceof FObject){
-							FObjectField objFld  = (FObjectField) prop.getFocField();
-							FObject      objProp = (FObject) prop;
-							
-							if(builder.isPrintForeignKeyFullObject() && !isFieldCreationField(fld)) {
-								FocObject valueObj = objProp.getObject_CreateIfNeeded();
-								if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
-									builder.appendKey(fld.getName());
-									
-									B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
-									valueObj.toJson(newBuilder);
-									String objStr = newBuilder.toString();
-//									builder.append("{");
-									builder.append(objStr);
-//									builder.append("}");
-									newBuilder.dispose();
-								}
-							} else {
-								if(builder.isPrintObjectNamesNotRefs()) {
-									String value = String.valueOf(objProp.getLocalReferenceInt());
-									FocObject valueFocObject = (FocObject) objProp.getObject();
-									if(valueFocObject != null) {
-										value = valueFocObject.getJSONName() + "[" + value + "]";
-									}
-									builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
-								} else {
-									long value = objProp.getLocalReferenceInt();
-									builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
-								}
-							}
-						}else if(prop instanceof FInt){
-							builder.appendKeyValue(fld.getName(), prop.getInteger());
-						}else if(prop instanceof FDouble){
-							builder.appendKeyValue(fld.getName(), prop.getDouble());							
-						}else if(prop instanceof FBoolean){
-							builder.appendKeyValue(fld.getName(), ((FBoolean) prop).getBoolean());							
-						}else{
-							String valStr = prop.getString();
-							builder.appendKeyValue(fld.getName(), valStr);
-						}
+						appendKeyValue_ForProperty(builder, fld.getName(), prop);
 					}
 				}
 			}
@@ -4679,7 +4702,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
 				while(fieldEnum != null && fieldEnum.hasNext()){
 					FField fld = fieldEnum.nextField();
-					if(fld.getID() != FField.REF_FIELD_ID){
+					if(		 fld.getID() != FField.REF_FIELD_ID
+							&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())						
+							){
 						FList prop = (FList) fieldEnum.getProperty();
 						FocList list = prop != null ? prop.getListWithoutLoad() : null;
 						if(list != null && list.getFocDesc() != null && !(list.getFocDesc() instanceof WFLogDesc)) {
@@ -4695,12 +4720,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 								if(subject != null && subject instanceof FocObject) {
 									FocObject focObj = (FocObject) subject;
 									
-//									if(			focObj != null 
-//											&& (!builder.isModifiedOnly() 
-//													|| (    focObj.isModified() 
-//															||  focObj.isDeleted()
-//															|| (focObj.isCreated() && !focObj.isEmpty()) 
-//													)))
+	//									if(			focObj != null 
+	//											&& (!builder.isModifiedOnly() 
+	//													|| (    focObj.isModified() 
+	//															||  focObj.isDeleted()
+	//															|| (focObj.isCreated() && !focObj.isEmpty()) 
+	//													)))
 									
 									boolean doWrite = focObj != null;
 									if(doWrite && builder.isModifiedOnly()) {
@@ -4732,12 +4757,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 								builder.endList();
 							}
 							
-//							ToJsonListIterator listIterator = new ToJsonListIterator(builder, fld.getName());
-//							list.iterate(listIterator);
-//							if(listIterator.isListStarted()) {
-//								builder.endList();
-//							}
-//							listIterator.dispose();
+	//							ToJsonListIterator listIterator = new ToJsonListIterator(builder, fld.getName());
+	//							list.iterate(listIterator);
+	//							if(listIterator.isListStarted()) {
+	//								builder.endList();
+	//							}
+	//							listIterator.dispose();
 						}
 					}
 				}
@@ -4746,6 +4771,17 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			}
 			
 			builder.endObject();
+		}
+	}
+	
+	public void toJson(B01JsonBuilder builder){
+		if(builder != null){
+			JSONObjectWriter writer = getThisFocDesc() != null ? builder.getJsonObjectWriter(getThisFocDesc().getStorageName()) : null;
+			if(writer != null) {
+				writer.writeJson(builder, this);
+			} else {
+				toJsonInternal(builder);
+			}
 		}
 	}
 

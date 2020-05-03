@@ -123,6 +123,17 @@ public class Utils {
 		}
 		return result;		
 	}
+	
+	public static long[] parseLongs(String[] texts, long defaultValue){
+		long[] longs = null;
+		if (texts != null) {
+			longs = new long[texts.length];
+			for (int i=0; i<texts.length; i++) {
+				longs[i] = Utils.parseLong(texts[i], defaultValue);
+			}
+		}
+		return longs;
+	}
 
 	public static int parseInteger(String text, int defaultValue){
 		int result = defaultValue;
@@ -131,6 +142,17 @@ public class Utils {
 		}catch(NumberFormatException e){
 		}
 		return result;		
+	}
+	
+	public static int[] parseIntegers(String[] texts, int defaultValue){
+		int[] ints = null;
+		if (texts != null) {
+			ints = new int[texts.length];
+			for (int i=0; i<texts.length; i++) {
+				ints[i] = Utils.parseInteger(texts[i], defaultValue);
+			}
+		}
+		return ints;		
 	}
 	
 	public static double parseDouble(String text, double defaultValue){
