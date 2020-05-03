@@ -5242,6 +5242,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						jsonParseDouble(jsonObj, fieldName);
 						break;
 					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
 						jsonParseString(jsonObj, fieldName);
 						break;					
 					}
