@@ -17,7 +17,7 @@
 		<attribute name="tarDir" default="NOT_SET"/>
 		<element name="justdoit" implicit="yes"/>
 		<sequential>
-			<javac srcdir="${focDataSource_DB.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}">
+			<javac srcdir="${focDataSource_DB.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" encoding="UTF-8" >
 				<classpath>
 					<pathelement path="${java.class.path}/"/>
 					<pathelement path="${foc.jarFile}/"/>

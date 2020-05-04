@@ -1,37 +1,20 @@
-## Welcome to GitHub Pages
+## focframework
 
-You can use the [editor on GitHub](https://github.com/FOC-framework/framework/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+FOC is an open source full stack web application framework build using [java](http://www.java.com) and [vaadin](http://www.vaadin.com) 
+It is free to use under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+### Tutorial
 
-### Markdown
+[Here](https://foc-frameworkgithubio.readthedocs.io/en/latest/index.html) you can find our recent tutorial
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Startup project
 
-```markdown
-Syntax highlighted code block
+[This project](https://github.com/FOC-framework/foc.samples) can be used as a startup for yours.
 
-# Header 1
-## Header 2
-### Header 3
+### Contact
 
-- Bulleted
-- List
+Antoine SAMAHA 
 
-1. Numbered
-2. List
+email: antoine.samaha@01barmaja.com
 
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/FOC-framework/framework/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+Skype: antoine.samaha01
