@@ -60,7 +60,11 @@
   		<version>4.8.1</version>
   	</dependency>
   	<dependency>
-  		<groupId>javax.mail</groupId>
+  		<groupId>javax.mail</groupId><scm>
+		<url>https://github.com/FOC-framework/framework.git</url>
+		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
+		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
+	</scm>
   		<artifactId>mail</artifactId>
   		<version>1.4</version>
   	</dependency>
@@ -83,4 +87,9 @@
   <properties>
   	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
+  <scm>
+		<url>https://github.com/FOC-framework/framework.git</url>
+		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
+		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
+	</scm>
 </project>
