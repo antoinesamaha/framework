@@ -5,7 +5,7 @@
   <version>${foc.version}</version>
   <name>foc</name>
   <description>foc</description>
-  
+    
   <distributionManagement>
   <snapshotRepository>
     <id>ossrh</id>
@@ -72,10 +72,15 @@
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>everproTreeGrid</artifactId>
-  		<version>1.2.0-SNAPSHOT</version>
+  		<version>1.2.3</version>
   	</dependency>  	
+  	<dependency>
+      <groupId>com.vaadin.external.json</groupId>
+      <artifactId>json</artifactId>
+      <version>0.0.20080701</version>
+    </dependency>
   </dependencies>
   <properties>
-  	<foc.version>1.7.1-SNAPSHOT</foc.version>
+  	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
 </project>

@@ -5,7 +5,7 @@
   <version>${foc.version}</version>
   <name>focDataSource</name>
   <description>focDataSource</description>
-  
+    
   <distributionManagement>
   <snapshotRepository>
     <id>ossrh</id>
@@ -53,6 +53,6 @@
   	</dependency>
   </dependencies>
   <properties>
-  	<foc.version>1.7.1-SNAPSHOT</foc.version>
+  	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
 </project>

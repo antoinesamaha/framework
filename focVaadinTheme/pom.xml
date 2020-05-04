@@ -49,6 +49,6 @@
   </dependencies>
   
   <properties>
-  	<foc.version>1.7.1-SNAPSHOT</foc.version>
+  	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
 </project>
