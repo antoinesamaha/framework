@@ -44,7 +44,8 @@
 					<pathelement path="${smtpJAR}/"/>
 					<pathelement path="${wibuJar}"/>
 					<pathelement path="${junitJAR}"/>
-					<pathelement path="${wibuJar}/"/>					
+					<pathelement path="${wibuJar}/"/>
+					<pathelement path="${jsonJAR}"/>
 				</classpath>
 			</javac>
 		</sequential>

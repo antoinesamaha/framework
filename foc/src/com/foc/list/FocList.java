@@ -2550,11 +2550,15 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	}
 
 	public int requestCount() {
+		return requestCount("\""+FField.REF_FIELD_NAME+"\"");
+	}
+	
+	public int requestCount(String fieldName) {
 		int count = 0;
 		FocDesc focDesc = getFocDesc();
 		if (focDesc != null) {
 			StringBuffer request = new StringBuffer();
-			request.append("SELECT COUNT(\"" + FField.REF_FIELD_NAME + "\") ");
+			request.append("SELECT COUNT(" + fieldName + ") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			
 			SQLFilter filter = getFilter();

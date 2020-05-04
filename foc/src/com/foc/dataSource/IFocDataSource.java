@@ -70,6 +70,8 @@ public interface IFocDataSource {
   public boolean       focList_Load(FocList focList, long refToBeReloaded);
   public boolean       focList_Join_Load(FocList focList, long refToBeReloaded);
   public boolean       focList_Delete(FocList focList);
+  public int           focList_Count(FocList focList, String fieldInsideCount);
+  public int           focList_Join_Count(FocList focList, String fieldInsideCount);
   
 	public void          transaction_SeeIfShouldCommit();
 	public void          transaction_setShouldSurroundWithTransactionIfRequest();

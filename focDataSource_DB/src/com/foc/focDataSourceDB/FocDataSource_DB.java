@@ -80,6 +80,7 @@ import com.foc.focDataSourceDB.db.SQLSelectExistance;
 import com.foc.focDataSourceDB.db.SQLSelectFields;
 import com.foc.focDataSourceDB.db.SQLSelectFindReferenceForUniqueKey;
 import com.foc.focDataSourceDB.db.SQLSelectFindReferenceForWhereExpression;
+import com.foc.focDataSourceDB.db.SQLSelectJoinCount;
 import com.foc.focDataSourceDB.db.SQLSelectJoinRequest;
 import com.foc.focDataSourceDB.db.SQLUpdate;
 import com.foc.focDataSourceDB.db.adaptor.DBAdaptor;
@@ -532,6 +533,26 @@ public class FocDataSource_DB implements IFocDataSource {
 	//-----------------------------------------------------
 	//-----------------------------------------------------
   
+	@Override
+	public int focList_Join_Count(FocList focList, String fieldInsideCount) {
+		int count = 0;
+		
+  	FocLinkJoinRequest link   = (FocLinkJoinRequest) focList.getFocLink();
+  	SQLSelectJoinCount select = new SQLSelectJoinCount(focList, link.getRequestDesc(), focList.getFilter(), fieldInsideCount); 
+
+    boolean error = !select.execute();
+    count = select.getCount();
+		
+		return count;
+	}
+  
+	@Override
+	public int focList_Count(FocList focList, String fieldInsideCount) {
+		int count = 0;
+		
+		return count;
+	}
+	
   @Override
   public boolean focList_Load(FocList focList, long refToBeReloaded){
   	boolean error = true;
@@ -1678,4 +1699,5 @@ public class FocDataSource_DB implements IFocDataSource {
 		DBManagerServer dbServer = getDBManagerServer();
 		return dbServer != null ? dbServer.getMonitoringText() : null;
 	}
+
 }
