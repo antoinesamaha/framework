@@ -81,7 +81,7 @@ public class UserChangePasswordControl {
 			
 			message = canChangePassword(); 
 			if(message == null){
-				Globals.logString(" = Username "+getUser().getName()+" password "+newPassStr+" encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
+				Globals.logString(" = Username "+getUser().getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
 				newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
 				getUser().setPassword(newPassStr);
 				getUser().validate(true);
