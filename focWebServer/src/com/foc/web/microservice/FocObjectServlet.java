@@ -194,6 +194,11 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return totalCount; 
 	}
 	
+	protected String toJsonDetails(FocObject focObject, B01JsonBuilder builder) {
+		focObject.toJson(builder);
+		return builder.toString();
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -220,8 +225,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						FocList list = newFocList(request, response, true);
 						if(filterRef > 0) {
 							if(list.size() == 1) {
-								list.getFocObject(0).toJson(builder);
-								userJson = builder.toString();
+								userJson = toJsonDetails(list.getFocObject(0), builder); 
 								responseBody = userJson;
 							} else {
 								userJson = "{}";
