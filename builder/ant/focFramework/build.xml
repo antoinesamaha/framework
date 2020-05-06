@@ -17,7 +17,7 @@
 		<attribute name="tarDir" default="NOT_SET"/>
 		<element name="justdoit" implicit="yes"/>
 		<sequential>
-			<javac srcdir="${focFramework.srcDir}" destdir="@{tarDir}">
+			<javac srcdir="${focFramework.srcDir}" destdir="@{tarDir}" encoding="UTF-8" >
 				<classpath>
 					<pathelement path="${java.class.path}/"/>
 					<pathelement path="${foc.jarFile}/"/>

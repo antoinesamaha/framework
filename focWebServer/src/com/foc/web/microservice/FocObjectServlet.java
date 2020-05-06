@@ -1,29 +1,21 @@
 package com.foc.web.microservice;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.foc.Globals;
-import com.foc.business.company.Company;
-import com.foc.business.company.CompanyDesc;
-import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
-import com.foc.property.FObject;
 import com.foc.shared.json.B01JsonBuilder;
-import com.foc.util.Utils;
 
 public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServlet {
 
@@ -65,115 +57,59 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return true;
 	}
 
-	protected void copyStringFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				String value = jsonObj.getString(fieldName);
-				focObj.setPropertyString(fieldName, value);
-			}catch (JSONException e){
-				Globals.logException(e);
-			}
-		}
-	}
-	
+	@Deprecated
 	protected void copyDATEFromJson(FocObject focObj, JSONObject jsonObj) {
-		if(jsonObj.has("Date") && focObj != null){
-			try{
-				String dateString = jsonObj.getString("Date");
-				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
-				java.util.Date jsonDate = simpleFormat.parse(dateString);
-				focObj.setDate(new java.sql.Date(jsonDate.getTime()));
-			}catch (JSONException e){
-				Globals.logException(e);
-			}catch (ParseException e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		if(focObj != null){
+			focObj.jsonParseDATE(jsonObj);
+		}		
 	}
 	
+	@Deprecated
+	protected void copyStringFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
+		}		
+	}
+		
+	@Deprecated
 	protected void copyDateFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				String dateString = jsonObj.getString(fieldName);
-				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
-				java.util.Date jsonDate = simpleFormat.parse(dateString);
-				focObj.setPropertyDate(fieldName, new java.sql.Date(jsonDate.getTime()));
-			}catch (JSONException e){
-				Globals.logException(e);
-			}catch (ParseException e){
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
+		}		
 	}
 	
+	@Deprecated
 	protected void copyBooleanFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				focObj.setPropertyBoolean(fieldName, jsonObj.getBoolean(fieldName));
-			}catch (JSONException e){
-				Globals.logException(e);
-			}
-		}
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
+		}		
 	}
 
-	private String arabicToNumbers(String result) {
-		if (result != null) {
-			result = result.replace("١", "1");
-			result = result.replace("٢", "2");
-			result = result.replace("٣", "3");
-			result = result.replace("٤", "4");
-			result = result.replace("٥", "5");
-			result = result.replace("٦", "6");
-			result = result.replace("٧", "7");
-			result = result.replace("٨", "8");
-			result = result.replace("٩", "9");
-			result = result.replace("٠", "0");
-		}
-		return result;
-	}
-	
+	@Deprecated
 	protected void copyIntFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				focObj.setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
-			}catch (Exception e){
-				try {
-					String strValue = jsonObj.getString(fieldName);
-					strValue = arabicToNumbers(strValue);
-					int intValue = Utils.parseInteger(strValue, 0);
-					focObj.setPropertyInteger(fieldName, intValue);
-				}catch(Exception e2) {
-					Globals.logException(e2);	
-				}
-			}
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
 		}
 	}
 	
+	@Deprecated
+	protected void copyLongFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
+		}		
+	}
+	
+	@Deprecated
 	protected void copyDoubleFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				focObj.setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
-			}catch (JSONException e){
-				Globals.logException(e);
-			}
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
 		}
 	}
 
+	@Deprecated
 	protected void copyForeignKeyFromJson(FocObject focObj, JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName) && focObj != null){
-			try{
-				FObject fObj = (FObject) focObj.getFocPropertyByName(fieldName);
-				FocList list = fObj != null ? fObj.getPropertySourceList() : null;
-				if (list != null) {
-					list.loadIfNotLoadedFromDB();
-					FocObject foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));
-					focObj.setPropertyObject(fieldName, foundObj);
-				}
-			}catch (JSONException e){
-				Globals.logException(e);
-			}
+		if(focObj != null){
+			focObj.jsonParse(jsonObj, fieldName);
 		}
 	}
 	
@@ -253,6 +189,16 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return count;
 	}
 	
+	protected int requestTotalCount(FocList list) {
+		int totalCount = list != null ? list.requestCount() : 0;
+		return totalCount; 
+	}
+	
+	protected String toJsonDetails(FocObject focObject, B01JsonBuilder builder) {
+		focObject.toJson(builder);
+		return builder.toString();
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
@@ -279,8 +225,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						FocList list = newFocList(request, response, true);
 						if(filterRef > 0) {
 							if(list.size() == 1) {
-								list.getFocObject(0).toJson(builder);
-								userJson = builder.toString();
+								userJson = toJsonDetails(list.getFocObject(0), builder); 
 								responseBody = userJson;
 							} else {
 								userJson = "{}";
@@ -295,7 +240,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							}
 							int totalCount = list.size();
 							if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
-								totalCount =	list.requestCount();
+								totalCount =	requestTotalCount(list);
+//								totalCount =	list.requestCount();
 							}
 							
 							builder.setListStart(start);
@@ -340,6 +286,14 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 	}
 
+	protected B01JsonBuilder newJsonBuilderForPostResponse() {
+		B01JsonBuilder builder = new B01JsonBuilder();
+		builder.setPrintForeignKeyFullObject(true);
+		builder.setHideWorkflowFields(true);
+		builder.setScanSubList(true);
+		return builder;
+	}
+	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SessionAndApplication sessionAndApp = pushSession(request, response);
@@ -359,10 +313,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					Globals.logString(" = Body: "+reqStr);
 				}
 	
-				B01JsonBuilder builder = new B01JsonBuilder();
-				builder.setPrintForeignKeyFullObject(true);
-				builder.setHideWorkflowFields(true);
-				builder.setScanSubList(true);
+				B01JsonBuilder builder = newJsonBuilderForPostResponse();
 
 				try{
 					JSONObject jsonObj = new JSONObject(reqStr);
@@ -404,18 +355,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 						boolean created = focObj.isCreated();
 						if(created) {
-							if(focObj instanceof FocWorkflowObject && ((FocWorkflowObject) focObj).getSite() == null) {
-								FocList companyList = CompanyDesc.getInstance().getFocList();
-								if(companyList != null) {
-									companyList.loadIfNotLoadedFromDB();
-									if(companyList.size() > 0) {
-										Company company = (Company) companyList.getFocObject(0);
-										WFSite  site    = company != null ? company.getAnySite() : null;
-										if(site != null){
-											((FocWorkflowObject)focObj).setSite(site);
-										}
-									}
-								}
+							if(focObj instanceof FocWorkflowObject) {
+								((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
 							}
 						}
 						

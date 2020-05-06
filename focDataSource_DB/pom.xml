@@ -5,7 +5,7 @@
   <version>${foc.version}</version>
   <name>focDataSource</name>
   <description>focDataSource</description>
-  
+    
   <distributionManagement>
   <snapshotRepository>
     <id>ossrh</id>
@@ -53,6 +53,11 @@
   	</dependency>
   </dependencies>
   <properties>
-  	<foc.version>1.7.1-SNAPSHOT</foc.version>
+  	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
+	<scm>
+		<url>https://github.com/FOC-framework/framework.git</url>
+		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
+		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
+	</scm>
 </project>

@@ -39,6 +39,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.sql.Date;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -55,11 +56,14 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
 import com.fab.gui.details.GuiDetails;
+import com.fab.model.table.FieldDefinition;
 import com.fab.model.table.UserDefinedObjectGuiDetailsPanel;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -74,6 +78,7 @@ import com.foc.api.IFocObject;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
+import com.foc.business.company.CompanyDesc;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -82,6 +87,7 @@ import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFFieldLockStage;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
+import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
@@ -147,6 +153,7 @@ import com.foc.property.IFDescProperty;
 import com.foc.property.PropertyFocObjectLocator;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.shared.json.JSONObjectWriter;
 import com.foc.util.IFocIterator;
 import com.foc.util.Utils;
 import com.vaadin.data.Item;
@@ -1011,6 +1018,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 
   public long getPropertyLong(String fieldName){
   	FField field = getThisFocDesc().getFieldByName(fieldName);  	
+  	return field != null ? getPropertyLong(field.getID()) : 0;
+  }
+  
+  public long getPropertyLong(String aliasName, String fieldName){
+  	FField field = getThisFocDesc().getFieldByName(aliasName+"-"+fieldName);  	
   	return field != null ? getPropertyLong(field.getID()) : 0;
   }
   
@@ -4538,6 +4550,22 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return b;
   }
 	
+	public boolean isFieldCreationField(String fieldName) {
+		return fieldName != null && fieldName.equals(StatusHolderDesc.FNAME_CREATION_USER);
+	}
+	
+	/*
+	public boolean isFieldCreationField(FField fld) {
+		boolean isCreationUser = false;
+		FocDesc focDesc = getThisFocDesc();
+		if(focDesc != null && focDesc instanceof IStatusHolderDesc) {
+			IStatusHolderDesc statusDesc = (IStatusHolderDesc) focDesc;
+			isCreationUser = fld.getID() == statusDesc.getFLD_CREATION_USER();
+		}
+		return isCreationUser;
+	}
+	*/
+	
 	public boolean isFieldWorkflowField(FField fld) {
 		boolean isWorkflow = false;
 		FocDesc focDesc = getThisFocDesc();
@@ -4546,7 +4574,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				IStatusHolderDesc statusDesc = (IStatusHolderDesc) focDesc;
 				isWorkflow = fld.getID() == statusDesc.getFLD_CLOSURE_DATE();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_DATE();
-				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_USER();
+//				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_CREATION_USER();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_STATUS();
 				isWorkflow = isWorkflow || fld.getID() == statusDesc.getFLD_VALIDATION_DATE();
 			}
@@ -4583,8 +4611,64 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public String buildJsonKey() {
 		return getThisFocDesc() != null ? getThisFocDesc().getStorageName()+"|"+getReferenceInt() : null; 
 	}
+
+	public void appendKeyValueForFieldName(B01JsonBuilder builder, String joinAlias, String fieldName) {
+		FProperty prop = null;
+		if(Utils.isStringEmpty(joinAlias)) {
+			prop = getFocPropertyByName(fieldName);
+		} else {
+			prop = getFocPropertyByName(joinAlias+"-"+fieldName);
+		}
+		if(prop != null) {
+			appendKeyValue_ForProperty(builder, fieldName, prop);
+		}
+	}
 	
-	public void toJson(B01JsonBuilder builder){
+	public void appendKeyValue_ForProperty(B01JsonBuilder builder, String fieldName, FProperty prop)	{
+		if(prop != null) {
+			if(prop instanceof FObject){
+				FObject objProp = (FObject) prop;
+				
+				if(builder.isPrintForeignKeyFullObject() && !isFieldCreationField(fieldName)) {
+					FocObject valueObj = objProp.getObject_CreateIfNeeded();
+					if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
+						builder.appendKey(fieldName);
+						
+						B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
+						valueObj.toJson(newBuilder);
+						String objStr = newBuilder.toString();
+	//									builder.append("{");
+						builder.append(objStr);
+	//									builder.append("}");
+						newBuilder.dispose();
+					}
+				} else {
+					if(builder.isPrintObjectNamesNotRefs()) {
+						String value = String.valueOf(objProp.getLocalReferenceInt());
+						FocObject valueFocObject = (FocObject) objProp.getObject();
+						if(valueFocObject != null) {
+							value = valueFocObject.getJSONName() + "[" + value + "]";
+						}
+						builder.appendKeyValue(fieldName/*+".REF"*/, value);
+					} else {
+						long value = objProp.getLocalReferenceInt();
+						builder.appendKeyValue(fieldName/*+".REF"*/, value);
+					}
+				}
+			}else if(prop instanceof FInt){
+				builder.appendKeyValue(fieldName, prop.getInteger());
+			}else if(prop instanceof FDouble){
+				builder.appendKeyValue(fieldName, prop.getDouble());							
+			}else if(prop instanceof FBoolean){
+				builder.appendKeyValue(fieldName, ((FBoolean) prop).getBoolean());							
+			}else{
+				String valStr = prop.getString();
+				builder.appendKeyValue(fieldName, valStr);
+			}
+		}
+	}
+	
+	public void toJsonInternal(B01JsonBuilder builder){
 		if(builder != null){
 			builder.beginObject();
 			if(builder.isPrintCRUD()) {
@@ -4609,61 +4693,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				FField fld = fieldEnum.nextField();
 				if(			fld.getID() != FField.REF_FIELD_ID 
 						&& (!builder.isHideWorkflowFields() || !isFieldWorkflowField(fld))
+						&& (!builder.isHideCreationUser() || !isFieldCreationField(fld.getName()))
 						&& (fld.getID() != FField.FLD_ORDER || builder.isPrintOrderField())
 						&& (fld.getID() != FField.FLD_DEPRECATED_FIELD || builder.isPrintDepricatedField())
 						&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())
 						){
 					FProperty prop = fieldEnum.getProperty();
 					if(prop != null && (!builder.isModifiedOnly() || prop.isModifiedFlag())){
-						//if(prop.isObjectProperty()){
-						if(prop instanceof FObject){
-							FObjectField objFld  = (FObjectField) prop.getFocField();
-							FObject      objProp = (FObject) prop;
-							
-							if(builder.isPrintForeignKeyFullObject()) {
-								FocObject valueObj = objProp.getObject_CreateIfNeeded();
-								if(valueObj != null && !builder.containsMasterObject(valueObj.buildJsonKey())) {								
-									builder.appendKey(fld.getName());
-									
-									B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
-									valueObj.toJson(newBuilder);
-									String objStr = newBuilder.toString();
-//									builder.append("{");
-									builder.append(objStr);
-//									builder.append("}");
-									newBuilder.dispose();
-								}
-							} else {
-								String value = String.valueOf(objProp.getLocalReferenceInt());
-								if(builder.isPrintObjectNamesNotRefs()) {
-									FocObject valueFocObject = (FocObject) objProp.getObject();
-									if(valueFocObject != null) {
-										value = valueFocObject.getJSONName() + "[" + value + "]";
-									}
-								}
-								builder.appendKeyValue(fld.getName()/*+".REF"*/, value);
-								/*
-								builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
-								if(objFld.getFocDesc() != null && objProp.getObject_CreateIfNeeded() != null){
-									FField displayField = objFld.getFocDesc().getFieldByID(objFld.getDisplayField());
-									builder.appendKeyValue(fld.getName()+".REF", objProp.getLocalReferenceInt());
-								}
-								*/
-							}
-						}else if(prop instanceof FInt){
-							builder.appendKeyValue(fld.getName(), prop.getInteger());
-						}else if(prop instanceof FDouble){
-							builder.appendKeyValue(fld.getName(), prop.getDouble());							
-						}else if(prop instanceof FBoolean){
-							builder.appendKeyValue(fld.getName(), ((FBoolean) prop).getBoolean());							
-						}else{
-							String valStr = prop.getString();
-//							valStr = valStr.replace("/\n/g", "\\\\n").replace("/\r/g", "\\\\r").replace("/\t/g", "\\\\t");
-//							valStr = valStr.replace("\n", "\\n");
-//							valStr = valStr.replace("\"", "\\\"");
-//							valStr = valStr.replaceAll("[\r\n]+", "\\\n");
-							builder.appendKeyValue(fld.getName(), valStr);
-						}
+						appendKeyValue_ForProperty(builder, fld.getName(), prop);
 					}
 				}
 			}
@@ -4676,7 +4713,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				fieldEnum = new FocFieldEnum(getThisFocDesc(), this, FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
 				while(fieldEnum != null && fieldEnum.hasNext()){
 					FField fld = fieldEnum.nextField();
-					if(fld.getID() != FField.REF_FIELD_ID){
+					if(		 fld.getID() != FField.REF_FIELD_ID
+							&& builder.includeField(getThisFocDesc().getStorageName(), fld.getName())						
+							){
 						FList prop = (FList) fieldEnum.getProperty();
 						FocList list = prop != null ? prop.getListWithoutLoad() : null;
 						if(list != null && list.getFocDesc() != null && !(list.getFocDesc() instanceof WFLogDesc)) {
@@ -4692,12 +4731,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 								if(subject != null && subject instanceof FocObject) {
 									FocObject focObj = (FocObject) subject;
 									
-//									if(			focObj != null 
-//											&& (!builder.isModifiedOnly() 
-//													|| (    focObj.isModified() 
-//															||  focObj.isDeleted()
-//															|| (focObj.isCreated() && !focObj.isEmpty()) 
-//													)))
+	//									if(			focObj != null 
+	//											&& (!builder.isModifiedOnly() 
+	//													|| (    focObj.isModified() 
+	//															||  focObj.isDeleted()
+	//															|| (focObj.isCreated() && !focObj.isEmpty()) 
+	//													)))
 									
 									boolean doWrite = focObj != null;
 									if(doWrite && builder.isModifiedOnly()) {
@@ -4729,12 +4768,12 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 								builder.endList();
 							}
 							
-//							ToJsonListIterator listIterator = new ToJsonListIterator(builder, fld.getName());
-//							list.iterate(listIterator);
-//							if(listIterator.isListStarted()) {
-//								builder.endList();
-//							}
-//							listIterator.dispose();
+	//							ToJsonListIterator listIterator = new ToJsonListIterator(builder, fld.getName());
+	//							list.iterate(listIterator);
+	//							if(listIterator.isListStarted()) {
+	//								builder.endList();
+	//							}
+	//							listIterator.dispose();
 						}
 					}
 				}
@@ -4743,6 +4782,17 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			}
 			
 			builder.endObject();
+		}
+	}
+	
+	public void toJson(B01JsonBuilder builder){
+		if(builder != null){
+			JSONObjectWriter writer = getThisFocDesc() != null ? builder.getJsonObjectWriter(getThisFocDesc().getStorageName()) : null;
+			if(writer != null) {
+				writer.writeJson(builder, this);
+			} else {
+				toJsonInternal(builder);
+			}
 		}
 	}
 
@@ -5055,4 +5105,149 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	boolean doNotValidate = isCreated() && isEmpty();
   	return doNotValidate ? true : super.validate(checkValidity, callFromValidationPanel);
   }
+  
+	public void jsonParseString(JSONObject jsonObj, String fieldName) {
+		try{
+			String value = jsonObj.getString(fieldName);
+			setPropertyString(fieldName, value);
+		}catch (JSONException e){
+			Globals.logException(e);
+		}
+	}
+	
+	public void jsonParseDATE(JSONObject jsonObj) {
+		if(jsonObj.has("Date")){
+			try{
+				String dateString = jsonObj.getString("Date");
+				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+				java.util.Date jsonDate = simpleFormat.parse(dateString);
+				setDate(new java.sql.Date(jsonDate.getTime()));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}catch (ParseException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParseDate(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				String dateString = jsonObj.getString(fieldName);
+				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+				java.util.Date jsonDate = simpleFormat.parse(dateString);
+				setPropertyDate(fieldName, new java.sql.Date(jsonDate.getTime()));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}catch (ParseException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParseBoolean(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyBoolean(fieldName, jsonObj.getBoolean(fieldName));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+  
+	public void jsonParseInt(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+			}catch (Exception e){
+				try {
+					String strValue = jsonObj.getString(fieldName);
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					int intValue = Utils.parseInteger(strValue, 0);
+					setPropertyInteger(fieldName, intValue);
+				}catch(Exception e2) {
+					Globals.logException(e2);	
+				}
+			}
+		}
+	}
+	
+	public void jsonParseLong(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+			}catch (Exception e){
+				try {
+					String strValue = jsonObj.getString(fieldName);
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					long intValue = Utils.parseLong(strValue, 0);
+					setPropertyLong(fieldName, intValue);
+				}catch(Exception e2) {
+					Globals.logException(e2);	
+				}
+			}
+		}
+	}
+	
+	public void jsonParseDouble(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+  
+	public void jsonParseForeignKey(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				FObject fObj = (FObject) getFocPropertyByName(fieldName);
+				FocList list = fObj != null ? fObj.getPropertySourceList() : null;
+				if (list != null) {
+					list.loadIfNotLoadedFromDB();
+					FocObject foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));
+					setPropertyObject(fieldName, foundObj);
+				}
+			}catch (JSONException e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
+	public void jsonParse(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			FProperty property = getFocPropertyByName(fieldName);
+			if(property != null){
+				FField fld = property.getFocField();
+				
+				if (fld != null) {
+					switch (fld.getFabType()) {
+					case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
+						jsonParseForeignKey(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DATE:
+						jsonParseDate(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
+						jsonParseBoolean(jsonObj, fieldName);
+						break;										
+					case FieldDefinition.SQL_TYPE_ID_INT:
+						jsonParseInt(jsonObj, fieldName);
+						break;					
+					case FieldDefinition.SQL_TYPE_ID_LONG:
+						jsonParseLong(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DOUBLE:
+						jsonParseDouble(jsonObj, fieldName);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						jsonParseString(jsonObj, fieldName);
+						break;					
+					}
+				}
+			}
+		}		
+	}
 }

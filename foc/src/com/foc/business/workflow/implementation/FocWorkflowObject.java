@@ -18,6 +18,8 @@ package com.foc.business.workflow.implementation;
 import java.sql.Date;
 
 import com.foc.business.adrBook.AdrBookParty;
+import com.foc.business.company.Company;
+import com.foc.business.company.CompanyDesc;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.StatusHolder;
 import com.foc.business.workflow.WFSite;
@@ -26,6 +28,7 @@ import com.foc.business.workflow.map.WFTransactionConfigDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
 import com.foc.gui.FPanel;
+import com.foc.list.FocList;
 
 public abstract class FocWorkflowObject extends FocObject implements IWorkflow, IStatusHolder {
 
@@ -136,5 +139,21 @@ public abstract class FocWorkflowObject extends FocObject implements IWorkflow, 
   @Override
   public boolean iWorkflow_allowSignature(WFSignature signature) {
     return true;
+  }
+  
+  public void setSiteToAnyValueIfEmpty() {
+		if(getSite() == null) {
+			FocList companyList = CompanyDesc.getInstance().getFocList();
+			if(companyList != null) {
+				companyList.loadIfNotLoadedFromDB();
+				if(companyList.size() > 0) {
+					Company company = (Company) companyList.getFocObject(0);
+					WFSite  site    = company != null ? company.getAnySite() : null;
+					if(site != null){
+						setSite(site);
+					}
+				}
+			}
+		}
   }
 }

@@ -123,6 +123,17 @@ public class Utils {
 		}
 		return result;		
 	}
+	
+	public static long[] parseLongs(String[] texts, long defaultValue){
+		long[] longs = null;
+		if (texts != null) {
+			longs = new long[texts.length];
+			for (int i=0; i<texts.length; i++) {
+				longs[i] = Utils.parseLong(texts[i], defaultValue);
+			}
+		}
+		return longs;
+	}
 
 	public static int parseInteger(String text, int defaultValue){
 		int result = defaultValue;
@@ -131,6 +142,17 @@ public class Utils {
 		}catch(NumberFormatException e){
 		}
 		return result;		
+	}
+	
+	public static int[] parseIntegers(String[] texts, int defaultValue){
+		int[] ints = null;
+		if (texts != null) {
+			ints = new int[texts.length];
+			for (int i=0; i<texts.length; i++) {
+				ints[i] = Utils.parseInteger(texts[i], defaultValue);
+			}
+		}
+		return ints;		
 	}
 	
 	public static double parseDouble(String text, double defaultValue){
@@ -378,5 +400,31 @@ public class Utils {
 		String out = decompressString(temp);
 		System.out.println("out:"+out);
 		 */
+	}
+	
+	public static String convertIndianNumberstoArabic(String result) {
+		if (result != null) {
+			result = result.replace("١", "1");
+			result = result.replace("٢", "2");
+			result = result.replace("٣", "3");
+			result = result.replace("٤", "4");
+			result = result.replace("٥", "5");
+			result = result.replace("٦", "6");
+			result = result.replace("٧", "7");
+			result = result.replace("٨", "8");
+			result = result.replace("٩", "9");
+			result = result.replace("٠", "0");
+		}
+		return result;
+	}
+
+	public static String replaceArabicAmbiguityLettersWithPercent(String text) {
+		text = text.replace("ة", "%");
+		text = text.replace("ه", "%");
+		text = text.replace("ا", "%");
+		text = text.replace("أ", "%");
+		text = text.replace("آ", "%");
+		text = text.replace("ء", "%");
+		return text; 
 	}
 }

@@ -41,6 +41,8 @@ public class CompanyDesc extends FocDesc{
   public static final int FLD_SITE_LIST        = 100;
   
 //  public static int ADR_BOOK_PARTY_FLD_ADRESS = FField.NO_FIELD_ID;
+  public static final String FNAME_OFFICIAL_ADDRESS = "OFFICIAL_ADDRESS";
+  public static final String FNAME_LOGO             = "LOGO";
   
   public static final String DB_TABLE_NAME = "COMPANY";
   
@@ -53,11 +55,11 @@ public class CompanyDesc extends FocDesc{
     addNameField();
     addDescriptionField();
     
-		FBlobStringField fField = new FBlobStringField("OFFICIAL_ADDRESS", "Official Address", FLD_OFFICIAL_ADDRESS, false, 4, 30);
+		FBlobStringField fField = new FBlobStringField(FNAME_OFFICIAL_ADDRESS, "Official Address", FLD_OFFICIAL_ADDRESS, false, 4, 30);
 		fField.setReflectingField(true);
     addField(fField);
     
-    FImageField signatureField = new FImageField("LOGO", "Logo", FLD_LOGO_IMAGE, 400, 270);
+    FImageField signatureField = new FImageField(FNAME_LOGO, "Logo", FLD_LOGO_IMAGE, 400, 270);
     addField(signatureField);
     
     FObjectField oFld = new FObjectField("ADR_BOOK_PARTY", "Adress book party", CompanyDesc.FLD_ADR_BOOK_PARTY, AdrBookPartyDesc.getInstance());

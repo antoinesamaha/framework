@@ -26,7 +26,7 @@
 		<attribute name="tarDir" default="NOT_SET"/>
 		<element name="justdoit" implicit="yes"/>
 		<sequential>
-			<javac srcdir="${foc.srcDir}" destdir="@{tarDir}" deprecation="on" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" > <!-- target="1.6" encoding="8859_1"  -->
+			<javac srcdir="${foc.srcDir}" destdir="@{tarDir}" deprecation="on" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" encoding="UTF-8" > <!-- target="1.6" encoding="8859_1"  -->
 				<classpath>
 					<!-- <pathelement location="lib/"/> -->
 					<pathelement path="${focAPI.jarFile}/"/>
@@ -44,7 +44,8 @@
 					<pathelement path="${smtpJAR}/"/>
 					<pathelement path="${wibuJar}"/>
 					<pathelement path="${junitJAR}"/>
-					<pathelement path="${wibuJar}/"/>					
+					<pathelement path="${wibuJar}/"/>
+					<pathelement path="${jsonJAR}"/>
 				</classpath>
 			</javac>
 		</sequential>
