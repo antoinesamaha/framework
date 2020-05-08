@@ -139,48 +139,106 @@ public class FocUser_CompanySelection_Form extends FocXMLLayout {
     comp = getComponentByName("SIMULATION_ACTIVE");
     if(comp != null) comp.setVisible(ConfigInfo.isSimulationAllowed());
     
-    FVWrapperLayout  siteWrapperLay = (FVWrapperLayout) getComponentByName("CURRENT_SITE");
-		FVObjectComboBox siteCombo      = siteWrapperLay != null ? (FVObjectComboBox) siteWrapperLay.getFormField() : null;
-		FocDataWrapper   wrapper        = siteCombo != null ? siteCombo.getListWrapper() : null;
-		if(wrapper != null) {
-			wrapper.addContainerFilter(new Filter() {
-				
-				@Override
-				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
-					WFSite  site = (WFSite) item;
-					FocUser user = getUser();
-					return user != null ? user.hasSite(site) : false;
-				}
-	
-				@Override
-				public boolean appliesToProperty(Object propertyId) {
-					return false;
-				}
-			});
-		}
-		
-		FVWrapperLayout  titleLay     = (FVWrapperLayout) getComponentByName("CURRENT_TITLE");
-		FVObjectComboBox titleCombo   = titleLay != null ? (FVObjectComboBox) titleLay.getFormField() : null;
-		FocDataWrapper   titleWrapper = titleCombo != null ? titleCombo.getListWrapper() : null;
-		if(titleWrapper != null) {
-			titleWrapper.addContainerFilter(new Filter() {
-				
-				@Override
-				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
-					WFTitle title = (WFTitle) item;
-					FocUser user  = getUser();
-					WFSite  site  = user != null ? user.getCurrentSite() : null;
-					
-					return user != null ? user.hasSiteTitle(site, title) : false;
-				}
-	
-				@Override
-				public boolean appliesToProperty(Object propertyId) {
-					return false;
-				}
-			});
-		}
     
+    Component siteComp = getComponentByName("CURRENT_SITE");
+    FVObjectComboBox siteCombo = null;
+    if(siteComp != null && siteComp instanceof FVWrapperLayout) {
+    	FVWrapperLayout  siteWrapperLay = (FVWrapperLayout) siteComp;
+    	siteCombo = siteWrapperLay != null ? (FVObjectComboBox) siteWrapperLay.getFormField() : null;
+    } else if(siteComp != null && siteComp instanceof FVObjectComboBox) {
+    	siteCombo = (FVObjectComboBox) siteComp;
+    }
+    if(siteCombo != null) {
+  		FocDataWrapper   wrapper = siteCombo != null ? siteCombo.getListWrapper() : null;
+  		if(wrapper != null) {
+  			wrapper.addContainerFilter(new Filter() {
+  				
+  				@Override
+  				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+  					WFSite  site = (WFSite) item;
+  					FocUser user = getUser();
+  					return user != null ? user.hasSite(site) : false;
+  				}
+  	
+  				@Override
+  				public boolean appliesToProperty(Object propertyId) {
+  					return false;
+  				}
+  			});
+  		}
+    }
+		
+    Component titleComponent = getComponentByName("CURRENT_TITLE");
+    FVObjectComboBox titleCombo = null;
+    if(titleComponent != null && titleComponent instanceof FVWrapperLayout) {
+    	FVWrapperLayout  titleLay     = (FVWrapperLayout) titleComponent;
+    	titleCombo   = titleLay != null ? (FVObjectComboBox) titleLay.getFormField() : null;
+    } else if(titleComponent != null && titleComponent instanceof FVObjectComboBox) {
+    	titleCombo = (FVObjectComboBox) titleComponent;
+    }
+    if(titleCombo != null) {
+			FocDataWrapper   titleWrapper = titleCombo != null ? titleCombo.getListWrapper() : null;
+			if(titleWrapper != null) {
+				titleWrapper.addContainerFilter(new Filter() {
+					
+					@Override
+					public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+						WFTitle title = (WFTitle) item;
+						FocUser user  = getUser();
+						WFSite  site  = user != null ? user.getCurrentSite() : null;
+						return user != null ? user.hasSiteTitle(site, title) : false;
+					}
+		
+					@Override
+					public boolean appliesToProperty(Object propertyId) {
+						return false;
+					}
+				});
+			}
+    }
+    
+  /*FVWrapperLayout  siteWrapperLay = (FVWrapperLayout) getComponentByName("CURRENT_SITE");
+  		FVObjectComboBox siteCombo      = siteWrapperLay != null ? (FVObjectComboBox) siteWrapperLay.getFormField() : null;
+  		FocDataWrapper   wrapper        = siteCombo != null ? siteCombo.getListWrapper() : null;
+  		if(wrapper != null) {
+  			wrapper.addContainerFilter(new Filter() {
+  				
+  				@Override
+  				public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+  					WFSite  site = (WFSite) item;
+  					FocUser user = getUser();
+  					return user != null ? user.hasSite(site) : false;
+  				}
+  	
+  				@Override
+  				public boolean appliesToProperty(Object propertyId) {
+  					return false;
+  				}
+  			});
+  		}
+  		
+  		FVWrapperLayout  titleLay     = (FVWrapperLayout) getComponentByName("CURRENT_TITLE");
+			FVObjectComboBox titleCombo   = titleLay != null ? (FVObjectComboBox) titleLay.getFormField() : null;
+			FocDataWrapper   titleWrapper = titleCombo != null ? titleCombo.getListWrapper() : null;
+			if(titleWrapper != null) {
+				titleWrapper.addContainerFilter(new Filter() {
+					
+					@Override
+					public boolean passesFilter(Object itemId, Item item) throws UnsupportedOperationException {
+						WFTitle title = (WFTitle) item;
+						FocUser user  = getUser();
+						WFSite  site  = user != null ? user.getCurrentSite() : null;
+						
+						return user != null ? user.hasSiteTitle(site, title) : false;
+					}
+		
+					@Override
+					public boolean appliesToProperty(Object propertyId) {
+						return false;
+					}
+				});
+			}
+  		*/
   }
   
   @Override
