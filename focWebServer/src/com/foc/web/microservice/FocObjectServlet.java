@@ -2,11 +2,14 @@ package com.foc.web.microservice;
 
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
@@ -14,6 +17,7 @@ import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 
@@ -471,5 +475,58 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 		Globals.logString("  = Returned: "+userJson);
 		Globals.logString(" <= DELETE End "+getNameInPlural());
+	}
+	
+	public void postSlaveList(O focObject, FocList list, JSONObject jsonObj, ICopyFromJsonToSlave copyFromJsonToSlave) throws Exception {
+		if(list != null && jsonObj != null && copyFromJsonToSlave != null) {
+			HashMap<Long, FocObject> toDelete = new HashMap<Long, FocObject>();
+			for(int i=0; i<list.size(); i++) {
+				FocObject slaveObj = (FocObject) list.getFocObject(i);
+				toDelete.put(slaveObj.getReferenceInt(), slaveObj);
+			}
+			
+			String tableName = list.getFocDesc().getStorageName();
+			String listFieldName = tableName+"_LIST";
+			if(list != null && jsonObj.has(listFieldName)) {
+				JSONArray jsonArray = jsonObj.getJSONArray(listFieldName);
+				if(jsonArray != null) {
+					for(int i=0; i<jsonArray.length(); i++) {
+						JSONObject slaveJson = (JSONObject) jsonArray.get(i);
+						FocObject slaveObj = null;
+						if (slaveJson.has(FField.REF_FIELD_NAME)) {
+							long ref = slaveJson.getLong(FField.REF_FIELD_NAME);
+							if (ref > 0) {
+								slaveObj = list.searchByRealReferenceOnly(ref);
+								if(slaveObj != null) {
+									toDelete.remove(slaveObj.getReferenceInt());
+								}
+							}
+						}
+						
+						if(slaveObj == null) {
+							slaveObj = list.newEmptyItem();
+							slaveObj.setCreated(true);
+						}
+	
+						copyFromJsonToSlave.copyJsonToObject(slaveObj, slaveJson);
+						
+						slaveObj.validate(false);
+					}
+				}
+			}
+			
+			Iterator<FocObject> iter = toDelete.values().iterator();
+			while(iter != null && iter.hasNext()) {
+				FocObject slaveObj = iter.next();
+				slaveObj.setDeleted(true);
+				list.remove(slaveObj);
+				slaveObj.validate(false);
+			}
+		}
+		
+	}
+
+	public interface ICopyFromJsonToSlave {
+		public void copyJsonToObject(FocObject slaveObj, JSONObject slaveJson);
 	}
 }
