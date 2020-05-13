@@ -107,7 +107,7 @@ public class FocListWrapper_ForObjectSelection extends FocListWrapper {
 	}
 	
 	protected boolean isWithNewItemOptionInList(){
-		return Globals.isValo() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && !Globals.getApp().getUser_ForThisSession().isGuest() && Globals.getApp().getUser_ForThisSession().hasRightsToAddItemsFor(getFocDesc());
+		return Globals.isValo() && Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && Globals.getApp().getUser_ForThisSession().hasRightsToAddItemsFor(getFocDesc());
 	}
 	
 	private FocDataItem_ForComboBoxActions getItemForAddAction(){
