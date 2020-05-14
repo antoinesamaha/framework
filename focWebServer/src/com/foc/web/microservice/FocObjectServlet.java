@@ -385,8 +385,10 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						} else {
 							afterPost(focRequest, focObj, created);
 	
-							focObj.toJson(builder);
-							userJson = builder.toString();
+							userJson = toJsonDetails(focObj, builder); 
+							//focObj.toJson(builder);
+							//userJson = builder.toString();
+							
 							response.setStatus(HttpServletResponse.SC_OK);
 							setCORS(response);
 							response.getWriter().println(userJson);
