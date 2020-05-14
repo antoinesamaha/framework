@@ -20,6 +20,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.util.Utils;
 
 public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServlet {
 
@@ -144,7 +145,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	
 	public long getFilterRef(HttpServletRequest request) {
 		String refStr = request != null ? request.getParameter("REF") : null;
-		long   ref    = refStr != null ? Long.parseLong(refStr) : 0;
+		long   ref    = refStr != null ? Utils.parseLong(refStr, 0) : 0;
 		return ref;
 	}
 
