@@ -44,7 +44,7 @@ public class ConfigInfo {
   private static String  password          = null;
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
-  private static boolean passwordPolicy = false;
+  private static int     passwordPolicy = 0;
   
   private static String  windowTitle   = null;  
 
@@ -387,7 +387,7 @@ public class ConfigInfo {
         showStatusColumn = str != null ? str.compareTo("1") == 0 : false;     
         
         str = getProperty("passwordPolicy");
-        passwordPolicy = str != null ? str.compareTo("1") == 0 : false;
+        if(str != null) passwordPolicy = Utils.parseInteger(str, 0);
         
         str = getProperty("statusTitle.proposal");
         if(str != null && !str.isEmpty()){
@@ -601,7 +601,7 @@ public class ConfigInfo {
     return showStatusColumn;
   }
   
-  public static boolean hasPasswordPolicy() {
+  public static int getPasswordPolicy() {
     return passwordPolicy;
   }
 

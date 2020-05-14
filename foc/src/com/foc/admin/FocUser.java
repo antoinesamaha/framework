@@ -83,6 +83,10 @@ public class FocUser extends FocObject {
   public static final int VIEW_CHANGE_MULTI_COMPANY_FILTER = 7;
   public static final String EMPTY_USER = "username";
 
+  public static final int PASSWORD_POLICY_NONE                           = 0; 
+  public static final int PASSWORD_POLICY_SIX_LETTERS_NUMBER             = 1;
+  public static final int PASSWORD_POLICY_TWELVE_UPPLER_LOWER_NBR_SYMBOL = 2;
+
 //USERREFACTOR  
 //  private FocList companyList   = null;
 //  private FocList titlesList    = null;
@@ -1500,44 +1504,100 @@ public class FocUser extends FocObject {
   	return group != null ? group.allowInsertInCombobox() : false;
   	//return ConfigInfo.isAllowAddInsideComboBox();
   }
-  
+    
 	public static String checkPasswordPolicyAbidance(String password) {
-		boolean error = false;
-		if (Utils.isStringEmpty(password)) {
-			error = true;
-		} else if(password.length() < 6) {
-			error = true;
-		} else {
-			boolean hasLetter = false;
-			boolean hasDigit  = false;
-			
-		  for (int i = 0; i < password.length(); i++) {
-        char x = password.charAt(i);
-        if (Character.isLetter(x)) {
-          hasLetter = true;
-        } else if (Character.isDigit(x)) {
-          hasDigit = true;
-        }
-		  }
-		  
-      if(!hasLetter){
-      	error = true;
-      }
-      if(!hasDigit){
-      	error = true;
-      }
-
-    }
-		
 		String errorText = null;
-		if (error) {
-			errorText = "Password should be at least 6 characters with a letters and numbers.";
-			if (ConfigInfo.isArabic()) {
-				errorText = "يجب على كلمة السر ان تكون اكبر من 6 احرف و ان تكون مكونة من احرف و ارقام";
+		
+		int policy = ConfigInfo.getPasswordPolicy();
+		if(policy == 1) {
+			boolean error = false;
+			if (Utils.isStringEmpty(password)) {
+				error = true;
+			} else if(password.length() < 6) {
+				error = true;
+			} else {
+				boolean hasLetter = false;
+				boolean hasDigit  = false;
+				
+			  for (int i = 0; i < password.length(); i++) {
+	        char x = password.charAt(i);
+	        if (Character.isLetter(x)) {
+	          hasLetter = true;
+	        } else if (Character.isDigit(x)) {
+	          hasDigit = true;
+	        }
+			  }
+			  
+	      if(!hasLetter){
+	      	error = true;
+	      }
+	      if(!hasDigit){
+	      	error = true;
+	      }
+	
+	    }
+			
+			if (error) {
+				errorText = "Password should be at least 6 characters with a letters and numbers.";
+				if (ConfigInfo.isArabic()) {
+					errorText = "يجب على كلمة السر ان تكون اكبر من 6 احرف و ان تكون مكونة من احرف و ارقام";
+				}
+			}
+		} else if(policy == 2) {
+			boolean error = false;
+			if (Utils.isStringEmpty(password)) {
+				error = true;
+			} else if(password.length() < 12) {
+				error = true;
+			} else {
+				boolean hasUpperLetter = false;
+				boolean hasLowerLetter = false;
+				boolean hasDigit  = false;
+				boolean hasSymbol = false;
+			  for (int i = 0; i < password.length(); i++) {
+	        char x = password.charAt(i);
+	        if(Character.isLetter(x)) {
+	        	if(!ConfigInfo.isArabic()) {
+		        	if (Character.isUpperCase(x)) {
+		        		hasUpperLetter = true;
+		        	} else if (Character.isLowerCase(x)) {
+		        		hasLowerLetter = true;
+		        	}
+	        	} else if(Character.isLetter(x)) {
+	        		hasUpperLetter = true;
+	        		hasLowerLetter = true;
+		        } 
+	        } else if (Character.isDigit(x)) {
+	          hasDigit = true;
+	        } else if (containsSpecialCharacter(String.valueOf(x))) {
+	        	hasSymbol = true;
+	        }
+			  }
+			  
+	      if(!hasUpperLetter){
+	      	error = true;
+	      } else if(!hasLowerLetter){
+	      	error = true;
+	      } else if(!hasDigit){
+	      	error = true;
+	      } else if(!hasSymbol){
+	      	error = true;
+	      }
+	    }
+			if (error) {
+				errorText = "Password should be at least 12 characters containing at least a symbol, an upper and lower case letter and a number.";
+				if (ConfigInfo.isArabic()) {
+					errorText = "يجب على كلمة السر ان تكون اكبر من 12 حرف و ان تكون مكونة من احرف، ارقام و رموز";
+				}
 			}
 		}
 			
 		return errorText;
+	}
+	
+	private static boolean containsSpecialCharacter(String s) {
+		String specialChars = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
+    return (s == null) ? false : specialChars.contains(s);
 	}
 
 }
