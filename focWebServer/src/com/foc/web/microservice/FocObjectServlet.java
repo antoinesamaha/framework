@@ -229,8 +229,17 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						
 						FocList list = newFocList(request, response, true);
 						if(filterRef > 0) {
-							if(list.size() == 1) {
-								userJson = toJsonDetails(list.getFocObject(0), builder); 
+							FocObject focObject = null;
+							if(!useCachedList(null)){
+								if(list.size() == 1) {
+									focObject = list.getFocObject(0); 
+								}
+							} else {
+								focObject = list.searchByReference(filterRef);
+							}
+							
+							if(focObject != null) {
+								userJson = toJsonDetails(focObject, builder); 
 								responseBody = userJson;
 							} else {
 								userJson = "{}";
