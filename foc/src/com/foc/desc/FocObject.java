@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -56,6 +57,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
@@ -78,7 +80,6 @@ import com.foc.api.IFocObject;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
-import com.foc.business.company.CompanyDesc;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -87,7 +88,6 @@ import com.foc.business.status.StatusHolderDesc;
 import com.foc.business.workflow.WFFieldLockStage;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
-import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.business.workflow.implementation.IAdrBookParty;
 import com.foc.business.workflow.implementation.IWorkflow;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
@@ -5105,6 +5105,61 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	boolean doNotValidate = isCreated() && isEmpty();
   	return doNotValidate ? true : super.validate(checkValidity, callFromValidationPanel);
   }
+  
+  public void jsonParseSlaveList_MultipleSelection(JSONObject jsonObject, String listFieldName, String fieldNameInSlave) throws Exception {
+		FocList slaveList = getPropertyList(listFieldName);
+		if(slaveList != null && jsonObject.has(listFieldName)) {
+			FocDesc      slaveDesc   = slaveList.getFocDesc();
+			FObjectField objectField = slaveDesc != null ? (FObjectField) slaveDesc.getFieldByName(fieldNameInSlave) : null;
+			
+			JSONArray jsonArray = jsonObject.getJSONArray(listFieldName);
+			if(jsonArray != null && objectField != null) {
+				FocList lookupList = objectField.getSelectionList();
+				if(lookupList != null) {
+					jsonParseSlaveList_MultipleSelection(lookupList, slaveList, jsonArray, fieldNameInSlave);
+				}
+			}
+		}
+  }
+  
+	public void jsonParseSlaveList_MultipleSelection(FocList lookupList, FocList slaveList, JSONArray jsonArray, String fieldNameInSlave) throws Exception {
+		if(slaveList != null && jsonArray != null) {
+			HashMap<Long, FocObject> toDelete = new HashMap<Long, FocObject>();
+			for(int i=0; i<slaveList.size(); i++) {
+				FocObject slaveObj = (FocObject) slaveList.getFocObject(i);
+				toDelete.put(slaveObj.getReferenceInt(), slaveObj);
+			}
+			
+			for(int i=0; i<jsonArray.length(); i++) {
+				int  refTypeInt = (int)  jsonArray.get(i);
+				long refType    = (long) refTypeInt;
+				
+				if (refType > 0) {
+					FocObject type = (FocObject) lookupList.searchByRealReferenceOnly(refType);
+					if (type != null) {
+						FocObject slaveObj = slaveList.searchByPropertyObjectReference(fieldNameInSlave, refType);
+					
+						if(slaveObj == null) {
+							slaveObj = slaveList.newEmptyItem();
+							slaveObj.setPropertyObject(fieldNameInSlave, type);
+							slaveObj.setCreated(true);
+							slaveObj.validate(false);
+						} else {
+							toDelete.remove(slaveObj.getReferenceInt());
+						}
+					}
+				}
+			}
+			
+			Iterator<FocObject> iter = toDelete.values().iterator();
+			while(iter != null && iter.hasNext()) {
+				FocObject slaveObj = iter.next();
+				slaveObj.setDeleted(true);
+				slaveList.remove(slaveObj);
+				slaveObj.validate(false);
+			}
+		}
+	}
   
 	public void jsonParseString(JSONObject jsonObj, String fieldName) {
 		try{
