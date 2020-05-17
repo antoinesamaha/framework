@@ -5270,7 +5270,15 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 	}
 	
+	public void jsonParseMandatory(JSONObject jsonObj, String fieldName) {
+		jsonParseInternal(jsonObj, fieldName, true);
+	}
+	
 	public void jsonParse(JSONObject jsonObj, String fieldName) {
+		jsonParseInternal(jsonObj, fieldName, false);
+	}
+	
+	private void jsonParseInternal(JSONObject jsonObj, String fieldName, boolean mandatory) {
 		if(jsonObj.has(fieldName)){
 			FProperty property = getFocPropertyByName(fieldName);
 			if(property != null){
@@ -5303,6 +5311,39 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					}
 				}
 			}
-		}		
+		} else if (mandatory) {
+			FProperty property = getFocPropertyByName(fieldName);
+			if(property != null){
+				FField fld = property.getFocField();
+				
+				if (fld != null) {
+					switch (fld.getFabType()) {
+					case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
+						((FObject)property).setObject(null);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DATE:
+						FDate dateProp = ((FDate)property);  
+						dateProp.setDate(new Date(dateProp.getZeroReference()));
+						break;
+					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
+						//jsonParseBoolean(jsonObj, fieldName);
+						break;										
+					case FieldDefinition.SQL_TYPE_ID_INT:
+						property.setInteger(0);
+						break;					
+					case FieldDefinition.SQL_TYPE_ID_LONG:
+						property.setLong(0);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_DOUBLE:
+						property.setDouble(0);
+						break;
+					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						property.setString("");
+						break;					
+					}
+				}
+			}
+		}
 	}
 }
