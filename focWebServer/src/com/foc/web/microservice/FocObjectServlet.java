@@ -138,9 +138,25 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 	public void applyRefFilterIfNeeded(HttpServletRequest request, FocList list) {
 		if(list != null && request != null) {
-			long filter_Ref = getFilterRef(request);
+			long filter_Ref = doGet_GetReference(request, list);
 			if(filter_Ref > 0 && list.getFilter() != null) list.getFilter().putAdditionalWhere("REF", "\"REF\"="+filter_Ref);
 		}
+	}
+	
+	protected long doPost_GetReference(JSONObject jsonObj, FocList list) {
+		int ref = 0;
+		if(jsonObj != null && jsonObj.has("REF")){
+			try {
+				ref = jsonObj.getInt("REF");
+			} catch (Exception e) {
+				Globals.logException(e);
+			}
+		}
+		return ref;
+	}
+	
+	protected long doGet_GetReference(HttpServletRequest request, FocList list) {
+		return getFilterRef(request);
 	}
 	
 	public long getFilterRef(HttpServletRequest request) {
@@ -225,9 +241,10 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						B01JsonBuilder builder = newJsonBuiler(request);
 						
 						//We get this only to see if we return a list or just an object
-						long filterRef = getFilterRef(request);
 						
 						FocList list = newFocList(request, response, true);
+						
+						long filterRef = doGet_GetReference(request, list);
 						if(filterRef > 0) {
 							FocObject focObject = null;
 							if(!useCachedList(null)){
@@ -332,11 +349,6 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 				try{
 					JSONObject jsonObj = new JSONObject(reqStr);
 
-					int ref = 0;
-					if(jsonObj.has("REF")){
-						ref = jsonObj.getInt("REF");
-					}
-
 					O focObj = null;
 					FocList list = null;
 
@@ -344,6 +356,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						list = newFocList(request, response, false);
 						if(list != null){
 							list.loadIfNotLoadedFromDB();
+							long ref = doPost_GetReference(jsonObj, list);
 							if(ref > 0){
 								focObj = (O) list.searchByRealReferenceOnly(ref);
 							}else{
@@ -355,6 +368,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						FocConstructor constr = new FocConstructor(getFocDesc());
 						focObj = (O) constr.newItem();
 
+						long ref = doPost_GetReference(jsonObj, list);
 						if(ref > 0){
 							focObj.setReference(ref);
 							focObj.load();
@@ -459,9 +473,9 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 			builder.setHideWorkflowFields(true);
 			SessionAndApplication sessionAndApp = pushSession(request, response);
 			if(sessionAndApp != null){
-				long ref = getFilterRef(request);
-
 				FocList list = getFocDesc().getFocList(FocList.LOAD_IF_NEEDED);
+				
+				long ref = doGet_GetReference(request, list);
 				O focObj = null;
 				if(ref > 0){
 					focObj = (O) list.searchByRealReferenceOnly(ref);
