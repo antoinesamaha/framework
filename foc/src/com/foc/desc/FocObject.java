@@ -5200,6 +5200,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 	}
 	
+	public void jsonParseDateTime(JSONObject jsonObj, String fieldName) {
+		if(jsonObj.has(fieldName)){
+			try{
+				String dateString = jsonObj.getString(fieldName);
+				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy HH:mm");
+				java.util.Date jsonDate = simpleFormat.parse(dateString);
+				setPropertyDate(fieldName, new java.sql.Date(jsonDate.getTime()));
+			}catch (JSONException e){
+				Globals.logException(e);
+			}catch (ParseException e){
+				Globals.logException(e);
+			}
+		}
+	}
+
 	public void jsonParseBoolean(JSONObject jsonObj, String fieldName) {
 		if(jsonObj.has(fieldName)){
 			try{
@@ -5292,6 +5307,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					case FieldDefinition.SQL_TYPE_ID_DATE:
 						jsonParseDate(jsonObj, fieldName);
 						break;
+					case FieldDefinition.SQL_TYPE_ID_DATE_TIME:
+						jsonParseDateTime(jsonObj, fieldName);
+						break;						
 					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
 						jsonParseBoolean(jsonObj, fieldName);
 						break;										
