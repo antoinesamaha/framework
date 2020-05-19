@@ -503,7 +503,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		Globals.logString(" <= DELETE End "+getNameInPlural());
 	}
 	
-	public void postSlaveList(O focObject, FocList list, JSONObject jsonObj, ICopyFromJsonToSlave copyFromJsonToSlave) throws Exception {
+	public void postSlaveList(FocObject focObject, FocList list, JSONObject jsonObj, ICopyFromJsonToSlave copyFromJsonToSlave) throws Exception {
 		if(list != null && jsonObj != null && copyFromJsonToSlave != null) {
 			HashMap<Long, FocObject> toDelete = new HashMap<Long, FocObject>();
 			for(int i=0; i<list.size(); i++) {
