@@ -270,9 +270,11 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 								count = getCountParameter(request);
 							}
 							int totalCount = list.size();
+							if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
+								totalCount = list.toJson_TotalCount(builder);
+							}
 							if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
 								totalCount =	requestTotalCount(list);
-//								totalCount =	list.requestCount();
 							}
 							
 							builder.setListStart(start);
