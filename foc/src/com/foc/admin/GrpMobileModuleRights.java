@@ -17,11 +17,14 @@ package com.foc.admin;
 
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
+import com.foc.shared.json.B01JsonBuilder;
 
 @SuppressWarnings("serial")
 public class GrpMobileModuleRights extends FocObject {
 
-  public GrpMobileModuleRights(FocConstructor constr) {
+  private Object object;
+
+	public GrpMobileModuleRights(FocConstructor constr) {
     super(constr);
     newFocProperties();
   }
@@ -60,9 +63,27 @@ public class GrpMobileModuleRights extends FocObject {
   
   public boolean hasAccessRight(String moduleName){
 		boolean access = false;
-		if(getModuleName() != null && getModuleName().equals(moduleName) && getRight() == GrpMobileModuleRightsDesc.ACCESS_FULL){
+		if(getModuleName() != null && getModuleName().equals(moduleName) && getRight() != GrpMobileModuleRightsDesc.ACCESS_NONE){
 			access = true;
 		}
 		return access;
 	}
+  
+  @Override
+  public void toJson(B01JsonBuilder builder) {
+  	builder.beginObject();
+  	builder.appendKey("MODULE_NAME");
+  	builder.appendValue(getModuleName());
+
+  	builder.appendKey("ACCESS");
+  	if (getRight() == GrpMobileModuleRightsDesc.ACCESS_NONE) {
+  		builder.appendValue("none");
+  	} else if (getRight() == GrpMobileModuleRightsDesc.ACCESS_FULL) {
+  		builder.appendValue("full");
+  	} else if (getRight() == GrpMobileModuleRightsDesc.ACCESS_READ_ONLY) {
+  		builder.appendValue("read_only");
+  	} 
+
+  	builder.endObject();
+  }
 }

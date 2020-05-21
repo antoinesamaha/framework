@@ -53,6 +53,7 @@ import com.foc.desc.FocDesc;
 import com.foc.helpBook.FocHelpBook;
 import com.foc.list.FocList;
 import com.foc.saas.manager.SaaSConfig;
+import com.foc.shared.IFocMobileModule;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.FocMobileModule;
@@ -61,7 +62,6 @@ import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.FocWebModule;
 import com.foc.vaadin.IApplicationConfigurator;
 import com.foc.vaadin.ICentralPanel;
-import com.foc.vaadin.IFocMobileModule;
 import com.foc.vaadin.IFocWebModule;
 import com.foc.vaadin.NotificationScheduledThread;
 import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
@@ -578,7 +578,7 @@ public class FocWebServer implements Serializable {
     FocList       listOfGroups = FocGroup.getList(FocList.LOAD_IF_NEEDED);
     for(int g=0; g<listOfGroups.size(); g++){
       FocGroup group = (FocGroup) listOfGroups.getFocObject(g);
-      modules_ScanAndAddMobileModulesToGroup(group);
+      group.scanAndAddMobileModulesToGroup();
     }
 	}
 	
@@ -599,15 +599,9 @@ public class FocWebServer implements Serializable {
 
 		return arrayList;
 	}
-	
-	public void modules_ScanAndAddMobileModulesToGroup(FocGroup group){
-    Iterator<IFocMobileModule> iter = modulesMobile_GetMap().values().iterator();
-    while(iter != null && iter.hasNext()){
-      IFocMobileModule focWebModule = iter.next();
-      if(group != null && focWebModule.getName() != null && !focWebModule.getName().isEmpty()){
-        group.addMobileModule(focWebModule.getName(), focWebModule.getTitle());
-      }
-    }
+
+	public Iterator<IFocMobileModule> mobileModules_NewIterator(){
+		return modulesMobile_GetMap() != null && modulesMobile_GetMap().values() != null ? (Iterator) (modulesMobile_GetMap().values().iterator()) : null;
 	}
 	
 	public void declareModules_IfNeeded(){

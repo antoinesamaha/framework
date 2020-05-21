@@ -21,6 +21,7 @@ import com.fab.gui.xmlView.IXMLViewDictionary;
 import com.foc.admin.UserSession;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
+import com.foc.shared.IFocMobileModule;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.dataStore.IFocDataDictionary;
@@ -50,6 +51,7 @@ public interface IFocEnvironment {
   public String      getSessionID();
   public void        applyUserTheme();
   public Iterator<IFocWebModuleShared> newWebModuleIterator();
+  public Iterator<IFocMobileModule> newMobileModuleIterator();
   public IFocDataDictionary getFocDataDictionary();
   //public int  popupOptionDialog(String message, String[] options);
 }

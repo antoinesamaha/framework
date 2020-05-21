@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.foc.vaadin;
 
+import com.foc.shared.IFocMobileModule;
+
 public abstract class FocMobileModule implements IFocMobileModule{
 
 	private int    order = 0;

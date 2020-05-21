@@ -28,6 +28,7 @@ import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocObject;
 import com.foc.focVaadinTheme.FocVaadinTheme;
 import com.foc.list.FocList;
+import com.foc.shared.IFocMobileModule;
 import com.foc.shared.IFocWebModuleShared;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.dataStore.IFocDataDictionary;
@@ -280,6 +281,11 @@ public class FocWebEnvironment implements IFocEnvironment {
 		return FocWebServer.getInstance() != null ? FocWebServer.getInstance().modules_NewIterator() : null;
 	}
 
+	@Override
+	public Iterator<IFocMobileModule> newMobileModuleIterator(){
+		return FocWebServer.getInstance() != null ? FocWebServer.getInstance().mobileModules_NewIterator() : null;
+	}
+	
 	@Override
 	public IFocDataDictionary getFocDataDictionary() {
 		return FocDataDictionary.getInstance();

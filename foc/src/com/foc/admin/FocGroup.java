@@ -53,6 +53,7 @@ import com.foc.property.FInt;
 import com.foc.property.FList;
 import com.foc.property.FMultipleChoice;
 import com.foc.property.FString;
+import com.foc.shared.IFocMobileModule;
 import com.foc.shared.IFocWebModuleShared;
 
 /**
@@ -522,6 +523,16 @@ public class FocGroup extends FocObject{
     	IFocWebModuleShared focWebModule = iter.next();
       if(focWebModule.getName() != null && !focWebModule.getName().isEmpty()){
         addWebModule(focWebModule.getName(), focWebModule.getTitle(), focWebModule.isAdminConsole());
+      }
+    }
+	}
+	
+	public void scanAndAddMobileModulesToGroup(){
+    Iterator<IFocMobileModule> iter = Globals.getIFocNotification().newMobileModuleIterator();
+    while(iter != null && iter.hasNext()){
+      IFocMobileModule focWebModule = iter.next();
+      if(focWebModule.getName() != null && !focWebModule.getName().isEmpty()){
+        addMobileModule(focWebModule.getName(), focWebModule.getTitle());
       }
     }
 	}
