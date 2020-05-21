@@ -62,6 +62,10 @@
           <TableColumn name="MODULE_NAME" caption="Module Name" editable="false" />
           <TableColumn name="MODULE_TITLE" caption="Module Title" editable="false" />
           <TableColumn name="ACCESS" caption="Access" />
+          <TableColumn name="Create" caption="Create" />
+          <TableColumn name="Read" caption="Read" />
+          <TableColumn name="Update" caption="Update" />
+          <TableColumn name="Delete" caption="Delete" />
         </GuiTable>
       </VerticalLayout>
     </VerticalLayout>
