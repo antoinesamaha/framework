@@ -67,6 +67,7 @@ public class FocGroup_Form extends FocXMLLayout {
     FocGroup group = (FocGroup) focData;
     if (group != null && group.isCreated()) {
     	group.scanAndAddWebModulesToGroup();
+    	group.scanAndAddMobileModulesToGroup();
     }
   }
 

@@ -13,10 +13,7 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package com.foc.vaadin;
-
-import com.foc.menuStructure.FocMenuItem;
-import com.foc.vaadin.gui.menuTree.FVMenuTree;
+package com.foc.shared;
 
 public interface IFocMobileModule {
   public int     getOrder();
