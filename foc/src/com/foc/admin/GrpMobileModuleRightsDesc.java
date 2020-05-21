@@ -35,8 +35,9 @@ public class GrpMobileModuleRightsDesc extends FocDesc{
   public static final int FLD_GROUP        = 3;
   public static final int FLD_MODULE_TITLE = 5;
   
-  public static final int ACCESS_NONE = 0;
-  public static final int ACCESS_FULL = 1;
+  public static final int ACCESS_NONE      = 0;
+  public static final int ACCESS_READ_ONLY = 1;
+  public static final int ACCESS_FULL      = 2;
 
   public final static String MAN_POWER    = "Man Power";
 	public final static String ADDRESS_BOOK = "Address Book";
@@ -58,6 +59,7 @@ public class GrpMobileModuleRightsDesc extends FocDesc{
 
     FMultipleChoiceField bFld = new FMultipleChoiceField("ACCESS", "Access", FLD_ACCESS_RIGHT, false, 2);
     bFld.addChoice(ACCESS_NONE, "-");
+    bFld.addChoice(ACCESS_READ_ONLY, "Read only");
     bFld.addChoice(ACCESS_FULL, "Full");
     addField(bFld);
     
@@ -112,7 +114,7 @@ public class GrpMobileModuleRightsDesc extends FocDesc{
 	  		if(mobileModuleRightsList != null){
 	  			for(int i=0; i<mobileModuleRightsList.size(); i++){
 	  				GrpMobileModuleRights grpMobileModuleRights = (GrpMobileModuleRights) mobileModuleRightsList.getFocObject(i);
-	  				if(grpMobileModuleRights != null && grpMobileModuleRights.getRight() == GrpMobileModuleRightsDesc.ACCESS_FULL){
+	  				if(grpMobileModuleRights != null && grpMobileModuleRights.getRight() != GrpMobileModuleRightsDesc.ACCESS_NONE){
 	  					focList.add(grpMobileModuleRights);
 	  				}
 	  			}
