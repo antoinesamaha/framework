@@ -61,9 +61,29 @@ public class GrpMobileModuleRights extends FocObject {
     setPropertyMultiChoice(GrpMobileModuleRightsDesc.FLD_ACCESS_RIGHT, right);
   }
   
+  public boolean getCreate() {
+  	return getPropertyBoolean(GrpMobileModuleRightsDesc.FLD_CREATE);
+  }
+
+  public boolean getRead() {
+  	return getPropertyBoolean(GrpMobileModuleRightsDesc.FLD_READ);
+  }
+  
+  public boolean getUpdate() {
+  	return getPropertyBoolean(GrpMobileModuleRightsDesc.FLD_UPDATE);
+  }
+  
+  public boolean getDelete() {
+  	return getPropertyBoolean(GrpMobileModuleRightsDesc.FLD_DELETE);
+  }
+  
   public boolean hasAccessRight(String moduleName){
 		boolean access = false;
-		if(getModuleName() != null && getModuleName().equals(moduleName) && getRight() != GrpMobileModuleRightsDesc.ACCESS_NONE){
+		if(			getModuleName() != null 
+				&& 	getModuleName().equals(moduleName) 
+				//&&  getRight() != GrpMobileModuleRightsDesc.ACCESS_NONE
+				&&  (getCreate() || getRead() || getUpdate() || getDelete())
+				){
 			access = true;
 		}
 		return access;
@@ -75,6 +95,20 @@ public class GrpMobileModuleRights extends FocObject {
   	builder.appendKey("MODULE_NAME");
   	builder.appendValue(getModuleName());
 
+  	if(getCreate()) {
+  		builder.appendKeyValue("Create", getCreate());
+  	}
+  	if(getRead()) {
+  		builder.appendKeyValue("Read", getRead());
+  	}
+  	if(getUpdate()) {
+  		builder.appendKeyValue("Update", getUpdate());
+  	}
+  	if(getDelete()) {
+  		builder.appendKeyValue("Delete", getDelete());
+  	}
+  	
+  	/*
   	builder.appendKey("ACCESS");
   	if (getRight() == GrpMobileModuleRightsDesc.ACCESS_NONE) {
   		builder.appendValue("none");
@@ -82,7 +116,8 @@ public class GrpMobileModuleRights extends FocObject {
   		builder.appendValue("full");
   	} else if (getRight() == GrpMobileModuleRightsDesc.ACCESS_READ_ONLY) {
   		builder.appendValue("read_only");
-  	} 
+  	}
+  	*/
 
   	builder.endObject();
   }

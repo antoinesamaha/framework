@@ -21,12 +21,14 @@ import com.foc.Globals;
 import com.foc.SrvConst_ServerSide;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FStringField;
+import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
+import com.foc.property.FBoolean;
 
 public class GrpMobileModuleRightsDesc extends FocDesc{
 
@@ -34,6 +36,11 @@ public class GrpMobileModuleRightsDesc extends FocDesc{
   public static final int FLD_ACCESS_RIGHT = 2;
   public static final int FLD_GROUP        = 3;
   public static final int FLD_MODULE_TITLE = 5;
+  
+  public static final int FLD_CREATE       = 6;
+  public static final int FLD_READ         = 7;
+  public static final int FLD_UPDATE       = 8;
+  public static final int FLD_DELETE       = 9;
   
   public static final int ACCESS_NONE      = 0;
   public static final int ACCESS_READ_ONLY = 1;
@@ -68,6 +75,18 @@ public class GrpMobileModuleRightsDesc extends FocDesc{
     objectField.setComboBoxCellEditor(FocGroupDesc.FLD_NAME);
     objectField.setSelectionList(FocGroup.getList(FocList.NONE));
     addField(objectField);
+    
+    FBoolField boolFld = new FBoolField("Create", "Create", FLD_CREATE, false);
+    addField(boolFld);
+    
+    boolFld = new FBoolField("Read", "Read", FLD_READ, false);
+    addField(boolFld);
+    
+    boolFld = new FBoolField("Update", "Update", FLD_UPDATE, false);
+    addField(boolFld);
+    
+    boolFld = new FBoolField("Delete", "Delete", FLD_DELETE, false);
+    addField(boolFld);
   }
 
   //ooooooooooooooooooooooooooooooooooo
