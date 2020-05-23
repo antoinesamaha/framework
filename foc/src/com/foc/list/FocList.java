@@ -2172,7 +2172,26 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			FField depricatedField = getFocDesc().getFieldByID(FField.FLD_DEPRECATED_FIELD);
 
 			int count = 0;
+
+			int readIndex = 0;
 			
+			for(int i=0; i<size() && (maxCount == 0 || count<maxCount); i++){
+				FocObject focObj = getFocObject(i);
+				if(			focObj != null 
+						&& (depricatedField == null || !focObj.isDeprecated())
+						&& (builder.getObjectFilter() == null || builder.getObjectFilter().includeObject(focObj))
+						){
+					
+					if(readIndex >= start) {
+						focObj.toJson(builder);
+						count++;
+					}
+					
+					readIndex++;
+				}
+			}
+			
+			/*
 			for(int i=start; i<size() && (maxCount == 0 || count<maxCount); i++){
 				FocObject focObj = getFocObject(i);
 				if(			focObj != null 
@@ -2183,6 +2202,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 					count++;
 				}
 			}
+			*/
+			
+			
 			builder.endList();
 		}
 	}
