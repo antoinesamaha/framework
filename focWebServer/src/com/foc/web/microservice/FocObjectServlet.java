@@ -12,8 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foc.Globals;
 import com.foc.business.workflow.implementation.FocWorkflowObject;
+import com.foc.common.exception.UnauthorizedException;
+import com.foc.common.model.ErrorCode;
+import com.foc.common.model.ErrorResponse;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -21,6 +26,7 @@ import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.Utils;
+import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
 
 public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServlet {
 
@@ -38,6 +44,9 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		
 	}
 
+	public boolean shouldAuthenticate() {
+		return true;
+	}
 	public boolean allowGet(FocServletRequest focRequest) {
 		return true;
 	}
@@ -222,101 +231,105 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		try {
-			if(request != null && request.getSession() != null) {
-				Globals.logString("Session ID Started request"+request.getSession().getId());
+		try{
+			if(request != null && request.getSession() != null){
+				Globals.logString("Session ID Started request" + request.getSession().getId());
 			}
 			SessionAndApplication sessionAndApp = pushSession(request, response);
-			if(sessionAndApp != null){
-				FocServletRequest focRequest = null;
-				try {
-					focRequest = newFocServletRequest(sessionAndApp, request, response);
-					
-					Globals.logString(" => GET Begin "+getNameInPlural());
-					if(allowGet(null)){
-						logRequestHeaders(request);
-						
-						String userJson = "";
-						String responseBody = "";
-						B01JsonBuilder builder = newJsonBuiler(request);
-						
-						//We get this only to see if we return a list or just an object
-						
-						FocList list = newFocList(request, response, true);
-						
-						long filterRef = doGet_GetReference(request, list);
-						if(filterRef > 0) {
-							FocObject focObject = null;
-							if(!useCachedList(null)){
-								if(list.size() == 1) {
-									focObject = list.getFocObject(0); 
-								}
-							} else {
-								focObject = list.searchByReference(filterRef);
-							}
-							
-							if(focObject != null) {
-								userJson = toJsonDetails(focObject, builder); 
-								responseBody = userJson;
-							} else {
-								userJson = "{}";
-								responseBody = userJson;
-							}
-						} else {
-							int start = -1;
-							int count = -1;
-							if(useCachedList(null)){
-								start = getStartParameter(request);
-								count = getCountParameter(request);
-							}
-							int totalCount = list.size();
-							if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
-								totalCount = list.toJson_TotalCount(builder);
-							}
-							if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
-								totalCount =	requestTotalCount(list);
-							}
-							
-							builder.setListStart(start);
-							builder.setListCount(count);
-							list.toJson(builder);
-							userJson = builder.toString();
-							//responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
-						  // add total if start or count is present in the request. If not paginated, no need to do a count query
-							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
-//							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
-						}
-						
-						if(!useCachedList(null)){
-							list.dispose();
-							list = null;
-						}
-						
-						response.setStatus(HttpServletResponse.SC_OK);
-						setCORS(response);
-						response.getWriter().println(responseBody);
-						String log = responseBody;
-						if(log.length() > 500) log = log.substring(0, 499)+"...";
-						Globals.logString("  = Returned: "+log);
-					}
-					Globals.logString(" <= GET End "+getNameInPlural()+" "+response.getStatus());
-				} catch (Exception e) {
-					Globals.logException(e);
-				} finally {
-					focRequest.dispose();
-					sessionAndApp.logout();				
-				}
-	
-			}else{
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				setCORS(response);
-				String responseBody = "{\"message\": \"Unauthorised\"}";
-				response.getWriter().println(responseBody);
+
+			if(shouldAuthenticate()){
+				authenticateSessionAndApp(sessionAndApp);
 			}
-		} catch (Exception e) {
+
+			FocServletRequest focRequest = null;
+			try{
+				focRequest = newFocServletRequest(sessionAndApp, request, response);
+
+				Globals.logString(" => GET Begin " + getNameInPlural());
+				if(allowGet(null)){
+					logRequestHeaders(request);
+
+					B01JsonBuilder builder = newJsonBuiler(request);
+
+					// We get this only to see if we return a list or just an object
+
+					doGetInternal(request, response, focRequest, builder);
+				}
+				Globals.logString(" <= GET End " + getNameInPlural() + " " + response.getStatus());
+			}catch (Exception e){
+				Globals.logException(e);
+			}finally{
+				focRequest.dispose();
+				sessionAndApp.logout();
+			}
+
+		}catch (UnauthorizedException exception){
+			writeResponseUnauthorized(response);
+		}catch (Exception e){
 			Globals.logException(e);
 			throw e;
 		}
+	}
+
+	public void doGetInternal(HttpServletRequest request, HttpServletResponse response, FocServletRequest focRequest, B01JsonBuilder builder) throws IOException {
+		String userJson;
+		String responseBody;
+		FocList list = newFocList(request, response, true);
+		
+		long filterRef = doGet_GetReference(request, list);
+		if(filterRef > 0) {
+			FocObject focObject = null;
+			if(!useCachedList(null)){
+				if(list.size() == 1) {
+					focObject = list.getFocObject(0); 
+				}
+			} else {
+				focObject = list.searchByReference(filterRef);
+			}
+			
+			if(focObject != null) {
+				userJson = toJsonDetails(focObject, builder); 
+				responseBody = userJson;
+			} else {
+				userJson = "{}";
+				responseBody = userJson;
+			}
+		} else {
+			int start = -1;
+			int count = -1;
+			if(useCachedList(null)){
+				start = getStartParameter(request);
+				count = getCountParameter(request);
+			}
+			int totalCount = list.size();
+			if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
+				totalCount = list.toJson_TotalCount(builder);
+			}
+			if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
+				totalCount =	requestTotalCount(list);
+			}
+			
+			builder.setListStart(start);
+			builder.setListCount(count);
+			list.toJson(builder);
+			userJson = builder.toString();
+			//responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
+		  // add total if start or count is present in the request. If not paginated, no need to do a count query
+			responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+//							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+		}
+		
+		if(!useCachedList(null)){
+			list.dispose();
+			list = null;
+		}
+		
+		response.setStatus(HttpServletResponse.SC_OK);
+		setCORS(response);
+		response.getWriter().println(responseBody);
+		String log = responseBody;
+		if(log.length() > 500) log = log.substring(0, 499)+"...";
+		Globals.logString("  = Returned: "+log);
 	}
 
 	protected B01JsonBuilder newJsonBuilderForPostResponse() {
@@ -329,12 +342,19 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SessionAndApplication sessionAndApp = pushSession(request, response);
-		if(sessionAndApp != null){
+
+		try{
+			
+			SessionAndApplication sessionAndApp = pushSession(request, response);
+			
+			if(shouldAuthenticate()) {
+				authenticateSessionAndApp(sessionAndApp);
+			}
+			
 			FocServletRequest focRequest = newFocServletRequest(sessionAndApp, request, response);
-			
+
 			String userJson = "";
-			
+
 			Globals.logString(" => POST Begin "+getNameInPlural());
 			if(allowPost(focRequest)){
 				logRequestHeaders(request);
@@ -351,105 +371,99 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 				try{
 					JSONObject jsonObj = new JSONObject(reqStr);
 
-					O focObj = null;
-					FocList list = null;
-
-					if(useCachedList(null)){
-						list = newFocList(request, response, false);
-						if(list != null){
-							list.loadIfNotLoadedFromDB();
-							long ref = doPost_GetReference(jsonObj, list);
-							if(ref > 0){
-								focObj = (O) list.searchByRealReferenceOnly(ref);
-							}else{
-								focObj = (O) list.newEmptyItem();
-								focObj.code_resetCode();
-							}
-						}
-					}else{
-						FocConstructor constr = new FocConstructor(getFocDesc());
-						focObj = (O) constr.newItem();
-
-						long ref = doPost_GetReference(jsonObj, list);
-						if(ref > 0){
-							focObj.setReference(ref);
-							focObj.load();
-						}else{
-							focObj.setCreated(true);
-							focObj.code_resetCode();
-						}
-					}
-
-					if(focObj != null){
-						fillFocObjectFromJson(focObj, jsonObj);
-
-						boolean created = focObj.isCreated();
-						if(created) {
-							if(focObj instanceof FocWorkflowObject) {
-								((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
-							}
-						}
-						
-						boolean errorSaving = false;
-						
-						if(list != null){
-							list.add(focObj);
-							errorSaving = !focObj.validate(true);
-							if(!errorSaving) {
-								errorSaving = !list.validate(true);
-							}
-						}else{
-							errorSaving = !focObj.validate(true);
-						}
-
-						if (errorSaving) {
-							userJson = "{\"message\": \"Could not save\"}";
-							response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-							setCORS(response);
-							response.getWriter().println(userJson);
-							
-						} else {
-							afterPost(focRequest, focObj, created);
-	
-							userJson = toJsonDetails(focObj, builder); 
-							//focObj.toJson(builder);
-							//userJson = builder.toString();
-							
-							response.setStatus(HttpServletResponse.SC_OK);
-							setCORS(response);
-							response.getWriter().println(userJson);
-						}
-					}else{
-						userJson = "{\"message\": \" Does not exists \"}";
-						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-						setCORS(response);
-						response.getWriter().println(userJson);
-					}
+					userJson = doPostInternal(request, response, focRequest, builder, jsonObj);
 
 				}catch (Exception e){
-					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					userJson = "{\"message\": \"Bad Request\"}";
+					writeResponseBadRequest(response, "Bad Request", null);
 					Globals.logException(e);
-					setCORS(response);
-					response.getWriter().println(userJson);
+
 				}
 				
 			} else {
-				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				userJson = "{\"message\": \"Post not allowed by server\"}";
-				setCORS(response);
-				response.getWriter().println(userJson);
+				// TODO this should be Method Not Allowed 405 HTTP status instead of 400 Bad Request
+				writeResponseBadRequest(response, "Post not allowed by server", null);
 			}
 			Globals.logString("  = Returned: "+userJson);
 			Globals.logString(" <= POST End "+getNameInPlural()+" "+response.getStatus());
 		
 			sessionAndApp.logout();		
-		}else{
-			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			String userJson = "{\"message\": \"Unauthorised\"}";
-			setCORS(response);
-			response.getWriter().println(userJson);
+			
+		}catch (UnauthorizedException exception){
+			writeResponseUnauthorized(response);
 		}
+	}
+
+	public String doPostInternal(HttpServletRequest request, HttpServletResponse response, FocServletRequest focRequest, B01JsonBuilder builder, JSONObject jsonObj) throws Exception, IOException {
+		String userJson;
+		O focObj = null;
+		FocList list = null;
+
+		if(useCachedList(null)){
+			list = newFocList(request, response, false);
+			if(list != null){
+				list.loadIfNotLoadedFromDB();
+				long ref = doPost_GetReference(jsonObj, list);
+				if(ref > 0){
+					focObj = (O) list.searchByRealReferenceOnly(ref);
+				}else{
+					focObj = (O) list.newEmptyItem();
+					focObj.code_resetCode();
+				}
+			}
+		}else{
+			FocConstructor constr = new FocConstructor(getFocDesc());
+			focObj = (O) constr.newItem();
+
+			long ref = doPost_GetReference(jsonObj, list);
+			if(ref > 0){
+				focObj.setReference(ref);
+				focObj.load();
+			}else{
+				focObj.setCreated(true);
+				focObj.code_resetCode();
+			}
+		}
+
+		if(focObj != null){
+			fillFocObjectFromJson(focObj, jsonObj);
+
+			boolean created = focObj.isCreated();
+			if(created) {
+				if(focObj instanceof FocWorkflowObject) {
+					((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
+				}
+			}
+			
+			boolean errorSaving = false;
+			
+			if(list != null){
+				list.add(focObj);
+				errorSaving = !focObj.validate(true);
+				if(!errorSaving) {
+					errorSaving = !list.validate(true);
+				}
+			}else{
+				errorSaving = !focObj.validate(true);
+			}
+
+			if (errorSaving) {
+				userJson=writeResponseInternalServerError(response, "Could not save", null);
+				
+			} else {
+				afterPost(focRequest, focObj, created);
+
+				userJson = toJsonDetails(focObj, builder); 
+				
+				response.setStatus(HttpServletResponse.SC_OK);
+				setCORS(response);
+				response.getWriter().println(userJson);
+			}
+		}else{
+			// TODO this maybe should be 404 instead of bad request
+			userJson=	writeResponseBadRequest(response, "Does not exists", null);
+
+		}
+		return userJson;
 	}
 
 	@Override
@@ -556,5 +570,61 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 	public interface ICopyFromJsonToSlave {
 		public void copyJsonToObject(FocObject slaveObj, JSONObject slaveJson);
+	}
+	
+	public void authenticateSessionAndApp(SessionAndApplication sessionAndApp) throws IOException, UnauthorizedException {
+
+		if(sessionAndApp == null){
+			throw new UnauthorizedException();
+		}
+	}
+
+	public String writeResponseInvalidData(HttpServletResponse response, String message) throws IOException {
+
+		String userjson = createJsonResponse(response, message, ErrorCode.INVALID_DATA, HttpServletResponse.SC_BAD_REQUEST);
+		writeResponseAndCORS(response, userjson);
+		return userjson;
+	}
+
+	public String writeResponseMissingData(HttpServletResponse response, String message) throws IOException {
+
+		String userjson = createJsonResponse(response, message, ErrorCode.MISSING_DATA, HttpServletResponse.SC_BAD_REQUEST);
+		writeResponseAndCORS(response, userjson);
+		return userjson;
+	}
+
+	public String writeResponseBadRequest(HttpServletResponse response, String message, ErrorCode errorCode) throws IOException {
+
+		String userjson = createJsonResponse(response, message, errorCode, HttpServletResponse.SC_BAD_REQUEST);
+		writeResponseAndCORS(response, userjson);
+		return userjson;
+	}
+
+	public String writeResponseInternalServerError(HttpServletResponse response, String message, ErrorCode errorCode) throws IOException {
+
+		String userjson = createJsonResponse(response, message, errorCode, HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		writeResponseAndCORS(response, userjson);
+		return userjson;
+	}
+
+	public String writeResponseUnauthorized(HttpServletResponse response) throws IOException {
+
+		String userjson = createJsonResponse(response, "Unauthorised", null, HttpServletResponse.SC_UNAUTHORIZED);
+		writeResponseAndCORS(response, userjson);
+		return userjson;
+	}
+
+	public String createJsonResponse(HttpServletResponse response, String message, ErrorCode errorCode, int status) throws JsonProcessingException {
+		
+		response.setStatus(status);
+		ErrorResponse errorResponse = new ErrorResponse(errorCode.getCode(), message);
+		String userJson = new ObjectMapper().writeValueAsString(errorResponse);
+		return userJson;
+
+	}
+
+	private void writeResponseAndCORS(HttpServletResponse response, String userJson) throws IOException {
+		setCORS(response);
+		response.getWriter().println(userJson);
 	}
 }
