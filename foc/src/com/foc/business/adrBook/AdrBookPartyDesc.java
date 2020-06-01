@@ -203,6 +203,7 @@ public class AdrBookPartyDesc extends FocDesc {
     addField(objFld);
     
     objFld = ContactDesc.newContactField("DEFAULT_CONTACT", "Main Contact", FLD_DEFAULT_CONTACT, true);
+    objFld.setReferenceChecker_PutToZeroWhenReferenceDeleted(true);
     addField(objFld);
     
     fField = new FStringField("COMMENT", "Comment", FLD_COMMENT, false, 200);//2 for the : and space
