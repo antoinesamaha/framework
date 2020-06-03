@@ -556,14 +556,6 @@ public class FocCentralPanel extends FVVerticalLayout implements INavigationWind
 		}
 	}
 	
-	public void goBackTillIndexPage(int i){
-		if(i >= 0) {			
-			while(getCentralPanelsArrayList().size() > i+1){
-				goBack(null);
-			}
-		}
-	}
-	
 	public void init(){
 	}
 
