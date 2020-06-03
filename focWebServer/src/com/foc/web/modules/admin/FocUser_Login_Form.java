@@ -45,6 +45,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
 	private FocWebApplication anotherApplicationAlreadyRunning = null;
   private FVButton          login           = null;
   private FocUser           approvedFocUser = null;
+  private String loginErrorMessage = "";
   
   protected void afterLayoutConstruction(){
     login = (FVButton) getComponentByName("login");
@@ -72,6 +73,10 @@ public class FocUser_Login_Form extends FocXMLLayout {
   	if(login != null){
   		login.setVisible(visible);
   	}
+  }
+  
+  public void setLoginErrorMessage(String message) {
+  	loginErrorMessage = message;
   }
   
   private void addBrowserBackClick_JavaScript(){
@@ -198,7 +203,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
       	loginWithUserAlreadyApproved_Internal(approvedFocUser);
       }
     } else {
-    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
     }
     
     loginAccess.dispose();
