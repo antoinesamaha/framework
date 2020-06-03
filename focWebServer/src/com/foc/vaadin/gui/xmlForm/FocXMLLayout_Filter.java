@@ -16,6 +16,7 @@
 package com.foc.vaadin.gui.xmlForm;
 
 import com.foc.business.dateShifter.DateShifter;
+import com.foc.dataWrapper.FocDataWrapper;
 import com.foc.list.filter.DateCondition;
 import com.foc.list.filter.DateTimeCondition;
 import com.foc.list.filter.FilterCondition;
@@ -149,17 +150,26 @@ public abstract class FocXMLLayout_Filter<F extends FocListFilter> extends FocXM
 	}
 
 	public void applyFilter() {
+		boolean refreshDisabledInitialValue = false;
+		FVTableWrapperLayout tableWrapper = getTableWrapperLayout();
+		if (tableWrapper != null) {
+			FocDataWrapper wrapper = tableWrapper.getFocDataWrapper();
+			refreshDisabledInitialValue = wrapper != null ? wrapper.setRefreshGuiDisabled(true) : false;
+		}
+		
 		FocListFilter filter = getFilter();
 		filter.setActive(true);
 
-		FVTableWrapperLayout tableWrapper = getTableWrapperLayout();
 		if (tableWrapper != null) {
-			if (tableWrapper.getFocDataWrapper() != null) {
-				tableWrapper.getFocDataWrapper().resetVisibleListElements();
+			FocDataWrapper wrapper = tableWrapper.getFocDataWrapper();
+			if (wrapper != null) {
+				wrapper.resetVisibleListElements();
 			}
 			if (tableWrapper.getTableTreeDelegate() != null) {
 				tableWrapper.getTableTreeDelegate().refresh_CallContainerItemSetChangeEvent();
 			}
+			
+			if(wrapper != null) wrapper.setRefreshGuiDisabled(refreshDisabledInitialValue);
 		}
 	}
 	
