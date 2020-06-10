@@ -15,12 +15,15 @@
  ******************************************************************************/
 package com.foc.business.workflow;
 
-import java.util.ArrayList;
-
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.business.department.DepartmentDesc;
+import com.foc.business.notifier.FNotifTrigger;
+import com.foc.business.notifier.FocNotificationConst;
+import com.foc.business.notifier.FocNotificationEvent;
+import com.foc.business.notifier.FocNotificationManager;
+import com.foc.business.notifier.actions.FocNotifAction_Abstract;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FObjectField;
 import com.foc.list.FocList;
@@ -90,7 +93,21 @@ public class WFOperatorDesc extends FocDesc {
     fObjectFld.setSelectionList(DepartmentDesc.getList(FocList.NONE));
     addField(fObjectFld);
     fObjectFld.addListener(listener);
+    setSiteModificationNotifier();
   }
+	
+	private void setSiteModificationNotifier() {
+		FocNotifAction_ReloadList manipulator = new FocNotifAction_ReloadList();
+			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_ADD);
+			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_UPDATE);
+			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_DELETE);
+	}
+	
+	private void addNotifTriggers(FocNotifAction_ReloadList manipulator, FocDesc desc, int notificationActionId) {
+		if(desc != null && FocNotificationManager.getInstance() != null) {
+			FocNotificationManager.getInstance().addInternalEventNotifier(notificationActionId, desc, null, manipulator);
+		}
+	}
 	
 	//ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
@@ -199,4 +216,17 @@ public class WFOperatorDesc extends FocDesc {
 	public static FocDesc getInstance() {
     return getInstance(DB_TABLE_NAME, WFOperatorDesc.class);    
   }
+	
+	public class FocNotifAction_ReloadList extends FocNotifAction_Abstract{
+
+		@Override
+		public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
+			try{
+				WFOperator operatorObject = ((WFOperator)event.getEventFocObject());
+				if(operatorObject != null && operatorObject.getUser() != null)	operatorObject.getUser().userSites_Rebuild();
+			} catch (Exception e){
+				Globals.logException(e);
+			}
+		}
+	}
 }
