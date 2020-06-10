@@ -22,18 +22,34 @@ import org.vaadin.visjs.networkDiagram.NetworkDiagram;
 import org.vaadin.visjs.networkDiagram.Node;
 import org.vaadin.visjs.networkDiagram.options.Options;
 
+import com.foc.ConfigInfo;
 import com.foc.desc.FocObject;
+import com.foc.util.Utils;
 
 public abstract class FocNetwork extends NetworkDiagram {
 	
+	private static final int DEFAULT_MAX_LEVEL = 10;
+	
 	private HashMap<String, Node> drawnNodes = null;
 	private ArrayList<FocObjectNetwork> focObjectNetworks = null;
+	private int level    = 0;
+	private int maxLevel = 0;
 	
 	public FocNetwork(Options options){
+		this(options, DEFAULT_MAX_LEVEL);
+		
+		String maxLevelString = ConfigInfo.getProperty("network.max.level");
+		if (maxLevelString != null) {
+			maxLevel = Utils.parseInteger(maxLevelString, DEFAULT_MAX_LEVEL);
+		}
+	}
+	
+	public FocNetwork(Options options, int maxLevel){
 		super(options);
 		
 		drawnNodes = new HashMap<String, Node>();
 		focObjectNetworks = new ArrayList<FocObjectNetwork>();
+		this.maxLevel = maxLevel;
 	}
 	
 	public void dispose(){
@@ -50,6 +66,16 @@ public abstract class FocNetwork extends NetworkDiagram {
 		}
 	}
 
+	public boolean incrementLevel() {
+		level++;
+		return level < maxLevel;
+	}
+	
+	public int decrementLevel() {
+		level--;
+		return level;
+	}
+	
 	public void addFocObjectNetwork(FocObjectNetwork focObjectNetwork){
 		if(focObjectNetworks != null){
 			focObjectNetworks.add(focObjectNetwork);
@@ -84,5 +110,9 @@ public abstract class FocNetwork extends NetworkDiagram {
 
 	public String getID(String storage, long ref){
 		return storage+"|"+ref;
+	}
+
+	public int getMaxLevel() {
+		return maxLevel;
 	}
 }

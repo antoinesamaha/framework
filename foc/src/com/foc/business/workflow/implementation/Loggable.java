@@ -18,6 +18,7 @@ package com.foc.business.workflow.implementation;
 import java.sql.Date;
 import java.util.Comparator;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
@@ -178,10 +179,17 @@ public class Loggable {
 						buffer.append(", "+lastModifDateFld.getDBName()+" = "+dateSQLStr+" ");
 						buffer.append(" where "+focDesc.getRefFieldName()+" = "+ref+" ");						
 					} else {
-						buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
-						buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
-						buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
-						buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+						if(ConfigInfo.isAdaptConstraints() && userRef == 0) {
+							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+							buffer.append("set \""+lastModifUserFld.getDBName()+"\" = NULL ");
+							buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
+							buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+						} else {
+							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+							buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
+							buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
+							buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
+						}
 					}					
 					Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
 				}
