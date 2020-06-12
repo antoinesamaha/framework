@@ -28,7 +28,7 @@
           <GuiField name="ALLOW_IMPORT" caption="Allow Imports" captionPos="left" captionWidth="200px"/>
           <GuiField name="REPORT_ACCESS" caption="Allow Report Access" captionPos="left" captionWidth="200px"/>
           <GuiField name="ALLOW_REPORT_CREATION" caption="Allow Report Creation" captionPos="left" captionWidth="200px"/>
-          <GuiField name="ALLOW_INSERT_IN_COMBOBOX" caption="Allow Inser in combobox" captionPos="left" captionWidth="200px"/>
+          <GuiField name="ALLOW_INSERT_IN_COMBOBOX" caption="Allow Insert in combobox" captionPos="left" captionWidth="200px"/>
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
           <GuiField name="DELETE_UNUSED_USERS" caption="Allow Delete Unused Users" captionPos="left" captionWidth="200px"/>
