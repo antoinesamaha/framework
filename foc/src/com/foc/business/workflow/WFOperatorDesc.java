@@ -93,14 +93,19 @@ public class WFOperatorDesc extends FocDesc {
     fObjectFld.setSelectionList(DepartmentDesc.getList(FocList.NONE));
     addField(fObjectFld);
     fObjectFld.addListener(listener);
-    setSiteModificationNotifier();
+  }
+	
+	@Override
+  protected void afterConstruction_1(){
+  	super.afterConstruction_1();
+  	setSiteModificationNotifier();
   }
 	
 	private void setSiteModificationNotifier() {
 		FocNotifAction_ReloadList manipulator = new FocNotifAction_ReloadList();
-			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_ADD);
-			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_UPDATE);
-			addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_DELETE);
+  	addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_ADD);
+	  addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_UPDATE);
+		addNotifTriggers(manipulator, this, FocNotificationConst.EVT_TABLE_DELETE);
 	}
 	
 	private void addNotifTriggers(FocNotifAction_ReloadList manipulator, FocDesc desc, int notificationActionId) {
