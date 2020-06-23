@@ -86,6 +86,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   private ReferencesCollection referencesCollection     = null;
   private boolean              refreshGuiDisabled       = false;
   private int                  forbidAncestorSiteAccess = -1;
+  private boolean 						 applySiteFilter = true;
   
   public FocDataWrapper(IFocData data){
   	this(data, true);
@@ -222,6 +223,14 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
       visibleListElements.clear();
       visibleListElements = null;
     }
+  }
+  
+  public boolean isApplySiteFilter() {
+  	return applySiteFilter;
+  }
+  
+  public void setApplySiteFilter(boolean value) {
+  	applySiteFilter = value;
   }
 
   public void setFilterByExpression_FocXMLLayout(String expression){
@@ -380,55 +389,57 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   protected boolean includeFocObject(FocObject focObj){
     boolean include = focObj != null ? true : false;
 //    FocUser user = FocWebApplication.getFocWebSession_Static().getUserSession().getUser();
-    UserSession userSession = getUserSession();
-    FocUser user = userSession != null ? userSession.getUser() : null;
-    if(user != null && user.isGuest()){
-    	if(focObj.hasAdrBookParty()){
-        include = false;
-        IAdrBookParty iAdrBookParty = (IAdrBookParty) focObj;
-        AdrBookParty adrBookParty = iAdrBookParty != null ? iAdrBookParty.iWorkflow_getAdrBookParty() : null;
-        if(adrBookParty != null){
-          if(user.getContact() != null && user.getContact().getAdrBookParty() != null){
-            include = adrBookParty.equalsRef(user.getContact().getAdrBookParty());
-          }
-        }
-      }
-      /*FocDesc focDesc = focObj.getThisFocDesc();
-      if(focDesc.workflow_IsWorkflowSubject()){
-        include = false;          
-        Workflow workflow = ((IWorkflow)focObj).iWorkflow_getWorkflow();
-        AdrBookParty adrBookParty = workflow.getAdrBookParty();
-        if(adrBookParty != null){
-          if(user.getContact() != null && user.getContact().getAdrBookParty() != null){
-            include = adrBookParty.equalsRef(user.getContact().getAdrBookParty());
-          }
-        }
-      }*/
-    }else{
-      if(include && byCompany){
-        include = false;      
-        if(focObj.getCompany() == null || focObj.getCompany().equalsRef(company)){
-          
-          if(siteFieldID_1 != FField.NO_FIELD_ID && userSession != null){
-            WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_1);
-            if(site != null){
-              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
-            }
-          }
-          
-          if(siteFieldID_2 != FField.NO_FIELD_ID && userSession != null){
-            WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_2);
-            if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
-              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
-            }
-          }
-          
-          if(siteFieldID_1 == FField.NO_FIELD_ID && siteFieldID_2 == FField.NO_FIELD_ID){
-            include = true;
-          }
-        }
-      }
-    }
+	  if(isApplySiteFilter()) {
+    	UserSession userSession = getUserSession();
+	    FocUser user = userSession != null ? userSession.getUser() : null;
+	    if(user != null && user.isGuest()){
+	    	if(focObj.hasAdrBookParty()){
+	        include = false;
+	        IAdrBookParty iAdrBookParty = (IAdrBookParty) focObj;
+	        AdrBookParty adrBookParty = iAdrBookParty != null ? iAdrBookParty.iWorkflow_getAdrBookParty() : null;
+	        if(adrBookParty != null){
+	          if(user.getContact() != null && user.getContact().getAdrBookParty() != null){
+	            include = adrBookParty.equalsRef(user.getContact().getAdrBookParty());
+	          }
+	        }
+	      }
+	      /*FocDesc focDesc = focObj.getThisFocDesc();
+	      if(focDesc.workflow_IsWorkflowSubject()){
+	        include = false;          
+	        Workflow workflow = ((IWorkflow)focObj).iWorkflow_getWorkflow();
+	        AdrBookParty adrBookParty = workflow.getAdrBookParty();
+	        if(adrBookParty != null){
+	          if(user.getContact() != null && user.getContact().getAdrBookParty() != null){
+	            include = adrBookParty.equalsRef(user.getContact().getAdrBookParty());
+	          }
+	        }
+	      }*/
+	    }else{
+	      if(include && byCompany){
+	        include = false;      
+	        if(focObj.getCompany() == null || focObj.getCompany().equalsRef(company)){
+	          
+	          if(siteFieldID_1 != FField.NO_FIELD_ID && userSession != null){
+	            WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_1);
+	            if(site != null){
+	              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
+	            }
+	          }
+	          
+	          if(siteFieldID_2 != FField.NO_FIELD_ID && userSession != null){
+	            WFSite site = (WFSite) focObj.getPropertyObject(siteFieldID_2);
+	            if(site != null && site.hasAncestorOrEqualTo(userSession.getSite())){
+	              include = isForbidAncestorsSitesFromAccess() ? site.equalsRef(userSession.getSite()) : site.hasAncestorOrEqualTo(userSession.getSite());
+	            }
+	          }
+	          
+	          if(siteFieldID_1 == FField.NO_FIELD_ID && siteFieldID_2 == FField.NO_FIELD_ID){
+	            include = true;
+	          }
+	        }
+	      }
+	    }
+	  }
 
     if(include && userSession != null && !userSession.isSimulation()){
     	if(focObj.workflow_IsWorkflowSubject()){
