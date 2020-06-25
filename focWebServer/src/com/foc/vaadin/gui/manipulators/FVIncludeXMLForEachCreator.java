@@ -17,14 +17,17 @@ package com.foc.vaadin.gui.manipulators;
 
 import org.xml.sax.Attributes;
 
+import com.foc.Globals;
 import com.foc.access.FocDataMap;
 import com.foc.dataWrapper.FocListWrapper;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.layouts.FVForEachLayout;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 public class FVIncludeXMLForEachCreator extends FVIncludeXMLCreator {
@@ -39,7 +42,25 @@ public class FVIncludeXMLForEachCreator extends FVIncludeXMLCreator {
     
     FVForEachLayout forEach = null;
     if(focData instanceof FocList || focData instanceof FocListWrapper){
-    	forEach = new FVForEachLayout(xmlLayout, focData, xmlViewKey, attributes);
+    	String  isPaginated = attributes.getValue(FXML.ATT_FOR_EACH_PAGINATED);
+    	if(!Utils.isStringEmpty(isPaginated)) {
+    		try {
+    			boolean paginated = Boolean.parseBoolean(isPaginated);
+    			if(paginated) {
+    				String  buttonStyle = attributes.getValue(FXML.ATT_FOR_EACH_MORE_BUTTON_STYLE);
+    				String  pageSizeStr = attributes.getValue(FXML.ATT_FOR_EACH_PAGE_SIZE);
+    				if(!Utils.isStringEmpty(pageSizeStr)) {
+    					int pageSize = Integer.parseInt(pageSizeStr);
+    					forEach = new FVForEachLayout(xmlLayout, focData, xmlViewKey, attributes, paginated, pageSize, buttonStyle);
+    				} else {
+    					forEach = new FVForEachLayout(xmlLayout, focData, xmlViewKey, attributes, paginated, buttonStyle);
+    				}
+    			} 
+    		} catch (Exception e) {
+    			Globals.logException(e);
+    		}
+    	} 
+    	if(forEach == null)	forEach = new FVForEachLayout(xmlLayout, focData, xmlViewKey, attributes);
     }
     FocXMLGuiComponentStatic.setRootFocDataWithDataPath(forEach, rootFocData, dataPathFromRootFocData);
     return forEach;

@@ -283,7 +283,10 @@ public interface FXML {
   public static final String ATT_FILTERING_MODE            = "filteringMode"      ;
   public static final String VAL_FILTERING_MODE_STARTS_WITH= "startsWith"         ;
   public static final String VAL_FILTERING_MODE_CONTAINS   = "contains"           ;
-  
+  public static final String ATT_FOR_EACH_PAGINATED        = "paginated"          ;
+  public static final String ATT_FOR_EACH_PAGE_SIZE        = "pageSize"          	;
+  public static final String ATT_FOR_EACH_MORE_BUTTON_STYLE= "moreButtonStyle"    ;
+
   public static final String ATT_TEXT_AREA_TOOLBAR         = "toolbar"            ;
   public static final String ATT_TEXT_AREA                 = "textArea"           ;
   public static final String ATT_FORMAT                    = "format"             ;
