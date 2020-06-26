@@ -86,6 +86,7 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   private ReferencesCollection referencesCollection     = null;
   private boolean              refreshGuiDisabled       = false;
   private int                  forbidAncestorSiteAccess = -1;
+  private boolean 						 filterByAddressBookForGuestUser = true;
   
   public FocDataWrapper(IFocData data){
   	this(data, true);
@@ -222,6 +223,14 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
       visibleListElements.clear();
       visibleListElements = null;
     }
+  }
+  
+  public boolean isFilterByAddressBookForGuestUser() {
+  	return filterByAddressBookForGuestUser;
+  }
+  
+  public void setFilterByAddressBookForGuestUser(boolean value) {
+  	filterByAddressBookForGuestUser = value;
   }
 
   public void setFilterByExpression_FocXMLLayout(String expression){
@@ -380,10 +389,10 @@ public abstract class FocDataWrapper implements Container, Container.Filterable,
   protected boolean includeFocObject(FocObject focObj){
     boolean include = focObj != null ? true : false;
 //    FocUser user = FocWebApplication.getFocWebSession_Static().getUserSession().getUser();
-    UserSession userSession = getUserSession();
+  	UserSession userSession = getUserSession();
     FocUser user = userSession != null ? userSession.getUser() : null;
     if(user != null && user.isGuest()){
-    	if(focObj.hasAdrBookParty()){
+    	if(focObj.hasAdrBookParty() && isFilterByAddressBookForGuestUser()){
         include = false;
         IAdrBookParty iAdrBookParty = (IAdrBookParty) focObj;
         AdrBookParty adrBookParty = iAdrBookParty != null ? iAdrBookParty.iWorkflow_getAdrBookParty() : null;

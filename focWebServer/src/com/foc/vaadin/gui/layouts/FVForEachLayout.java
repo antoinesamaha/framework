@@ -73,13 +73,18 @@ public class FVForEachLayout extends FVVerticalLayout {
 		this(xmlLayout, focList, xmlViewKey, attributes, false, "");
 	}
 	
-  public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes, boolean withPagination, String nextButtonStyleName) {
+	public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes, boolean withPagination, String nextButtonStyleName) {
+		this(xmlLayout, focList, xmlViewKey, attributes, withPagination, 20 , nextButtonStyleName);
+	}
+	
+  public FVForEachLayout(FocXMLLayout xmlLayout, IFocData focList, XMLViewKey xmlViewKey, Attributes attributes, boolean withPagination, int pageCount, String nextButtonStyleName) {
   	super(attributes);
   	setCaption(null);
   	setSpacing(false);
   	setMargin(false);
   	paginate = withPagination;
   	pageNextButtonStyleName = nextButtonStyleName;
+  	this.pageCount = pageCount;
   	
   	bannerContainer = new FVVerticalLayout(null);
   	bannerContainer.setSpacing(false);
@@ -372,6 +377,10 @@ public class FVForEachLayout extends FVVerticalLayout {
   		pageStart -= pageCount;
   		if(pageStart < 0) pageStart = 0;
   	}
+  }
+  
+  public void setMoreButtonStyleName(String style) {
+  	pageNextButtonStyleName = style;
   }
   
   private void addNextPageLayoutButton() {
