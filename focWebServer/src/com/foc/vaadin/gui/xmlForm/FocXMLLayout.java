@@ -770,7 +770,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return newGuiField(null, null, name, rootDataPath, dataPath, property, attributes);
 	}
 
-	/**
+	/*
 	 * 
 	 * @param layout
 	 *          The container layout. Not applicable when called from a Table or
@@ -2876,7 +2876,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		public boolean after(FocXMLLayout layout);
 	}
 
-	/**
+	/*
 	 * The GUI class extending FocXMLLayout can override this method take full
 	 * control of the Add event By default it just calls the addItem in the
 	 * TableTreeDelegate
@@ -2901,7 +2901,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return consumed;
 	}	
 
-	/**
+	/*
 	 * This method returns the same focObject in standard FocXMLLayout, but allows
 	 * for tables on join object to transform the join FocObject coming from the table
 	 * to the flat FocObject we need to open.
@@ -2966,7 +2966,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		return null;
 	}
 
-	/**
+	/*
 	 * The GUI class extending FocXMLLayout can override this method in case it
 	 * wants to popup a dialog for the add or edit item
 	 * 
@@ -3341,7 +3341,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 		this.commitWithParent = commitWithParent;
 	}
 	
-/**
+/*
  * You can override this method  	
  * @return
  */

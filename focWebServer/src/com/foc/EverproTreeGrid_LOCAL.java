@@ -58,8 +58,7 @@ public class EverproTreeGrid_LOCAL extends Grid {
 		});
 	}
 	
-	/**
-	 * @param cellReference
+	/*
 	 * @return the style name required for this cell. In your css the style name should be prefixed with:
 	 * v-grid-cell. example: if you return "gray" your css style should be .v-grid-row.gray
 	 *  
@@ -97,9 +96,7 @@ public class EverproTreeGrid_LOCAL extends Grid {
 		adjustTreeNodeEditableField();
 	}
 
-	/**
-	 *  
-	 * @param itemId
+	/*  
 	 * @return the display String to be displayed as node title
 	 */
 	protected String getNodeTitleForItemId(Object itemId){
