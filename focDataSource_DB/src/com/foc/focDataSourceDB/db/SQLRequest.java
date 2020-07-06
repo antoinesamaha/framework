@@ -297,11 +297,11 @@ public class SQLRequest {
 	          		getFocObject().backup();
 	          		
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
-	    	      	Globals.logString("Do Execute: Try DBReloader");
 
 								if(dbReloader != null){
 
 									if(getFocObject().getThisFocDesc().isListInCache()){
+			    	      	Globals.logString("Do Execute: Add to DB reloader map, table :"+getFocObject().getThisFocDesc().getName());
 										dbReloader.addToMap(getFocObject().getThisFocDesc().getName(), new Date());
 									}
 								}
