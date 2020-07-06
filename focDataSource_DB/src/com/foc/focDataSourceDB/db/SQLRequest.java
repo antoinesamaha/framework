@@ -5,6 +5,7 @@ package com.foc.focDataSourceDB.db;
 
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 import com.foc.Globals;
@@ -298,12 +299,13 @@ public class SQLRequest {
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
 	    	      	Globals.logString("Do Execute: Try DBReloader");
 
-	          		if(dbReloader!=null) {
-	          			dbReloader.reloadTable(getFocObject().getThisFocDesc().getName());	
-		    	      	Globals.logString("Do Execute: called DBReloader.reloadTable, table name: "+getFocObject().getThisFocDesc().getName());
+								if(dbReloader != null){
 
-	          		}
-	          	}
+									if(getFocObject().getThisFocDesc().isListInCache()){
+										dbReloader.addToMap(getFocObject().getThisFocDesc().getName(), new Date());
+									}
+								}
+							}
 	          }
 		        PerfManager.endDBExecForRequest(req);
 		      } catch (Exception e) {
