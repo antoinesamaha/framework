@@ -204,8 +204,22 @@ public class SQLRequest {
   
   public void addOffset() {
   	if(			 filter != null 
+  			&&   this.request != null
+  			&&   filter.getOffset() >= 0
+  			&&   filter.getOffsetCount() >= 0
   			&& 	(getSQLRequestType() == TYPE_SELECT || getSQLRequestType() == TYPE_OTHER)) {
-  		filter.addOffsetToRequest(this.request);
+  		if(focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+				request.append(" offset ");
+				request.append(filter.getOffset());
+				request.append(" limit ");
+				request.append(filter.getOffsetCount());
+  		} else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) {
+				request.append(" OFFSET ");
+				request.append(filter.getOffset());
+				request.append(" ROWS FETCH NEXT ");
+				request.append(filter.getOffsetCount());
+				request.append(" ROWS ONLY ");
+  		}
   	}
   }
   

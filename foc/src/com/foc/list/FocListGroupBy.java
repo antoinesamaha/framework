@@ -298,7 +298,7 @@ public class FocListGroupBy {
 		
 		@Override
 		public void propertyModified(FProperty property) {
-			if(property.isLastModifiedBySetSQLString()) {
+			if(property.isLastModifiedBySetSQLString() && property.getString() != null) {
 				ArrayList valuesArray = null;
 				String result = "";
 				StringTokenizer tokzer = new StringTokenizer(property.getString(), LISTAGG_SEPARATOR, false);
