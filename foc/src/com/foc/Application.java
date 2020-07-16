@@ -67,7 +67,7 @@ import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
 import com.foc.db.DBManager;
-import com.foc.db.IDBReloader;
+import com.foc.db.IDBRequestListener;
 import com.foc.depricatedUnit.UnitFactory;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocDescMap;
@@ -202,7 +202,7 @@ public class Application {
   
   public FSerializerDictionary htmlGeneratorDictionary = null; 
   
-  private IDBReloader dbReloader=null;
+  private IDBRequestListener dbRequestListener=null;
     
   
   public static void initArgs(String[] args){
@@ -2251,14 +2251,14 @@ public class Application {
 			}
 		}
 	}
-	
-  public  IDBReloader getDbReloader() {
-		return dbReloader;
+
+	public IDBRequestListener getDbRequestListener() {
+		return dbRequestListener;
 	}
 
-	public void setDbReloader(IDBReloader dbReloader) {
-		this.dbReloader = dbReloader;
+	public void setDbRequestListener(IDBRequestListener dbRequestListener) {
+		this.dbRequestListener = dbRequestListener;
 	}
-  
+	 
 	
 }
