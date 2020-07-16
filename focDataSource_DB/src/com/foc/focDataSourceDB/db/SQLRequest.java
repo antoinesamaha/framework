@@ -10,7 +10,7 @@ import java.util.Iterator;
 
 import com.foc.Globals;
 import com.foc.db.DBManager;
-import com.foc.db.IDBReloader;
+import com.foc.db.IDBRequestListener;
 import com.foc.db.SQLFilter;
 import com.foc.db.SQLJoin;
 import com.foc.desc.FocDesc;
@@ -288,6 +288,8 @@ public class SQLRequest {
 	      	Globals.logString("DB Error Preparing Request : "+request);
 	      }else if(request != null && request.length()>0){
 		      try {
+					IDBRequestListener dbRequestListener = Globals.getApp().getDbRequestListener();
+
 		        String req = getRequestAdaptedToProvider();
 		        
 		        PerfManager.startDBExec();
@@ -295,20 +297,26 @@ public class SQLRequest {
 	          if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
 	          	if(getFocObject() != null){
 	          		getFocObject().backup();
-	          		
-	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
+				}
+			}
 
-								if(dbReloader != null){
+			PerfManager.endDBExecForRequest(req);
 
-									if(getFocObject().getThisFocDesc().isListInCache()){
-			    	      	Globals.logString("Do Execute: Add to DB reloader map, table :"+getFocObject().getThisFocDesc().getName());
-										dbReloader.addToMap(getFocObject().getThisFocDesc().getName(), new Date());
-									}
-								}
-							}
-	          }
-		        PerfManager.endDBExecForRequest(req);
-		      } catch (Exception e) {
+			if (dbRequestListener != null) {
+
+				if (getFocObject().getThisFocDesc().isListInCache()) {
+					Globals.logString("Do Execute: New Request, table :" + getFocObject().getThisFocDesc().getName());
+					if (getSQLRequestType() == TYPE_UPDATE) {
+						dbRequestListener.newRequestUpdate(getFocObject().getThisFocDesc().getName(), new Date());
+					} else if (getSQLRequestType() == TYPE_INSERT) {
+						dbRequestListener.newRequestInsert(getFocObject().getThisFocDesc().getName(), new Date());
+					} else if (getSQLRequestType() == TYPE_DELETE) {
+						dbRequestListener.newRequestDelete(getFocObject().getThisFocDesc().getName(), new Date());
+					}
+				}
+			}
+
+		} catch (Exception e) {
 		        error = true;
 		        Globals.logException(e);
 		      }
