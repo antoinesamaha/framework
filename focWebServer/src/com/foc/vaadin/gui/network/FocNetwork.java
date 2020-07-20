@@ -18,6 +18,7 @@ package com.foc.vaadin.gui.network;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.vaadin.visjs.networkDiagram.Edge;
 import org.vaadin.visjs.networkDiagram.NetworkDiagram;
 import org.vaadin.visjs.networkDiagram.Node;
 import org.vaadin.visjs.networkDiagram.options.Options;
@@ -31,6 +32,8 @@ public abstract class FocNetwork extends NetworkDiagram {
 	private static final int DEFAULT_MAX_LEVEL = 10;
 	
 	private HashMap<String, Node> drawnNodes = null;
+	private HashMap<String, Edge> drawnEdges = null;
+	
 	private ArrayList<FocObjectNetwork> focObjectNetworks = null;
 	private int level    = 0;
 	private int maxLevel = 0;
@@ -48,6 +51,8 @@ public abstract class FocNetwork extends NetworkDiagram {
 		super(options);
 		
 		drawnNodes = new HashMap<String, Node>();
+		drawnEdges = new HashMap<String, Edge>();
+
 		focObjectNetworks = new ArrayList<FocObjectNetwork>();
 		this.maxLevel = maxLevel;
 	}
@@ -56,6 +61,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 		if(drawnNodes != null){
 			drawnNodes.clear();
 			drawnNodes = null;
+		}
+		if(drawnEdges != null){
+			drawnEdges.clear();
+			drawnEdges = null;
 		}
 		if(focObjectNetworks != null){
 			for(int i=0; i<focObjectNetworks.size(); i++){
@@ -80,6 +89,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 		if(focObjectNetworks != null){
 			focObjectNetworks.add(focObjectNetwork);
 		}
+	}
+
+	public Edge findEdge(String id){
+		return drawnEdges != null ? drawnEdges.get(id) : null;
 	}
 	
 	public Node findNode(String id){
@@ -114,5 +127,9 @@ public abstract class FocNetwork extends NetworkDiagram {
 
 	public int getMaxLevel() {
 		return maxLevel;
+	}
+	
+	public void setMaxLevel(int maxLevel) {
+		this.maxLevel = maxLevel;
 	}
 }
