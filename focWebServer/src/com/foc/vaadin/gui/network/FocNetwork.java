@@ -94,6 +94,19 @@ public abstract class FocNetwork extends NetworkDiagram {
 	public Edge findEdge(String id){
 		return drawnEdges != null ? drawnEdges.get(id) : null;
 	}
+
+	public Edge newEdge(String id1, String id2, String caption) {
+		String id = id1+"|"+id2;
+		Edge edge = findEdge(id);
+		if (edge == null) {
+			edge = new Edge(id1, id2);
+			//edge.setValue(1);
+			if(caption != null) edge.setLabel(caption);
+			addEdge(edge);
+			if(drawnEdges != null) drawnEdges.put(id, edge);
+		}
+		return edge;
+	}	
 	
 	public Node findNode(String id){
 		return drawnNodes != null ? drawnNodes.get(id) : null;

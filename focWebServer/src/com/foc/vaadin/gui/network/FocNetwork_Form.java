@@ -77,14 +77,14 @@ public abstract class FocNetwork_Form extends FocXMLLayout {
 			button.addClickListener(new ClickListener() {
 				@Override
 				public void buttonClick(ClickEvent event) {
-//					int maxLevel = getMaxLevelFromGui();
+					int maxLevel = getMaxLevelFromGui();
 					
-//					if (network != null && objectNetwork != null && maxLevel > network.getMaxLevel()) {
-//						network.setMaxLevel(maxLevel);
-//						objectNetwork.fill();
-//					} else {
+					if (network != null && objectNetwork != null && maxLevel >= network.getMaxLevel()) {
+						network.setMaxLevel(maxLevel);
+						objectNetwork.fill();
+					} else {
 						rebuildNetwork();
-//					}
+					}
 				}
 			});
 		}
