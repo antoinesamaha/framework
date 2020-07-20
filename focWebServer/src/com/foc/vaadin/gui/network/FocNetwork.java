@@ -18,6 +18,7 @@ package com.foc.vaadin.gui.network;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.vaadin.visjs.networkDiagram.Edge;
 import org.vaadin.visjs.networkDiagram.NetworkDiagram;
 import org.vaadin.visjs.networkDiagram.Node;
 import org.vaadin.visjs.networkDiagram.options.Options;
@@ -31,6 +32,8 @@ public abstract class FocNetwork extends NetworkDiagram {
 	private static final int DEFAULT_MAX_LEVEL = 10;
 	
 	private HashMap<String, Node> drawnNodes = null;
+	private HashMap<String, Edge> drawnEdges = null;
+	
 	private ArrayList<FocObjectNetwork> focObjectNetworks = null;
 	private int level    = 0;
 	private int maxLevel = 0;
@@ -48,6 +51,8 @@ public abstract class FocNetwork extends NetworkDiagram {
 		super(options);
 		
 		drawnNodes = new HashMap<String, Node>();
+		drawnEdges = new HashMap<String, Edge>();
+
 		focObjectNetworks = new ArrayList<FocObjectNetwork>();
 		this.maxLevel = maxLevel;
 	}
@@ -56,6 +61,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 		if(drawnNodes != null){
 			drawnNodes.clear();
 			drawnNodes = null;
+		}
+		if(drawnEdges != null){
+			drawnEdges.clear();
+			drawnEdges = null;
 		}
 		if(focObjectNetworks != null){
 			for(int i=0; i<focObjectNetworks.size(); i++){
@@ -81,6 +90,23 @@ public abstract class FocNetwork extends NetworkDiagram {
 			focObjectNetworks.add(focObjectNetwork);
 		}
 	}
+
+	public Edge findEdge(String id){
+		return drawnEdges != null ? drawnEdges.get(id) : null;
+	}
+
+	public Edge newEdge(String id1, String id2, String caption) {
+		String id = id1+"|"+id2;
+		Edge edge = findEdge(id);
+		if (edge == null) {
+			edge = new Edge(id1, id2);
+			//edge.setValue(1);
+			if(caption != null) edge.setLabel(caption);
+			addEdge(edge);
+			if(drawnEdges != null) drawnEdges.put(id, edge);
+		}
+		return edge;
+	}	
 	
 	public Node findNode(String id){
 		return drawnNodes != null ? drawnNodes.get(id) : null;
@@ -114,5 +140,9 @@ public abstract class FocNetwork extends NetworkDiagram {
 
 	public int getMaxLevel() {
 		return maxLevel;
+	}
+	
+	public void setMaxLevel(int maxLevel) {
+		this.maxLevel = maxLevel;
 	}
 }
