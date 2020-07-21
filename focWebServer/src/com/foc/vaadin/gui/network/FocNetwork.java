@@ -29,7 +29,7 @@ import com.foc.util.Utils;
 
 public abstract class FocNetwork extends NetworkDiagram {
 	
-	private static final int DEFAULT_MAX_LEVEL = 10;
+	private static final int DEFAULT_MAX_LEVEL = 5;
 	
 	private HashMap<String, Node> drawnNodes = null;
 	private HashMap<String, Edge> drawnEdges = null;
