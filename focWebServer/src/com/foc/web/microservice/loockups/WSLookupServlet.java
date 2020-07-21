@@ -9,8 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.foc.Globals;
 import com.foc.util.Utils;
 import com.foc.web.microservice.FocServletRequest;
-
-import siren.fenix.covid.services.FenixMicroServlet;
+import com.foc.web.microservice.simple.FocSimpleMicroServlet;
 
 public class WSLookupServlet extends FocSimpleMicroServlet {
 
