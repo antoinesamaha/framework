@@ -78,6 +78,7 @@ public class ConfigInfo {
   private static String  codeProjectPath             = null;
   private static String  focDataServletURL           = null;
   private static String  focWebServerClassName       = null;
+  private static String  focWebUIClassName           = null;
   private static boolean adaptDataModelAtStartup     = true;
   private static boolean adaptEnabled                = true;
   private static boolean adaptIndexesEnabled         = true;
@@ -242,6 +243,9 @@ public class ConfigInfo {
         }
         focWebServerClassName = serverClassName;
         Globals.logString("WebServerClass: "+focWebServerClassName);
+        
+        focWebUIClassName = getProperty("focWebUIClassName");
+        Globals.logString("focWebUIClassName - Used un REST API backend: "+focWebUIClassName);        
         
         String cloudClassName = getProperty("cloudStorageClass");
         if(cloudClassName == null){
@@ -672,6 +676,10 @@ public class ConfigInfo {
 
   public static String getFocWebServerClassName() {
 	  return focWebServerClassName;
+	}
+
+  public static String getFocWebUIClassName() {
+	  return focWebUIClassName;
 	}
 
 	public static boolean isRemoveUndeclaredIndexesDuringAdaptDataModel(){
