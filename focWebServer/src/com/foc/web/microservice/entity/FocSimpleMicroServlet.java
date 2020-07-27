@@ -1,11 +1,11 @@
-package com.foc.web.microservice.simple;
+package com.foc.web.microservice.entity;
 
 import org.json.JSONObject;
 
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 
-public class FocSimpleMicroServlet extends FocSimpleObjectServlet<FocObject> {
+public class FocSimpleMicroServlet extends FocEntityServlet<FocObject> {
 
 	@Override
 	public FocDesc getFocDesc() {

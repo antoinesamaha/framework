@@ -1,4 +1,4 @@
-package com.foc.web.microservice.simple;
+package com.foc.web.microservice.entity;
 
 import java.util.Date;
 

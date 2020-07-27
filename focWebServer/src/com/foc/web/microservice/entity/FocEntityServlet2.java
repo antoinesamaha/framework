@@ -1,4 +1,4 @@
-package com.foc.web.microservice.simple;
+package com.foc.web.microservice.entity;
 
 import java.io.IOException;
 
@@ -7,21 +7,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
 
-public class FocSimpleObjectServlet<O extends FocObject> extends FocObjectServlet<O> {
+public class FocEntityServlet2<O extends FocObject> extends FocObjectServlet<O> {
 
+	private static String uiclassname = null;
+	
+	public void extractUIClassname(HttpServletRequest request) {
+		if(uiclassname == null) {
+			uiclassname = request.getParameter("uiclass");
+		}
+	}
+	
 	@Override
 	protected String getUIClassName() {
-		return ConfigInfo.getFocWebUIClassName();
+		return uiclassname;
 	}
 
 	@Override
@@ -34,6 +42,68 @@ public class FocSimpleObjectServlet<O extends FocObject> extends FocObjectServle
 		return "list";
 	}
 
+	public FocList simpleObjectServlet_NewList(HttpServletRequest request, HttpServletResponse response, boolean loaded) {
+		FocList list = getFocDesc().getFocList();
+		list.reloadFromDB();
+		return list;
+	}
+	
+	public void simpleObjectServlet_SetOrder(FocList list, HttpServletRequest request, HttpServletResponse response) {
+		if (list != null && list.getFilter() != null) {
+			FocDesc focDesc = list.getFocDesc();
+			if (focDesc != null) {
+				String order = "";
+				if(focDesc.getFieldByID(FField.FLD_DATE) != null) {
+					order += FField.FNAME_DATE +" DESC";
+				}
+				if(focDesc.getFieldByID(FField.REF_FIELD_ID) != null) {
+					if(order.length() > 0) order += " ";
+					order += FField.REF_FIELD_NAME+" DESC";
+				}
+				list.getFilter().setOrderBy(order);
+			}
+		}
+	}
+	
+	@Override
+	public boolean useCachedList(FocServletRequest focRequest) {
+		boolean useCash = false;
+		FocDesc focDesc = getFocDesc();
+		if (focDesc != null) {
+			if (focDesc.isListInCache()) {
+				useCash = true;
+			} else {
+				useCash = false;
+			}
+		}
+		return useCash;
+	}
+	
+	@Override
+	public FocList newFocList(HttpServletRequest request, HttpServletResponse response, boolean loaded) {
+		FocList list = null;
+		
+		FocDesc focDesc = getFocDesc();
+		if (focDesc != null) {
+			if (focDesc.isListInCache()) {
+				list = focDesc.getFocList();
+				if (loaded) {
+					list.loadIfNotLoadedFromDB();
+				}
+			} else {
+				int start = getStartParameter(request);
+				int count = getCountParameter(request);
+				list = simpleObjectServlet_NewList(request, response, loaded);
+				simpleObjectServlet_SetOrder(list, request, response);
+				list.getFilter().setOffset(start, count);
+				if(loaded) {
+					list.loadIfNotLoadedFromDB();
+				}
+			}
+		}
+		return list;
+	}
+	
 	@Override
 	public void fillFocObjectFromJson(O focObj, JSONObject jsonObj) throws Exception {
 	}
