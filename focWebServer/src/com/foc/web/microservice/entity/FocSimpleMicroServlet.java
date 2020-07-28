@@ -4,11 +4,12 @@ import org.json.JSONObject;
 
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.web.microservice.FocServletRequest;
 
-public class FocSimpleMicroServlet extends FocEntityServlet<FocObject> {
+public class FocSimpleMicroServlet extends FocEntityServlet<FocObject, FocObject> {
 
 	@Override
-	public FocDesc getFocDesc() {
+	public FocDesc getFocDesc(FocServletRequest request) {
 		return null;
 	}
 

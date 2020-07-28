@@ -11,15 +11,19 @@ import org.json.JSONObject;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.db.DBManager;
+import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
+import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
+import com.foc.shared.json.JSONObjectWriter;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
 
-public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
+public class FocEntityServlet<O extends FocObject, J extends FocObject> extends FocObjectServlet<O> {
 
 	private static String uiclassname = null;
 	
@@ -56,11 +60,72 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 	public FocDesc getFilterFocDesc(FocServletRequest focRequest) {
 		return null;
 	}
+	
+	public boolean toJson_JoinInList(B01JsonBuilder builder, J focObject) {
+		focObject.toJson(builder);
+		return false;
+	}
 
+	public boolean toJson_DetailedObject(B01JsonBuilder builder, O focObject) {
+		focObject.toJson(builder);
+		return false;
+	}
+
+	public B01JsonBuilder xmlBuilder_New(FocServletRequest request, boolean getRequest, boolean detail) {
+		B01JsonBuilder builder = new B01JsonBuilder();
+		builder.setPrintForeignKeyFullObject(false);
+//		builder.setPrintObjectNamesNotRefs(true);
+		builder.setHideWorkflowFields(true);
+		builder.setScanSubList(true);
+		
+		if(getRequest && !detail) {
+			//Put json serializer to Join
+			FocDesc desc = getJoinFocDesc(request);
+			if(desc != null) {
+				JSONObjectWriter writer = new JSONObjectWriter<J>() {
+					@Override
+					public boolean writeJson(B01JsonBuilder builder, J focObject) {
+						toJson_JoinInList(builder, focObject);
+						return false;
+					}
+				};
+				builder.putJsonObjectWriter(desc.getStorageName(), writer);
+			}
+			
+			//Put json serializer to Join
+			desc = getFocDesc(request);
+			if(desc != null) {
+				JSONObjectWriter writer = new JSONObjectWriter<O>() {
+					@Override
+					public boolean writeJson(B01JsonBuilder builder, O focObject) {
+						toJson_DetailedObject(builder, focObject);
+						return false;
+					}
+				};
+				builder.putJsonObjectWriter(desc.getStorageName(), writer);
+			}			
+		} else {
+		}
+		
+		return builder;
+	}
+	
 	public FocList list_New(FocServletRequest focRequest) {
-		FocDesc focDesc = getJoinFocDesc(focRequest);
-		if(focDesc == null) focDesc = getFocDesc(focRequest);
-		FocList list = focDesc != null ? focDesc.getFocList() : null;
+		FocDesc focDesc = null;
+		if (focRequest.getRef() != 0) {
+			focDesc = getFocDesc(focRequest);
+		} else {
+			focDesc = getJoinFocDesc(focRequest);
+			if(focDesc == null) focDesc = getFocDesc(focRequest);
+		}
+		
+		FocList list = null;
+		if(useCachedList(focRequest)) {
+			list = focDesc != null ? focDesc.getFocList() : null;
+		} else {
+			list = new FocList(new FocLinkSimple(focDesc));
+		}
+		
 		return list;
 	}
 	
@@ -100,8 +165,13 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 		FocList list = null;
 		
 		if(useCachedList(focRequest)) {
-			FocDesc focDesc = getJoinFocDesc(focRequest);
-			focDesc = focDesc == null ? getFocDesc(focRequest) : null;
+			FocDesc focDesc = null;
+			if (focRequest.getRef() != 0) {
+				focDesc = getFocDesc(focRequest);
+			} else {
+				focDesc = getJoinFocDesc(focRequest);
+				focDesc = focDesc == null ? getFocDesc(focRequest) : null;
+			}
 			if (focDesc != null && focDesc.isListInCache()) {
 				list = focDesc.getFocList();
 				if (load) {
@@ -111,16 +181,27 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 		} else {
 			HttpServletRequest request = focRequest.getRequest();
 			
-			int start = getStartParameter(request);
-			int count = getCountParameter(request);
 			list = list_New(focRequest);
+			focRequest.setList(list);
+			
 			if (list != null) {
-				String orderBy = list_GetSQLOrder(list, focRequest);
-				if (orderBy != null) {
-					list.getFilter().setOrderBy(orderBy);
-				}
-				if(list.getFilter() != null && start >= 0 && count >= 0) {
-					list.getFilter().setOffset(start, count);
+				long ref = doGet_GetReference(request, list);
+				if (ref != 0) {
+					FocDesc desc = list.getFocDesc();
+					String fieldName = desc.getRefFieldName();
+					fieldName = DBManager.provider_ConvertFieldName(desc.getProvider(), fieldName);
+					list.getFilter().putAdditionalWhere("REF", fieldName+"="+ref);
+					//list.getFilter().putAdditionalWhere("REF", "I.\"REF\"="+ref);
+				} else {
+					int start = getStartParameter(request);
+					int count = getCountParameter(request);
+					String orderBy = list_GetSQLOrder(list, focRequest);
+					if (orderBy != null) {
+						list.getFilter().setOrderBy(orderBy);
+					}
+					if(list.getFilter() != null && start >= 0 && count >= 0) {
+						list.getFilter().setOffset(start, count);
+					}
 				}
 				if(load) {
 					list.loadIfNotLoadedFromDB();
@@ -194,6 +275,16 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 	// GET
 	// ------------------------------------
 	// ------------------------------------
+
+	public FocList getFocList(FocServletRequest focRequest) {
+		FocList list = focRequest != null ? focRequest.getList() : null;
+		if (list == null) {
+			list = newEntityList(focRequest, true);
+			focRequest.setList(list);
+			focRequest.setListOwner(!useCachedList(focRequest));
+		}
+		return list;
+	}
 	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -223,22 +314,26 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 						
 						String userJson = "";
 						String responseBody = "";
-						B01JsonBuilder builder = newJsonBuiler(request);
+						B01JsonBuilder builder = null;//newJsonBuiler(request);
 						
-						FocList list = newEntityList(focRequest, true);
-						
-						long filterRef = doGet_GetReference(request, list);
+						long filterRef = focRequest.getRef();
 						if(filterRef > 0) {
 							FocObject focObject = null;
 							if(!useCachedList(null)){
-								if(list.size() == 1) {
-									focObject = list.getFocObject(0); 
+								FocDesc focDesc = getFocDesc(focRequest);
+								if (focDesc != null) {
+									FocConstructor constr = new FocConstructor(focDesc);
+									focObject = constr.newItem();
+									focObject.setReference(filterRef);
+									focObject.load();
 								}
 							} else {
-								focObject = list.searchByReference(filterRef);
+								FocList list = getFocList(focRequest);
+								focObject = list != null ? list.searchByReference(filterRef) : null;
 							}
 							
 							if(focObject != null) {
+								builder = xmlBuilder_New(focRequest, true, true);
 								userJson = toJsonDetails(focObject, builder); 
 								responseBody = userJson;
 							} else {
@@ -246,6 +341,8 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 								responseBody = userJson;
 							}
 						} else {
+							FocList list = getFocList(focRequest);
+
 							int start = -1;
 							int count = -1;
 							if(useCachedList(null)){
@@ -253,6 +350,7 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 								count = getCountParameter(request);
 							}
 							int totalCount = list.size();
+							builder = xmlBuilder_New(focRequest, true, false);
 							if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
 								totalCount = list.toJson_TotalCount(builder);
 							}
@@ -269,12 +367,7 @@ public class FocEntityServlet<O extends FocObject> extends FocObjectServlet<O> {
 							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
 //							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
 						}
-						
-						if(!useCachedList(null)){
-							list.dispose();
-							list = null;
-						}
-						
+												
 						response.setStatus(HttpServletResponse.SC_OK);
 						setCORS(response);
 						response.getWriter().println(responseBody);
