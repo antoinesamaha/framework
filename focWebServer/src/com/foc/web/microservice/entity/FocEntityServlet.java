@@ -362,10 +362,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 							builder.setListCount(count);
 							list.toJson(builder);
 							userJson = builder.toString();
-							//responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + "}";					
-						  // add total if start or count is present in the request. If not paginated, no need to do a count query
 							responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
-//							responseBody = "{ \"list\":" + userJson + ", \"totalCount\":"+totalCount+"}";
 						}
 												
 						response.setStatus(HttpServletResponse.SC_OK);
