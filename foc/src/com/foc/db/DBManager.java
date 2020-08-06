@@ -6,6 +6,7 @@ package com.foc.db;
 import java.util.*;
 
 import com.foc.*;
+import com.foc.db.IDBRequestListener.DBRequestAffectedObject;
 import com.foc.db.sync.SyncManager;
 import com.foc.desc.*;
 
@@ -198,4 +199,48 @@ public class DBManager {
 		}
 	  return newFieldName;
 	}
+	
+	// --------------------	
+	// SQL Request Listener  
+	// --------------------
+	
+  private ArrayList<IDBRequestListener> dbRequestListener_Array = null;	
+	private HashMap<String, String> dbRequestListener_ExcludedTables = new HashMap<String, String>();
+	
+	public boolean requestListener_IsExcludedTable(String table) {
+		if(dbRequestListener_ExcludedTables != null) {
+			return dbRequestListener_ExcludedTables.get(table) != null;
+		}
+		return false;
+	}
+	
+	public void requestListener_AddExcludedTable(String table) {
+		if(dbRequestListener_ExcludedTables == null) {
+			dbRequestListener_ExcludedTables = new HashMap<String, String>(); 
+		}
+		dbRequestListener_ExcludedTables.put(table, table);
+	}
+	
+	public boolean requestListener_HasListener() {
+		return dbRequestListener_Array != null && dbRequestListener_Array.size() > 0;
+	}
+	
+	public void requestListener_AddListener(IDBRequestListener listener) {
+		if(dbRequestListener_Array == null) {
+			dbRequestListener_Array = new ArrayList<IDBRequestListener>(); 
+		}
+		dbRequestListener_Array.add(listener);
+	}
+
+	public void requestListener_NotifyListeners(ArrayList<DBRequestAffectedObject> affectedObjects, int requestType, String req) {
+		if(dbRequestListener_Array != null) {
+			for (int i=0; i<dbRequestListener_Array.size(); i++) {
+				IDBRequestListener listener = dbRequestListener_Array.get(i);
+				if(listener != null) {
+					listener.newRequest(affectedObjects, requestType, req);
+				}
+			}
+		}
+	}
+	
 }

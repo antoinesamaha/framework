@@ -5,10 +5,10 @@ package com.foc.focDataSourceDB.db;
 
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 
 import com.foc.Globals;
+import com.foc.access.AccessSubject;
 import com.foc.db.DBManager;
 import com.foc.db.IDBRequestListener;
 import com.foc.db.SQLFilter;
@@ -288,8 +288,6 @@ public class SQLRequest {
 	      	Globals.logString("DB Error Preparing Request : "+request);
 	      }else if(request != null && request.length()>0){
 		      try {
-					IDBRequestListener dbRequestListener = Globals.getApp().getDbRequestListener();
-
 		        String req = getRequestAdaptedToProvider();
 		        
 		        PerfManager.startDBExec();
@@ -297,26 +295,37 @@ public class SQLRequest {
 	          if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
 	          	if(getFocObject() != null){
 	          		getFocObject().backup();
-				}
-			}
+	          	}
+	          }
 
-			PerfManager.endDBExecForRequest(req);
+	          PerfManager.endDBExecForRequest(req);
 
-			if (dbRequestListener != null) {
+	          DBManager dbManager = Globals.getDBManager();
+	          if (dbManager != null) {
+		          if (dbManager.requestListener_HasListener() && !dbManager.requestListener_IsExcludedTable(getFocObject().getThisFocDesc().getStorageName())) {
+		          	
+		          	if (
+		          					getSQLRequestType() == TYPE_UPDATE 
+		          			|| 	getSQLRequestType() == TYPE_INSERT 
+		          			|| 	getSQLRequestType() == TYPE_DELETE) {
+		          		ArrayList<IDBRequestListener.DBRequestAffectedObject> objArray = new ArrayList<IDBRequestListener.DBRequestAffectedObject>();
+		          		objArray.add(new IDBRequestListener.DBRequestAffectedObject(getFocObject().getThisFocDesc(), getFocObject().getReferenceInt()));
+	          			
+	          			AccessSubject father = getFocObject().getFatherSubject();
+	          			while (father != null) {
+	          				if(father instanceof FocObject) {
+	          					FocObject currObj = (FocObject) father; 
+	          					objArray.add(new IDBRequestListener.DBRequestAffectedObject(currObj.getThisFocDesc(), currObj.getReferenceInt()));
+	          				}
+	          				father = father.getFatherSubject();
+	          			}
+	          			
+	          			dbManager.requestListener_NotifyListeners(objArray, getSQLRequestType(), req);
+	          		}
+		          }
+	          }
 
-				if (getFocObject().getThisFocDesc().isListInCache()) {
-					Globals.logString("Do Execute: New Request, table :" + getFocObject().getThisFocDesc().getName());
-					if (getSQLRequestType() == TYPE_UPDATE) {
-						dbRequestListener.newRequestUpdate(getFocObject().getThisFocDesc().getName(), new Date());
-					} else if (getSQLRequestType() == TYPE_INSERT) {
-						dbRequestListener.newRequestInsert(getFocObject().getThisFocDesc().getName(), new Date());
-					} else if (getSQLRequestType() == TYPE_DELETE) {
-						dbRequestListener.newRequestDelete(getFocObject().getThisFocDesc().getName(), new Date());
-					}
-				}
-			}
-
-		} catch (Exception e) {
+		      } catch (Exception e) {
 		        error = true;
 		        Globals.logException(e);
 		      }

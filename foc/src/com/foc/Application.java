@@ -202,9 +202,6 @@ public class Application {
   
   public FSerializerDictionary htmlGeneratorDictionary = null; 
   
-  private IDBRequestListener dbRequestListener=null;
-    
-  
   public static void initArgs(String[] args){
   	String timeZone = Application.argumentGetValue(args, "timeZone");
   	if(timeZone != null){
@@ -2252,13 +2249,4 @@ public class Application {
 		}
 	}
 
-	public IDBRequestListener getDbRequestListener() {
-		return dbRequestListener;
-	}
-
-	public void setDbRequestListener(IDBRequestListener dbRequestListener) {
-		this.dbRequestListener = dbRequestListener;
-	}
-	 
-	
 }
