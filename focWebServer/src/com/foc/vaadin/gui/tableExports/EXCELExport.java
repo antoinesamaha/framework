@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -156,6 +157,23 @@ public abstract class EXCELExport {
 		}catch (Exception localException){
 			localException.printStackTrace();
 		}
+	}
+	
+	public InputStream getFileInputStream() {
+		try{
+			File localFile = getFile();
+			if(localFile != null){
+				FileOutputStream localFileOutputStream = new FileOutputStream(localFile);
+				this.workbook.write(localFileOutputStream);
+				byte[] arrayOfByte = new byte[(int) localFile.length()];
+				FileInputStream localFileInputStream = new FileInputStream(localFile);
+				return localFileInputStream;
+			
+			}
+		}catch (Exception localException){
+			localException.printStackTrace();
+		}
+		return null;
 	}
 
 	public File getFile() {
