@@ -618,10 +618,12 @@ public class DBAdaptor {
 				  		FReferenceField refField = (FReferenceField) otherFocDesc.getFieldByID(FField.REF_FIELD_ID); 
 				  		
 				  		if(refField != null){
-				  			//If the column is already there with zeros instead of null this will rase errors when creating the constraints  
-								String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
-								Globals.logString(replaceRequest);
-								Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
+				  			//If the column is already there with zeros instead of null this will rase errors when creating the constraints
+//				  			if(alterAllFields) {
+									String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
+									Globals.logString(replaceRequest);
+									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
+//				  			}				  			
 						    //-------------------------------------------------------------------------------------------------------------
 								
 								StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());

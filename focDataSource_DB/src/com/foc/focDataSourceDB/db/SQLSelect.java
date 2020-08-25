@@ -170,11 +170,11 @@ public class SQLSelect extends SQLSelectPlain {
       
       addFrom();
       error = addWhere();
-      addOrderBy();
-      addOffset();
       if(sqlGroupBy != null){
       	request.append(" GROUP BY ("+sqlGroupBy.getGroupByExpression(focDesc)+")");
       }
+      addOrderBy();
+      addOffset();      
     }
     return error;
   }

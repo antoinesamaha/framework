@@ -95,21 +95,6 @@ public class FocExcelSheet {
     return cell != null ? cell.getDateCellValue() : null;
   }
 
-	public int getCellType(int coord0, int coord1) {
-		int type = 0;
-		try {
-			Row row = sheet.getRow(coord0);
-			Cell cell = row != null ? row.getCell(coord1) : null;
-			if (cell != null) {
-				type = cell.getCellType();
-			}
-		} catch (Exception e) {
-			Globals.logException(e);
-			Globals.logString("Could Not get Value for cell [" + coord0 + "," + coord1 + "]");
-		}
-		return type;
-	}
-
   public String getCellString(int coord0, int coord1) {
     String str = null;
     try{
