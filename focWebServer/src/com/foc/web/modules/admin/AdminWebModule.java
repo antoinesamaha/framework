@@ -388,7 +388,8 @@ public class AdminWebModule extends FocWebModule {
 			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
 				// INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
 
-		    // Antoine DEBUGGING Code allows to capture any setWithList (true) that needs to be captured
+		    // DEBUGGING Code allows to capture any setWithList (true) that needs to be captured
+				/*
 		    try{
 			  	java.util.Iterator<FocDesc> iterDescs = Globals.getApp().getFocDescMap().values().iterator();
 			  	while(iterDescs != null && iterDescs.hasNext()){
@@ -399,7 +400,6 @@ public class AdminWebModule extends FocWebModule {
 		  					if (fld != null && fld instanceof FObjectField) {
 		  						FObjectField objFld = (FObjectField) fld;
 		  						FocDesc subDesc = objFld.getFocDesc();
-		  						/*
 		  						if(subDesc != null && subDesc.getStorageName().equals("Vehicles")) {
 		  							if(objFld.isWithList()) {
 		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName()+"  -  WITH LIST  -");
@@ -407,7 +407,6 @@ public class AdminWebModule extends FocWebModule {
 		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName());
 		  							}
 		  						}
-		  						*/
 		  					}
 		  				}
 		  			}
@@ -415,6 +414,7 @@ public class AdminWebModule extends FocWebModule {
 		    } catch(Exception e) {
 		    	Globals.logException(e);
 		    }
+		    */
 		    // -------------------------------
 				
 				String beforeMessage = Globals.logMemory("Before Freeing ");
