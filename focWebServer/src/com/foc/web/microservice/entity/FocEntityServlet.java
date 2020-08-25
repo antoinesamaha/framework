@@ -27,6 +27,10 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 
 	private static String uiclassname = null;
 	
+	protected boolean isNoUserServlet() {
+		return false;
+	}
+	
 	public void extractUIClassname(HttpServletRequest request) {
 		if(uiclassname == null) {
 			uiclassname = request.getParameter("uiclass");
@@ -182,7 +186,6 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 			HttpServletRequest request = focRequest.getRequest();
 			
 			list = list_New(focRequest);
-			focRequest.setList(list);
 			
 			if (list != null) {
 				long ref = doGet_GetReference(request, list);
@@ -261,7 +264,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 					session.logout();
 					session = null;
 				}
-			}else{
+			}else if(!isNoUserServlet() && session.getStatus() != com.foc.Application.LOGIN_VALID){
 				Globals.logString(" = Authorization header with 'Bearer' missing");
 				session.logout();
 				session = null;

@@ -98,7 +98,7 @@ public class WSLookupFactory {
 //		putLookup(new WSSingleLookup("public_unit_status",PublicUnitStatus.getFocDesc()));
 	}
 
-	private void putLookup(WSSingleLookup lookup) {
+	public void putLookup(WSSingleLookup lookup) {
 		map.put(lookup.getKey(), lookup);
 	}
 
