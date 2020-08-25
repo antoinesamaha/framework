@@ -100,6 +100,22 @@ public class FocListGroupBy {
 		return "CONCAT("+a+","+b+")";
 	}
 	
+	private String getConcatsFromConcatenationFields(String concatenationFields) {
+		String concats = "";
+		String[] parts = concatenationFields.split(LISTAGG_SUB_SEPARATOR);
+		for(int p=parts.length-1; p>=0; p--) {
+			String subfield = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), parts[p]);
+
+			if(!Utils.isStringEmpty(concats)) {
+				concats = addAConcat(subfield, concats);
+			} else {
+				concats = subfield;
+			}
+			concats = addAConcat("'~'", concats);
+		}
+		return concats;
+	}
+	
 	public FField addField_FormulaSingleText(FocDesc focDesc, FField field, String formula, String concatenationFields){
 		int fieldID = field.getID();
 		String fieldName = field.getDBName(); 
@@ -111,9 +127,17 @@ public class FocListGroupBy {
 			String formulaAfter  = "";
 			
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
-				if(ConfigInfo.isOracleListAggCLOB() && Utils.isStringEmpty(concatenationFields)) {
+				if(ConfigInfo.isOracleListAggCLOB()) {
 					formulaBefore = "LISTAGG_CLOB(";
 					formulaAfter  = ")";
+					
+					if(!Utils.isStringEmpty(concatenationFields)) {
+						formulaBefore += "CONCAT(";
+						String concats = getConcatsFromConcatenationFields(concatenationFields);
+						formulaAfter = "," + concats + "))"; 
+					}
+					
+					addField_Formulas(fieldID, formulaBefore, formulaAfter);
 				} else {
 					formulaBefore = "LISTAGG(";
 					formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
@@ -122,19 +146,8 @@ public class FocListGroupBy {
 	//			  formulaAfter  = ",'"+LISTAGG_SEPARATOR+"').EXTRACT('//text()') ORDER BY "+fieldName+").GetClobVal(),',') AS LIST";
 	
 					if(!Utils.isStringEmpty(concatenationFields)) {
-						String concats = "";
 						formulaBefore += "CONCAT(";
-						String[] parts = concatenationFields.split(LISTAGG_SUB_SEPARATOR);
-						for(int p=parts.length-1; p>=0; p--) {
-							String subfield = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), parts[p]);
-	
-							if(!Utils.isStringEmpty(concats)) {
-								concats = addAConcat(subfield, concats);
-							} else {
-								concats = subfield;
-							}
-							concats = addAConcat("'~'", concats);
-						}
+						String concats = getConcatsFromConcatenationFields(concatenationFields);
 						formulaAfter = "," + concats + ")" + formulaAfter; 
 					}
 					
