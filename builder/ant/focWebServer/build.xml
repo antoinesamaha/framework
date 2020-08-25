@@ -57,7 +57,8 @@
 				  	
 					<pathelement path="${pdfJAR}"/>
 					<pathelement path="${jwtJAR}"/>
-					<pathelement path="${excelExportJAR}"/>
+					<pathelement path="${jettyJAR}"/>
+\					<pathelement path="${excelExportJAR}"/>
 					
 					<pathelement path="${WebServicesDir}/${wsFile1}"/>
 					<pathelement path="${WebServicesDir}/${wsFile2}"/>
