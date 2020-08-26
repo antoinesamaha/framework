@@ -348,9 +348,9 @@ public class FocUser_Form extends FocXMLLayout {
   public void button_RESET_GUEST_PASSWORD_Clicked(FVButtonClickEvent event){
 		FocUser user = getFocUser();
 		if(user != null) {
-			String  newPassword = user.resetPassword();
-			Contact contact     = user.getContact();
+			Contact contact = user.getContact();
 			if(contact != null && !Utils.isStringEmpty(contact.getEMail())) {
+				String  newPassword = user.resetPassword();
     		FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getEmailTemplatePasswordChange();
     		if(user != null && !user.isCreated() && template != null && !Utils.isStringEmpty(contact.getEMail())) {
     			FocDataMap focDataMap = new FocDataMap(user);
@@ -372,6 +372,11 @@ public class FocUser_Form extends FocXMLLayout {
     			}
     		}
 
+			} else {
+		    UserChangePasswordWindow loginWindow = new UserChangePasswordWindow(user, false);
+		    loginWindow.init();
+		    
+		    getUI().addWindow(loginWindow);
 			}
 		}
   }

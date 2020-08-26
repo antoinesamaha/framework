@@ -48,6 +48,8 @@ public class UserChangePasswordWindow extends Window {
   }
   
   public void init(){
+  	boolean showOldPassword = control == null || control.showOldPassword();
+  	
   	FVVerticalLayout vLay = new FVVerticalLayout(null);
   	vLay.setWidth("90%");
   	setContent(vLay);
@@ -55,9 +57,12 @@ public class UserChangePasswordWindow extends Window {
   	vLay.setMargin(true);
   	vLay.setSpacing(true);
   	
-  	FVPasswordField pFld = control.getOldPasswordField(true);
-  	if(pFld != null) vLay.addComponent(pFld);
-
+  	FVPasswordField pFld = null;
+  	if (showOldPassword) {
+  		pFld = control.getOldPasswordField(true);
+	  	if(pFld != null) vLay.addComponent(pFld);
+  	}
+  	
   	pFld = control.getNewPasswordField(true);
   	if(pFld != null) vLay.addComponent(pFld);
 
