@@ -918,6 +918,9 @@ public class FocUser extends FocObject {
 
       if(anyGuestGroup != null){
       	String name = contact.getEMail();
+      	if(Utils.isStringEmpty(name)){
+      		name = contact.getFirstName()+contact.getFamilyName();
+      	}
       	if(name != null && !name.isEmpty()){
 	        user = findUser(name);
 	        String appendedString = "";
