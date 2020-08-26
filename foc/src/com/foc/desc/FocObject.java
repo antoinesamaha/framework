@@ -213,6 +213,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public static final int PROPERTY_RIGHT_READ       = 1;
   public static final int PROPERTY_RIGHT_READ_WRITE = 2;  
   
+  private boolean showMessageWhenCodeChange = true;
   // ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
   // MAIN
@@ -2807,6 +2808,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public void save() {
   	save(null);
   }
+
+  public boolean isShowMessageWhenCodeChange() {
+    return showMessageWhenCodeChange;
+  }
+  
+  public void setShowMessageWhenCodeChange(boolean show) {
+    showMessageWhenCodeChange = show;
+  }
   
   public boolean code_NotifyWhenCodeTaken() {
   	return true;
@@ -2823,7 +2832,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     		code_resetCode();
     		String newCode = code_getCode();
     		code_ChangingCodeBecauseTaken(originalCode, newCode);
-    		if(!originalCode.equals(newCode) && code_NotifyWhenCodeTaken()){
+    		if(!originalCode.equals(newCode) && code_NotifyWhenCodeTaken() && isShowMessageWhenCodeChange()){
     			String message = "A new code has been assigned : " + newCode + " because the previous one was taken";
     			String title = "Code already taken";
     			if (ConfigInfo.isArabic()) {

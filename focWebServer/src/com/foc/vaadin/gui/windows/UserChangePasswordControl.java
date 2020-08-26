@@ -71,6 +71,16 @@ public class UserChangePasswordControl {
 		return user;
 	}
 
+	public boolean showOldPassword() {
+		boolean showOldPassword = true;
+		if(			Globals.getApp().getUser_ForThisSession() != null 
+				&&  getUser() != null
+				&& 	!Globals.getApp().getUser_ForThisSession().equalsRef(getUser())) {
+			showOldPassword = false;
+		}
+		return showOldPassword;
+	}
+
 	public String executeChange(){
 		String message = getNewPasswordField(false) == null ? "New Password field not found Error" : null;
 		if(message == null){
@@ -93,7 +103,7 @@ public class UserChangePasswordControl {
   	String errorMessage = null;
   	
   	//If the old password is null this means the administrator is recreating the password. 
-    if(oldPass != null){
+    if(oldPass != null && showOldPassword()){
       String oldPassStr = getOldPasswordField(false).getValueString();
       oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
       

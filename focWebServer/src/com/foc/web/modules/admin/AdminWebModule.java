@@ -50,6 +50,8 @@ import com.foc.db.migration.MigFieldMapDesc;
 import com.foc.db.migration.MigrationSourceDesc;
 import com.foc.desc.AutoPopulatable;
 import com.foc.desc.FocDesc;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.FObjectField;
 import com.foc.gui.table.view.ColumnsConfigDesc;
 import com.foc.gui.table.view.UserViewDesc;
 import com.foc.gui.table.view.ViewConfigDesc;
@@ -386,6 +388,35 @@ public class AdminWebModule extends FocWebModule {
 			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
 				// INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
 
+		    // DEBUGGING Code allows to capture any setWithList (true) that needs to be captured
+				/*
+		    try{
+			  	java.util.Iterator<FocDesc> iterDescs = Globals.getApp().getFocDescMap().values().iterator();
+			  	while(iterDescs != null && iterDescs.hasNext()){
+			  		FocDesc focDesc = iterDescs.next();
+		  			if(focDesc != null){
+		  				for(int i=0; i<focDesc.getFieldsSize(); i++) {
+		  					FField fld = focDesc.getFieldAt(i);
+		  					if (fld != null && fld instanceof FObjectField) {
+		  						FObjectField objFld = (FObjectField) fld;
+		  						FocDesc subDesc = objFld.getFocDesc();
+		  						if(subDesc != null && subDesc.getStorageName().equals("Vehicles")) {
+		  							if(objFld.isWithList()) {
+		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName()+"  -  WITH LIST  -");
+		  							} else {
+		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName());
+		  							}
+		  						}
+		  					}
+		  				}
+		  			}
+			  	}
+		    } catch(Exception e) {
+		    	Globals.logException(e);
+		    }
+		    */
+		    // -------------------------------
+				
 				String beforeMessage = Globals.logMemory("Before Freeing ");
 
 				System.gc();

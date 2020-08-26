@@ -27,6 +27,7 @@ import com.foc.vaadin.gui.components.FVTableColumn;
 import com.foc.vaadin.gui.components.ITableTree;
 import com.foc.vaadin.gui.components.TableTreeDelegate;
 import com.foc.vaadin.gui.layouts.FVTableWrapperLayout;
+import com.foc.vaadin.gui.windows.UserChangePasswordWindow;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
 import com.foc.web.modules.admin.AdminWebModule;
@@ -192,6 +193,19 @@ public class AdrBookParty_common_Form extends FocXMLLayout {
 								contact.createUserAndSendEmailNotification();
 								copyMemoryToGui();
 								refreshContactTableButton();
+								
+								//If no email => the random password needs to be set manually
+								if(Utils.isStringEmpty(contact.getEMail())){
+									FocUser user = contact.findUser();
+									if (user != null) {
+								    UserChangePasswordWindow loginWindow = new UserChangePasswordWindow(user, false);
+								    loginWindow.init();
+								    
+								    if (AdrBookParty_common_Form.this != null && AdrBookParty_common_Form.this.getUI() != null) {
+								    	AdrBookParty_common_Form.this.getUI().addWindow(loginWindow);
+								    }
+									}
+								}
 								return false;
 							} else if (optionName.equals("DO_NOT_CREATE")) {
 								return false;

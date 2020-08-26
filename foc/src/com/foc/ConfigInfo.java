@@ -78,6 +78,7 @@ public class ConfigInfo {
   private static String  codeProjectPath             = null;
   private static String  focDataServletURL           = null;
   private static String  focWebServerClassName       = null;
+  private static String  focWebUIClassName           = null;
   private static boolean adaptDataModelAtStartup     = true;
   private static boolean adaptEnabled                = true;
   private static boolean adaptIndexesEnabled         = true;
@@ -115,6 +116,8 @@ public class ConfigInfo {
   
   private static boolean refreshCachedLists = false;
   private static boolean logOpenEvent       = true;
+  
+  private static boolean oracleListAggCLOB = false;
   
   private static Properties props = null; 
   
@@ -242,6 +245,9 @@ public class ConfigInfo {
         }
         focWebServerClassName = serverClassName;
         Globals.logString("WebServerClass: "+focWebServerClassName);
+        
+        focWebUIClassName = getProperty("focWebUIClassName");
+        Globals.logString("focWebUIClassName - Used un REST API backend: "+focWebUIClassName);        
         
         String cloudClassName = getProperty("cloudStorageClass");
         if(cloudClassName == null){
@@ -411,7 +417,10 @@ public class ConfigInfo {
         
         str = getProperty("logOpenEvent");
         logOpenEvent = str != null ? str.compareTo("1") == 0 : true;
-        
+
+        str = getProperty("oracleListAggCLOB");
+        oracleListAggCLOB = str != null ? str.compareTo("1") == 0 : true;
+
         userName          = getProperty("userLogin");
         password          = getProperty("password");
         encriptedPassword = getProperty("encriptedPassword");
@@ -674,6 +683,10 @@ public class ConfigInfo {
 	  return focWebServerClassName;
 	}
 
+  public static String getFocWebUIClassName() {
+	  return focWebUIClassName;
+	}
+
 	public static boolean isRemoveUndeclaredIndexesDuringAdaptDataModel(){
 		return false;
 	}
@@ -850,5 +863,8 @@ public class ConfigInfo {
 	public static boolean isLogOpenEvent() {
 		return logOpenEvent;
 	}
-	
+
+	public static boolean isOracleListAggCLOB() {
+		return oracleListAggCLOB;
+	}
 }

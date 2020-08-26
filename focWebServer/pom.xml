@@ -245,6 +245,12 @@
       <artifactId>json</artifactId>
       <version>0.0.20080701</version>
     </dependency>
+		<!-- https://mvnrepository.com/artifact/com.auth0/java-jwt -->
+		<dependency>
+		    <groupId>com.auth0</groupId>
+		    <artifactId>java-jwt</artifactId>
+		    <version>3.10.3</version>
+		</dependency>
     <!-- ======================================================================= -->
     <!-- dependency>
 		   <groupId>org.vaadin.alump.fancylayouts</groupId>
