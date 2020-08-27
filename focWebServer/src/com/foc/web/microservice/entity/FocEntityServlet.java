@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONObject;
 
 import com.foc.Globals;
+import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.db.DBManager;
@@ -20,12 +21,21 @@ import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.shared.json.JSONObjectWriter;
+import com.foc.util.Encryptor;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
 
 public class FocEntityServlet<O extends FocObject, J extends FocObject> extends FocObjectServlet<O> {
 
 	private static String uiclassname = null;
+	
+	public static int AUTH_NONE              = 0;
+	public static int AUTH_BEARER            = 1;
+	public static int AUTH_USERNAME_PASSWORD = 2;
+	
+	public int getAuthenticationMethod() {
+		return AUTH_BEARER;
+	}
 	
 	protected boolean isNoUserServlet() {
 		return false;
@@ -227,45 +237,81 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 	public SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		SessionAndApplication session = super.pushSession(request, response);
 		if(session != null){
-			String authTokenHeader = request.getHeader("Authorization");
-			if(authTokenHeader != null && authTokenHeader.startsWith("Bearer")){
-				String token = authTokenHeader.substring("Bearer".length()).trim();
-				FocSimpleTokenAuth auth = new FocSimpleTokenAuth();
-				String username = auth.verifyToken(token);
-
-				if(username != null){
-					FocList list = FocUserDesc.getInstance().getFocList();
-					if(list != null){
-						list.loadIfNotLoadedFromDB();
-						FocUser user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
-						// Reload once if we don't find. This is in case a new user was
-						// created
-						if(user == null){
-							Globals.logString(" = Username: " + username + " not found reloading user list");
-							list.reloadFromDB();
-							user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
-						}
-
-						if(user != null && !user.isSuspended()){
-							session.getWebSession().setFocUser(user);
-							Globals.logString(" = Session opened for username: " + username);
+			if(getAuthenticationMethod() == AUTH_BEARER) {
+				String authTokenHeader = request.getHeader("Authorization");
+				if(authTokenHeader != null && authTokenHeader.startsWith("Bearer")){
+					String token = authTokenHeader.substring("Bearer".length()).trim();
+					FocSimpleTokenAuth auth = new FocSimpleTokenAuth();
+					String username = auth.verifyToken(token);
+	
+					if(username != null){
+						FocList list = FocUserDesc.getInstance().getFocList();
+						if(list != null){
+							list.loadIfNotLoadedFromDB();
+							FocUser user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
+							// Reload once if we don't find. This is in case a new user was
+							// created
+							if(user == null){
+								Globals.logString(" = Username: " + username + " not found reloading user list");
+								list.reloadFromDB();
+								user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
+							}
+	
+							if(user != null && !user.isSuspended()){
+								session.getWebSession().setFocUser(user);
+								Globals.logString(" = Session opened for username: " + username);
+							}else{
+								Globals.logString(" = Username: " + username + " not found, logout()");
+								session.logout();
+								session = null;
+							}
 						}else{
-							Globals.logString(" = Username: " + username + " not found, logout()");
+							Globals.logString(" = FocUser list null");
 							session.logout();
 							session = null;
 						}
 					}else{
-						Globals.logString(" = FocUser list null");
+						Globals.logString(" = Token Subject (Username) null!");
 						session.logout();
 						session = null;
 					}
-				}else{
-					Globals.logString(" = Token Subject (Username) null!");
+				}else if(!isNoUserServlet() && session.getStatus() != com.foc.Application.LOGIN_VALID){
+					Globals.logString(" = Authorization header with 'Bearer' missing");
 					session.logout();
 					session = null;
 				}
-			}else if(!isNoUserServlet() && session.getStatus() != com.foc.Application.LOGIN_VALID){
-				Globals.logString(" = Authorization header with 'Bearer' missing");
+			} else if(getAuthenticationMethod() == AUTH_USERNAME_PASSWORD) {
+				String username = request.getHeader("username");
+				String password = request.getHeader("password");
+				if(username == null){
+					username = (String) request.getAttribute(HEADER_KEY_USERNAME);
+				}
+				if(password == null){
+					password = (String) request.getAttribute(HEADER_KEY_PASSWORD);
+				}
+
+				if (username != null && password != null) {
+					Globals.logString(username);
+					Globals.logString(password);
+					String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+					FocLoginAccess loginAccess = new FocLoginAccess();
+	
+					int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+	
+					if(status == com.foc.Application.LOGIN_VALID){
+						// webSession = newApplication.getFocWebSession();
+						session.getWebSession().setFocUser(loginAccess.getUser());
+					}
+					if(status == com.foc.Application.LOGIN_WRONG){
+						Globals.logString(" = Authorization with Username password failed - Incorrect credentials");
+						session.logout();
+						session = null;						
+						// PrintWriter printWriter = response.getWriter();
+						// printWriter.println("Error: Login credentials are incorrect.");
+					}
+				}
+			} else {
+				Globals.logString(" = Servlet does not specify Authorization Method");
 				session.logout();
 				session = null;
 			}

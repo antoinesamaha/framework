@@ -34,7 +34,7 @@ public class WSSingleLookup {
 		return key;
 	}
 
-	private synchronized void replaceJson(String newJson) {
+	protected synchronized void replaceJson(String newJson) {
 		json = newJson;
 	}
 
