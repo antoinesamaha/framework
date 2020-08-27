@@ -13,6 +13,16 @@ import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 
 public class WSLookupServlet extends FocSimpleMicroServlet {
 
+	public static int authorization_method = AUTH_USERNAME_PASSWORD;  
+	
+	public static void setAuthorizationMethod(int method) {
+		authorization_method = method;
+	}
+	
+	public int getAuthenticationMethod() {
+		return authorization_method;
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if(request != null && request.getSession() != null) {
