@@ -309,6 +309,10 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 						// PrintWriter printWriter = response.getWriter();
 						// printWriter.println("Error: Login credentials are incorrect.");
 					}
+				} else {
+					Globals.logString(" = Authorization with need to specify Username and password");
+					session.logout();
+					session = null;						
 				}
 			} else {
 				Globals.logString(" = Servlet does not specify Authorization Method");

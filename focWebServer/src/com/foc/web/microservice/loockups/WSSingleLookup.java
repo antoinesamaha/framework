@@ -6,13 +6,20 @@ import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 
 public class WSSingleLookup {
-	private String  key     = null;
-	private String  json    = null;
-	private FocDesc focDesc = null;
+	private String  key        = null;
+	private String  json       = null;
+	private FocDesc focDesc    = null;
+	private long    expiryDuration = 0;
+	private long    nextExpiryTime = 0;
 	
 	public WSSingleLookup(String key, FocDesc focDesc) {
+		this(key, focDesc, 0);
+	}
+	
+	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration) {
 		this.key = key;
 		this.focDesc = focDesc;
+		setExpiryDuration(expiryDuration);
 	}
 
 	private void dispose() {
@@ -23,9 +30,21 @@ public class WSSingleLookup {
 		return focDesc;
 	}
 	
+	protected boolean shouldRefresh() {
+		boolean shouldRefresh = false;
+		if (nextExpiryTime > 0) {
+			long currentTime = System.currentTimeMillis();
+			shouldRefresh = currentTime > nextExpiryTime;
+			if(shouldRefresh) nextExpiryTime = currentTime + expiryDuration;
+		}
+		return shouldRefresh;
+	}
+	
 	public synchronized String getJson() {
 		if(json == null) {
 			jsonRebuild();
+		} else if (shouldRefresh()){
+			refresh();
 		}
 		return json;
 	}
@@ -75,6 +94,17 @@ public class WSSingleLookup {
 		FocList focList = getFocList(true); 
 		if (focList != null) focList.reloadFromDB();
 		jsonRebuild();
+	}
+
+	public long getExpiryTime() {
+		return expiryDuration;
+	}
+
+	public void setExpiryDuration(long expiryTime) {
+		this.expiryDuration = expiryTime;
+		if (this.expiryDuration > 0) {
+			nextExpiryTime = System.currentTimeMillis();
+		}
 	}
 
 }
