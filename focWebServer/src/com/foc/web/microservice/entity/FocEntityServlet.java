@@ -184,7 +184,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 				focDesc = getFocDesc(focRequest);
 			} else {
 				focDesc = getJoinFocDesc(focRequest);
-				focDesc = focDesc == null ? getFocDesc(focRequest) : null;
+				focDesc = focDesc == null ? getFocDesc(focRequest) : focDesc;
 			}
 			if (focDesc != null && focDesc.isListInCache()) {
 				list = focDesc.getFocList();

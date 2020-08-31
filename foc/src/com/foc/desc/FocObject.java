@@ -4621,6 +4621,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		return getThisFocDesc() != null ? getThisFocDesc().getStorageName()+"|"+getReferenceInt() : null; 
 	}
 
+	public void appendKeyValueForFieldName_FullObject(B01JsonBuilder builder, String joinAlias, String fieldName) {
+		boolean fullObject = builder.isPrintForeignKeyFullObject();
+		builder.setPrintForeignKeyFullObject(true);
+		appendKeyValueForFieldName(builder, joinAlias, fieldName);
+		builder.setPrintForeignKeyFullObject(fullObject);
+	}
+	
 	public void appendKeyValueForFieldName(B01JsonBuilder builder, String joinAlias, String fieldName) {
 		FProperty prop = null;
 		if(Utils.isStringEmpty(joinAlias)) {
