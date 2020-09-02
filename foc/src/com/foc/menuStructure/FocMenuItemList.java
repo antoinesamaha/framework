@@ -65,7 +65,7 @@ public class FocMenuItemList extends FocList {
 	
 	private void map_PutMenuItem(FocMenuItem item) {
 		if(map != null && item != null) {
-			item = map.get(map_buildKey((FocMenuItem) item.getFatherObject(), item.getCode()));
+			map.put(map_buildKey((FocMenuItem) item.getFatherObject(), item.getCode()), item);
 		}
 	}
 
