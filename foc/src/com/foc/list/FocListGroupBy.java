@@ -329,9 +329,13 @@ public class FocListGroupBy {
 							//if Object I want to convert to String
 							if(list != null && !Utils.isStringEmpty(captionProperty)) {
 								long ref = Long.valueOf(token);
-								FocObject focObjectValue = list.searchByReference(ref);
-								FProperty prop = focObjectValue != null ? focObjectValue.getFocPropertyForPath(captionProperty) : null;
-								token = prop != null ? prop.getString() : "";
+								if(ref == 0) {
+									token = "";
+								} else {
+									FocObject focObjectValue = list.searchByReference(ref);
+									FProperty prop = focObjectValue != null ? focObjectValue.getFocPropertyForPath(captionProperty) : null;
+									token = prop != null ? prop.getString() : "";
+								}
 							}
 							//----------------
 
