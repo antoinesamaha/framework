@@ -104,6 +104,7 @@ public class ConnectionPool {
 				connectionsQueuedForDispose = new ArrayList<ConnectionWrapper>();
 			}			
 			connectionsQueuedForDispose.add(defaultConnectionWrapper);
+			Globals.logString(" DB CONNECTION QUEUED FOR DISPOSE. Total: "+connectionsQueuedForDispose.size());
 			defaultConnectionWrapper = null;
 		}
 	}
@@ -115,6 +116,7 @@ public class ConnectionPool {
 				if (cw != null && (!checkForPendingStatements || !cw.hasBusyStatements())) {
 					cw.dispose();
 					connectionsQueuedForDispose.remove(cw);
+					Globals.logString(" DB CONNECTION QUEUED IS ACTUALLY DISPOSED. Total: "+connectionsQueuedForDispose.size());
 				}
 			}
 			if (connectionsQueuedForDispose.size() == 0) {
