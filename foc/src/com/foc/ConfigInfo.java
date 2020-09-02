@@ -46,6 +46,8 @@ public class ConfigInfo {
   private static boolean exitWithoutValidationPrompt = false;
   private static int     passwordPolicy = 0;
   
+  private static long    dbConnectionDuration = 0;    
+  
   private static String  windowTitle   = null;  
 
   private static int guiNavigatorWidth  = 0; 
@@ -394,6 +396,9 @@ public class ConfigInfo {
         
         str = getProperty("passwordPolicy");
         if(str != null) passwordPolicy = Utils.parseInteger(str, 0);
+
+        str = getProperty("dbConnectionDuration");
+        if(str != null) dbConnectionDuration = Utils.parseLong(str, 0);
         
         str = getProperty("statusTitle.proposal");
         if(str != null && !str.isEmpty()){
@@ -866,5 +871,9 @@ public class ConfigInfo {
 
 	public static boolean isOracleListAggCLOB() {
 		return oracleListAggCLOB;
+	}
+
+	public static long getDbConnectionDuration() {
+		return dbConnectionDuration;
 	}
 }

@@ -29,8 +29,10 @@ public class ConnectionPool {
 	
 	private ConnectionWrapper            defaultConnectionWrapper = null;
 	
-	private ArrayList<ConnectionWrapper> busyConnections = null;//These Connections are autocommit=false
-	private ArrayList<ConnectionWrapper> freeConnections = null;
+//	private ArrayList<ConnectionWrapper> busyConnections = null;//These Connections are autocommit=false
+//	private ArrayList<ConnectionWrapper> freeConnections = null;
+	
+	private ArrayList<ConnectionWrapper> connectionsQueuedForDispose = null;
 
 	public ConnectionPoolThreadLocal threadLocal_Connections = null;
 //	public ThreadLocal<ThreadDBTransactionData> threadLocal_TransactionData = null;
@@ -45,11 +47,14 @@ public class ConnectionPool {
 		threadLocal_Connections = new ConnectionPoolThreadLocal();
 //		threadLocal_TransactionData = new ThreadLocal<ThreadDBTransactionData>();
 		
-		busyConnections = new ArrayList<ConnectionWrapper>();
-		freeConnections = new ArrayList<ConnectionWrapper>();
+//		busyConnections = new ArrayList<ConnectionWrapper>();
+//		freeConnections = new ArrayList<ConnectionWrapper>();
+		
+		connectionsQueuedForDispose = null;
 	}
 	
 	public void dispose(){
+		/*
 		if(busyConnections != null){
 			for(int i=0; i<busyConnections.size(); i++){
 				busyConnections.get(i).dispose();
@@ -65,6 +70,9 @@ public class ConnectionPool {
 			freeConnections.clear();
 			freeConnections = null;
 		}
+		*/
+		
+		dispose_QueuedConnections_Dispose(false);
 		
 		if(credentials != null){
 			credentials.dispose();
@@ -90,11 +98,49 @@ public class ConnectionPool {
 		}
 	}
 
+	public synchronized void dispose_QueuedConnections_Add() {
+		if(defaultConnectionWrapper != null) {
+			if(connectionsQueuedForDispose == null) {
+				connectionsQueuedForDispose = new ArrayList<ConnectionWrapper>();
+			}			
+			connectionsQueuedForDispose.add(defaultConnectionWrapper);
+			if (credentials != null) {
+				Globals.logString(" DB CONNECTION QUEUED FOR DISPOSE. Total: "+connectionsQueuedForDispose.size()+" key="+credentials.getDbSourceKey());
+			} else {
+				Globals.logString(" DB CONNECTION QUEUED FOR DISPOSE. Total: "+connectionsQueuedForDispose.size());
+			}
+			defaultConnectionWrapper = null;
+		}
+	}
+
+	public synchronized void dispose_QueuedConnections_Dispose(boolean checkForPendingStatements) {
+		if(connectionsQueuedForDispose != null) {
+			for(int i=connectionsQueuedForDispose.size()-1; i>=0; i--) {
+				ConnectionWrapper cw = connectionsQueuedForDispose.get(i);
+				if (cw != null && (!checkForPendingStatements || !cw.hasBusyStatements())) {
+					cw.dispose();
+					connectionsQueuedForDispose.remove(cw);
+					
+					if (credentials != null) {
+						Globals.logString(" DB CONNECTION QUEUED IS ACTUALLY DISPOSED. Total: "+connectionsQueuedForDispose.size()+" Key="+credentials.getDbSourceKey());
+					} else {
+						Globals.logString(" DB CONNECTION QUEUED IS ACTUALLY DISPOSED. Total: "+connectionsQueuedForDispose.size());
+					}
+				}
+			}
+			if (connectionsQueuedForDispose.size() == 0) {
+				//In this case we would have removed all connections wrapped
+				connectionsQueuedForDispose = null;
+			}
+		}
+	}
+
 	public StringBuffer getMonitoringText() {
 		ConnectionWrapper wrapper = getConnectionWrapper();
 		return wrapper != null ? wrapper.getMonitoringText() : null;
 	}
 	
+	/*
   private synchronized ConnectionWrapper lockConnectionWrapper() {
     ConnectionWrapper connection = null;
     if (freeConnections.size() > 0) {
@@ -127,6 +173,7 @@ public class ConnectionPool {
     	threadLocal_Connections.set(null);
     }
   }
+  */
 	
 	public int getProvider(){
 		return getCredentials() != null ? getCredentials().getProvider() : 0;
@@ -191,6 +238,10 @@ public class ConnectionPool {
 			connectionWrapper = getDefaultConnectionWrapper();
 			if(closeReopenBecauseExpired && connectionWrapper != null){
 				dispose_DefaultConnectionWrapper();
+				connectionWrapper = getDefaultConnectionWrapper();
+			} else if(connectionWrapper != null && connectionWrapper.exceededExpiryTime()){
+				dispose_QueuedConnections_Add();
+				dispose_QueuedConnections_Dispose(true);
 				connectionWrapper = getDefaultConnectionWrapper();
 			}
 		}

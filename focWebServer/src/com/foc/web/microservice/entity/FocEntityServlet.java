@@ -66,7 +66,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 	}
 
 	public FocDesc getJoinFocDesc(FocServletRequest focRequest) {
-		return null;
+		return getFocDesc();
 	}
 
 	public FocDesc getFilterFocDesc(FocServletRequest focRequest) {
@@ -148,12 +148,13 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 			if (focDesc != null) {
 				order = "";
 				if(focDesc.getFieldByID(FField.FLD_DATE) != null) {
-					order += "\""+FField.FNAME_DATE +"\" DESC";
+					order += "\""+FField.FNAME_DATE +"\" ";
 				}
 				if(focDesc.getFieldByID(FField.REF_FIELD_ID) != null) {
-					if(order.length() > 0) order += " ";
-					order += "\""+FField.REF_FIELD_NAME+"\" DESC";
+					if(order.length() > 0) order += ",";
+					order += "\""+FField.REF_FIELD_NAME+"\" ";
 				}
+				order += " DESC";
 			}
 		}
 		return order;
@@ -381,6 +382,8 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 						
 						long filterRef = focRequest.getRef();
 						if(filterRef > 0) {
+							//Get a single object
+							//-------------------
 							FocObject focObject = null;
 							if(!useCachedList(null)){
 								FocDesc focDesc = getFocDesc(focRequest);

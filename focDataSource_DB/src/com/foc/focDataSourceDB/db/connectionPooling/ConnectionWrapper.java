@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
+import com.foc.ConfigInfo;
 import com.foc.ConfigInfoWizardPanel;
 import com.foc.Globals;
 import com.foc.GuiConfigInfo;
@@ -31,9 +32,11 @@ import com.foc.performance.PerfManager;
 import com.foc.util.Utils;
 
 public class ConnectionWrapper {
-	private ConnectionPool pool       = null; 
-	private Connection     connection = null;
-	private boolean        autoCommit = true;
+	private ConnectionPool pool         = null; 
+	private Connection     connection   = null;
+	private boolean        autoCommit   = true;
+	private long           creationTime = 0;
+	private long           expiryTime   = 0;
 	
   private HashMap<StatementWrapper, StatementWrapper> busyStatements = null;
   private ArrayList<StatementWrapper>                 freeStatements = null;
@@ -42,6 +45,11 @@ public class ConnectionWrapper {
 		this.pool = pool;
     busyStatements = new HashMap<StatementWrapper, StatementWrapper>();
     freeStatements = new ArrayList<StatementWrapper>();
+    long duration = ConfigInfo.getDbConnectionDuration();
+    if(duration > 0) {
+    	creationTime = System.currentTimeMillis();
+    	expiryTime   = creationTime + duration; 
+    }
 	}
 	
 	public void dispose(){
@@ -61,6 +69,14 @@ public class ConnectionWrapper {
 		}		
 		closeConnection();
 		pool = null;
+	}
+	
+	public boolean hasBusyStatements() {
+		return busyStatements != null && busyStatements.size() > 0; 
+	}
+	
+	public boolean exceededExpiryTime() {
+		return expiryTime > 0 && System.currentTimeMillis() > expiryTime;
 	}
 	
 	public Connection getConnection(){
