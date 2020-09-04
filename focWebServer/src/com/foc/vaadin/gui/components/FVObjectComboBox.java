@@ -503,11 +503,11 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 	}
 	
 	public String getAddActionUserView() {
-		return attributes.getValue(FXML.ATT_ADD_USER_VIEW);
+		return attributes != null ? attributes.getValue(FXML.ATT_ADD_USER_VIEW) : null;
 	}
 	
 	public String getAddActionContext() {
-		return attributes.getValue(FXML.ATT_ADD_CONTEXT);
+		return attributes != null ? attributes.getValue(FXML.ATT_ADD_CONTEXT) : null;
 	}
 	
 	public void openObjectDetailsPanel(FocObject focObjToOpen, boolean adaptViewKeyWhenObjectCreated){
