@@ -3,9 +3,12 @@ package com.foc.web.microservice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.foc.admin.FocAppGroup;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
+import com.foc.vaadin.FocWebApplication;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
+import com.foc.web.server.session.FocWebSession;
 
 public class FocServletRequest {
 	private SessionAndApplication sessionAndApp = null;
@@ -32,6 +35,11 @@ public class FocServletRequest {
 		String refStr = request != null ? request.getParameter("REF") : null;
 		long ref = refStr != null ? Utils.parseLong(refStr, 0) : 0;
 		setRef(ref);
+		
+		if (request != null) {
+			FocWebSession focWebSession = FocWebApplication.getInstanceForThread().getFocWebSession();
+			focWebSession.putParameter(FocWebSession.PARAM_KEY_IP, request.getRemoteAddr());
+		}
 	}
 	
 	public void dispose() {
