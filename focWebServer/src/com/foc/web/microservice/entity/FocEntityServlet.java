@@ -22,6 +22,7 @@ import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.shared.json.JSONObjectWriter;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
 
@@ -29,16 +30,13 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 
 	private static String uiclassname = null;
 	
-	public static int AUTH_NONE              = 0;
-	public static int AUTH_BEARER            = 1;
-	public static int AUTH_USERNAME_PASSWORD = 2;
+	public static int AUTH_NONE                  = 0;
+	public static int AUTH_BEARER                = 1;
+	public static int AUTH_USERNAME_PASSWORD     = 2;
+	public static int AUTH_BEARER_THEN_USER_PASS = 3;
 	
 	public int getAuthenticationMethod() {
 		return AUTH_BEARER;
-	}
-	
-	protected boolean isNoUserServlet() {
-		return false;
 	}
 	
 	public void extractUIClassname(HttpServletRequest request) {
@@ -68,7 +66,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 	}
 
 	public FocDesc getJoinFocDesc(FocServletRequest focRequest) {
-		return null;
+		return getFocDesc();
 	}
 
 	public FocDesc getFilterFocDesc(FocServletRequest focRequest) {
@@ -150,12 +148,13 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 			if (focDesc != null) {
 				order = "";
 				if(focDesc.getFieldByID(FField.FLD_DATE) != null) {
-					order += "\""+FField.FNAME_DATE +"\" DESC";
+					order += "\""+FField.FNAME_DATE +"\" ";
 				}
 				if(focDesc.getFieldByID(FField.REF_FIELD_ID) != null) {
-					if(order.length() > 0) order += " ";
-					order += "\""+FField.REF_FIELD_NAME+"\" DESC";
+					if(order.length() > 0) order += ",";
+					order += "\""+FField.REF_FIELD_NAME+"\" ";
 				}
+				order += " DESC";
 			}
 		}
 		return order;
@@ -184,7 +183,7 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 				focDesc = getFocDesc(focRequest);
 			} else {
 				focDesc = getJoinFocDesc(focRequest);
-				focDesc = focDesc == null ? getFocDesc(focRequest) : null;
+				focDesc = focDesc == null ? getFocDesc(focRequest) : focDesc;
 			}
 			if (focDesc != null && focDesc.isListInCache()) {
 				list = focDesc.getFocList();
@@ -237,10 +236,20 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 	public SessionAndApplication pushSession(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		SessionAndApplication session = super.pushSession(request, response);
 		if(session != null){
-			if(getAuthenticationMethod() == AUTH_BEARER) {
+			int authMethod = getAuthenticationMethod();
+			String token = null;
+			if(authMethod == AUTH_BEARER || authMethod == AUTH_BEARER_THEN_USER_PASS) {
 				String authTokenHeader = request.getHeader("Authorization");
 				if(authTokenHeader != null && authTokenHeader.startsWith("Bearer")){
-					String token = authTokenHeader.substring("Bearer".length()).trim();
+					token = authTokenHeader.substring("Bearer".length()).trim();
+					authMethod = AUTH_BEARER; 
+				} else if(authMethod == AUTH_BEARER_THEN_USER_PASS){
+					authMethod = AUTH_USERNAME_PASSWORD;
+				}
+			}
+			
+			if(authMethod == AUTH_BEARER) {
+				if(!Utils.isStringEmpty(token)){
 					FocSimpleTokenAuth auth = new FocSimpleTokenAuth();
 					String username = auth.verifyToken(token);
 	
@@ -275,12 +284,12 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 						session.logout();
 						session = null;
 					}
-				}else if(!isNoUserServlet() && session.getStatus() != com.foc.Application.LOGIN_VALID){
+				} else {
 					Globals.logString(" = Authorization header with 'Bearer' missing");
 					session.logout();
 					session = null;
 				}
-			} else if(getAuthenticationMethod() == AUTH_USERNAME_PASSWORD) {
+			} else if(authMethod == AUTH_USERNAME_PASSWORD) {
 				String username = request.getHeader("username");
 				String password = request.getHeader("password");
 				if(username == null){
@@ -309,7 +318,13 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 						// PrintWriter printWriter = response.getWriter();
 						// printWriter.println("Error: Login credentials are incorrect.");
 					}
+				} else {
+					Globals.logString(" = Authorization with need to specify Username and password");
+					session.logout();
+					session = null;						
 				}
+			} else if(authMethod == AUTH_NONE) {
+					
 			} else {
 				Globals.logString(" = Servlet does not specify Authorization Method");
 				session.logout();
@@ -367,6 +382,8 @@ public class FocEntityServlet<O extends FocObject, J extends FocObject> extends 
 						
 						long filterRef = focRequest.getRef();
 						if(filterRef > 0) {
+							//Get a single object
+							//-------------------
 							FocObject focObject = null;
 							if(!useCachedList(null)){
 								FocDesc focDesc = getFocDesc(focRequest);
