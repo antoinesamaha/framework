@@ -189,7 +189,7 @@ public class FocDataSource_DB implements IFocDataSource {
     boolean error = !focObject_CanDelete(focObject, referenceCjeckerToIgnore, arrayPutToZero, arrayToDelete);
 
     FocDesc focDesc = focObject.getThisFocDesc();
-    if(!error){
+    if(!error && focDesc != null && !focDesc.isLogicalDeleteEnabled()){
       FocFieldEnum fieldsIterator = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
       while (!error && fieldsIterator.hasNext()) {
         FField focField = (FField) fieldsIterator.next();
@@ -205,7 +205,7 @@ public class FocDataSource_DB implements IFocDataSource {
       }
     }
 
-    if(focObject.hasRealReference()){
+    if(focObject.hasRealReference() && focDesc != null && !focDesc.isLogicalDeleteEnabled()){ // this will delete the child elements from object fields -- not to be done if logical
 	    if(!error){
 	    	FocFieldEnum fieldsIterator = focDesc.newFocFieldEnum(FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
 	      fieldsIterator.reverseOrder();
@@ -341,14 +341,29 @@ public class FocDataSource_DB implements IFocDataSource {
 
 	private boolean focObject_DB_Delete_AtomicNoCheck(FocObject focObject) {
 		boolean successfull = false;
-		SQLDelete sqlDelete = new SQLDelete(focObject);
-	  try{
-	  	sqlDelete.execute();
-	  	successfull = true;
-	  }catch(Exception e){
-	  	Globals.logException(e);
-	  	successfull = false;
-	  }
+		boolean logicalDelete = focObject != null && focObject.getThisFocDesc() != null ? focObject.getThisFocDesc().isLogicalDeleteEnabled() : false;
+		if(logicalDelete) {
+			SQLUpdate sqlUpdate = new SQLUpdate(focObject.getThisFocDesc(), focObject);
+      sqlUpdate.addQueryField(FField.FLD_LOGICAL_DELETE);
+      sqlUpdate.addQueryField(FField.FLD_LOGICAL_DELETE_DATE);
+      sqlUpdate.addQueryField(FField.FLD_LOGICAL_DELETE_USER);
+      try{
+      	focObject.setLogicalDeleted(true);
+				sqlUpdate.execute();
+				successfull = true;
+			}catch (Exception e){
+				Globals.logException(e);
+			}
+		} else {
+			SQLDelete sqlDelete = new SQLDelete(focObject);
+		  try{
+		  	sqlDelete.execute();
+		  	successfull = true;
+		  }catch(Exception e){
+		  	Globals.logException(e);
+		  	successfull = false;
+		  }
+		}
 	  return !successfull;
 	}
 	
@@ -722,7 +737,7 @@ public class FocDataSource_DB implements IFocDataSource {
 			}catch (Exception e){
 				Globals.logException(e);
 			}
-			error = false;;
+			error = false;
     }
     return error;
   }

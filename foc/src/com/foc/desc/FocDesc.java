@@ -139,6 +139,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	private   boolean      logActive           = false;
 	private   boolean      listInCache         = true ;
 	private   boolean      allowAdaptDataModel = true ;
+	private 	boolean 		 logicalDelete		   = false;
 	private   boolean      siteRestrictionAccess = true;//User from Site A cannot see items of Site B
     
 	private FocModule                   module                = null;
@@ -1701,6 +1702,28 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   public boolean isWithNodeCollapseField(){
     return getFieldByID(FField.FLD_NODE_COLLAPSE) != null;
   }
+  
+  protected FBoolField addLogicalDeleteFields(boolean isKeyField){
+  	FBoolField deletionStateField = new FBoolField(FField.LOGICAL_DELETE_FIELD_NAME, "Logically Deleted", FField.FLD_LOGICAL_DELETE, isKeyField);
+    addField(deletionStateField);
+    
+  	FDateTimeField deletionDateField = new FDateTimeField(FField.LOGICAL_DELETE_DATE_FIELD_NAME, "Logically Deleted Date Time", FField.FLD_LOGICAL_DELETE_DATE, isKeyField);
+    addField(deletionDateField);
+    
+    FObjectField fObjectFld = new FObjectField(FField.LOGICAL_DELETE_USER_FIELD_NAME, "Deleted By User", FField.FLD_LOGICAL_DELETE_USER, FocUser.getFocDesc());
+    fObjectFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);
+    fObjectFld.setDisplayField(FocUserDesc.FLD_NAME);
+    fObjectFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
+    fObjectFld.setSelectionList(FocUserDesc.getList(FocList.NONE));
+    fObjectFld.setAllwaysLocked(true);
+    addField(fObjectFld);
+    
+    return deletionStateField;
+  }
+  
+  public FBoolField addLogicalDeleteFields(){
+  	return addLogicalDeleteFields(false);
+  }
 
   protected FObjectField setWithObjectTree(boolean isKeyField){
   	FObjectField fatherNode = new FObjectField(FField.FATHER_NODE_FIELD_NAME, FField.FATHER_NODE_FIELD_NAME, FField.FLD_FATHER_NODE_FIELD_ID, isKeyField, this, FField.FATHER_NODE_FIELDPREFIX);
@@ -2497,6 +2520,14 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 
 	public void setAllowAdaptDataModel(boolean allowAdaptDataModel) {
 		this.allowAdaptDataModel = allowAdaptDataModel;
+	}
+	
+	public boolean isLogicalDeleteEnabled() {
+		return logicalDelete;
+	}
+
+	public void setLogicalDeleteEnabled(boolean enableLogicalDelete) {
+		logicalDelete = enableLogicalDelete;
 	}
 	
 	public int nextFldID(){

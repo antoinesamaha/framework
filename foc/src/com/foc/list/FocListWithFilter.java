@@ -33,6 +33,7 @@ public class FocListWithFilter extends FocList {
     if(filterFocDesc != null){
       FocConstructor constr = new FocConstructor(filterFocDesc, null);
       setFocListFilter((FocListFilterBindedToList)constr.newItem());
+      addLogicalDeleteFilter();
     }
   }
   
