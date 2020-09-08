@@ -6,7 +6,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.web.microservice.FocServletRequest;
 
-public class FocSimpleMicroServlet extends FocEntityServlet<FocObject, FocObject> {
+public class FocSimpleMicroServlet extends FocEntityServlet<FocObject> {
 
 	@Override
 	public FocDesc getFocDesc(FocServletRequest request) {
