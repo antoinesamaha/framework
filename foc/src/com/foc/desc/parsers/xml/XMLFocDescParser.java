@@ -95,6 +95,9 @@ public class XMLFocDescParser extends DefaultHandler implements FXMLDesc{
     	
     	boolean allowAdaptDataModel = getBoolean(att, ATT_ALLOW_ADAPT_DATA_MODEL, true);
     	xmlFocDesc.setAllowAdaptDataModel(allowAdaptDataModel);
+    	
+    	boolean logicalDelete = getBoolean(att, ATT_LOGICAL_DELETE, false);
+    	xmlFocDesc.setLogicalDeleteEnabled(logicalDelete);
     
     } else if(qName.equals(TAG_WORKFLOW)) {
     	String workflowCode  = getString(att, ATT_WORKFLOW_CODE);
