@@ -36,6 +36,7 @@ import com.foc.property.FObject;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.FVIconFactory;
@@ -501,9 +502,25 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 		return focObjToOpen;
 	}
 	
+	public String getAddActionUserView() {
+		return attributes != null ? attributes.getValue(FXML.ATT_ADD_USER_VIEW) : null;
+	}
+	
+	public String getAddActionContext() {
+		return attributes != null ? attributes.getValue(FXML.ATT_ADD_CONTEXT) : null;
+	}
+	
 	public void openObjectDetailsPanel(FocObject focObjToOpen, boolean adaptViewKeyWhenObjectCreated){
-		XMLViewKey key = new XMLViewKey(focObjToOpen.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
-		
+		XMLViewKey key = null;
+		String userView = getAddActionUserView();
+		String context = getAddActionContext();
+		if((userView != null && !Utils.isStringEmpty(userView)) || (context != null && !Utils.isStringEmpty(context))){
+			if(userView == null || Utils.isStringEmpty(userView)) userView = XMLViewKey.VIEW_DEFAULT;
+			if(context == null || Utils.isStringEmpty(context)) context = XMLViewKey.CONTEXT_DEFAULT;
+			key = new XMLViewKey(focObjToOpen.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM, context, userView);
+		} else {
+			key = new XMLViewKey(focObjToOpen.getThisFocDesc().getStorageName(), XMLViewKey.TYPE_FORM);
+		}
 		try{
 			openedCentralPanel = XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, focObjToOpen, true, true, adaptViewKeyWhenObjectCreated);
 		}catch(Exception e){
@@ -547,7 +564,9 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
 									if(getiObjectSelectWindowListener() != null){
 										getiObjectSelectWindowListener().beforeSetValue(newFocObject);
 									}
-									
+									// The following line of refresh was added because in the case where the foc data is of type adress book party, after adding an element, 
+									// the list was not refresh, thus the new item was not visible in the list
+									if(getDelegate() != null) getDelegate().refreshFocData();
 									select(ref);
 								}
 							}

@@ -1,5 +1,6 @@
 package com.foc.fluttercodewriter;
 
+import java.io.File;
 import java.io.PrintStream;
 
 import com.foc.Globals;
@@ -28,6 +29,20 @@ public abstract class FlutterCodeWriter_Abstract {
 		String      kiteClassName  = focDesc.getStorageName();
 		String      fullname       = main.getCodepath() + "/modules/" + module + "/autogen/"+filename + ".dart";
 		PrintStream outPrintStream = new PrintStream(fullname, "UTF-8");
+
+		return outPrintStream;
+	}
+
+	public PrintStream newFileInMain(String filename) throws Exception {
+		String      kiteClassName  = focDesc.getStorageName();
+		String      fullname       = main.getCodepath() + "/modules/" + module + "/"+filename + ".dart";
+		
+		PrintStream outPrintStream = null; 
+				
+		File file = new File(fullname);
+		if(!file.exists()) {
+			outPrintStream = new PrintStream(fullname, "UTF-8");
+		}
 
 		return outPrintStream;
 	}

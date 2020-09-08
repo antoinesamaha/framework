@@ -15,6 +15,11 @@ public class FlutterCodeWriter_Entity extends FlutterCodeWriter_Abstract {
 	}
 
 	public void generate() {
+		generate_AutoGenFile();
+		generate_MainFile();
+	}
+	
+	public void generate_AutoGenFile() {
 		try {
 			String entityname = getFocDesc().getStorageName();
 			String entityname_auto = entityname+"_AutoGen";
@@ -23,6 +28,8 @@ public class FlutterCodeWriter_Entity extends FlutterCodeWriter_Abstract {
 			outPrintStream.println("import 'package:kite/config.dart';");
 			outPrintStream.println("import 'package:kite/provider/KiteControler.dart';");
 			outPrintStream.println("import 'package:kite/entity/Kite.dart';");
+			outPrintStream.println("");
+			outPrintStream.println("import '../" + entityname + ".dart';");
 			outPrintStream.println("");
 			outPrintStream.println("class " + entityname_auto + " extends MappedKite {");
 			outPrintStream.println("");
@@ -59,4 +66,24 @@ public class FlutterCodeWriter_Entity extends FlutterCodeWriter_Abstract {
 		}
 	}
 
+	public void generate_MainFile() {
+		try {
+			String entityname = getFocDesc().getStorageName();
+			String entityname_auto = entityname+"_AutoGen";
+			PrintStream outPrintStream = newFileInMain(entityname);
+			
+			if (outPrintStream != null) {
+				outPrintStream.println("import 'autogen/" + entityname + "_AutoGen.dart';");
+				outPrintStream.println("");
+				outPrintStream.println("class " + entityname + " extends " + entityname + "_AutoGen {");
+				outPrintStream.println("");
+				outPrintStream.println("}");
+				
+				outPrintStream.close();
+			}
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
+	}
+	
 }

@@ -33,8 +33,10 @@ import com.fab.model.table.underlyingCustomisation.UndCustFieldDesc;
 import com.fab.model.table.underlyingCustomisation.UndCustTable;
 import com.fab.model.table.underlyingCustomisation.UndCustTableDesc;
 import com.fab.parameterSheet.ParameterSheetSelectorDesc;
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.business.printing.PrnLayoutDefinitionDesc;
+import com.foc.fluttercodewriter.FlutterCodeWriterMain;
 import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.menuStructure.IFocMenuItemAction;
@@ -339,6 +341,14 @@ public class FabWebModule extends FocWebModule {
       }
     });
 
+    if (ConfigInfo.isDevMode()) {
+	    menuItem = mainMenu.pushMenu("FAB_FLUTTER_CODE_GEN", "Generate Flutter Code");
+	    menuItem.setMenuAction(new IFocMenuItemAction() {
+	      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+	      	FlutterCodeWriterMain main = new FlutterCodeWriterMain();
+	      }
+	    });
+    }
     
     /*
     menuItem = mainMenu.pushMenu("Fab Workspace", "_Fab Workspace");
