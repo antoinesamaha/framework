@@ -105,7 +105,7 @@ public interface FXMLDesc {
   public static final String ATT_CACHED      = "cached";
   public static final String ATT_DB_SOURCE   = "dbSource";
   public static final String ATT_ALLOW_ADAPT_DATA_MODEL 	= "allowAdaptDataModel";
-  final public static String ATT_LOGICAL_DELETE       		= "LogicalDelete";
+  final public static String ATT_LOGICAL_DELETE       		= "logicalDelete";
 
   public static final String ATT_IN_TABLE_EDITABLE = "inTableEditable";
   public static final String ATT_STORAGE_NAME     = "storageName";

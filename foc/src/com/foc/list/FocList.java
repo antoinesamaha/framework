@@ -316,13 +316,14 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	
 	protected String getFullJoinWhereClause() {
 		String fullJoinWhere = "";
-		Iterator<ParsedJoin> newItr = ((ParsedFocDesc)getFocDesc()).newJoinIterator();
-		while(newItr != null && newItr.hasNext()) {
-			ParsedJoin join = newItr.next();
-			if(join != null && Utils.isStringEmpty(join.getOtherAlias()) && join.getWhere() != null && !Utils.isStringEmpty(join.getWhere())) { 
-				// this means that it is the main table of the join
-    		if(!Utils.isStringEmpty(fullJoinWhere)) fullJoinWhere += " AND ";
-    		fullJoinWhere += join.getWhere();
+		if(getFocDesc().isJoin() && getFocDesc() instanceof ParsedFocDesc) {			
+			Iterator<ParsedJoin> newItr = ((ParsedFocDesc)getFocDesc()).newJoinIterator();
+			while(newItr != null && newItr.hasNext()) {
+				ParsedJoin join = newItr.next();
+				if(join != null && Utils.isStringEmpty(join.getOtherAlias()) && join.getWhere() != null && !Utils.isStringEmpty(join.getWhere())) { 
+	    		if(!Utils.isStringEmpty(fullJoinWhere)) fullJoinWhere += " AND ";
+	    		fullJoinWhere += join.getWhere();
+				}
 			}
 		}
 		return fullJoinWhere;
