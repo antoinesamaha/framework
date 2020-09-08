@@ -3,7 +3,7 @@ package com.foc.web.microservice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.foc.admin.FocAppGroup;
+import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
@@ -15,15 +15,11 @@ public class FocServletRequest {
 	private HttpServletRequest  request  = null;
 	private HttpServletResponse response = null;
 
+	private boolean   masterOwner = false;
+	private FocObject master      = null;
+	private long      masterRef   = 0;
+	
 	private boolean listOwner = false;
-	public boolean isListOwner() {
-		return listOwner;
-	}
-
-	public void setListOwner(boolean listOwner) {
-		this.listOwner = listOwner;
-	}
-
 	private FocList list      = null;
 	private long    ref       = 0;
 	
@@ -32,11 +28,16 @@ public class FocServletRequest {
 		this.request       = request;
 		this.response      = response;
 		
-		String refStr = request != null ? request.getParameter("REF") : null;
-		long ref = refStr != null ? Utils.parseLong(refStr, 0) : 0;
-		setRef(ref);
-		
-		if (request != null) {
+		if(request != null) {
+			String refStr = request.getParameter("REF");
+			if(refStr == null) refStr = request.getParameter("ref");
+			long ref = refStr != null ? Utils.parseLong(refStr, 0) : 0;
+			setRef(ref);
+			
+			String masterRefStr = request.getParameter("master_ref");
+			long masterRef = masterRefStr != null ? Utils.parseLong(masterRefStr, 0) : 0;
+			setMasterRef(masterRef);
+			
 			FocWebSession focWebSession = FocWebApplication.getInstanceForThread().getFocWebSession();
 			focWebSession.putParameter(FocWebSession.PARAM_KEY_IP, request.getRemoteAddr());
 		}
@@ -51,6 +52,11 @@ public class FocServletRequest {
 			list.dispose();
 			list = null;
 		}
+		
+		if (masterOwner && master != null) {
+			master.dispose();
+			master = null;
+		}
 	}
 
 	public SessionAndApplication getSessionAndApp() {
@@ -63,6 +69,14 @@ public class FocServletRequest {
 
 	public HttpServletResponse getResponse() {
 		return response;
+	}
+
+	public boolean isListOwner() {
+		return listOwner;
+	}
+
+	public void setListOwner(boolean listOwner) {
+		this.listOwner = listOwner;
 	}
 	
 	public FocList getList() {
@@ -79,5 +93,29 @@ public class FocServletRequest {
 
 	public void setRef(long ref) {
 		this.ref = ref;
+	}
+
+	public long getMasterRef() {
+		return masterRef;
+	}
+
+	public void setMasterRef(long masterRef) {
+		this.masterRef = masterRef;
+	}
+
+	public FocObject getMaster() {
+		return master;
+	}
+
+	public void setMaster(FocObject master) {
+		this.master = master;
+	}
+
+	public boolean isMasterOwner() {
+		return masterOwner;
+	}
+
+	public void setMasterOwner(boolean masterOwner) {
+		this.masterOwner = masterOwner;
 	}
 }
