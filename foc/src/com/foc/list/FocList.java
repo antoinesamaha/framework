@@ -303,7 +303,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	protected void addLogicalDeleteFilter() {
 		if(getFocDesc() != null && getFilter() != null) {
 			if(!getFocDesc().isJoin()) {
-				if(getFocDesc().isLogicalDeleteEnabled()) getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", "\"" + FField.LOGICAL_DELETE_FIELD_NAME + "\" = 0 OR \"" + FField.LOGICAL_DELETE_FIELD_NAME + "\" IS NULL");
+				if(getFocDesc().isLogicalDeleteEnabled()) {
+					String name = FField.adaptFieldNameToProvider(getFocDesc().getProvider(), FField.LOGICAL_DELETE_FIELD_NAME);
+					getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", name + " = 0 OR " + name + " IS NULL");
+				}
 			} else {
 				String fullJoinWhere = getFullJoinWhereClause();
       	if(!Utils.isStringEmpty(fullJoinWhere)) getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", fullJoinWhere);
@@ -316,10 +319,11 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		Iterator<ParsedJoin> newItr = ((ParsedFocDesc)getFocDesc()).newJoinIterator();
 		while(newItr != null && newItr.hasNext()) {
 			ParsedJoin join = newItr.next();
-			if(join != null && join.getWhere() != null && !Utils.isStringEmpty(join.getWhere())) {
+			if(join != null && Utils.isStringEmpty(join.getOtherAlias()) && join.getWhere() != null && !Utils.isStringEmpty(join.getWhere())) { 
+				// this means that it is the main table of the join
     		if(!Utils.isStringEmpty(fullJoinWhere)) fullJoinWhere += " AND ";
     		fullJoinWhere += join.getWhere();
-    	}
+			}
 		}
 		return fullJoinWhere;
 	}

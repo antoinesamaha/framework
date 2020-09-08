@@ -90,10 +90,11 @@ public class ParsedJoin implements FXMLDesc {
 	}
 	
 	private void addLogicalDeleteToWhereIfNeeded(String table, String alias){
-		if(table != null && !Utils.isStringEmpty(table)) {
-			ParsedFocDesc desc = ParsedFocDesc.getInstance(table);
+		if(!Utils.isStringEmpty(table)) {
+			FocDesc desc = Globals.getApp().getFocDescByName(table);
 			if(desc != null && desc.isLogicalDeleteEnabled()) {
-				String name = alias + ".\"" + FField.LOGICAL_DELETE_FIELD_NAME + "\"";
+				String name = alias + "." + FField.LOGICAL_DELETE_FIELD_NAME;
+				name = FField.adaptFieldNameToProvider(desc.getProvider(), name);
 				String whereClause = "(" + name + " = 0 OR " + name + " IS NULL )";
 				if(!Utils.isStringEmpty(where)) where += " AND ";
 				where += whereClause;
@@ -157,6 +158,7 @@ public class ParsedJoin implements FXMLDesc {
 					  }
 					  if(!Utils.isStringEmpty(getWhere())){
 					  	join.setAdditionalWhere(getWhere());
+					  	// we can't because the clause of the row 139 wouldn't allow us to enter in this code
 					  }
 					  
 					  tableAlias.addJoin(join);

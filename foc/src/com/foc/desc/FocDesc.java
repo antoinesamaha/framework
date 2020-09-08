@@ -1703,11 +1703,11 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     return getFieldByID(FField.FLD_NODE_COLLAPSE) != null;
   }
   
-  protected FBoolField addLogicalDeleteFields(boolean isKeyField){
-  	FBoolField deletionStateField = new FBoolField(FField.LOGICAL_DELETE_FIELD_NAME, "Logically Deleted", FField.FLD_LOGICAL_DELETE, isKeyField);
+  public FBoolField addLogicalDeleteFields(){
+  	FBoolField deletionStateField = new FBoolField(FField.LOGICAL_DELETE_FIELD_NAME, "Logically Deleted", FField.FLD_LOGICAL_DELETE, false);
     addField(deletionStateField);
     
-  	FDateTimeField deletionDateField = new FDateTimeField(FField.LOGICAL_DELETE_DATE_FIELD_NAME, "Logically Deleted Date Time", FField.FLD_LOGICAL_DELETE_DATE, isKeyField);
+  	FDateTimeField deletionDateField = new FDateTimeField(FField.LOGICAL_DELETE_DATE_FIELD_NAME, "Logically Deleted Date Time", FField.FLD_LOGICAL_DELETE_DATE, false);
     addField(deletionDateField);
     
     FObjectField fObjectFld = new FObjectField(FField.LOGICAL_DELETE_USER_FIELD_NAME, "Deleted By User", FField.FLD_LOGICAL_DELETE_USER, FocUser.getFocDesc());
@@ -1719,10 +1719,6 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     addField(fObjectFld);
     
     return deletionStateField;
-  }
-  
-  public FBoolField addLogicalDeleteFields(){
-  	return addLogicalDeleteFields(false);
   }
 
   protected FObjectField setWithObjectTree(boolean isKeyField){
@@ -2528,6 +2524,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 
 	public void setLogicalDeleteEnabled(boolean enableLogicalDelete) {
 		logicalDelete = enableLogicalDelete;
+		if(enableLogicalDelete) addLogicalDeleteFields();
 	}
 	
 	public int nextFldID(){

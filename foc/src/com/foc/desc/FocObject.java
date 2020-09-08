@@ -3265,8 +3265,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	}
 	
 	public void setLogicalDeleted(boolean deleted) {
+		boolean alreadyDeleted = isLogicalDeleted();
 		setPropertyBoolean(FField.FLD_LOGICAL_DELETE, deleted);
-		if(deleted) {
+		if(!alreadyDeleted && deleted) {
 			Date now = new Date(System.currentTimeMillis());
 			setLogicalDeletedDate(now);
 			if(Globals.getApp() != null) setLogicalDeletedUser(Globals.getApp().getUser_ForThisSession());
