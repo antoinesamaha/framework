@@ -64,6 +64,7 @@ public class ParsedJoin implements FXMLDesc {
   	on           = joinAnnotation.on();
   	type         = joinAnnotation.type();
   	where        = joinAnnotation.where();
+  	addLogicalDeleteToWhereIfNeeded(table, alias);
   	isPrimaryKey = joinAnnotation.isPrimaryKey();
   	if(joinAnnotation.fields() != null) {
   		for(FocJoinField field : joinAnnotation.fields()) {
@@ -82,9 +83,24 @@ public class ParsedJoin implements FXMLDesc {
   	on          = XMLFocDescParser.getString(att, ATT_JOIN_ON);
   	type        = XMLFocDescParser.getString(att, ATT_JOIN_TYPE);
   	where       = XMLFocDescParser.getString(att, ATT_JOIN_WHERE);
+  	addLogicalDeleteToWhereIfNeeded(table, alias);
   	isPrimaryKey = XMLFocDescParser.getBoolean(att, ATT_JOIN_IS_PRIMARY_KEY, false);
   	
   	parseOn();
+	}
+	
+	private void addLogicalDeleteToWhereIfNeeded(String table, String alias){
+		if(!Utils.isStringEmpty(table) && Globals.getApp() != null) {
+			FocDesc desc = Globals.getApp().getFocDescByName(table);
+			if(desc != null && desc.isLogicalDeleteEnabled()) {
+				String name = alias + "." + FField.LOGICAL_DELETE_FIELD_NAME;
+				name = FField.adaptFieldNameToProvider(desc.getProvider(), name);
+				String whereClause = "(" + name + " = 0 OR " + name + " IS NULL )";
+				if(!Utils.isStringEmpty(where)) where += " AND ";
+				if(where == null) where = "";
+				where += whereClause;
+			}
+		}
 	}
 	
 	public ParsedFocDesc getFocDesc(){
@@ -143,6 +159,7 @@ public class ParsedJoin implements FXMLDesc {
 					  }
 					  if(!Utils.isStringEmpty(getWhere())){
 					  	join.setAdditionalWhere(getWhere());
+					  	// we can't because the clause of the row 139 wouldn't allow us to enter in this code
 					  }
 					  
 					  tableAlias.addJoin(join);

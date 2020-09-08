@@ -144,6 +144,10 @@ public abstract class FField implements Cloneable, IFocData {
   final public static int FLD_REVIEWSTATUS		          = -43;
   final public static int FLD_REVIEWCOMMENT             = -44;
   
+  final public static int FLD_LOGICAL_DELETE        	  = -45;
+  final public static int FLD_LOGICAL_DELETE_DATE    		= -46;
+  final public static int FLD_LOGICAL_DELETE_USER     	= -47;
+  
   final public static int NO_FIELD_ID                   = -99;
   final public static int FLD_SLAVE_LIST_FIRST          = -200;
   final public static int FLD_SLAVE_LIST_LAST           = -100;
@@ -170,6 +174,9 @@ public abstract class FField implements Cloneable, IFocData {
   final public static String FATHER_NODE_FIELDPREFIX            = "FATHERNODE_";
   final public static String FNAME_SYNC_IS_NEW_OBJECT           = "SYNC_IS_NEW";
   final public static String FNAME_NODE_COLLAPSE                = "NODE_COLLAPSE";
+  final public static String LOGICAL_DELETE_FIELD_NAME       		= "LogicalDelete";
+  final public static String LOGICAL_DELETE_DATE_FIELD_NAME  		= "LogicalDeleteDate";
+  final public static String LOGICAL_DELETE_USER_FIELD_NAME  		= "LogicalDeleteUser";
   public static final String FNAME_CODE                         = "CODE";
   public static final String FNAME_NAME                         = "NAME";
   public static final String FNAME_DESCRIPTION                  = "DESCRIP";

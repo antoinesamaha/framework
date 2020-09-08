@@ -399,6 +399,15 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
       	notCompletedField.newProperty(this);
       }
       
+      FField logicalDeleteField = thisFocDesc.getFieldByID(FField.FLD_LOGICAL_DELETE);
+      if(logicalDeleteField != null) logicalDeleteField.newProperty(this);
+      
+      FField logicalDeleteDateField = thisFocDesc.getFieldByID(FField.FLD_LOGICAL_DELETE_DATE);
+      if(logicalDeleteDateField != null) logicalDeleteDateField.newProperty(this);
+      
+      FField logicalDeleteUserField = thisFocDesc.getFieldByID(FField.FLD_LOGICAL_DELETE_USER);
+      if(logicalDeleteUserField != null) logicalDeleteUserField.newProperty(this);
+      
       //Review Fields
       FField reviewStatusField = thisFocDesc.getFieldByID(FField.FLD_REVIEWSTATUS);
       if(reviewStatusField != null){
@@ -3250,6 +3259,36 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   public void setDeprecated(boolean deprecated){
     setPropertyBoolean(FField.FLD_DEPRECATED_FIELD, deprecated);
   }
+  
+	public boolean isLogicalDeleted() {
+		return getPropertyBoolean(FField.FLD_LOGICAL_DELETE);
+	}
+	
+	public void setLogicalDeleted(boolean deleted) {
+		boolean alreadyDeleted = isLogicalDeleted();
+		setPropertyBoolean(FField.FLD_LOGICAL_DELETE, deleted);
+		if(!alreadyDeleted && deleted) {
+			Date now = new Date(System.currentTimeMillis());
+			setLogicalDeletedDate(now);
+			if(Globals.getApp() != null) setLogicalDeletedUser(Globals.getApp().getUser_ForThisSession());
+		}
+	}
+	
+	public Date getLogicalDeleteDate() {
+		return getPropertyDate(FField.FLD_LOGICAL_DELETE_DATE);
+	}
+	
+	public void setLogicalDeletedDate(Date value) {
+		setPropertyDate(FField.FLD_LOGICAL_DELETE_DATE, value);
+	}
+	
+	public FocUser getLogicalDeleteUser() {
+		return (FocUser) getPropertyObject(FField.FLD_LOGICAL_DELETE_USER);
+	}
+	
+	public void setLogicalDeletedUser(FocUser user) {
+		setPropertyObject(FField.FLD_LOGICAL_DELETE_USER, user);
+	}
   
   //ooooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo

@@ -39,4 +39,5 @@ public @interface FocEntity {
 	public String reportContext() default "";
 	public boolean cached() default true;
 	public int filterLevel() default FocListFilter.LEVEL_DATABASE;
+	public boolean logicalDelete() default false;
 }
