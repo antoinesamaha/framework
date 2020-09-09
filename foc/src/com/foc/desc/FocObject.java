@@ -4715,7 +4715,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			}else if(prop instanceof FDouble){
 				builder.appendKeyValue(fieldName, prop.getDouble());							
 			}else if(prop instanceof FBoolean){
-				builder.appendKeyValue(fieldName, ((FBoolean) prop).getBoolean());							
+				builder.appendKeyValue(fieldName, ((FBoolean) prop).getBoolean());
+			}else if(prop instanceof FList){
+				FocList list = ((FList) prop).getList();
+				builder.appendKey(fieldName);
+				list.toJson(builder);
 			}else{
 				String valStr = prop.getString();
 				builder.appendKeyValue(fieldName, valStr);
