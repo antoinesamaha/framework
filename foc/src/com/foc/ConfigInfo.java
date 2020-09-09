@@ -121,6 +121,8 @@ public class ConfigInfo {
   
   private static boolean oracleListAggCLOB = false;
   
+  private static String jwtTokenAlgorithmKey = null;
+  
   private static Properties props = null; 
   
   public static String getProperty(String key){
@@ -240,6 +242,8 @@ public class ConfigInfo {
 
         tempDownloadFolder = getProperty("tempDownloadFolder");
         blobStorageDirectory = getProperty("blobStorageDirectory");
+        
+        jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
         
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
@@ -481,6 +485,10 @@ public class ConfigInfo {
   
   public static String getBlobStorageDirectory(){
   	return blobStorageDirectory;
+  }
+  
+  public static String getJWTTokenAlgorithmKey() {
+  	return jwtTokenAlgorithmKey;
   }
   
   public static String getWindowTitle() {
