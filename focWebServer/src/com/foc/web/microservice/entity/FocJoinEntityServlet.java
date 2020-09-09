@@ -349,18 +349,18 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	// ------------------------------------
 	
 	public boolean toJson_ListObject(B01JsonBuilder builder, J focObject) {
-		focObject.toJson(builder);
+		focObject.toJson_InList(builder);
 		return false;
 	}
 
 	public boolean toJson_DetailedObject(B01JsonBuilder builder, O focObject) {
-		focObject.toJson(builder);
+		focObject.toJson_Detailed(builder);
 		return false;
 	}
 
 	public B01JsonBuilder xmlBuilder_New(FocServletRequest request, boolean getRequest, boolean detail) {
 		B01JsonBuilder builder = new B01JsonBuilder();
-		builder.setPrintForeignKeyFullObject(false);
+		builder.setPrintForeignKeyFullObject(true);
 //		builder.setPrintObjectNamesNotRefs(true);
 		builder.setHideWorkflowFields(true);
 		builder.setScanSubList(true);

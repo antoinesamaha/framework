@@ -4690,7 +4690,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						builder.appendKey(fieldName);
 						
 						B01JsonBuilder newBuilder = new B01JsonBuilder(builder);
-						valueObj.toJson(newBuilder);
+						//valueObj.toJson(newBuilder);
+						valueObj.toJson_Embedded(newBuilder);
+						
 						String objStr = newBuilder.toString();
 	//									builder.append("{");
 						builder.append(objStr);
@@ -4816,7 +4818,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 											builder.setPrintCRUD(true);
 											builder.setPrintRootRef(true);
 										}
-										focObj.toJson(builder);
+										focObj.toJson_InList(builder);
 									}
 								}
 							}
@@ -4842,6 +4844,18 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			
 			builder.endObject();
 		}
+	}
+	
+	public void toJson_Detailed(B01JsonBuilder builder){
+		toJson(builder);
+	}
+
+	public void toJson_InList(B01JsonBuilder builder){
+		toJson_Detailed(builder);
+	}
+		
+	public void toJson_Embedded(B01JsonBuilder builder){
+		toJson_Detailed(builder);
 	}
 	
 	public void toJson(B01JsonBuilder builder){
