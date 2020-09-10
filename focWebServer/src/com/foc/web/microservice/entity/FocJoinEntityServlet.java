@@ -12,6 +12,7 @@ import com.foc.Globals;
 import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.admin.GrpMobileModuleRights;
 import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
@@ -27,6 +28,7 @@ import com.foc.util.Utils;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
 
+// RIGHTS
 // LIST
 // JSON
 // GET
@@ -198,6 +200,69 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 
 	// ------------------------------------
 	// ------------------------------------
+	// RIGHTS
+	// ------------------------------------
+	// ------------------------------------
+	
+	protected String mobileModule_GetModuleName(FocServletRequest focRequest) {
+		return null;
+	}
+	
+	protected GrpMobileModuleRights mobileModule_GetModule(FocServletRequest focRequest, String mobileModuleName) {
+		GrpMobileModuleRights mobileModule = null;
+		if (Globals.getApp() != null && Globals.getApp().getGroup() != null) {
+			mobileModule = Globals.getApp().getGroup().getMobileModuleRightsObject(mobileModuleName);
+		}
+		return mobileModule;
+	}
+	
+	protected boolean mobileModule_HasRight(FocServletRequest focRequest, char crud) {
+		boolean right = false;
+		String moduleName = mobileModule_GetModuleName(focRequest);
+		if (Utils.isStringEmpty(moduleName)) {
+			right = true;
+		} else {
+			GrpMobileModuleRights module = mobileModule_GetModule(focRequest, moduleName);
+			if(module == null) {
+				right = false;
+			} else {
+				switch (crud) {
+					case 'C':
+						right = module.getCreate();
+						break;
+					case 'R':
+						right = module.getRead();
+						break;
+					case 'U':
+						right = module.getUpdate();
+						break;
+					case 'D':
+						right = module.getDelete();
+						break;
+				}
+			}
+		}
+		return right;
+	}
+	
+	public boolean mobileModule_HasCreate(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'C'); 
+	}
+	
+	public boolean mobileModule_HasRead(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'R'); 
+	}
+	
+	public boolean mobileModule_HasUpdate(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'U'); 
+	}
+	
+	public boolean mobileModule_HasDelete(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'D'); 
+	}
+	
+	// ------------------------------------
+	// ------------------------------------
 	// LIST
 	// ------------------------------------
 	// ------------------------------------
@@ -349,18 +414,18 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	// ------------------------------------
 	
 	public boolean toJson_ListObject(B01JsonBuilder builder, J focObject) {
-		focObject.toJson(builder);
+		focObject.toJson_InList(builder);
 		return false;
 	}
 
 	public boolean toJson_DetailedObject(B01JsonBuilder builder, O focObject) {
-		focObject.toJson(builder);
+		focObject.toJson_Detailed(builder);
 		return false;
 	}
 
 	public B01JsonBuilder xmlBuilder_New(FocServletRequest request, boolean getRequest, boolean detail) {
 		B01JsonBuilder builder = new B01JsonBuilder();
-		builder.setPrintForeignKeyFullObject(false);
+		builder.setPrintForeignKeyFullObject(true);
 //		builder.setPrintObjectNamesNotRefs(true);
 		builder.setHideWorkflowFields(true);
 		builder.setScanSubList(true);
@@ -421,8 +486,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 				focRequest = newFocServletRequest(sessionAndApp, request, response);
 				
 				Globals.logString(" => GET Begin "+getNameInPlural());
-				if(!allowGet(focRequest)){
-					
+				if(!allowGet(focRequest) || !mobileModule_HasRead(focRequest)){
 					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 					setCORS(response);
 					String responseBody = "{\"message\": \"Forbidden\"}";
@@ -533,17 +597,19 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 				response.getWriter().println(responseBody);
 			} else {
 				focRequest = newFocServletRequest(sessionAndApp, request, response);
+				long ref = focRequest.getRef();
 				
 				Globals.logString(" => POST Begin "+getNameInPlural());
-				if(!allowPost(focRequest)){
-					
+				if(			!allowPost(focRequest) 
+						|| (ref != 0 && !mobileModule_HasUpdate(focRequest))
+						|| (ref == 0 && !mobileModule_HasCreate(focRequest))
+						){
 					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 					setCORS(response);
 					String responseBody = "{\"message\": \"Forbidden\"}";
 					response.getWriter().println(responseBody);
 				} else {
 					logRequestHeaders(request);
-
 					
 					//Here starts the CORE Poste 
 					//--------------------------
@@ -559,8 +625,6 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 
 					O focObj = null;
 					FocList list = null;
-
-					long ref = focRequest.getRef();
 					
 					if(useCachedList(focRequest)){
 						list = list_Post_CreateIfNeeded(focRequest); 

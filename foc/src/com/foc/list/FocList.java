@@ -2215,7 +2215,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
 						){
 					
 					if(readIndex >= start) {
-						focObj.toJson(builder);
+						focObj.toJson_InList(builder);
+						//focObj.toJson(builder);
 						count++;
 					}
 					

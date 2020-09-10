@@ -9,6 +9,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.foc.ConfigInfo;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.list.FocList;
@@ -19,8 +20,16 @@ public class FocSimpleTokenAuth {
 //	
 //	public static final String MOBILE_APP_TOKEN_START = "MOBILE_APP_TOKEN(";
 //	public static final String MOBILE_APP_TOKEN_END   = ")";
-	Algorithm algorithm = Algorithm.HMAC256("!@#dfdfSDFSdFSDFsdvkikhdcvq");
+	Algorithm algorithm = null;
 
+	public FocSimpleTokenAuth() {
+		String key = ConfigInfo.getJWTTokenAlgorithmKey();
+		if (key == null) {
+			key = "!@#dfdfSDFSdFSDFsdvkikhdcvq";
+		}
+		algorithm = Algorithm.HMAC256(key);
+	}
+	
 	public String generateToken(String username) {
 		String token;
 
