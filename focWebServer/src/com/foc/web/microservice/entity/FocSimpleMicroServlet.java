@@ -1,5 +1,11 @@
 package com.foc.web.microservice.entity;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.json.JSONObject;
 
 import com.foc.desc.FocDesc;
@@ -20,5 +26,10 @@ public class FocSimpleMicroServlet extends FocEntityServlet<FocObject> {
 
 	@Override
 	public void fillFocObjectFromJson(FocObject focObj, JSONObject jsonObj) throws Exception {
+	}
+	
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 	}
 }

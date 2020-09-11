@@ -468,6 +468,77 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	// ------------------------------------
 	// ------------------------------------
 
+	public void doGet_Core(FocServletRequest focRequest) throws Exception {
+		HttpServletRequest  request  = focRequest.getRequest();
+		HttpServletResponse response = focRequest.getResponse();
+		
+		//Here starts the CORE Get 
+		//------------------------
+		
+		String userJson = "";
+		String responseBody = "";
+		B01JsonBuilder builder = null;//newJsonBuiler(request);
+		
+		long filterRef = focRequest.getRef();
+		if(filterRef > 0) {
+			//Get a single object
+			//-------------------
+			FocObject focObject = null;
+			if(!useCachedList(null)){
+				FocDesc focDesc = getFocDesc(focRequest);
+				if (focDesc != null) {
+					FocConstructor constr = new FocConstructor(focDesc);
+					focObject = constr.newItem();
+					focObject.setReference(filterRef);
+					focObject.load();
+				}
+			} else {
+				FocList list = list_Get_CreateIfNeeded(focRequest);
+				focObject = list != null ? list.searchByReference(filterRef) : null;
+			}
+			
+			if(focObject != null) {
+				builder = xmlBuilder_New(focRequest, true, true);
+				userJson = toJsonDetails(focObject, builder); 
+				responseBody = userJson;
+			} else {
+				userJson = "{}";
+				responseBody = userJson;
+			}
+		} else {
+			FocList list = list_Get_CreateIfNeeded(focRequest);
+
+			int start = -1;
+			int count = -1;
+			if(useCachedList(null)){
+				start = getStartParameter(request);
+				count = getCountParameter(request);
+			}
+			int totalCount = list.size();
+			builder = xmlBuilder_New(focRequest, true, false);
+			if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
+				totalCount = list.toJson_TotalCount(builder);
+			}
+			if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
+				totalCount =	requestTotalCount(list);
+			}
+			
+			builder.setListStart(start);
+			builder.setListCount(count);
+			list.toJson(builder);
+			userJson = builder.toString();
+			responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
+		}
+								
+		response.setStatus(HttpServletResponse.SC_OK);
+		setCORS(response);
+		response.getWriter().println(responseBody);
+		String log = responseBody;
+		if(log.length() > 500) log = log.substring(0, 499)+"...";
+		
+		Globals.logString("  = Returned: "+log);
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SessionAndApplication sessionAndApp = null;
@@ -486,6 +557,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 				focRequest = newFocServletRequest(sessionAndApp, request, response);
 				
 				Globals.logString(" => GET Begin "+getNameInPlural());
+				
 				if(!allowGet(focRequest) || !mobileModule_HasRead(focRequest)){
 					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 					setCORS(response);
@@ -493,73 +565,10 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					response.getWriter().println(responseBody);
 				} else {
 					logRequestHeaders(request);
-					
-					//Here starts the CORE Get 
-					//------------------------
-					
-					String userJson = "";
-					String responseBody = "";
-					B01JsonBuilder builder = null;//newJsonBuiler(request);
-					
-					long filterRef = focRequest.getRef();
-					if(filterRef > 0) {
-						//Get a single object
-						//-------------------
-						FocObject focObject = null;
-						if(!useCachedList(null)){
-							FocDesc focDesc = getFocDesc(focRequest);
-							if (focDesc != null) {
-								FocConstructor constr = new FocConstructor(focDesc);
-								focObject = constr.newItem();
-								focObject.setReference(filterRef);
-								focObject.load();
-							}
-						} else {
-							FocList list = list_Get_CreateIfNeeded(focRequest);
-							focObject = list != null ? list.searchByReference(filterRef) : null;
-						}
-						
-						if(focObject != null) {
-							builder = xmlBuilder_New(focRequest, true, true);
-							userJson = toJsonDetails(focObject, builder); 
-							responseBody = userJson;
-						} else {
-							userJson = "{}";
-							responseBody = userJson;
-						}
-					} else {
-						FocList list = list_Get_CreateIfNeeded(focRequest);
 
-						int start = -1;
-						int count = -1;
-						if(useCachedList(null)){
-							start = getStartParameter(request);
-							count = getCountParameter(request);
-						}
-						int totalCount = list.size();
-						builder = xmlBuilder_New(focRequest, true, false);
-						if(useCachedList(focRequest) && builder.getObjectFilter() != null) {
-							totalCount = list.toJson_TotalCount(builder);
-						}
-						if(list.getFilter() != null && list.getFilter().getOffset() >= 0 && list.getFilter().getOffsetCount() >= 0) {
-							totalCount =	requestTotalCount(list);
-						}
-						
-						builder.setListStart(start);
-						builder.setListCount(count);
-						list.toJson(builder);
-						userJson = builder.toString();
-						responseBody = "{ \"" + getNameInPlural() + "\":" + userJson + ", \"totalCount\":"+totalCount+"}";
-					}
-											
-					response.setStatus(HttpServletResponse.SC_OK);
-					setCORS(response);
-					response.getWriter().println(responseBody);
-					String log = responseBody;
-					if(log.length() > 500) log = log.substring(0, 499)+"...";
-					
-					Globals.logString("  = Returned: "+log);
+					doGet_Core(focRequest);
 				}
+				
 				Globals.logString(" <= GET End "+getNameInPlural()+" "+response.getStatus());
 			}
 		} catch (Exception e) {
