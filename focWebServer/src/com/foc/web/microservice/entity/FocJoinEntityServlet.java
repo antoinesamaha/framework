@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
@@ -33,6 +34,7 @@ import com.foc.web.microservice.FocServletRequest;
 // JSON
 // GET
 // PUSH
+// DELETE
 public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> extends FocObjectServlet<O> {
 
 	private static String uiclassname = null;
@@ -286,7 +288,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	 * Creates the FocList if needed and puts it in the FocServletRequest
 	 * The newEntityList is called once in the servlet call
 	 */
-	public FocList list_Get_CreateIfNeeded(FocServletRequest focRequest) {
+	public FocList list_CreateIfNeeded(FocServletRequest focRequest) {
 		FocList list = focRequest != null ? focRequest.getList() : null;
 		if (list == null) {
 			list = list_Create(focRequest, true);
@@ -295,11 +297,19 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 		}
 		return list;
 	}
+
+	public FocList list_Get_CreateIfNeeded(FocServletRequest focRequest) {
+		return list_CreateIfNeeded(focRequest);
+	}
 	
 	public FocList list_Post_CreateIfNeeded(FocServletRequest focRequest) {
 		return list_Get_CreateIfNeeded(focRequest);
 	}
-	
+
+	public FocList list_Delete_CreateIfNeeded(FocServletRequest focRequest) {
+		return list_Get_CreateIfNeeded(focRequest);
+	}
+
 	public FocList list_Create(FocServletRequest focRequest, boolean load) {
 		FocList list = null;
 		
@@ -719,4 +729,139 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			if(sessionAndApp != null) sessionAndApp.logout();
 		}
 	}
+	
+	// ------------------------------------
+	// ------------------------------------
+	// DELETE
+	// ------------------------------------
+	// ------------------------------------
+	
+	public void doDelete_Core(FocServletRequest focRequest) throws Exception {
+		HttpServletRequest  request  = focRequest.getRequest();
+		HttpServletResponse response = focRequest.getResponse();
+
+		// Here starts the CORE Delete 
+		//----------------------------
+		StringBuffer buffer  = getRequestAsStringBuffer(request);
+		String       reqStr  = buffer != null ? buffer.toString() : null;
+		JSONArray    jsonArr = new JSONArray(reqStr);
+
+		B01JsonBuilder builder = newJsonBuilderForPostResponse();
+		builder.beginList();
+		
+		if(jsonArr != null) {
+			for(int i=0; i<jsonArr.length(); i++) {
+				JSONObject obj = (JSONObject) jsonArr.get(i);
+				if(obj != null && obj.has("REF")) {
+					long ref = obj.getLong("REF");
+					
+					if(ref != 0) {
+						builder.beginObject();
+						
+						if(useCachedList(focRequest)) {
+							FocList list = list_Delete_CreateIfNeeded(focRequest); 
+							if(list != null){
+								list.loadIfNotLoadedFromDB();
+								O focObj = (O) list.searchByReference(ref);
+								if(focObj != null) focObj.delete();
+							}
+							list.validate(true);
+							builder.appendKeyValue("REF", ref);
+							builder.appendKeyValue("Status", "Deleted");
+						} else {
+							FocConstructor constr = new FocConstructor(getFocDesc());
+							O focObj = (O) constr.newItem();
+							focObj.setReference(ref);
+							
+							focObj.load();
+							focObj.setDeleted(true);
+							boolean error = !focObj.validate(true);
+							builder.appendKeyValue("REF", ref);
+							if (error) {
+								builder.appendKeyValue("Status", "Error, could not delete");
+							} else {
+								builder.appendKeyValue("Status", "Deleted");	
+							}
+						}
+						builder.endObject();
+					}
+				}
+			}
+		}
+		
+		builder.endList();
+
+		String userJson = builder.toString();
+		response.setStatus(HttpServletResponse.SC_OK);
+		setCORS(response);
+		response.getWriter().println(userJson);
+
+//		if(focObj != null){
+//
+//			if (errorSaving) {
+//				userJson = "{\"message\": \"Could not save\"}";
+//				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//				setCORS(response);
+//				response.getWriter().println(userJson);
+//				
+//			} else {
+//				afterPost(focRequest, focObj, created);
+//
+//				builder = xmlBuilder_New(focRequest, true, true);
+//				userJson = toJsonDetails(focObj, builder);
+//				
+//				response.setStatus(HttpServletResponse.SC_OK);
+//				setCORS(response);
+//				response.getWriter().println(userJson);
+//			}
+//		}
+	}
+	
+	@Override
+	protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		SessionAndApplication sessionAndApp = null;
+		FocServletRequest focRequest = null;		
+		try {
+			if(request != null && request.getSession() != null) {
+				Globals.logString("Session ID Started request"+request.getSession().getId());
+			}
+			sessionAndApp = pushSession(request, response);
+			if(sessionAndApp == null){
+				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+				setCORS(response);
+				String responseBody = "{\"message\": \"Unauthorised\"}";
+				response.getWriter().println(responseBody);
+			} else {
+				focRequest = newFocServletRequest(sessionAndApp, request, response);
+				long ref = focRequest.getRef();
+				
+				Globals.logString(" => DELETE Begin "+getNameInPlural());
+				if(		 !allowPost(focRequest) 
+						|| !mobileModule_HasDelete(focRequest)
+						){
+					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+					setCORS(response);
+					String responseBody = "{\"message\": \"Forbidden\"}";
+					response.getWriter().println(responseBody);
+				} else {
+					logRequestHeaders(request);
+
+					doDelete_Core(focRequest);
+				}
+				
+				Globals.logString(" <= DELETE End "+getNameInPlural()+" "+response.getStatus());
+			}
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			setCORS(response);
+			String responseBody = "{\"Exception\": \""+e.getMessage()+"\"}";
+			response.getWriter().println(responseBody);
+
+			Globals.logException(e);
+		} finally {
+			if(focRequest != null) focRequest.dispose();
+			if(sessionAndApp != null) sessionAndApp.logout();
+		}
+	}
+
 }
