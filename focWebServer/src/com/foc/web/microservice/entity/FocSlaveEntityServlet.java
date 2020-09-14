@@ -1,11 +1,9 @@
 package com.foc.web.microservice.entity;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
@@ -69,130 +67,167 @@ public abstract class FocSlaveEntityServlet<O extends FocObject, M extends FocOb
   }
   
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		SessionAndApplication sessionAndApp = null;
-		FocServletRequest focRequest = null;		
-		try {
-			if(request != null && request.getSession() != null) {
-				Globals.logString("Session ID Started request"+request.getSession().getId());
-			}
-			sessionAndApp = pushSession(request, response);
-			if(sessionAndApp == null){
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				setCORS(response);
-				String responseBody = "{\"message\": \"Unauthorised\"}";
-				response.getWriter().println(responseBody);
+	protected void doPost_Core(FocServletRequest focRequest) throws Exception {
+		if (focRequest != null) {
+			HttpServletRequest  request  = focRequest.getRequest();
+			HttpServletResponse response = focRequest.getResponse();
+
+			//Here starts the CORE Poste 
+			//--------------------------
+			String userJson = "";
+
+			StringBuffer buffer = getRequestAsStringBuffer(request);
+			String       reqStr = buffer.toString();
+			
+			if (reqStr != null) Globals.logString(" = Body: "+reqStr);
+
+			B01JsonBuilder builder = newJsonBuilderForPostResponse();
+			JSONObject     jsonObj = new JSONObject(reqStr);
+
+			String errorMessage = null;
+			
+			O focObj = null;
+			//This should be called first to GET the master 
+			FocList list = list_Create(focRequest, true);
+			
+			M master = (M) focRequest.getMaster();
+			if (master == null) {
+				errorMessage = "Could not find master object";
 			} else {
-				focRequest = newFocServletRequest(sessionAndApp, request, response);
-				
-				Globals.logString(" => POST Begin "+getNameInPlural());
-				if(!allowPost(focRequest)){
-					
-					response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-					setCORS(response);
-					String responseBody = "{\"message\": \"Forbidden\"}";
-					response.getWriter().println(responseBody);
+				if(list == null) {
+					errorMessage = "Could not find slave list";
 				} else {
-					logRequestHeaders(request);
-					
-					//Here starts the CORE Poste 
-					//--------------------------
-					String userJson = "";
+					long ref = focRequest.getRef();
 
-					StringBuffer buffer = getRequestAsStringBuffer(request);
-					String       reqStr = buffer.toString();
-					
-					if (reqStr != null) Globals.logString(" = Body: "+reqStr);
-		
-					B01JsonBuilder builder = newJsonBuilderForPostResponse();
-					JSONObject     jsonObj = new JSONObject(reqStr);
-
-					String errorMessage = null;
-					
-					O focObj = null;
-					//This should be called first to GET the master 
-					FocList list = list_Create(focRequest, true);
-					
-					M master = (M) focRequest.getMaster();
-					if (master == null) {
-						errorMessage = "Could not find master object";
+					if(ref != 0) {
+						focObj = (O) list.searchByRealReferenceOnly(ref);
 					} else {
-						if(list == null) {
-							errorMessage = "Could not find slave list";
-						} else {
-							long ref = focRequest.getRef();
-	
-							if(ref != 0) {
-								focObj = (O) list.searchByRealReferenceOnly(ref);
-							} else {
-								focObj = (O) list.newEmptyItem();
-								focObj.code_resetCode();
-							}
-						}
+						focObj = (O) list.newEmptyItem();
+						focObj.code_resetCode();
+					}
+				}
 
-						if(focObj != null){
-							fillFocObjectFromJson(focObj, jsonObj);
-	
-							boolean created = focObj.isCreated();
-							if(created) {
-								if(focObj instanceof FocWorkflowObject) {
-									((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
-								}
-							}
-							
-							boolean errorSaving = false;
-							
-							if(list != null){
-								list.add(focObj);
-								errorSaving = !focObj.validate(true);
-								if(!errorSaving) {
-									errorSaving = !list.validate(true);
-								}
-								if(!errorSaving) {
-									errorSaving = !master.validate(true);
-								}
-							}
-	
-							if (errorSaving) {
-								userJson = "{\"message\": \"Could not save\"}";
-								response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-								setCORS(response);
-								response.getWriter().println(userJson);
-								
-							} else {
-								afterPost(focRequest, focObj, created);
-		
-								builder = xmlBuilder_New(focRequest, true, true);
-								userJson = toJsonDetails(focObj, builder);
-								
-								response.setStatus(HttpServletResponse.SC_OK);
-								setCORS(response);
-								response.getWriter().println(userJson);
-							}
+				if(focObj != null){
+					fillFocObjectFromJson(focObj, jsonObj);
+
+					boolean created = focObj.isCreated();
+					if(created) {
+						if(focObj instanceof FocWorkflowObject) {
+							((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
 						}
-					} 
+					}
 					
-					if(errorMessage != null){
-						userJson = "{\"message\": \" " + errorMessage + " \"}";
-						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+					boolean errorSaving = false;
+					
+					if(list != null){
+						list.add(focObj);
+						errorSaving = !focObj.validate(true);
+						if(!errorSaving) {
+							errorSaving = !list.validate(true);
+						}
+						if(!errorSaving) {
+							errorSaving = !master.validate(true);
+						}
+					}
+
+					if (errorSaving) {
+						userJson = "{\"message\": \"Could not save\"}";
+						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+						setCORS(response);
+						response.getWriter().println(userJson);
+						
+					} else {
+						afterPost(focRequest, focObj, created);
+
+						builder = xmlBuilder_New(focRequest, true, true);
+						userJson = toJsonDetails(focObj, builder);
+						
+						response.setStatus(HttpServletResponse.SC_OK);
 						setCORS(response);
 						response.getWriter().println(userJson);
 					}
 				}
-				
-				Globals.logString(" <= POST End "+getNameInPlural()+" "+response.getStatus());
+			} 
+			
+			if(errorMessage != null){
+				userJson = "{\"message\": \" " + errorMessage + " \"}";
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				setCORS(response);
+				response.getWriter().println(userJson);
 			}
-		} catch (Exception e) {
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			setCORS(response);
-			String responseBody = "{\"Exception\": \""+e.getMessage()+"\"}";
-			response.getWriter().println(responseBody);
-
-			Globals.logException(e);
-		} finally {
-			if(focRequest != null) focRequest.dispose();
-			if(sessionAndApp != null) sessionAndApp.logout();
 		}
+				
 	}
 
+	@Override
+	public void doDelete_Core(FocServletRequest focRequest) throws Exception {
+		
+		if (focRequest != null) {
+			HttpServletRequest  request  = focRequest.getRequest();
+			HttpServletResponse response = focRequest.getResponse();
+
+			//Here starts the CORE Poste 
+			//--------------------------
+			StringBuffer buffer = getRequestAsStringBuffer(request);
+			String       reqStr  = buffer != null ? buffer.toString() : null;
+			JSONArray    jsonArr = new JSONArray(reqStr);
+			
+			if (reqStr != null) Globals.logString(" = Body: "+reqStr);
+
+			B01JsonBuilder builder = newJsonBuilderForPostResponse();
+
+			String errorMessage = null;
+			
+			//This should be called first to GET the master 
+			FocList list = list_Create(focRequest, true);
+			
+			M master = (M) focRequest.getMaster();
+			if (master == null) {
+				errorMessage = "Could not find master object";
+			} else {
+				if(list == null) {
+					errorMessage = "Could not find slave list";
+				} else {
+
+					builder.beginList();
+					
+					if(jsonArr != null) {
+						for(int i=0; i<jsonArr.length(); i++) {
+							JSONObject obj = (JSONObject) jsonArr.get(i);
+							if(obj != null && obj.has("REF")) {
+								long ref = obj.getLong("REF");
+								
+								if(ref != 0) {
+									builder.beginObject();
+
+									list.loadIfNotLoadedFromDB();
+									O focObj = (O) list.searchByReference(ref);
+									if(focObj != null) {
+										focObj.delete();
+										list.validate(true);
+										master.validate(true);
+										builder.appendKeyValue("REF", ref);
+										builder.appendKeyValue("Status", "Deleted");
+									} else {
+										builder.appendKeyValue("REF", ref);
+										builder.appendKeyValue("Status", "Object not found");
+									}
+									
+									builder.endObject();
+								}
+							}
+						}
+					}
+					
+					builder.endList();
+
+					String userJson = builder.toString();
+					response.setStatus(HttpServletResponse.SC_OK);
+					setCORS(response);
+					response.getWriter().println(userJson);
+				}
+			}
+		}
+		
+	}
 }
