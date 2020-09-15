@@ -4666,7 +4666,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		appendKeyValueForFieldName(builder, joinAlias, fieldName);
 		builder.setPrintForeignKeyFullObject(fullObject);
 	}
-	
+
+	public void appendKeyValueForFieldName(B01JsonBuilder builder, String fieldName) {
+		appendKeyValueForFieldName(builder, null, fieldName);
+	}
+
 	public void appendKeyValueForFieldName(B01JsonBuilder builder, String joinAlias, String fieldName) {
 		FProperty prop = null;
 		if(Utils.isStringEmpty(joinAlias)) {
