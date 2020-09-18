@@ -31,7 +31,12 @@ public class FTypeDouble extends FocFieldTypAbstract<FocDouble> {
 	@Override
 	public FField newFField(Class focObjClass, Field f, FocDouble a) {
 		FField focField = null;
-		focField = new FNumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size(), a.decimal());
+//		focField = new FNumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size(), a.decimal());
+		if(a.displayZeroValues()) {
+			focField = new FNumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size(),a.decimal());
+		} else {
+			focField = new FNumField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size(),a.decimal(), true,  a.displayZeroValues());
+		}
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
 		return focField;
