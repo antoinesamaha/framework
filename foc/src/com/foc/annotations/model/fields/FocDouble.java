@@ -28,4 +28,5 @@ public @interface FocDouble {
 	public int decimal() default 2;
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
+	public boolean displayZeroValues() default true;
 }

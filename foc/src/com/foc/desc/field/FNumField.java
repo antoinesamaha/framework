@@ -44,6 +44,12 @@ public class FNumField extends FField {
     super(name, title, id, key, size, decimals);
     this.groupingUsed = groupingUsed;
   }
+  
+  public FNumField(String name, String title, int id, boolean key, int size, int decimals, boolean groupingUsed, boolean displayZeroValues) {
+    super(name, title, id, key, size, decimals);
+    this.groupingUsed = groupingUsed;
+    this.displayZeroValues = displayZeroValues;
+  }
 
   public int getDecimals() {
     if(decimals == 0 && getProvider()== DBManager.PROVIDER_ORACLE){
