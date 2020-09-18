@@ -116,17 +116,22 @@ public abstract class GenExcelReader {
 		}
 	}
 
-	public String copyObject(FocObject focObj, GenExcelLine line, String fieldName) {
+	public String copyObject(FocObject focObj, GenExcelLine line, String fieldName, HashMap<String, String> possibleAlternatives) {
 		String error = null;
 		
 		if (focObj != null && line != null && !Utils.isStringEmpty(fieldName)) {
-			String name = line.get(fieldName);
-			
-			if (!Utils.isStringEmpty(name)) {
-				FObject objProp = (FObject) focObj.getFocPropertyByName(fieldName);
-				FocList selectinoList = objProp.getPropertySourceList();
+			FObject objProp = (FObject) focObj.getFocPropertyByName(fieldName);
+			FocList selectinoList = objProp.getPropertySourceList();
 				
+			String name = line.get(fieldName);
+			if (!Utils.isStringEmpty(name)) {
 				FocObject selectedObject = selectinoList.searchByPropertyStringValue(FField.FNAME_NAME, name);
+				
+				if (selectedObject == null && possibleAlternatives != null) {
+					name = possibleAlternatives.get(name);
+					selectedObject = selectinoList.searchByPropertyStringValue(FField.FNAME_NAME, name);
+				}
+				
 				if (selectedObject != null) {
 					objProp.setObject(selectedObject);
 				} else {
@@ -136,6 +141,10 @@ public abstract class GenExcelReader {
 		}
 		
 		return error;
+	}
+	
+	public String copyObject(FocObject focObj, GenExcelLine line, String fieldName) {
+		return copyObject(focObj, line, fieldName, null) ;
 	}
 
 	private void openWorkbook() {

@@ -29,4 +29,5 @@ public @interface FocDouble {
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
 	public boolean displayZeroValues() default true;
+	public boolean groupingUsed() default true;
 }

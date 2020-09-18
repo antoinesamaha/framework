@@ -131,6 +131,10 @@ public class FNumField extends FField {
   public boolean isGroupingUsed(){
   	return this.groupingUsed;
   }
+  
+  public void setGroupingUsed(boolean groupingUsed){
+  	this.groupingUsed = groupingUsed;
+  }
 
   public boolean isObjectContainer(){
     return false;
