@@ -128,6 +128,14 @@ public class FCloudStorageProperty extends FBlobMediumProperty {
 	}
 	
 	public boolean doesFileExist(){
+		String fileName = getFileName();
+		return !Utils.isStringEmpty(fileName);
+		//DO NOT DELETE THIS COMMENT
+		//-----------------------------
+		//-----------------------------
+		//-----------------------------		
+		//THIS BELLOW CHECKS THE FILE SYSTEM OR S3
+		/*
 		boolean exist = false;
 		if(!isUploading()){
 			if(getCloudStorage() != null){
@@ -149,6 +157,13 @@ public class FCloudStorageProperty extends FBlobMediumProperty {
 			
 		}
 		return exist;
+		*/
+		//-----------------------------
+		//-----------------------------
+		//-----------------------------		
+		//DO NOT DELETE THIS COMMENT
+		//THIS ABOVE CHECKS THE FILE SYSTEM OR S3
+
 	}
 	
 	//Download
