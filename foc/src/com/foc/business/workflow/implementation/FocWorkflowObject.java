@@ -156,4 +156,28 @@ public abstract class FocWorkflowObject extends FocObject implements IWorkflow, 
 			}
 		}
   }
+
+  public void setCompanyAndSiteToAnyValueIfEmpty() {
+  	Company company = getCompany();
+  	if(company == null || getSite() == null) {
+  		if(company == null) {
+				FocList companyList = CompanyDesc.getInstance().getFocList();
+				if(companyList != null) {
+					companyList.loadIfNotLoadedFromDB();
+					if(companyList.size() > 0) {
+						company = (Company) companyList.getFocObject(0);
+						setCompany(company);
+					}
+				}
+  		}
+  		
+  		if (company != null && getSite() == null) {
+				WFSite site = company != null ? company.getAnySite() : null;
+				if(site != null){
+					setSite(site);
+				}
+  		}
+			
+  	}
+  }
 }
