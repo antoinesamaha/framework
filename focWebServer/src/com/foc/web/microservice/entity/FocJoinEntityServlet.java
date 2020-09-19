@@ -651,7 +651,8 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 				boolean created = focObj.isCreated();
 				if(created) {
 					if(focObj instanceof FocWorkflowObject) {
-						((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
+						((FocWorkflowObject) focObj).setCompanyAndSiteToAnyValueIfEmpty();
+//						((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
 					}
 				}
 				

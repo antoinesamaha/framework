@@ -642,31 +642,33 @@ public class AdminWebModule extends FocWebModule {
 			}
 		}
 
-		menuItem = mainMenu.pushMenu("MAKE_DATA_ANONIMOUS", "Make Data Anonymous");
-		menuItem.setMenuAction(new IFocMenuItemAction() {
-
-			@Override
-			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
-
-				OptionDialogWindow optionWindow = new OptionDialogWindow("ARE YOU SURE YOU WANT TO LOOSE DATA NAMES!!!!! (NOT RECOMMENDED) SHOULD NEVER BE USED FOR PRODUCTION REAL DATA !!!!!!!!!!! !!!!!!!!!!!! !!!!!!!!!!!!! !!!!!!!!!!!", null);
-				optionWindow.setWidth("500px");
-				optionWindow.setHeight("200px");
-
-				optionWindow.addOption("Yes, Loose Data", new IOption() {
-					@Override
-					public void optionSelected(Object contextObject) {
-						FocWebServer.getInstance().makeDataAnonymous();
-					}
-				});
-
-				optionWindow.addOption("Cancel", new IOption() {
-					@Override
-					public void optionSelected(Object contextObject) {
-					}
-				});
-				FocWebApplication.getInstanceForThread().addWindow(optionWindow);
-			}
-		});
+		if (ConfigInfo.isDevMode()) {
+			menuItem = mainMenu.pushMenu("MAKE_DATA_ANONIMOUS", "Make Data Anonymous");
+			menuItem.setMenuAction(new IFocMenuItemAction() {
+	
+				@Override
+				public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+	
+					OptionDialogWindow optionWindow = new OptionDialogWindow("ARE YOU SURE YOU WANT TO LOOSE DATA NAMES!!!!! (NOT RECOMMENDED) SHOULD NEVER BE USED FOR PRODUCTION REAL DATA !!!!!!!!!!! !!!!!!!!!!!! !!!!!!!!!!!!! !!!!!!!!!!!", null);
+					optionWindow.setWidth("500px");
+					optionWindow.setHeight("200px");
+	
+					optionWindow.addOption("Yes, Loose Data", new IOption() {
+						@Override
+						public void optionSelected(Object contextObject) {
+							//FocWebServer.getInstance().makeDataAnonymous();
+						}
+					});
+	
+					optionWindow.addOption("Cancel", new IOption() {
+						@Override
+						public void optionSelected(Object contextObject) {
+						}
+					});
+					FocWebApplication.getInstanceForThread().addWindow(optionWindow);
+				}
+			});
+		}
 
 		FocMenuItem autoPopulateMenu = null;
 		Iterator<IFocDescDeclaration> focDescDeclarationIterator = Globals.getApp().getFocDescDeclarationIterator();
