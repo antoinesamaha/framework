@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 import javax.swing.JTextField;
 
 import com.fab.model.table.FieldDefinition;
-import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -84,6 +83,10 @@ public class FIntField extends FField {
   
   public boolean isGroupingUsed(){
   	return this.isGroupingUsed;
+  }
+  
+  public void setGroupingUsed(boolean groupingUsed){
+  	this.isGroupingUsed = groupingUsed;
   }
 
   public NumberFormat getFormat(){
