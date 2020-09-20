@@ -32,6 +32,8 @@ public class FTypeInteger extends FocFieldTypAbstract<FocInteger> {
 	public FField newFField(Class focObjClass, Field f, FocInteger a) {
 		FIntField focField = null;
 		focField = new FIntField(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false, a.size());
+		focField.setGroupingUsed(a.groupingUsed());
+		focField.setDisplayZeroValues(a.displayZeroValues());		
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
 		focField.setLockValueAfterCreation(a.lockAfterCreation());
