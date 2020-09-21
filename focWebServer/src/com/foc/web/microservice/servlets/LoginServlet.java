@@ -14,6 +14,10 @@ import com.foc.admin.FocGroupDesc;
 import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.business.adrBook.AdrBookParty;
+import com.foc.business.adrBook.AdrBookPartyDesc;
+import com.foc.business.adrBook.Contact;
+import com.foc.business.adrBook.ContactDesc;
 import com.foc.business.company.Company;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
@@ -159,6 +163,34 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				builder.beginObject_InValue();
 				company.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
 				company.appendKeyValueForFieldName(builder, FField.FNAME_NAME);
+				builder.endObject();
+			}
+			
+			Contact contact = user.getContact();
+			if (contact != null) {
+				FocDesc contactDesc = contact.getThisFocDesc();
+				builder.appendKey(userDesc.getFieldNameByID(FocUserDesc.FLD_CONTACT));
+				builder.beginObject_InValue();
+				contact.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FirstName);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FamilyName);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Phone1);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Mobile);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_EMail);
+				
+				AdrBookParty party = contact.getAdrBookParty();
+				if (party != null) {
+					FocDesc partyDesc = party.getThisFocDesc();
+					if (partyDesc != null) {
+						builder.appendKey(contactDesc.getFieldNameByID(ContactDesc.FLD_ADR_BOOK_PARTY));
+						builder.beginObject_InValue();
+						party.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
+						party.appendKeyValueForFieldName(builder, partyDesc.getFieldNameByID(AdrBookPartyDesc.FLD_CODE));
+						party.appendKeyValueForFieldName(builder, partyDesc.getFieldNameByID(AdrBookPartyDesc.FLD_NAME));
+						builder.endObject();
+					}
+				}
+				
 				builder.endObject();
 			}
 			
