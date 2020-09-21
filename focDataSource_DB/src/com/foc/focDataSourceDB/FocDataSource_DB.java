@@ -1702,6 +1702,16 @@ public class FocDataSource_DB implements IFocDataSource {
 		}
 		return provider;
 	}
+	
+	@Override
+	public int getServerVersion(String dbSourceKey) {
+		int version = 0;
+		ConnectionPool pool = DBManagerServer.getInstance().getConnectionPool(dbSourceKey);
+		if(pool != null){
+			version = pool.getServerVersion();
+		}
+		return version;
+	}
 
 	@Override
 	public boolean command_AdaptDataModel_Reindex() {

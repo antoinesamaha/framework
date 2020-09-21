@@ -214,11 +214,25 @@ public class SQLRequest {
 				request.append(" limit ");
 				request.append(filter.getOffsetCount());
   		} else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) {
-				request.append(" OFFSET ");
-				request.append(filter.getOffset());
-				request.append(" ROWS FETCH NEXT ");
-				request.append(filter.getOffsetCount());
-				request.append(" ROWS ONLY ");
+ 				if(focDesc.getServerVersion() < 12 || focDesc.getServerVersion() > 0) {
+ 					int endingIndex   = filter.getOffset() + filter.getOffsetCount();
+ 					int startingIndex = filter.getOffset();
+ 					
+ 					StringBuffer requestWrapper = new StringBuffer();
+ 					requestWrapper.append("SELECT * FROM ");
+ 					requestWrapper.append("( SELECT pagination.*, rownum r__ FROM (");
+ 					requestWrapper.append(request);
+ 					requestWrapper.append(") pagination "); 					
+ 					requestWrapper.append("WHERE rownum < ( " + endingIndex + " + 1) ");
+ 					requestWrapper.append(") WHERE rownum >= ( " + startingIndex + " + 1) ");
+ 					request = requestWrapper; 
+  			} else {
+					request.append(" OFFSET ");
+					request.append(filter.getOffset());
+					request.append(" ROWS FETCH NEXT ");
+					request.append(filter.getOffsetCount());
+					request.append(" ROWS ONLY ");
+  			}
   		}
   	}
   }
