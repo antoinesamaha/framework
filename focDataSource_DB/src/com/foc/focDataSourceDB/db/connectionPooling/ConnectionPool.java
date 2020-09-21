@@ -178,6 +178,11 @@ public class ConnectionPool {
 	public int getProvider(){
 		return getCredentials() != null ? getCredentials().getProvider() : 0;
 	}
+	
+	public int getServerVersion(){
+		return getCredentials() != null ? getCredentials().getServerVersion() : 0;
+	}
+	
 	/*
 	public DBManagerServer getDbManagerServer() {
 		return dbManagerServer;

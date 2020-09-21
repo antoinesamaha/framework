@@ -21,11 +21,12 @@ import com.foc.util.Utils;
  */
 public class ConfigInfo {
 	
-  public static final String JDBC_DRIVERS   = "jdbc.drivers";
-  public static final String JDBC_URL       = "jdbc.url";
-  public static final String JDBC_USERNAME  = "jdbc.username";
-  public static final String JDBC_PASSWORD  = "jdbc.password";
-  public static final String JDBC_XPASSWORD = "jdbc.Xpassword";
+  public static final String JDBC_DRIVERS        = "jdbc.drivers";
+  public static final String JDBC_URL            = "jdbc.url";
+  public static final String JDBC_USERNAME       = "jdbc.username";
+  public static final String JDBC_PASSWORD       = "jdbc.password";
+  public static final String JDBC_XPASSWORD      = "jdbc.Xpassword";
+  public static final String JDBC_SERVER_VERSION = "jdbc.server.version";
 	
   private static boolean loaded = false;
   
@@ -37,6 +38,7 @@ public class ConfigInfo {
   private static String  jdbcUserName  = null;
   private static String  jdbcPassword  = null;
   private static String  jdbcXPassword = null;
+  private static int     jdbcServerVersion = 0;
   private static String  syncMode      = null;//N none, S server, R remote
   
   private static String  userName          = null;
@@ -201,6 +203,10 @@ public class ConfigInfo {
         jdbcUserName  = getProperty(JDBC_USERNAME);
         jdbcPassword  = getProperty(JDBC_PASSWORD);
         jdbcXPassword = getProperty(JDBC_XPASSWORD);
+        
+        str = getProperty(JDBC_SERVER_VERSION);
+        if(str != null) jdbcServerVersion = Utils.parseInteger(str, 0);
+        
         Globals.logString("Drivers: "+jdbcDrivers);
         Globals.logString("URL: "+jdbcURL);
         
@@ -539,6 +545,10 @@ public class ConfigInfo {
     return jdbcUserName;
   }
 
+  public static int getJdbcServerVersion() {
+    return jdbcServerVersion;
+  }
+  
   public static boolean isDevMode() {
     return devMode;
   }

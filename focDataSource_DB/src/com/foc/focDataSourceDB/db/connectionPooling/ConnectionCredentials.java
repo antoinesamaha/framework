@@ -23,7 +23,6 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.api.IFocEncryptor;
 import com.foc.db.DBManager;
-import com.foc.util.Utils;
 
 public class ConnectionCredentials {
 	private String dbSourceKey = null;
@@ -33,6 +32,7 @@ public class ConnectionCredentials {
   private String username  = null;
   private String password  = null;
   private String xpassword = null;      
+  private int    serverVersion = 0;
   
   private int    provider  = DBManager.PROVIDER_MYSQL;
 
@@ -41,7 +41,8 @@ public class ConnectionCredentials {
     url       = null;
     username  = null;
     password  = null;
-    xpassword = null;  	
+    xpassword = null;
+    serverVersion = 0;
   }
   
   public void dispose(){
@@ -74,6 +75,7 @@ public class ConnectionCredentials {
     setUsername(ConfigInfo.getJdbcUserName());
     setPassword(ConfigInfo.getJdbcPassword());
     setXpassword(ConfigInfo.getJdbcXPassword());
+    setServerVersion(ConfigInfo.getJdbcServerVersion());
     
     StringTokenizer tokenizer = url != null ? new StringTokenizer(url, ":", false) : null;
     for(int count = 0; count < 2 && tokenizer.hasMoreTokens(); count++){
@@ -208,6 +210,14 @@ public class ConnectionCredentials {
 
 	public void setXpassword(String xpassword) {
 		this.xpassword = xpassword;
+	}
+
+	public void setServerVersion(int serverVersion) {
+		this.serverVersion = serverVersion;
+	}
+	
+	public int getServerVersion() {
+		return serverVersion;
 	}
 
 	private String decrypt(String str) {
