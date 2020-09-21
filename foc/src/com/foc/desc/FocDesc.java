@@ -141,7 +141,8 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	private   boolean      allowAdaptDataModel = true ;
 	private 	boolean 		 logicalDelete		   = false;
 	private   boolean      siteRestrictionAccess = true;//User from Site A cannot see items of Site B
-    
+	private   boolean      useOracleListAggCLOB = true;
+	
 	private FocModule                   module                = null;
 	
 	private String                      name                  = null;
@@ -2606,6 +2607,14 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 			}
 		}
 		return logFocDesc;
+	}
+
+	public boolean isUseOracleListAggCLOB() {
+		return useOracleListAggCLOB;
+	}
+
+	public void setUseOracleListAggCLOB(boolean useOracleListAggCLOB) {
+		this.useOracleListAggCLOB = useOracleListAggCLOB;
 	}
 
 }

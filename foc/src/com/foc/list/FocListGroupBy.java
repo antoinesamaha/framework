@@ -127,7 +127,7 @@ public class FocListGroupBy {
 			String formulaAfter  = "";
 			
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
-				if(ConfigInfo.isOracleListAggCLOB()) {
+				if(ConfigInfo.isOracleListAggCLOB() && focDesc.isUseOracleListAggCLOB()) {
 					formulaBefore = "LISTAGG_CLOB(";
 					formulaAfter  = ")";
 					
