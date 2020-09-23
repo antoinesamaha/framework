@@ -73,13 +73,20 @@ public class WSSingleLookup {
 		}
 		return list; 
 	}
-		
+
+	public void fillJson(B01JsonBuilder builder) {
+		FocList focList = getFocList(true); 
+		if (focList != null && builder != null) {
+			focList.toJson(builder);
+		}
+	}
+	
 	public void jsonRebuild() {
 		try {
 			B01JsonBuilder builder = newJsonBuiler();
-			FocList focList = getFocList(true); 
-			if (focList != null && builder != null) {
-				focList.toJson(builder);
+			if(builder != null) {
+				fillJson(builder);
+				
 				String newJson = builder.toString();
 				if(newJson != null) {
 					replaceJson(newJson);
