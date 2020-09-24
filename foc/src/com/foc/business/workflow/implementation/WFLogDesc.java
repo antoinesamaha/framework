@@ -239,4 +239,11 @@ public class WFLogDesc extends FocDesc {
 	public static String getStorageName_ForTransactionStorageName(String transStorageName){
 		return "WF_LOG_"+transStorageName;
 	}
+	
+	@Override
+	protected void afterConstruction() {
+		super.afterConstruction();
+    setListInCache(false);
+
+	}
 }
