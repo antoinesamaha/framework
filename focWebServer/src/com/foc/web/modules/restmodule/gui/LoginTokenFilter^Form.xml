@@ -1,0 +1,14 @@
+<HorizontalLayout spacing="true" captionMargin="0" margin="true" height="-1px" width="1300px">
+  <ValidationSettings formTitle="Search" withApply="true" withSave="false" withAttach="false" withPrint="false" viewSelector="false" />
+    <HorizontalLayout name="" spacing="true" captionMargin="0" margin="true" height="-1px" width="100%">
+    
+		  <VerticalLayout spacing="true" captionMargin="0" margin="true" height="-1px" width="-1px">
+		    <ConditionField dataPath="FocUser" />		  
+		    <ConditionField dataPath="DateTime" />
+		    <ConditionField dataPath="Token" />
+		    <ConditionField dataPath="Consumed"/>
+		    <ConditionField dataPath="ConsumptionDateTime"/>
+		  </VerticalLayout>
+		  
+	</HorizontalLayout>
+</HorizontalLayout>
