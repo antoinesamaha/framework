@@ -28,6 +28,8 @@ import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.Encryptor;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 import com.foc.web.microservice.entity.FocSimpleTokenAuth;
+import com.foc.web.modules.restmodule.LoginToken;
+import com.foc.web.modules.restmodule.LoginTokenList;
 
 public class LoginServlet extends FocSimpleMicroServlet {
 
@@ -48,8 +50,9 @@ public class LoginServlet extends FocSimpleMicroServlet {
 			JSONObject jsonObj = reqStr != null ? new JSONObject(reqStr) : null;
 
 			if(jsonObj != null && jsonObj.has("username") && jsonObj.has("password")){
-				String username = jsonObj.getString("username");
-				String password = jsonObj.getString("password");
+				String username    = jsonObj.getString("username");
+				String password    = jsonObj.getString("password");
+				boolean login_token = jsonObj.has("login_token") ? jsonObj.getBoolean("login_token") : false;
 				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
 				// Login
 				FocLoginAccess loginAccess = new FocLoginAccess();
@@ -71,6 +74,12 @@ public class LoginServlet extends FocSimpleMicroServlet {
 						B01JsonBuilder builder = new B01JsonBuilder();
 						builder.beginObject();
 						builder.appendKeyValue("access_token", token);
+						if(login_token) {
+							LoginToken loginToken = LoginTokenList.generateToken(user);
+							if (loginToken != null) {
+								builder.appendKeyValue("login_token", loginToken.getToken());
+							}
+						}
 						builder.appendKey("UserProfile");
 						builder.append(userProfile);
 						builder.endObject();
@@ -202,6 +211,7 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				builder.beginObject_InValue();
 				group.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
 				group.appendKeyValueForFieldName(builder, FField.FNAME_NAME);
+				group.appendKeyValueForFieldName(builder, FocGroupDesc.FNAME_GUEST_APPLICABLE);
 				group.appendKeyValueForFieldName(builder, userDesc.getFieldNameByID(FocGroupDesc.FLD_MOBILE_MODULE_RIGHTS_LIST));
 				builder.endObject();
 				
