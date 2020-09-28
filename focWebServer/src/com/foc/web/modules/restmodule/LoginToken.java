@@ -17,6 +17,8 @@ import com.foc.desc.parsers.pojo.PojoFocObject;
 public class LoginToken extends PojoFocObject {
 	
 	public static final String DBNAME = "LoginToken";
+
+	public static int TOKEN_LENGTH = 20;
 	
 	@FocForeignEntity(table = "FUSER")
 	public static final String FIELD_FocUser = "FocUser";

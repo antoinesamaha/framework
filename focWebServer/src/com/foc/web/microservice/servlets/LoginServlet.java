@@ -52,8 +52,8 @@ public class LoginServlet extends FocSimpleMicroServlet {
 			if(jsonObj != null && jsonObj.has("username") && jsonObj.has("password")){
 				String username    = jsonObj.getString("username");
 				String password    = jsonObj.getString("password");
-				boolean login_token = jsonObj.has("login_token") ? jsonObj.getBoolean("login_token") : false;
 				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+				
 				// Login
 				FocLoginAccess loginAccess = new FocLoginAccess();
 				Globals.logString("  = Username " + username + " Password encrypted " + encryptedPassword);
@@ -66,37 +66,42 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				}
 				
 				if(status == com.foc.Application.LOGIN_VALID){
-					String token = jwt.generateToken(username);
-					if(token != null){
-						FocUser user = FocUser.findUser(username);
-						String userProfile = buildUserProfileJson(user);
-						
-						B01JsonBuilder builder = new B01JsonBuilder();
-						builder.beginObject();
-						builder.appendKeyValue("access_token", token);
-						if(login_token) {
-							LoginToken loginToken = LoginTokenList.generateToken(user);
-							if (loginToken != null) {
-								builder.appendKeyValue("login_token", loginToken.getToken());
-							}
+					boolean login_token = jsonObj.has("login_token") ? jsonObj.getBoolean("login_token") : false;
+					
+					FocUser user = FocUser.findUser(username);
+					String userProfile = buildUserProfileJson(user);
+					
+					B01JsonBuilder builder = new B01JsonBuilder();
+					builder.beginObject();
+					
+					if(login_token) {
+						LoginToken loginToken = LoginTokenList.generateToken(user);
+						if (loginToken != null) {
+							builder.appendKeyValue("access_token", loginToken.getToken());
 						}
-						builder.appendKey("UserProfile");
-						builder.append(userProfile);
-						builder.endObject();
-						userJson = builder.toString();
-						loggedJson = "{\"access_token\": \" *** \", \"UserProfile\": "+userProfile+"}";
-						response.setStatus(HttpServletResponse.SC_OK);
+					} else {
+						String token = jwt.generateToken(username);
+						if(token != null){
+							builder.appendKeyValue("access_token", token);		
+						}
+					}
+					builder.appendKey("UserProfile");
+					builder.append(userProfile);
+					builder.endObject();
+					userJson = builder.toString();
+					loggedJson = "{\"access_token\": \" *** \", \"UserProfile\": "+userProfile+"}";
+					response.setStatus(HttpServletResponse.SC_OK);
 						
 //						if(user != null) {
 //							DeviceInformation deviceInformation = DeviceInformation.fromRequest(request);
 //
 //							WSUserActivity.logLogin(user, deviceInformation);
 //						}
-					}else{
-						userJson = "{\"message\": \"Error in login\"}";
-						loggedJson = userJson; 
-						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-					}
+						
+//					}else{
+//						userJson = "{\"message\": \"Error in login\"}";
+//						loggedJson = userJson; 
+//						response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				}else{
 					userJson = "{\"message\": \"Invalid Credentials\"}";
 					loggedJson = userJson;

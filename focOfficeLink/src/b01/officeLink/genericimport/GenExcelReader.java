@@ -34,6 +34,9 @@ public abstract class GenExcelReader {
 	private String endOfSheetField = null;
 	private String logPrefix       = null;
 	private HashMap<String, String> fieldIsDate = null;
+	private ArrayList<String> mandatoryHeaders = null;
+
+	private String sheetName = "DATA";
 	
 	public GenExcelReader(InputStream inputStream, String endOfSheetField, String logPrefix) {
 		this.inputStream     = inputStream;
@@ -55,6 +58,14 @@ public abstract class GenExcelReader {
 		workbook = null;
 		dispose_Stream();
 	}
+
+	public String getSheetName() {
+		return sheetName;
+	}
+	
+	public void setSheetName(String sheetName) {
+		this.sheetName = sheetName;
+	}
 	
 	public void addDateField(String fieldName) {
 		if(fieldIsDate != null) fieldIsDate.put(fieldName, fieldName); 
@@ -63,6 +74,20 @@ public abstract class GenExcelReader {
 	public boolean isDateField(String fieldName) {
 		if(fieldIsDate != null) return fieldIsDate.get(fieldName) != null;
 		return false;
+	}
+	
+	protected ArrayList<String> getMandatoryHeaders() {
+		return mandatoryHeaders;
+	}
+	
+	public void addMandatoryHeader(String header) {
+		if(!Utils.isStringEmpty(header)) {
+			if (mandatoryHeaders == null) {
+				mandatoryHeaders = new ArrayList<String>();
+			}
+			
+			mandatoryHeaders.add(header);
+		}
 	}
 	
 	public String getValueFromCell(FocExcelSheet sheet, String fieldName, int type, int line, int col) {
@@ -183,57 +208,58 @@ public abstract class GenExcelReader {
 
 	public void openSheets() {
 		//FocList list = FocUser.getFocDesc().getFocList(FocList.FORCE_RELOAD);
-		FocExcelSheet sheet = openSheet("DATA");
+		FocExcelSheet sheet = openSheet(getSheetName());
 		if (sheet != null) {
 			GenExcelSheetReader sheetReader = new GenExcelSheetReader(this, sheet, endOfSheetField);
-			sheetReader.execute();
+			String error = sheetReader.executeWithError();
 			
-			if (sheetReader != null && Utils.isStringEmpty(sheetReader.getErrorMessage())) {
-				OptionDialog dialog = new OptionDialog("Info", "Data is valid for import. Do you wish to save?") {
-					@Override
-					public boolean executeOption(String optionName) {
-						if (optionName.equals("SAVE")) {
-							try {
-					    	PrintStream logFile    = null;
-					    	
-					    	try {
-					    		logFile    = new PrintStream(Globals.logFile_GetFileName(logPrefix, "log"), "UTF-8");
-					    	} catch(Exception e) {
-					    		Globals.logException(e);
-					    	}
-
-								ArrayList<GenExcelLine> lineList = sheetReader.getItemArray();
-					    	scanAndFillLines(logFile, lineList);
-								
-								if(logFile != null) {
-									logFile.flush();
-									logFile.close();
+			if (error == null) {
+				if (sheetReader != null && Utils.isStringEmpty(sheetReader.getErrorMessage())) {
+					OptionDialog dialog = new OptionDialog("Info", "Data is valid for import. Do you wish to save?") {
+						@Override
+						public boolean executeOption(String optionName) {
+							if (optionName.equals("SAVE")) {
+								try {
+						    	PrintStream logFile    = null;
+						    	
+						    	try {
+						    		logFile    = new PrintStream(Globals.logFile_GetFileName(logPrefix, "log"), "UTF-8");
+						    	} catch(Exception e) {
+						    		Globals.logException(e);
+						    	}
+	
+									ArrayList<GenExcelLine> lineList = sheetReader.getItemArray();
+						    	scanAndFillLines(logFile, lineList);
+									
+									if(logFile != null) {
+										logFile.flush();
+										logFile.close();
+									}
+								} catch (Exception e) {
+									Globals.logException(e);
 								}
-							} catch (Exception e) {
-								Globals.logException(e);
 							}
+							sheetReader.dispose();
+							return false;
 						}
-						sheetReader.dispose();
-						return false;
-					}
-				};
-				dialog.addOption("SAVE", "Save");
-				dialog.addOption("CLOSE", "Don't Save");
-				dialog.popup();
-
-			} else {
-				OptionDialog dialog = new OptionDialog("Alert", "There are missing info. Please fix and import again. <br> <br>" + sheetReader.getErrorMessage()) {
-					@Override
-					public boolean executeOption(String optionName) {
-						return false;
-					}
-				};
-				dialog.addOption("OK", "OK");
-				dialog.popup();
+					};
+					dialog.addOption("SAVE", "Save");
+					dialog.addOption("CLOSE", "Don't Save");
+					dialog.popup();
+	
+				} else {
+					OptionDialog dialog = new OptionDialog("Alert", "There are missing info. Please fix and import again. <br> <br>" + sheetReader.getErrorMessage()) {
+						@Override
+						public boolean executeOption(String optionName) {
+							return false;
+						}
+					};
+					dialog.addOption("OK", "OK");
+					dialog.popup();
+				}
 			}
 			sheetReader.setListOfData(null);
 			sheetReader.setErrorMessage("");
-//			sheetReader.dispose();
 		}
 	}
 }
