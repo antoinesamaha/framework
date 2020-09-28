@@ -36,7 +36,7 @@ public class LoginTokenList extends FocListWithFilter{
 		
 		if (recentUnconsumed) {
 			long since = System.currentTimeMillis();
-			since = since - 30000;
+			since = since - 120000;
 			Date dateSince30Sec = new Date(since);
 			String datetime = df.format(dateSince30Sec);
 			
@@ -56,8 +56,8 @@ public class LoginTokenList extends FocListWithFilter{
 			token.setCreated(true);
 			token.setFocUser(user);		
 			token.setDateTime(new Date(System.currentTimeMillis()));
-			String tokenStirng = ASCII.generateRandomString(20, true);
-			token.setToken(tokenStirng);
+			String tokenSrting = ASCII.generateRandomString(LoginToken.TOKEN_LENGTH, true);
+			token.setToken(tokenSrting);
 			token.validate(true);
 		}
 		return token;

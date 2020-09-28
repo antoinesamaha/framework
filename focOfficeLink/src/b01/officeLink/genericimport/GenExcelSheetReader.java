@@ -3,10 +3,13 @@ package b01.officeLink.genericimport;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.poi.ss.usermodel.Cell;
 
+import com.foc.Globals;
+import com.foc.IFocEnvironment;
 import com.foc.property.FDate;
 import com.foc.util.Utils;
 
@@ -43,6 +46,25 @@ public class GenExcelSheetReader extends ExcelSheetReader {
 		return reader != null ? reader.isDateField(fieldName) : null;
 	}
 	
+ 	public String checkMandatoryHeaders(ArrayList<String> mandatoryHeaders) {
+ 		String error = null;
+ 		
+ 		if(mandatoryHeaders != null) {
+			HashMap<String, Integer> columnHeaderMap = getColumnHeadersMap();
+			if (columnHeaderMap != null) {
+				for(int i=0; i<mandatoryHeaders.size(); i++) {
+					String header = mandatoryHeaders.get(i);
+					if (columnHeaderMap.get(header) == null) {
+						if(error == null) error = "These mandatory headers are missing: ";
+						error += header+" ";
+					}
+				}
+			}
+ 		}
+		
+		return error;
+	}
+	
 	@Override
  	public Boolean checkLine(int line) {
 		Boolean valid = true;
@@ -74,6 +96,7 @@ public class GenExcelSheetReader extends ExcelSheetReader {
 					String value = reader.getValueFromCell(getExcelSheet(), fieldName, type, line, col);
 					if (value == null) {
 						if(isDateField(fieldName)) {
+							Globals.logString(" Reading cell : line:"+line+" col:"+col);
 							Date date = getExcelSheet().getCellDate(line, col);
 							value = FDate.convertDateToDisplayString(date);
 							//value = getExcelSheet().getCellDate(line, col);
@@ -111,6 +134,19 @@ public class GenExcelSheetReader extends ExcelSheetReader {
 
 	public ArrayList<GenExcelLine> getItemArray() {
 		return itemArray;
+	}
+
+	public String executeWithError() {
+		String error = null;
+		fillHeaderMap();
+		if (reader != null) {
+			error = checkMandatoryHeaders(reader.getMandatoryHeaders());
+			if (!Utils.isStringEmpty(error)) {
+				Globals.showNotification("Error", error, IFocEnvironment.TYPE_ERROR_MESSAGE);
+			}
+		}
+		if(error == null) readDataLines();
+		return error;
 	}
 
 }
