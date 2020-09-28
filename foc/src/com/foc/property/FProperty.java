@@ -44,6 +44,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   private static final char FLG_IS_IN_DISPOSE_METHOD            =  64;//FOR FObject only
   private static final char FLG_MANUALY_EDITED                  = 128;//FOR FObject only
   private static final char FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED = 256;//FOR FObject only
+  private static final char FLG_VALUE_IS_NULL                   = 512;//FOR FObject only
   //private static final char FLG_HIDDEN_MINUS_SIGN               = 256;
   
   //private static final char FLG_VALUE_LOCKED = 8;
@@ -430,9 +431,11 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   public void setSqlString(String str) {
     setDesactivateListeners(true);
     if (str == null){
-	    if (getProvider() == DBManager.PROVIDER_ORACLE){
-	    	str = "";
-	    }
+    	if (!ConfigInfo.isAllowNullProperties()) {
+  	    if (getProvider() == DBManager.PROVIDER_ORACLE){
+  	    	str = "";
+  	    }
+    	}
     }
     setSqlStringInternal(str);
     setModifiedFlag(false);//2017-05-31
@@ -591,6 +594,18 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
       flags = (char)(flags | FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED);
     }else{
       flags = (char)(flags & ~FLG_BACKUP_VALUE_LOCALY_CONSTRUCTED);
+    }
+  }
+  
+  public boolean isValueNull() {
+    return (flags & FLG_VALUE_IS_NULL) != 0;
+  }
+  
+  public void setValueNull(boolean isnull) {
+    if(isnull){
+      flags = (char)(flags | FLG_VALUE_IS_NULL);
+    }else{
+      flags = (char)(flags & ~FLG_VALUE_IS_NULL);
     }
   }
   
