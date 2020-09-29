@@ -88,10 +88,13 @@ public class UserChangePasswordControl {
 	
 			message = canChangePassword(); 
 			if(message == null){
-				Globals.logString(" = Username "+getUser().getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
-				newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
-				getUser().setPassword(newPassStr);
-				getUser().validate(true);
+				getUser().changePassword(newPassStr);
+				
+//				Globals.logString(" = Username "+getUser().getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
+//				newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
+//				getUser().setPassword(newPassStr);
+//				getUser().validate(true);
+				
 //				Globals.showNotification("Password Changed", "Successful", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
 //				FocWebApplication.getInstanceForThread().removeWindow(UserChangePasswordControl.this);
 			}
@@ -101,7 +104,18 @@ public class UserChangePasswordControl {
 	
   private String canChangePassword(){
   	String errorMessage = null;
+
+  	String oldPassStr = null;
+    if(oldPass != null && showOldPassword()){
+      oldPassStr = getOldPasswordField(false).getValueString();
+    }
+
+    String newPassStr  = getNewPasswordField(false) != null ? (String) getNewPasswordField(false).getValue() : null;
+    String confPassStr = getConfirmPasswordField(false) != null ? (String) getConfirmPasswordField(false).getValue() : null;
+    
+  	errorMessage = getUser() != null ? getUser().canChangePassword(oldPassStr, newPassStr, confPassStr, showOldPassword()) : "User is null";
   	
+  	/*
   	//If the old password is null this means the administrator is recreating the password. 
     if(oldPass != null && showOldPassword()){
       String oldPassStr = getOldPasswordField(false).getValueString();
@@ -132,6 +146,7 @@ public class UserChangePasswordControl {
 	    	errorMessage = FocUser.checkPasswordPolicyAbidance(newPassStr);
 	    }
     }
+    */
     
     return errorMessage;
   }

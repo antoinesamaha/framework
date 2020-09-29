@@ -68,7 +68,8 @@ public class ContactDesc extends FocDesc {
   public static final String FNAME_Phone1 = "PHONE1";
   public static final String FNAME_Phone2 = "PHONE2";
   public static final String FNAME_Mobile = "MOBILE";
-  public static final String FNAME_EMail = "EMAIL";
+  public static final String FNAME_EMail  = "EMAIL";
+  public static final String FNAME_EMail2 = "EMAIL2";
   
   public ContactDesc() {
     super(Contact.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, true);
@@ -171,7 +172,7 @@ public class ContactDesc extends FocDesc {
     fField = new FEMailField(FNAME_EMail, "Email", FLD_EMAIL, false);
     addField(fField);
 
-    fField = new FEMailField("EMAIL2", "Email 2", FLD_EMAIL_2, false);
+    fField = new FEMailField(FNAME_EMail2, "Email 2", FLD_EMAIL_2, false);
     addField(fField);
 
     /*

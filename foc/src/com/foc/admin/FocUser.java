@@ -1603,4 +1603,45 @@ public class FocUser extends FocObject {
     return (s == null) ? false : specialChars.contains(s);
 	}
 
+  public String canChangePassword(String oldPassStr, String newPassStr, String confPassStr, boolean checkOldPassword){
+  	String errorMessage = null;
+  	
+  	//If the old password is null this means the administrator is recreating the password. 
+    if(checkOldPassword){
+    	if(oldPassStr == null) errorMessage = "Old password is not available";
+    	if (errorMessage == null) {
+    		oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
+        boolean oldPasswordMatches = false;
+        if(getPassword().isEmpty()){
+        	oldPasswordMatches = Encryptor.encrypt_MD5("").equals(oldPassStr);
+        }else{
+        	oldPasswordMatches = getPassword().equals(oldPassStr);
+        }
+        //If the password was never set it is still empty in the FocUser
+        if(!oldPasswordMatches){
+        	errorMessage = "Old password is incorrect!";
+        }
+    	}
+    }
+    
+    if(errorMessage == null){
+	    if(!newPassStr.equals(confPassStr)){
+	    	errorMessage = "Passwords do not match!";
+	    }
+
+	    if(errorMessage == null) {
+	    	errorMessage = FocUser.checkPasswordPolicyAbidance(newPassStr);
+	    }
+    }
+    
+    return errorMessage;
+  }
+  
+  public void changePassword(String newPassStr) {
+		Globals.logString(" = Username "+getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
+		newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
+		setPassword(newPassStr);
+		validate(true);
+  }
+  
 }

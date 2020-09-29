@@ -191,6 +191,8 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Phone1);
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Mobile);
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_EMail);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_EMail2);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Position);
 				
 				AdrBookParty party = contact.getAdrBookParty();
 				if (party != null) {
