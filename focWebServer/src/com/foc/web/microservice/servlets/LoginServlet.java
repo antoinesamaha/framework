@@ -186,6 +186,7 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				builder.appendKey(userDesc.getFieldNameByID(FocUserDesc.FLD_CONTACT));
 				builder.beginObject_InValue();
 				contact.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
+				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Title);
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FirstName);
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FamilyName);
 				contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Phone1);
