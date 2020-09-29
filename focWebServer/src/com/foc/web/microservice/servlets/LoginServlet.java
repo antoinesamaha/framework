@@ -140,6 +140,10 @@ public class LoginServlet extends FocSimpleMicroServlet {
 		Globals.logString(" <= Options E LoginServlet /login");
 	}
 
+	protected void appendKeyValue_User(B01JsonBuilder builder, FocUser user){
+		
+	}
+	
 	private String buildUserProfileJson(FocUser user) {
 		B01JsonBuilder builder = new B01JsonBuilder();
 
@@ -179,6 +183,8 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				company.appendKeyValueForFieldName(builder, FField.FNAME_NAME);
 				builder.endObject();
 			}
+
+			appendKeyValue_User(builder, user);
 			
 			Contact contact = user.getContact();
 			if (contact != null) {
@@ -204,6 +210,15 @@ public class LoginServlet extends FocSimpleMicroServlet {
 						party.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
 						party.appendKeyValueForFieldName(builder, partyDesc.getFieldNameByID(AdrBookPartyDesc.FLD_CODE));
 						party.appendKeyValueForFieldName(builder, partyDesc.getFieldNameByID(AdrBookPartyDesc.FLD_NAME));
+						
+						Contact defaultContact = party.getDefaultContact();
+						if(defaultContact != null) {
+							builder.appendKey(partyDesc.getFieldNameByID(AdrBookPartyDesc.FLD_DEFAULT_CONTACT));
+							builder.beginObject_InValue();
+							defaultContact.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
+							builder.endObject();
+						}
+						
 						builder.endObject();
 					}
 				}
