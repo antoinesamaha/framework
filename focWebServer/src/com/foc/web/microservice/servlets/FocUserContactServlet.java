@@ -101,6 +101,7 @@ public class FocUserContactServlet extends FocEntityServlet<Contact> {
 					response.getWriter().println(userJson);
 					
 				} else {
+					contact.jsonParseString(jsonObj, ContactDesc.FNAME_Title);
 					contact.jsonParseString(jsonObj, ContactDesc.FNAME_FirstName);
 					contact.jsonParseString(jsonObj, ContactDesc.FNAME_FamilyName);
 					contact.jsonParseString(jsonObj, ContactDesc.FNAME_Phone1);
@@ -112,6 +113,7 @@ public class FocUserContactServlet extends FocEntityServlet<Contact> {
 					
 					builder.beginObject();
 					contact.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
+					contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Title);
 					contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FirstName);
 					contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_FamilyName);
 					contact.appendKeyValueForFieldName(builder, ContactDesc.FNAME_Phone1);
