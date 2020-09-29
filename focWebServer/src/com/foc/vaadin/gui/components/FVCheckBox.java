@@ -17,6 +17,8 @@ package com.foc.vaadin.gui.components;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
+import com.foc.property.FDouble;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -97,12 +99,19 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
     return false;
   }
 
-  @Override
-  public void copyMemoryToGui() {
-    if(focData instanceof FProperty){
-      setValue((Boolean) ((FProperty)focData).getValue());
-    }
-  }
+	@Override
+	public void copyMemoryToGui() {
+		if (focData instanceof FProperty) {
+			FProperty property = (FProperty) getFocData();
+			if (property != null) {
+				if (property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+					setValue(null);
+				} else {
+					setValue((Boolean) ((FProperty) focData).getValue());
+				}
+			}
+		}
+	}
 
 	@Override
 	public Field getFormField() {

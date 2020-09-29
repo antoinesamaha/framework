@@ -148,6 +148,12 @@ public class B01JsonBuilder {
 //			buffer.append("\"");
 		}
 	}
+	
+	public void appendNullValue(){
+		if(buffer != null){
+			buffer.append("null");
+		}
+	}
 
 	public void appendKeyValue(String key, int value){
 		if(buffer != null){
