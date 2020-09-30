@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.components;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.property.FDouble;
 import com.foc.property.FProperty;
@@ -40,14 +41,22 @@ public class FVNumField extends FVTextField {
 		return false;
   }	
 	
-  @Override
-  public void copyMemoryToGui() {
-  	try{
-  		if(getFocData() instanceof FDouble){
-  			setValue((String) ((FDouble)getFocData()).getTableDisplayObject());
-  		}
-    }catch(Exception e){
-    	Globals.logException(e);
-    }
-  }
+	@Override
+	public void copyMemoryToGui() {
+		try {
+			if (getFocData() instanceof FDouble) {
+				FProperty property = (FProperty) getFocData();
+				if (property != null) {
+					if (property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+						setValue("");
+					} else {
+						setValue((String) ((FDouble) getFocData()).getTableDisplayObject());
+					}
+				}
+			}
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
+	}
+	
 }

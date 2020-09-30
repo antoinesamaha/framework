@@ -32,7 +32,7 @@ public class FVInteger implements FocXMLGuiComponentCreator {
   public FocXMLGuiComponent newGuiComponent(FocXMLLayout xmlLayout, IFocData focData, Attributes attributes, IFocData rootFocData, String dataPathFromRootFocData) {
   	FProperty property = (FProperty) focData;
   	FVTextField component = new FVTextField(property, attributes);
-    component.addValidator(new IntegerValidator("Must be an Integer"));
+    //component.addValidator(new IntegerValidator("Must be an Integer"));
     FocXMLGuiComponentStatic.setRootFocDataWithDataPath(component, rootFocData, dataPathFromRootFocData);
     return FVWrapperLayout.wrapIfNecessary(component);
   }

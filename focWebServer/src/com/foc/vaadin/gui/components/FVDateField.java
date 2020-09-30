@@ -24,6 +24,7 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.field.FDateField;
 import com.foc.property.FDate;
+import com.foc.property.FDouble;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -157,7 +158,12 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
   public void copyMemoryToGui() {
     if(focData instanceof FProperty){
     	try{
-      	setValue((Date) ((FProperty)focData).getValue());
+    		FProperty property = (FProperty) getFocData();
+				if (property != null && property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+					setValue(null);
+				} else {
+					setValue((Date) ((FProperty)focData).getValue());
+				}      	
     	}catch(Exception e){
     	 	Globals.logException(e);
     	}
