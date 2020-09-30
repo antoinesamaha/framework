@@ -4751,6 +4751,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				FocList list = ((FList) prop).getList();
 				builder.appendKey(fieldName);
 				list.toJson(builder);
+			} else if (prop instanceof FString) {
+				if (prop.isValueNull()) {
+					builder.appendKey(fieldName);
+					builder.appendNullValue();
+				} else {
+					String valStr = prop.getString();
+					builder.appendKeyValue(fieldName, valStr);
+				}
 			} else {
 				String valStr = prop.getString();
 				builder.appendKeyValue(fieldName, valStr);
@@ -5223,7 +5231,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			FocDesc      slaveDesc   = slaveList.getFocDesc();
 			FObjectField objectField = slaveDesc != null ? (FObjectField) slaveDesc.getFieldByName(fieldNameInSlave) : null;
 			
-			JSONArray jsonArray = jsonObject.getJSONArray(listFieldName);
+			Object jsonArray = jsonObject.get(listFieldName);
 			if(jsonArray != null && objectField != null) {
 				FocList lookupList = objectField.getSelectionList();
 				if(lookupList != null) {
@@ -5233,30 +5241,37 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
   }
   
-	public void jsonParseSlaveList_MultipleSelection(FocList lookupList, FocList slaveList, JSONArray jsonArray, String fieldNameInSlave) throws Exception {
-		if(slaveList != null && jsonArray != null) {
+	public void jsonParseSlaveList_MultipleSelection(FocList lookupList, FocList slaveList, Object jsonObject, String fieldNameInSlave) throws Exception {
+		if(slaveList != null && jsonObject != null) {
+			//Prepare ToDelete Map 
 			HashMap<Long, FocObject> toDelete = new HashMap<Long, FocObject>();
 			for(int i=0; i<slaveList.size(); i++) {
 				FocObject slaveObj = (FocObject) slaveList.getFocObject(i);
 				toDelete.put(slaveObj.getReferenceInt(), slaveObj);
 			}
 			
-			for(int i=0; i<jsonArray.length(); i++) {
-				int  refTypeInt = (int)  jsonArray.get(i);
-				long refType    = (long) refTypeInt;
+			if(jsonObject instanceof String && ((String)jsonObject).equalsIgnoreCase("null")) {
 				
-				if (refType > 0) {
-					FocObject type = (FocObject) lookupList.searchByRealReferenceOnly(refType);
-					if (type != null) {
-						FocObject slaveObj = slaveList.searchByPropertyObjectReference(fieldNameInSlave, refType);
+			} else if(jsonObject instanceof JSONArray) {
+				JSONArray jsonArray = (JSONArray) jsonObject;
+				
+				for(int i=0; i<jsonArray.length(); i++) {
+					int  refTypeInt = (int)  jsonArray.get(i);
+					long refType    = (long) refTypeInt;
 					
-						if(slaveObj == null) {
-							slaveObj = slaveList.newEmptyItem();
-							slaveObj.setPropertyObject(fieldNameInSlave, type);
-							slaveObj.setCreated(true);
-							slaveObj.validate(false);
-						} else {
-							toDelete.remove(slaveObj.getReferenceInt());
+					if (refType > 0) {
+						FocObject type = (FocObject) lookupList.searchByRealReferenceOnly(refType);
+						if (type != null) {
+							FocObject slaveObj = slaveList.searchByPropertyObjectReference(fieldNameInSlave, refType);
+						
+							if(slaveObj == null) {
+								slaveObj = slaveList.newEmptyItem();
+								slaveObj.setPropertyObject(fieldNameInSlave, type);
+								slaveObj.setCreated(true);
+								slaveObj.validate(false);
+							} else {
+								toDelete.remove(slaveObj.getReferenceInt());
+							}
 						}
 					}
 				}
@@ -5275,7 +5290,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public void jsonParseString(JSONObject jsonObj, String fieldName) {
 		try{
 			String value = jsonObj.getString(fieldName);
-			setPropertyString(fieldName, value);
+			if (isNullAndAllowed(value)) {
+				setPropertyNull_WithListener(fieldName);
+			} else {
+				setPropertyString(fieldName, value);
+			}
 		}catch (JSONException e){
 			Globals.logException(e);
 		}
@@ -5285,9 +5304,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		if(jsonObj.has("Date")){
 			try{
 				String dateString = jsonObj.getString("Date");
-				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
-				java.util.Date jsonDate = simpleFormat.parse(dateString);
-				setDate(new java.sql.Date(jsonDate.getTime()));
+				if (isNullAndAllowed(dateString)) {
+					setPropertyNull_WithListener(FField.FNAME_DATE);
+				} else {
+					SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+					java.util.Date jsonDate = simpleFormat.parse(dateString);
+					setDate(new java.sql.Date(jsonDate.getTime()));
+				}
 			}catch (JSONException e){
 				Globals.logException(e);
 			}catch (ParseException e){
@@ -5295,8 +5318,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			}
 		}
 	}
-	
-	
 	
 	public void jsonParseDate(JSONObject jsonObj, String fieldName) {
 		if (jsonObj.has(fieldName)) {
