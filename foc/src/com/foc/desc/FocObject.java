@@ -5235,7 +5235,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   //---------------------------------------- JSON Parsers ----------------------------------------//
   
   public boolean isNullAndAllowed(String val) {
-		if (val.equalsIgnoreCase("null") && ConfigInfo.isAllowNullProperties()) {
+		if ((Utils.isStringEmpty(val) || val.equalsIgnoreCase("null")) && ConfigInfo.isAllowNullProperties()) {
 			return true;
 		}
 		return false;

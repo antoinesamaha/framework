@@ -525,7 +525,9 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						JSONObject slaveJson = (JSONObject) jsonArray.get(i);
 						FocObject slaveObj = null;
 						if (slaveJson.has(FField.REF_FIELD_NAME)) {
-							long ref = slaveJson.getLong(FField.REF_FIELD_NAME);
+							//long ref = slaveJson.getLong(FField.REF_FIELD_NAME);
+							String strValue = slaveJson.getString(FField.REF_FIELD_NAME);
+							long ref = Utils.parseLong(strValue, 0);
 							if (ref > 0) {
 								slaveObj = list.searchByRealReferenceOnly(ref);
 								if(slaveObj != null) {
