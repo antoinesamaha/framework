@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.components;
 
 import org.xml.sax.Attributes;
 
+import com.foc.ConfigInfo;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FNumField;
@@ -229,27 +230,26 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 	  return false;
   }
 
-  @Override
-  public void copyMemoryToGui() {
-    if(focData instanceof FProperty){
-//      setValue((String) ((FProperty)focData).getValue());
-    	
-    	FProperty property = (FProperty)focData;
-    	String strFromProperty = property.getString();
-    	
-	  	if(property.getFocField() != null) {
-	  		IPropertyStringConverter converter = property.getFocField().getStringConverter();
-	  		if(converter != null) {
-	  			strFromProperty = converter.getGuiStringFromMemory(property);
-	  		}
-	  	}
-    	
-    	setValue(strFromProperty);
-    	if(isDescriptionEqualValue()){
-    		setDescription(getValue());
-    	}
-    }
-  }
+	@Override
+	public void copyMemoryToGui() {
+		if (focData instanceof FProperty) {
+			FProperty property = (FProperty) focData;
+			String strFromProperty = property.getString();
+			if (property.isValueNull()) {
+				strFromProperty = "";
+			}
+			if (property.getFocField() != null) {
+				IPropertyStringConverter converter = property.getFocField().getStringConverter();
+				if (converter != null) {
+					strFromProperty = converter.getGuiStringFromMemory(property);
+				}
+			}
+			setValue(strFromProperty);
+			if (isDescriptionEqualValue()) {
+				setDescription(getValue());
+			}
+		}
+	}
   
   @Override
   public void setDelegate(FocXMLGuiComponentDelegate delegate) {

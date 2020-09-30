@@ -5,6 +5,7 @@ package com.foc.property;
 
 import java.text.Format;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
@@ -68,7 +69,9 @@ public class FDouble extends FProperty {
   }
 
   public String getSqlString() {
-  	if(Double.isNaN(dVal) || Double.isInfinite(dVal)){
+  	if(isValueNull()) {
+  		return "NULL";
+  	} else if(Double.isNaN(dVal) || Double.isInfinite(dVal)){
   		return "0";
   	}else{
   		return getString();
@@ -76,17 +79,25 @@ public class FDouble extends FProperty {
   }
 
   public void setString(String str, boolean userEditingEvent) {
-    double d = 0;
-    if(str != null && str.compareTo("") != 0){
-    	try{
-    		str = str.replace(",","");
-        d = Double.parseDouble(str);
-    	}catch(Exception e){
-    		Globals.logString("parsing string :"+str+" Exception "+e.getMessage());
-    		d = dVal;
+    if (str == null || str.trim().compareTo("") == 0) {
+    	if (isAllowNullProperties()) {
+    		setValueNull_WithListener(true);
+    	} else {
+    		setDouble_Internal(0, userEditingEvent);
     	}
+    } else {
+    	double d = 0;
+	    if(str.compareTo("") != 0){
+	    	try{
+	    		str = str.replace(",","");
+	        d = Double.parseDouble(str);
+	    	}catch(Exception e){
+	    		Globals.logString("parsing string :"+str+" Exception "+e.getMessage());
+	    		d = dVal;
+	    	}
+	    }
+	    setDouble_Internal(d, userEditingEvent);
     }
-    setDouble_Internal(d, userEditingEvent);    
   }
   
   public void setString(String str) {
@@ -110,16 +121,17 @@ public class FDouble extends FProperty {
   }
   
   public void setDouble_Internal(double dVal, boolean userEditingEvent) {
-    if(dVal != this.dVal){
+    if(dVal != this.dVal || isValueNull()){
     	FNumField numField = (FNumField)getFocField();
     	double roundPrecision = numField != null ? numField.getRoundingPrecision() : 0;
     	if(roundPrecision > 0){
     		dVal = FocMath.round(dVal, 0.00000001);
     		dVal = FocMath.trunc(dVal, roundPrecision);
     	}
-    	if(dVal != this.dVal){
+    	if(dVal != this.dVal || isValueNull()){
 	    	if(getFocField() == null || getFocField().isPropertyModificationAllowed(this, dVal, true)){
 	    		this.dVal = dVal;
+	    		setValueNull(false);
 	    		notifyListeners(userEditingEvent);
 	    	}
     	}

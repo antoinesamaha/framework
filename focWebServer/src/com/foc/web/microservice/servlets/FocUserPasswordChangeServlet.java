@@ -68,6 +68,10 @@ public class FocUserPasswordChangeServlet extends FocEntityServlet<Contact> {
   	return toJson_DetailedObject(builder, join); 
   }
     
+  protected void passwordChangedSuccessfully(FocUser user) {
+  	
+  }
+  
 	protected void doPost_Core(FocServletRequest focRequest) throws Exception {
 		if(focRequest != null) {
 			HttpServletRequest  request  = focRequest.getRequest();
@@ -115,6 +119,8 @@ public class FocUserPasswordChangeServlet extends FocEntityServlet<Contact> {
 						
 					} else {
 						user.changePassword(newPassword);
+						
+						passwordChangedSuccessfully(user);
 
 						userJson = "{\"message\": \"Password changed successfully\"}";
 						response.setStatus(HttpServletResponse.SC_OK);

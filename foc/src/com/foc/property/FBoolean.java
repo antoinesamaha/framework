@@ -38,12 +38,16 @@ public class FBoolean extends FProperty {
 
   public String getString() {
     //return String.valueOf(bVal);
-    return String.valueOf(getInteger());
+    return isValueNull() ? getNullSQLValue() : String.valueOf(getInteger());
   }
 
   public void setString(String str) {
     if (str == null || str.compareTo("") == 0) {
-      setBoolean(false);
+    	if (isAllowNullProperties()) {
+    		setValueNull(true);
+    	} else {
+    		setBoolean(false);
+    	}
     } else {
     	try{
     		setInteger(Integer.valueOf(str).intValue());
@@ -97,11 +101,13 @@ public class FBoolean extends FProperty {
   public void setBoolean(boolean b, boolean userEditingEvent) {
     if(bVal != b){
       bVal = b;
+      setValueNull(false);
       notifyListeners(userEditingEvent);
     }
   }
 
   public void setBoolean_WithoutListeners(boolean b) {
+  	setValueNull(false);
     bVal = b;
   }
 
