@@ -58,7 +58,7 @@ public class FInt extends FProperty {
   }
 
   public String getSqlString() {
-  	if(ConfigInfo.isAllowNullProperties() && isValueNull()) {
+  	if(isAllowNullProperties() && isValueNull()) {
   		return "NULL";
   	} else {
   		return getString();
@@ -71,7 +71,7 @@ public class FInt extends FProperty {
 
   public void setString(String str, boolean userEditingEvent) {
   	if (str == null || str.compareTo("") == 0) {
-	    if (ConfigInfo.isAllowNullProperties()) {
+	    if (isAllowNullProperties()) {
 	    	boolean notifyListeners = !isValueNull();
 	      setValueNull(true);
 	      if (notifyListeners) notifyListeners(userEditingEvent);

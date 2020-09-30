@@ -22,6 +22,7 @@ import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.FVCheckBox;
+import com.foc.vaadin.gui.components.multipleChoiceOptionGroupHorizontal.FVBooleanOptionGroupHorizontal;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
@@ -29,10 +30,16 @@ public class FVBoolean implements FocXMLGuiComponentCreator {
   
   @Override
   public FocXMLGuiComponent newGuiComponent(FocXMLLayout xmlLayout, IFocData focData, Attributes attributes, IFocData rootFocData, String dataPathFromRootFocData) {
-  	FProperty  property = (FProperty) focData;
-    FVCheckBox checkBox = new FVCheckBox(property, attributes);
-    FocXMLGuiComponentStatic.setRootFocDataWithDataPath(checkBox, rootFocData, dataPathFromRootFocData);
-    return FVWrapperLayout.wrapIfNecessary(checkBox);
+  	FocXMLGuiComponent component = null; 
+  	FProperty property = (FProperty) focData;
+  	if (property != null && property.isAllowNullProperties()) {
+  		component = new FVBooleanOptionGroupHorizontal(property, attributes);  
+  	} else {
+	    FVCheckBox checkBox = new FVCheckBox(property, attributes);
+	    component = checkBox;
+  	}
+  	FocXMLGuiComponentStatic.setRootFocDataWithDataPath(component, rootFocData, dataPathFromRootFocData);
+    return FVWrapperLayout.wrapIfNecessary(component);
   }
 
 }

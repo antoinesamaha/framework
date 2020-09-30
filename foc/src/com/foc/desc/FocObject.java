@@ -4761,21 +4761,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					}
 				}
 			} else if (prop instanceof FInt) {
-				if (ConfigInfo.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isAllowNullProperties() && prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
 					builder.appendKeyValue(fieldName, prop.getInteger());
 				}
 			} else if (prop instanceof FDouble) {
-				if (ConfigInfo.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isAllowNullProperties() && prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
 					builder.appendKeyValue(fieldName, prop.getDouble());
 				}
 			} else if (prop instanceof FBoolean) {
-				if (ConfigInfo.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isAllowNullProperties() && prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
@@ -4783,7 +4783,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				}
 
 			} else if (prop instanceof FDate) {
-				if (ConfigInfo.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isAllowNullProperties() && prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {

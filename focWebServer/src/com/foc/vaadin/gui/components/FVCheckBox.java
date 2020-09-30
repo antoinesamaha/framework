@@ -104,7 +104,7 @@ public class FVCheckBox extends CheckBox implements FocXMLGuiComponent {
 		if (focData instanceof FProperty) {
 			FProperty property = (FProperty) getFocData();
 			if (property != null) {
-				if (property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+				if (property.isValueNull() && property.isAllowNullProperties()) {
 					setValue(null);
 				} else {
 					setValue((Boolean) ((FProperty) focData).getValue());

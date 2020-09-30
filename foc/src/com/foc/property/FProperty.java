@@ -431,7 +431,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   public void setSqlString(String str) {
     setDesactivateListeners(true);
     if (str == null){
-    	if (!ConfigInfo.isAllowNullProperties()) {
+    	if (!isAllowNullProperties()) {
   	    if (getProvider() == DBManager.PROVIDER_ORACLE){
   	    	str = "";
   	    }
@@ -598,7 +598,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   }
   
   public boolean isValueNull() {
-    return (flags & FLG_VALUE_IS_NULL) != 0;
+    return (flags & FLG_VALUE_IS_NULL) != 0 && isAllowNullProperties();
   }
   
   public void setValueNull(boolean isnull) {
@@ -1027,4 +1027,8 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
 		}
   }
   //------------------------------------------
+  
+  public boolean isAllowNullProperties() {
+  	return ConfigInfo.isAllowNullProperties();
+  }
 }

@@ -199,7 +199,7 @@ public class FDate extends FProperty {
   }
 
   public String getSqlString() {
-  	if (ConfigInfo.isAllowNullProperties() && isValueNull()) {
+  	if (isAllowNullProperties() && isValueNull()) {
   		return "NULL";
   	} else {
 	    if (getProvider() == DBManager.PROVIDER_ORACLE){
@@ -219,7 +219,7 @@ public class FDate extends FProperty {
   public void setSqlStringInternal(String str) {
     try {
     	if (str == null) {
-    		if (ConfigInfo.isAllowNullProperties()) {
+    		if (isAllowNullProperties()) {
     			setValueNull(true);
     		}
     	} else {
@@ -352,7 +352,7 @@ public class FDate extends FProperty {
   @Override
   public void setValue(Object newValue) throws ReadOnlyException, Converter.ConversionException {
 		if(newValue == null){
-			if (ConfigInfo.isAllowNullProperties()) {
+			if (isAllowNullProperties()) {
 				boolean notifyListeners = !isValueNull();
 				setValueNull(true);
 				if(notifyListeners) notifyListeners(false);

@@ -47,7 +47,7 @@ public class FVNumField extends FVTextField {
 			if (getFocData() instanceof FDouble) {
 				FProperty property = (FProperty) getFocData();
 				if (property != null) {
-					if (property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+					if (property.isValueNull() && property.isAllowNullProperties()) {
 						setValue("");
 					} else {
 						setValue((String) ((FDouble) getFocData()).getTableDisplayObject());

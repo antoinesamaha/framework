@@ -235,7 +235,7 @@ public class FVTextField extends TextField implements FocXMLGuiComponent {
 		if (focData instanceof FProperty) {
 			FProperty property = (FProperty) focData;
 			String strFromProperty = property.getString();
-			if (property.isValueNull() && ConfigInfo.isAllowNullProperties()) {
+			if (property.isValueNull() && property.isAllowNullProperties()) {
 				strFromProperty = "";
 			}
 			if (property.getFocField() != null) {
