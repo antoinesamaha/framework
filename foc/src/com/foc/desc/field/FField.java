@@ -22,6 +22,7 @@ import java.sql.Types;
 import java.text.Format;
 import java.util.ArrayList;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.*;
@@ -357,14 +358,36 @@ public abstract class FField implements Cloneable, IFocData {
 		}
 	}
   
-  public FProperty newProperty(FocObject masterObj, Object defaultValue){
-  	return isReflectingField() ? null : newProperty_ToImplement(masterObj, defaultValue);
+  private void setPropertyToNullIfAllowed(FProperty property){
+  	if (property != null 
+				&& ConfigInfo.isAllowNullProperties()
+				&& (property instanceof FInt 
+						|| property instanceof FLong 
+						|| property instanceof FDouble 
+						|| property instanceof FString  
+						|| property instanceof FBoolean  		
+						|| property instanceof FDate 
+						|| property instanceof FTime
+						|| property instanceof FDateTime  						
+						|| property instanceof FMultipleChoiceString)) {
+			property.setValueNull(true);
+		}
   }
+  
+	public FProperty newProperty(FocObject masterObj, Object defaultValue) {
+		FProperty prop = null;
+		if (!isReflectingField()) {
+			prop = newProperty_ToImplement(masterObj, defaultValue);
+			setPropertyToNullIfAllowed(prop);
+		}
+		return prop;
+	}
   
   public FProperty newProperty(FocObject masterObj){
   	FProperty prop = null;
   	if(!isReflectingField()){
   		prop = newProperty_EvenIfReflecting(masterObj);
+  		setPropertyToNullIfAllowed(prop);
   	}
   	return prop;
   }
@@ -372,6 +395,7 @@ public abstract class FField implements Cloneable, IFocData {
   public FProperty newProperty_EvenIfReflecting(FocObject masterObj){
   	FProperty prop = newProperty_ToImplement(masterObj);
   	if(prop != null && getDefaultStringValue() != null) prop.setString(getDefaultStringValue());
+  	setPropertyToNullIfAllowed(prop);
   	return prop;
   }
 
