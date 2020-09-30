@@ -26,7 +26,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.business.calendar.FCalendar;
 import com.foc.db.DBManager;
@@ -220,6 +219,7 @@ public class FDate extends FProperty {
     try {
     	if (str == null) {
     		if (isAllowNullProperties()) {
+    			setString("");
     			setValueNull(true);
     		}
     	} else {
@@ -354,7 +354,7 @@ public class FDate extends FProperty {
 		if(newValue == null){
 			if (isAllowNullProperties()) {
 				boolean notifyListeners = !isValueNull();
-				setValueNull(true);
+				setValueNull_AndResetIntrinsicValue(false);
 				if(notifyListeners) notifyListeners(false);
 			} else {
 				setDate(new java.sql.Date(getZeroReference()));
@@ -373,5 +373,10 @@ public class FDate extends FProperty {
   @Override
   public void copy(FProperty sourceProp){
   	super.copy(sourceProp);
+  }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	date = new java.sql.Date(getZeroReference());
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
   }
 }

@@ -135,6 +135,7 @@ public class FVBooleanOptionGroupHorizontal extends HorizontalLayout implements 
   	if(cb != null){
   		focData.setValue(cb.getItemValue());
   	} else {
+  		focData.setBoolean(false);
   		focData.setValueNull_WithListener(true);
   	}
 	  return false;
