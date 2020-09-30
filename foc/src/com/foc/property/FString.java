@@ -120,30 +120,35 @@ public class FString extends FProperty implements Cloneable{
   }
   
   public String getSqlString() {
-  	String sqlStr = new String(getString() != null ? getString() : "");
-  	if(isCompress()) {
-  		sqlStr = Utils.compressString(sqlStr);
-  	}
-  	if(getProvider() == DBManager.PROVIDER_MSSQL){
-//  		try{
-//				sqlStr = new String(sqlStr.getBytes(), "UTF-8");
-//			}catch (UnsupportedEncodingException e){
-//				Globals.logException(e);
-//			}
-  		if(!isCompress()) sqlStr = sqlStr.replace("'", "''");
-  		sqlStr = "N\'" + sqlStr + "\'";
-  	}else if(getProvider() == DBManager.PROVIDER_ORACLE
-  			|| getProvider() == DBManager.PROVIDER_POSTGRES
-  			){
-  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
-  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
-  		sqlStr = "\'" + sqlStr + "\'";
-  	}else if(getProvider() == DBManager.PROVIDER_H2){
-  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
-  		sqlStr = "\'" + sqlStr + "\'";
-  	}else{
-  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
-  		sqlStr = "\"" + sqlStr + "\"";
+  	String sqlStr = "";
+  	if(isValueNull()) {
+  		sqlStr = getNullSQLValue();
+  	} else {
+	  	sqlStr = new String(getString() != null ? getString() : "");
+	  	if(isCompress()) {
+	  		sqlStr = Utils.compressString(sqlStr);
+	  	}
+	  	if(getProvider() == DBManager.PROVIDER_MSSQL){
+	//  		try{
+	//				sqlStr = new String(sqlStr.getBytes(), "UTF-8");
+	//			}catch (UnsupportedEncodingException e){
+	//				Globals.logException(e);
+	//			}
+	  		if(!isCompress()) sqlStr = sqlStr.replace("'", "''");
+	  		sqlStr = "N\'" + sqlStr + "\'";
+	  	}else if(getProvider() == DBManager.PROVIDER_ORACLE
+	  			|| getProvider() == DBManager.PROVIDER_POSTGRES
+	  			){
+	  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
+	  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
+	  		sqlStr = "\'" + sqlStr + "\'";
+	  	}else if(getProvider() == DBManager.PROVIDER_H2){
+	  		if(!isCompress()) sqlStr = sqlStr.replaceAll("'", "''");
+	  		sqlStr = "\'" + sqlStr + "\'";
+	  	}else{
+	  		if(!isCompress()) sqlStr = sqlStr.replaceAll("\"", "''");
+	  		sqlStr = "\"" + sqlStr + "\"";
+	  	}
   	}
     return sqlStr;
   }

@@ -219,7 +219,7 @@ public class FDate extends FProperty {
     try {
     	if (str == null) {
     		if (isAllowNullProperties()) {
-    			setString("");
+    			setDate(new java.sql.Date(getZeroReference()), false);
     			setValueNull(true);
     		}
     	} else {
