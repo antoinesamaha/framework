@@ -358,6 +358,7 @@ public abstract class FField implements Cloneable, IFocData {
 		}
 	}
   
+  /*
   private void setPropertyToNullIfAllowed(FProperty property){
   	if (property != null 
 				&& ConfigInfo.isAllowNullProperties()
@@ -373,12 +374,13 @@ public abstract class FField implements Cloneable, IFocData {
 			property.setValueNull(true);
 		}
   }
+  */
   
 	public FProperty newProperty(FocObject masterObj, Object defaultValue) {
 		FProperty prop = null;
 		if (!isReflectingField()) {
 			prop = newProperty_ToImplement(masterObj, defaultValue);
-			setPropertyToNullIfAllowed(prop);
+			//setPropertyToNullIfAllowed(prop);
 		}
 		return prop;
 	}
@@ -387,7 +389,7 @@ public abstract class FField implements Cloneable, IFocData {
   	FProperty prop = null;
   	if(!isReflectingField()){
   		prop = newProperty_EvenIfReflecting(masterObj);
-  		setPropertyToNullIfAllowed(prop);
+  		//setPropertyToNullIfAllowed(prop);
   	}
   	return prop;
   }
@@ -395,7 +397,7 @@ public abstract class FField implements Cloneable, IFocData {
   public FProperty newProperty_EvenIfReflecting(FocObject masterObj){
   	FProperty prop = newProperty_ToImplement(masterObj);
   	if(prop != null && getDefaultStringValue() != null) prop.setString(getDefaultStringValue());
-  	setPropertyToNullIfAllowed(prop);
+  	//setPropertyToNullIfAllowed(prop);
   	return prop;
   }
 
@@ -972,5 +974,9 @@ public abstract class FField implements Cloneable, IFocData {
 	}
 	public void setStringConverter(IPropertyStringConverter stringConverter) {
 		this.stringConverter = stringConverter;
+	}
+	
+	public boolean isAllowNullProperties() {
+		return ConfigInfo.isAllowNullProperties();
 	}
 }

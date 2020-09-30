@@ -64,11 +64,17 @@ public class FIntField extends FField {
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FInt(masterObj, getID(), (defaultValue != null) ? ((Integer)defaultValue).intValue() : 0);
+  	FInt prop = new FInt(masterObj, getID(), (defaultValue != null) ? ((Integer)defaultValue).intValue() : 0);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return new FInt(masterObj, getID(), 0);
+    FProperty prop = new FInt(masterObj, getID(), 0);
+    if (isAllowNullProperties()) prop.setValueNull(true);
+    return prop;
   }
 
   /*
