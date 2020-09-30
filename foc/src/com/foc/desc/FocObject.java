@@ -142,6 +142,7 @@ import com.foc.property.FImageProperty;
 import com.foc.property.FInLineObject;
 import com.foc.property.FInt;
 import com.foc.property.FList;
+import com.foc.property.FLong;
 import com.foc.property.FMaster;
 import com.foc.property.FMultipleChoice;
 import com.foc.property.FObject;
@@ -4724,6 +4725,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				} else {
 					builder.appendKeyValue(fieldName, prop.getInteger());
 				}
+			} else if (prop instanceof FLong) {
+				if (prop.isValueNull()) {
+					builder.appendKey(fieldName);
+					builder.appendNullValue();
+				} else {
+					builder.appendKeyValue(fieldName, prop.getLong());
+				}				
 			} else if (prop instanceof FDouble) {
 				if (prop.isValueNull()) {
 					builder.appendKey(fieldName);
@@ -4747,6 +4755,14 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					String valStr = prop.getString();
 					builder.appendKeyValue(fieldName, valStr);
 				}
+			} else if (prop instanceof FTime) {
+				if (prop.isValueNull()) {
+					builder.appendKey(fieldName);
+					builder.appendNullValue();
+				} else {
+					String valStr = prop.getString();
+					builder.appendKeyValue(fieldName, valStr);
+				}				
 			} else if (prop instanceof FList) {
 				FocList list = ((FList) prop).getList();
 				builder.appendKey(fieldName);
@@ -5357,6 +5373,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		}
 	}
 
+	public void jsonParseTime(JSONObject jsonObj, String fieldName) {
+		if (jsonObj.has(fieldName)) {
+			try {
+				String dateString = jsonObj.getString(fieldName);
+				if (isNullAndAllowed(dateString)) {
+					setPropertyNull_WithListener(fieldName);
+				} else {
+					setPropertyTime(fieldName, dateString);
+				}
+			} catch (JSONException e) {
+				Globals.logException(e);
+			}
+		}
+	}
+
 	public void jsonParseBoolean(JSONObject jsonObj, String fieldName) {
 		if (jsonObj.has(fieldName)) {
 			try {
@@ -5396,7 +5427,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public void jsonParseLong(JSONObject jsonObj, String fieldName) {
 		if (jsonObj.has(fieldName)) {
 			try {
-				setPropertyInteger(fieldName, jsonObj.getInt(fieldName));
+				setPropertyLong(fieldName, jsonObj.getLong(fieldName));
 			} catch (Exception e) {
 				try {
 					String strValue = jsonObj.getString(fieldName);
@@ -5477,6 +5508,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						break;
 					case FieldDefinition.SQL_TYPE_ID_DATE_TIME:
 						jsonParseDateTime(jsonObj, fieldName);
+						break;						
+					case FieldDefinition.SQL_TYPE_ID_TIME:						
+						jsonParseTime(jsonObj, fieldName);
 						break;						
 					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
 						jsonParseBoolean(jsonObj, fieldName);
