@@ -319,6 +319,11 @@ public class FTime extends FProperty {
   	setTime(getZeroTime_Copy());
   }
   
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	time = getZeroTime_Copy();
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
+  
   //-------------------------------
   // VAADIN Property implementation
   //-------------------------------
