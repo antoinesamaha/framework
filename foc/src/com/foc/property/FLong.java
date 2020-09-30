@@ -109,4 +109,9 @@ public class FLong extends FProperty {
   public void setEmptyValue(){
   	setLong(0);
   }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	lVal = 0;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
 }

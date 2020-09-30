@@ -44,7 +44,8 @@ public class FBoolean extends FProperty {
   public void setString(String str) {
     if (str == null || str.compareTo("") == 0) {
     	if (isAllowNullProperties()) {
-    		setValueNull(true);
+    		setBoolean_WithoutListeners(false);
+    		setValueNull_WithListener(true);
     	} else {
     		setBoolean(false);
     	}
@@ -145,4 +146,10 @@ public class FBoolean extends FProperty {
     if(bool) return "true";
     else return "false";
   }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	bVal = false;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
+
 }

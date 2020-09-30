@@ -81,6 +81,7 @@ public class FDouble extends FProperty {
   public void setString(String str, boolean userEditingEvent) {
     if (str == null || str.trim().compareTo("") == 0) {
     	if (isAllowNullProperties()) {
+    		setDouble_WithoutListeners(0);
     		setValueNull_WithListener(true);
     	} else {
     		setDouble_Internal(0, userEditingEvent);
@@ -252,4 +253,8 @@ public class FDouble extends FProperty {
 		return obj;
 	}
 
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	dVal = 0;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
 }

@@ -601,6 +601,14 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
     return (flags & FLG_VALUE_IS_NULL) != 0 && isAllowNullProperties();
   }
   
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	if(notifyListeners) {
+  		setValueNull_WithListener(true);
+  	} else {
+  		setValueNull(true);
+  	}
+  }
+  
   public void setValueNull(boolean isnull) {
     if(isnull){
       flags = (char)(flags | FLG_VALUE_IS_NULL);

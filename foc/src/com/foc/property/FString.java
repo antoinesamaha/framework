@@ -94,7 +94,7 @@ public class FString extends FProperty implements Cloneable{
   @Override
   protected void setSqlStringInternal(String str) {
   	if (str == null && isAllowNullProperties()) {
-  		setValueNull(true);
+  		setValueNull_AndResetIntrinsicValue(false);
   	} else {
 	  	if(isCompress()) {
 	  		str = Utils.decompressString(str);
@@ -203,5 +203,10 @@ public class FString extends FProperty implements Cloneable{
   
   public void setEmptyValue(){
   	setString("");
+  }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	str = "";
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
   }
 }

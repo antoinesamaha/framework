@@ -5,7 +5,6 @@ package com.foc.property;
 
 import java.text.Format;
 
-import com.foc.ConfigInfo;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FIntField;
 import com.vaadin.data.util.converter.Converter;
@@ -73,7 +72,7 @@ public class FInt extends FProperty {
   	if (str == null || str.compareTo("") == 0) {
 	    if (isAllowNullProperties()) {
 	    	boolean notifyListeners = !isValueNull();
-	      setValueNull(true);
+	      setValueNull_AndResetIntrinsicValue(false);
 	      if (notifyListeners) notifyListeners(userEditingEvent);
 	    } else {
 	    	setInteger(0, userEditingEvent);
@@ -147,6 +146,11 @@ public class FInt extends FProperty {
   public void setEmptyValue(){
   	setInteger(0);
   }
+
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	iVal = 0;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
   
   //-------------------------------
   // VAADIN Property implementation
@@ -163,5 +167,5 @@ public class FInt extends FProperty {
 //    setInteger(((Integer)newValue).intValue());
 	  setObject(newValue);
   }
-  
+
 }
