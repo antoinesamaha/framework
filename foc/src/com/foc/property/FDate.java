@@ -199,7 +199,7 @@ public class FDate extends FProperty {
   }
 
   public String getSqlString() {
-  	if (isAllowNullProperties() && isValueNull()) {
+  	if (isValueNull()) {
   		return "NULL";
   	} else {
 	    if (getProvider() == DBManager.PROVIDER_ORACLE){

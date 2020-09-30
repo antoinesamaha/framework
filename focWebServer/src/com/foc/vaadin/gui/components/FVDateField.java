@@ -159,7 +159,7 @@ public class FVDateField extends PopupDateField implements FocXMLGuiComponent {
     if(focData instanceof FProperty){
     	try{
     		FProperty property = (FProperty) getFocData();
-				if (property != null && property.isValueNull() && property.isAllowNullProperties()) {
+				if (property != null && property.isValueNull()) {
 					setValue(null);
 				} else {
 					setValue((Date) ((FProperty)focData).getValue());

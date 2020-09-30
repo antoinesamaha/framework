@@ -51,6 +51,7 @@ public class FString extends FProperty implements Cloneable{
   public void setString_Internal(String str, boolean userEditingEvent) {
     if(doSetString(str)){
       this.str = str;
+      setValueNull(false);
       
       if(			getFocField() != null 
       		&& 	this.str.length() > getFocField().getSize() 
@@ -77,10 +78,12 @@ public class FString extends FProperty implements Cloneable{
 
   public void setString_WithoutListeners(String str) {
     this.str = str;
+    setValueNull(false);
   }
 
   public boolean doSetString(String str){
-  	boolean allow = 		(this.str == null && str != null) 
+  	boolean allow = 		isValueNull()
+  			            ||  (this.str == null && str != null) 
   									|| 	(this.str != null && str != null && this.str.compareTo(str) != 0) /*|| (this.str != null && str == null)*/ ;
   	if(allow){
   		allow = getFocField() == null || getFocField().isPropertyModificationAllowed(this, str, true);
@@ -90,12 +93,16 @@ public class FString extends FProperty implements Cloneable{
   
   @Override
   protected void setSqlStringInternal(String str) {
-  	if(isCompress()) {
-  		str = Utils.decompressString(str);
+  	if (str == null && isAllowNullProperties()) {
+  		setValueNull(true);
   	} else {
-  		str = (str != null) ? str.replace("''", "\"") : null;	
+	  	if(isCompress()) {
+	  		str = Utils.decompressString(str);
+	  	} else {
+	  		str = (str != null) ? str.replace("''", "\"") : null;	
+	  	}
+	    setString(str);
   	}
-    setString(str);
   }
 
   private FStringField getStringField() {

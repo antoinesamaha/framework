@@ -58,7 +58,7 @@ public class FInt extends FProperty {
   }
 
   public String getSqlString() {
-  	if(isAllowNullProperties() && isValueNull()) {
+  	if(isValueNull()) {
   		return "NULL";
   	} else {
   		return getString();

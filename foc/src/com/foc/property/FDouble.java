@@ -69,7 +69,7 @@ public class FDouble extends FProperty {
   }
 
   public String getSqlString() {
-  	if(isAllowNullProperties() && isValueNull()) {
+  	if(isValueNull()) {
   		return "NULL";
   	} else if(Double.isNaN(dVal) || Double.isInfinite(dVal)){
   		return "0";
@@ -81,7 +81,7 @@ public class FDouble extends FProperty {
   public void setString(String str, boolean userEditingEvent) {
     if (str == null || str.trim().compareTo("") == 0) {
     	if (isAllowNullProperties()) {
-    		setValueNull(true);
+    		setValueNull_WithListener(true);
     	} else {
     		setDouble_Internal(0, userEditingEvent);
     	}

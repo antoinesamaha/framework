@@ -66,7 +66,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   
   //private PropertyFormulaContainer propertyFormulaContainer = null;
   private PropertyFormulaContext propertyFormulaContext = null;
-
+  
   protected void initStateVariables(){
     focField  = null;
     listeners = null;
@@ -609,6 +609,12 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
     }
   }
   
+  public void setValueNull_WithListener(boolean isnull) {
+  	boolean notifyListeners = isValueNull() != isnull;
+  	setValueNull(isnull);
+  	if(notifyListeners) notifyListeners();
+  }
+  
   public boolean isOutput() {
     return ((flags & FLG_OUTPUT) != 0) || (getFocField() != null && getFocField().isOutput());
   }
@@ -1030,5 +1036,9 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   
   public boolean isAllowNullProperties() {
   	return ConfigInfo.isAllowNullProperties();
+  }
+  
+  public String getNullSQLValue() {
+  	return "NULL";
   }
 }

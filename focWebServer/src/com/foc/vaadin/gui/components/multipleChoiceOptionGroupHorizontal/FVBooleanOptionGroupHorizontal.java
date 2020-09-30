@@ -135,7 +135,7 @@ public class FVBooleanOptionGroupHorizontal extends HorizontalLayout implements 
   	if(cb != null){
   		focData.setValue(cb.getItemValue());
   	} else {
-  		focData.setValueNull(true);
+  		focData.setValueNull_WithListener(true);
   	}
 	  return false;
   }
@@ -143,12 +143,12 @@ public class FVBooleanOptionGroupHorizontal extends HorizontalLayout implements 
   @Override
   public void copyMemoryToGui() {
   	if(focData.isValueNull()) {
-  		switchOffTheRest(null);
+  		switchOffTheRest(null, false);
   	} else {
       boolean mcItem = ((FBoolean)focData).getBoolean();
     	YesNoHorizontalCheckBox cb = getCheckBoxForItem(mcItem);
     	if(cb != null){
-    		switchOffTheRest(cb);
+    		switchOffTheRest(cb, true);
     	}
   	}
   }
@@ -221,13 +221,15 @@ public class FVBooleanOptionGroupHorizontal extends HorizontalLayout implements 
 		return cb;
 	}
 	
-	private void switchOffTheRest(CheckBox cb){
+	private void switchOffTheRest(CheckBox cb, boolean theValue){
 		if(checkBoxArray != null){
 			switchingOffTheRest = true;
 			for(int i=0; i<checkBoxArray.size(); i++){
 				YesNoHorizontalCheckBox box = checkBoxArray.get(i);
 				if(box != cb){
 					box.setValue(false);
+				} else {
+					box.setValue(theValue);
 				}
 			}
 			switchingOffTheRest = false;
@@ -257,9 +259,7 @@ public class FVBooleanOptionGroupHorizontal extends HorizontalLayout implements 
 		public void valueChange(com.vaadin.data.Property.ValueChangeEvent event) {
 			if(!switchingOffTheRest){
 				if (getValue()) {
-					switchOffTheRest(YesNoHorizontalCheckBox.this);
-				} else {
-					switchOffTheRest(null);
+					switchOffTheRest(YesNoHorizontalCheckBox.this, getValue());
 				}
 			}
 			copyGuiToMemory();

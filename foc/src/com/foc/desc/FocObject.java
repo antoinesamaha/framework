@@ -930,7 +930,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	}
   }
   
-	public void setPropertyDateNull(String fieldName) {
+	public void setPropertyNull(String fieldName) {
 		FField field = getThisFocDesc().getFieldByName(fieldName);
 		if (field != null) {
 			FDate prop = (FDate) getFocProperty(field.getID());
@@ -1063,16 +1063,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	}
   }
   
-	public void setPropertyLongNull(String fieldName) {
-		FField field = getThisFocDesc().getFieldByName(fieldName);
-		if (field != null) {
-			FProperty prop = getFocProperty(field.getID());
-			if (prop != null) {
-				prop.setValueNull(true);
-			}
-		}
-	}
-  
   public void setPropertyLong(int fieldID, long val){
   	setPropertyLong(fieldID, val, false);
   }
@@ -1150,16 +1140,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     setPropertyDoubleGeneral(fieldName, val, false);
   }
   
-	public void setPropertyDoubleNull(String fieldName) {
-		FField field = getThisFocDesc().getFieldByName(fieldName);
-		if (field != null) {
-			FProperty prop = getFocProperty(field.getID());
-			if (prop != null) {
-				prop.setValueNull(true);
-			}
-		}
-	}
-
   public void setPropertyDoubleWithoutListener(int fieldID, double val){
     setPropertyDoubleGeneral(fieldID, val, true);
   }
@@ -1301,16 +1281,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     FField field = getThisFocDesc().getFieldByName(fieldName);
     if(field != null){
     	setPropertyInteger(field.getID(), b ? 1 : 0);
-    }
-  }
-  
-  public void setPropertyBooleanNull(String fieldName){
-    FField field = getThisFocDesc().getFieldByName(fieldName);
-    if(field != null){
-    	FProperty prop = getFocProperty(field.getID());
-    	if(prop != null){
-    		prop.setValueNull(true);
-    	}
     }
   }
   
@@ -4761,21 +4731,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 					}
 				}
 			} else if (prop instanceof FInt) {
-				if (prop.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
 					builder.appendKeyValue(fieldName, prop.getInteger());
 				}
 			} else if (prop instanceof FDouble) {
-				if (prop.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
 					builder.appendKeyValue(fieldName, prop.getDouble());
 				}
 			} else if (prop instanceof FBoolean) {
-				if (prop.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
@@ -4783,7 +4753,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				}
 
 			} else if (prop instanceof FDate) {
-				if (prop.isAllowNullProperties() && prop.isValueNull()) {
+				if (prop.isValueNull()) {
 					builder.appendKey(fieldName);
 					builder.appendNullValue();
 				} else {
@@ -5346,7 +5316,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			try {
 				String dateString = jsonObj.getString(fieldName);
 				if (isNullAndAllowed(dateString)) {
-					setPropertyDateNull(fieldName);
+					setPropertyNull(fieldName);
 				} else {
 					SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy");
 					java.util.Date jsonDate = simpleFormat.parse(dateString);
@@ -5365,7 +5335,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			try {
 				String dateString = jsonObj.getString(fieldName);
 				if (isNullAndAllowed(dateString)) {
-					setPropertyDateNull(fieldName);
+					setPropertyNull(fieldName);
 				} else {
 					SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 					java.util.Date jsonDate = simpleFormat.parse(dateString);
@@ -5384,7 +5354,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			try {
 				String booleanString = jsonObj.getString(fieldName);
 				if (isNullAndAllowed(booleanString)) {
-					setPropertyBooleanNull(fieldName);
+					setPropertyNull(fieldName);
 				} else {
 					setPropertyBoolean(fieldName, jsonObj.getBoolean(fieldName));
 				}
@@ -5402,7 +5372,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				try {
 					String strValue = jsonObj.getString(fieldName);
 					if (isNullAndAllowed(strValue)) {
-						setPropertyIntegerNull(fieldName);
+						setPropertyNull(fieldName);
 					} else {
 						strValue = Utils.convertIndianNumberstoArabic(strValue);
 						int intValue = Utils.parseInteger(strValue, 0);
@@ -5423,7 +5393,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				try {
 					String strValue = jsonObj.getString(fieldName);
 					if (isNullAndAllowed(strValue)) {
-						setPropertyLongNull(fieldName);
+						setPropertyNull(fieldName);
 					} else {
 						strValue = Utils.convertIndianNumberstoArabic(strValue);
 						long intValue = Utils.parseLong(strValue, 0);
@@ -5441,7 +5411,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			try {
 				String strValue = jsonObj.getString(fieldName);
 				if (isNullAndAllowed(strValue)) {
-					setPropertyDoubleNull(fieldName);
+					setPropertyNull(fieldName);
 				} else {
 					setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
 				}
@@ -5522,33 +5492,37 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		} else if (mandatory) {
 			FProperty property = getFocPropertyByName(fieldName);
 			if(property != null){
-				FField fld = property.getFocField();
-				
-				if (fld != null) {
-					switch (fld.getFabType()) {
-					case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
-						((FObject)property).setObject(null);
-						break;
-					case FieldDefinition.SQL_TYPE_ID_DATE:
-						FDate dateProp = ((FDate)property);  
-						dateProp.setDate(new Date(dateProp.getZeroReference()));
-						break;
-					case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
-						//jsonParseBoolean(jsonObj, fieldName);
-						break;										
-					case FieldDefinition.SQL_TYPE_ID_INT:
-						property.setInteger(0);
-						break;					
-					case FieldDefinition.SQL_TYPE_ID_LONG:
-						property.setLong(0);
-						break;
-					case FieldDefinition.SQL_TYPE_ID_DOUBLE:
-						property.setDouble(0);
-						break;
-					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
-					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
-						property.setString("");
-						break;					
+				if (property.isAllowNullProperties()) {
+					property.setValueNull(true);
+				} else {
+					FField fld = property.getFocField();
+					
+					if (fld != null) {
+						switch (fld.getFabType()) {
+						case FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD:
+							((FObject)property).setObject(null);
+							break;
+						case FieldDefinition.SQL_TYPE_ID_DATE:
+							FDate dateProp = ((FDate)property);  
+							dateProp.setDate(new Date(dateProp.getZeroReference()));
+							break;
+						case FieldDefinition.SQL_TYPE_ID_BOOLEAN:
+							//jsonParseBoolean(jsonObj, fieldName);
+							break;										
+						case FieldDefinition.SQL_TYPE_ID_INT:
+							property.setInteger(0);
+							break;					
+						case FieldDefinition.SQL_TYPE_ID_LONG:
+							property.setLong(0);
+							break;
+						case FieldDefinition.SQL_TYPE_ID_DOUBLE:
+							property.setDouble(0);
+							break;
+						case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+							property.setString("");
+							break;					
+						}
 					}
 				}
 			}
