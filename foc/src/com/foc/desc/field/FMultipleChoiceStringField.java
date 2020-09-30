@@ -106,7 +106,11 @@ public class FMultipleChoiceStringField extends FStringField {
 	}
 	
 	public FProperty newProperty(FocObject masterObj, Object defaultValue){
-   return new FMultipleChoiceString(masterObj, getID(), defaultValue != null ? (String)defaultValue : null);
+		FProperty prop = new FMultipleChoiceString(masterObj, getID(), defaultValue != null ? (String)defaultValue : null);
+		if (isAllowNullProperties() && defaultValue == null) {
+			prop.setValueNull(true);
+		}
+		return prop;
   }
 
   public FProperty newProperty(FocObject masterObj){

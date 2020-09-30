@@ -54,7 +54,7 @@ public class FString extends FProperty implements Cloneable{
       setValueNull(false);
       
       if(			getFocField() != null 
-      		&& 	this.str.length() > getFocField().getSize() 
+      		&& 	this.str != null && this.str.length() > getFocField().getSize() 
       		&&  getFocField().getSize() > 0
       		&&  getFocField().isDBResident()
       		&&  getFocObject() != null

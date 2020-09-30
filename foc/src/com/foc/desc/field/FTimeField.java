@@ -9,7 +9,7 @@ import java.sql.Types;
 import javax.swing.JTextField;
 
 import com.fab.model.table.FieldDefinition;
-import com.foc.*;
+import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.gui.FGTimeField;
@@ -17,7 +17,6 @@ import com.foc.gui.table.cellControler.AbstractCellControler;
 import com.foc.gui.table.cellControler.TextCellControler;
 import com.foc.property.FProperty;
 import com.foc.property.FTime;
-import com.foc.property.validators.FPropertyValidator;
 
 /**
  * @author 01Barmaja
@@ -63,7 +62,9 @@ public class FTimeField extends FDateField {
   }
 
   public FProperty newProperty(FocObject masterObj, Object defaultValue){
-  	return new FTime(masterObj, getID(), (java.sql.Time)defaultValue);
+  	FProperty prop = new FTime(masterObj, getID(), (java.sql.Time)defaultValue);
+  	if(isAllowNullProperties() && defaultValue == null) prop.setValueNull(true);
+  	return prop;
   }
   
   public FProperty newProperty(FocObject masterObj){
