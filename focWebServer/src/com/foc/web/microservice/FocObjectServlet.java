@@ -147,7 +147,10 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		int ref = 0;
 		if(jsonObj != null && jsonObj.has("REF")){
 			try {
-				ref = jsonObj.getInt("REF");
+				String strValue = jsonObj.getString("REF");
+				if (!strValue.equalsIgnoreCase("null")) {
+					ref = Utils.parseInteger(strValue, 0);
+				}
 			} catch (Exception e) {
 				Globals.logException(e);
 			}

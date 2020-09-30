@@ -5275,7 +5275,11 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	public void jsonParseString(JSONObject jsonObj, String fieldName) {
 		try{
 			String value = jsonObj.getString(fieldName);
-			setPropertyString(fieldName, value);
+			if (isNullAndAllowed(value)) {
+				setPropertyNull_WithListener(fieldName);
+			} else {
+				setPropertyString(fieldName, value);
+			}
 		}catch (JSONException e){
 			Globals.logException(e);
 		}
@@ -5285,9 +5289,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		if(jsonObj.has("Date")){
 			try{
 				String dateString = jsonObj.getString("Date");
-				SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
-				java.util.Date jsonDate = simpleFormat.parse(dateString);
-				setDate(new java.sql.Date(jsonDate.getTime()));
+				if (isNullAndAllowed(dateString)) {
+					setPropertyNull_WithListener(FField.FNAME_DATE);
+				} else {
+					SimpleDateFormat simpleFormat= new SimpleDateFormat("dd/MM/yyyy");
+					java.util.Date jsonDate = simpleFormat.parse(dateString);
+					setDate(new java.sql.Date(jsonDate.getTime()));
+				}
 			}catch (JSONException e){
 				Globals.logException(e);
 			}catch (ParseException e){
@@ -5295,8 +5303,6 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			}
 		}
 	}
-	
-	
 	
 	public void jsonParseDate(JSONObject jsonObj, String fieldName) {
 		if (jsonObj.has(fieldName)) {
