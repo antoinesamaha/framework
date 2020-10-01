@@ -35,7 +35,7 @@ public class FVBoolean implements FocXMLGuiComponentCreator {
   	FProperty property = (FProperty) focData;
   	
   	boolean optionGroup = false;
-		String optGroup = attributes.getValue(FXML.ATT_OPTION_GROUP);
+		String optGroup = attributes != null ? attributes.getValue(FXML.ATT_OPTION_GROUP) : null;
 		if(optGroup != null && optGroup.toLowerCase().equals("true")){
 			optionGroup = true;
 		}
