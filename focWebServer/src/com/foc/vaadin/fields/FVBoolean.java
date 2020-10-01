@@ -24,6 +24,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.components.FVCheckBox;
 import com.foc.vaadin.gui.components.multipleChoiceOptionGroupHorizontal.FVBooleanOptionGroupHorizontal;
 import com.foc.vaadin.gui.layouts.FVWrapperLayout;
+import com.foc.vaadin.gui.xmlForm.FXML;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 
 public class FVBoolean implements FocXMLGuiComponentCreator {
@@ -32,7 +33,14 @@ public class FVBoolean implements FocXMLGuiComponentCreator {
   public FocXMLGuiComponent newGuiComponent(FocXMLLayout xmlLayout, IFocData focData, Attributes attributes, IFocData rootFocData, String dataPathFromRootFocData) {
   	FocXMLGuiComponent component = null; 
   	FProperty property = (FProperty) focData;
-  	if (property != null && property.isAllowNullProperties()) {
+  	
+  	boolean optionGroup = false;
+		String optGroup = attributes.getValue(FXML.ATT_OPTION_GROUP);
+		if(optGroup != null && optGroup.toLowerCase().equals("true")){
+			optionGroup = true;
+		}
+  	
+  	if (property != null && optionGroup) {
   		component = new FVBooleanOptionGroupHorizontal(property, attributes);  
   	} else {
 	    FVCheckBox checkBox = new FVCheckBox(property, attributes);
