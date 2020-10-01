@@ -100,9 +100,9 @@ public class FBoolean extends FProperty {
   }
 
   public void setBoolean(boolean b, boolean userEditingEvent) {
+  	setValueNull(false);
     if(bVal != b){
-      bVal = b;
-      setValueNull(false);
+      bVal = b;      
       notifyListeners(userEditingEvent);
     }
   }
