@@ -390,6 +390,8 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			list = new FocList(new FocLinkSimple(focDesc));
 		}
 		
+		if(focRequest != null && list != null) focRequest.applyFiltersToList(list);
+		
 		return list;
 	}
 	
