@@ -12,6 +12,10 @@ import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
 import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
+import com.foc.list.FocListWithFilter;
+import com.foc.list.filter.FilterCondition;
+import com.foc.list.filter.FocListFilter;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
@@ -124,6 +128,31 @@ public class FocServletRequest {
 
 	public void setMasterOwner(boolean masterOwner) {
 		this.masterOwner = masterOwner;
+	}
+	
+	public void applyFiltersToListWithFilter(FocListWithFilter list) {
+		if (getRequest() != null && list != null) {
+			FocDesc focDesc = list.getFocDesc();
+			if (focDesc != null) {
+				Enumeration<String> paramsEnum = getRequest().getParameterNames();
+				
+				if (paramsEnum != null) {
+					while(paramsEnum.hasMoreElements()) {
+						String name = paramsEnum.nextElement();
+						if(name.startsWith("filter_")) {
+							String conditionName = name.substring("filter_".length());
+							
+							FocListFilter filter = (FocListFilter) list.getFocListFilter();
+							FilterCondition condition = filter.findFilterCondition(conditionName);
+							String value = getRequest().getParameter(name);
+							if (condition != null && value != null) {
+								condition.parseString(filter, value);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	public void applyFiltersToList(FocList list) {
