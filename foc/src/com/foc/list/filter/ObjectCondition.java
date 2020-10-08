@@ -81,6 +81,10 @@ public class ObjectCondition extends FilterCondition {
 	public void setOperation(FocListFilter filter, int operation) {
 		filter.setPropertyMultiChoice(getFirstFieldID() + FLD_CONDITION_OPERATION, operation);
 	}
+	
+	public void setOperation(FocListFilter filter, String operation) {
+		filter.setPropertyMultiChoice(getFirstFieldID() + FLD_CONDITION_OPERATION, operation);
+	}
 
 	public FocObject getObject(FocListFilter filter) {
 		FObject prop = (FObject) filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OBJECT);
@@ -92,6 +96,13 @@ public class ObjectCondition extends FilterCondition {
 
 		FObject oprop = (FObject) filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OBJECT);
 		oprop.setObject(object);
+	}
+	
+	public void setObject(FocListFilter filter, long objectRef) {
+		setOperation(filter, OPERATION_EQUALS);
+
+		FObject oprop = (FObject) filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OBJECT);
+		oprop.setLocalReferenceInt(objectRef);
 	}
 
 	public String getInList(FocListFilter filter) {
@@ -394,5 +405,29 @@ public class ObjectCondition extends FilterCondition {
 		}
 
 		return description;
+	}
+	
+	@Override
+	public void parseString(FocListFilter filter, String str) {
+		super.parseString(filter, str);
+		
+		String[] parts = str.split("::");
+		if(parts.length > 0) {
+			String operation = parts[0];
+      if(ConfigInfo.isArabic()){//The String always contains English if the application is arabic we need to convert because Multiplechoice contains arabic
+      	if(operation.equals("None")) operation = "لا شرط";
+      	else if(operation.equals("=")) operation = "=";
+      	else if(operation.equals("<>")) operation = "لايساوي";
+      	else if(operation.equals("Empty")) operation = "فارغ";
+      	else if(operation.equals("Not Empty")) operation = "غير فارغ";
+      }
+			setOperation(filter, operation);
+			
+			if(parts.length > 1) {
+				String text = parts[1];
+				long objectRef = Utils.parseLong(text, 0);
+				if(objectRef != 0) setObject(filter, objectRef);
+			}
+		}
 	}
 }
