@@ -86,6 +86,10 @@ public abstract class FField implements Cloneable, IFocData {
   public static final int MANDATORY_YES = 1;
   public static final int MANDATORY_YES_BUT_CAN_FILL_LATER = 2;
   
+  private boolean jsonDetailedInclude = true;
+  private boolean jsonListInclude     = true;
+  private boolean jsonEmbeddedInclude = true;
+  
   abstract public int getSqlType();
 	abstract public String getCreationString(String name);
   abstract public Component getGuiComponent(FProperty prop);
@@ -961,22 +965,50 @@ public abstract class FField implements Cloneable, IFocData {
   @Override
   public Object iFocData_getValue() {
     return null;
-  }  
+  }
+  
   //--------------------------------------------------------	
 	public FField getJoinOriginalField() {
 		return joinOriginalField;
 	}
+	
 	public void setJoinOriginalField(FField joinOriginalField) {
 		this.joinOriginalField = joinOriginalField;
 	}
+	
 	public IPropertyStringConverter getStringConverter() {
 		return stringConverter;
 	}
+	
 	public void setStringConverter(IPropertyStringConverter stringConverter) {
 		this.stringConverter = stringConverter;
 	}
 	
 	public boolean isAllowNullProperties() {
 		return ConfigInfo.isAllowNullProperties();
+	}
+	
+	public boolean isJsonDetailedInclude() {
+		return jsonDetailedInclude;
+	}
+	
+	public void setJsonDetailedInclude(boolean jsonDetailedInclude) {
+		this.jsonDetailedInclude = jsonDetailedInclude;
+	}
+	
+	public boolean isJsonListInclude() {
+		return jsonListInclude;
+	}
+	
+	public void setJsonListInclude(boolean jsonListInclude) {
+		this.jsonListInclude = jsonListInclude;
+	}
+	
+	public boolean isJsonEmbeddedInclude() {
+		return jsonEmbeddedInclude;
+	}
+	
+	public void setJsonEmbeddedInclude(boolean jsonEmbeddedInclude) {
+		this.jsonEmbeddedInclude = jsonEmbeddedInclude;
 	}
 }

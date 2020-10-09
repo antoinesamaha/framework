@@ -1,10 +1,21 @@
 package com.foc.web.microservice;
 
+import java.util.Enumeration;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.foc.db.DBManager;
+import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
+import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
+import com.foc.list.FocListWithFilter;
+import com.foc.list.filter.FilterCondition;
+import com.foc.list.filter.FocListFilter;
+import com.foc.list.filter.IFocListFilter;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
@@ -117,5 +128,65 @@ public class FocServletRequest {
 
 	public void setMasterOwner(boolean masterOwner) {
 		this.masterOwner = masterOwner;
+	}
+	
+	public void applyFiltersToListWithFilter(FocListWithFilter list) {
+		if (getRequest() != null && list != null) {
+			FocDesc focDesc = list.getFocDesc();
+			if (focDesc != null) {
+				Enumeration<String> paramsEnum = getRequest().getParameterNames();
+				
+				if (paramsEnum != null) {
+					while(paramsEnum.hasMoreElements()) {
+						String name = paramsEnum.nextElement();
+						if(name.startsWith("filter_")) {
+							String conditionName = name.substring("filter_".length());
+							
+							FocListFilter filter = (FocListFilter) list.getFocListFilter();
+							FilterCondition condition = filter.findFilterCondition(conditionName);
+							String value = getRequest().getParameter(name);
+							if (condition != null && value != null) {
+								condition.parseString(filter, value);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public void applyFiltersToList(FocList list) {
+		if (getRequest() != null && list != null) {
+			FocDesc focDesc = list.getFocDesc();
+			if (focDesc != null) {
+				Enumeration<String> paramsEnum = getRequest().getParameterNames();
+				
+				if (paramsEnum != null) {
+					while(paramsEnum.hasMoreElements()) {
+						String name = paramsEnum.nextElement();
+						if(name.startsWith("filter_")) {
+							String fieldName = name.substring("filter_".length());
+							FField field = focDesc.getFieldByName(fieldName);
+							if (field != null) {
+								if (list.getFilter() != null) {
+
+									if(field instanceof FStringField) {
+										String fieldNameSQL = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fieldName);
+										String value = getRequest().getParameter(name);
+										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"='"+value+"'");
+									} else if(field instanceof FObjectField) {
+										String fieldNameSQL = fieldName+"_"+FField.REF_FIELD_NAME;
+										fieldNameSQL = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fieldNameSQL);
+										String value = getRequest().getParameter(name);
+										long ref = Utils.parseLong(value, -1);
+										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"="+ref+"");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 }

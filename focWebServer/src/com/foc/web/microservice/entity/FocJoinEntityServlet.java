@@ -20,8 +20,12 @@ import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
+import com.foc.desc.parsers.ParsedFocDesc;
+import com.foc.join.FocRequestDesc;
+import com.foc.join.TableAlias;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
+import com.foc.list.FocListWithFilter;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.shared.json.JSONObjectWriter;
 import com.foc.util.Encryptor;
@@ -323,9 +327,6 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			}
 			if (focDesc != null && focDesc.isListInCache()) {
 				list = focDesc.getFocList();
-				if (load) {
-					list.loadIfNotLoadedFromDB();
-				}
 			}
 		} else {
 			HttpServletRequest request = focRequest.getRequest();
@@ -351,9 +352,17 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 						list.getFilter().setOffset(start, count);
 					}
 				}
-				if(load) {
-					list.loadIfNotLoadedFromDB();
+			}
+		
+			if (list != null) {
+				if(focRequest != null) {
+					if(list instanceof FocListWithFilter) {
+						focRequest.applyFiltersToListWithFilter((FocListWithFilter) list);
+					} else {
+						focRequest.applyFiltersToList(list);
+					}
 				}
+				if(load) list.loadIfNotLoadedFromDB();  
 			}
 		}
 		
@@ -403,13 +412,22 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 		if (list != null && list.getFilter() != null) {
 			FocDesc focDesc = list.getFocDesc();
 			if (focDesc != null) {
+				String alias = "";
+				
+				if(focDesc.isJoin() && focDesc instanceof ParsedFocDesc) {
+					ParsedFocDesc parsedDesc = (ParsedFocDesc) focDesc;
+					FocRequestDesc reqDesc = parsedDesc.getFocRequestDesc();
+					TableAlias rootAlias = reqDesc.getRootTableAlias();
+					alias = rootAlias.getAlias()+".";
+				}
+				
 				order = "";
 				if(focDesc.getFieldByID(FField.FLD_DATE) != null) {
-					order += "\""+FField.FNAME_DATE +"\" ";
+					order += alias+"\""+FField.FNAME_DATE +"\" ";
 				}
 				if(focDesc.getFieldByID(FField.REF_FIELD_ID) != null) {
 					if(order.length() > 0) order += ",";
-					order += "\""+FField.REF_FIELD_NAME+"\" ";
+					order += alias+"\""+FField.REF_FIELD_NAME+"\" ";
 				}
 				order += " DESC";
 			}

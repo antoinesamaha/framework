@@ -138,4 +138,8 @@ public abstract class FilterCondition {
 	public void setLevel(int level) {
 		this.level = level;
 	}
+	
+	public void parseString(FocListFilter filter, String str) {
+		
+	}
 }
