@@ -353,17 +353,16 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					}
 				}
 			}
-		
-			if (list != null) {
-				if(focRequest != null) {
-					if(list instanceof FocListWithFilter) {
-						focRequest.applyFiltersToListWithFilter((FocListWithFilter) list);
-					} else {
-						focRequest.applyFiltersToList(list);
-					}
+		}
+		if (list != null) {
+			if(focRequest != null) {
+				if(list instanceof FocListWithFilter) {
+					focRequest.applyFiltersToListWithFilter((FocListWithFilter) list);
+				} else {
+					focRequest.applyFiltersToList(list);
 				}
-				if(load) list.loadIfNotLoadedFromDB();  
 			}
+			if(load) list.loadIfNotLoadedFromDB();  
 		}
 		
 		return list;
