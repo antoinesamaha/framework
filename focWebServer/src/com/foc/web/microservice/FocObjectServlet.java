@@ -136,6 +136,13 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return list; 
 	}
 
+	public void disposeFocList(FocServletRequest focRequest, FocList focList) {
+		if(focList != null) {
+			focList.dispose();
+			focList = null;
+		}
+	}
+		
 	public void applyRefFilterIfNeeded(HttpServletRequest request, FocList list) {
 		if(list != null && request != null) {
 			long filter_Ref = doGet_GetReference(request, list);
@@ -291,7 +298,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						}
 						
 						if(!useCachedList(null)){
-							list.dispose();
+							disposeFocList(focRequest, list);
 							list = null;
 						}
 						
@@ -328,6 +335,26 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		builder.setHideWorkflowFields(true);
 		builder.setScanSubList(true);
 		return builder;
+	}
+	
+	protected O newFocObject_POST(FocServletRequest focRequest, long ref) {
+		FocConstructor constr = new FocConstructor(getFocDesc());
+		O focObj = (O) constr.newItem();
+
+		if(ref > 0){
+			focObj.setReference(ref);
+			focObj.load();
+		}else{
+			focObj.setCreated(true);
+			focObj.code_resetCode();
+		}
+		return focObj;
+	}
+	
+	protected void disposeFocObject_POST(FocServletRequest focRequest, O focObj) {
+		if(focObj != null) {
+			focObj.dispose();
+		}
 	}
 	
 	@Override
@@ -370,17 +397,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							}
 						}
 					}else{
-						FocConstructor constr = new FocConstructor(getFocDesc());
-						focObj = (O) constr.newItem();
-
 						long ref = doPost_GetReference(jsonObj, list);
-						if(ref > 0){
-							focObj.setReference(ref);
-							focObj.load();
-						}else{
-							focObj.setCreated(true);
-							focObj.code_resetCode();
-						}
+						focObj = newFocObject_POST(focRequest, ref);
 					}
 
 					if(focObj != null){
@@ -422,6 +440,11 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 							setCORS(response);
 							response.getWriter().println(userJson);
 						}
+						
+						if(!useCachedList(null)){
+							disposeFocObject_POST(focRequest, focObj);
+						}
+						
 					}else{
 						userJson = "{\"message\": \" Does not exists \"}";
 						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

@@ -71,6 +71,10 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	protected String getUIClassName() {
 		return uiclassname;
 	}
+	
+	protected void setUIClassName(String classname) {
+		uiclassname = classname;
+	}
 
 	@Override
 	public String getNameInPlural() {
