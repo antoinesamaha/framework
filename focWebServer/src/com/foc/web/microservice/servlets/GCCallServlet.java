@@ -68,8 +68,8 @@ public class GCCallServlet extends FocSimpleMicroServlet {
 
 		String cachedParam = request.getParameter("cached");
 		boolean includeCached = cachedParam != null && cachedParam.equals("true") ? true : false;
-		String fileName = Globals.getApp().dumpLivingFocObjectCounts(false, includeCached);
-		buffer.append("<p>File dumped: "+fileName);
+		String htmlMemoryDump = Globals.getApp().dumpLivingFocObjectCounts(false, includeCached, true);
+		buffer.append(htmlMemoryDump);
 
 		buffer.append("</body>");
 		buffer.append("</html>");
