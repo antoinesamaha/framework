@@ -65,7 +65,12 @@ public class GCCallServlet extends FocSimpleMicroServlet {
 //		if (server != null) {
 //			buffer.append(server.getHtml());
 //		}
-		
+
+		String cachedParam = request.getParameter("cached");
+		boolean includeCached = cachedParam != null && cachedParam.equals("true") ? true : false;
+		String htmlMemoryDump = Globals.getApp().dumpLivingFocObjectCounts(false, includeCached, true);
+		buffer.append(htmlMemoryDump);
+
 		buffer.append("</body>");
 		buffer.append("</html>");
 		
@@ -75,7 +80,7 @@ public class GCCallServlet extends FocSimpleMicroServlet {
 		response.setHeader("Access-Control-Allow-Methods", "GET");
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.getWriter().println(buffer.toString());
-
+		
 		if(sessionAndApp != null){
 			sessionAndApp.logout();
 		}

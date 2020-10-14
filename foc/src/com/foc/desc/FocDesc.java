@@ -2321,6 +2321,11 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   	return allFocObjectArray_get(false);
   }
   
+  public int allFocObjectArray_size(){
+  	ArrayList<FocObject> array = allFocObjectArray_get(false);
+  	return array != null ? array.size() : -1;
+  }
+  
   private ArrayList<FocObject> allFocObjectArray_get(boolean createIfNeeded){
   	if(createIfNeeded && descFocObjects == null && ConfigInfo.isKeepFocObjectArrayInFocDesc()){
   		descFocObjects = new ArrayList<FocObject>();

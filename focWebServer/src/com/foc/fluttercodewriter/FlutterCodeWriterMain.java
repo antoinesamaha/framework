@@ -3,11 +3,13 @@ package com.foc.fluttercodewriter;
 public class FlutterCodeWriterMain {
 	
 	//public String codepath = "/home/antoine/work/flutterws/central_inspection_hr/it_quiz_web/lib";
-	public String codepath = "f:/git/siren/flutterlab/it_quiz_web/lib";
+	public String codepath = "f:/git/siren/flutterlab/fenix/lib";
 	
 	public FlutterCodeWriterMain() {
 		//generateFilesFor("news", "Incident");
-		generateFilesFor("aid", "PcmAid");
+		//generateFilesFor("aid", "PcmAid");
+		
+		generateFilesFor("incident/common", "OpCallSeverity");
 	}
 	
 	private void generateFilesFor(String module, String objectType) {

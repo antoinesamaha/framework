@@ -80,6 +80,8 @@ import com.foc.api.IFocObject;
 import com.foc.business.adrBook.Contact;
 import com.foc.business.calendar.FCalendar;
 import com.foc.business.company.Company;
+import com.foc.business.company.UserCompanyRights;
+import com.foc.business.company.UserCompanyRightsDesc;
 import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
@@ -5087,9 +5089,37 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return getThisFocDesc().iFocData_getFieldOrPropertyByName(this, path);
   }
   
-  public boolean focObject_IsLocked(){
-    return isSystemObject();
-  }
+	public boolean focObject_IsLocked() {
+		boolean locked = false;
+		if (isSystemObject()) {
+			locked = true;
+		} else {			
+			if (Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null) {
+				FocUser user = Globals.getApp().getUser_ForThisSession();
+				if (user != null && user.getCompanyRightsList() != null && user.getCompanyRightsList().size() > 0) {
+					for (int i = 0; i < user.getCompanyRightsList().size(); i++) {
+						UserCompanyRights companyRight = (UserCompanyRights) user.getCompanyRightsList().getFocObject(i);
+						if (companyRight != null && companyRight.getCompany() != null) {
+							// Object related to Company
+							if (getCompany() != null && getCompany().equals(companyRight.getCompany())) {
+								if (companyRight.getAccessRight() == UserCompanyRightsDesc.ACCESS_RIGHT_NONE || companyRight.getAccessRight() == UserCompanyRightsDesc.ACCESS_RIGHT_READ_ONLY) {
+									locked = true;
+								}
+							} else if (getCompany() == null) {
+								if (companyRight.getAccessRight() == UserCompanyRightsDesc.ACCESS_RIGHT_READ_WRITE) {
+									locked = false;
+									break;
+								}else{
+									locked = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return locked;
+	}
 
   public boolean isEditable_AtomicNoDotLookup(String dataPath){
   	boolean editable = true;

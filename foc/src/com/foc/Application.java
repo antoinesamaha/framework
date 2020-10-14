@@ -2247,5 +2247,64 @@ public class Application {
 			}
 		}
 	}
-	
+
+	public String dumpLivingFocObjectCounts(boolean withGuiMessage, boolean includeCached, boolean html) {
+		StringBuffer buffer = new StringBuffer();
+		String fileName = null;
+    try {
+    	fileName = Globals.logFile_GetFileName("EntityCounts", "csv");
+    	PrintStream logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(fileName, "UTF-8") : null;
+
+    	logFile.println("Entity,Cached,Count");
+    	
+    	buffer.append("Log File dumped " + fileName);
+    	if(html) {
+    		buffer.append("<table>");
+    		buffer.append("<tr>");
+    		buffer.append("  <th>Entity</th>");
+    		buffer.append("  <th>Is Cahced</th>");
+    		buffer.append("  <th>Count</th>");
+    		buffer.append("</tr>");
+    	} else {
+    		buffer.append("Entity  |  Cached  |  Count\n");
+    	}
+    	
+  	  Iterator<IFocDescDeclaration> iter = Globals.getApp() != null ? Globals.getApp().getFocDescDeclarationIterator() : null;
+  	  while (iter != null && iter.hasNext()) {
+  	  	IFocDescDeclaration focDescDeclaration = iter.next();
+  	  	if (focDescDeclaration != null) {
+  	    	FocDesc focDesc = focDescDeclaration.getFocDescription();
+  				if(focDesc != null && (includeCached || !focDesc.isListInCache())) {
+  			  	int size = focDesc.allFocObjectArray_size();
+  			  	if(size > 0) {
+  			  		logFile.println(focDesc.getStorageName()+","+focDesc.isListInCache()+","+size);
+  			    	if(html) {
+  			    		buffer.append("<tr>");
+  			    		buffer.append("  <td>"+focDesc.getStorageName()+"</td>");
+  			    		buffer.append("  <td>"+focDesc.isListInCache()+"</td>");
+  			    		buffer.append("  <td>"+size+"</td>");
+  			    		buffer.append("</tr>");
+  			    	} else {
+  			    		buffer.append(focDesc.getStorageName()+"  |  "+focDesc.isListInCache()+"  |  "+size+"\n");    		
+  			    	}
+  			  	}
+  				}
+  	  	}
+  	  }
+
+  	  if(html) buffer.append("</table>");
+  	  
+  	  logFile.close();
+  
+  	  if (withGuiMessage) {
+  	  	//Globals.showNotification("Log File dumped", fileName, IFocEnvironment.TYPE_WARNING_MESSAGE);
+  	  }
+  	  
+    } catch (Exception e) {
+    	Globals.logException(e);
+    }
+    
+    return buffer.toString();
+	}
+
 }
