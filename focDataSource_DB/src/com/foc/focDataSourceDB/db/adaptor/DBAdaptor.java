@@ -430,7 +430,6 @@ public class DBAdaptor {
   private HashMap<String, HashMap<String, String>> constraints_GetActualConstraintsMap(boolean createIfNull){
   	if(actualConstraintsByConnection == null && createIfNull){
 	  	actualConstraintsByConnection = new HashMap<String, HashMap<String, String>>();
-	
 	  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
 	  	HashMap<String, String> constraintsMap = constrains_NewAllConstraints(defaultConnection);
 	  	actualConstraintsByConnection.put(null, constraintsMap);
@@ -438,7 +437,7 @@ public class DBAdaptor {
 	  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
 	  	while(auxConnIter != null && auxConnIter.hasNext()){
 	  		ConnectionPool connectionPool = auxConnIter.next();
-		  	constraintsMap = constrains_NewAllConstraints(defaultConnection);
+		  	constraintsMap = constrains_NewAllConstraints(connectionPool);
 		  	actualConstraintsByConnection.put(connectionPool.getDBSourceKey(), constraintsMap);
 	  	}
   	}
@@ -583,8 +582,8 @@ public class DBAdaptor {
 	    	HashMap<String, String> constraintsMap = constrains_GetAllConstraints(connectionPool);
 	    	Iterator<String> iter = constraintsMap.keySet().iterator();
 	    	while (iter != null && iter.hasNext()) {
-	    		String tableName = iter.next();
-	    		String constraintName = constraintsMap.get(tableName);
+	    		String constraintName = iter.next();
+	    		String tableName = constraintsMap.get(constraintName);
 	    		
 	    		constrains_Drop(connectionPool, tableName, constraintName);
 	    	}
