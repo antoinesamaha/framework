@@ -140,7 +140,8 @@ public abstract class FocSlaveEntityServlet<O extends FocObject, M extends FocOb
 						afterPost(focRequest, focObj, created);
 
 						builder = xmlBuilder_New(focRequest, true, true);
-						userJson = toJsonDetails(focObj, builder);
+						toJson_DetailedObject(builder, focObj);
+						userJson = builder.toString();
 						
 						response.setStatus(HttpServletResponse.SC_OK);
 						setCORS(response);

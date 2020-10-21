@@ -50,8 +50,6 @@ import com.foc.db.migration.MigFieldMapDesc;
 import com.foc.db.migration.MigrationSourceDesc;
 import com.foc.desc.AutoPopulatable;
 import com.foc.desc.FocDesc;
-import com.foc.desc.field.FField;
-import com.foc.desc.field.FObjectField;
 import com.foc.gui.table.view.ColumnsConfigDesc;
 import com.foc.gui.table.view.UserViewDesc;
 import com.foc.gui.table.view.ViewConfigDesc;
@@ -432,6 +430,29 @@ public class AdminWebModule extends FocWebModule {
 			}
 		});
 
+		menuItem = systemMenu.pushMenu("SHOW_MEMORY_OBJECTS", "Dump living entity counts");
+		menuItem.setMenuAction(new IFocMenuItemAction() {
+			@Override
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				String beforeMessage = Globals.logMemory("Before Freeing ");
+
+				System.gc();
+				Globals.logMemory("");
+
+				System.gc();
+				Globals.logMemory("");
+
+				System.gc();
+				String afterMessage = Globals.logMemory("After  Freeing ");
+
+				String html = Globals.getApp().dumpLivingFocObjectCounts(true, true, false);
+				afterMessage += "\n" + html; 
+				
+				Globals.showNotification(beforeMessage, afterMessage, IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+				
+			}
+		});
+		
 		menuItem = systemMenu.pushMenu("MEMORY", "Memory");
 		menuItem.setMenuAction(new IFocMenuItemAction() {
 

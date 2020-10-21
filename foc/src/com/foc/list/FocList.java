@@ -174,6 +174,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
     init(null,focLinkForeignKey,filter);
   }
 
+  public FocList(FocDesc focDesc) {
+  	this(new FocLinkSimple(focDesc));
+  }
+  
   /**
    * This constructor is mainly for simple lists used to store some objects We
    * do not need any link or filter, neether a master object

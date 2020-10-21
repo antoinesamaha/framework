@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.foc.business.adrBook;
 
+import com.foc.admin.FocGroup;
 import com.foc.business.config.BusinessConfig;
 import com.foc.business.country.Country;
 import com.foc.business.country.city.City;
@@ -71,6 +72,10 @@ public class AdrBookParty extends FocObject{
 		return filterExpression; 
 	}
 
+  public FocGroup getFocGroupForContactUsers() {
+  	return BusinessConfig.getInstance() != null ? BusinessConfig.getInstance().getGuestGroup() : null;
+  }
+  
 	@Override
   public int code_getNumberOfDigits(){
   	return BusinessConfig.getInstance().getPartyNbrDigits();
