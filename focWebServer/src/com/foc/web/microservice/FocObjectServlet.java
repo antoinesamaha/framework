@@ -357,7 +357,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 	}
 	
-	protected String doPost_CheckError(FocServletRequest focRequest) {
+	protected String doPost_CheckError(FocServletRequest focRequest, JSONObject jsonObj) {
 		return null;
 	}
 
@@ -388,7 +388,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					O focObj = null;
 					FocList list = null;
 
-					String checkErrorJson = doPost_CheckError(focRequest);
+					String checkErrorJson = doPost_CheckError(focRequest, jsonObj);
 					if (checkErrorJson == null) {
 						if(useCachedList(null)){
 							list = newFocList(request, response, false);
