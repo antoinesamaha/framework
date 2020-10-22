@@ -357,6 +357,10 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		}
 	}
 	
+	protected String doPost_CheckError(FocServletRequest focRequest) {
+		return null;
+	}
+
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		SessionAndApplication sessionAndApp = pushSession(request, response);
@@ -384,70 +388,78 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					O focObj = null;
 					FocList list = null;
 
-					if(useCachedList(null)){
-						list = newFocList(request, response, false);
-						if(list != null){
-							list.loadIfNotLoadedFromDB();
-							long ref = doPost_GetReference(jsonObj, list);
-							if(ref > 0){
-								focObj = (O) list.searchByRealReferenceOnly(ref);
-							}else{
-								focObj = (O) list.newEmptyItem();
-								focObj.code_resetCode();
-							}
-						}
-					}else{
-						long ref = doPost_GetReference(jsonObj, list);
-						focObj = newFocObject_POST(focRequest, ref);
-					}
-
-					if(focObj != null){
-						fillFocObjectFromJson(focObj, jsonObj);
-
-						boolean created = focObj.isCreated();
-						if(created) {
-							if(focObj instanceof FocWorkflowObject) {
-								((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
-							}
-						}
-						
-						boolean errorSaving = false;
-						
-						if(list != null){
-							list.add(focObj);
-							errorSaving = !focObj.validate(true);
-							if(!errorSaving) {
-								errorSaving = !list.validate(true);
+					String checkErrorJson = doPost_CheckError(focRequest);
+					if (checkErrorJson == null) {
+						if(useCachedList(null)){
+							list = newFocList(request, response, false);
+							if(list != null){
+								list.loadIfNotLoadedFromDB();
+								long ref = doPost_GetReference(jsonObj, list);
+								if(ref > 0){
+									focObj = (O) list.searchByRealReferenceOnly(ref);
+								}else{
+									focObj = (O) list.newEmptyItem();
+									focObj.code_resetCode();
+								}
 							}
 						}else{
-							errorSaving = !focObj.validate(true);
+							long ref = doPost_GetReference(jsonObj, list);
+							focObj = newFocObject_POST(focRequest, ref);
 						}
-
-						if (errorSaving) {
-							userJson = "{\"message\": \"Could not save\"}";
-							response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-							setCORS(response);
-							response.getWriter().println(userJson);
-							
-						} else {
-							afterPost(focRequest, focObj, created);
 	
-							userJson = toJsonDetails(focObj, builder); 
-							//focObj.toJson(builder);
-							//userJson = builder.toString();
+						if(focObj != null){
+							fillFocObjectFromJson(focObj, jsonObj);
+	
+							boolean created = focObj.isCreated();
+							if(created) {
+								if(focObj instanceof FocWorkflowObject) {
+									((FocWorkflowObject) focObj).setSiteToAnyValueIfEmpty();
+								}
+							}
 							
-							response.setStatus(HttpServletResponse.SC_OK);
+							boolean errorSaving = false;
+							
+							if(list != null){
+								list.add(focObj);
+								errorSaving = !focObj.validate(true);
+								if(!errorSaving) {
+									errorSaving = !list.validate(true);
+								}
+							}else{
+								errorSaving = !focObj.validate(true);
+							}
+	
+							if (errorSaving) {
+								userJson = "{\"message\": \"Could not save\"}";
+								response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+								setCORS(response);
+								response.getWriter().println(userJson);
+								
+							} else {
+								afterPost(focRequest, focObj, created);
+		
+								userJson = toJsonDetails(focObj, builder); 
+								//focObj.toJson(builder);
+								//userJson = builder.toString();
+								
+								response.setStatus(HttpServletResponse.SC_OK);
+								setCORS(response);
+								response.getWriter().println(userJson);
+							}
+							
+							if(!useCachedList(null)){
+								disposeFocObject_POST(focRequest, focObj);
+							}
+							
+						}else{
+							userJson = "{\"message\": \" Does not exists \"}";
+							response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 							setCORS(response);
 							response.getWriter().println(userJson);
 						}
-						
-						if(!useCachedList(null)){
-							disposeFocObject_POST(focRequest, focObj);
-						}
-						
-					}else{
-						userJson = "{\"message\": \" Does not exists \"}";
+					} else { 
 						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						userJson = checkErrorJson;
 						setCORS(response);
 						response.getWriter().println(userJson);
 					}
