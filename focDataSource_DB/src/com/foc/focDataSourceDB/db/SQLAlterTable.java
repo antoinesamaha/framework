@@ -40,6 +40,29 @@ public class SQLAlterTable extends SQLRequest {
     this.fieldNameToDrop = fieldNameToDrop;
     this.action = DROP;
   }
+  
+  private void appendCreationString_AfterSpecificAdapt() {
+		boolean appended = false;
+		String fieldCreationString = fieldToAlter.getCreationString(fieldToAlterName);
+		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+			if(!Utils.isStringEmpty(fieldCreationString)) {//Normally this is not empty
+				int indexOfSecondSpeachMark = fieldCreationString.indexOf("\"", 2);
+				if(indexOfSecondSpeachMark > 0 && indexOfSecondSpeachMark + 1 < fieldCreationString.length()) {
+    			String columnType = fieldCreationString.substring(indexOfSecondSpeachMark + 1);
+    			String columnName = fieldCreationString.substring(0, indexOfSecondSpeachMark + 1);
+    			if(!Utils.isStringEmpty(columnType) && !Utils.isStringEmpty(columnName)) {
+      			String result = " " + columnName + " TYPE " + columnType;
+      			request.append(result);
+      			appended = true;
+    			}
+				}
+			}
+		} 
+		
+		if(!appended){
+			request.append(fieldCreationString);
+		}
+  }
 
   public boolean buildRequest() {
     request = new StringBuffer("");
@@ -79,7 +102,8 @@ public class SQLAlterTable extends SQLRequest {
         if (fieldToAlter != null) {
         	//particular Case when 
         	if(fieldToAlter instanceof FReferenceField){
-        		request.append(((FReferenceField)fieldToAlter).getCreationString(focDesc.getProvider(), fieldToAlterName));
+        		//request.append(((FReferenceField)fieldToAlter).getCreationString(focDesc.getProvider(), fieldToAlterName));
+        		appendCreationString_AfterSpecificAdapt();
         	}else{
         		//Oracle CLOB needs
         		boolean oracleCLOB = 		focDesc.getProvider() == DBManager.PROVIDER_ORACLE 
@@ -87,27 +111,8 @@ public class SQLAlterTable extends SQLRequest {
 								            		&&  ((FStringField) fieldToAlter).isClob();
         		if(oracleCLOB) request.append(" (");
         		//-----------------
-        		
-        		boolean appended = false;
-        		String fieldCreationString = fieldToAlter.getCreationString(fieldToAlterName);
-        		if(action == MODIFY && focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
-        			if(!Utils.isStringEmpty(fieldCreationString)) {//Normally this is not empty
-        				int indexOfSecondSpeachMark = fieldCreationString.indexOf("\"", 2);
-        				if(indexOfSecondSpeachMark > 0 && indexOfSecondSpeachMark + 1 < fieldCreationString.length()) {
-  	        			String columnType = fieldCreationString.substring(indexOfSecondSpeachMark + 1);
-  	        			String columnName = fieldCreationString.substring(0, indexOfSecondSpeachMark + 1);
-  	        			if(!Utils.isStringEmpty(columnType) && !Utils.isStringEmpty(columnName)) {
-  		        			String result = " " + columnName + " TYPE " + columnType;
-  		        			request.append(result);
-  		        			appended = true;
-  	        			}
-        				}
-        			}
-        		} 
-        		
-        		if(!appended){
-        			request.append(fieldCreationString);
-        		}
+  
+        		appendCreationString_AfterSpecificAdapt();
         		
         		//Oracle CLOB needs
             if(oracleCLOB) request.append(") LOB(\""+fieldToAlterName+"\") STORE AS SECUREFILE ");
