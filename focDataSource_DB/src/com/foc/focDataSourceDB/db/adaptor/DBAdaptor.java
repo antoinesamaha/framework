@@ -721,6 +721,10 @@ public class DBAdaptor {
 //      	modelFieldName = modelFieldName.toUpperCase();
 //      }
       realField = (FField) actualFields.get(modelFieldName);
+//      if(enumer.getFieldCompleteName(focDesc)==FField.REF_FIELD_NAME) {
+//      	continue;
+//      }
+      
       try{
 	      if (realField == null) {
 //	        new SQLTableDetails(focDesc);
