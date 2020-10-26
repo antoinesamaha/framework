@@ -32,11 +32,12 @@ public class FTypeTableName extends FocFieldTypAbstract<FocTableName> {
 
 	@Override
 	public FField newFField(Class focObjClass, Field f, FocTableName a) {
-		FField focField = null;
+		FDescFieldStringBased focField = null;
 		focField = new FDescFieldStringBased(getDBFieldName(f), getFieldTitle(f), FField.NO_FIELD_ID, false);
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
 		focField.setSize(a.size());
+		focField.fillWithAllDeclaredFocDesc();
 		return focField;
 	}
 
