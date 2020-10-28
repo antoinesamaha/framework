@@ -10,5 +10,7 @@
     <TableColumn name="KEY_UNIQUE" caption="Key Unique" />
     <TableColumn name="HAS_WORFLOW" caption="Workflow" />
     <TableColumn name="SHOW_IN_MENU" caption="Show in Menu" />
+    <TableColumn name="FORM_XML" caption="Form XML" />
+	<TableColumn name="TABLE_XML" caption="Table XML" />
   </GuiTree>
 </VerticalLayout>
