@@ -35,6 +35,7 @@ import com.foc.desc.FocObject;
 import com.foc.desc.dataModelTree.DataModelNodeTree;
 import com.foc.desc.field.FField;
 import com.foc.list.FocList;
+import com.foc.list.FocListOrderFocObject;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -85,9 +86,12 @@ import com.vaadin.event.dd.DragAndDropEvent;
 import com.vaadin.event.dd.DropHandler;
 import com.vaadin.event.dd.acceptcriteria.AcceptAll;
 import com.vaadin.event.dd.acceptcriteria.AcceptCriterion;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.Table.HeaderClickEvent;
+import com.vaadin.ui.Table.HeaderClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Panel;
@@ -138,6 +142,9 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private ArrayList<Integer> excludedStatusArray = null;
 	private String codeFrom = null;
 	private String codeTo = null;
+	
+	private String currentSortingExpression = "";
+	private boolean isSortingDescending = true;
 
 	//BAntoineS - Horizontal
 //	private FVVerticalLayout verticalTableLayout = null;
@@ -1276,14 +1283,85 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	public void setAttributes(Attributes attributes) {
 		if(tableOrTree != null){
 			((FocXMLGuiComponent) tableOrTree).setAttributes(attributes);
+
+			if(attributes != null) {
+	      String sortingHeaderSorting = attributes.getValue(FXML.ATT_HEADER_SORTING);
+	      if(sortingHeaderSorting != null && sortingHeaderSorting.equalsIgnoreCase("true")) addHeaderSotringListener();
+			}
 		}
+	}
+	
+	protected void addHeaderSotringListener() {
+		if(getTableTreeDelegate() != null) {
+			Table table = getTableTreeDelegate().getTable();
+			if(table != null) {
+				table.setSortEnabled(true);
+				table.addHeaderClickListener(new HeaderClickListener() {
+					@Override
+					public void headerClick(HeaderClickEvent event) {
+						Object propertyId = event.getPropertyId();
+						if(getFocDataWrapper() != null && propertyId != null) {
+							FocDataWrapper dataWrapper = getFocDataWrapper();
+							if(!currentSortingExpression.equals(propertyId.toString())) {
+								clearAllHeadersFromHtmlTags(table);
+								isSortingDescending = true;
+								currentSortingExpression = propertyId.toString();
+							} else {
+								isSortingDescending = !isSortingDescending;
+							}							
+							if(isSortingDescending) {
+								String headerStr = table.getColumnHeader(propertyId);
+								headerStr = clearHeaderFromHtmlTags(headerStr);
+								table.setColumnHeader(propertyId, headerStr + FontAwesome.SORT_ASC.getHtml());
+							} else {
+								String headerStr = table.getColumnHeader(propertyId);
+								headerStr = clearHeaderFromHtmlTags(headerStr);
+								table.setColumnHeader(propertyId, headerStr + FontAwesome.SORT_DESC.getHtml());
+							}
+							String expression = currentSortingExpression;
+							if(propertyId.toString().contains(">")){
+								expression = propertyId.toString().replace(">", ".");
+							}
+							if(getTableOrTree() != null && getTableOrTree().getFocList() != null) {
+								FocList focList = getTableOrTree().getFocList();
+								FocListOrderFocObject newListOrder = FocListOrderFocObject.newFocListOrder_ForExpression(focList.getFocDesc(), expression, true);
+								newListOrder.setReverted(isSortingDescending);
+					    	dataWrapper.setSortingComparator(newListOrder);
+							}
+				    	dataWrapper.refreshGuiForContainerChanges();
+						}
+					}
+				});		
+			}
+		}
+	}
+	
+	public static void clearAllHeadersFromHtmlTags(Table table) {
+		if(table != null && table.getColumnHeaders() != null) {			
+			String[] headers = table.getColumnHeaders();
+			if(headers != null) {
+				for(int i=0; i < headers.length; i++) {
+					String curr = headers[i];
+					headers[i] = clearHeaderFromHtmlTags(curr);
+				}
+				table.setColumnHeaders(headers);
+			}
+		}
+	}
+	
+	public static String clearHeaderFromHtmlTags(String header) {
+		if(!Utils.isStringEmpty(header)) {
+			int index = header.indexOf("<");
+			if(index > 0) header = header.substring(0, index);
+		}
+		return header;
 	}
 
 	@Override
 	public boolean isXMLLeaf() {
 		return true;
 	}
-
+	
 	@Override
 	public void fillXMLNodeContent(XMLBuilder builder) {
 		tableOrTree.getTableTreeDelegate().fillXMLNodeContent(builder);
