@@ -203,6 +203,8 @@ public interface FXML {
   public static final String ATT_BUTTON_LINK_STYLE        = "linkStyle"         ;
   public static final String ATT_ADD_USER_VIEW  					= "addFormUserView"       ;
   public static final String ATT_ADD_CONTEXT    					= "addFormContext"        ;
+  public static final String ATT_HEADER_SORTING       		= "headerSorting";
+
   
   public static final String TAG_LABEL                     = "Label"             ;
   public static final String TAG_BUTTON                    = "Button"            ;
