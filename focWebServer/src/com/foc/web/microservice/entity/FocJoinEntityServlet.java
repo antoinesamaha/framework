@@ -220,8 +220,8 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	
 	protected GrpMobileModuleRights mobileModule_GetModule(FocServletRequest focRequest, String mobileModuleName) {
 		GrpMobileModuleRights mobileModule = null;
-		if (Globals.getApp() != null && Globals.getApp().getGroup() != null) {
-			mobileModule = Globals.getApp().getGroup().getMobileModuleRightsObject(mobileModuleName);
+		if (Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && Globals.getApp().getUser_ForThisSession().getGroup() != null) {
+			mobileModule = Globals.getApp().getUser_ForThisSession().getGroup().getMobileModuleRightsObject(mobileModuleName);
 		}
 		return mobileModule;
 	}
@@ -235,7 +235,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			GrpMobileModuleRights module = mobileModule_GetModule(focRequest, moduleName);
 			if(module == null) {
 				right = false;
-			} else {
+			} else if(module.getRight() > 0){
 				switch (crud) {
 					case 'C':
 						right = module.getCreate();
