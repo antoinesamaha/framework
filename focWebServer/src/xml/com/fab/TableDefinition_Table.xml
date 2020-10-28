@@ -1,7 +1,7 @@
-<VerticalLayout height="100%" width="100%">
- <ValidationSettings formTitle="Document Table" withApply="true" withSave="false" withAttach="true" withPrint="true" />
- <GuiTable title="Custom Tables" name="FIELD_DEFINITION" dataPath="DATAROOT" caption="" width="700px" height="100%" top="50px" left="20px" checkBox="true" duplicateEnabled="true" >
-  <TableColumn name="NAME" caption="Name" />
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+ <ValidationSettings formTitle="Custom Tables" withApply="true" withSave="false" withAttach="false" withPrint="false" />
+ <GuiTable title="Custom Tables" name="FIELD_DEFINITION" dataPath="DATAROOT" caption="" width="100%" height="100%" expandRatio="1" duplicateEnabled="true" >
+  <TableColumn name="NAME" caption="Name" />  
   <TableColumn name="TITLE" caption="Title" />
   <TableColumn name="CLASS_NAME" caption="Class name" />
   <TableColumn name="EXISTING_TABLE" caption="Existing Tbl" />
@@ -10,5 +10,7 @@
   <TableColumn name="KEY_UNIQUE" caption="Key Unique" />
   <TableColumn name="HAS_WORFLOW" caption="Wrkflw" />
   <TableColumn name="SHOW_IN_MENU" caption="Show in Menu" />
+  <TableColumn name="FORM_XML" caption="Form XML" />
+  <TableColumn name="TABLE_XML" caption="Table XML" />
  </GuiTable>
 </VerticalLayout>

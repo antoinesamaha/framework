@@ -13,31 +13,8 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  ******************************************************************************/
-package com.fab.model.table;
+package com.foc.web.modules.fab;
 
-import com.foc.list.FocList;
-import com.foc.tree.objectTree.FObjectTree;
-
-public class TableDefinitionTree extends FObjectTree {
-	
-	public static final String ROOT_TITLE = "Object Structure";
-	public static TableDefinitionTree tree = null;
-	
-	public TableDefinitionTree(FocList list){
-    super();
-    //FocList list = DepartmentList.getInstance();
-  	//list.loadIfNotLoadedFromDB();
-    setDisplayFieldId(TableDefinitionDesc.FLD_NAME);
-    growTreeFromFocList(list);
-    
-    getRoot().setTitle(ROOT_TITLE);
-  }
-	
-	public static TableDefinitionTree getInstance(){
-		if(tree == null){
-			tree = new TableDefinitionTree(TableDefinitionDesc.getList(FocList.LOAD_IF_NEEDED));
-		}
-		return tree;
-	}
-	
+@SuppressWarnings("serial")
+public class FabTableDefinition_Tree extends FabTableDefinition_Table {
 }
