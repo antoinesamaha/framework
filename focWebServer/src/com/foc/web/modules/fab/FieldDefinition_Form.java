@@ -17,11 +17,9 @@ package com.foc.web.modules.fab;
 
 import com.fab.model.table.FieldDefinition;
 import com.foc.Globals;
-import com.foc.desc.FocDesc;
-import com.foc.shared.dataStore.IFocData;
+import com.foc.IFocEnvironment;
+import com.foc.vaadin.gui.layouts.validationLayout.FVValidationLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
-import com.foc.web.gui.INavigationWindow;
-import com.foc.web.server.xmlViewDictionary.XMLView;
 
 @SuppressWarnings("serial")
 public class FieldDefinition_Form extends FocXMLLayout {
@@ -55,5 +53,22 @@ public class FieldDefinition_Form extends FocXMLLayout {
 			fieldDefinition.setID_ToMax();
 		}
 	}
-  
+
+	@Override
+	public boolean validateDataBeforeCommit(FVValidationLayout validationLayout) {
+		boolean error = super.validateDataBeforeCommit(validationLayout);
+		if(!error) {
+			FieldDefinition fieldDefinition = getFieldDefinition();
+			//Check when size is mandatory
+			if (		fieldDefinition.getSQLType() == FieldDefinition.SQL_TYPE_ID_CHAR_FIELD 
+					|| 	fieldDefinition.getSQLType() == FieldDefinition.SQL_TYPE_ID_INT
+					|| 	fieldDefinition.getSQLType() == FieldDefinition.SQL_TYPE_ID_DOUBLE) {
+				if(fieldDefinition.getLength() == 0) {
+					error = true;
+					Globals.showNotification("Please enter 'Size' value", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
+				}
+			}
+		}
+		return error;
+	}
 }
