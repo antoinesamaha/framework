@@ -235,7 +235,7 @@ public class LoginServlet extends FocSimpleMicroServlet {
 				group.appendKeyValueForFieldName(builder, FField.REF_FIELD_NAME);
 				group.appendKeyValueForFieldName(builder, FField.FNAME_NAME);
 				group.appendKeyValueForFieldName(builder, FocGroupDesc.FNAME_GUEST_APPLICABLE);
-				group.appendKeyValueForFieldName(builder, userDesc.getFieldNameByID(FocGroupDesc.FLD_MOBILE_MODULE_RIGHTS_LIST));
+				group.appendKeyValueForFieldName(builder, group.getThisFocDesc().getFieldNameByID(FocGroupDesc.FLD_MOBILE_MODULE_RIGHTS_LIST));
 				builder.endObject();
 				
 	//			String mobileProfile = group.getMobileProfile();

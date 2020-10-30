@@ -28,15 +28,17 @@ import com.fab.gui.xmlView.UserXMLView;
 import com.fab.gui.xmlView.UserXMLViewDesc;
 import com.fab.gui.xmlView.XMLViewDefinition;
 import com.fab.gui.xmlView.XMLViewDefinitionDesc;
+import com.fab.model.table.FieldDefinition;
+import com.fab.model.table.TableDefinition;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.GroupXMLView;
 import com.foc.admin.GroupXMLViewDesc;
 import com.foc.business.workflow.implementation.WFLogDesc;
-import com.foc.business.workflow.implementation.Workflow;
 import com.foc.dataDictionary.FocDataDictionary;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
@@ -47,9 +49,7 @@ import com.foc.vaadin.FocWebEnvironment;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.XMLBuilder;
 import com.foc.vaadin.gui.xmlForm.FXML;
-import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
 import com.foc.web.gui.INavigationWindow;
-import com.foc.web.modules.workflow.WorkflowWebModule;
 import com.foc.web.server.FocWebServer;
 
 public class XMLViewDictionary implements IXMLViewDictionary {
@@ -308,20 +308,24 @@ public class XMLViewDictionary implements IXMLViewDictionary {
     return view;
   }
   
-  public XMLView get_CreateIfNeeded_WithValidationSettings(XMLViewKey xmlViewKey) {
-  	return get_CreateIfNeeded(xmlViewKey, true);
+  public XMLView get_CreateIfNeeded_WithValidationSettings(XMLViewKey xmlViewKey, TableDefinition tableDef) {
+  	return get_CreateIfNeeded(xmlViewKey, tableDef, true);
   }
   
   public XMLView get_CreateIfNeeded(XMLViewKey xmlViewKey) {
-  	return get_CreateIfNeeded(xmlViewKey, false);
+  	return get_CreateIfNeeded(xmlViewKey, null);
   }
   
-  private XMLView get_CreateIfNeeded(XMLViewKey xmlViewKey, boolean withTableValidationSettings) {
+  public XMLView get_CreateIfNeeded(XMLViewKey xmlViewKey, TableDefinition tableDef) {
+  	return get_CreateIfNeeded(xmlViewKey, tableDef, false);
+  }
+  
+  private XMLView get_CreateIfNeeded(XMLViewKey xmlViewKey, TableDefinition tableDef, boolean withTableValidationSettings) {
     String key = xmlViewKey.builStringKey();
     XMLView view = getXmlViewDicMap().get(key);
     
     if (view == null) {
-      view = putXmlViewDefinition(newViewDefinition(xmlViewKey, withTableValidationSettings));
+      view = putXmlViewDefinition(newViewDefinition(xmlViewKey, tableDef, withTableValidationSettings));
     }
     
     return view;
@@ -384,7 +388,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
 			      focDesc = list.getFocDesc();
 			    }
 		      if(focDesc != null && focDesc.getFabTableDefinition() != null && !focDesc.getFabTableDefinition().isAlreadyExisting()){
-		        view = get_CreateIfNeeded(xmlViewKey);
+		        view = get_CreateIfNeeded(xmlViewKey, focDesc.getFabTableDefinition());
 		      }
 			  }
 	  	}
@@ -463,7 +467,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
 	  return centralPanel;
   }
   
-  public XMLViewDefinition newViewDefinition(XMLViewKey key, boolean withTableValidationSettings){
+  public XMLViewDefinition newViewDefinition(XMLViewKey key, TableDefinition tableDef, boolean withTableValidationSettings){
     FocList listOfViews = XMLViewDefinitionDesc.getList(FocList.LOAD_IF_NEEDED);
     XMLViewDefinition viewDefinition = (XMLViewDefinition) listOfViews.newEmptyItem(); 
     
@@ -473,27 +477,66 @@ public class XMLViewDictionary implements IXMLViewDictionary {
     viewDefinition.setView(key.getUserView());
     viewDefinition.setJavaClassName("");
     if(key.getType() == XMLViewKey.TYPE_TABLE){
-    	if(withTableValidationSettings){
-    		StringBuilder builder = new StringBuilder();
-    		builder.append("<VerticalLayout width=\"100%\" height=\"700px\">\n");
-    		builder.append("\t" + addValidationSettings());
-    		builder.append("\t<GuiTable name=\"MAIN_TABLE\" dataPath=\"DATAROOT\" width=\"100%\" height=\"650px\">\n");
-    		builder.append("\t</GuiTable>\n");
-    		builder.append("</VerticalLayout>");
-    		viewDefinition.setXML(builder.toString());
-    	}else{
-    		viewDefinition.setXML("<VerticalLayout width=\"100%\" height=\"700px\">\n  <GuiTable name=\"MAIN_TABLE\" dataPath=\"DATAROOT\" width=\"100%\" height=\"650px\">\n  </GuiTable>\n</VerticalLayout>");
-    	}
+  		StringBuilder builder = new StringBuilder();
+  		builder.append("<VerticalLayout width=\"100%\" height=\"100%\" captionMargin=\"0\" spacing=\"true\" margin=\"true\" fullscreen=\"true\">\n");
+  		if(withTableValidationSettings){
+  			builder.append("\t" + addValidationSettings());
+  		}
+  		builder.append("\t<GuiTable name=\"MAIN_TABLE\" dataPath=\"DATAROOT\" width=\"100%\" height=\"100%\" expandRatio=\"1\" >\n");
+
+			FocList tableFieldDefinitionList = tableDef.getFieldDefinitionList();
+			for(int i=0; i<tableFieldDefinitionList.size(); i++){
+				FieldDefinition fieldDefinition = (FieldDefinition) tableFieldDefinitionList.getFocObject(i);
+				if(fieldDefinition != null){
+					builder.append("\t\t");
+					builder.append("<TableColumn");
+					builder.append(" name=\"" + fieldDefinition.getName() + "\"");
+					builder.append(" caption=\"" + fieldDefinition.getTitle() + "\"");
+					builder.append(" />\n");
+				}
+			}    		
+  		
+  		builder.append("\t</GuiTable>\n");
+  		builder.append("</VerticalLayout>");
+  		viewDefinition.setXML(builder.toString());
+//    	}else{
+//    		viewDefinition.setXML("<VerticalLayout width=\"100%\" height=\"700px\">\n  <GuiTable name=\"MAIN_TABLE\" dataPath=\"DATAROOT\" width=\"100%\" height=\"650px\">\n  </GuiTable>\n</VerticalLayout>");
+//    	}
     }else{
-    	if(withTableValidationSettings){
-    		StringBuilder builder = new StringBuilder();
-    		builder.append("<VerticalLayout width=\"100%\" height=\"700px\">\n");
-    		builder.append("\t" + addValidationSettings());
-    		builder.append("</VerticalLayout>");
-    		viewDefinition.setXML(builder.toString());
-    	}else{
-    		viewDefinition.setXML("<VerticalLayout width=\"100%\" height=\"700px\">\n</VerticalLayout>");
-    	}
+  		StringBuilder builder = new StringBuilder();
+  		builder.append("<VerticalLayout width=\"100%\" height=\"700px\">\n");
+  		if(withTableValidationSettings){
+  			builder.append("\t" + addValidationSettings());
+  		}
+  		
+			FocList tableFieldDefinitionList = tableDef.getFieldDefinitionList();
+			for(int i=0; i<tableFieldDefinitionList.size(); i++){
+				FieldDefinition fieldDefinition = (FieldDefinition) tableFieldDefinitionList.getFocObject(i);
+				if(fieldDefinition != null){
+					builder.append("\t\t");
+					builder.append("<GuiField");
+					if (fieldDefinition.getSQLType() == FieldDefinition.SQL_TYPE_ID_OBJECT_FIELD) {
+						FocDesc lookupDesc = Globals.getApp().getFocDescByName(fieldDefinition.getName());
+						if(lookupDesc != null && lookupDesc.getFieldByName(FField.FNAME_NAME) != null) {
+							builder.append(" name=\"" + fieldDefinition.getName() + ">NAME\"");
+						} else if(lookupDesc != null && lookupDesc.getFieldByName("Name") != null) {
+							builder.append(" name=\"" + fieldDefinition.getName() + ">Name\"");
+						} else {
+							builder.append(" name=\"" + fieldDefinition.getName() + ">REF\"");
+						}
+					} else {
+						builder.append(" name=\"" + fieldDefinition.getName() + "\"");
+					}
+					builder.append(" caption=\"" + fieldDefinition.getTitle() + "\"");
+					builder.append(" />\n");
+				}
+			}    		
+  		
+  		builder.append("</VerticalLayout>");
+  		viewDefinition.setXML(builder.toString());
+//    	}else{
+//    		viewDefinition.setXML("<VerticalLayout width=\"100%\" height=\"700px\">\n</VerticalLayout>");
+//    	}
     }
     
     listOfViews.add(viewDefinition);
@@ -607,7 +650,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   	XMLViewKey key = newXMLViewKey_ForDocumentHeader(XMLViewKey.VIEW_DEFAULT);
   	
   	if(getXmlViewDicMap().get(key.getStringKey()) == null){
-	  	XMLViewDefinition xmlViewDef = newViewDefinition(key, false);
+	  	XMLViewDefinition xmlViewDef = newViewDefinition(key, null, false);
 	  	
 	  	updateDocumentHearerView(xmlViewDef);
   	}
@@ -615,7 +658,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   	key = newXMLViewKey_ForDocumentHeader(XMLViewKey.VIEW_PRINTING);
   	
   	if(getXmlViewDicMap().get(key.getStringKey()) == null){
-	  	XMLViewDefinition xmlViewDef = newViewDefinition(key, false);
+	  	XMLViewDefinition xmlViewDef = newViewDefinition(key, null, false);
 	  	
 	  	updateDocumentHearerView_Printing(xmlViewDef);
   	}  	
