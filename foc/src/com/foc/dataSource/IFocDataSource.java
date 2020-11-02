@@ -20,9 +20,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.fab.model.table.TableDefinition;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.ReferenceChecker;
@@ -37,6 +35,7 @@ public interface IFocDataSource {
 	public void          setEmptyDatabaseJustCreated(boolean emptyDBJustCreated);
 	
 	public int           getProvider(String dbSouceKey);
+	public int           getServerVersion(String dbSourceKey);
 	
 	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
 	public boolean       command_ExecuteRequest(StringBuffer sqlRequest);

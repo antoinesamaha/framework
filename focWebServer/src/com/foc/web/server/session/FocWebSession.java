@@ -49,6 +49,8 @@ public class FocWebSession implements Serializable {
 	
 	private HashMap<String, Object> parameterMap = null;
 	
+	public static final String PARAM_KEY_IP = "IP";
+	
 	public FocWebSession(HttpSession session){
 		this.httpSession = session;
 		userSession = new UserSession();

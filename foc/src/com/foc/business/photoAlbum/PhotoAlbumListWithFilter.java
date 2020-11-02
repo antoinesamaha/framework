@@ -107,6 +107,14 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
     }
   }
 
+  public void applyFilterOnObjectReference(long objRef){
+    if(objRef > 0){
+      FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
+      NumCondition mcCond = (NumCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.OBJECT_REF_CONDITION);
+      mcCond.forceToValue((FocListFilter) getFocListFilter(), NumCondition.OPERATOR_EQUALS, objRef, objRef);
+    }
+  }
+  
   public void applyFilterOnObjectReference(int objRef){
     if(objRef > 0){
       FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();

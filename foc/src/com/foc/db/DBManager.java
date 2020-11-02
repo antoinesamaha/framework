@@ -122,6 +122,14 @@ public class DBManager {
 		return getProvider(null);
 	}
 
+	public int getServerVersion(String dbSourceKey) {
+		return Globals.getApp().getDataSource().getServerVersion(dbSourceKey);
+	}
+	
+	public int getServerVersion() {
+		return getServerVersion(null);
+	}
+	
 //	public void setProvider(int provider) {
 //		this.provider = provider;
 //		if(provider == PROVIDER_ORACLE || provider == PROVIDER_H2){

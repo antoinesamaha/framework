@@ -29,6 +29,7 @@ public class TableDefinitionTree extends FObjectTree {
   	//list.loadIfNotLoadedFromDB();
     setDisplayFieldId(TableDefinitionDesc.FLD_NAME);
     growTreeFromFocList(list);
+    
     getRoot().setTitle(ROOT_TITLE);
   }
 	

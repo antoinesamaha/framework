@@ -32,7 +32,7 @@ public class SQLSelectJoinCount extends SQLSelectJoinRequest {
 		StringBuffer fakeBuffer = new StringBuffer();
 		super.addTableFieldsToSelect(focDesc, fakeBuffer, tableAlias);
 		
-    fieldsCommaSeparated.append("COUNT(");
+    fieldsCommaSeparated.append("COUNT(DISTINCT ");
     fieldsCommaSeparated.append(fieldName);
     fieldsCommaSeparated.append(")");
 	}

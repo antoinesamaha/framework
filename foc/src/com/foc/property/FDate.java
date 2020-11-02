@@ -169,6 +169,7 @@ public class FDate extends FProperty {
     if(date.compareTo(this.date) != 0 && !equalAtMidnight){
     	if(getFocField() == null || getFocField().isPropertyModificationAllowed(this, date, true)){
         this.date.setTime(date.getTime());
+        setValueNull(false);
     		notifyListeners(userEditingEvent);
     	}
     }
@@ -197,39 +198,51 @@ public class FDate extends FProperty {
   }
 
   public String getSqlString() {
-    if (getProvider() == DBManager.PROVIDER_ORACLE){
-      return "TO_DATE (" + "'" + convertDateToSQLString(date) + "'" + " , "+ "'DD-MON-YYYY')";
-    }else if (getProvider() == DBManager.PROVIDER_POSTGRES){
-    	return "'" + convertDateToSQLString(date) + "'";
-    }else if (getProvider() == DBManager.PROVIDER_MSSQL){
-    	return "CAST(N\'"+convertDateToSQLString(date)+"\' AS Date)";
-    }else if (getProvider() == DBManager.PROVIDER_H2){
-    	return "\'" + convertDateToSQLString(date) + "\'";
-    }else{
-      return "\"" + convertDateToSQLString(date) + "\"";
-    }
+  	if (isValueNull()) {
+  		return "NULL";
+  	} else {
+	    if (getProvider() == DBManager.PROVIDER_ORACLE){
+	      return "TO_DATE (" + "'" + convertDateToSQLString(date) + "'" + " , "+ "'DD-MON-YYYY')";
+	    }else if (getProvider() == DBManager.PROVIDER_POSTGRES){
+	    	return "'" + convertDateToSQLString(date) + "'";
+	    }else if (getProvider() == DBManager.PROVIDER_MSSQL){
+	    	return "CAST(N\'"+convertDateToSQLString(date)+"\' AS Date)";
+	    }else if (getProvider() == DBManager.PROVIDER_H2){
+	    	return "\'" + convertDateToSQLString(date) + "\'";
+	    }else{
+	      return "\"" + convertDateToSQLString(date) + "\"";
+	    }
+  	}
   }
 
   public void setSqlStringInternal(String str) {
     try {
-      if (str != null && !str.equals("0000-00-00") && str != ""){
-      	int idx = str.indexOf(" ");
-      	String datteStr = null;
-      	
-      	if(idx > 0){
-      		datteStr = str.substring(0, idx).trim();
-      	}else{
-      		datteStr = str.substring(0, 10).trim();
-      	}
-      	
-      	int zerosToAdd = 4 - datteStr.indexOf("-");
-      	while(zerosToAdd > 0){
-      		datteStr = "0"+datteStr;
-      		zerosToAdd--;
-      	}
-      	
-        date = java.sql.Date.valueOf(datteStr);
-      }
+    	if (str == null) {
+    		if (isAllowNullProperties()) {
+    			setDate(new java.sql.Date(getZeroReference()), false);
+    			setValueNull(true);
+    		}
+    	} else {
+	      if (str != null && !str.equals("0000-00-00") && str != ""){
+	      	int idx = str.indexOf(" ");
+	      	String datteStr = null;
+	      	
+	      	if(idx > 0){
+	      		datteStr = str.substring(0, idx).trim();
+	      	}else{
+	      		datteStr = str.substring(0, 10).trim();
+	      	}
+	      	
+	      	int zerosToAdd = 4 - datteStr.indexOf("-");
+	      	while(zerosToAdd > 0){
+	      		datteStr = "0"+datteStr;
+	      		zerosToAdd--;
+	      	}
+	      	
+	        date = java.sql.Date.valueOf(datteStr);
+	        setValueNull(false);
+	      }
+    	}
     } catch (Exception e) {
     	Globals.logString("!!!! Trying to parse date: "+str);
       Globals.logException(e);
@@ -339,7 +352,13 @@ public class FDate extends FProperty {
   @Override
   public void setValue(Object newValue) throws ReadOnlyException, Converter.ConversionException {
 		if(newValue == null){
-			setDate(new java.sql.Date(getZeroReference()));
+			if (isAllowNullProperties()) {
+				boolean notifyListeners = !isValueNull();
+				setValueNull_AndResetIntrinsicValue(false);
+				if(notifyListeners) notifyListeners(false);
+			} else {
+				setDate(new java.sql.Date(getZeroReference()));
+			}
 		}else{
 			setDate(new java.sql.Date(((java.util.Date)newValue).getTime()));
 		}
@@ -354,5 +373,10 @@ public class FDate extends FProperty {
   @Override
   public void copy(FProperty sourceProp){
   	super.copy(sourceProp);
+  }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	date = new java.sql.Date(getZeroReference());
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
   }
 }

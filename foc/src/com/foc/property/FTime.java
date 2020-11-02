@@ -166,6 +166,7 @@ public class FTime extends FProperty {
 
   public void setTime(java.sql.Time time) {
     if(time != null && this.time != null && !time.toString().equals(this.time.toString()) && time.getTime() != this.time.getTime()){
+    	setValueNull(false);
       this.time.setTime(time.getTime());
       notifyListeners();
     }
@@ -180,6 +181,9 @@ public class FTime extends FProperty {
   }
 
   public String getSqlString() {
+  	if (isValueNull()) {
+  		return getNullSQLValue();
+  	} else {
       if (getProvider() == DBManager.PROVIDER_ORACLE){
         return "TO_DATE (" + "'" + convertTimeToSQLString(time) + "'" + " , "+ "'DD-MON-YYYY HH24:MI:SS')";
       }else if(getProvider() == DBManager.PROVIDER_POSTGRES){
@@ -191,35 +195,44 @@ public class FTime extends FProperty {
       }else{
         return "\"" + time.toString() + "\"";
       }
+  	}
   }
 
   public void setSqlStringInternal(String str) {
     try {
-      if (str != null && !str.equals("00:00:00")){
-      	if(getProvider() == DBManager.PROVIDER_ORACLE){
-      		try{
-      			if(str.length()-1 > 11 && 11+5 < str.length()){
-	      			String timeStr = str.substring(11, 11+5);//(str.length() -3));
-	      			if(!timeStr.equals("00:00")){
-	      				time = java.sql.Time.valueOf(timeStr+":00");
+    	if (str == null){
+	  		if (isAllowNullProperties()) {
+	  			time = getZeroTime_Copy();
+	  			setValueNull(true);
+	  		}
+    	} else {
+	      if (str != null && !str.equals("00:00:00")){
+	      	if(getProvider() == DBManager.PROVIDER_ORACLE){
+	      		try{
+	      			if(str.length()-1 > 11 && 11+5 < str.length()){
+		      			String timeStr = str.substring(11, 11+5);//(str.length() -3));
+		      			if(!timeStr.equals("00:00")){
+		      				time = java.sql.Time.valueOf(timeStr+":00");
+		      			}
+	      			}else{
+	      				time = java.sql.Time.valueOf("00:00:00");
 	      			}
-      			}else{
-      				time = java.sql.Time.valueOf("00:00:00");
-      			}
-      		}catch(Exception e){
-      			Globals.logString("FTime.setSqlStringInternal() str="+str);
-      			Globals.logExceptionWithoutPopup(e);
-      		}
-      	}else if(getProvider() == DBManager.PROVIDER_MSSQL){
-      		int dotIndex = str.indexOf('.');
-      		if(dotIndex > 0){
-      			str = str.substring(0, dotIndex);
-      		}
-      		time = java.sql.Time.valueOf(str);
-      	}else{
-      		time = java.sql.Time.valueOf(str);
-      	}
-      }
+	      		}catch(Exception e){
+	      			Globals.logString("FTime.setSqlStringInternal() str="+str);
+	      			Globals.logExceptionWithoutPopup(e);
+	      		}
+	      	}else if(getProvider() == DBManager.PROVIDER_MSSQL){
+	      		int dotIndex = str.indexOf('.');
+	      		if(dotIndex > 0){
+	      			str = str.substring(0, dotIndex);
+	      		}
+	      		time = java.sql.Time.valueOf(str);
+	      	}else{
+	      		time = java.sql.Time.valueOf(str);
+	      	}
+	      	setValueNull(false);
+	      }
+    	}
     } catch (Exception e) {
     	Globals.logString(str);
       Globals.logException(e);
@@ -304,6 +317,11 @@ public class FTime extends FProperty {
   
   public void setEmptyValue(){
   	setTime(getZeroTime_Copy());
+  }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	time = getZeroTime_Copy();
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
   }
   
   //-------------------------------

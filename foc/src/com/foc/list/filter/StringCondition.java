@@ -65,10 +65,25 @@ public class StringCondition extends FilterCondition {
     FProperty prop = filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OPERATION);
     return prop.getInteger();
   }
+  
+  public void setOperation(FocListFilter filter, int operation){
+    FProperty prop = filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OPERATION);
+    prop.setInteger(operation);
+  }
+  
+  public void setOperation(FocListFilter filter, String operation){
+    FProperty prop = filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_OPERATION);
+    prop.setString(operation);
+  }
 
   public String getText(FocListFilter filter){
     FProperty prop = filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_TEXT);
     return prop.getString();
+  }
+  
+  public void setText(FocListFilter filter, String text){
+    FProperty prop = filter.getFocProperty(getFirstFieldID() + FLD_CONDITION_TEXT);
+    prop.setString(text);
   }
 
   public void setToValue(FocListFilter filter, int operator, String value){
@@ -363,4 +378,27 @@ public class StringCondition extends FilterCondition {
 		return description;
 	}
 
+	@Override
+	public void parseString(FocListFilter filter, String str) {
+		super.parseString(filter, str);
+		
+		String[] parts = str.split("::");
+		if(parts.length > 0) {
+			String operation = parts[0];
+      if(ConfigInfo.isArabic()){//The String always contains English if the application is arabic we need to convert because Multiplechoice contains arabic
+      	if(operation.equals("None")) operation = "لا شرط";
+      	else if(operation.equals("Begins with")) operation = "يبداء ب";
+      	else if(operation.equals("Contains")) operation = "يحتوي على";
+      	else if(operation.equals("Equals")) operation = "=";
+      	else if(operation.equals("Empty")) operation = "فارغ";
+      	else if(operation.equals("Not Empty")) operation = "غير فارغ";
+      }
+			setOperation(filter, operation);
+			
+			if(parts.length > 1) {
+				String text = parts[1];
+			  setText(filter, text);
+			}
+		}
+	}
 }

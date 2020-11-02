@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
@@ -99,6 +100,22 @@ public class FocListGroupBy {
 		return "CONCAT("+a+","+b+")";
 	}
 	
+	private String getConcatsFromConcatenationFields(String concatenationFields) {
+		String concats = "";
+		String[] parts = concatenationFields.split(LISTAGG_SUB_SEPARATOR);
+		for(int p=parts.length-1; p>=0; p--) {
+			String subfield = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), parts[p]);
+
+			if(!Utils.isStringEmpty(concats)) {
+				concats = addAConcat(subfield, concats);
+			} else {
+				concats = subfield;
+			}
+			concats = addAConcat("'~'", concats);
+		}
+		return concats;
+	}
+	
 	public FField addField_FormulaSingleText(FocDesc focDesc, FField field, String formula, String concatenationFields){
 		int fieldID = field.getID();
 		String fieldName = field.getDBName(); 
@@ -110,30 +127,32 @@ public class FocListGroupBy {
 			String formulaAfter  = "";
 			
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
-//				formulaBefore = "LISTAGG(";
-//				formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
-				
-				formulaBefore = "RTRIM(XMLAGG(XMLELEMENT(E,";
-			  formulaAfter  = ",'"+LISTAGG_SEPARATOR+"').EXTRACT('//text()') ORDER BY "+fieldName+").GetClobVal(),',') AS LIST";
-
-				if(!Utils.isStringEmpty(concatenationFields)) {
-					String concats = "";
-					formulaBefore += "CONCAT(";
-					String[] parts = concatenationFields.split(LISTAGG_SUB_SEPARATOR);
-					for(int p=parts.length-1; p>=0; p--) {
-						String subfield = DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), parts[p]);
-
-						if(!Utils.isStringEmpty(concats)) {
-							concats = addAConcat(subfield, concats);
-						} else {
-							concats = subfield;
-						}
-						concats = addAConcat("'~'", concats);
+				if(ConfigInfo.isOracleListAggCLOB() && focDesc.isUseOracleListAggCLOB()) {
+					formulaBefore = "LISTAGG_CLOB(";
+					formulaAfter  = ")";
+					
+					if(!Utils.isStringEmpty(concatenationFields)) {
+						formulaBefore += "CONCAT(";
+						String concats = getConcatsFromConcatenationFields(concatenationFields);
+						formulaAfter = "," + concats + "))"; 
 					}
-					formulaAfter = "," + concats + ")" + formulaAfter; 
+					
+					addField_Formulas(fieldID, formulaBefore, formulaAfter);
+				} else {
+					formulaBefore = "LISTAGG(";
+					formulaAfter  = ", '"+LISTAGG_SEPARATOR+"') WITHIN GROUP (ORDER BY "+fieldName+")";
+					
+	//				formulaBefore = "RTRIM(XMLAGG(XMLELEMENT(E,";
+	//			  formulaAfter  = ",'"+LISTAGG_SEPARATOR+"').EXTRACT('//text()') ORDER BY "+fieldName+").GetClobVal(),',') AS LIST";
+	
+					if(!Utils.isStringEmpty(concatenationFields)) {
+						formulaBefore += "CONCAT(";
+						String concats = getConcatsFromConcatenationFields(concatenationFields);
+						formulaAfter = "," + concats + ")" + formulaAfter; 
+					}
+					
+					addField_Formulas(fieldID, formulaBefore, formulaAfter);
 				}
-				
-				addField_Formulas(fieldID, formulaBefore, formulaAfter);
 			} else if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_POSTGRES) {
 				formulaBefore = "STRING_AGG(";
 				formulaAfter  = "::character varying, '"+LISTAGG_SEPARATOR+"' ORDER BY "+fieldName+")";
@@ -298,7 +317,7 @@ public class FocListGroupBy {
 		
 		@Override
 		public void propertyModified(FProperty property) {
-			if(property.isLastModifiedBySetSQLString()) {
+			if(property.isLastModifiedBySetSQLString() && property.getString() != null) {
 				ArrayList valuesArray = null;
 				String result = "";
 				StringTokenizer tokzer = new StringTokenizer(property.getString(), LISTAGG_SEPARATOR, false);
@@ -310,9 +329,13 @@ public class FocListGroupBy {
 							//if Object I want to convert to String
 							if(list != null && !Utils.isStringEmpty(captionProperty)) {
 								long ref = Long.valueOf(token);
-								FocObject focObjectValue = list.searchByReference(ref);
-								FProperty prop = focObjectValue != null ? focObjectValue.getFocPropertyForPath(captionProperty) : null;
-								token = prop != null ? prop.getString() : "";
+								if(ref == 0) {
+									token = "";
+								} else {
+									FocObject focObjectValue = list.searchByReference(ref);
+									FProperty prop = focObjectValue != null ? focObjectValue.getFocPropertyForPath(captionProperty) : null;
+									token = prop != null ? prop.getString() : "";
+								}
 							}
 							//----------------
 

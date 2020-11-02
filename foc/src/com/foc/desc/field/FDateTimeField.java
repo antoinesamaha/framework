@@ -58,11 +58,15 @@ public class FDateTimeField extends FDateField {
   }
 
   public FProperty newProperty(FocObject masterObj, Object defaultValue){
-    return new FDateTime(masterObj, getID(), (java.sql.Date)defaultValue);
+  	FProperty prop = new FDateTime(masterObj, getID(), (java.sql.Date)defaultValue);
+    if(isAllowNullProperties() && defaultValue == null) prop.setValueNull(true);
+    return prop;
   }
 
   public FProperty newProperty(FocObject masterObj){
-    return new FDateTime(masterObj, getID(), new java.sql.Date(0));
+    FProperty prop = new FDateTime(masterObj, getID(), new java.sql.Date(0));
+    if (isAllowNullProperties()) prop.setValueNull(true);
+    return prop;    
   }
 
   public Component getGuiComponent(FProperty prop){

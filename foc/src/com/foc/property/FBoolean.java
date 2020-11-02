@@ -38,12 +38,17 @@ public class FBoolean extends FProperty {
 
   public String getString() {
     //return String.valueOf(bVal);
-    return String.valueOf(getInteger());
+    return isValueNull() ? getNullSQLValue() : String.valueOf(getInteger());
   }
 
   public void setString(String str) {
     if (str == null || str.compareTo("") == 0) {
-      setBoolean(false);
+    	if (isAllowNullProperties()) {
+    		setBoolean_WithoutListeners(false);
+    		setValueNull_WithListener(true);
+    	} else {
+    		setBoolean(false);
+    	}
     } else {
     	try{
     		setInteger(Integer.valueOf(str).intValue());
@@ -95,13 +100,20 @@ public class FBoolean extends FProperty {
   }
 
   public void setBoolean(boolean b, boolean userEditingEvent) {
-    if(bVal != b){
-      bVal = b;
-      notifyListeners(userEditingEvent);
+  	boolean notifyListener = false;
+  	if(isValueNull()) {
+  		setValueNull(false);
+  		notifyListener = true;
+  	}
+    if(bVal != b) {
+    	bVal = b;
+    	notifyListener = true;
     }
+    if(notifyListener) notifyListeners(userEditingEvent);
   }
 
   public void setBoolean_WithoutListeners(boolean b) {
+  	setValueNull(false);
     bVal = b;
   }
 
@@ -139,4 +151,10 @@ public class FBoolean extends FProperty {
     if(bool) return "true";
     else return "false";
   }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	bVal = false;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
+
 }

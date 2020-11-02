@@ -39,10 +39,6 @@ public class FMultipleChoiceString extends FString implements IFMultipleChoicePr
 		}
 	}
 	
-  public void setString(String str) {
-  	super.setString(str);
-  }
-	
 	private int getNextChoiceId(){
 		return localChoicesArray == null ? 1 : localChoicesArray.size() + 1;
 	}

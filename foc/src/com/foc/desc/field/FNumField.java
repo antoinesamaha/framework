@@ -10,6 +10,7 @@ import java.text.NumberFormat;
 import javax.swing.JTextField;
 
 import com.fab.model.table.FieldDefinition;
+import com.foc.ConfigInfo;
 import com.foc.business.multilanguage.MultiLanguage;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
@@ -43,6 +44,12 @@ public class FNumField extends FField {
   public FNumField(String name, String title, int id, boolean key, int size, int decimals, boolean groupingUsed) {
     super(name, title, id, key, size, decimals);
     this.groupingUsed = groupingUsed;
+  }
+  
+  public FNumField(String name, String title, int id, boolean key, int size, int decimals, boolean groupingUsed, boolean displayZeroValues) {
+    super(name, title, id, key, size, decimals);
+    this.groupingUsed = groupingUsed;
+    this.displayZeroValues = displayZeroValues;
   }
 
   public int getDecimals() {
@@ -80,11 +87,19 @@ public class FNumField extends FField {
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FDouble(masterObj, getID(), defaultValue != null ? ((Double)defaultValue).doubleValue() : 0);
+  	FDouble prop = new FDouble(masterObj, getID(), defaultValue != null ? ((Double)defaultValue).doubleValue() : 0);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+    return prop;
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return new FDouble(masterObj, getID(), 0);
+  	FDouble prop = new FDouble(masterObj, getID(), 0);
+  	if(isAllowNullProperties()) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
   
   @Override
@@ -124,6 +139,10 @@ public class FNumField extends FField {
   
   public boolean isGroupingUsed(){
   	return this.groupingUsed;
+  }
+  
+  public void setGroupingUsed(boolean groupingUsed){
+  	this.groupingUsed = groupingUsed;
   }
 
   public boolean isObjectContainer(){

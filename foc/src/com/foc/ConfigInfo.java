@@ -21,11 +21,12 @@ import com.foc.util.Utils;
  */
 public class ConfigInfo {
 	
-  public static final String JDBC_DRIVERS   = "jdbc.drivers";
-  public static final String JDBC_URL       = "jdbc.url";
-  public static final String JDBC_USERNAME  = "jdbc.username";
-  public static final String JDBC_PASSWORD  = "jdbc.password";
-  public static final String JDBC_XPASSWORD = "jdbc.Xpassword";
+  public static final String JDBC_DRIVERS        = "jdbc.drivers";
+  public static final String JDBC_URL            = "jdbc.url";
+  public static final String JDBC_USERNAME       = "jdbc.username";
+  public static final String JDBC_PASSWORD       = "jdbc.password";
+  public static final String JDBC_XPASSWORD      = "jdbc.Xpassword";
+  public static final String JDBC_SERVER_VERSION = "jdbc.server.version";
 	
   private static boolean loaded = false;
   
@@ -37,6 +38,7 @@ public class ConfigInfo {
   private static String  jdbcUserName  = null;
   private static String  jdbcPassword  = null;
   private static String  jdbcXPassword = null;
+  private static int     jdbcServerVersion = 0;
   private static String  syncMode      = null;//N none, S server, R remote
   
   private static String  userName          = null;
@@ -45,6 +47,10 @@ public class ConfigInfo {
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
   private static int     passwordPolicy = 0;
+  
+  private static boolean allowNullProperties = false;
+  
+  private static long    dbConnectionDuration = 0;    
   
   private static String  windowTitle   = null;  
 
@@ -78,6 +84,7 @@ public class ConfigInfo {
   private static String  codeProjectPath             = null;
   private static String  focDataServletURL           = null;
   private static String  focWebServerClassName       = null;
+  private static String  focWebUIClassName           = null;
   private static boolean adaptDataModelAtStartup     = true;
   private static boolean adaptEnabled                = true;
   private static boolean adaptIndexesEnabled         = true;
@@ -115,6 +122,10 @@ public class ConfigInfo {
   
   private static boolean refreshCachedLists = false;
   private static boolean logOpenEvent       = true;
+  
+  private static boolean oracleListAggCLOB = false;
+  
+  private static String jwtTokenAlgorithmKey = null;
   
   private static Properties props = null; 
   
@@ -194,6 +205,10 @@ public class ConfigInfo {
         jdbcUserName  = getProperty(JDBC_USERNAME);
         jdbcPassword  = getProperty(JDBC_PASSWORD);
         jdbcXPassword = getProperty(JDBC_XPASSWORD);
+        
+        str = getProperty(JDBC_SERVER_VERSION);
+        if(str != null) jdbcServerVersion = Utils.parseInteger(str, 0);
+        
         Globals.logString("Drivers: "+jdbcDrivers);
         Globals.logString("URL: "+jdbcURL);
         
@@ -236,12 +251,17 @@ public class ConfigInfo {
         tempDownloadFolder = getProperty("tempDownloadFolder");
         blobStorageDirectory = getProperty("blobStorageDirectory");
         
+        jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
+        
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
         	serverClassName = "com.foc.web.server.FocWebServer";
         }
         focWebServerClassName = serverClassName;
         Globals.logString("WebServerClass: "+focWebServerClassName);
+        
+        focWebUIClassName = getProperty("focWebUIClassName");
+        Globals.logString("focWebUIClassName - Used un REST API backend: "+focWebUIClassName);        
         
         String cloudClassName = getProperty("cloudStorageClass");
         if(cloudClassName == null){
@@ -388,6 +408,9 @@ public class ConfigInfo {
         
         str = getProperty("passwordPolicy");
         if(str != null) passwordPolicy = Utils.parseInteger(str, 0);
+
+        str = getProperty("dbConnectionDuration");
+        if(str != null) dbConnectionDuration = Utils.parseLong(str, 0);
         
         str = getProperty("statusTitle.proposal");
         if(str != null && !str.isEmpty()){
@@ -411,7 +434,10 @@ public class ConfigInfo {
         
         str = getProperty("logOpenEvent");
         logOpenEvent = str != null ? str.compareTo("1") == 0 : true;
-        
+
+        str = getProperty("oracleListAggCLOB");
+        oracleListAggCLOB = str != null ? str.compareTo("1") == 0 : true;
+
         userName          = getProperty("userLogin");
         password          = getProperty("password");
         encriptedPassword = getProperty("encriptedPassword");
@@ -424,6 +450,11 @@ public class ConfigInfo {
       	if(exitWithoutValidationPromptString != null 
       			&& (exitWithoutValidationPromptString.toLowerCase().equals("true") || exitWithoutValidationPromptString.equals("1"))) {
       		exitWithoutValidationPrompt = true; 
+      	}
+
+      	String allowNullPropertiesString = getProperty("allowNullProperties");
+      	if(allowNullPropertiesString != null) {
+      		allowNullProperties = allowNullPropertiesString.equals("1"); 
       	}
       	
       	String createAdminUserIfNotExistString = getProperty("createAdminUserIfNotExist");
@@ -467,6 +498,10 @@ public class ConfigInfo {
   
   public static String getBlobStorageDirectory(){
   	return blobStorageDirectory;
+  }
+  
+  public static String getJWTTokenAlgorithmKey() {
+  	return jwtTokenAlgorithmKey;
   }
   
   public static String getWindowTitle() {
@@ -517,6 +552,10 @@ public class ConfigInfo {
     return jdbcUserName;
   }
 
+  public static int getJdbcServerVersion() {
+    return jdbcServerVersion;
+  }
+  
   public static boolean isDevMode() {
     return devMode;
   }
@@ -672,6 +711,10 @@ public class ConfigInfo {
 
   public static String getFocWebServerClassName() {
 	  return focWebServerClassName;
+	}
+
+  public static String getFocWebUIClassName() {
+	  return focWebUIClassName;
 	}
 
 	public static boolean isRemoveUndeclaredIndexesDuringAdaptDataModel(){
@@ -850,5 +893,16 @@ public class ConfigInfo {
 	public static boolean isLogOpenEvent() {
 		return logOpenEvent;
 	}
-	
+
+	public static boolean isOracleListAggCLOB() {
+		return oracleListAggCLOB;
+	}
+
+	public static long getDbConnectionDuration() {
+		return dbConnectionDuration;
+	}
+
+	public static boolean isAllowNullProperties() {
+		return allowNullProperties;
+	}
 }

@@ -15,8 +15,6 @@
  ******************************************************************************/
 package com.foc.web.modules.fab;
 
-import java.util.Hashtable;
-
 import com.fab.gui.xmlView.XMLViewDefinitionDesc;
 import com.fab.model.filter.FilterDefinitionDesc;
 import com.fab.model.filter.FilterFieldDefinitionDesc;
@@ -26,15 +24,16 @@ import com.fab.model.table.FabDictionaryGroupDesc;
 import com.fab.model.table.FabMultiChoiceSetDesc;
 import com.fab.model.table.FabMultipleChoiceDesc;
 import com.fab.model.table.FieldDefinitionDesc;
-import com.fab.model.table.TableDefinition;
 import com.fab.model.table.TableDefinitionDesc;
 import com.fab.model.table.TableDefinitionTree;
 import com.fab.model.table.underlyingCustomisation.UndCustFieldDesc;
 import com.fab.model.table.underlyingCustomisation.UndCustTable;
 import com.fab.model.table.underlyingCustomisation.UndCustTableDesc;
 import com.fab.parameterSheet.ParameterSheetSelectorDesc;
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.business.printing.PrnLayoutDefinitionDesc;
+import com.foc.fluttercodewriter.FlutterCodeWriterMain;
 import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.menuStructure.IFocMenuItemAction;
@@ -93,14 +92,14 @@ public class FabWebModule extends FocWebModule {
       XMLViewKey.TYPE_TABLE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/com/fab/TableDefinition_Table.xml", 0, null);
+      "/xml/com/fab/TableDefinition_Table.xml", 0, FabTableDefinition_Table.class.getName());
 
     XMLViewDictionary.getInstance().put(
       TableDefinitionDesc.getInstance().getStorageName(),
       XMLViewKey.TYPE_TREE,
       XMLViewKey.CONTEXT_DEFAULT,
       XMLViewKey.VIEW_DEFAULT,
-      "/xml/com/fab/TableDefinition_Tree.xml", 0, null);
+      "/xml/com/fab/TableDefinition_Tree.xml", 0, FabTableDefinition_Tree.class.getName());
     
     XMLViewDictionary.getInstance().put(
   		TableDefinitionDesc.getInstance().getStorageName(),
@@ -266,6 +265,18 @@ public class FabWebModule extends FocWebModule {
       }
     });
 
+    menuItem = mainMenu.pushMenu("FAB_TABLE_DEFINITION_TABLE", "Custom Tables");
+    menuItem.setMenuAction(new IFocMenuItemAction() {
+      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+        INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
+        FocList focList = TableDefinitionDesc.getList(FocList.LOAD_IF_NEEDED);
+        
+        XMLViewKey key = new XMLViewKey(TableDefinitionDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
+        ICentralPanel central = XMLViewDictionary.getInstance().newCentralPanel(mainWindow, key, focList);
+        mainWindow.changeCentralPanelContent(central, true);
+      }
+    });
+    
     menuItem = mainMenu.pushMenu("FAB_MULTIPLE_CHOICE_SET", "Data List Sets (Multiple Choice Fields)");
     menuItem.setMenuAction(new IFocMenuItemAction() {
       public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
@@ -339,6 +350,14 @@ public class FabWebModule extends FocWebModule {
       }
     });
 
+    if (ConfigInfo.isDevMode()) {
+	    menuItem = mainMenu.pushMenu("FAB_FLUTTER_CODE_GEN", "Generate Flutter Code");
+	    menuItem.setMenuAction(new IFocMenuItemAction() {
+	      public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+	      	FlutterCodeWriterMain main = new FlutterCodeWriterMain();
+	      }
+	    });
+    }
     
     /*
     menuItem = mainMenu.pushMenu("Fab Workspace", "_Fab Workspace");

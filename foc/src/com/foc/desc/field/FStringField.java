@@ -85,11 +85,16 @@ public class FStringField extends FField {
   }
   
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FString(masterObj, getID(), (String)defaultValue);
+    FProperty prop = new FString(masterObj, getID(), (String)defaultValue);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
   
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return newProperty(masterObj, "");
+  	String defaultValue = isAllowNullProperties() ? null : "";
+    return newProperty(masterObj, defaultValue);
   }
 
   public Component getGuiComponent(FProperty prop){

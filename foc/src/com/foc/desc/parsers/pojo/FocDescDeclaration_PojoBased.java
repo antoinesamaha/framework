@@ -124,6 +124,7 @@ public class FocDescDeclaration_PojoBased extends FocDescDeclaration_ParsedBased
 	      }
 
 	      focDesc.setAllowAdaptDataModel(entity.allowAdaptDataModel());
+	      focDesc.setLogicalDeleteEnabled(entity.logicalDelete());
 	      
 	      if(!Utils.isStringEmpty(entity.filterOnTable())){
 	      	ParsedFilter parsedFilter = new ParsedFilter(entity.filterOnTable());

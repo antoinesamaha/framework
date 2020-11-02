@@ -10,7 +10,6 @@ import java.text.NumberFormat;
 import javax.swing.JTextField;
 
 import com.fab.model.table.FieldDefinition;
-import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -65,11 +64,17 @@ public class FIntField extends FField {
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FInt(masterObj, getID(), (defaultValue != null) ? ((Integer)defaultValue).intValue() : 0);
+  	FInt prop = new FInt(masterObj, getID(), (defaultValue != null) ? ((Integer)defaultValue).intValue() : 0);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return new FInt(masterObj, getID(), 0);
+    FProperty prop = new FInt(masterObj, getID(), 0);
+    if (isAllowNullProperties()) prop.setValueNull(true);
+    return prop;
   }
 
   /*
@@ -84,6 +89,10 @@ public class FIntField extends FField {
   
   public boolean isGroupingUsed(){
   	return this.isGroupingUsed;
+  }
+  
+  public void setGroupingUsed(boolean groupingUsed){
+  	this.isGroupingUsed = groupingUsed;
   }
 
   public NumberFormat getFormat(){

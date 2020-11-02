@@ -36,6 +36,10 @@ public class FocExcelSheet {
     sheet = null;
   }
 
+	public String getName() {
+		return sheet != null ? sheet.getSheetName() : "";
+	}
+
   public void set(int coord0, int coord1, Object obj){
 		if(obj instanceof Double){
 			set(coord0, coord1, (Double) obj);
@@ -90,6 +94,21 @@ public class FocExcelSheet {
     Cell cell = row != null ? row.getCell(coord1) : null;
     return cell != null ? cell.getDateCellValue() : null;
   }
+
+	public int getCellType(int coord0, int coord1) {
+		int type = 0;
+		try {
+			Row row = sheet.getRow(coord0);
+			Cell cell = row != null ? row.getCell(coord1) : null;
+			if (cell != null) {
+				type = cell.getCellType();
+			}
+		} catch (Exception e) {
+			Globals.logException(e);
+			Globals.logString("Could Not get Value for cell [" + coord0 + "," + coord1 + "]");
+		}
+		return type;
+	}
 
   public String getCellString(int coord0, int coord1) {
     String str = null;

@@ -22,6 +22,7 @@ import java.sql.Types;
 import java.text.Format;
 import java.util.ArrayList;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.*;
@@ -85,6 +86,10 @@ public abstract class FField implements Cloneable, IFocData {
   public static final int MANDATORY_YES = 1;
   public static final int MANDATORY_YES_BUT_CAN_FILL_LATER = 2;
   
+  private boolean jsonDetailedInclude = true;
+  private boolean jsonListInclude     = true;
+  private boolean jsonEmbeddedInclude = true;
+  
   abstract public int getSqlType();
 	abstract public String getCreationString(String name);
   abstract public Component getGuiComponent(FProperty prop);
@@ -144,6 +149,10 @@ public abstract class FField implements Cloneable, IFocData {
   final public static int FLD_REVIEWSTATUS		          = -43;
   final public static int FLD_REVIEWCOMMENT             = -44;
   
+  final public static int FLD_LOGICAL_DELETE        	  = -45;
+  final public static int FLD_LOGICAL_DELETE_DATE    		= -46;
+  final public static int FLD_LOGICAL_DELETE_USER     	= -47;
+  
   final public static int NO_FIELD_ID                   = -99;
   final public static int FLD_SLAVE_LIST_FIRST          = -200;
   final public static int FLD_SLAVE_LIST_LAST           = -100;
@@ -170,6 +179,9 @@ public abstract class FField implements Cloneable, IFocData {
   final public static String FATHER_NODE_FIELDPREFIX            = "FATHERNODE_";
   final public static String FNAME_SYNC_IS_NEW_OBJECT           = "SYNC_IS_NEW";
   final public static String FNAME_NODE_COLLAPSE                = "NODE_COLLAPSE";
+  final public static String LOGICAL_DELETE_FIELD_NAME       		= "LogicalDelete";
+  final public static String LOGICAL_DELETE_DATE_FIELD_NAME  		= "LogicalDeleteDate";
+  final public static String LOGICAL_DELETE_USER_FIELD_NAME  		= "LogicalDeleteUser";
   public static final String FNAME_CODE                         = "CODE";
   public static final String FNAME_NAME                         = "NAME";
   public static final String FNAME_DESCRIPTION                  = "DESCRIP";
@@ -350,14 +362,38 @@ public abstract class FField implements Cloneable, IFocData {
 		}
 	}
   
-  public FProperty newProperty(FocObject masterObj, Object defaultValue){
-  	return isReflectingField() ? null : newProperty_ToImplement(masterObj, defaultValue);
+  /*
+  private void setPropertyToNullIfAllowed(FProperty property){
+  	if (property != null 
+				&& ConfigInfo.isAllowNullProperties()
+				&& (property instanceof FInt 
+						|| property instanceof FLong 
+						|| property instanceof FDouble 
+						|| property instanceof FString  
+						|| property instanceof FBoolean  		
+						|| property instanceof FDate 
+						|| property instanceof FTime
+						|| property instanceof FDateTime  						
+						|| property instanceof FMultipleChoiceString)) {
+			property.setValueNull(true);
+		}
   }
+  */
+  
+	public FProperty newProperty(FocObject masterObj, Object defaultValue) {
+		FProperty prop = null;
+		if (!isReflectingField()) {
+			prop = newProperty_ToImplement(masterObj, defaultValue);
+			//setPropertyToNullIfAllowed(prop);
+		}
+		return prop;
+	}
   
   public FProperty newProperty(FocObject masterObj){
   	FProperty prop = null;
   	if(!isReflectingField()){
   		prop = newProperty_EvenIfReflecting(masterObj);
+  		//setPropertyToNullIfAllowed(prop);
   	}
   	return prop;
   }
@@ -365,6 +401,7 @@ public abstract class FField implements Cloneable, IFocData {
   public FProperty newProperty_EvenIfReflecting(FocObject masterObj){
   	FProperty prop = newProperty_ToImplement(masterObj);
   	if(prop != null && getDefaultStringValue() != null) prop.setString(getDefaultStringValue());
+  	//setPropertyToNullIfAllowed(prop);
   	return prop;
   }
 
@@ -928,18 +965,50 @@ public abstract class FField implements Cloneable, IFocData {
   @Override
   public Object iFocData_getValue() {
     return null;
-  }  
+  }
+  
   //--------------------------------------------------------	
 	public FField getJoinOriginalField() {
 		return joinOriginalField;
 	}
+	
 	public void setJoinOriginalField(FField joinOriginalField) {
 		this.joinOriginalField = joinOriginalField;
 	}
+	
 	public IPropertyStringConverter getStringConverter() {
 		return stringConverter;
 	}
+	
 	public void setStringConverter(IPropertyStringConverter stringConverter) {
 		this.stringConverter = stringConverter;
+	}
+	
+	public boolean isAllowNullProperties() {
+		return ConfigInfo.isAllowNullProperties();
+	}
+	
+	public boolean isJsonDetailedInclude() {
+		return jsonDetailedInclude;
+	}
+	
+	public void setJsonDetailedInclude(boolean jsonDetailedInclude) {
+		this.jsonDetailedInclude = jsonDetailedInclude;
+	}
+	
+	public boolean isJsonListInclude() {
+		return jsonListInclude;
+	}
+	
+	public void setJsonListInclude(boolean jsonListInclude) {
+		this.jsonListInclude = jsonListInclude;
+	}
+	
+	public boolean isJsonEmbeddedInclude() {
+		return jsonEmbeddedInclude;
+	}
+	
+	public void setJsonEmbeddedInclude(boolean jsonEmbeddedInclude) {
+		this.jsonEmbeddedInclude = jsonEmbeddedInclude;
 	}
 }

@@ -49,6 +49,8 @@ import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
+import com.foc.desc.parsers.ParsedFocDesc;
+import com.foc.desc.parsers.join.ParsedJoin;
 import com.foc.event.FocEvent;
 import com.foc.event.FocListener;
 import com.foc.formula.FocSimpleFormulaContext;
@@ -151,6 +153,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     setWaitForValidationToAddObject(true);
     setKeepNewLineFocusUntilValidation(true);
     
+    addLogicalDeleteFilter();
     if(getListOrder() == null && getFocDesc() != null && getFocDesc().hasOrderField()){
     	FocListOrder order = new FocListOrder(FField.FLD_ORDER);
     	setListOrder(order);
@@ -171,6 +174,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
     init(null,focLinkForeignKey,filter);
   }
 
+  public FocList(FocDesc focDesc) {
+  	this(new FocLinkSimple(focDesc));
+  }
+  
   /**
    * This constructor is mainly for simple lists used to store some objects We
    * do not need any link or filter, neether a master object
@@ -295,6 +302,35 @@ public class FocList extends AccessSubject implements IFocList, Container {
 
 	public boolean includeObject_ByListFilter(FocObject obj){
 		return true;
+	}
+	
+	protected void addLogicalDeleteFilter() {
+		if(getFocDesc() != null && getFilter() != null) {
+			if(!getFocDesc().isJoin()) {
+				if(getFocDesc().isLogicalDeleteEnabled()) {
+					String name = FField.adaptFieldNameToProvider(getFocDesc().getProvider(), FField.LOGICAL_DELETE_FIELD_NAME);
+					getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", name + " = 0 OR " + name + " IS NULL");
+				}
+			} else {
+				String fullJoinWhere = getFullJoinWhereClause();
+      	if(!Utils.isStringEmpty(fullJoinWhere)) getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", fullJoinWhere);
+			}
+		}
+	}
+	
+	protected String getFullJoinWhereClause() {
+		String fullJoinWhere = "";
+		if(getFocDesc().isJoin() && getFocDesc() instanceof ParsedFocDesc) {			
+			Iterator<ParsedJoin> newItr = ((ParsedFocDesc)getFocDesc()).newJoinIterator();
+			while(newItr != null && newItr.hasNext()) {
+				ParsedJoin join = newItr.next();
+				if(join != null && Utils.isStringEmpty(join.getOtherAlias()) && join.getWhere() != null && !Utils.isStringEmpty(join.getWhere())) { 
+	    		if(!Utils.isStringEmpty(fullJoinWhere)) fullJoinWhere += " AND ";
+	    		fullJoinWhere += join.getWhere();
+				}
+			}
+		}
+		return fullJoinWhere;
 	}
 
   public void putSiteReadRightConditionIfRequired(){
@@ -2183,7 +2219,8 @@ public class FocList extends AccessSubject implements IFocList, Container {
 						){
 					
 					if(readIndex >= start) {
-						focObj.toJson(builder);
+						focObj.toJson_InList(builder);
+						//focObj.toJson(builder);
 						count++;
 					}
 					
@@ -2598,7 +2635,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		FocDesc focDesc = getFocDesc();
 		if (focDesc != null) {
 			StringBuffer request = new StringBuffer();
-			request.append("SELECT COUNT(" + fieldName + ") ");
+			request.append("SELECT COUNT(DISTINCT " + fieldName + ") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			
 			SQLFilter filter = getFilter();

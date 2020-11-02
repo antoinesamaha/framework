@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.foc.menuStructure;
 
+import java.util.HashMap;
+
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.list.FocLinkSimple;
@@ -23,6 +25,8 @@ import com.foc.list.FocListOrder;
 
 @SuppressWarnings("serial")
 public class FocMenuItemList extends FocList {
+	
+	HashMap<String, FocMenuItem> map = new HashMap<String, FocMenuItem>();
 	
 	public FocMenuItemList(){
 		super(new FocLinkSimple(FocMenuItemDesc.getInstance()));
@@ -33,8 +37,42 @@ public class FocMenuItemList extends FocList {
 		sort();
 	}
 	
+	@Override
+	public void dispose() {
+		super.dispose();
+		if(map != null) {
+			map.clear();
+			map = null;
+		}
+	}
+	
+	private String map_buildKey(FocMenuItem father, String code) {
+		String key = "";
+		if(father != null) {
+			key = father.getCode()+"|"; 
+		}
+		key += code;
+		return key;
+	}
+	
+	private FocMenuItem map_FindMenuItem(FocMenuItem father, String code) {
+		FocMenuItem item = null;
+		if(map != null) {
+			item = map.get(map_buildKey(father, code));
+		}
+		return item;
+	}
+	
+	private void map_PutMenuItem(FocMenuItem item) {
+		if(map != null && item != null) {
+			map.put(map_buildKey((FocMenuItem) item.getFatherObject(), item.getCode()), item);
+		}
+	}
+
 	public FocMenuItem findMenuItem(FocMenuItem father, String code){
-		FocMenuItem found = null;
+		FocMenuItem found = map_FindMenuItem(father, code);
+
+		/*
 		for(int i=0; i<size() && found == null; i++){
 			FocMenuItem menuItem = (FocMenuItem) getFocObject(i);
 			if(FocObject.equal(menuItem.getFatherObject(), father)){
@@ -43,6 +81,8 @@ public class FocMenuItemList extends FocList {
 				}
 			}
 		}
+		*/
+		
 		return found;
 	}
 	
@@ -56,6 +96,7 @@ public class FocMenuItemList extends FocList {
 			menuItem.setFatherObject(father);
 			
 			add(menuItem);
+			map_PutMenuItem(menuItem); 		
 		}
 		
 		return menuItem;

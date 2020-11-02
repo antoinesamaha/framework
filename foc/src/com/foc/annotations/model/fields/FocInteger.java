@@ -28,4 +28,6 @@ public @interface FocInteger {
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
 	public boolean lockAfterCreation() default false;
+	public boolean displayZeroValues() default true;
+	public boolean groupingUsed() default true;
 }

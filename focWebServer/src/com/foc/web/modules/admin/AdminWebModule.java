@@ -386,6 +386,35 @@ public class AdminWebModule extends FocWebModule {
 			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
 				// INavigationWindow mainWindow = (INavigationWindow) navigationWindow;
 
+		    // DEBUGGING Code allows to capture any setWithList (true) that needs to be captured
+				/*
+		    try{
+			  	java.util.Iterator<FocDesc> iterDescs = Globals.getApp().getFocDescMap().values().iterator();
+			  	while(iterDescs != null && iterDescs.hasNext()){
+			  		FocDesc focDesc = iterDescs.next();
+		  			if(focDesc != null){
+		  				for(int i=0; i<focDesc.getFieldsSize(); i++) {
+		  					FField fld = focDesc.getFieldAt(i);
+		  					if (fld != null && fld instanceof FObjectField) {
+		  						FObjectField objFld = (FObjectField) fld;
+		  						FocDesc subDesc = objFld.getFocDesc();
+		  						if(subDesc != null && subDesc.getStorageName().equals("Vehicles")) {
+		  							if(objFld.isWithList()) {
+		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName()+"  -  WITH LIST  -");
+		  							} else {
+		  								Globals.logString("Vehicles are ferenced in "+focDesc.getStorageName()+" field "+objFld.getName());
+		  							}
+		  						}
+		  					}
+		  				}
+		  			}
+			  	}
+		    } catch(Exception e) {
+		    	Globals.logException(e);
+		    }
+		    */
+		    // -------------------------------
+				
 				String beforeMessage = Globals.logMemory("Before Freeing ");
 
 				System.gc();
@@ -401,6 +430,29 @@ public class AdminWebModule extends FocWebModule {
 			}
 		});
 
+		menuItem = systemMenu.pushMenu("SHOW_MEMORY_OBJECTS", "Dump living entity counts");
+		menuItem.setMenuAction(new IFocMenuItemAction() {
+			@Override
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				String beforeMessage = Globals.logMemory("Before Freeing ");
+
+				System.gc();
+				Globals.logMemory("");
+
+				System.gc();
+				Globals.logMemory("");
+
+				System.gc();
+				String afterMessage = Globals.logMemory("After  Freeing ");
+
+				String html = Globals.getApp().dumpLivingFocObjectCounts(true, true, false);
+				afterMessage += "\n" + html; 
+				
+				Globals.showNotification(beforeMessage, afterMessage, IFocEnvironment.TYPE_HUMANIZED_MESSAGE);
+				
+			}
+		});
+		
 		menuItem = systemMenu.pushMenu("MEMORY", "Memory");
 		menuItem.setMenuAction(new IFocMenuItemAction() {
 
@@ -611,31 +663,33 @@ public class AdminWebModule extends FocWebModule {
 			}
 		}
 
-		menuItem = mainMenu.pushMenu("MAKE_DATA_ANONIMOUS", "Make Data Anonymous");
-		menuItem.setMenuAction(new IFocMenuItemAction() {
-
-			@Override
-			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
-
-				OptionDialogWindow optionWindow = new OptionDialogWindow("ARE YOU SURE YOU WANT TO LOOSE DATA NAMES!!!!! (NOT RECOMMENDED) SHOULD NEVER BE USED FOR PRODUCTION REAL DATA !!!!!!!!!!! !!!!!!!!!!!! !!!!!!!!!!!!! !!!!!!!!!!!", null);
-				optionWindow.setWidth("500px");
-				optionWindow.setHeight("200px");
-
-				optionWindow.addOption("Yes, Loose Data", new IOption() {
-					@Override
-					public void optionSelected(Object contextObject) {
-						FocWebServer.getInstance().makeDataAnonymous();
-					}
-				});
-
-				optionWindow.addOption("Cancel", new IOption() {
-					@Override
-					public void optionSelected(Object contextObject) {
-					}
-				});
-				FocWebApplication.getInstanceForThread().addWindow(optionWindow);
-			}
-		});
+		if (ConfigInfo.isDevMode()) {
+			menuItem = mainMenu.pushMenu("MAKE_DATA_ANONIMOUS", "Make Data Anonymous");
+			menuItem.setMenuAction(new IFocMenuItemAction() {
+	
+				@Override
+				public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+	
+					OptionDialogWindow optionWindow = new OptionDialogWindow("ARE YOU SURE YOU WANT TO LOOSE DATA NAMES!!!!! (NOT RECOMMENDED) SHOULD NEVER BE USED FOR PRODUCTION REAL DATA !!!!!!!!!!! !!!!!!!!!!!! !!!!!!!!!!!!! !!!!!!!!!!!", null);
+					optionWindow.setWidth("500px");
+					optionWindow.setHeight("200px");
+	
+					optionWindow.addOption("Yes, Loose Data", new IOption() {
+						@Override
+						public void optionSelected(Object contextObject) {
+							//FocWebServer.getInstance().makeDataAnonymous();
+						}
+					});
+	
+					optionWindow.addOption("Cancel", new IOption() {
+						@Override
+						public void optionSelected(Object contextObject) {
+						}
+					});
+					FocWebApplication.getInstanceForThread().addWindow(optionWindow);
+				}
+			});
+		}
 
 		FocMenuItem autoPopulateMenu = null;
 		Iterator<IFocDescDeclaration> focDescDeclarationIterator = Globals.getApp().getFocDescDeclarationIterator();

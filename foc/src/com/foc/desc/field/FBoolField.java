@@ -54,11 +54,17 @@ public class FBoolField extends FIntField {
   }
   
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FBoolean(masterObj, getID(), (defaultValue != null) ? ((Boolean)defaultValue).booleanValue() : false);
+  	FBoolean prop = new FBoolean(masterObj, getID(), (defaultValue != null) ? ((Boolean)defaultValue).booleanValue() : false);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return newProperty(masterObj, null);
+    FProperty prop = newProperty(masterObj, null);
+    if (isAllowNullProperties()) prop.setValueNull(true);
+    return prop;
   }
   
 /*

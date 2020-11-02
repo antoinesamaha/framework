@@ -205,8 +205,36 @@ public class SQLRequest {
   
   public void addOffset() {
   	if(			 filter != null 
+  			&&   this.request != null
+  			&&   filter.getOffset() >= 0
+  			&&   filter.getOffsetCount() >= 0
   			&& 	(getSQLRequestType() == TYPE_SELECT || getSQLRequestType() == TYPE_OTHER)) {
-  		filter.addOffsetToRequest(this.request);
+  		if(focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+				request.append(" offset ");
+				request.append(filter.getOffset());
+				request.append(" limit ");
+				request.append(filter.getOffsetCount());
+  		} else if(focDesc.getProvider() == DBManager.PROVIDER_ORACLE) {
+ 				if(focDesc.getServerVersion() < 12 || focDesc.getServerVersion() > 0) {
+ 					int endingIndex   = filter.getOffset() + filter.getOffsetCount();
+ 					int startingIndex = filter.getOffset();
+ 					
+ 					StringBuffer requestWrapper = new StringBuffer();
+ 					requestWrapper.append("SELECT * FROM ");
+ 					requestWrapper.append("( SELECT pagination.*, rownum r__ FROM (");
+ 					requestWrapper.append(request);
+ 					requestWrapper.append(") pagination "); 					
+ 					requestWrapper.append("WHERE rownum < ( " + endingIndex + " + 1) ");
+ 					requestWrapper.append(") WHERE rownum >= ( " + startingIndex + " + 1) ");
+ 					request = requestWrapper; 
+  			} else {
+					request.append(" OFFSET ");
+					request.append(filter.getOffset());
+					request.append(" ROWS FETCH NEXT ");
+					request.append(filter.getOffsetCount());
+					request.append(" ROWS ONLY ");
+  			}
+  		}
   	}
   }
   

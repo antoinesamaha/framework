@@ -493,15 +493,6 @@ public class SQLFilter {
 		}
 	}
 	
-	public void addOffsetToRequest(StringBuffer requestBuffer) {
-		if (requestBuffer != null && offset >=0 && offsetCount >=0) {
-			requestBuffer.append(" offset ");
-			requestBuffer.append(offset);
-			requestBuffer.append(" limit ");
-			requestBuffer.append(offsetCount);
-		}
-	}
-
 	public int getOffset() {
 		return offset;
 	}

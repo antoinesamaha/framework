@@ -55,11 +55,17 @@ public class FLongField extends FField {
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj, Object defaultValue){
-    return new FLong(masterObj, getID(), (defaultValue != null) ? ((Long)defaultValue).longValue() : 0);
+    FProperty prop = new FLong(masterObj, getID(), (defaultValue != null) ? ((Long)defaultValue).longValue() : 0);
+  	if(isAllowNullProperties() && defaultValue == null) {
+  		prop.setValueNull(true);
+  	}
+  	return prop;
   }
 
   public FProperty newProperty_ToImplement(FocObject masterObj){
-    return new FLong(masterObj, getID(), 0);
+    FProperty prop = new FLong(masterObj, getID(), 0);
+    if (isAllowNullProperties()) prop.setValueNull(true);
+    return prop;
   }
 
   /*

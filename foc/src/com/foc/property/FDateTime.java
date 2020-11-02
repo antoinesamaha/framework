@@ -97,6 +97,7 @@ public class FDateTime extends FDate {
   
   public void setDate(java.sql.Date date) {
     if(date.compareTo(this.date) != 0){
+    	setValueNull(false);
       this.date.setTime(date.getTime());
       notifyListeners();
     }
@@ -112,7 +113,11 @@ public class FDateTime extends FDate {
   }
 
   public String getSqlString() {
-  	return getSqlString_Static(getProvider(), date);
+  	if (isValueNull()) {
+  		return "NULL";
+  	} else {
+  		return getSqlString_Static(getProvider(), date);
+  	}
   }
 
   public static String getSqlString_Static(int provider, Date date) {
@@ -131,13 +136,20 @@ public class FDateTime extends FDate {
   
   public void setSqlStringInternal(String str) {
     try {
-      if (str != null && !str.equals("0000-00-00 00:00:00") && str != ""){
-        date = java.sql.Date.valueOf(str.substring(0, 10));
-        int hours = Integer.valueOf(str.substring(11, 13));
-        int mins  = Integer.valueOf(str.substring(14, 16));
-        int sec   = Integer.valueOf(str.substring(17, 19));
-        date.setTime(date.getTime()+((hours*60+mins)*60+sec)*1000);
-      }
+    	if (str == null) {
+    		if (isAllowNullProperties()) {
+    			setDate(new java.sql.Date(getZeroReference()), false);
+    			setValueNull(true);
+    		}
+    	} else {    	
+	      if (str != null && !str.equals("0000-00-00 00:00:00") && str != ""){
+	        date = java.sql.Date.valueOf(str.substring(0, 10));
+	        int hours = Integer.valueOf(str.substring(11, 13));
+	        int mins  = Integer.valueOf(str.substring(14, 16));
+	        int sec   = Integer.valueOf(str.substring(17, 19));
+	        date.setTime(date.getTime()+((hours*60+mins)*60+sec)*1000);
+	      }
+    	}
     } catch (Exception e) {
       Globals.logException(e);
     }

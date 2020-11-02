@@ -48,6 +48,7 @@ public class FLong extends FProperty {
   public void setLong(long lVal, boolean userEditingEvent) {
     if(lVal != this.lVal){
       this.lVal = lVal;
+      setValueNull(false);
       notifyListeners(userEditingEvent);
     }
   }
@@ -56,13 +57,27 @@ public class FLong extends FProperty {
   	setLong(lVal, false);
   }
 
+  public String getSqlString() {
+  	if(isValueNull()) {
+  		return getNullSQLValue();
+  	} else {
+  		return getString();
+  	}
+  }
+  
   public String getString() {
     return String.valueOf(lVal);
   }
 
   public void setString(String str, boolean userEditingEvent) {
     if (str == null || str.compareTo("") == 0) {
-      setLong(0, userEditingEvent);
+	    if (isAllowNullProperties()) {
+	    	boolean notifyListeners = !isValueNull();
+	      setValueNull_AndResetIntrinsicValue(false);
+	      if (notifyListeners) notifyListeners(userEditingEvent);
+	    } else {
+	    	setLong(0, userEditingEvent);
+	    }
     } else {
       setLong(Integer.parseInt(str), userEditingEvent);
     }
@@ -108,5 +123,10 @@ public class FLong extends FProperty {
   
   public void setEmptyValue(){
   	setLong(0);
+  }
+  
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	lVal = 0;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
   }
 }

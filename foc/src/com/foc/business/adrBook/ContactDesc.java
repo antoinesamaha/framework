@@ -61,6 +61,16 @@ public class ContactDesc extends FocDesc {
   public static final String FPARTY_NAME_PREFIX = "ADR_BK_PARTY_";
   public static final String DB_TABLE_NAME = "ADR_BK_CONTACT";
   
+  public static final String FNAME_Title = "TITLE";
+  public static final String FNAME_FirstName = "FIRST_NAME";
+  public static final String FNAME_FamilyName = "FAMILY_NAME";
+  public static final String FNAME_Position = "POSITION_DESC";
+  public static final String FNAME_Phone1 = "PHONE1";
+  public static final String FNAME_Phone2 = "PHONE2";
+  public static final String FNAME_Mobile = "MOBILE";
+  public static final String FNAME_EMail  = "EMAIL";
+  public static final String FNAME_EMail2 = "EMAIL2";
+  
   public ContactDesc() {
     super(Contact.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, true);
     setGuiBrowsePanelClass(ContactGuiBrowsePanel.class);
@@ -82,12 +92,12 @@ public class ContactDesc extends FocDesc {
 			}
     };
     
-    fField = new FStringField("FIRST_NAME", "First Name", FLD_FIRST_NAME, true, LEN_FIRST_NAME);
+    fField = new FStringField(FNAME_FirstName, "First Name", FLD_FIRST_NAME, true, LEN_FIRST_NAME);
     fField.setMandatory(true);
     fField.addListener(firstLastNameListener);
     addField(fField);
     
-    fField = new FStringField("FAMILY_NAME", "Family Name", FLD_FAMILY_NAME, true, LEN_FAMILY_NAME);
+    fField = new FStringField(FNAME_FamilyName, "Family Name", FLD_FAMILY_NAME, true, LEN_FAMILY_NAME);
     fField.setMandatory(true);
     fField.addListener(firstLastNameListener);    
     addField(fField);
@@ -106,11 +116,11 @@ public class ContactDesc extends FocDesc {
     fField = new FBlobStringField("DESCRIP", "Description", FLD_DESCRIPTION, false, 5, 30);
     addField(fField);
 
-    FMultipleChoiceStringField mFld = new FMultipleChoiceStringField("POSITION_DESC", "Position", FLD_POSITION_STR, false, LEN_POSITION);
+    FMultipleChoiceStringField mFld = new FMultipleChoiceStringField(FNAME_Position, "Position", FLD_POSITION_STR, false, LEN_POSITION);
     mFld.setChoicesAreFromSameColumn(this);
     addField(mFld);
     
-    mFld = new FMultipleChoiceStringField("TITLE", "Title", FLD_TITLE, false, LEN_TITLE);
+    mFld = new FMultipleChoiceStringField(FNAME_Title, "Title", FLD_TITLE, false, LEN_TITLE);
     mFld.setChoicesAreFromSameColumn(this);
     mFld.addListener(firstLastNameListener);
     addField(mFld);
@@ -150,19 +160,19 @@ public class ContactDesc extends FocDesc {
 			}
 		});
 
-    fField = new FPhoneField("PHONE1", "Phone 1", FLD_PHONE_1);
+    fField = new FPhoneField(FNAME_Phone1, "Phone 1", FLD_PHONE_1);
     addField(fField);
 
-    fField = new FPhoneField("PHONE2", "Phone 2", FLD_PHONE_2);
+    fField = new FPhoneField(FNAME_Phone2, "Phone 2", FLD_PHONE_2);
     addField(fField);
 
-    fField = new FPhoneField("MOBILE", "Mobile", FLD_MOBILE);
+    fField = new FPhoneField(FNAME_Mobile, "Mobile", FLD_MOBILE);
     addField(fField);
     
-    fField = new FEMailField("EMAIL", "Email", FLD_EMAIL, false);
+    fField = new FEMailField(FNAME_EMail, "Email", FLD_EMAIL, false);
     addField(fField);
 
-    fField = new FEMailField("EMAIL2", "Email 2", FLD_EMAIL_2, false);
+    fField = new FEMailField(FNAME_EMail2, "Email 2", FLD_EMAIL_2, false);
     addField(fField);
 
     /*

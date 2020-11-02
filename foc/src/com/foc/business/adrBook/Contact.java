@@ -177,7 +177,14 @@ public class Contact extends FocObject {
 	    } else if (BusinessConfig.getInstance() == null) {
 	      Globals.showNotification("No Business Essentials configuration available", "", IFocEnvironment.TYPE_WARNING_MESSAGE);
 	    } else {
-	    	FocGroup group = BusinessConfig.getInstance().getGuestGroup();
+	    	FocGroup group = null;
+	    	AdrBookParty party = getAdrBookParty();
+	    	if(party != null) {
+	    		group = party.getFocGroupForContactUsers();
+	    	} else {
+	    		group = BusinessConfig.getInstance().getGuestGroup();
+	    	}
+	    	
 	    	WFTitle title =  BusinessConfig.getInstance().getGuestTitle();
 	    	
 	    	if(group == null) {

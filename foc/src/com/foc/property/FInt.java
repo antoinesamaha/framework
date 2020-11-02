@@ -39,9 +39,10 @@ public class FInt extends FProperty {
   }
 
   public void setInteger(int iVal, boolean userEditingEvent, boolean controlersActive) {
-    if(iVal != this.iVal){
+    if(iVal != this.iVal || isValueNull()){
     	if(getFocField() == null || !controlersActive || getFocField().isPropertyModificationAllowed(this, iVal, true)){
 	      this.iVal = iVal;
+	      setValueNull(false);
 	      notifyListeners(userEditingEvent);
     	}
     }
@@ -55,13 +56,27 @@ public class FInt extends FProperty {
   	setInteger(iVal, false);
   }
 
+  public String getSqlString() {
+  	if(isValueNull()) {
+  		return getNullSQLValue();
+  	} else {
+  		return getString();
+  	}
+  }
+  
   public String getString() {
-    return String.valueOf(iVal);
+ 		return String.valueOf(iVal);
   }
 
   public void setString(String str, boolean userEditingEvent) {
-    if (str == null || str.compareTo("") == 0) {
-      setInteger(0, userEditingEvent);
+  	if (str == null || str.compareTo("") == 0) {
+	    if (isAllowNullProperties()) {
+	    	boolean notifyListeners = !isValueNull();
+	      setValueNull_AndResetIntrinsicValue(false);
+	      if (notifyListeners) notifyListeners(userEditingEvent);
+	    } else {
+	    	setInteger(0, userEditingEvent);
+	    }
     } else {
       setInteger(Integer.parseInt(str), userEditingEvent);
     }
@@ -131,6 +146,11 @@ public class FInt extends FProperty {
   public void setEmptyValue(){
   	setInteger(0);
   }
+
+  public void setValueNull_AndResetIntrinsicValue(boolean notifyListeners) {
+  	iVal = 0;
+  	super.setValueNull_AndResetIntrinsicValue(notifyListeners);
+  }
   
   //-------------------------------
   // VAADIN Property implementation
@@ -147,5 +167,5 @@ public class FInt extends FProperty {
 //    setInteger(((Integer)newValue).intValue());
 	  setObject(newValue);
   }
-  
+
 }

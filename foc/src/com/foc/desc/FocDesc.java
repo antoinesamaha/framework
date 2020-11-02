@@ -125,7 +125,8 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   // oooooooooooooooooooooooooooooooooo
 
 	private String dbSourceKey = null;//Auxiliary Pools
-	private int    providerCached = DBManager.PROVIDER_NONE;
+	private int    providerCached      = DBManager.PROVIDER_NONE;
+	private int    serverVersionCached = 0;//set to -1 if already read and got 0
 	
   private Class<FocObject> focObjectClass = null;
   private Class guiBrowsePanelClass  = null;
@@ -139,8 +140,10 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	private   boolean      logActive           = false;
 	private   boolean      listInCache         = true ;
 	private   boolean      allowAdaptDataModel = true ;
+	private 	boolean 		 logicalDelete		   = false;
 	private   boolean      siteRestrictionAccess = true;//User from Site A cannot see items of Site B
-    
+	private   boolean      useOracleListAggCLOB = true;
+	
 	private FocModule                   module                = null;
 	
 	private String                      name                  = null;
@@ -1701,6 +1704,24 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   public boolean isWithNodeCollapseField(){
     return getFieldByID(FField.FLD_NODE_COLLAPSE) != null;
   }
+  
+  public FBoolField addLogicalDeleteFields(){
+  	FBoolField deletionStateField = new FBoolField(FField.LOGICAL_DELETE_FIELD_NAME, "Logically Deleted", FField.FLD_LOGICAL_DELETE, false);
+    addField(deletionStateField);
+    
+  	FDateTimeField deletionDateField = new FDateTimeField(FField.LOGICAL_DELETE_DATE_FIELD_NAME, "Logically Deleted Date Time", FField.FLD_LOGICAL_DELETE_DATE, false);
+    addField(deletionDateField);
+    
+    FObjectField fObjectFld = new FObjectField(FField.LOGICAL_DELETE_USER_FIELD_NAME, "Deleted By User", FField.FLD_LOGICAL_DELETE_USER, FocUser.getFocDesc());
+    fObjectFld.setComboBoxCellEditor(FocUserDesc.FLD_NAME);
+    fObjectFld.setDisplayField(FocUserDesc.FLD_NAME);
+    fObjectFld.setNullValueMode(FObjectField.NULL_VALUE_ALLOWED_AND_SHOWN);
+    fObjectFld.setSelectionList(FocUserDesc.getList(FocList.NONE));
+    fObjectFld.setAllwaysLocked(true);
+    addField(fObjectFld);
+    
+    return deletionStateField;
+  }
 
   protected FObjectField setWithObjectTree(boolean isKeyField){
   	FObjectField fatherNode = new FObjectField(FField.FATHER_NODE_FIELD_NAME, FField.FATHER_NODE_FIELD_NAME, FField.FLD_FATHER_NODE_FIELD_ID, isKeyField, this, FField.FATHER_NODE_FIELDPREFIX);
@@ -2300,6 +2321,11 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   	return allFocObjectArray_get(false);
   }
   
+  public int allFocObjectArray_size(){
+  	ArrayList<FocObject> array = allFocObjectArray_get(false);
+  	return array != null ? array.size() : -1;
+  }
+  
   private ArrayList<FocObject> allFocObjectArray_get(boolean createIfNeeded){
   	if(createIfNeeded && descFocObjects == null && ConfigInfo.isKeepFocObjectArrayInFocDesc()){
   		descFocObjects = new ArrayList<FocObject>();
@@ -2499,6 +2525,15 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		this.allowAdaptDataModel = allowAdaptDataModel;
 	}
 	
+	public boolean isLogicalDeleteEnabled() {
+		return logicalDelete;
+	}
+
+	public void setLogicalDeleteEnabled(boolean enableLogicalDelete) {
+		logicalDelete = enableLogicalDelete;
+		if(enableLogicalDelete) addLogicalDeleteFields();
+	}
+	
 	public int nextFldID(){
 		int next = 1;
 		for(int i=0; i<fields.size(); i++){
@@ -2523,6 +2558,16 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 			providerCached = Globals.getDBManager().getProvider(dbSourceKey);
 		}		
 		return providerCached;
+	}
+
+	public int getServerVersion() {
+		//#PERF cahce the Provider pointer because taking 6% of a select conacts
+		if(serverVersionCached == 0) {
+			String dbSourceKey = getDbSourceKey();
+			serverVersionCached = Globals.getDBManager().getServerVersion(dbSourceKey);
+			if(serverVersionCached == 0) serverVersionCached = -1;
+		}		
+		return serverVersionCached <= 0 ? 0 : serverVersionCached;
 	}
 
 	public String getName() {
@@ -2578,6 +2623,14 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 			}
 		}
 		return logFocDesc;
+	}
+
+	public boolean isUseOracleListAggCLOB() {
+		return useOracleListAggCLOB;
+	}
+
+	public void setUseOracleListAggCLOB(boolean useOracleListAggCLOB) {
+		this.useOracleListAggCLOB = useOracleListAggCLOB;
 	}
 
 }
