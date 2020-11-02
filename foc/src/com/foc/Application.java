@@ -67,6 +67,7 @@ import com.foc.cloudStorage.IFocCloudStorage;
 import com.foc.dataSource.IFocDataSource;
 import com.foc.dataSource.store.DataStore;
 import com.foc.db.DBManager;
+import com.foc.db.IDBReloader;
 import com.foc.depricatedUnit.UnitFactory;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocDescMap;
@@ -200,6 +201,9 @@ public class Application {
   public boolean isUnitTest = false;
   
   public FSerializerDictionary htmlGeneratorDictionary = null; 
+  
+  private IDBReloader dbReloader=null;
+    
   
   public static void initArgs(String[] args){
   	String timeZone = Application.argumentGetValue(args, "timeZone");
@@ -2306,5 +2310,13 @@ public class Application {
     
     return buffer.toString();
 	}
+	
+  public  IDBReloader getDbReloader() {
+		return dbReloader;
+	}
 
+	public void setDbReloader(IDBReloader dbReloader) {
+		this.dbReloader = dbReloader;
+	}
+  
 }
