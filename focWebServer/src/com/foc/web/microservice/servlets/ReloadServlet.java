@@ -15,7 +15,6 @@ import com.foc.list.FocList;
 import com.foc.util.Utils;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 import com.foc.web.microservice.loockups.WSLookupFactory;
-import com.foc.web.microservice.loockups.WSSingleLookup;
 
 public class ReloadServlet extends FocSimpleMicroServlet {
 
@@ -39,14 +38,28 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 						}
 					} else {
 						FocDesc desc = Globals.getApp().getFocDescByName(tableName);
+						if(desc == null) {
+							WSLookupFactory factory = WSLookupFactory.getInstance();
+							factory.refreshLookupByName(tableName);
+							
+						} else {
+							WSLookupFactory factory = WSLookupFactory.getInstance();
+							boolean noRefreshDone = factory.refreshLookupByDesc(desc);
+							
+							if(noRefreshDone) {
+								desc.getFocList().reloadFromDB();
+							}
+						}
+						
+						/*
 						if(desc != null && desc.loadCachedListFromServletOnAction_CRUD() && desc.getFocList() != null) {
 							WSLookupFactory factory = WSLookupFactory.getInstance();
-							WSSingleLookup lookup= factory.getLookup(desc.getName());
-							if(lookup !=null) {
+							WSSingleLookup lookup = factory.getLookup(desc.getName());
+							if(lookup != null) {
 								Globals.logString("Reload Servlet : lookup found, name : "+desc.getName());
 								lookup.refresh();
 							} else {
-								lookup= factory.getLookup(tableName); // if the lookup is not db resident and was manually created
+								lookup = factory.getLookup(tableName); // if the lookup is not db resident and was manually created
 								if(lookup !=null) {
 									Globals.logString("Reload Servlet : lookup found, name : "+tableName);
 									lookup.refresh();
@@ -55,6 +68,8 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 								}
 							}
 						}
+						*/
+						
 					}
 				}
 			}
