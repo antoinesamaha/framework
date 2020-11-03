@@ -41,12 +41,18 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 						FocDesc desc = Globals.getApp().getFocDescByName(tableName);
 						if(desc != null && desc.loadCachedListFromServletOnAction_CRUD() && desc.getFocList() != null) {
 							WSLookupFactory factory = WSLookupFactory.getInstance();
-							WSSingleLookup lookup= factory.getLookupByFocDescName(desc.getName());
+							WSSingleLookup lookup= factory.getLookup(desc.getName());
 							if(lookup !=null) {
 								Globals.logString("Reload Servlet : lookup found, name : "+desc.getName());
 								lookup.refresh();
 							} else {
-								desc.getFocList().reloadFromDB();
+								lookup= factory.getLookup(tableName); // if the lookup is not db resident and was manually created
+								if(lookup !=null) {
+									Globals.logString("Reload Servlet : lookup found, name : "+tableName);
+									lookup.refresh();
+								}	else {
+									desc.getFocList().reloadFromDB();
+								}
 							}
 						}
 					}

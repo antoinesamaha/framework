@@ -62,7 +62,7 @@ public class Cache_DBReloader implements IDBReloader {
 			try{
 				Thread.sleep(waitDuration);
 
-				if(active && Utils.isStringEmpty(url)) {
+				if(active && !Utils.isStringEmpty(url)) {
 					HttpGet someHttpGet = new HttpGet(url);
 					URIBuilder uriBuilder = new URIBuilder(someHttpGet.getURI());
 					Iterator<String> iter = tablesToSend.keySet().iterator();
