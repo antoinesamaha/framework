@@ -45,7 +45,9 @@ public abstract class FocAdminAbstractTest extends FocUnitTest {
 		if(transactionPrefix != null) {
 			component_SetValue("TRANSACTION_PREFIX", transactionPrefix, false);
 		}
-		component_SetValue("FATHER_NODE>NAME", parentSiteName, false);
+		if (parentSiteName != null) {
+			component_SetValue("FATHER_NODE>NAME", parentSiteName, false);
+		}
 		button_ClickApply();
 		button_ClickDiscard();
 		FocLogger.getInstance().closeNode();
