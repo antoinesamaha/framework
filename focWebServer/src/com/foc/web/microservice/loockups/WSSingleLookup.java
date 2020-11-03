@@ -1,5 +1,7 @@
 package com.foc.web.microservice.loockups;
 
+import java.util.ArrayList;
+
 import com.foc.Globals;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
@@ -15,13 +17,23 @@ public class WSSingleLookup {
 	public WSSingleLookup(String key, FocDesc focDesc) {
 		this(key, focDesc, 0);
 	}
+
+	public WSSingleLookup(String key, FocDesc focDesc, ArrayList<String> relatedLookups) {
+		this(key, focDesc, 0);
+	}
+	
+	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration, ArrayList<String> relatedLookups) {
+		this.key = key;
+		this.focDesc = focDesc;
+		setExpiryDuration(expiryDuration);
+	}
 	
 	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration) {
 		this.key = key;
 		this.focDesc = focDesc;
 		setExpiryDuration(expiryDuration);
 	}
-
+	
 	private void dispose() {
 		focDesc = null;
 	}
@@ -46,6 +58,7 @@ public class WSSingleLookup {
 		} else if (shouldRefresh()){
 			refresh();
 		}
+		Globals.logString("json is :"  + json);
 		return json;
 	}
 	
@@ -100,9 +113,9 @@ public class WSSingleLookup {
 	public synchronized void refresh(){
 		FocList focList = getFocList(true); 
 		if (focList != null) focList.reloadFromDB();
-		jsonRebuild();
+		jsonRebuild();	
 	}
-
+	
 	public long getExpiryTime() {
 		return expiryDuration;
 	}

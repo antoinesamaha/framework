@@ -1,19 +1,11 @@
 package com.foc.web.microservice.servlets;
 
 import java.io.IOException;
-import java.net.URI;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocGroupDesc;
@@ -21,10 +13,8 @@ import com.foc.admin.GrpMobileModuleRightsDesc;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
-import com.foc.vaadin.FocWebEnvironment;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 import com.foc.web.microservice.loockups.WSLookupFactory;
-import com.foc.web.microservice.loockups.WSSingleLookup;
 
 public class ReloadServlet extends FocSimpleMicroServlet {
 
@@ -48,16 +38,38 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 						}
 					} else {
 						FocDesc desc = Globals.getApp().getFocDescByName(tableName);
-						if(desc != null && desc.loadCachedListFromServletOnAction_CRUD() && desc.getFocList() != null) {
+						if(desc == null) {
 							WSLookupFactory factory = WSLookupFactory.getInstance();
-							WSSingleLookup lookup= factory.getLookupByFocDescName(desc.getName());
-							if(lookup !=null) {
-								Globals.logString("Reload Servlet : lookup found, name : "+desc.getName());
-								lookup.refresh();
-							} else {
+							factory.refreshLookupByName(tableName);
+							
+						} else {
+							WSLookupFactory factory = WSLookupFactory.getInstance();
+							boolean noRefreshDone = factory.refreshLookupByDesc(desc);
+							
+							if(noRefreshDone) {
 								desc.getFocList().reloadFromDB();
 							}
 						}
+						
+						/*
+						if(desc != null && desc.loadCachedListFromServletOnAction_CRUD() && desc.getFocList() != null) {
+							WSLookupFactory factory = WSLookupFactory.getInstance();
+							WSSingleLookup lookup = factory.getLookup(desc.getName());
+							if(lookup != null) {
+								Globals.logString("Reload Servlet : lookup found, name : "+desc.getName());
+								lookup.refresh();
+							} else {
+								lookup = factory.getLookup(tableName); // if the lookup is not db resident and was manually created
+								if(lookup !=null) {
+									Globals.logString("Reload Servlet : lookup found, name : "+tableName);
+									lookup.refresh();
+								}	else {
+									desc.getFocList().reloadFromDB();
+								}
+							}
+						}
+						*/
+						
 					}
 				}
 			}
@@ -72,10 +84,8 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		Globals.logString(" <= GET End ReloadServlet /reload");
 	}
 	
-	public static void sendReloadRequestToBackend(String tableName, String portConfigInfoString, String port){
-		String portConfig=ConfigInfo.getProperty(portConfigInfoString); // "fenix.localhost.port"
-		if(Utils.isStringEmpty(portConfig)) portConfig = port;
-		String url = "http://localhost:" + portConfig + "/reload";
+	/*
+	public static void sendReloadRequestToBackend(String url, String tableName){
 		try{
 			HttpGet someHttpGet = new HttpGet(url);
 			URIBuilder uriBuilder = new URIBuilder(someHttpGet.getURI());
@@ -86,8 +96,6 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 			HttpResponse response = client.execute(someHttpGet);
 			if(response != null) {
 				if(response.getStatusLine().getStatusCode() != HttpServletResponse.SC_OK) {
-//					Globals.showNotification("Lists refreshed successfully", "", FocWebEnvironment.TYPE_HUMANIZED_MESSAGE);
-//				} else {
 					Globals.showNotification("Lists refresh failed", "", FocWebEnvironment.TYPE_ERROR_MESSAGE);
 				}
 			}
@@ -95,4 +103,5 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 			Globals.logException(e);
 		}
 	}
+	*/
 }
