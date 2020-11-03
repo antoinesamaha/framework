@@ -107,7 +107,7 @@ public class FieldDefinitionDesc extends FocDesc {
 		objFld.setSelectionList(tableSelectionList);
 		addField(objFld);
 		
-		fld = new FNumField("ID","Id",FLD_ID,false,3,0);
+		fld = new FNumField("ID","Id",FLD_ID,false,10,0);
 		addField(fld);
 		
 		FStringField charFld = new FStringField("NAME","Name",FLD_NAME,false,50);
