@@ -13,7 +13,6 @@ public class WSSingleLookup {
 	private FocDesc focDesc    = null;
 	private long    expiryDuration = 0;
 	private long    nextExpiryTime = 0;
-	private ArrayList<String> relatedLookups = null;
 	
 	public WSSingleLookup(String key, FocDesc focDesc) {
 		this(key, focDesc, 0);
@@ -21,14 +20,12 @@ public class WSSingleLookup {
 
 	public WSSingleLookup(String key, FocDesc focDesc, ArrayList<String> relatedLookups) {
 		this(key, focDesc, 0);
-		setRelatedLookups(relatedLookups);
 	}
 	
 	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration, ArrayList<String> relatedLookups) {
 		this.key = key;
 		this.focDesc = focDesc;
 		setExpiryDuration(expiryDuration);
-		setRelatedLookups(relatedLookups);
 	}
 	
 	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration) {
@@ -37,24 +34,6 @@ public class WSSingleLookup {
 		setExpiryDuration(expiryDuration);
 	}
 	
-	public ArrayList<String> getRelatedLookups() {
-		return relatedLookups;
-	}
-	
-	public void setRelatedLookups(ArrayList<String> list) {
-		if(list != null) {
-			if(relatedLookups == null) relatedLookups = new ArrayList<String>();
-			for(int i=0; i < list.size(); i++) {
-				pushRelatedLookup(list.get(i));
-			}
-		}
-	}
-	
-	public void pushRelatedLookup(String name) {
-		if(relatedLookups == null) relatedLookups = new ArrayList<String>();
-		if(!relatedLookups.contains(name)) relatedLookups.add(name);
-	}
-
 	private void dispose() {
 		focDesc = null;
 	}
@@ -134,26 +113,9 @@ public class WSSingleLookup {
 	public synchronized void refresh(){
 		FocList focList = getFocList(true); 
 		if (focList != null) focList.reloadFromDB();
-		jsonRebuild();
-		refreshRelatedLookups();
+		jsonRebuild();	
 	}
 	
-	public void refreshRelatedLookups() {
-		if(relatedLookups != null) {
-			for(int i=0; i < relatedLookups.size(); i++) {
-				String lookupName = relatedLookups.get(i);
-				WSLookupFactory factory = WSLookupFactory.getInstance();
-				if(factory != null) {
-					WSSingleLookup lookup= factory.getLookup(lookupName);
-					if(lookup !=null) {
-						Globals.logString("Reload Servlet : lookup found, name : "+lookupName);
-						lookup.refresh();
-					}
-				}
-			}
-		}
-	}
-
 	public long getExpiryTime() {
 		return expiryDuration;
 	}
