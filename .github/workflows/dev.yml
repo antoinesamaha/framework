@@ -25,6 +25,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: build and deploy
         run: |
-          pwd
-          dev_version=$(git rev-list dev --count)
-          mvn -Dfoc.version=1.7.$dev_version-SNAPSHOT clean deploy
+          pwd          
+          mvn -Dfoc.version=1.7.$GITHUB_RUN_NUMBER-SNAPSHOT clean deploy
