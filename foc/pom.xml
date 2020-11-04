@@ -83,9 +83,10 @@
   <properties>
   	<foc.version>1.7.4-SNAPSHOT</foc.version>
   </properties>
-  <scm>
+	<scm>
 		<url>https://github.com/FOC-framework/framework.git</url>
 		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
 		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
-	</scm>
+	</scm>  
+	<url>http://www.focframework.com</url>
 </project>

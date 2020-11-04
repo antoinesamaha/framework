@@ -64,7 +64,7 @@ import com.vaadin.server.WebBrowser;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.VerticalLayout;
 
-/**
+/*
  * A simple JFreeChart wrapper that renders charts in SVG to browser.
  * 
  * To use this component, you'll need all the common JFreeChart and Batik
@@ -123,7 +123,7 @@ public class JFreeChartWrapper extends Embedded {
 		this.chartLayout = chartLayout;
 	}
 	
-	/**
+	/*
 	 * Compress SVG charts in wrapper. It makes sense to put this on if the
 	 * server does not automatically compress responses.
 	 * 
@@ -167,7 +167,7 @@ public class JFreeChartWrapper extends Embedded {
 		super.detach();
 	}
 
-	/**
+	/*
 	 * This method may be used to tune rendering of the chart when using
 	 * relative sizes. Most commonly you should use just use common methods
 	 * inherited from {@link Sizeable} interface.
@@ -182,7 +182,7 @@ public class JFreeChartWrapper extends Embedded {
 		graphWidthInPixels = width;
 	}
 
-	/**
+	/*
 	 * This method may be used to tune rendering of the chart when using
 	 * relative sizes. Most commonly you should use just use common methods
 	 * inherited from {@link Sizeable} interface.
@@ -195,7 +195,7 @@ public class JFreeChartWrapper extends Embedded {
 		graphHeightInPixels = height;
 	}
 
-	/**
+	/*
 	 * Gets the pixel width into which the graph is rendered. Unless explicitly
 	 * set, the value is derived from the components size, except when the
 	 * component has relative size.
@@ -226,7 +226,7 @@ public class JFreeChartWrapper extends Embedded {
 		return width;
 	}
 
-	/**
+	/*
 	 * Gets the pixel height into which the graph is rendered. Unless explicitly
 	 * set, the value is derived from the components size, except when the
 	 * component has relative size.
@@ -261,7 +261,7 @@ public class JFreeChartWrapper extends Embedded {
 		return aspectRatio;
 	}
 
-	/**
+	/*
 	 * See SVG spec from W3 for more information.
 	 * Default is "none" (stretch), another common value is "xMidYMid" (stretch
 	 * proportionally, align middle of the area).
@@ -419,7 +419,7 @@ public class JFreeChartWrapper extends Embedded {
 		return res;
 	}
 	
-    /**
+    /*
      * {@inheritDoc}
      */
     @Override

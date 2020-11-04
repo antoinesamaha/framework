@@ -1180,7 +1180,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	 * } // getTable().setVisibleColumns(getVisibleColumnIds()); } }
 	 */
 
-	/**
+	/*
 	 * This is applicable only for TreeTable and Table
 	 */
 	public void pushVisibleColumns() {
@@ -1785,7 +1785,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 		return newObj;
 	}
 
-	/**
+	/*
 	 * This method is not to be called directly because it shortcuts any override,
 	 * developers should rather call the addItem.
 	 * 
