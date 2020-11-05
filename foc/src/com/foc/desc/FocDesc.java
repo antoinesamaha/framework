@@ -688,7 +688,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 	      if(identifierField != null){
 	        DBIndex idIndex = new DBIndex(indexRef, this, true);
 	        idIndex.addField(identifierField.getID());
-	        indexes.put(indexRef, idIndex);
+	        indexPut(indexRef, idIndex);
 	      }
 	    }
   	}
@@ -707,7 +707,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
       if(masterRefField != null){
         DBIndex masterIndex = new DBIndex(indexName, this, false);
         masterIndex.addField(masterRefField.getID());
-        indexes.put(indexName, masterIndex);        
+        indexPut(indexName, masterIndex);        
       }
     }
 
@@ -730,7 +730,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
           mainKeyIndex.addField(field.getID());
         }
         if(mainKeyIndex != null){
-        	indexes.put(indexName, mainKeyIndex);
+        	indexPut(indexName, mainKeyIndex);
         }else{
         	Globals.showNotification("Warining", "Missing key fields for "+getStorageName(), IFocEnvironment.TYPE_WARNING_MESSAGE);
         }
@@ -744,9 +744,13 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     }
   }
   
+  private void indexPut(String name, DBIndex index) {
+  	if(indexes != null && index != null) indexPut(name, index);
+  }
+  
   public void indexAdd(DBIndex index){
     indexCreate();
-    indexes.put(index.getName(), index);
+    indexPut(index.getName(), index);
   }
   
   public Iterator indexIterator(){

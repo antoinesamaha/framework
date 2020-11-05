@@ -83,6 +83,7 @@ import com.foc.focDataSourceDB.db.SQLSelectFindReferenceForWhereExpression;
 import com.foc.focDataSourceDB.db.SQLSelectJoinCount;
 import com.foc.focDataSourceDB.db.SQLSelectJoinRequest;
 import com.foc.focDataSourceDB.db.SQLUpdate;
+import com.foc.focDataSourceDB.db.ScriptRunner;
 import com.foc.focDataSourceDB.db.adaptor.DBAdaptor;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
@@ -1723,6 +1724,33 @@ public class FocDataSource_DB implements IFocDataSource {
 	public StringBuffer getMonitoringText() {
 		DBManagerServer dbServer = getDBManagerServer();
 		return dbServer != null ? dbServer.getMonitoringText() : null;
+	}
+
+	@Override
+	public boolean command_executeSQLScript(String key, String spFileName) {
+		try{
+			Globals.logString("SQL Script Runner : "+spFileName);
+			
+			ConnectionPool pool       = getDBManagerServer() != null ? getDBManagerServer().getConnectionPool(key) : null;
+			Connection     connection = pool != null ? pool.getConnection() : null;
+			
+			if(connection != null){
+				ScriptRunner runner = new ScriptRunner(connection, true, false);
+
+	  		ClassResource resource = new ClassResource(spFileName);
+				InputStream inputStream = resource.getStream().getStream();
+				InputStreamReader isReader = new InputStreamReader(inputStream);
+				BufferedReader bufferedReader = new BufferedReader(isReader);
+				
+				runner.runScript(bufferedReader);
+			}
+			
+			Globals.logString("    Script : Successful");
+		}catch(Exception ex){
+			Globals.logString("    Scritp : Failed"); 
+			Globals.logException(ex);
+		}
+		return false;
 	}
 
 }
