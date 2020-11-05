@@ -64,12 +64,6 @@ public abstract class FocMenuItemAbstractAction_WithAddCommand implements IFocMe
   	setView(view);
   }
 
-  /**
-   * 
-   * @param navigationWindow
-   * @param menuItem
-   * @param extraActionIndex
-   */
   public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
     FocList focList = getFocList();
     if (focList != null) {

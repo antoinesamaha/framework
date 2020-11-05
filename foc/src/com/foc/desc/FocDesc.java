@@ -361,6 +361,10 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
     return isKeyUnique;
   }
 	
+	public boolean loadCachedListFromServletOnAction_CRUD() {
+		return true;
+	}
+	
 	public void setKeyUnique(boolean keyUnique){
 		this.isKeyUnique = keyUnique;
 	}

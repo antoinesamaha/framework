@@ -173,7 +173,7 @@ public class FocUnitTestingCommand {
   	}
   }
 
-  /**
+  /*
    * Gets the current application.
    */
   public FocWebApplication getApplication() {
@@ -181,7 +181,7 @@ public class FocUnitTestingCommand {
     return application;
   }
 
-  /**
+  /*
    * Gets the current main window.
    */
   public FocWebVaadinWindow getMainWindow() {
@@ -189,7 +189,7 @@ public class FocUnitTestingCommand {
     return window;
   }
 
-  /**
+  /*
    * Returns the current central panel.
    * @return The current central panel.
    */
@@ -244,7 +244,7 @@ public class FocUnitTestingCommand {
     return result;
   }
   
-  /**
+  /*
    * Gets the logger found in FocUnitDictionary.
    * 
    * @return returns the logger.
@@ -263,7 +263,7 @@ public class FocUnitTestingCommand {
   	}
   }
   
-  /**
+  /*
    * Simulates a click on the "Log Out" button in the application.
    */
   public void logout() throws Exception {
@@ -292,7 +292,7 @@ public class FocUnitTestingCommand {
   	}
   }
 
-  /**
+  /*
    * Simulates a click on the "Navigation" button in the application.
    * 
    */
@@ -305,7 +305,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Home" button in the application.
    */
   public void button_ClickHome() throws Exception {
@@ -317,7 +317,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Admin" button in the application.
    * 
    */
@@ -330,7 +330,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Apply" button in the validation layout.
    * 
    */
@@ -396,7 +396,7 @@ public class FocUnitTestingCommand {
     if(nodeCreated) getLogger().closeNode();
   }
 
-  /**
+  /*
    * Simulates clicking on the "Apply" button in the validation layout until the apply button can't be found anymore.
    * 
    */
@@ -429,7 +429,7 @@ public class FocUnitTestingCommand {
   	}
   }
 
-  /**
+  /*
    * Simulates a click on the "Discard" button in the validation layout.
    * 
    */
@@ -485,7 +485,7 @@ public class FocUnitTestingCommand {
     if(nodeCreated) getLogger().closeNode();
   }
   
-  /**
+  /*
    * Simulates a click on the "Discard" button in the validation layout.
    * 
    */
@@ -526,7 +526,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Delete" button in the validation layout.
    * 
    */
@@ -554,7 +554,7 @@ public class FocUnitTestingCommand {
      if(nodeCreated) getLogger().closeNode();
   }
   
-  /**
+  /*
    * Simulates a click on the "Print" button in the validation layout.
    * 
    */
@@ -578,7 +578,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Full Screen" button in the validation layout.
    * 
    */
@@ -602,7 +602,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Attach Image" button in the validation layout.
    * 
    */
@@ -626,7 +626,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Back" button in the validation layout.
    * 
    */
@@ -700,7 +700,7 @@ public class FocUnitTestingCommand {
   }
   
   
-  /**
+  /*
    * Simulates a click on the "Approve" button under "Status" in the Validation
    * layout.
    * 
@@ -731,7 +731,7 @@ public class FocUnitTestingCommand {
     }
   }
   
-  /**
+  /*
    * Simulates clicking on a gear button in a component and then clicking on the
    * Add button.
    * 
@@ -758,7 +758,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates clicking on a gear button in a component and then clicking on the
    * Open button.
    * 
@@ -785,7 +785,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Searches for a menu item under the more menu by name.
    * 
    * @param menuCaption
@@ -812,7 +812,7 @@ public class FocUnitTestingCommand {
     return menuItem;
   }
 
-  /**
+  /*
    * Simulates clicking on a specific menu item in the more menu.
    * 
    * @param menuCaption
@@ -832,7 +832,7 @@ public class FocUnitTestingCommand {
 
   }
 
-  /**
+  /*
    * Simulates the navigation to a specific menu item in the main navigation
    * while expanding all parent menu items and selecting the menu item in
    * question.
@@ -848,9 +848,10 @@ public class FocUnitTestingCommand {
   	changePanel(menuCode, false);
   }
   
-  /**
+  /*
    * open Panel according to menuCode
    * @param menuCode
+   * menu code
    */
   private void changePanel(String menuCode, boolean assertNotAvailable) throws Exception {
     FocXMLLayout navigationLayout = getCurrentCentralPanel();
@@ -895,7 +896,7 @@ public class FocUnitTestingCommand {
   	if(nodeOpened) getLogger().closeNode();
   }
   
-  /**
+  /*
    * Simulates the navigation to a specific menu item in the main navigation
    * while expanding all parent menu items and selecting the menu item in
    * question. This function then constructs a mouse click event to simulate a
@@ -916,7 +917,7 @@ public class FocUnitTestingCommand {
     if(nodeOpened) getLogger().closeNode();
   }
 
-  /**
+  /*
    * MenuTree Double click action 
    */
   private void menuDoubleClickAction() throws Exception {
@@ -934,7 +935,7 @@ public class FocUnitTestingCommand {
     if(nodeOpened) getLogger().closeNode();
   }
   
-  /**
+  /*
    * Simulates a navigation and a click on the "Launch Unit Test" button
    * effectively launching the test over and over again. Useful function to
    * crash the server for the lulz.
@@ -982,13 +983,9 @@ public class FocUnitTestingCommand {
   	}
   }
 
-  /**
+  /*
    * Sets the quick filter expression on the top right of the table. It checks if exists and enabled and returns the size of the list
    * 
-   * @param tableName
-   * @param filterValue
-   * @return the size of the table after setting to the filterValue
-   * @throws Exception
    */
   public int table_QuickFilter(String tableName, String filterValue) throws Exception {
     int size = -1;
@@ -1035,7 +1032,7 @@ public class FocUnitTestingCommand {
   	return table_Select(tableName, propertyName, propertyValue, null, 0);
   }
   
-  /**
+  /*
    * Simulates selecting an item in an open table. Also saves the reference of
    * the selected object in a variable.
    * 
@@ -1052,7 +1049,7 @@ public class FocUnitTestingCommand {
     return table_Select(tableName, propertyName, propertyValue, null, 0, failIfNotFound);
   }
 
-  /**
+  /*
    * Simulates selecting an item in an open table. Also saves the reference of
    * the selected object in a variable.
    * 
@@ -1069,7 +1066,7 @@ public class FocUnitTestingCommand {
     return table_Select(tableName, propertyName, propertyValue, variableName, ancestor, true);
   }
 
-  /**
+  /*
    * Simulates selecting an item in an open table. Also saves the reference of
    * the selected object in a variable.
    * 
@@ -1147,7 +1144,7 @@ public class FocUnitTestingCommand {
   	return ref;
   }
   
-  /**
+  /*
    * Simulates adding an item in an open table (right-click then Add). Also stores
    * the id of the created object in a variable.
    * 
@@ -1158,7 +1155,7 @@ public class FocUnitTestingCommand {
   	return table_Add(tableName, null);
   }
   
-  /**
+  /*
    * Simulates adding an item in an open table (right-click then Add). Also stores
    * the id of the created object in a variable.
    * 
@@ -1205,7 +1202,7 @@ public class FocUnitTestingCommand {
     return ref;
   }
 
-  /**
+  /*
    * Simulates a popup menu selection on a table 
    * 
    * @param tableName
@@ -1254,7 +1251,7 @@ public class FocUnitTestingCommand {
   	return ref;
   }
   
-  /**
+  /*
    * Simulates opening the selected item in a table (right-click then Open).
    * 
    * @param tableName
@@ -1284,7 +1281,7 @@ public class FocUnitTestingCommand {
     if(nodeCreated) getLogger().closeNode();
   }
 
-  /**
+  /*
    * Simulates deleting the selected item in a table (right-click then Delete).
    * 
    * @param tableName
@@ -1339,7 +1336,7 @@ public class FocUnitTestingCommand {
   	return isEqual;
   }
   
-  /**
+  /*
    * Simulates setting the value of a component in a form.
    * 
    * @param componentName
@@ -1486,7 +1483,7 @@ public class FocUnitTestingCommand {
     }
   }
   
-  /**
+  /*
    * Simulates setting the value of a component in a table.
    * 
    * @param tableName
@@ -1502,7 +1499,7 @@ public class FocUnitTestingCommand {
   	componentInTable_SetValue(tableName, objRef, fieldName, componentValue, null); 
   }
 
-  /**
+  /*
    * Simulates setting the value of a component in a table.
    * 
    * @param tableName
@@ -1524,7 +1521,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates setting the value of a component in a table.
    * 
    * @param tableName
@@ -1612,7 +1609,7 @@ public class FocUnitTestingCommand {
   	objectComboBox.unitTesting_AddItemSelected();
   }
   
-  /**
+  /*
    * Simulates selecting a component in a table.
    * 
    * @param tableName
@@ -1675,7 +1672,7 @@ public class FocUnitTestingCommand {
     objectComboBox.unitTesting_AddItemSelected();
   }
   
-  /**
+  /*
    * Stores the value of a component in a hash map at the level of the
    * dictionary
    * 
@@ -1698,7 +1695,7 @@ public class FocUnitTestingCommand {
     return value;
   }
   
-  /**
+  /*
    * Stores the value of a component in a hash map at the level of the
    * dictionary
    * 
@@ -1732,7 +1729,7 @@ public class FocUnitTestingCommand {
   	if(nodeCreated) getLogger().closeNode();
   }
   
-  /**
+  /*
    * Simulates a click on a button of a certain name.
    * 
    */
@@ -1748,7 +1745,7 @@ public class FocUnitTestingCommand {
     if(nodeCreated) getLogger().closeNode();
   }
 
-  /**
+  /*
    * Simulates a click on the "Add New Line" in an FVForEachLayout.
    * 
    * @param bannerLayoutName
@@ -1772,7 +1769,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Delete" in an FVForEachLayout on a specific line.
    * 
    * @param bannerLayoutName
@@ -1810,7 +1807,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates a click on the "Delete" in an FVForEachLayout on a specific line.
    * 
    * @param bannerLayoutName
@@ -1852,7 +1849,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates setting the value of a component in an FVForEachLayout.
    * 
    * @param bannerLayoutName
@@ -1881,7 +1878,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Simulates setting the value of a component in an FVForEachLayout.
    * 
    * @param bannerLayoutName
@@ -1910,7 +1907,7 @@ public class FocUnitTestingCommand {
 
   }
 
-  /**
+  /*
    * Stores the reference of a banner line in a variable.
    * @param bannerLayoutName The name of the banner layout.
    * @param componentName The name of the component to look for.
@@ -1955,7 +1952,7 @@ public class FocUnitTestingCommand {
     }
   }
 
-  /**
+  /*
    * Finds a component in an FVForEachLayout.
    * 
    * @param bannerLayoutName
@@ -2000,7 +1997,7 @@ public class FocUnitTestingCommand {
     return component;
   }
 
-  /**
+  /*
    * Finds a component in an FVForEachLayout.
    * 
    * @param bannerLayoutName
@@ -2037,7 +2034,7 @@ public class FocUnitTestingCommand {
     return component;
   }
 
-  /**
+  /*
    * Gets an FocXMLGuiComponent by name.
    * 
    * @param navigationLayout
@@ -2050,7 +2047,7 @@ public class FocUnitTestingCommand {
   	return findComponent(navigationLayout, componentName, true);
   }
 
-  /**
+  /*
    * Gets an FocXMLGuiComponent by name.
    * 
    * @param navigationLayout
@@ -2086,7 +2083,7 @@ public class FocUnitTestingCommand {
   	return component;
   }
 
-  /**
+  /*
    * Sets a Variable value can be used for constants to declare once the name of a project or a client... 
    * 
    * @param variableName
@@ -2100,12 +2097,8 @@ public class FocUnitTestingCommand {
     }
   }
   
-  /**
+  /*
    * Simulates a drag and drop event.
-   * @param sourceName
-   * @param sourcePropertyName
-   * @param targetPropertyName
-   * @param targetPropertyValue
    */
   
   public void dragAndDropHighLevel(String sourceName, String sourcePropertyName, String sourcePropertyValue, String targetName, String targetPropertyName, String targetPropertyValue) throws Exception {
@@ -2323,7 +2316,7 @@ public class FocUnitTestingCommand {
 		focWebService.initAcount(company, accountName, encryptedPassword, currency, appType, appPlan, userRole, null);
   }
   
-  /**
+  /*
    * Simulates a click on a button of a certain name.
    * 
    */
