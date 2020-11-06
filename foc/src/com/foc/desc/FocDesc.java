@@ -745,7 +745,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
   }
   
   private void indexPut(String name, DBIndex index) {
-  	if(indexes != null && index != null) indexPut(name, index);
+  	if(indexes != null && index != null) indexes.put(name, index);
   }
   
   public void indexAdd(DBIndex index){
