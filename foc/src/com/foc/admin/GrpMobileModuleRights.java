@@ -94,7 +94,7 @@ public class GrpMobileModuleRights extends FocObject {
   	builder.beginObject();
   	builder.appendKey("MODULE_NAME");
   	builder.appendValue(getModuleName());
-
+		builder.appendKeyValue("ACCESS", getRight());
   	if(getCreate()) {
   		builder.appendKeyValue("Create", getCreate());
   	}

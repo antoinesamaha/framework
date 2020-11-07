@@ -55,7 +55,7 @@ import com.vaadin.ui.VerticalLayout;
 //import com.vaadin.terminal.Resource;
 //import com.vaadin.terminal.Sizeable;
 
-/**
+/*
  * A simple JFreeChart wrapper that renders charts in SVG to browser.
  * 
  * To use this component, you'll need all the common JFreeChart and Batik
@@ -116,7 +116,7 @@ public class JFreeChartWrapper_Modified extends Embedded {
 		this.chartLayout = chartLayout;
 	}
 
-	/**
+	/*
 	 * Compress SVG charts in wrapper. It makes sense to put this on if the
 	 * server does not automatically compress responses.
 	 * 
@@ -170,7 +170,7 @@ public class JFreeChartWrapper_Modified extends Embedded {
 		super.detach();
 	}
 	
-	/**
+	/*
 	 * This method may be used to tune rendering of the chart when using
 	 * relative sizes. Most commonly you should use just use common methods
 	 * inherited from {@link Sizeable} interface.
@@ -185,7 +185,7 @@ public class JFreeChartWrapper_Modified extends Embedded {
 		graphWidthInPixels = width;
 	}
 
-	/**
+	/*
 	 * This method may be used to tune rendering of the chart when using
 	 * relative sizes. Most commonly you should use just use common methods
 	 * inherited from {@link Sizeable} interface.
@@ -232,7 +232,7 @@ public class JFreeChartWrapper_Modified extends Embedded {
 		return width;
 	}
 
-	/**
+	/*
 	 * Gets the pixel height into which the graph is rendered. Unless explicitly
 	 * set, the value is derived from the components size, except when the
 	 * component has relative size.
@@ -267,7 +267,7 @@ public class JFreeChartWrapper_Modified extends Embedded {
 		return aspectRatio;
 	}
 
-	/**
+	/*
 	 * See SVG spec from W3 for more information.
 	 * 
 	 * 

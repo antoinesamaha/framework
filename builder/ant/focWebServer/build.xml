@@ -17,6 +17,13 @@
 		<attribute name="tarDir" default="NOT_SET"/>
 		<element name="justdoit" implicit="yes"/>
 		<sequential>
+			<echo message="focWebServer.srcDir = ${focWebServer.srcDir}"/>
+			<echo message="tarDir= @{tarDir}"/>
+			
+			<echo message="jwtJAR= ${jwtJAR}"/>
+			<echo message="jettyJAR= ${jettyJAR}"/>
+			<echo message="${java.class.path} = ${java.class.path}"/> 
+				
 			<javac srcdir="${focWebServer.srcDir}" destdir="@{tarDir}" debug="${compile_debug_true}" debuglevel="${compile_debug_lines}" encoding="UTF-8" >
 				<classpath>
 					<pathelement path="${java.class.path}/"/>
@@ -56,6 +63,8 @@
 					<pathelement path="${BarcodeJAR2}"/>
 				  	
 					<pathelement path="${pdfJAR}"/>
+					<pathelement path="${jwtJAR}"/>
+					<pathelement path="${jettyJAR}"/>
 					<pathelement path="${excelExportJAR}"/>
 					
 					<pathelement path="${WebServicesDir}/${wsFile1}"/>

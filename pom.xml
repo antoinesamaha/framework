@@ -1,10 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.focframework</groupId>
-  <artifactId>foc</artifactId>
+  <artifactId>focframework</artifactId>
   <version>${foc.version}</version>
-  <name>foc</name>
-  <description>foc</description>
+  
+  <name>focframework</name>
+  <description>focframework</description>
+  <packaging>pom</packaging>
     
   <distributionManagement>
   <snapshotRepository>
@@ -18,15 +20,6 @@
   </distributionManagement>
   
   <build>
-    <sourceDirectory>src</sourceDirectory>
-    <resources>
-      <resource>
-        <directory>src</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -36,6 +29,24 @@
           <target>1.8</target>
         </configuration>
       </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+						<configuration>
+							<keyname>4AE5DB223147B9675773C136992A59191E28DBA2</keyname>
+							<passphraseServerId>4AE5DB223147B9675773C136992A59191E28DBA2</passphraseServerId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
     </plugins>
   </build>
   <dependencies>
@@ -89,4 +100,14 @@
 		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
 	</scm>  
 	<url>http://www.focframework.com</url>
+
+  <modules>
+   <module>focAPI</module>
+   <module>focShared</module>
+   <module>foc</module>
+   <module>focOfficeLink</module>
+   <module>focDataSource_DB</module>
+   <module>focVaadinTheme</module>
+   <module>focWebServer</module>         
+  </modules>
 </project>

@@ -382,7 +382,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		adjustButtonStyleInHeaderBar(nBut, false, addButton);
 	}
 	
-	/**
+	/*
 	 * adjustButtonStyleInHeaderBar allows to customize the look of a button displayed in header menu bar 
 	 * 
 	 * @param nBut
@@ -987,7 +987,7 @@ public class FocWebVaadinWindow extends FocCentralPanel {
 		}
   }
   
-  /**
+  /*
    * Prepares a new opened tab when user is already logged in  
    */
   protected void prepareWindowAfterLogin(){

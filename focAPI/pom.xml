@@ -37,7 +37,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -64,8 +64,8 @@
 							<goal>sign</goal>
 						</goals>
 						<configuration>
-							<keyname>049FE00FA937BC187DD164112EEA74CBE741B06E</keyname>
-							<passphraseServerId>049FE00FA937BC187DD164112EEA74CBE741B06E</passphraseServerId>
+							<keyname>4AE5DB223147B9675773C136992A59191E28DBA2</keyname>
+							<passphraseServerId>4AE5DB223147B9675773C136992A59191E28DBA2</passphraseServerId>
 						</configuration>
 					</execution>
 				</executions>
@@ -94,6 +94,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -107,6 +108,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			 -->
 		</plugins>
 	</build>
 	<properties>

@@ -215,7 +215,7 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
   }    
   
   public int hashCode() {
-    return getString().hashCode();
+    return getString() != null ? getString().hashCode() : 0;
   }
 
   public int compareTo(FProperty prop) {

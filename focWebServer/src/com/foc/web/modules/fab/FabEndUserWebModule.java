@@ -77,12 +77,12 @@ public class FabEndUserWebModule extends FocWebModule {
         
         if(tableDef.isShowInMenu_Descendent()){
           XMLViewKey key_Form = new XMLViewKey(tableDef.getName(), XMLViewKey.TYPE_FORM);
-          XMLViewDictionary.getInstance().get_CreateIfNeeded_WithValidationSettings(key_Form);
+          XMLViewDictionary.getInstance().get_CreateIfNeeded_WithValidationSettings(key_Form, tableDef);
         }
         
         if(tableDef.isShowInMenu()){
           XMLViewKey key = new XMLViewKey(tableDef.getName(), XMLViewKey.TYPE_TABLE);
-          XMLViewDictionary.getInstance().get_CreateIfNeeded_WithValidationSettings(key);
+          XMLViewDictionary.getInstance().get_CreateIfNeeded_WithValidationSettings(key, tableDef);
         }
       }
     }

@@ -5546,6 +5546,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						jsonParseBoolean(jsonObj, fieldName);
 						break;										
 					case FieldDefinition.SQL_TYPE_ID_INT:
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE:
 						jsonParseInt(jsonObj, fieldName);
 						break;					
 					case FieldDefinition.SQL_TYPE_ID_LONG:
@@ -5601,6 +5602,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							//jsonParseBoolean(jsonObj, fieldName);
 							break;										
 						case FieldDefinition.SQL_TYPE_ID_INT:
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE:
 							property.setInteger(0);
 							break;					
 						case FieldDefinition.SQL_TYPE_ID_LONG:
