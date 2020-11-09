@@ -14,19 +14,15 @@ public class WSSingleLookup {
 	private FocDesc focDesc    = null;
 	private long    expiryDuration = 0;
 	private long    nextExpiryTime = 0;
+	private boolean scanSubList = true;
 	
 	public WSSingleLookup(String key, FocDesc focDesc) {
 		this(key, focDesc, 0);
 	}
-
-	public WSSingleLookup(String key, FocDesc focDesc, ArrayList<String> relatedLookups) {
-		this(key, focDesc, 0);
-	}
 	
-	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration, ArrayList<String> relatedLookups) {
-		this.key = key;
-		this.focDesc = focDesc;
-		setExpiryDuration(expiryDuration);
+	public WSSingleLookup(String key, FocDesc focDesc, boolean scanSubList) {
+		this(key, focDesc, 0);
+		this.scanSubList = scanSubList;
 	}
 	
 	public WSSingleLookup(String key, FocDesc focDesc, long expiryDuration) {
@@ -75,7 +71,7 @@ public class WSSingleLookup {
 		B01JsonBuilder builder = new B01JsonBuilder();
 		builder.setPrintForeignKeyFullObject(true);
 		builder.setHideWorkflowFields(true);
-		builder.setScanSubList(true);
+		builder.setScanSubList(scanSubList);
 		return builder;
 	}
 

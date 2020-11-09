@@ -19,7 +19,7 @@ public class WSLookupFactory {
 
 		putLookup(new WSSingleLookup("wf_title", WFTitleDesc.getInstance()));
 		putLookup(new WSSingleLookup("fgroup", FocGroupDesc.getInstance()));
-		putLookup(new WSSingleLookup("fuser", FocUserDesc.getInstance()));
+		putLookup(new WSSingleLookup("fuser", FocUserDesc.getInstance(), false));
 	}
 
 	public void putLookup(WSSingleLookup lookup) {
