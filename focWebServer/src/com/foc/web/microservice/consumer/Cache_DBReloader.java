@@ -52,9 +52,7 @@ public class Cache_DBReloader implements IDBReloader {
 			if(action == TYPE_UPDATE) {
 				if(tablesToSend.containsKey(obj.getThisFocDesc().getName())) {
 					ArrayList<Long> list = tablesToSend.get(obj.getThisFocDesc().getName());
-					if(list != null) {
-						list.add(obj.getReferenceInt());
-					} 
+					if(list != null && !list.contains(obj.getReferenceInt())) list.add(obj.getReferenceInt());
 				} else {
 					ArrayList<Long> list = new ArrayList<Long>();
 					list.add(obj.getReferenceInt());
