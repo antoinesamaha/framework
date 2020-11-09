@@ -106,7 +106,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		if(factory.hasLookupByName(table_name)) {
 			if(reload_all || Utils.isStringEmpty(object_refs)) {
 				factory.refreshLookupByName(table_name);
-			}else {
+			}else if(!Utils.isStringEmpty(object_refs)){
 				JSONArray array = new JSONArray(object_refs);
 				for(int j=0; j < array.length(); j++) {
 					try{
@@ -126,7 +126,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		boolean hasLookupByDesc = factory.hasLookupByFocDesc(desc); 
 		if(hasLookupByDesc && (reload_all || Utils.isStringEmpty(object_refs))) {
 			noRefreshDone = factory.refreshLookupByDesc(desc);
-		}else {
+		}else if(!Utils.isStringEmpty(object_refs)){
 			JSONArray array = new JSONArray(object_refs);
 			boolean ItemRefreshedFailed = false; 
 			for(int j=0; j < array.length(); j++) {
@@ -154,7 +154,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		if(desc != null && desc.getFocList() != null) {
 			if(reload_all || Utils.isStringEmpty(object_refs)) {
 				desc.getFocList().reloadFromDB();
-			} else {
+			} else if(!Utils.isStringEmpty(object_refs)){
 				JSONArray array = new JSONArray(object_refs);
 				for(int j=0; j < array.length(); j++) {
 					try{
