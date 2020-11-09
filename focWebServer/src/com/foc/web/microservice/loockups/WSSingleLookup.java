@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.foc.Globals;
 import com.foc.desc.FocDesc;
+import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 
@@ -114,6 +115,17 @@ public class WSSingleLookup {
 		FocList focList = getFocList(true); 
 		if (focList != null) focList.reloadFromDB();
 		jsonRebuild();	
+	}
+	
+	public synchronized void refreshObjectByReference(Long ref){
+		if(ref > 0) {
+			FocList focList = getFocList(true); 
+			if (focList != null) {
+				FocObject object = focList.searchByRealReferenceOnly(ref);
+				object.load();
+			}
+			jsonRebuild();
+		}
 	}
 	
 	public long getExpiryTime() {
