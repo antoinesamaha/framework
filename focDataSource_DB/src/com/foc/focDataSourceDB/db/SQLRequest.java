@@ -323,8 +323,10 @@ public class SQLRequest {
 	          	if(getFocObject() != null){
 	          		getFocObject().backup();
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
-	          		Globals.logString("Do Execute on action ID " + getSQLRequestType() + " : Try DBReloader Table '" + getFocObject().getThisFocDesc().getName() + "' - Ref : " + getFocObject().getReferenceInt());
 	          		if(dbReloader!=null) {
+	          			if (getFocObject().getThisFocDesc() != null) {
+	          				Globals.logString("IDBReloader action=" + getSQLRequestType() + " Table =" + getFocObject().getThisFocDesc().getName() + " Ref =" + getFocObject().getReferenceInt());
+	          			}
 	          			dbReloader.reloadTable(getFocObject(), getSQLRequestType());	
 //		    	      	Globals.logString("Do Execute: called DBReloader.reloadTable, table name: "+getFocObject().getThisFocDesc().getName());
 	          		}
@@ -332,8 +334,12 @@ public class SQLRequest {
 	          }
 	          if(getSQLRequestType() == TYPE_DELETE && getFocObject() != null){
           		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
-          		Globals.logString("Do Execute on action ID " + getSQLRequestType() + " : Try DBReloader Table '" + getFocObject().getThisFocDesc().getName() + "' - Ref : " + getFocObject().getReferenceInt());
-          		if(dbReloader!=null) dbReloader.reloadTable(getFocObject(), getSQLRequestType());
+          		if (dbReloader!=null) {
+          			if (getFocObject().getThisFocDesc() != null) {
+          				Globals.logString("IDBReloader action=" + getSQLRequestType() + " Table =" + getFocObject().getThisFocDesc().getName() + " Ref =" + getFocObject().getReferenceInt());
+          			}
+          			dbReloader.reloadTable(getFocObject(), getSQLRequestType());
+          		}
 	          }
 		        PerfManager.endDBExecForRequest(req);
 		      } catch (Exception e) {

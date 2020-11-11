@@ -118,7 +118,9 @@ public class WSSingleLookup {
 			FocList focList = getFocList(true); 
 			if (focList != null) {
 				FocObject object = focList.searchByRealReferenceOnly(ref);
-				object.load();
+				if (object != null) {
+					object.load();
+				}
 			}
 			jsonRebuild();
 		}

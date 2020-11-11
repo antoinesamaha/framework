@@ -50,14 +50,16 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 							JSONObject jsonObject = new JSONObject(table);
 							if(jsonObject.has(PARAM_TABLE_NAME)) {
 								String table_name = jsonObject.getString(PARAM_TABLE_NAME);
-								boolean reload_all = true;
-								if(jsonObject.has(PARAM_RELOAD_ALL)) {
-									String allData = jsonObject.getString(PARAM_RELOAD_ALL);
-									if(allData != null && allData.equalsIgnoreCase("false")) reload_all = false;
+								if (!Utils.isStringEmpty(table_name)) {
+									boolean reload_all = true;
+									if(jsonObject.has(PARAM_RELOAD_ALL)) {
+										String allData = jsonObject.getString(PARAM_RELOAD_ALL);
+										if(allData != null && allData.equalsIgnoreCase("false")) reload_all = false;
+									}
+									String object_refs = "";
+									if(!reload_all && jsonObject.has(PARAM_OBJECT_REF)) object_refs = jsonObject.getString(PARAM_OBJECT_REF);
+									executeRefreshTable(table_name, reload_all, object_refs);
 								}
-								String object_refs = "";
-								if(!reload_all && jsonObject.has(PARAM_RELOAD_ALL)) object_refs = jsonObject.getString(PARAM_OBJECT_REF);
-								if(!Utils.isStringEmpty(table_name)) executeRefreshTable(table_name, reload_all, object_refs);
 							}
 						}
 					}
@@ -124,26 +126,28 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		WSLookupFactory factory = WSLookupFactory.getInstance();
 		boolean noRefreshDone = true;
 		boolean hasLookupByDesc = factory.hasLookupByFocDesc(desc); 
-		if(hasLookupByDesc && (reload_all || Utils.isStringEmpty(object_refs))) {
+		if(hasLookupByDesc && reload_all) {
 			noRefreshDone = factory.refreshLookupByDesc(desc);
 		}else if(!Utils.isStringEmpty(object_refs)){
 			JSONArray array = new JSONArray(object_refs);
-			boolean ItemRefreshedFailed = false; 
+			boolean itemRefreshFailed = false; 
 			for(int j=0; j < array.length(); j++) {
 				try{
 					boolean itemDidntRefresh = true;
 					Long ref = array.getLong(j);
 					if(hasLookupByDesc) {
-						itemDidntRefresh = factory.refreshLookupByDescAndObjectReference(desc,ref);
+						itemDidntRefresh = factory.refreshLookupByDescAndObjectReference(desc, ref);
 					} else {
-						itemDidntRefresh = refreshCachedListItemByDescAndRef(desc, ref);
+						if (desc != null) {
+							itemDidntRefresh = desc.refreshCachedListFocObject(ref);
+						}
 					}
-					if(itemDidntRefresh) ItemRefreshedFailed = true;
+					if(itemDidntRefresh) itemRefreshFailed = true;
 				} catch (JSONException e){
 					e.printStackTrace();
 				}
 			}
-			noRefreshDone = ItemRefreshedFailed;
+			noRefreshDone = itemRefreshFailed;
 		}
 		if(noRefreshDone) {
 			refreshCachedListByDesc(desc, reload_all, object_refs);
@@ -159,7 +163,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 				for(int j=0; j < array.length(); j++) {
 					try{
 						Long ref = array.getLong(j);
-						refreshCachedListItemByDescAndRef(desc, ref);
+						desc.refreshCachedListFocObject(ref);
 					} catch (JSONException e){
 						e.printStackTrace();
 					}
@@ -168,13 +172,4 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		}
 	}
 	
-	private boolean refreshCachedListItemByDescAndRef(FocDesc desc, long ref) {
-		boolean error = true;
-		if(desc != null && ref > 0) {
-			FocObject descObject = desc.getFocList(FocList.LOAD_IF_NEEDED).searchByRealReferenceOnly(ref);
-			descObject.load();
-			error = false;
-		}
-		return error;
-	}
 }
