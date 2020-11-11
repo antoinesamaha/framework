@@ -235,7 +235,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			GrpMobileModuleRights module = mobileModule_GetModule(focRequest, moduleName);
 			if(module == null) {
 				right = false;
-			} else if(module.getRight() > 0){
+			} else {
 				switch (crud) {
 					case 'C':
 						right = module.getCreate();
