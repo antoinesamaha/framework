@@ -5482,7 +5482,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				if (isNullAndAllowed(strValue)) {
 					setPropertyNull_WithListener(fieldName);
 				} else {
-					setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					double doubleValue = Utils.parseDouble(strValue, 0.00);
+					setPropertyDouble(fieldName, doubleValue);
 				}
 			} catch (JSONException e) {
 				Globals.logException(e);
