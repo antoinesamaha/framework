@@ -2637,4 +2637,21 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		this.useOracleListAggCLOB = useOracleListAggCLOB;
 	}
 
+	public boolean refreshCachedListFocObject(long ref) {
+		boolean error = true;
+		if (isListInCache()) {
+			if(ref > 0) {
+				FocList list = getFocList();
+				if(list != null) {
+					list.loadIfNotLoadedFromDB();
+					FocObject focObject = list.searchByRealReferenceOnly(ref);
+					if(focObject != null) {
+						focObject.load();
+						error = false;
+					}
+				}
+			}
+		}
+		return error;
+	}	
 }

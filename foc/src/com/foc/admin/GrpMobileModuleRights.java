@@ -52,14 +52,6 @@ public class GrpMobileModuleRights extends FocObject {
   public void setModuleTitle(String key){
     setPropertyString(GrpMobileModuleRightsDesc.FLD_MODULE_TITLE, key);
   }
-
-  public int getRight(){
-    return getPropertyMultiChoice(GrpMobileModuleRightsDesc.FLD_ACCESS_RIGHT);
-  }
-  
-  public void setRight(int right){
-    setPropertyMultiChoice(GrpMobileModuleRightsDesc.FLD_ACCESS_RIGHT, right);
-  }
   
   public boolean getCreate() {
   	return getPropertyBoolean(GrpMobileModuleRightsDesc.FLD_CREATE);
@@ -94,7 +86,6 @@ public class GrpMobileModuleRights extends FocObject {
   	builder.beginObject();
   	builder.appendKey("MODULE_NAME");
   	builder.appendValue(getModuleName());
-		builder.appendKeyValue("ACCESS", getRight());
   	if(getCreate()) {
   		builder.appendKeyValue("Create", getCreate());
   	}
