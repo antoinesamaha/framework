@@ -142,6 +142,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	
 							if(user != null && !user.isSuspended()){
 								session.getWebSession().setFocUser(user);
+								registerUserLastHeartbeat(user);
 								Globals.logString(" = Session opened for username: " + username);
 							}else{
 								Globals.logString(" = Username: " + username + " not found, logout()");

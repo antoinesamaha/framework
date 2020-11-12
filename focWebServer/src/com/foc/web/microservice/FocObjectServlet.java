@@ -1,6 +1,7 @@
 package com.foc.web.microservice;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
+import com.foc.admin.ActiveUser;
+import com.foc.admin.ActiveUserDesc;
+import com.foc.admin.FocUser;
 import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -596,5 +600,33 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 
 	public interface ICopyFromJsonToSlave {
 		public void copyJsonToObject(FocObject slaveObj, JSONObject slaveJson);
+	}
+	
+	protected static void registerUserLastHeartbeat(FocUser user) {
+		if(user != null && ActiveUserDesc.getInstance() != null) {
+			FocList list = ActiveUserDesc.getInstance().getFocList();
+			if(list != null) {
+				ActiveUser activeUser = null;
+				for(int i=0; i < list.size() && activeUser == null; i++) {
+					ActiveUser curr = (ActiveUser) list.getFocObject(i);
+					if(curr.getUser() != null && curr.getUser().equalsRef(user)) {
+						activeUser = curr;
+					}
+				}
+				if(activeUser == null) {
+					activeUser = (ActiveUser) list.newEmptyItem();
+					activeUser.setUserCompany(user.getCompany());
+					activeUser.setUser(user);
+					activeUser.setUserSite(user.getCurrentSite());
+					activeUser.setUserTitle(user.getCurrentTitle());
+				}
+				long lastHeartBeat = System.currentTimeMillis();
+				Date lastHeartBeatDate = new Date(lastHeartBeat);
+				activeUser.setLastHeartBeat(lastHeartBeatDate);
+				list.add(activeUser);
+				activeUser.validate(false);
+				list.validate(false);
+			}
+		}
 	}
 }
