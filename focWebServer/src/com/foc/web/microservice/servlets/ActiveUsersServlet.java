@@ -28,6 +28,7 @@ import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitle;
 import com.foc.business.workflow.WFTitleDesc;
+import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.Utils;
@@ -78,53 +79,52 @@ public class ActiveUsersServlet extends FocSimpleMicroServlet {
 	
 	// static method to call the get servlet above //
 	
-	public static FocList getWSActiveUsersList(FocList list) {
-		if(list != null) {
-			try{
-				String url = ConfigInfo.getProperty("activeUsers.url");
-				if(!Utils.isStringEmpty(url)) {
-					HttpGet request = new HttpGet(url);
-					HttpClient client = HttpClientBuilder.create().build();
-					HttpResponse response = client.execute(request);
-					if(response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK) {
-						HttpEntity entity = response.getEntity();
-						String responseString = EntityUtils.toString(entity, "UTF-8");
-						System.out.println("reponding to WSActiveUsers GET call : " + responseString);
-						try{
-							JSONObject mainObject = new JSONObject(responseString);
-							if(mainObject.has(ActiveUsersServlet.PARAM_TABLE_LIST)) {
-								JSONArray activeUsersList = new JSONArray(mainObject.getString(ActiveUsersServlet.PARAM_TABLE_LIST));
-								if (activeUsersList != null) {
-									for(int i=0; i<activeUsersList.length(); i++) {
-										String activeUserStr = activeUsersList.getString(i);
-										if(!Utils.isStringEmpty(activeUserStr)) {
-											JSONObject activeUser = new JSONObject(activeUserStr);
-											long userRef = 0;
-											long companyRef = 0;
-											long siteRef = 0;
-											long titleRef = 0;
-											long lastHeartbeat = 0;
-											if(activeUser.has(ActiveUsersServlet.PARAM_USER_REF)) userRef = activeUser.getLong(ActiveUsersServlet.PARAM_USER_REF);
-											if(activeUser.has(ActiveUsersServlet.PARAM_COMPANY_REF)) companyRef = activeUser.getLong(ActiveUsersServlet.PARAM_COMPANY_REF);
-											if(activeUser.has(ActiveUsersServlet.PARAM_SITE_REF)) siteRef = activeUser.getLong(ActiveUsersServlet.PARAM_SITE_REF);
-											if(activeUser.has(ActiveUsersServlet.PARAM_TITLE_REF)) titleRef = activeUser.getLong(ActiveUsersServlet.PARAM_TITLE_REF);
-											if(activeUser.has(ActiveUsersServlet.PARAM_LAST_HEART_BEAT)) lastHeartbeat = activeUser.getLong(ActiveUsersServlet.PARAM_LAST_HEART_BEAT);
-											if(userRef > 0 && lastHeartbeat > 0){
-												ActiveUser newActiveUser = cerateActiveUserFromString(userRef, lastHeartbeat, companyRef,siteRef, titleRef);
-												list.add(newActiveUser);
-											}
+	public static FocList getNewWSActiveUsersList() {
+		FocList list = new FocList(new FocLinkSimple(ActiveUserDesc.getInstance()));
+		try{
+			String url = ConfigInfo.getProperty("activeUsers.url");
+			if(!Utils.isStringEmpty(url)) {
+				HttpGet request = new HttpGet(url);
+				HttpClient client = HttpClientBuilder.create().build();
+				HttpResponse response = client.execute(request);
+				if(response != null && response.getStatusLine() != null && response.getStatusLine().getStatusCode() == HttpServletResponse.SC_OK) {
+					HttpEntity entity = response.getEntity();
+					String responseString = EntityUtils.toString(entity, "UTF-8");
+					System.out.println("reponding to WSActiveUsers GET call : " + responseString);
+					try{
+						JSONObject mainObject = new JSONObject(responseString);
+						if(mainObject.has(ActiveUsersServlet.PARAM_TABLE_LIST)) {
+							JSONArray activeUsersList = new JSONArray(mainObject.getString(ActiveUsersServlet.PARAM_TABLE_LIST));
+							if (activeUsersList != null) {
+								for(int i=0; i<activeUsersList.length(); i++) {
+									String activeUserStr = activeUsersList.getString(i);
+									if(!Utils.isStringEmpty(activeUserStr)) {
+										JSONObject activeUser = new JSONObject(activeUserStr);
+										long userRef = 0;
+										long companyRef = 0;
+										long siteRef = 0;
+										long titleRef = 0;
+										long lastHeartbeat = 0;
+										if(activeUser.has(ActiveUsersServlet.PARAM_USER_REF)) userRef = activeUser.getLong(ActiveUsersServlet.PARAM_USER_REF);
+										if(activeUser.has(ActiveUsersServlet.PARAM_COMPANY_REF)) companyRef = activeUser.getLong(ActiveUsersServlet.PARAM_COMPANY_REF);
+										if(activeUser.has(ActiveUsersServlet.PARAM_SITE_REF)) siteRef = activeUser.getLong(ActiveUsersServlet.PARAM_SITE_REF);
+										if(activeUser.has(ActiveUsersServlet.PARAM_TITLE_REF)) titleRef = activeUser.getLong(ActiveUsersServlet.PARAM_TITLE_REF);
+										if(activeUser.has(ActiveUsersServlet.PARAM_LAST_HEART_BEAT)) lastHeartbeat = activeUser.getLong(ActiveUsersServlet.PARAM_LAST_HEART_BEAT);
+										if(userRef > 0 && lastHeartbeat > 0){
+											ActiveUser newActiveUser = cerateActiveUserFromString(userRef, lastHeartbeat, companyRef,siteRef, titleRef);
+											list.add(newActiveUser);
 										}
 									}
 								}
 							}
-						} catch (JSONException e){
-							e.printStackTrace();
 						}
+					} catch (JSONException e){
+						e.printStackTrace();
 					}
 				}
-			}catch (Exception e){
-				Globals.logException(e);
 			}
+		}catch (Exception e){
+			Globals.logException(e);
 		}
 		return list;
 	}
