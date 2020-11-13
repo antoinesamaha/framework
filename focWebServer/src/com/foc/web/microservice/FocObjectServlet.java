@@ -602,16 +602,27 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		public void copyJsonToObject(FocObject slaveObj, JSONObject slaveJson);
 	}
 	
+	protected static FocList cleanActiveUsersList(FocList list) {
+		if(list != null) {
+			long time = System.currentTimeMillis() - (1000 * 60 * 60 * 24 * 2);;
+			Date dateToCompare = new Date(time);
+			for(int i = list.size()-1; i >= 0; i--) {
+				ActiveUser curr = (ActiveUser) list.getFocObject(i);
+				if(curr.getLastHeartBeat() == null || curr.getLastHeartBeat().before(dateToCompare)) list.remove(curr);
+			}
+		}
+		return list;
+	}
+	
 	protected static void registerUserLastHeartbeat(FocUser user) {
 		if(user != null && ActiveUserDesc.getInstance() != null) {
 			FocList list = ActiveUserDesc.getInstance().getFocList();
 			if(list != null) {
+				if(list.size() > 50) list = cleanActiveUsersList(list);
 				ActiveUser activeUser = null;
 				for(int i=0; i < list.size() && activeUser == null; i++) {
 					ActiveUser curr = (ActiveUser) list.getFocObject(i);
-					if(curr.getUser() != null && curr.getUser().equalsRef(user)) {
-						activeUser = curr;
-					}
+					if(curr.getUser() != null && curr.getUser().equalsRef(user)) activeUser = curr;
 				}
 				if(activeUser == null) {
 					activeUser = (ActiveUser) list.newEmptyItem();
