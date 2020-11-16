@@ -16,7 +16,6 @@
 package com.foc.web.modules.admin;
 
 import java.net.URI;
-import java.sql.Date;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -30,8 +29,8 @@ import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
 import com.foc.access.FocLogLineDesc;
 import com.foc.access.FocLogger;
-import com.foc.admin.ActiveUser;
 import com.foc.admin.ActiveUserDesc;
+import com.foc.admin.ActiveUserList;
 import com.foc.admin.DocRightsGroupDesc;
 import com.foc.admin.DocRightsGroupUsersDesc;
 import com.foc.admin.FocGroup;
@@ -42,10 +41,7 @@ import com.foc.admin.GroupXMLViewDesc;
 import com.foc.admin.MenuRightsDesc;
 import com.foc.admin.userModuleAccess.UserModuleList;
 import com.foc.business.adrBook.ContactDesc;
-import com.foc.business.company.Company;
 import com.foc.business.multilanguage.LanguageDesc;
-import com.foc.business.workflow.WFSite;
-import com.foc.business.workflow.WFTitle;
 import com.foc.db.migration.MigFieldMapDesc;
 import com.foc.db.migration.MigrationSourceDesc;
 import com.foc.desc.AutoPopulatable;
@@ -53,7 +49,6 @@ import com.foc.desc.FocDesc;
 import com.foc.gui.table.view.ColumnsConfigDesc;
 import com.foc.gui.table.view.UserViewDesc;
 import com.foc.gui.table.view.ViewConfigDesc;
-import com.foc.list.FocLinkSimple;
 import com.foc.list.FocList;
 import com.foc.menuStructure.FocMenuItem;
 import com.foc.menuStructure.FocMenuItemDesc;
@@ -72,6 +67,7 @@ import com.foc.vaadin.gui.windows.optionWindow.IOption;
 import com.foc.vaadin.gui.windows.optionWindow.OptionDialogWindow;
 import com.foc.vaadin.xmleditor.XMLEditor;
 import com.foc.web.gui.INavigationWindow;
+import com.foc.web.microservice.servlets.ActiveUsersServlet;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.xmlViewDictionary.XMLView;
 import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
@@ -339,29 +335,17 @@ public class AdminWebModule extends FocWebModule {
 					FocWebServer.getInstance().removeApplicationsNotRunning();
 				}
 
-				FocList list = new FocList(new FocLinkSimple(ActiveUserDesc.getInstance()));
+				ActiveUserList list = new ActiveUserList();
 				for (int i = 0; i < FocWebServer.getInstance().getApplicationCount(); i++) {
 					FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
 					if (app != null && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null && !app.isClosing()) {
 						FocUser user = app.getFocWebSession().getFocUser();
-						if (user != null) {
-							Company company = user.getCurrentCompany();
-							WFSite site = user.getCurrentSite();
-							WFTitle title = user.getCurrentTitle();
-							ActiveUser activeUser = (ActiveUser) list.newEmptyItem();
-							activeUser.setUserCompany(company);
-							activeUser.setUser(user);
-							activeUser.setUserSite(site);
-							activeUser.setUserTitle(title);
-
-							long lastHeartBeat = app.getLastHeartbeatTimestamp();
-							Date lastHeartBeatDate = new Date(lastHeartBeat);
-							activeUser.setLastHeartBeat(lastHeartBeatDate);
-
-							list.add(activeUser);
-						}
+						
+						list.addActiveUser(user, app.getLastHeartbeatTimestamp(), ActiveUserDesc.ORIGIN_DESKTOP);
 					}
 				}
+				
+				ActiveUsersServlet.fillActiveUsersList(list);
 
 				XMLViewKey xmlViewKey = new XMLViewKey(ActiveUserDesc.getInstance().getStorageName(), XMLViewKey.TYPE_TABLE);
 				ICentralPanel centralPanel = XMLViewDictionary.getInstance().newCentralPanel((FocWebVaadinWindow) mainWindow, xmlViewKey, list);

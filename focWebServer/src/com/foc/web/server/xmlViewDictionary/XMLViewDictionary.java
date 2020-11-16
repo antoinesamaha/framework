@@ -509,6 +509,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
   			builder.append("\t" + addValidationSettings());
   		}
   		
+  		if(tableDef != null) {
 			FocList tableFieldDefinitionList = tableDef.getFieldDefinitionList();
 			for(int i=0; i<tableFieldDefinitionList.size(); i++){
 				FieldDefinition fieldDefinition = (FieldDefinition) tableFieldDefinitionList.getFocObject(i);
@@ -531,7 +532,7 @@ public class XMLViewDictionary implements IXMLViewDictionary {
 					builder.append(" />\n");
 				}
 			}    		
-  		
+  		}  		
   		builder.append("</VerticalLayout>");
   		viewDefinition.setXML(builder.toString());
 //    	}else{

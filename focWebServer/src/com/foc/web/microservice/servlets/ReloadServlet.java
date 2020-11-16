@@ -15,7 +15,6 @@ import com.foc.admin.FocGroup;
 import com.foc.admin.FocGroupDesc;
 import com.foc.admin.GrpMobileModuleRightsDesc;
 import com.foc.desc.FocDesc;
-import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
