@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.ActiveUser;
 import com.foc.admin.ActiveUserDesc;
@@ -615,7 +616,8 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	}
 	
 	protected static void registerUserLastHeartbeat(FocUser user) {
-		if(user != null && ActiveUserDesc.getInstance() != null) {
+		String url = ConfigInfo.getProperty("activeUsers.url");
+		if(user != null && ActiveUserDesc.getInstance() != null && !Utils.isStringEmpty(url)) {
 			FocList list = ActiveUserDesc.getInstance().getFocList();
 			if(list != null) {
 				if(list.size() > 50) list = cleanActiveUsersList(list);
