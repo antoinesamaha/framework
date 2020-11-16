@@ -7,6 +7,7 @@
     <TableColumn name="COMPANY.NAME" caption="Company" />
     <TableColumn name="SITE>NAME" caption="Site" />
     <TableColumn name="TITLE>NAME" caption="Title" />
+    <TableColumn name="Origin" caption="Origin" />
     <TableColumn name="LAST_HEART_BEAT" caption="Last Heart Beat" />
   </GuiTable>
 </VerticalLayout>

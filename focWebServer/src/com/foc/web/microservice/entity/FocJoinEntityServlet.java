@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
+import com.foc.admin.ActiveUserList;
 import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
@@ -142,6 +143,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 	
 							if(user != null && !user.isSuspended()){
 								session.getWebSession().setFocUser(user);
+								ActiveUserList.getInstance().serviceSide_updateHeartbeat(user);
 								Globals.logString(" = Session opened for username: " + username);
 							}else{
 								Globals.logString(" = Username: " + username + " not found, logout()");
@@ -184,6 +186,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					if(status == com.foc.Application.LOGIN_VALID){
 						// webSession = newApplication.getFocWebSession();
 						session.getWebSession().setFocUser(loginAccess.getUser());
+						ActiveUserList.getInstance().serviceSide_updateHeartbeat(loginAccess.getUser());
 					}
 					if(status == com.foc.Application.LOGIN_WRONG){
 						Globals.logString(" = Authorization with Username password failed - Incorrect credentials");

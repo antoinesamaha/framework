@@ -91,6 +91,14 @@ public class ActiveUser extends FocObject{
   	setPropertyDate(ActiveUserDesc.FLD_LAST_HEART_BEAT, date);
   }
 
+	public String getOrigin() {
+		return getPropertyString(ActiveUserDesc.FLD_ORIGIN);
+	}
+
+	public void setOrigin(String value) {
+		setPropertyString(ActiveUserDesc.FLD_ORIGIN, value);
+	}
+	
   public static FocDesc getFocDesc() {
     return FocGroupDesc.getInstance();
   }
