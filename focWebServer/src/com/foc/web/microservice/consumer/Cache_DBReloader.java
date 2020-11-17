@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.admin.FocUserHistoryDesc;
 import com.foc.db.IDBReloader;
 import com.foc.desc.FocObject;
 import com.foc.util.Utils;
@@ -28,6 +29,7 @@ public class Cache_DBReloader implements IDBReloader {
 
 	private boolean active = false;
 	private String  url    = null;
+	private HashMap<String, String> excludedTables = null;
 	private HashMap<String, ArrayList<Long>> tablesToSend = null;
   public static final int TYPE_UPDATE =  2;
 	
@@ -44,11 +46,27 @@ public class Cache_DBReloader implements IDBReloader {
 				active = true;
 			}
 		}
+		excludedTables_Fill();
+	}
+	
+	protected void excludedTables_Fill() {
+		excludedTables_Put(FocUserHistoryDesc.DB_TABLE_NAME);
+	}
+	
+	public void excludedTables_Put(String tablename) {
+		if (excludedTables == null) {
+			excludedTables = new HashMap<String, String>();
+		}
+		excludedTables.put(tablename, tablename);
+	}
+
+	public boolean excludedTables_IsExcluded(String tablename) {
+		return excludedTables != null && excludedTables.containsKey(tablename);
 	}
 	
 	@Override
 	public synchronized void reloadTable(FocObject obj, int action) {
-		if(obj != null && obj.getThisFocDesc() != null && obj.getThisFocDesc().isListInCache()) {
+		if(obj != null && obj.getThisFocDesc() != null && obj.getThisFocDesc().isListInCache() && active) {
 			if(action == TYPE_UPDATE) {
 				if(tablesToSend.containsKey(obj.getThisFocDesc().getName())) {
 					ArrayList<Long> list = tablesToSend.get(obj.getThisFocDesc().getName());

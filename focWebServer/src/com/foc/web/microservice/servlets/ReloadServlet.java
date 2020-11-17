@@ -57,6 +57,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 									}
 									String object_refs = "";
 									if(!reload_all && jsonObject.has(PARAM_OBJECT_REF)) object_refs = jsonObject.getString(PARAM_OBJECT_REF);
+									Globals.logString(" - Reloading table:"+table_name+" all:"+reload_all+" refs:"+object_refs);
 									executeRefreshTable(table_name, reload_all, object_refs);
 								}
 							}
