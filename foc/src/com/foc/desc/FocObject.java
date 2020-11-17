@@ -2918,6 +2918,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }
     return error;
   }
+  
+  public void reloadWithSlaveLists() {
+		load();
+		FocFieldEnum enumer = newFocFieldEnum(FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
+		if(enumer != null) {
+			while(enumer.hasNext()) {
+				FField fld = enumer.nextField();
+				FProperty prop = enumer.getProperty();
+				if (prop != null && prop instanceof FList) {
+					FocList list = ((FList) prop).getList();
+					list.reloadFromDB();
+				}
+			}
+		}
+  }
 
   private void backupRestore(boolean backup) {
     //FocDesc focDesc = getThisFocDesc();

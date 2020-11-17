@@ -2646,7 +2646,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 					list.loadIfNotLoadedFromDB();
 					FocObject focObject = list.searchByRealReferenceOnly(ref);
 					if(focObject != null) {
-						focObject.load();
+						focObject.reloadWithSlaveLists();
 						error = false;
 					}
 				}

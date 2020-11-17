@@ -20,6 +20,7 @@ import org.json.JSONObject;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.access.AccessSubject;
 import com.foc.admin.FocUserHistoryDesc;
 import com.foc.db.IDBReloader;
 import com.foc.desc.FocObject;
@@ -65,23 +66,45 @@ public class Cache_DBReloader implements IDBReloader {
 	}
 	
 	@Override
-	public synchronized void reloadTable(FocObject obj, int action) {
-		if(obj != null && obj.getThisFocDesc() != null && obj.getThisFocDesc().isListInCache() && active) {
-			if(action == TYPE_UPDATE) {
-				if(tablesToSend.containsKey(obj.getThisFocDesc().getName())) {
-					ArrayList<Long> list = tablesToSend.get(obj.getThisFocDesc().getName());
-					if(list != null && !list.contains(obj.getReferenceInt())) list.add(obj.getReferenceInt());
-				} else {
-					ArrayList<Long> list = new ArrayList<Long>();
-					list.add(obj.getReferenceInt());
-					tablesToSend.put(obj.getThisFocDesc().getName(), list);
+	public synchronized void reloadTable(FocObject objInitial, int action) {
+		if (active) {
+			boolean       reload = false;
+			
+			FocObject     obj = null;
+			AccessSubject subject = objInitial;
+			while (subject != null) {
+				if (subject instanceof FocObject) {
+					FocObject currentObj = (FocObject) subject;
+					if(		 currentObj.getThisFocDesc() != null 
+							&& currentObj.getThisFocDesc().isListInCache() 
+							&& !excludedTables_IsExcluded(currentObj.getThisFocDesc().getStorageName())) {
+						obj = currentObj;
+						reload = true;
+					} else {
+						reload = false;
+						break;
+					}
 				}
-			} else {
-				tablesToSend.put(obj.getThisFocDesc().getName(), null);
-			}			
-			if (awaitingThread == null) {
-				awaitingThread = new CallThread();
-				awaitingThread.start();
+				subject = subject.getFatherSubject();
+			}
+			
+			if (reload && obj != null) {
+				if(action == TYPE_UPDATE) {
+					if(tablesToSend.containsKey(obj.getThisFocDesc().getName())) {
+						ArrayList<Long> list = tablesToSend.get(obj.getThisFocDesc().getName());
+						if(list != null && !list.contains(obj.getReferenceInt())) list.add(obj.getReferenceInt());
+					} else {
+						ArrayList<Long> list = new ArrayList<Long>();
+						list.add(obj.getReferenceInt());
+						tablesToSend.put(obj.getThisFocDesc().getName(), list);
+					}
+				} else {
+					tablesToSend.put(obj.getThisFocDesc().getName(), null);
+				}			
+				if (awaitingThread == null) {
+					awaitingThread = new CallThread();
+					awaitingThread.start();
+				}
 			}
 		}
 	}

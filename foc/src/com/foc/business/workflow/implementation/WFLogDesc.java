@@ -94,6 +94,7 @@ public class WFLogDesc extends FocDesc {
 		super(WFLog.class, FocDesc.DB_RESIDENT, getStorageName_ForTransactionStorageName(dbTableSuffix), false);
 		setGuiBrowsePanelClass(WFLogGuiBrowsePanel.class);
 		addReferenceField();
+		setListInCache(false);
 		
 		boolean isWorkflow = iWFDesc instanceof IWorkflowDesc; 
 		
