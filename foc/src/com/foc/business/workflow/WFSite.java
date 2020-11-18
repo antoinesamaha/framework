@@ -19,14 +19,15 @@ import java.util.ArrayList;
 
 import com.foc.Globals;
 import com.foc.admin.FocUser;
-import com.foc.admin.UserSession;
 import com.foc.business.workflow.rights.RightLevel;
 import com.foc.business.workflow.rights.UserTransactionRight;
 import com.foc.business.workflow.rights.UserTransactionRightDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FField;
 import com.foc.list.FocList;
 import com.foc.list.FocListOrder;
+import com.foc.shared.json.B01JsonBuilder;
 
 @SuppressWarnings("serial")
 public class WFSite extends FocObject {
@@ -209,4 +210,37 @@ public class WFSite extends FocObject {
 		}
 		return userTransactionRight;
 	}	
+	
+	@Override
+	public void toJson_Detailed(B01JsonBuilder builder) {
+    builder.beginObject();
+    appendKeyValueForFieldName(builder, null, FField.REF_FIELD_NAME);
+    appendKeyValueForFieldName(builder, null, FField.FNAME_NAME);
+    appendKeyValueForFieldName(builder, null, FField.FNAME_DESCRIPTION);
+    appendKeyValueForFieldName(builder, null, WFSiteDesc.FNAME_TRANSACTION_PREFIX);
+    
+    appendKeyValueForFieldName(builder, null, WFOperatorDesc.DB_TABLE_NAME+"_LIST");
+    appendKeyValueForFieldName(builder, null, UserTransactionRightDesc.DB_TABLE_NAME+"_LIST");
+    
+    builder.endObject();
+	}
+	
+	@Override
+	public void toJson_Embedded(B01JsonBuilder builder) {
+    builder.beginObject();
+    appendKeyValueForFieldName(builder, null, FField.REF_FIELD_NAME);
+    appendKeyValueForFieldName(builder, null, FField.FNAME_NAME);
+    builder.endObject();
+	}
+	
+	@Override
+	public void toJson_InList(B01JsonBuilder builder) {
+    builder.beginObject();
+    appendKeyValueForFieldName(builder, null, FField.REF_FIELD_NAME);
+    appendKeyValueForFieldName(builder, null, FField.FNAME_NAME);
+    appendKeyValueForFieldName(builder, null, FField.FNAME_DESCRIPTION);
+    appendKeyValueForFieldName(builder, null, WFSiteDesc.FNAME_TRANSACTION_PREFIX);
+    builder.endObject();
+	}
+	
 }

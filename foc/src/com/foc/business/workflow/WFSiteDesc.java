@@ -44,6 +44,7 @@ public class WFSiteDesc extends FocDesc {
 	public static final String DB_TABLE_NAME = "WF_AREA";
 	
 	public static final String FNAME_ADDRESS = "ADDRESS";
+	public static final String FNAME_TRANSACTION_PREFIX = "TRANSACTION_PREFIX";
 	
 	public WFSiteDesc(){
 		super(WFSite.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, true);
@@ -60,7 +61,7 @@ public class WFSiteDesc extends FocDesc {
     compField.setListFieldInMaster(CompanyDesc.getInstance(), CompanyDesc.FLD_SITE_LIST, this, null);
     addField(compField);
 
-    FStringField cFld = new FStringField("TRANSACTION_PREFIX", "Transaction Prefix", FLD_TRANSACTION_PREFIX, false, LEN_TRANSACTION_PREFIX);
+    FStringField cFld = new FStringField(FNAME_TRANSACTION_PREFIX, "Transaction Prefix", FLD_TRANSACTION_PREFIX, false, LEN_TRANSACTION_PREFIX);
     addField(cFld);
 		
 		FBlobStringField fField = new FBlobStringField(FNAME_ADDRESS, "Address", FLD_ADDRESS, false, 4, 30);
