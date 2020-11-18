@@ -297,6 +297,30 @@ public class DBAdaptor {
     		}
       }
 
+    	//Debug only
+    	//----------
+    	/*
+    	if(DBManagerServer.getInstance() != null){//Logging cached not cached
+    		Globals.logString("Cached or Not Cached:");
+    		
+		    iter = Globals.getApp().getFocDescDeclarationIterator();
+		    while(iter != null && iter.hasNext()){
+		    	IFocDescDeclaration focDescDeclaration = iter.next();
+		    	if(focDescDeclaration != null){
+			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
+			    	if(focDesc != null && focDesc.isDbResident()){
+			    		try{
+			    			Globals.logString(focDesc.getStorageName()+" , "+focDesc.isListInCache(), false);
+			        }catch(Exception e){
+			        	Globals.logException(e);
+			    		}
+			    	}
+		      }
+		    }
+      }
+      */
+    	//----------
+    	
 	    iter1 = Globals.getApp().modules_Iterator();
 	    while(iter1 != null && iter1.hasNext()){
 	      FocModule module = (FocModule) iter1.next();
