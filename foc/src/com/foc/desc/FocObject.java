@@ -5511,7 +5511,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 		if (jsonObj.has(fieldName)) {
 			try {
 				FObject fObj = (FObject) getFocPropertyByName(fieldName);
-				if (jsonObj.isNull(fieldName)) {
+				if (jsonObj.isNull(fieldName) && ConfigInfo.isAllowNullProperties()) {
 					setPropertyObject(fieldName, null);
 				} else {
 					FocList list = fObj != null ? fObj.getPropertySourceList() : null;
