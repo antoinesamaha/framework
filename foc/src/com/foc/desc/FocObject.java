@@ -5508,24 +5508,26 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	}
   
 	public void jsonParseForeignKey(JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName)){
-			try{
+		if (jsonObj.has(fieldName)) {
+			try {
 				FObject fObj = (FObject) getFocPropertyByName(fieldName);
-				FocList list = fObj != null ? fObj.getPropertySourceList() : null;
-				if (list != null && !jsonObj.isNull(fieldName)) {
-					list.loadIfNotLoadedFromDB();
-					
-					FocObject foundObj = null;
-					if (jsonObj.get(fieldName) instanceof JSONObject) {
-						JSONObject jsonForeignObj = (JSONObject) jsonObj.get(fieldName); 
-						foundObj = list.searchByRealReferenceOnly(jsonForeignObj.getInt(FField.REF_FIELD_NAME));
-					} else {
-						foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));	
+				if (jsonObj.isNull(fieldName)) {
+					setPropertyObject(fieldName, null);
+				} else {
+					FocList list = fObj != null ? fObj.getPropertySourceList() : null;
+					if (list != null && !jsonObj.isNull(fieldName)) {
+						list.loadIfNotLoadedFromDB();
+						FocObject foundObj = null;
+						if (jsonObj.get(fieldName) instanceof JSONObject) {
+							JSONObject jsonForeignObj = (JSONObject) jsonObj.get(fieldName);
+							foundObj = list.searchByRealReferenceOnly(jsonForeignObj.getInt(FField.REF_FIELD_NAME));
+						} else {
+							foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));
+						}
+						setPropertyObject(fieldName, foundObj);
 					}
-					
-					setPropertyObject(fieldName, foundObj);
 				}
-			}catch (JSONException e){
+			} catch (JSONException e) {
 				Globals.logException(e);
 			}
 		}
