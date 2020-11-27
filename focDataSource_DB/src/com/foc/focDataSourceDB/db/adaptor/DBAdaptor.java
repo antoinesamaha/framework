@@ -54,12 +54,14 @@ import com.foc.util.Utils;
 
 public class DBAdaptor {
 
-	private HashMap<String, Hashtable<String, String>> actualTablesByConnection = null;
+	private HashMap<String, Hashtable<String, String>> actualTablesByConnection      = null;
+	private HashMap<String, HashMap<String, String>>   actualConstraintsByConnection = null;
 	
 //  private Hashtable<String, String> allTables      = null;
   private Hashtable<String, String> exeTables      = null;
   private boolean                   alterAllFields = false;
   private FocDataSource_DB          dataSource     = null;
+  
   
   public DBAdaptor(FocDataSource_DB dataSource){
   	this.dataSource = dataSource;
@@ -77,6 +79,13 @@ public class DBAdaptor {
   	if(actualTablesByConnection != null){
   		actualTablesByConnection.clear();
   		actualTablesByConnection = null;
+  	}
+  }
+
+  public void dispose_ActualConstraintsByConnection(){
+  	if(actualConstraintsByConnection != null){
+  		actualConstraintsByConnection.clear();
+  		actualConstraintsByConnection = null;
   	}
   }
   
@@ -133,25 +142,15 @@ public class DBAdaptor {
 	    }
 	
 	    //Drop all FFK_ constraints on all Oracle connections
-	    if(ConfigInfo.isAdaptConstraints()) {
+	    if(ConfigInfo.isAdaptConstraints() && isAlterAllFields()) {
 		  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
-		  	if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE ){
-		  		dropConstrains_Oracle(null);	
-		  	} else if (defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES) {
-		  		dropConstrains_Postgres(null);
-		  	}
+	  		constrains_DropAll(defaultConnection);
+
 		  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
 		  	while(auxConnIter != null && auxConnIter.hasNext()){
 		  		ConnectionPool connectionPool = auxConnIter.next();
-		  		if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE || defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES){
-			  		String sourceKey = connectionPool.getDBSourceKey();
-			  		if(connectionPool != null && sourceKey != null){
-			  			if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE ){
-					  		dropConstrains_Oracle(sourceKey);	
-					  	} else if (defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES) {
-					  		dropConstrains_Postgres(sourceKey);
-					  	}
-			  		}
+		  		if(connectionPool != null){
+			  		constrains_DropAll(connectionPool);
 		  		}
 		  	}
 	    }
@@ -267,7 +266,7 @@ public class DBAdaptor {
 			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
 			    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
 			    		try{
-			    			adaptDBTable_Constraints_OraclePostgres(focDesc);
+			    			constraint_Adapt(focDesc);
 			        }catch(Exception e){
 			        	Globals.logException(e);
 			    		}
@@ -297,6 +296,30 @@ public class DBAdaptor {
     		}
       }
 
+    	//Debug only
+    	//----------
+    	/*
+    	if(DBManagerServer.getInstance() != null){//Logging cached not cached
+    		Globals.logString("Cached or Not Cached:");
+    		
+		    iter = Globals.getApp().getFocDescDeclarationIterator();
+		    while(iter != null && iter.hasNext()){
+		    	IFocDescDeclaration focDescDeclaration = iter.next();
+		    	if(focDescDeclaration != null){
+			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
+			    	if(focDesc != null && focDesc.isDbResident()){
+			    		try{
+			    			Globals.logString(focDesc.getStorageName()+" , "+focDesc.isListInCache(), false);
+			        }catch(Exception e){
+			        	Globals.logException(e);
+			    		}
+			    	}
+		      }
+		    }
+      }
+      */
+    	//----------
+    	
 	    iter1 = Globals.getApp().modules_Iterator();
 	    while(iter1 != null && iter1.hasNext()){
 	      FocModule module = (FocModule) iter1.next();
@@ -428,6 +451,24 @@ public class DBAdaptor {
   	return actualTablesByConnection;
   }
   
+  private HashMap<String, HashMap<String, String>> constraints_GetActualConstraintsMap(boolean createIfNull){
+  	if(actualConstraintsByConnection == null && createIfNull){
+	  	actualConstraintsByConnection = new HashMap<String, HashMap<String, String>>();
+	  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
+	  	HashMap<String, String> constraintsMap = constrains_NewAllConstraints(defaultConnection);
+	  	actualConstraintsByConnection.put(null, constraintsMap);
+	  	
+	  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
+	  	while(auxConnIter != null && auxConnIter.hasNext()){
+	  		ConnectionPool connectionPool = auxConnIter.next();
+		  	constraintsMap = constrains_NewAllConstraints(connectionPool);
+		  	actualConstraintsByConnection.put(connectionPool.getDBSourceKey(), constraintsMap);
+	  	}
+  	}
+  			
+  	return actualConstraintsByConnection;
+  }
+  
   /*
   public Hashtable<String, String> actualTables_fillForOneConnection(ConnectionPool connectionPool){
   	Hashtable<String, String> allTables = new Hashtable<String, String>();
@@ -495,62 +536,82 @@ public class DBAdaptor {
   	}
   }
   
-  private void dropConstrains_Oracle(String dbSourceKey){
+  private HashMap<String, String> constrains_GetAllConstraints(ConnectionPool connectionPool){
+  	HashMap<String, HashMap<String, String>> map = constraints_GetActualConstraintsMap(true);
+  	HashMap<String, String> allConstraints = map != null ? map.get(connectionPool.getDBSourceKey()) : null;
+  	return allConstraints;
+  }
+  
+  private HashMap<String, String> constrains_NewAllConstraints(ConnectionPool connectionPool){
+  	HashMap<String, String> constraints = new HashMap<String, String>();
+  	try{
+	  	if (connectionPool != null) {
+				String request = null;
+				if (connectionPool.getProvider() == DBManager.PROVIDER_POSTGRES) {
+					request = "SELECT conname, relname FROM pg_catalog.pg_constraint con INNER JOIN pg_catalog.pg_class rel ON rel.oid = con.conrelid INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace where conname like 'FFK_%'";
+				} else if (connectionPool.getProvider() == DBManager.PROVIDER_ORACLE) {
+					request = "SELECT constraint_name, table_name FROM user_constraints where constraint_name like 'FFK_%'";	
+				}
+				
+				if (!Utils.isStringEmpty(request)) {
+					StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(connectionPool.getDBSourceKey());
+					stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+			    ResultSet resSet = stmt.getResultSet();
+			    if(resSet != null){
+			    	while(resSet.next()){
+			  			String contraintName = resSet.getString(1);
+			  			String tableName = resSet.getString(2);
+			  			
+			  			constraints.put(contraintName, tableName);
+			    	}
+			    	resSet.close();
+			    }
+			    DBManagerServer.getInstance().unlockStatement(stmt);
+				}
+	  	}
+  	} catch(Exception e) {
+  		Globals.logException(e);
+  	}
+    
+    return constraints;
+  }
+
+  private void constrains_Drop(ConnectionPool connectionPool, String tableName, String constraintName){
     try{
-    	ArrayList<String> constraintsDropRequests = new ArrayList<String>();
-    	
-			StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
-			String request = "SELECT table_name, constraint_name FROM user_constraints where constraint_name like 'FFK_%'";
-	    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
-	    ResultSet resSet = stmt.getResultSet();
-	    if(resSet != null){
-	    	while(resSet.next()){
-	  			String tableName     = resSet.getString(1);
-	  			String contraintName = resSet.getString(2);
-	  			constraintsDropRequests.add("alter table \""+tableName+"\" drop constraint \""+contraintName+"\"");
-	    	}
-	    	resSet.close();
-	    }
-	    DBManagerServer.getInstance().unlockStatement(stmt);
+    	if (connectionPool != null) {
+    		String request = null;
+    		if(connectionPool.getProvider() == DBManager.PROVIDER_POSTGRES) {
+    			request = "alter table \""+tableName+"\" drop constraint if exists \""+constraintName+"\"";
+    		} else if(connectionPool.getProvider() == DBManager.PROVIDER_ORACLE) {
+    			request = "alter table \""+tableName+"\" drop constraint \""+constraintName+"\"";
+    		}
 	    
-	    for(int i=0; i<constraintsDropRequests.size(); i++){
-	    	request = constraintsDropRequests.get(i);
-	    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
-	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
-	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
-	    }
+    		if (!Utils.isStringEmpty(request)) {
+		    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(connectionPool.getDBSourceKey());
+	//	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
+	//	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+		    	constraintStmt.executeUpdate(request);
+		    	Globals.logString(request);
+		    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+    		}
+    	}
     }catch(Exception e){
     	Globals.logException(e);
     }
   }
   
-  private void dropConstrains_Postgres(String dbSourceKey){
+  private void constrains_DropAll(ConnectionPool connectionPool){
     try{
-    	ArrayList<String> constraintsDropRequests = new ArrayList<String>();
-    	
-			StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
-			String request = "SELECT conname, relname FROM pg_catalog.pg_constraint con INNER JOIN pg_catalog.pg_class rel ON rel.oid = con.conrelid INNER JOIN pg_catalog.pg_namespace nsp ON nsp.oid = connamespace where conname like 'FFK_%'";
-	    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
-	    ResultSet resSet = stmt.getResultSet();
-	    if(resSet != null){
-	    	while(resSet.next()){
-	  			String contraintName = resSet.getString(1);
-	  			String tableName = resSet.getString(2);
-	  			constraintsDropRequests.add("alter table \""+tableName+"\" drop constraint if exists \""+contraintName+"\"");
+    	if (connectionPool != null) {
+	    	HashMap<String, String> constraintsMap = constrains_GetAllConstraints(connectionPool);
+	    	Iterator<String> iter = constraintsMap.keySet().iterator();
+	    	while (iter != null && iter.hasNext()) {
+	    		String constraintName = iter.next();
+	    		String tableName = constraintsMap.get(constraintName);
+	    		
+	    		constrains_Drop(connectionPool, tableName, constraintName);
 	    	}
-	    	resSet.close();
-	    }
-	    DBManagerServer.getInstance().unlockStatement(stmt);
-	    
-	    for(int i=0; i<constraintsDropRequests.size(); i++){
-	    	request = constraintsDropRequests.get(i);
-	    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
-//	    	constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request);
-//	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
-	    	constraintStmt.executeUpdate(request);
-	    	Globals.logString(request);
-	    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
-	    }
+    	}
     }catch(Exception e){
     	Globals.logException(e);
     }
@@ -591,9 +652,13 @@ public class DBAdaptor {
     }
   }
   
-  private void adaptDBTable_Constraints_OraclePostgres(FocDesc focDesc){
+  private void constraint_Adapt(FocDesc focDesc){
   	if(focDesc != null && focDesc.isDbResident() && (focDesc.getProvider() == DBManager.PROVIDER_ORACLE || focDesc.getProvider() == DBManager.PROVIDER_POSTGRES)){
-	    FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
+  		String         dbSourceKey = focDesc.getDbSourceKey();
+  		ConnectionPool connectionPool  = DBManagerServer.getInstance().getConnectionPool(dbSourceKey);
+  		HashMap<String, String> allConstraints = constrains_GetAllConstraints(connectionPool);
+  		
+  		FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
 	    while (enumer.hasNext()) {
 	      FField field = (FField) enumer.next();
 	  	
@@ -610,6 +675,15 @@ public class DBAdaptor {
 		     
 		      	if(constraintName.length() > 30) {
 		      		int fieldNameHashCode = field.getDBName().hashCode();
+		      		if(fieldNameHashCode < 0) {
+		      			//This is only needed because we used to create constraints with negative field hash
+		        		String oldName = "FFK_"+tableNameHashCode+"_"+fieldNameHashCode;
+		        		if (allConstraints != null && allConstraints.get(oldName) != null) {
+		        			constrains_Drop(connectionPool, allConstraints.get(oldName), oldName);
+		        		}
+		      			
+		      			fieldNameHashCode = -fieldNameHashCode;
+		      		}
 		      		constraintName = "FFK_"+tableNameHashCode+"_"+fieldNameHashCode;
 		      	}
 		      	
@@ -618,25 +692,28 @@ public class DBAdaptor {
 				  		FReferenceField refField = (FReferenceField) otherFocDesc.getFieldByID(FField.REF_FIELD_ID); 
 				  		
 				  		if(refField != null){
+				  			
 				  			//If the column is already there with zeros instead of null this will rase errors when creating the constraints
-//				  			if(alterAllFields) {
+				  			if(alterAllFields) {
 									String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
 									Globals.logString(replaceRequest);
 									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
-//				  			}				  			
+				  			}				  			
 						    //-------------------------------------------------------------------------------------------------------------
-								
-								StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
-								String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
-								request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
-								request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
-								if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
-									request += " novalidate";
-									stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
-							    DBManagerServer.getInstance().unlockStatement(stmt);
-								} else {
-							    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
-								}
+
+				  			if(alterAllFields || allConstraints == null || allConstraints.get(constraintName) == null) {
+									StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
+									String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
+									request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
+									request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
+									if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
+										request += " novalidate";
+										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+								    DBManagerServer.getInstance().unlockStatement(stmt);
+									} else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
+									}
+				  			}								
 				  		}
 			  		}
 		      }catch(Exception e){
@@ -668,6 +745,10 @@ public class DBAdaptor {
 //      	modelFieldName = modelFieldName.toUpperCase();
 //      }
       realField = (FField) actualFields.get(modelFieldName);
+//      if(enumer.getFieldCompleteName(focDesc)==FField.REF_FIELD_NAME) {
+//      	continue;
+//      }
+      
       try{
 	      if (realField == null) {
 //	        new SQLTableDetails(focDesc);
@@ -686,8 +767,6 @@ public class DBAdaptor {
 	        Globals.logException(e);
 	        */
 	      } else if (isAlterAllFields() || focField.compareSQLDeclaration(realField) != 0) {
-	        focField.compareSQLDeclaration(realField);
-	      	
 	      	String fieldCompleteName = enumer.getFieldCompleteName(focDesc);
 	        SQLAlterTable alter = new SQLAlterTable(focDesc, focField, fieldCompleteName, SQLAlterTable.MODIFY);
 	        if(ConfigInfo.isAdaptEnabled()){

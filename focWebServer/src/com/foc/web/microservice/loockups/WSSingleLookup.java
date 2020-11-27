@@ -1,7 +1,5 @@
 package com.foc.web.microservice.loockups;
 
-import java.util.ArrayList;
-
 import com.foc.Globals;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -113,13 +111,13 @@ public class WSSingleLookup {
 		jsonRebuild();	
 	}
 	
-	public synchronized void refreshObjectByReference(Long ref){
+	public synchronized void refreshObjectByReference(long ref){
 		if(ref > 0) {
 			FocList focList = getFocList(true); 
 			if (focList != null) {
 				FocObject object = focList.searchByRealReferenceOnly(ref);
 				if (object != null) {
-					object.load();
+					object.reloadWithSlaveLists();
 				}
 			}
 			jsonRebuild();

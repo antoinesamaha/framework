@@ -81,4 +81,6 @@ public interface IFocDataSource {
 	
 	public String command_DataModel2Code();
 	public StringBuffer getMonitoringText();
+	
+	public boolean      command_executeSQLScript(String key, String spFileName);
 }

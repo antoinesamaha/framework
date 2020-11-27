@@ -113,7 +113,7 @@ public class UserChangePasswordControl {
     String newPassStr  = getNewPasswordField(false) != null ? (String) getNewPasswordField(false).getValue() : null;
     String confPassStr = getConfirmPasswordField(false) != null ? (String) getConfirmPasswordField(false).getValue() : null;
     
-  	errorMessage = getUser() != null ? getUser().canChangePassword(oldPassStr, newPassStr, confPassStr, showOldPassword()) : "User is null";
+  	errorMessage = getUser() != null ? getUser().canChangePassword(oldPassStr, newPassStr, confPassStr, showOldPassword() && !isAdmin) : "User is null";
   	
   	/*
   	//If the old password is null this means the administrator is recreating the password. 

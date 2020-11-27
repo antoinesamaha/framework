@@ -503,7 +503,11 @@ public class ConfigInfo {
   public static String getJWTTokenAlgorithmKey() {
   	return jwtTokenAlgorithmKey;
   }
-  
+
+  public static void setJWTTokenAlgorithmKey(String key) {
+  	jwtTokenAlgorithmKey = key;
+  }
+
   public static String getWindowTitle() {
     return windowTitle;
   }

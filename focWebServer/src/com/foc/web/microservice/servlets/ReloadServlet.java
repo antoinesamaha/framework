@@ -13,7 +13,6 @@ import org.json.JSONObject;
 import com.foc.Globals;
 import com.foc.admin.FocGroup;
 import com.foc.admin.FocGroupDesc;
-import com.foc.admin.GrpMobileModuleRightsDesc;
 import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
@@ -57,6 +56,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 									}
 									String object_refs = "";
 									if(!reload_all && jsonObject.has(PARAM_OBJECT_REF)) object_refs = jsonObject.getString(PARAM_OBJECT_REF);
+									Globals.logString(" - Reloading table:"+table_name+" all:"+reload_all+" refs:"+object_refs);
 									executeRefreshTable(table_name, reload_all, object_refs);
 								}
 							}
@@ -79,16 +79,16 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 	
 	public void executeRefreshTable(String table_name, boolean reload_all, String object_refs) throws JSONException {
 		if(!Utils.isStringEmpty(table_name)) {
-			if (table_name.equals(FocGroupDesc.DB_TABLE_NAME) || table_name.equals(GrpMobileModuleRightsDesc.DB_TABLE_NAME)) {
-				refreshGroupList();
+//			if (table_name.equals(FocGroupDesc.DB_TABLE_NAME) || table_name.equals(GrpMobileModuleRightsDesc.DB_TABLE_NAME)) {
+//				refreshGroupList();
+//			} else {
+			FocDesc desc = Globals.getApp().getFocDescByName(table_name);
+			if(desc == null) {
+				refreshLookupByName(table_name, reload_all, object_refs);
 			} else {
-				FocDesc desc = Globals.getApp().getFocDescByName(table_name);
-				if(desc == null) {
-					refreshLookupByName(table_name, reload_all, object_refs);
-				} else {
-					refreshLookupByDesc(desc, reload_all, object_refs);
-				}
+				refreshLookupByDesc(desc, reload_all, object_refs);
 			}
+//			}
 		}
 	}
 	
@@ -98,7 +98,8 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		groupList.reloadFromDB();
 		for(int g=0; g<groupList.size(); g++) {
 			FocGroup group = (FocGroup) groupList.getFocObject(g);
-			group.getMobileModuleRightsList().reloadFromDB();
+			if(group.getMobileModuleRightsList() != null) group.getMobileModuleRightsList().reloadFromDB();
+			if(group.getWebModuleRightsList() != null) group.getWebModuleRightsList().reloadFromDB();
 		}
 	}
 	

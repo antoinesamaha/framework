@@ -55,6 +55,7 @@ import com.foc.property.FMultipleChoice;
 import com.foc.property.FString;
 import com.foc.shared.IFocMobileModule;
 import com.foc.shared.IFocWebModuleShared;
+import com.foc.shared.json.B01JsonBuilder;
 
 /**
  * @author 01Barmaja
@@ -694,5 +695,18 @@ public class FocGroup extends FocObject{
 
   public static FocDesc getFocDesc() {
     return FocGroupDesc.getInstance();
+  }
+  
+  @Override
+  public void toJson_Embedded(B01JsonBuilder builder) {
+    builder.beginObject();
+    appendKeyValueForFieldName(builder, null, "NAME");
+    appendKeyValueForFieldName(builder, null, "DESCRIP");
+    builder.endObject();
+  }
+  
+  @Override
+  public void toJson_InList(B01JsonBuilder builder) {
+  	toJson_Embedded(builder);
   }
 }
