@@ -101,10 +101,10 @@ public class WSLookupFactory {
 			} else {
 				ArrayList<WSSingleLookup> arrayList = mapByFocDesc.get(focDesc.getStorageName());
 				if (arrayList != null) {
-					for (int i=0; i<arrayList.size() && error; i++) {
+					error = false;
+					for (int i=0; i<arrayList.size(); i++) {
 						WSSingleLookup lookup = arrayList.get(i);
 						lookup.refreshObjectByReference(reference);
-						error = false;
 					}
 				}
 			}
