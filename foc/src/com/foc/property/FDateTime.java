@@ -148,6 +148,7 @@ public class FDateTime extends FDate {
 	        int mins  = Integer.valueOf(str.substring(14, 16));
 	        int sec   = Integer.valueOf(str.substring(17, 19));
 	        date.setTime(date.getTime()+((hours*60+mins)*60+sec)*1000);
+	        if (isAllowNullProperties()) setValueNull(false);
 	      }
     	}
     } catch (Exception e) {
