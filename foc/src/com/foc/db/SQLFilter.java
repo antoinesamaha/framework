@@ -6,6 +6,8 @@ package com.foc.db;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.foc.Globals;
 import com.foc.admin.UserSession;
@@ -424,8 +426,18 @@ public class SQLFilter {
             res.append(" ( ");
             firstCondition = false;
           }
-          res.append("( "+condition +") ");
-        }
+			Pattern p = Pattern.compile("\'([^\'%]*)\'|%([^%]*)%");
+			Matcher m = p.matcher(condition);
+			String cleanCondition = condition;
+			while (m.find()) {
+				String wordBetweenQuotes = m.group(1) != null ? m.group(1) : m.group(2);
+				if (wordBetweenQuotes != null) {
+					String cleanWord = wordBetweenQuotes.trim();
+					cleanCondition = cleanCondition.replace(wordBetweenQuotes, cleanWord);
+				}
+			}
+			res.append("( " + cleanCondition + ") ");
+		}
       }
     }
     if(res.length() > 0){
