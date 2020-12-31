@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.foc.ConfigInfo;
 import com.foc.business.dateShifter.DateShifter;
 import com.foc.business.dateShifter.IDateShifterHolder;
 import com.foc.db.SQLFilter;

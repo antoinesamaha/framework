@@ -33,8 +33,9 @@ public class SQLFilter {
   private SQLJoinMap         joinMap         = null;
   private boolean            filterByCompany = (Globals.getApp() != null && Globals.getApp().isWebServer()) ? false : true;
   
-  private int offset      = -1;
-  private int offsetCount = -1;
+//  private int offset      = -1;
+//  private int offsetCount = -1;
+  private ListPagination pagination = null;
   private String orderBy  = null;
   
   public static final String KEY_FILTER_BUTTON_ADDITINAL_WHERE = "FIL_BUT";
@@ -103,8 +104,14 @@ public class SQLFilter {
     if(additionalWhere != null){      
       additionalWhere = null;
     }
+    
     if(additionalWhereMap != null){
       additionalWhere = null;
+    }
+    
+    if (pagination != null) {
+    	pagination.dispose();
+    	pagination = null;
     }
   }
   
@@ -494,16 +501,17 @@ public class SQLFilter {
 	}
 	
 	public int getOffset() {
-		return offset;
+		return pagination != null ? pagination.getOffset() : -1;
 	}
 
 	public void setOffset(int offset, int offsetCount) {
-		this.offset = offset;
-		this.offsetCount = offsetCount;
+		if(pagination == null) pagination = new ListPagination();
+		pagination.setOffset(offset);
+		pagination.setOffsetCount(offsetCount);
 	}
 
 	public int getOffsetCount() {
-		return offsetCount;
+		return pagination != null ? pagination.getOffsetCount() : -1;
 	}
 
 	public String getOrderBy() {
@@ -512,5 +520,12 @@ public class SQLFilter {
 
 	public void setOrderBy(String orderBy) {
 		this.orderBy = orderBy;
+	}
+
+	public ListPagination getPagination(boolean createIfNeeded) {
+		if (pagination == null && createIfNeeded) {
+			pagination = new ListPagination();
+		}
+		return pagination;
 	}
 }
