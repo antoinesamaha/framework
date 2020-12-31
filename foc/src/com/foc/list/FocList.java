@@ -42,6 +42,7 @@ import com.foc.business.company.Company;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.implementation.IWorkflowDesc;
 import com.foc.business.workflow.implementation.WorkflowDesc;
+import com.foc.db.ListPagination;
 import com.foc.db.SQLFilter;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -2648,5 +2649,10 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			}
 		}
 		return count;
+	}
+	
+	public ListPagination getPagination(boolean createIfNeeded) {
+		SQLFilter filter = getFilter();
+		return filter != null ? filter.getPagination(createIfNeeded) : null;
 	}
 }

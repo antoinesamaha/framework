@@ -30,6 +30,7 @@ import com.foc.business.department.Department;
 import com.foc.business.status.IStatusHolder;
 import com.foc.business.status.IStatusHolderDesc;
 import com.foc.dataWrapper.FocDataWrapper;
+import com.foc.db.ListPagination;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.dataModelTree.DataModelNodeTree;
@@ -73,6 +74,8 @@ import com.foc.web.server.xmlViewDictionary.XMLViewDictionary;
 import com.foc.web.unitTesting.FocUnitRecorder;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.DataBoundTransferable;
@@ -90,12 +93,13 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Table.HeaderClickEvent;
-import com.vaadin.ui.Table.HeaderClickListener;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.Table.HeaderClickEvent;
+import com.vaadin.ui.Table.HeaderClickListener;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.Reindeer;
@@ -119,6 +123,16 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private Embedded valo_TransactionFilterEmbedded = null;
 	// private FVButton zoomButton = null;
 
+	// Pagination
+	// ----------
+	private boolean     pagination_Active       = true;
+	private FVButton    pagination_PreviousButton     = null;
+	private FVButton    pagination_NextButton         = null;
+	private FVTextField pagination_CurrentPageTextField      = null;	
+//	private FVLabel     pagination_ItemsPerPage = null;
+	private FVLabel     pagination_NbrOfPagesLabel   = null;
+	// ----------
+	
 	private FVCheckBox replaceCheckBox = null;
 	private ITableTree tableOrTree = null;
 	private XMLView xmlView_showForm = null;
@@ -134,6 +148,10 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 	private FVHorizontalLayout headerRootLayout = null;
 	private FVHorizontalLayout headerLeftLayout = null;
 	private FVHorizontalLayout headerRightLayout = null;
+
+	private FVHorizontalLayout footerRootLayout = null;
+	private FVHorizontalLayout footerLeftLayout = null;
+	private FVHorizontalLayout footerRightLayout = null;
 
 	private FVViewSelector_MenuBar viewSelector = null;
 
@@ -200,6 +218,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		xmlView_showForm = null;
 		showFormPanel = null;
 		headerRootLayout = null;
+		footerRootLayout = null;
+
 		if(tablePanel != null){
 			tablePanel.setContent(null);
 			tablePanel = null;
@@ -251,6 +271,31 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				headerRootLayout.setExpandRatio(headerRightLayout, 1);
 			} else {
 				headerRootLayout.setExpandRatio(headerLeftLayout, 1);
+			}			
+		}
+	}
+
+	private void createFooterLayoutsIfNeeded() {
+		if(footerRootLayout == null){
+			footerRootLayout = new FVHorizontalLayout(null);
+			footerRootLayout.setWidth("100%");
+			addComponent(footerRootLayout);
+
+			footerLeftLayout = new FVHorizontalLayout(null);
+			footerLeftLayout.setCaption(null);
+			footerRootLayout.addComponent(footerLeftLayout);
+			footerRootLayout.setComponentAlignment(footerLeftLayout, Alignment.BOTTOM_LEFT);
+
+			footerRightLayout = new FVHorizontalLayout(null);
+			footerRightLayout.setCaption(null);
+			footerRightLayout.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
+			footerRootLayout.addComponent(footerRightLayout);
+			footerRootLayout.setComponentAlignment(footerRightLayout, Alignment.BOTTOM_RIGHT);
+			
+			if(isGuiRTLAndNewLook()) {
+				footerRootLayout.setExpandRatio(footerRightLayout, 1);
+			} else {
+				footerRootLayout.setExpandRatio(footerLeftLayout, 1);
 			}			
 		}
 	}
@@ -426,6 +471,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		if(focList != null && !focList.isCollectionBehaviour()){
 			if(isAutoRefresh()) focList.setAutoRefresh(true);
 			focList.reloadFromDB();
+			pagination_UpdateLabels();
 			if(isAutoRefresh()) focList.setAutoRefresh(false);
 			getTableOrTree().getFocDataWrapper().refreshGuiForContainerChanges();
 		}
@@ -1028,7 +1074,7 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		}
 
 		setFilterBoxListenerIfNecessary();
-
+		
 		tablePanel = new Panel();
 		tablePanel.addStyleName(Reindeer.PANEL_LIGHT);
 		// tablePanel.addActionHandler(new KbdHandler());
@@ -1051,6 +1097,8 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 		setExpandRatio(tablePanel, 1);
 		//EAntoineS - Horizontal
 
+		pagination_AddUIControls();
+		
 		// addComponent((Component) tableOrTree);
 
 		if(tableOrTree instanceof Table){
@@ -1197,6 +1245,172 @@ public class FVTableWrapperLayout extends FVVerticalLayout implements FocXMLGuiC
 				getHeaderRightLayout().setComponentAlignment(filterTextField, Alignment.BOTTOM_RIGHT);
 			}
 		}
+	}
+	
+	public FocList getFocList() {
+		return getFocDataWrapper() != null ? getFocDataWrapper().getFocList() : null;
+	}
+
+	public ListPagination pagination_GetPagination() {
+		ListPagination pagination = null;
+		FocList focList = getFocList();
+		if (focList != null) {
+			pagination = focList.getPagination(true);
+		}
+		return pagination;
+	}
+	
+	public void pagination_Reset() {
+		ListPagination pagination = pagination_GetPagination();
+		if (pagination != null) {
+			pagination.reset();
+		}		
+	}
+	
+	public void pagination_UpdateLabels() {
+		if (pagination_NbrOfPagesLabel != null) {
+			FocList focList = getFocList();
+			if (focList != null) {
+				ListPagination pagination = pagination_GetPagination();
+				if (pagination != null) {
+					pagination.setListMaxCount(focList.requestCount());
+					pagination.computeNbrOfPages();
+					
+					//pagination_ItemsPerPage.setValue(pagination.getPageNbrOfRows()+" lines/page");
+					if(ConfigInfo.isArabic()) {
+						pagination_NbrOfPagesLabel.setValue(" من "+pagination.getPagesCount()+" صفحات "+pagination.getPageNbrOfRows()+" سطر/ صفحة");
+					} else {
+						pagination_NbrOfPagesLabel.setValue(" of "+pagination.getPagesCount()+" pages "+pagination.getPageNbrOfRows()+" lines/page");
+					}
+				}
+			}
+		}
+	}
+
+	public void pagination_SetPage(int pageNbr) {
+		if (pagination_CurrentPageTextField != null) {
+			ListPagination pagination = pagination_GetPagination();
+			if (pagination != null) {
+				if(pageNbr <= 0) {
+					pageNbr = 1;
+				} else if(pageNbr > pagination.getPagesCount()) {
+					pageNbr = pagination.getPagesCount();
+				}
+				
+				if (!pagination_CurrentPageTextField.getValue().equals(""+pageNbr)) {
+					pagination_CurrentPageTextField.setValue(""+pageNbr);
+				}
+				
+				if (pagination.setCurrentPage(pageNbr)) {
+					pagination.computeOffsetAndCount();
+					reloadClickListener();
+				}
+ 			}
+		}
+	}
+	
+	public void pagination_NextPage() {
+		ListPagination pagination = pagination_GetPagination();
+		if (pagination != null) {
+			pagination_SetPage(pagination.getCurrentPage() + 1);
+		}
+	}
+
+	public void pagination_PreviousPage() {
+		ListPagination pagination = pagination_GetPagination();
+		if (pagination != null) {
+			pagination_SetPage(pagination.getCurrentPage() - 1);
+		}
+	}
+
+	public void pagination_AddUIControls() {
+		pagination_Active = false;
+
+		if(			getAttributes() != null 
+				&& 	getAttributes().getValue(FXML.ATT_PAGINATION) != null
+				&&  getFocDataWrapper() != null) {
+			String paginationAtt = getAttributes().getValue(FXML.ATT_PAGINATION);
+			paginationAtt = paginationAtt.trim().toLowerCase();
+			pagination_Active = paginationAtt.equals("1") || paginationAtt.equals("true");
+			
+			if(pagination_Active && getAttributes().getValue(FXML.ATT_PAGINATION_PAGE_CAPACITY) != null) {
+				String pageCapacityAtt = getAttributes().getValue(FXML.ATT_PAGINATION_PAGE_CAPACITY);
+				int pageCapacity = Utils.parseInteger(pageCapacityAtt, 50);
+				ListPagination pagination = getFocDataWrapper().getFocList().getPagination(true);
+			}
+			
+		}
+		
+		if (pagination_Active) {
+			createFooterLayoutsIfNeeded();
+			
+//			FVHorizontalLayout layout = getHeaderRightLayout();
+			FVHorizontalLayout layout = new FVHorizontalLayout(null);
+			layout.setSpacing(true);
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(layout);
+			if(isGuiRTLAndNewLook()) {
+				footerLeftLayout.addComponent(layout);
+				footerLeftLayout.setComponentAlignment(layout, Alignment.BOTTOM_RIGHT);
+			} else {
+				footerRightLayout.addComponentAsFirst(layout);
+				footerRightLayout.setComponentAlignment(layout, Alignment.BOTTOM_LEFT);
+			}
+
+			pagination_NextButton = new FVButton("");//, FontAwesome.BULLHORN);//, FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_FORMULA));
+			pagination_NextButton.setIcon(FontAwesome.ANGLE_LEFT);
+			pagination_NextButton.setHeight("22px");
+			pagination_NextButton.setStyleName(BaseTheme.BUTTON_LINK);
+			pagination_NextButton.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
+			pagination_NextButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(pagination_NextButton);
+			pagination_NextButton.setDescription("Next page");
+			layout.addComponent(pagination_NextButton);
+			pagination_NextButton.addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					pagination_NextPage();
+				}
+			});
+			
+			pagination_CurrentPageTextField = new FVTextField();
+			pagination_CurrentPageTextField.setValue("1");
+			pagination_CurrentPageTextField.setWidth("30px");
+			pagination_CurrentPageTextField.setHeight("22px");
+			pagination_CurrentPageTextField.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
+			pagination_CurrentPageTextField.addValueChangeListener(new ValueChangeListener() {
+				public void valueChange(Property.ValueChangeEvent event) {
+					String value = pagination_CurrentPageTextField.getValue();					
+					pagination_SetPage(Utils.parseInteger(value, 1));
+				}
+			});
+
+			pagination_NbrOfPagesLabel = new FVLabel("of 23");	
+			
+			layout.addComponent(pagination_NbrOfPagesLabel);
+			layout.setComponentAlignment(pagination_NbrOfPagesLabel, Alignment.BOTTOM_RIGHT);
+
+			layout.addComponent(pagination_CurrentPageTextField);
+			
+			pagination_PreviousButton = new FVButton("");//, FVIconFactory.getInstance().getFVIcon_Small(FVIconFactory.ICON_BACK));
+			pagination_PreviousButton.setIcon(FontAwesome.ANGLE_RIGHT);
+			pagination_PreviousButton.setHeight("22px");
+			pagination_PreviousButton.setStyleName(BaseTheme.BUTTON_LINK);
+			pagination_PreviousButton.addStyleName(FocXMLGuiComponentStatic.STYLE_NO_PRINT);
+			pagination_PreviousButton.addStyleName(FocXMLGuiComponentStatic.STYLE_HAND_POINTER_ON_HOVER);
+			FocXMLGuiComponentStatic.setCaptionMargin_Zero(pagination_PreviousButton);
+			pagination_PreviousButton.setDescription("Previous page");
+			layout.addComponent(pagination_PreviousButton);
+			pagination_PreviousButton.addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					pagination_PreviousPage();
+				}
+			});
+
+		}
+		
+		pagination_SetPage(1);
+		pagination_UpdateLabels();
 	}
 
 	public void quickFilterExecute(String newFilterString) {

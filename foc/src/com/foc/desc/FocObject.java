@@ -5575,7 +5575,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						jsonParseDouble(jsonObj, fieldName);
 						break;
 					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
-					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:			
+					case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 						jsonParseString(jsonObj, fieldName);
 						break;					
 					}
@@ -5602,7 +5603,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
 							property.setValueNull_AndResetIntrinsicValue(true);	
 							break;
-						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:
+						case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 							property.setString("");
 							break;					
 						}
@@ -5631,7 +5633,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							property.setDouble(0);
 							break;
 						case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
-						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:
+						case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 							property.setString("");
 							break;					
 						}
