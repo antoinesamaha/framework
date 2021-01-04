@@ -64,6 +64,7 @@ import com.foc.property.FObject;
 import com.foc.property.FPassword;
 import com.foc.property.FProperty;
 import com.foc.property.FString;
+import com.foc.shared.json.B01JsonBuilder;
 import com.foc.util.ASCII;
 import com.foc.util.Encryptor;
 import com.foc.util.IFocIterator;
@@ -1643,5 +1644,15 @@ public class FocUser extends FocObject {
 		setPassword(newPassStr);
 		validate(true);
   }
-  
+
+	@Override
+	public void toJson_Detailed(B01JsonBuilder builder) {
+    builder.beginObject();
+    appendKeyValueForFieldName(builder, null, FField.REF_FIELD_NAME);
+    appendKeyValueForFieldName(builder, null, FocUserDesc.FLDNAME_NAME);
+    appendKeyValueForFieldName(builder, null, FocUserDesc.FNAME_SUSPENDED);
+    appendKeyValueForFieldName(builder, null, FocUserDesc.FNAME_GROUP);
+    builder.endObject();
+	}
+	
 }

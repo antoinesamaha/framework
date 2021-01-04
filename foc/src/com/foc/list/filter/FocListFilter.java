@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import com.foc.ConfigInfo;
 import com.foc.business.dateShifter.DateShifter;
 import com.foc.business.dateShifter.IDateShifterHolder;
 import com.foc.db.SQLFilter;
@@ -482,7 +481,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
     if(filterLevel == LEVEL_MEMORY){
       setActive_MemoryLevel(this.active);
     }else{
-      setActive_DatabaseLevel(this.active);
+    	setActive_DatabaseLevel(this.active);
     }
    	  
 	  if(selectionPanel != null){

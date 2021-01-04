@@ -3,10 +3,9 @@
  */
 package com.foc.db;
 
-import java.util.*;
+import java.util.ArrayList;
 
-import com.foc.Globals;
-import com.foc.desc.*;
+import com.foc.desc.FocDesc;
 
 /**
  * @author 01Barmaja
@@ -26,7 +25,12 @@ public class DBIndex {
     		)){
       this.name = name+"_"+focDesc.getStorageName_ForSQL();
       if(this.name.length() > 30){
-      	this.name = this.name.substring(0, 30);
+      	//this.name = this.name.substring(0, 30);
+    		int fieldNameHashCode = this.name.hashCode();
+    		if(fieldNameHashCode < 0) {
+    			fieldNameHashCode = -fieldNameHashCode;
+    		}
+    		this.name = name+"_"+fieldNameHashCode;
       }
     }
     

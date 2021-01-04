@@ -296,6 +296,30 @@ public class DBAdaptor {
     		}
       }
 
+    	//Debug only
+    	//----------
+    	/*
+    	if(DBManagerServer.getInstance() != null){//Logging cached not cached
+    		Globals.logString("Cached or Not Cached:");
+    		
+		    iter = Globals.getApp().getFocDescDeclarationIterator();
+		    while(iter != null && iter.hasNext()){
+		    	IFocDescDeclaration focDescDeclaration = iter.next();
+		    	if(focDescDeclaration != null){
+			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
+			    	if(focDesc != null && focDesc.isDbResident()){
+			    		try{
+			    			Globals.logString(focDesc.getStorageName()+" , "+focDesc.isListInCache(), false);
+			        }catch(Exception e){
+			        	Globals.logException(e);
+			    		}
+			    	}
+		      }
+		    }
+      }
+      */
+    	//----------
+    	
 	    iter1 = Globals.getApp().modules_Iterator();
 	    while(iter1 != null && iter1.hasNext()){
 	      FocModule module = (FocModule) iter1.next();
@@ -430,7 +454,6 @@ public class DBAdaptor {
   private HashMap<String, HashMap<String, String>> constraints_GetActualConstraintsMap(boolean createIfNull){
   	if(actualConstraintsByConnection == null && createIfNull){
 	  	actualConstraintsByConnection = new HashMap<String, HashMap<String, String>>();
-	
 	  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
 	  	HashMap<String, String> constraintsMap = constrains_NewAllConstraints(defaultConnection);
 	  	actualConstraintsByConnection.put(null, constraintsMap);
@@ -438,7 +461,7 @@ public class DBAdaptor {
 	  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
 	  	while(auxConnIter != null && auxConnIter.hasNext()){
 	  		ConnectionPool connectionPool = auxConnIter.next();
-		  	constraintsMap = constrains_NewAllConstraints(defaultConnection);
+		  	constraintsMap = constrains_NewAllConstraints(connectionPool);
 		  	actualConstraintsByConnection.put(connectionPool.getDBSourceKey(), constraintsMap);
 	  	}
   	}
@@ -583,8 +606,8 @@ public class DBAdaptor {
 	    	HashMap<String, String> constraintsMap = constrains_GetAllConstraints(connectionPool);
 	    	Iterator<String> iter = constraintsMap.keySet().iterator();
 	    	while (iter != null && iter.hasNext()) {
-	    		String tableName = iter.next();
-	    		String constraintName = constraintsMap.get(tableName);
+	    		String constraintName = iter.next();
+	    		String tableName = constraintsMap.get(constraintName);
 	    		
 	    		constrains_Drop(connectionPool, tableName, constraintName);
 	    	}
@@ -722,6 +745,10 @@ public class DBAdaptor {
 //      	modelFieldName = modelFieldName.toUpperCase();
 //      }
       realField = (FField) actualFields.get(modelFieldName);
+//      if(enumer.getFieldCompleteName(focDesc)==FField.REF_FIELD_NAME) {
+//      	continue;
+//      }
+      
       try{
 	      if (realField == null) {
 //	        new SQLTableDetails(focDesc);

@@ -49,6 +49,7 @@ public class FocUserDesc extends FocDesc {
   public static final String FNAME_SUSPENDED = "SUSPENDED";
   public static final String FNAME_USER_COMPANY_LIST = UserCompanyRightsDesc.DB_TABLE_NAME+"_LIST";
   public static final String FNAME_OPERATOR_LIST     = WFOperatorDesc.DB_TABLE_NAME+"_LIST";
+  public static final String FNAME_GROUP             = "UGROUP";
   
   public static final int FLD_NAME                 		=  1;
   public static final int FLD_PASSWORD             		=  2;
@@ -119,7 +120,7 @@ public class FocUserDesc extends FocDesc {
     focPassFld.setCapital(true);
     addField(focPassFld);
     
-    FObjectField focObjFld = new FObjectField("UGROUP", "Group", FLD_GROUP, false, FocGroup.getFocDesc(), "GRP_");
+    FObjectField focObjFld = new FObjectField(FNAME_GROUP, "Group", FLD_GROUP, false, FocGroup.getFocDesc(), "GRP_");
     focObjFld.setSelectionList(FocGroup.getList(FocList.NONE));
     focObjFld.setComboBoxCellEditor(FocGroupDesc.FLD_NAME);
 //    focObjFld.setMandatory(true);

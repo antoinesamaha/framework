@@ -19,7 +19,7 @@ public class WSLookupFactory {
 
 		putLookup(new WSSingleLookup("wf_title", WFTitleDesc.getInstance()));
 		putLookup(new WSSingleLookup("fgroup", FocGroupDesc.getInstance()));
-		putLookup(new WSSingleLookup("fuser", FocUserDesc.getInstance()));
+		putLookup(new WSSingleLookup("fuser", FocUserDesc.getInstance(), false));
 	}
 
 	public void putLookup(WSSingleLookup lookup) {
@@ -53,13 +53,28 @@ public class WSLookupFactory {
 
 	public boolean refreshLookupByName(String lookupKey) {
 		boolean error = true;
-
 		WSSingleLookup lookup = map.get(lookupKey);
 		if(lookup != null) {
 			lookup.refresh();
 			error = false;
 		}
 
+		return error;
+	}
+	
+	public boolean refreshLookupByNameAndObjectReference(String lookupKey, Long reference) {
+		boolean error = true;
+		if(!Utils.isStringEmpty(lookupKey)) {
+			if(reference == null || reference <= 0) {
+				error = refreshLookupByName(lookupKey);
+			} else {
+				WSSingleLookup lookup = map.get(lookupKey);
+				if(lookup != null) {
+					lookup.refreshObjectByReference(reference);
+					error = false;
+				}
+			}
+		}
 		return error;
 	}
 	
@@ -76,6 +91,33 @@ public class WSLookupFactory {
 		}
 
 		return error;
+	}
+	
+	public boolean refreshLookupByDescAndObjectReference(FocDesc focDesc, Long reference) {
+		boolean error = true;
+		if(focDesc != null) {
+			if(reference == null || reference <= 0) {
+				error = refreshLookupByDesc(focDesc);
+			} else {
+				ArrayList<WSSingleLookup> arrayList = mapByFocDesc.get(focDesc.getStorageName());
+				if (arrayList != null) {
+					error = false;
+					for (int i=0; i<arrayList.size(); i++) {
+						WSSingleLookup lookup = arrayList.get(i);
+						lookup.refreshObjectByReference(reference);
+					}
+				}
+			}
+		}
+		return error;
+	}
+	
+	public boolean hasLookupByFocDesc(FocDesc focDesc) {
+		return focDesc != null && mapByFocDesc != null && mapByFocDesc.get(focDesc.getStorageName()) != null ? true : false;
+	}
+	
+	public boolean hasLookupByName(String lookupKey) {
+		return map != null ? map.get(lookupKey) != null : false;
 	}
 	
 	private static WSLookupFactory instance = null;

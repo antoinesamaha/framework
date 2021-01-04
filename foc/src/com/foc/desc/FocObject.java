@@ -2918,6 +2918,21 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }
     return error;
   }
+  
+  public void reloadWithSlaveLists() {
+		load();
+		FocFieldEnum enumer = newFocFieldEnum(FocFieldEnum.CAT_LIST, FocFieldEnum.LEVEL_PLAIN);
+		if(enumer != null) {
+			while(enumer.hasNext()) {
+				FField fld = enumer.nextField();
+				FProperty prop = enumer.getProperty();
+				if (prop != null && prop instanceof FList) {
+					FocList list = ((FList) prop).getList();
+					list.reloadFromDB();
+				}
+			}
+		}
+  }
 
   private void backupRestore(boolean backup) {
     //FocDesc focDesc = getThisFocDesc();
@@ -5482,7 +5497,9 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 				if (isNullAndAllowed(strValue)) {
 					setPropertyNull_WithListener(fieldName);
 				} else {
-					setPropertyDouble(fieldName, jsonObj.getDouble(fieldName));
+					strValue = Utils.convertIndianNumberstoArabic(strValue);
+					double doubleValue = Utils.parseDouble(strValue, 0.00);
+					setPropertyDouble(fieldName, doubleValue);
 				}
 			} catch (JSONException e) {
 				Globals.logException(e);
@@ -5491,24 +5508,26 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	}
   
 	public void jsonParseForeignKey(JSONObject jsonObj, String fieldName) {
-		if(jsonObj.has(fieldName)){
-			try{
+		if (jsonObj.has(fieldName)) {
+			try {
 				FObject fObj = (FObject) getFocPropertyByName(fieldName);
-				FocList list = fObj != null ? fObj.getPropertySourceList() : null;
-				if (list != null && !jsonObj.isNull(fieldName)) {
-					list.loadIfNotLoadedFromDB();
-					
-					FocObject foundObj = null;
-					if (jsonObj.get(fieldName) instanceof JSONObject) {
-						JSONObject jsonForeignObj = (JSONObject) jsonObj.get(fieldName); 
-						foundObj = list.searchByRealReferenceOnly(jsonForeignObj.getInt(FField.REF_FIELD_NAME));
-					} else {
-						foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));	
+				if (jsonObj.isNull(fieldName) && ConfigInfo.isAllowNullProperties()) {
+					setPropertyObject(fieldName, null);
+				} else {
+					FocList list = fObj != null ? fObj.getPropertySourceList() : null;
+					if (list != null && !jsonObj.isNull(fieldName)) {
+						list.loadIfNotLoadedFromDB();
+						FocObject foundObj = null;
+						if (jsonObj.get(fieldName) instanceof JSONObject) {
+							JSONObject jsonForeignObj = (JSONObject) jsonObj.get(fieldName);
+							foundObj = list.searchByRealReferenceOnly(jsonForeignObj.getInt(FField.REF_FIELD_NAME));
+						} else {
+							foundObj = list.searchByRealReferenceOnly(jsonObj.getInt(fieldName));
+						}
+						setPropertyObject(fieldName, foundObj);
 					}
-					
-					setPropertyObject(fieldName, foundObj);
 				}
-			}catch (JSONException e){
+			} catch (JSONException e) {
 				Globals.logException(e);
 			}
 		}
@@ -5556,7 +5575,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						jsonParseDouble(jsonObj, fieldName);
 						break;
 					case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
-					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+					case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:			
+					case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 						jsonParseString(jsonObj, fieldName);
 						break;					
 					}
@@ -5583,7 +5603,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 						case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
 							property.setValueNull_AndResetIntrinsicValue(true);	
 							break;
-						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:
+						case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 							property.setString("");
 							break;					
 						}
@@ -5612,7 +5633,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 							property.setDouble(0);
 							break;
 						case FieldDefinition.SQL_TYPE_ID_CHAR_FIELD:
-						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:						
+						case FieldDefinition.SQL_TYPE_ID_MULTIPLE_CHOICE_STRING_BASED:
+						case FieldDefinition.SQL_TYPE_ID_EMAIL_FIELD:
 							property.setString("");
 							break;					
 						}

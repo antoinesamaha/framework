@@ -30,6 +30,7 @@ import com.foc.business.workflow.WFSiteDesc;
 import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FDateTimeField;
+import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
 import com.foc.list.FocList;
 
@@ -43,9 +44,13 @@ public class ActiveUserDesc extends FocDesc{
 	public final static int FLD_LAST_HEART_BEAT  =  3;
 	public final static int FLD_SITE             =  4;
 	public final static int FLD_TITLE            =  5;
+	public final static int FLD_ORIGIN           =  6;
 
   public static final String DB_TABLE_NAME = "ACTIVE_USER";
   
+	public static final String ORIGIN_DESKTOP = "Desktop";
+	public static final String ORIGIN_MOBILE  = "Mobile";
+	
   public ActiveUserDesc() {
     super(ActiveUser.class, FocDesc.NOT_DB_RESIDENT, DB_TABLE_NAME, true);
 
@@ -67,6 +72,11 @@ public class ActiveUserDesc extends FocDesc{
   	objFld = new FObjectField("TITLE", "Title", FLD_TITLE, WFTitleDesc.getInstance());
   	objFld.setWithList(false);
   	addField(objFld);
+  	
+		FMultipleChoiceStringField originField = new FMultipleChoiceStringField("Origin", "Origin", FLD_ORIGIN, false, 100);
+    originField.addChoice(ORIGIN_DESKTOP);
+    originField.addChoice(ORIGIN_MOBILE);
+    addField(originField);
   }
   
   public FocList newFocList(){

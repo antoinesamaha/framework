@@ -496,6 +496,7 @@ public class FVForEachLayout extends FVVerticalLayout {
 			FVBannerLayout bannerLayout = new FVBannerLayout(null);
 			centralPanel.setParentLayout(xmlLayout);
 			bannerLayout.addCentralPanel(centralPanel);
+			bannerLayout.setWidth(centralPanel.getWidth(), centralPanel.getWidthUnits());
 			bannerLayoutCreated(bannerLayout);
 			if (isDeleteEnabled()) {
 				DeleteButtonForEach deleteButtonForEach = new DeleteButtonForEach(bannerLayout, focObj);
