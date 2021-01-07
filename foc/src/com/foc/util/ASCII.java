@@ -149,17 +149,28 @@ public class ASCII {
   }
   
   public static String generateRandomString(int nbrChars, boolean withNumbers){
+  	return generateRandomString(nbrChars, withNumbers, false);
+  }
+  
+  public static String generateRandomString(int nbrChars, boolean withNumbers, boolean caseSensitive){
   	StringBuffer str = new StringBuffer();
   	Random ran = new Random(Globals.getDBManager().getCurrentTimeStamp_AsTime().getTime());
   	char cA = 'A';
+  	char ca = 'a';
   	char c0 = '0';
   	int maxRandom = 26;
+  	if(caseSensitive) maxRandom = 2 * maxRandom;
   	if(withNumbers) maxRandom += 10;
   	for(int i=0; i<nbrChars; i++){
   		int  charInt = (int)cA + ran.nextInt(maxRandom);
   		if(charInt>'Z'){
   			charInt = charInt - 'Z' - 1;
   			charInt = (int)c0 + charInt;
+  			
+  			if(caseSensitive && charInt>'9') {
+    			charInt = charInt - '9' - 1;
+    			charInt = (int)ca + charInt;
+  			}
   		}
   		char c  = (char)charInt;  		
   		str.append(c);
