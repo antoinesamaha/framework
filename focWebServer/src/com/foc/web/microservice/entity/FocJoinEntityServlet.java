@@ -708,6 +708,11 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					setCORS(response);
 					response.getWriter().println(userJson);
 				}
+				
+				if (focObj != null && !useCachedList(focRequest)) {
+					focObj.dispose();
+					focObj = null;
+				}
 			}else{
 				userJson = "{\"message\": \" Does not exists \"}";
 				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
