@@ -151,10 +151,14 @@ public class ASCII {
   public static String generateRandomString(int nbrChars, boolean withNumbers){
   	return generateRandomString(nbrChars, withNumbers, false);
   }
-  
+
   public static String generateRandomString(int nbrChars, boolean withNumbers, boolean caseSensitive){
+  	return generateRandomString(0, nbrChars, withNumbers, caseSensitive);
+  }
+  
+  public static String generateRandomString(long salt, int nbrChars, boolean withNumbers, boolean caseSensitive){
   	StringBuffer str = new StringBuffer();
-  	Random ran = new Random(Globals.getDBManager().getCurrentTimeStamp_AsTime().getTime());
+  	Random ran = new Random(salt + Globals.getDBManager().getCurrentTimeStamp_AsTime().getTime());
   	char cA = 'A';
   	char ca = 'a';
   	char c0 = '0';

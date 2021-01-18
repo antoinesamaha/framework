@@ -10,6 +10,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.foc.ConfigInfo;
+import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.list.FocList;
@@ -22,6 +23,11 @@ public class FocSimpleTokenAuth {
 //	public static final String MOBILE_APP_TOKEN_END   = ")";
 	Algorithm algorithm = null;
 
+	private static ITokenAuth tokenAuth = null;
+	public static void setTokenAuth(ITokenAuth tokenAuthSent) {
+		tokenAuth = tokenAuthSent;
+	}
+	
 	public FocSimpleTokenAuth() {
 		String key = ConfigInfo.getJWTTokenAlgorithmKey();
 		if (key == null) {
@@ -101,14 +107,20 @@ public class FocSimpleTokenAuth {
 	*/
 
 	public String verifyToken(String token) {
-		String subject;
-		try{
-			JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build(); // instance
-			DecodedJWT jwt = verifier.verify(token);
-			subject = jwt.getSubject();
-		}catch (JWTVerificationException exception){
-			// Invalid signature/claims
-			subject = null;
+		String subject = null;
+		try {
+			subject = tokenAuth != null ? tokenAuth.validateToken(token) : null;
+
+			try{
+				JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build(); // instance
+				DecodedJWT jwt = verifier.verify(token);
+				subject = jwt.getSubject();
+			}catch (JWTVerificationException exception){
+				// Invalid signature/claims
+				subject = null;
+			}
+		} catch(Exception e) {
+			Globals.logException(e);
 		}
 		return subject;
 	}
