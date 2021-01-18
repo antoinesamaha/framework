@@ -12,6 +12,10 @@ import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 
 public class GCCallServlet extends FocSimpleMicroServlet {
 
+	public String getCustomHtmlSection() {
+		return "";
+	}
+	
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		extractUIClassname(request);
@@ -71,6 +75,9 @@ public class GCCallServlet extends FocSimpleMicroServlet {
 		String htmlMemoryDump = Globals.getApp().dumpLivingFocObjectCounts(false, includeCached, true);
 		buffer.append(htmlMemoryDump);
 
+		String cutomHtml = getCustomHtmlSection();
+		buffer.append(cutomHtml);
+		
 		buffer.append("</body>");
 		buffer.append("</html>");
 		
