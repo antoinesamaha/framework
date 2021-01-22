@@ -702,11 +702,11 @@ public class DBAdaptor {
 						    //-------------------------------------------------------------------------------------------------------------
 
 				  			if(alterAllFields || allConstraints == null || allConstraints.get(constraintName) == null) {
-									StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());
 									String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
 									request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
 									request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
 									if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
+										StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());										
 										request += " novalidate";
 										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
 								    DBManagerServer.getInstance().unlockStatement(stmt);

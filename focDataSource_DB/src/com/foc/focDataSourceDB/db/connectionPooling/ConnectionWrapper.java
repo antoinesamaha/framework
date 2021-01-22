@@ -16,13 +16,12 @@
 package com.foc.focDataSourceDB.db.connectionPooling;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Properties;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.foc.ConfigInfo;
 import com.foc.ConfigInfoWizardPanel;
@@ -33,18 +32,19 @@ import com.foc.util.Utils;
 
 public class ConnectionWrapper {
 	private ConnectionPool pool         = null; 
-	private Connection     connection   = null;
+	//private Connection     connection   = null;
+	private BasicDataSource apacheConnectionPool = null;
 	private boolean        autoCommit   = true;
 	private long           creationTime = 0;
 	private long           expiryTime   = 0;
 	
   private HashMap<StatementWrapper, StatementWrapper> busyStatements = null;
-  private ArrayList<StatementWrapper>                 freeStatements = null;
+//  private ArrayList<StatementWrapper>                 freeStatements = null;
 
 	public ConnectionWrapper(ConnectionPool pool){
 		this.pool = pool;
     busyStatements = new HashMap<StatementWrapper, StatementWrapper>();
-    freeStatements = new ArrayList<StatementWrapper>();
+//    freeStatements = new ArrayList<StatementWrapper>();
     long duration = ConfigInfo.getDbConnectionDuration();
     if(duration > 0) {
     	creationTime = System.currentTimeMillis();
@@ -60,13 +60,13 @@ public class ConnectionWrapper {
 			busyStatements.clear();
 			busyStatements = null;
 		}
-		if(freeStatements != null){
-			for(int i=0; i>freeStatements.size(); i++){
-				freeStatements.get(i).close();
-			}
-			freeStatements.clear();
-			freeStatements = null;
-		}		
+//		if(freeStatements != null){
+//			for(int i=0; i>freeStatements.size(); i++){
+//				freeStatements.get(i).close();
+//			}
+//			freeStatements.clear();
+//			freeStatements = null;
+//		}		
 		closeConnection();
 		pool = null;
 	}
@@ -79,12 +79,31 @@ public class ConnectionWrapper {
 		return expiryTime > 0 && System.currentTimeMillis() > expiryTime;
 	}
 	
+	public void releaseConnection(Connection connection){
+		if(connection != null) {
+			try{
+				Globals.logString("  << << JDBC ACTIVE CONNECTIONS - Closing = "+apacheConnectionPool.getNumActive());
+				connection.close();				
+			}catch (Exception e){
+				Globals.logException(e);
+			}
+		}
+	}
+	
 	public Connection getConnection(){
-  	if(connection == null){
+  	if(apacheConnectionPool == null){
   		openConnection();
   		setAutoCommit(autoCommit);
   	}
-		return connection;
+  	Connection conn = null;
+		try{
+			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--";
+			Globals.logString(threadID+"  >> >> JDBC ACTIVE CONNECTIONS - Opening = "+apacheConnectionPool.getNumActive());
+			conn = apacheConnectionPool.getConnection();
+		}catch (Exception e){
+			Globals.logException(e);
+		}
+		return conn;
 	}
 	
 	public StringBuffer getMonitoringText() {
@@ -92,16 +111,16 @@ public class ConnectionWrapper {
 		String sourceKey = getDBSourceKey();
 		
 		if(Utils.isStringEmpty(sourceKey)) sourceKey = "Main";
-		if (freeStatements != null && busyStatements != null) {
-			buffer.append("DB pool: <b>" + sourceKey + "</b> locked: <b>" + busyStatements.size() + "</b> free: <b>" + freeStatements.size() + "</b><br>");
-		}
+//		if (freeStatements != null && busyStatements != null) {
+//			buffer.append("DB pool: <b>" + sourceKey + "</b> locked: <b>" + busyStatements.size() + "</b> free: <b>" + freeStatements.size() + "</b><br>");
+//		}
 		return buffer;
 	}
 	
 	public void setAutoCommit(boolean autoCommit){
 		this.autoCommit = autoCommit;
 		try{
-			getConnection().setAutoCommit(autoCommit);
+			apacheConnectionPool.setDefaultAutoCommit(autoCommit);
 			if(!autoCommit){
 				getConnection().setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
 			}
@@ -110,6 +129,7 @@ public class ConnectionWrapper {
 		}
 	}
 	
+	/*
 	public boolean isAutoCommit(){
 		try{
 			return getConnection().getAutoCommit();
@@ -118,6 +138,7 @@ public class ConnectionWrapper {
 		}
 		return false;
 	}
+	*/
 	
 	public ConnectionPool getPool(){
 		return pool;
@@ -141,44 +162,67 @@ public class ConnectionWrapper {
 		return valid;
 	}
 	
-  public synchronized StatementWrapper lockStatement() {
+  public StatementWrapper lockStatement() {
   	StatementWrapper stmtWrapper = null;
-    if (freeStatements.size() > 0) {
-    	stmtWrapper = (StatementWrapper) freeStatements.get(0);
-      freeStatements.remove(0);
-    } else {
+//    if (freeStatements.size() > 0) {
+//    	stmtWrapper = (StatementWrapper) freeStatements.get(0);
+//      freeStatements.remove(0);
+//    } else {
       try {
-      	Statement stm = getConnection().createStatement();
+      	Connection conn = getConnection();
+      	Statement stm = conn.createStatement();
       	stmtWrapper = new StatementWrapper(this, stm);
+      	stmtWrapper.setConnection(conn);
       } catch (Exception e) {
         Globals.logException(e);
       }
-    }
-    if (stmtWrapper != null) {
-      busyStatements.put(stmtWrapper, stmtWrapper);
-    }
+//    }
+//    if (stmtWrapper != null) {
+//      busyStatements.put(stmtWrapper, stmtWrapper);
+//    }
     
     return stmtWrapper;
   }
   
-  public synchronized void unlockStatement(StatementWrapper stmtWrapper) {
+  public void unlockStatement(StatementWrapper stmtWrapper) {
     if (stmtWrapper != null) {
       busyStatements.remove(stmtWrapper);
-      if(freeStatements.size() < 0){
-      	freeStatements.add(stmtWrapper);	
-      }else{
+//      if(freeStatements.size() < 0){
+//      	freeStatements.add(stmtWrapper);	
+//      }else{
       	try{
       		stmtWrapper.close();
+      		Connection conn = stmtWrapper.getConnection();
+      		releaseConnection(conn);
       	}catch(Exception e){
       		Globals.logException(e);
       	}
-      }
+//      }
     }
   }
 	
-  private void openConnection() {
+  private synchronized void openConnection() {
   	ConnectionCredentials credentials = getPool() != null ? getPool().getCredentials() : null;
     try {
+      apacheConnectionPool = new BasicDataSource();
+
+     	apacheConnectionPool.setUsername(credentials.getUsername());
+     	apacheConnectionPool.setPassword(credentials.getPassword());
+     	apacheConnectionPool.setConnectionProperties("characterEncoding=UTF-8;");//utf8
+
+      apacheConnectionPool.setDriverClassName(credentials.getDrivers());
+      apacheConnectionPool.setUrl(credentials.getUrl());
+      apacheConnectionPool.setInitialSize(1);
+
+      String maxStr = ConfigInfo.getProperty("jdbc.connections.maxtotal");
+      int maxtotal = Utils.parseInteger(maxStr, 10);
+
+      String maxIdleStr = ConfigInfo.getProperty("jdbc.connections.maxidle");
+      int maxidle = Utils.parseInteger(maxIdleStr, 1);
+
+      apacheConnectionPool.setMaxIdle(maxidle);
+      apacheConnectionPool.setMaxTotal(maxtotal);
+      /*
       Globals.logString("drivers "+credentials.getDrivers());
       Class.forName(credentials.getDrivers()).newInstance();
       
@@ -189,6 +233,10 @@ public class ConnectionWrapper {
       
       Globals.logString("Connection URL "+credentials.getUrl());
       connection = DriverManager.getConnection(credentials.getUrl(), props);
+      */
+      
+      
+      
     } catch (Exception e) {
     	String message = "Could not connect to Database: "+(credentials.getUrl() != null ? credentials.getUrl() : "")+"\nwith Username: "+(credentials.getUsername() != null ? credentials.getUsername() : ""); 
       if(Globals.getApp().isWithRegistry() && Globals.getDisplayManager() != null){
@@ -207,13 +255,13 @@ public class ConnectionWrapper {
     }
   }
 
-  private void closeConnection() {
+  private synchronized void closeConnection() {
     try {
-    	if(connection != null){
+    	if(apacheConnectionPool != null){
     		destroyBusyStatments();
-	      destroyFreeStatments();
-	      connection.close();
-	      connection = null;
+//	      destroyFreeStatments();
+	      apacheConnectionPool.close();
+	      apacheConnectionPool = null;
     	}
     } catch (Exception e) {
       Globals.logException(e);
@@ -238,19 +286,19 @@ public class ConnectionWrapper {
 		}
 	}
 	
-  public void destroyFreeStatments(){
-    if(freeStatements != null){
-      for(int i=freeStatements.size()-1; i>=0; i--){
-        Statement stm = (Statement) freeStatements.get(i);
-        try{
-          stm.close();
-          freeStatements.remove(i);
-        }catch(Exception e){
-          Globals.logException(e);
-        }
-      }
-    }
-  }
+//  public void destroyFreeStatments(){
+//    if(freeStatements != null){
+//      for(int i=freeStatements.size()-1; i>=0; i--){
+//        Statement stm = (Statement) freeStatements.get(i);
+//        try{
+//          stm.close();
+//          freeStatements.remove(i);
+//        }catch(Exception e){
+//          Globals.logException(e);
+//        }
+//      }
+//    }
+//  }
 
   public synchronized void commitTransaction(){
     try{
@@ -291,5 +339,4 @@ public class ConnectionWrapper {
   public String getDBSourceKey(){
   	return pool != null ? pool.getDBSourceKey() : null;
   }
-
 }
