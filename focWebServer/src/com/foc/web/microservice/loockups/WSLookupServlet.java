@@ -44,7 +44,7 @@ public class WSLookupServlet extends FocSimpleMicroServlet {
 						String[] filters = request.getParameterValues("filter");
 						if (filters != null) {
 							boolean first = true;
-							StringBuffer json = new StringBuffer("{");
+							StringBuilder json = new StringBuilder("{");
 							for(int i=0; i<filters.length; i++) {
 								String filter = filters[i];
 								if(!Utils.isStringEmpty(filter)) {
