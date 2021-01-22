@@ -1066,6 +1066,7 @@ public class FocDataSource_DB implements IFocDataSource {
 		
 		boolean error = true;
 	  StatementWrapper stmt = getDBManagerServer().lockStatement();
+	  String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--";
 	  if (stmt != null) {
 	    try {
 	    	String req = SQLRequest.adapteRequestToDBProvider(sqlRequest);
@@ -1074,6 +1075,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	      }
 	      
 	      ResultSet resSet = stmt.executeQuery(req);
+				Globals.logString(threadID+" - OUT of execute(req)");
 	      while(resSet.next()){
 	      	String[] row = new String[nbrColumns];
 	      	for(int c=1; c<=nbrColumns; c++) {
@@ -1083,7 +1085,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	      	array.add(row);
 	      }
 	      if(resSet != null) resSet.close();
-	      
+	      Globals.logString(threadID+" - read result set ended");
 	      error = false;
 	    } catch (Exception e) {
 	    	error = true;
@@ -1093,7 +1095,9 @@ public class FocDataSource_DB implements IFocDataSource {
 	      getDBManagerServer().unlockStatement(stmt);
 	      Globals.logString("Exception is thrown again ->...");        
 	    }
+      Globals.logString(threadID+" - unlocking statement");
 	    getDBManagerServer().unlockStatement(stmt);
+	    Globals.logString(threadID+" - unlocking statement DONE");
 	  }
 	
 		return array;
@@ -1287,8 +1291,10 @@ public class FocDataSource_DB implements IFocDataSource {
 	  Globals.logString(selectRequest);
 	
 	  PreparedStatement preparedStmt = null;
+	  Connection connection = null;
 		try{
-			preparedStmt = getDBManagerServer().getConnection().prepareStatement(selectRequest);
+			connection = getDBManagerServer().getConnection();
+			preparedStmt = connection.prepareStatement(selectRequest);			
 		}catch (SQLException e){
 			Globals.logException(e);
 		}
@@ -1303,6 +1309,7 @@ public class FocDataSource_DB implements IFocDataSource {
 			  is = rs.getBinaryStream(imageFieldName);
 			}
 			if(rs != null) rs.close();
+			getDBManagerServer().releaseConnection(connection);
 		}catch (SQLException e){
 			Globals.logException(e);
 		}
@@ -1326,8 +1333,10 @@ public class FocDataSource_DB implements IFocDataSource {
       Globals.logString(selectRequest);
 
       ResultSet rs = null;
+      Connection connection = null;
       try{
-	      PreparedStatement preparedStmt = getDBManagerServer().getConnection().prepareStatement(selectRequest);
+      	connection = getDBManagerServer().getConnection();
+	      PreparedStatement preparedStmt = connection.prepareStatement(selectRequest);
 	      rs = preparedStmt.executeQuery();
 	      while (rs.next()) {
 	        InputStream is = rs.getBinaryStream(imageFieldName);
@@ -1339,10 +1348,11 @@ public class FocDataSource_DB implements IFocDataSource {
 	      if(rs != null) {
 	      	rs.close();
 	      	rs = null;
-	      }
+	      }	      
       }catch(Exception e){
       	Globals.logException(e);
       }finally {
+      	if(getDBManagerServer() != null && connection != null) getDBManagerServer().releaseConnection(connection);
       	if(rs != null) {
 					try{
 						rs.close();
@@ -1378,7 +1388,8 @@ public class FocDataSource_DB implements IFocDataSource {
 	      stmt.setBinaryStream(1, inputStream);
 	      
 	      stmt.executeUpdate();
-	      
+	      stmt.close();
+	      getDBManagerServer().releaseConnection(connection);
 	      inputStream.close();
 	      imagebuffer.close();
 	    }catch (SQLException e){
@@ -1405,6 +1416,8 @@ public class FocDataSource_DB implements IFocDataSource {
 	      PreparedStatement stmt            = connection.prepareStatement(sqlRequest);
 	      stmt.setBinaryStream(1, fileInputStream, (int) file.length());
 	      stmt.executeUpdate();
+	      stmt.close();
+	      getDBManagerServer().releaseConnection(connection);
 	      fileInputStream.close();
 	      fileInputStream = null;
 	    }catch (SQLException e){
@@ -1432,6 +1445,7 @@ public class FocDataSource_DB implements IFocDataSource {
 		      PreparedStatement stmt = connection.prepareStatement(sqlRequest);
 		      stmt.setBinaryStream(1, fileInputStream, (int) file.length());
 		      stmt.executeUpdate();
+		      getDBManagerServer().releaseConnection(connection);
 		      fileInputStream.close();
 		    }
 		  } catch (SQLException e) {
@@ -1457,6 +1471,7 @@ public class FocDataSource_DB implements IFocDataSource {
           PreparedStatement stmt = connection.prepareStatement(sqlRequest);
           stmt.setBinaryStream(1, inputStream);
           stmt.executeUpdate();
+          getDBManagerServer().releaseConnection(connection);
           inputStream.close();
         }
       } catch (SQLException e) {
@@ -1593,7 +1608,9 @@ public class FocDataSource_DB implements IFocDataSource {
 				callableStatement = connection.prepareCall(statementString);
 				if(callableStatement != null){
 					callableStatement.execute();
+					callableStatement.close();
 				}
+				getDBManagerServer().releaseConnection(connection);
 			}
 			Globals.logString("SP Call : Successful");
 		}catch(Exception ex){
@@ -1637,6 +1654,8 @@ public class FocDataSource_DB implements IFocDataSource {
 					}
 					sqlStatement.executeBatch();
 				}
+				
+				if(getDBManagerServer() != null) getDBManagerServer().releaseConnection(connection);
 			}
 			inputStream.close();
 			inputStream = null;
@@ -1743,6 +1762,10 @@ public class FocDataSource_DB implements IFocDataSource {
 				BufferedReader bufferedReader = new BufferedReader(isReader);
 				
 				runner.runScript(bufferedReader);
+				runner.dispose();
+				runner = null;
+				
+				if(pool != null) pool.releaseConnection(connection);
 			}
 			
 			Globals.logString("    Script : Successful");

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.foc.focDataSourceDB.db.connectionPooling;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -24,6 +25,7 @@ import com.foc.Globals;
 public class StatementWrapper {
 	private ConnectionWrapper connectionWrapper = null;
 	private Statement         statement         = null;
+	private Connection        connection        = null;
 	
 	public StatementWrapper(ConnectionWrapper connectionWrapper, Statement statement){
 		this.connectionWrapper = connectionWrapper;
@@ -33,6 +35,7 @@ public class StatementWrapper {
 	public void dispose(){
 		connectionWrapper = null;
 		statement = null;
+		connection = null;
 	}
 	
 	public void close(){
@@ -78,5 +81,17 @@ public class StatementWrapper {
 		if(getStatement() != null){
 			getStatement().execute(req);
 		}
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
+	}
+
+	public ConnectionWrapper getConnectionWrapper() {
+		return connectionWrapper;
 	}
 }

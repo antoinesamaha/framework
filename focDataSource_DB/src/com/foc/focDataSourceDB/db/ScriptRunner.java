@@ -23,9 +23,17 @@
 
 package com.foc.focDataSourceDB.db;
 
-import java.io.*;
-import java.sql.*;
-import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
+import java.io.Reader;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +54,7 @@ public class ScriptRunner {
 	 */
 	public static final Pattern delimP = Pattern.compile("^\\s*(--)?\\s*delimiter\\s*=?\\s*([^\\s]+)+\\s*.*$", Pattern.CASE_INSENSITIVE);
 
-	private final Connection connection;
+	private Connection connection;
 
 	private final boolean stopOnError;
 
@@ -67,6 +75,10 @@ public class ScriptRunner {
 		this.stopOnError = stopOnError;
 	}
 
+	public void dispose() {
+		connection = null;
+	}
+	
 	public void setDelimiter(String delimiter, boolean fullLineDelimiter) {
 		this.delimiter = delimiter;
 		this.fullLineDelimiter = fullLineDelimiter;

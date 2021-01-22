@@ -214,11 +214,13 @@ public class ConnectionPool {
 		return getConnectionWrapper(false); 
 	}
 	
+	/*
 	public void closeReopenConnection(){
 		if(getConnectionWrapper() == null || !getConnectionWrapper().isValid()) {
 			getConnectionWrapper(true);
 		}
 	}
+	*/
 
 	private ConnectionWrapper recreateConnectionWrapper(ConnectionWrapper connectionWrapper){
 		if(connectionWrapper != null){
@@ -258,6 +260,11 @@ public class ConnectionPool {
 		return cw != null ? cw.getConnection() : null;
 	}
 
+	public void releaseConnection(Connection connection){
+		ConnectionWrapper cw = getConnectionWrapper();
+		if(cw != null) cw.releaseConnection(connection);
+	}
+	
 	private ConnectionWrapper newConnectionWrapper(){
 		return new ConnectionWrapper(this);
 	}
@@ -379,6 +386,7 @@ public class ConnectionPool {
 	          resultSet.close();
 	        }
 	      }
+	      releaseConnection(connection);
     	}
     } catch (Exception e) {
       Globals.logException(e);

@@ -101,8 +101,9 @@ public class SQLTableDetails extends SQLRequest {
         if(withForeignKeys){
         	foreignKeys = new Hashtable<String, String>();
 	        try{
-		        DatabaseMetaData metaData = DBManagerServer.getInstance().getConnection().getMetaData();
-		        ResultSet resSet = metaData.getImportedKeys(DBManagerServer.getInstance().getConnection().getCatalog(), null, focDesc.getStorageName());
+	        	Connection connection = DBManagerServer.getInstance().getConnection();
+		        DatabaseMetaData metaData = connection.getMetaData();
+		        ResultSet resSet = metaData.getImportedKeys(connection.getCatalog(), null, focDesc.getStorageName());
 		        while (resSet.next()) {
 //		            String fkTableName = resSet.getString("FKTABLE_NAME");
 		            String fkColumnName = resSet.getString("FKCOLUMN_NAME");//This is field name
@@ -111,6 +112,7 @@ public class SQLTableDetails extends SQLRequest {
 		            foreignKeys.put(fkColumnName, pkTableName);
 //		            Globals.logString(fkTableName + "." + fkColumnName + " -> " + pkTableName + "." + pkColumnName);
 		        }
+		        DBManagerServer.getInstance().releaseConnection(connection);
 	        }catch(Exception e){
 	        	Globals.logException(e);
 	        }

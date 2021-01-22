@@ -111,7 +111,8 @@ public class SQLTableIndexesDetails{
         rs.close();
         DBManagerServer.getInstance().unlockStatement(stmt);
       } else {
-	      DatabaseMetaData dbmd = DBManagerServer.getInstance().getConnection().getMetaData();
+      	Connection connection = DBManagerServer.getInstance().getConnection();
+	      DatabaseMetaData dbmd = connection.getMetaData();
 	      ResultSet rs = dbmd.getIndexInfo(null, null, focDesc.getStorageName_ForSQL(), false, false);
 	
 	      //Getting the idx of the interesting columns
@@ -173,6 +174,8 @@ public class SQLTableIndexesDetails{
 	      if(rs != null){
 	      	rs.close();
 	      }
+	      
+	      DBManagerServer.getInstance().releaseConnection(connection);
       }
     }catch (Exception e){
     	if(focDesc != null){

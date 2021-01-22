@@ -38,6 +38,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionCredentials;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
+import com.foc.focDataSourceDB.db.connectionPooling.ConnectionWrapper;
 import com.foc.focDataSourceDB.db.connectionPooling.CredentialsFileScanner;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 
@@ -105,11 +106,16 @@ public class DBManagerServer {
   public Connection getConnection() {
   	return getConnectionPool() != null ? getConnectionPool().getConnection() : null;
   }
+  
+  public void releaseConnection(Connection connection) {
+  	if(getConnectionPool() != null) getConnectionPool().releaseConnection(connection);
+  }
 
   private String initializeDateRequest(){
     if(dateRequestSQL == null || timeStampRequestSQL == null){
       try{
-        DatabaseMetaData dmt = getConnection().getMetaData();
+      	Connection connection = getConnection();
+        DatabaseMetaData dmt = connection.getMetaData();
         String fcts = dmt.getTimeDateFunctions();
         StringTokenizer tokenizer = new StringTokenizer(fcts, ",");
         Globals.logString(fcts);
@@ -136,6 +142,7 @@ public class DBManagerServer {
         if(timeStampRequestSQL == null){
           timeStampRequestSQL = "";
         }
+        releaseConnection(connection);
       }catch (Exception e){
         Globals.logException(e);
       }
@@ -216,7 +223,8 @@ public class DBManagerServer {
 	    		}
     		}
     	} else {
-	      DatabaseMetaData dmt = getConnection().getMetaData();
+    		Connection conn = getConnection();
+	      DatabaseMetaData dmt = conn.getMetaData();
 	      Globals.logString(dmt.getTimeDateFunctions());
 	      if (dmt != null) {
 	        ResultSet resultSet = dmt.getTables(null, null, null, new String[] { "TABLE" });
@@ -228,6 +236,7 @@ public class DBManagerServer {
 	          resultSet.close();
 	        }
 	      }
+	      releaseConnection(conn);
     	}
     } catch (Exception e) {
       Globals.logException(e);
@@ -340,7 +349,8 @@ public class DBManagerServer {
 		  		if(attemptsCount < MAX_NUMBER_OF_ATTEMPTS){
 		  			Globals.logExceptionWithoutPopup(e);
 		  			Globals.logString("FOC will Attempt Again");
-		  			getConnectionPool().closeReopenConnection();
+		  			
+		  			stmt.unlockStatement();
 		  			stmt = lockStatement(stmt.getDBSourceKey());
 		  		}else{
 		  			Globals.logException(e);
