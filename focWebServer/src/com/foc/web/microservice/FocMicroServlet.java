@@ -21,11 +21,6 @@ import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.json.JSONObject;
 
 import com.foc.Globals;
@@ -36,8 +31,12 @@ import com.foc.vaadin.FocWebApplication;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
 
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 @SuppressWarnings("serial")
-public abstract class FocMicroServlet extends HttpServlet implements SrvConst_ServerSide {
+public abstract class FocMicroServlet extends jakarta.servlet.http.HttpServlet implements SrvConst_ServerSide {
 	
 	protected abstract String getUIClassName();
 	

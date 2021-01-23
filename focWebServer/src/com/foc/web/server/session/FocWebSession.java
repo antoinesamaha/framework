@@ -18,9 +18,8 @@ package com.foc.web.server.session;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpSession;
 
-import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.UserSession;
 import com.foc.business.company.Company;

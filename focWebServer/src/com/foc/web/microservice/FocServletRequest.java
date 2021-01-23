@@ -2,9 +2,6 @@ package com.foc.web.microservice;
 
 import java.util.Enumeration;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -15,11 +12,13 @@ import com.foc.list.FocList;
 import com.foc.list.FocListWithFilter;
 import com.foc.list.filter.FilterCondition;
 import com.foc.list.filter.FocListFilter;
-import com.foc.list.filter.IFocListFilter;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
 import com.foc.web.server.session.FocWebSession;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class FocServletRequest {
 	private SessionAndApplication sessionAndApp = null;

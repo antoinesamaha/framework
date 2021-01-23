@@ -3,9 +3,9 @@ package com.foc.web.microservice.servlets;
 import java.io.IOException;
 import java.text.NumberFormat;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import com.foc.Globals;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
