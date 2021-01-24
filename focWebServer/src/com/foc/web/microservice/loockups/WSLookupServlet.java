@@ -19,6 +19,7 @@ public class WSLookupServlet extends FocSimpleMicroServlet {
 		authorization_method = method;
 	}
 	
+	@Override
 	public int getAuthenticationMethod() {
 		return authorization_method;
 	}

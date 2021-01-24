@@ -43,19 +43,6 @@ import com.foc.web.microservice.FocServletRequest;
 public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> extends FocObjectServlet<O> {
 
 	private static String uiclassname = null;
-	
-	public static int AUTH_NONE                  = 0;
-	public static int AUTH_BEARER                = 1;
-	public static int AUTH_USERNAME_PASSWORD     = 2;
-	public static int AUTH_BEARER_THEN_USER_PASS = 3;
-	
-	/**
-	 * Can be overwriden by the Servlet implementation 
-	 * @return the Authentication method that this servlet requires
-	 */
-	public int getAuthenticationMethod() {
-		return AUTH_BEARER;
-	}
 
 	/**
 	 * The first API call needs to know the Vaadin UI class to be initialized. 

@@ -448,7 +448,7 @@ public class FocWebServer implements Serializable {
 		FocWebApplication webApplication_Found = null;
 		
 		webServer.removeApplicationsNotRunning();
-		
+
     for (int i = 0; i < webServer.getApplicationCount(); i++) {
       FocWebApplication webApplication = webServer.getApplicationAt(i);
 
@@ -465,7 +465,11 @@ public class FocWebServer implements Serializable {
         }
       }
     }
-    
+
+//    if (webServer.getApplicationCount() > 0) {
+//			webApplication_Found = webServer.getApplicationAt(0);
+//		}
+
     return webApplication_Found;
 	}
 	
