@@ -108,7 +108,7 @@ public class Globals{
   	getIFocNotification().applyUserTheme();
   }
   
-  public synchronized static boolean isValo(){
+  public static boolean isValo(){
   	boolean valo = true;
   	return valo;
   }

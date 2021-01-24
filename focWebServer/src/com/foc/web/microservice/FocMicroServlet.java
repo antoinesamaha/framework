@@ -41,6 +41,21 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 	
 	protected abstract String getUIClassName();
 	
+	private FocWebApplication webApplication_ForNoAuthentication = null;
+	
+	public static int AUTH_NONE                  = 0;
+	public static int AUTH_BEARER                = 1;
+	public static int AUTH_USERNAME_PASSWORD     = 2;
+	public static int AUTH_BEARER_THEN_USER_PASS = 3;
+	
+	/**
+	 * Can be overwriden by the Servlet implementation 
+	 * @return the Authentication method that this servlet requires
+	 */
+	public int getAuthenticationMethod() {
+		return AUTH_BEARER;
+	}
+	
 	protected String getParameterString(HttpServletRequest request, String paramName) {
 		String value = null;
 		Map<String, String[]> map = request.getParameterMap();
@@ -174,6 +189,25 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		out.flush();
 	}
 
+	private FocWebApplication newFocWebApplication(HttpServletRequest request) {
+		FocWebApplication webApplication = null;
+		try{
+			Class cls = Class.forName(getUIClassName());
+			Class[] param = new Class[0];
+			Constructor constr = cls.getConstructor(param);
+			Object[] argsNew = new Object[0];
+
+			webApplication = (FocWebApplication) constr.newInstance(argsNew);
+			FocWebApplication.setInstanceForThread(webApplication);
+			webApplication.initialize(null, request.getServletContext(), request.getSession(), true);
+			webApplication.setData(FocWebServer.getInstance());
+			FocWebServer.getInstance().setWebServicesOnly(true);
+		}catch (Exception e){
+			Globals.logException(e);
+		}
+		return webApplication;
+	}
+	
 	public SessionAndApplication pushSessionLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		return pushSessionInternal(request, response);
 	}
@@ -204,23 +238,19 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		int status = com.foc.Application.LOGIN_WRONG;
 
 		{
-			webApplication = FocWebServer.findWebApplicationBySessionID(requestSessionID, request.getSession().getServletContext());
+			//If not authentication they can all ue the same FocWebApplication
+			if (getAuthenticationMethod() == AUTH_NONE) {
+				if (webApplication_ForNoAuthentication == null) {
+					webApplication_ForNoAuthentication = newFocWebApplication(request);
+				}
+				webApplication = webApplication_ForNoAuthentication;
+			} else {
+				webApplication = FocWebServer.findWebApplicationBySessionID(requestSessionID, request.getSession().getServletContext());
+			}
+			
 			if(webApplication == null){
 				Globals.logString("FocMicorServlet is creating a new FocWebApplication(UI)");
-				try{
-					Class cls = Class.forName(getUIClassName());
-					Class[] param = new Class[0];
-					Constructor constr = cls.getConstructor(param);
-					Object[] argsNew = new Object[0];
-
-					webApplication = (FocWebApplication) constr.newInstance(argsNew);
-					FocWebApplication.setInstanceForThread(webApplication);
-					webApplication.initialize(null, request.getServletContext(), request.getSession(), true);
-					webApplication.setData(FocWebServer.getInstance());
-					FocWebServer.getInstance().setWebServicesOnly(true);
-				}catch (Exception e){
-					Globals.logException(e);
-				}
+				webApplication = newFocWebApplication(request);
 			} else {
 				FocWebServer.connect(request.getSession().getServletContext(), false);
 				FocWebApplication.setInstanceForThread(webApplication);
@@ -244,7 +274,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			// ---------------------------------------------
 			// If the FocWebSession has no user, try to log in by reading the user
 			// name and password from the HTTP request header.
-			if(webSession != null && webSession.getFocUser() == null){
+			if(webSession != null && webSession.getFocUser() == null && getAuthenticationMethod() != AUTH_NONE){
 				String username = request.getHeader("username");
 				String password = request.getHeader("password");
 				if(username == null){
