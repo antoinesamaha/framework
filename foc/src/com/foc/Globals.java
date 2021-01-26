@@ -14,6 +14,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.foc.access.AccessControl;
 import com.foc.access.FocLogger;
 import com.foc.db.DBManager;
@@ -54,7 +57,7 @@ public class Globals{
   
   public static String notificationMessageToAssert = "";
   
-  //static final Logger logger = LogManager.getLogger(Globals.class);
+  static final Logger logger = LogManager.getLogger(Globals.class);
   
   public static Application newApplication(boolean withDB, boolean withAdmin, boolean mdi){
     return newApplication(withDB, withAdmin, mdi, null, null);
@@ -216,18 +219,26 @@ public class Globals{
   	}
   	return dateFormat;
   }
-  
-  private static boolean insideLogString = false;
-  public static void logString(String str, boolean withTime) {
+
+  private static String logStringFormat(String str, boolean withTime) {
   	if(withTime){
   		if(!insideLogString){
   			insideLogString = true;
-  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
-  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			//String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+  			//str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			str = "["+ getUsername() +"] <" + getSessionID() + ">:" + str;
   			insideLogString = false;
   		}
   	}
-    PrintStream logFile = getLogFile();
+  	return str;
+  }
+  
+  private static boolean insideLogString = false;
+  public static void logString(String str, boolean withTime) {
+  	str = logStringFormat(str, withTime);
+  	logger.info(str);
+  	/*
+  	PrintStream logFile = getLogFile();
     if(logFile != null){ 
       logFile.println(str);
       logFile.flush();
@@ -236,6 +247,7 @@ public class Globals{
       System.out.println(str);
       System.out.flush();
     }
+  	*/
   }
   
   public static String getSessionID(){
