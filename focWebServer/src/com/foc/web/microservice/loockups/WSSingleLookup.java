@@ -53,7 +53,13 @@ public class WSSingleLookup {
 		} else if (shouldRefresh()){
 			refresh();
 		}
-		Globals.logString("json is :"  + json);
+		StringBuilder builder = new StringBuilder("json is :");
+		if(json.length() > 200) {
+			builder.append(json.substring(0, 200));
+		} else {
+			builder.append(json);
+		}
+		Globals.logString(builder.toString());
 		return json;
 	}
 	
