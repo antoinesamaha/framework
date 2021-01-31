@@ -17,6 +17,7 @@ package com.foc.business.notifier;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -198,6 +199,30 @@ public class FocNotificationEmail extends FocObject implements FocNotificationEm
 
   public void setTemplate(FocNotificationEmailTemplate template) {
     setPropertyObject(FLD_TEMPLATE_NAME, template);
+  }
+
+  public Date getDateTime() {
+    return getPropertyDate(FLD_DATE_TIME);
+  }
+
+  public void setDateTime(Date date) {
+    setPropertyDate(FLD_DATE_TIME, date);
+  }
+
+  public String getErrorMessage() {
+    return getPropertyString(FLD_ERROR_MESSAGE);
+  }
+
+  public void setErrorMessage(String from) {
+    setPropertyString(FLD_ERROR_MESSAGE, from);
+  }
+
+  public int getEmailStatus() {
+    return getPropertyInteger(FLD_EMAIL_STATUS);
+  }
+
+  public void setEmailStatus(int status) {
+    setPropertyInteger(FLD_EMAIL_STATUS, status);
   }
   
   public void setEmailFocData(IFocData data){

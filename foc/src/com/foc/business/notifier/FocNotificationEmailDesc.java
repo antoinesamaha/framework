@@ -15,12 +15,13 @@
  ******************************************************************************/
 package com.foc.business.notifier;
 
-import com.foc.Globals;
 import com.foc.db.DBManager;
 import com.foc.desc.FocDesc;
-import com.foc.desc.field.FStringField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FField;
+import com.foc.desc.field.FMultipleChoiceField;
 import com.foc.desc.field.FObjectField;
+import com.foc.desc.field.FStringField;
 import com.foc.list.FocList;
 
 public class FocNotificationEmailDesc extends FocDesc implements FocNotificationEmailConst {
@@ -31,6 +32,9 @@ public class FocNotificationEmailDesc extends FocDesc implements FocNotification
     super(FocNotificationEmail.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, false);
     
     FField focFld = addReferenceField();
+    
+    focFld = new FDateTimeField("DATE_TIME", "DateTime", FLD_DATE_TIME, false);
+    addField(focFld);
     
     focFld = new FStringField("SENDER", "Sender", FLD_SENDER, false, 200);
     addField(focFld);
@@ -60,6 +64,15 @@ public class FocNotificationEmailDesc extends FocDesc implements FocNotification
     objFld.setDisplayField(FocNotificationEmailTemplateDesc.FLD_TEMPLATE_NAME);    
     objFld.setSelectionList(FocNotificationEmailTemplateDesc.getList(FocList.NONE));
     addField(objFld);
+    
+    FMultipleChoiceField mFld = new FMultipleChoiceField("STATUS", "Status", FLD_EMAIL_STATUS, false, 1000);
+    mFld.addChoice(STATUS_NONE      , "None");
+    mFld.addChoice(STATUS_SUCCESSFUL, "Successful");
+    mFld.addChoice(STATUS_FAILED    , "Failed");
+    addField(mFld);
+
+    focFld = new FStringField("ERROR_MESSAGE", "Text", FLD_ERROR_MESSAGE, false, 1000);
+    addField(focFld);
   }
   
   public static FocDesc getInstance() {

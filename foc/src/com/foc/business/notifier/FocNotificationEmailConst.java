@@ -26,4 +26,13 @@ public interface FocNotificationEmailConst {
   public static final int FLD_PRN_FILE_NAME   = 8;
   public static final int FLD_HTML            = 9;
   public static final int FLD_TEXT_OLD        = 10;
+
+  public static final int FLD_DATE_TIME       = 11;
+  public static final int FLD_EMAIL_STATUS    = 12;
+  public static final int FLD_ERROR_MESSAGE   = 13;
+
+
+  public static final int STATUS_NONE         =  0;
+  public static final int STATUS_SUCCESSFUL   =  1;
+  public static final int STATUS_FAILED       =  2;
 }
