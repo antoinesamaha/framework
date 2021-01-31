@@ -58,6 +58,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
   public static final int FREQUENCY_ONE_TIME = 0;
   public static final int FREQUENCY_DAILY    = 1;
+  public static final int FREQUENCY_HOURLY   = 2;
   public static final int FREQUENCY_WEEKLY   = 7;
   public static final int FREQUENCY_MONTHLY  = 30;
 
@@ -91,8 +92,8 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	@FocMultipleChoice(size = 5, choices = {
 			@FocChoice(id=FREQUENCY_ONE_TIME, title="One time"),
-			@FocChoice(id=FREQUENCY_DAILY, title="Daily")
-//			@FocChoice(id=FREQUENCY_WEEKLY, title="Weekly"),
+			@FocChoice(id=FREQUENCY_DAILY, title="Daily"),
+			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly")
 //			@FocChoice(id=FREQUENCY_MONTHLY, title="Monthly")
 	})
 	public static final String FIELD_Frequency = "Frequency";
@@ -344,20 +345,22 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 		return match;
 	}
 	
-	public void execute(FocNotificationEvent eventFired) {
+	public String execute(FocNotificationEvent eventFired) {
+		String error = null;
 		IFocNotifAction action = getActionObject();
 		if(action == null) {
 			action = FocNotifActionFactory.getInstance().get(getAction());
 		}
 		if(action != null) {
-			action.execute(this, eventFired);
+			error = action.execute(this, eventFired);
 		}
+		return error;
 	}
 	
 	public void executeIfSameEvent(FocNotificationEvent eventFired) {
 		if(isEventMatch(eventFired)) {
 			try {
-				execute(eventFired);
+				String error = execute(eventFired);
 				reschedule();
 				validate(false);
 			}catch(Exception e) {
@@ -394,6 +397,17 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 				cal.setTime(Globals.getApp().getSystemDate());
 				FCalendar.rollTheCalendar_Day(cal);
 				setNextDate(new Date(cal.getTime().getTime()));
+			} else if(frequency == FREQUENCY_HOURLY) {
+				long nexTimesMillis = startingTime.getTime();
+				nexTimesMillis += 60 * 60 * 1000;
+				if (nexTimesMillis > Globals.DAY_TIME) {
+					nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
+					Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
+					cal.setTime(Globals.getApp().getSystemDate());
+					FCalendar.rollTheCalendar_Day(cal);
+					setNextDate(new Date(cal.getTime().getTime()));
+				}
+				setNextTime(new Time(nexTimesMillis));
 			}
 		}
 		return error;

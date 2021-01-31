@@ -225,13 +225,14 @@ public class WFOperatorDesc extends FocDesc {
 	public class FocNotifAction_ReloadList extends FocNotifAction_Abstract{
 
 		@Override
-		public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
+		public String execute(FNotifTrigger notifier, FocNotificationEvent event) {
 			try{
 				WFOperator operatorObject = ((WFOperator)event.getEventFocObject());
 				if(operatorObject != null && operatorObject.getUser() != null)	operatorObject.getUser().userSites_Rebuild();
 			} catch (Exception e){
 				Globals.logException(e);
 			}
+			return null;
 		}
 	}
 }

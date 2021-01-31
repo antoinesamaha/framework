@@ -55,7 +55,7 @@ public class BroadcastNotifyer {
 			this.ui = ui;
 		}
 
-		public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
+		public String execute(FNotifTrigger notifier, FocNotificationEvent event) {
 			try{
 				if(ui != null && ui.isAttached()){
 
@@ -90,6 +90,7 @@ public class BroadcastNotifyer {
 			}catch (Exception e){
 				Globals.logException(e);
 			}
+			return null;
 		}
 	}
 	

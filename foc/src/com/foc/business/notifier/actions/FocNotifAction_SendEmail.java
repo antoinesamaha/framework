@@ -25,7 +25,7 @@ import com.foc.desc.FocConstructor;
 public class FocNotifAction_SendEmail extends FocNotifAction_Abstract {
 
 	@Override
-	public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
+	public String execute(FNotifTrigger notifier, FocNotificationEvent event) {
     FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) notifier.getTemplate();
     if(template != null) {
 	    FocNotificationEmail email = new FocNotificationEmail(new FocConstructor(FocNotificationEmailDesc.getInstance(), null), template, event != null ?event.getEventFocData() : null);
@@ -33,6 +33,7 @@ public class FocNotifAction_SendEmail extends FocNotifAction_Abstract {
 	    email.setCreated(true);
 	    email.validate(true);
     }		
+    return null;
 	}
 
 }
