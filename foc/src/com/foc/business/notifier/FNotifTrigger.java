@@ -360,10 +360,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	public void executeIfSameEvent(FocNotificationEvent eventFired) {
 		if(isEventMatch(eventFired)) {
 			try {
-				if (execute(eventFired) == null) {
-					reschedule();
-					validate(false);
-				}
+				String error = execute(eventFired);
+				reschedule();
+				validate(false);
 			}catch(Exception e) {
 				Globals.logException(e);
 			}
