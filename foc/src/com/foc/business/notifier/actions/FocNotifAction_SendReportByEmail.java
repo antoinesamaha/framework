@@ -34,7 +34,7 @@ import com.foc.util.Utils;
 public class FocNotifAction_SendReportByEmail extends FocNotifAction_Abstract {
 
 	@Override
-	public void execute(FNotifTrigger notifier, FocNotificationEvent event) {
+	public String execute(FNotifTrigger notifier, FocNotificationEvent event) {
     FocNotificationEmailTemplate template = notifier != null ? (FocNotificationEmailTemplate) notifier.getTemplate() : null;
     if(template != null) {
     	try {
@@ -83,7 +83,8 @@ public class FocNotifAction_SendReportByEmail extends FocNotifAction_Abstract {
     	}catch(Exception e) {
     		Globals.logException(e);
     	}
-    }		
+    }
+    return null;
 	}
 
 }
