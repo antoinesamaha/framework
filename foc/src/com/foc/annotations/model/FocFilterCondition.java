@@ -28,4 +28,5 @@ public @interface FocFilterCondition {
 	public String caption() default "";
 	public String captionProperty() default "";
 	public int    level() default FocListFilter.LEVEL_DATABASE;
+	public String className() default "";
 }
