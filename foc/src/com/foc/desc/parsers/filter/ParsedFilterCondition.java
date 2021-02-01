@@ -32,6 +32,7 @@ public class ParsedFilterCondition {
 	private String  prefix          = null;
 	private String  caption         = null;
 	private String  captionProperty = null;
+	private String  className       = null;
 	private int     level           = FocListFilter.LEVEL_DATABASE;
 	
 	private HashMap<String, String> captionLanguageMap = null;
@@ -43,6 +44,7 @@ public class ParsedFilterCondition {
 		buildCaptionLanguageMap();
 		this.captionProperty = filterCondAnnotation.captionProperty();
 		this.level = filterCondAnnotation.level();
+		this.className = filterCondAnnotation.className();
 	}
 	
 	public ParsedFilterCondition(Attributes att){
@@ -60,6 +62,7 @@ public class ParsedFilterCondition {
 		}else if(levelStr != null && levelStr.equals(FXMLDesc.VAL_FILTER_LEVEL_DATABASE_AND_MEMORY)) {
 			this.level = FocListFilter.LEVEL_DATABASE_AND_MEMORY;
 		}			
+		this.className = XMLFocDescParser.getString(att, FXMLDesc.ATT_FILTER_CONDITION_CLASS_NAME);
 	}
 	
 	public void buildCaptionLanguageMap() {
@@ -118,4 +121,9 @@ public class ParsedFilterCondition {
 	public void setLevel(int level) {
 		this.level = level;
 	}
+
+	public String getClassName() {
+		return className;
+	}
+
 }

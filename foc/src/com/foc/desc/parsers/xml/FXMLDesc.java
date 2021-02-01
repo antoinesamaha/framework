@@ -29,6 +29,7 @@ public interface FXMLDesc {
   public static final String ATT_FILTER_ON_FIELD          = "field";
   public static final String ATT_FILTER_CONDITION_PREFIX  = "prefix";
   public static final String ATT_FILTER_CONDITION_CAPTION = "caption";
+  public static final String ATT_FILTER_CONDITION_CLASS_NAME = "className";
   public static final String ATT_FILTER_CONDITION_CAPTION_PROPERTY = "captionProperty";
   public static final String ATT_FILTER_CONDITION_MEMORY_ONLY = "memoryOnly";
   public static final String ATT_FILTER_LEVEL             = "level";

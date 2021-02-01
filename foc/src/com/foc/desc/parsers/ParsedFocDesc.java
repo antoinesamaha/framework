@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.foc.desc.parsers;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -123,7 +124,12 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
 					FField fld = (FField) subjectFocDesc.iFocData_getDataByPath(condition.getFieldPath());
 					if(fld != null){
 						FFieldPath fieldPath = FFieldPath.newFFieldPath(subjectFocDesc, condition.getFieldPath());
-						FilterCondition cond = FilterConditionFactory.newConditionForField(fld, fieldPath, condition.getPrefix());
+						FilterCondition cond = null;
+						if (!Utils.isStringEmpty(condition.getClassName())) {
+							cond = newItem(condition.getClassName(), fieldPath, condition.getPrefix());
+						} else {
+							cond = FilterConditionFactory.newConditionForField(fld, fieldPath, condition.getPrefix());
+						}
 						if(cond != null){
 							cond.setLevel(condition.getLevel());
 							if(!Utils.isStringEmpty(condition.getCaption())){
@@ -146,6 +152,36 @@ public abstract class ParsedFocDesc extends FocWorkflowDesc {
 		}
 		return filterDesc;
 	}
+	
+	public FilterCondition newItem(String className, FFieldPath stringFieldPath, String fieldPrefix){
+		FilterCondition condition = null;
+
+    try{
+      Class<FilterCondition> cls = (Class<FilterCondition>) Class.forName(className);
+      if(cls != null){ 
+        Class[] classes = new Class[2];
+        classes[0] = FFieldPath.class;
+        classes[1] = String.class;
+    
+        Object[] objects = new Object[2];
+        objects[0] = stringFieldPath;
+        objects[1] = fieldPrefix;
+        
+        Constructor<FilterCondition> construct = cls.getConstructor(classes);
+        if(construct != null){
+          condition = (FilterCondition) construct.newInstance(objects);
+        }
+      }
+    }catch (Exception e){
+      Globals.logException(e);
+      if(className != null){
+      	Globals.logString("Could not create condition for Class:"+className);
+      }
+    }
+    return condition;
+  }
+
+	
   
 	public FocRequestDesc getFocRequestDesc() {
 		return getFocRequestDesc(false);
