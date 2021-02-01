@@ -225,7 +225,7 @@ public class SQLRequest {
  					requestWrapper.append(request);
  					requestWrapper.append(") pagination "); 					
  					requestWrapper.append("WHERE rownum < ( " + endingIndex + " + 1) ");
- 					requestWrapper.append(") WHERE rownum >= ( " + startingIndex + " + 1) ");
+ 					requestWrapper.append(") WHERE r__ >= ( " + startingIndex + " + 1) ");
  					request = requestWrapper; 
   			} else {
 					request.append(" OFFSET ");
