@@ -40,7 +40,12 @@ import com.foc.Globals;
 public class Utils {
 
 	public static boolean paramSanityCheck(String param) {
-		return param != null && param.contains("'");
+		boolean error = false;
+		if(param != null && param.contains("'")) {
+			error = true;
+			Globals.logString("Sanity Check "+param);
+		}
+		return error;
 	}
 	
 	public static boolean isStringEmpty(String input){
