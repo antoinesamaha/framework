@@ -39,6 +39,10 @@ import com.foc.Globals;
 
 public class Utils {
 
+	public static boolean paramSanityCheck(String param) {
+		return param != null && param.contains("'");
+	}
+	
 	public static boolean isStringEmpty(String input){
 		return input == null || input.isEmpty();
 	}
