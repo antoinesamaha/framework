@@ -2636,7 +2636,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		FocDesc focDesc = getFocDesc();
 		if (focDesc != null) {
 			StringBuffer request = new StringBuffer();
-			request.append("SELECT COUNT(DISTINCT " + fieldName + ") ");
+			request.append("SELECT COUNT( " + fieldName + ") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			
 			SQLFilter filter = getFilter();
