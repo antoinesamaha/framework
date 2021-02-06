@@ -2636,13 +2636,19 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		FocDesc focDesc = getFocDesc();
 		if (focDesc != null) {
 			StringBuffer request = new StringBuffer();
-			request.append("SELECT COUNT(DISTINCT " + fieldName + ") ");
+			request.append("SELECT COUNT( " + fieldName + ") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			
 			SQLFilter filter = getFilter();
 			boolean atLeastOneAdded = filter.addWhereToRequest(request, this.getFocDesc(), true, true);
 			
+      long startTimeDBRequest = System.currentTimeMillis();
+			
 			ArrayList<String> valuesArray = Globals.getApp().getDataSource().command_SelectRequest(request);
+      
+			long endTimeDBRequest = System.currentTimeMillis();
+      Globals.logString(" - SQL DURATION = "+(endTimeDBRequest-startTimeDBRequest));
+
 			if(valuesArray.size() == 1) {
 				String countStr = valuesArray.get(0);
 				count = countStr != null ? Utils.parseInteger(countStr, 0) : 0;
