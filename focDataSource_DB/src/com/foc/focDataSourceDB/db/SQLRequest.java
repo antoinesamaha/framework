@@ -318,8 +318,12 @@ public class SQLRequest {
 		        String req = getRequestAdaptedToProvider();
 		        
 		        PerfManager.startDBExec();
-	          stmt      = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, req, getSQLRequestType(), getFocObject());
-	          if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
+            long startTimeDBRequest = System.currentTimeMillis();
+		        stmt      = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, req, getSQLRequestType(), getFocObject());
+            long endTimeDBRequest = System.currentTimeMillis();
+            Globals.logString(" - SQL DURATION = "+(endTimeDBRequest-startTimeDBRequest));
+	          
+		        if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
 	          	if(getFocObject() != null){
 	          		getFocObject().backup();
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
