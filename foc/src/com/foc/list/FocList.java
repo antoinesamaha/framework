@@ -2642,7 +2642,13 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			SQLFilter filter = getFilter();
 			boolean atLeastOneAdded = filter.addWhereToRequest(request, this.getFocDesc(), true, true);
 			
+      long startTimeDBRequest = System.currentTimeMillis();
+			
 			ArrayList<String> valuesArray = Globals.getApp().getDataSource().command_SelectRequest(request);
+      
+			long endTimeDBRequest = System.currentTimeMillis();
+      Globals.logString(" - SQL DURATION = "+(endTimeDBRequest-startTimeDBRequest));
+
 			if(valuesArray.size() == 1) {
 				String countStr = valuesArray.get(0);
 				count = countStr != null ? Utils.parseInteger(countStr, 0) : 0;
