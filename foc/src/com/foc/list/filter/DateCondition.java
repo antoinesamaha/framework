@@ -169,10 +169,10 @@ public class DateCondition extends FilterCondition {
 
   public static int adjustTheOperation(int op, Date firstDate, Date lastDate) {
     if (op != OPERATOR_INDIFERENT) {
-    	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
-    	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
-	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
-	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
+    	if(op == OPERATOR_BETWEEN && firstDate.getTime() < Globals.DAY_TIME && firstDate.getTime() > -Globals.DAY_TIME) op = OPERATOR_LESS_THAN;
+    	if(op == OPERATOR_BETWEEN && lastDate.getTime() < Globals.DAY_TIME && lastDate.getTime() > -Globals.DAY_TIME) op = OPERATOR_GREATER_THAN;
+	    if(op == OPERATOR_GREATER_THAN && firstDate.getTime() < Globals.DAY_TIME && firstDate.getTime() > -Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
+	    if(op == OPERATOR_LESS_THAN && lastDate.getTime() < Globals.DAY_TIME && lastDate.getTime() > -Globals.DAY_TIME) op = OPERATOR_INDIFERENT;
     }
     return op;
   }
