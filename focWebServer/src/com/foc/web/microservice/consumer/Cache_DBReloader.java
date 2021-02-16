@@ -150,8 +150,10 @@ public class Cache_DBReloader implements IDBReloader {
 				Thread.sleep(waitDuration);
 				
 				if (active) {
+					JSONObject json = constructReloadJsonBody();
 					for(int i=0; i<urls.length; i++) {
-						callReloadForUrl(urls[i]);
+						
+						callReloadForUrl(urls[i],json);
 					}
 				}
 				
@@ -162,12 +164,11 @@ public class Cache_DBReloader implements IDBReloader {
 			}
 		}
 		
-		private void callReloadForUrl(String url) {
+		private void callReloadForUrl(String url,JSONObject json) {
 			try{
 				if(!Utils.isStringEmpty(url)) {
 					HttpPost someHttpPost = new HttpPost(url);
 					URIBuilder uriBuilder = new URIBuilder(someHttpPost.getURI());
-					JSONObject json = constructReloadJsonBody();
 					if(json != null) {
 						Globals.logString("Call "+url+" body is " +json.toString());
 						StringEntity strEntity = new StringEntity(json.toString());
