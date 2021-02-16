@@ -111,15 +111,22 @@ public class WSSingleLookup {
 		}
 	}
 	
-	public synchronized void refresh(){
+	public void refresh(){
+		refresh(true);
+	}
+	
+	public synchronized void refresh(boolean reloadAlways){
 		FocList focList = getFocList(true); 
-		if (focList != null) focList.reloadFromDB();
-		jsonRebuild();	
+		if (focList != null && 
+				(reloadAlways || focList.isLoaded())) {
+			focList.reloadFromDB();
+		}
+		jsonRebuild();
 	}
 	
 	public synchronized void refreshObjectByReference(long ref){
 		if(ref > 0) {
-			FocList focList = getFocList(true); 
+			FocList focList = getFocList(false); 
 			if (focList != null) {
 				FocObject object = focList.searchByRealReferenceOnly(ref);
 				if (object != null) {

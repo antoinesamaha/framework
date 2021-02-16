@@ -55,7 +55,7 @@ public class WSLookupFactory {
 		boolean error = true;
 		WSSingleLookup lookup = map.get(lookupKey);
 		if(lookup != null) {
-			lookup.refresh();
+			lookup.refresh(false);
 			error = false;
 		}
 
@@ -85,7 +85,7 @@ public class WSLookupFactory {
 		if (arrayList != null) {
 			for (int i=0; i<arrayList.size(); i++) {
 				WSSingleLookup lookup = arrayList.get(i);
-				lookup.refresh();
+				lookup.refresh(false);
 				error = false;
 			}
 		}
