@@ -29,7 +29,7 @@ import com.foc.util.Utils;
 public class Cache_DBReloader implements IDBReloader {
 
 	private boolean active = false;
-	private String  url    = null;
+	private String[] urls  = null;
 	private HashMap<String, String> excludedTables = null;
 	private HashMap<String, ArrayList<Long>> tablesToSend = null;
   public static final int TYPE_UPDATE =  2;
@@ -39,12 +39,15 @@ public class Cache_DBReloader implements IDBReloader {
 
 	public Cache_DBReloader() {
 		tablesToSend = new HashMap<String, ArrayList<Long>>();
-		url = ConfigInfo.getProperty("reloader.url");
-		if (!Utils.isStringEmpty(url)) {
-			String activeTxt = ConfigInfo.getProperty("reloader.active");
-			if(			!Utils.isStringEmpty(activeTxt) 
-					&& (activeTxt.equals("1") || activeTxt.toLowerCase().equals("true"))){
-				active = true;
+		String urlString = ConfigInfo.getProperty("reloader.url");
+		if (!Utils.isStringEmpty(urlString)) {
+			urls = urlString.split(",");
+			if(urls != null && urls.length > 0) {
+				String activeTxt = ConfigInfo.getProperty("reloader.active");
+				if(			!Utils.isStringEmpty(activeTxt) 
+						&& (activeTxt.equals("1") || activeTxt.toLowerCase().equals("true"))){
+					active = true;
+				}
 			}
 		}
 		excludedTables_Fill();
@@ -145,12 +148,29 @@ public class Cache_DBReloader implements IDBReloader {
 		public void run() {
 			try{
 				Thread.sleep(waitDuration);
-				if(active && !Utils.isStringEmpty(url)) {
+				
+				if (active) {
+					JSONObject json = constructReloadJsonBody();
+					for(int i=0; i<urls.length; i++) {
+						
+						callReloadForUrl(urls[i],json);
+					}
+				}
+				
+				disposeAwaitingThread();
+			}catch (Exception e){
+				Globals.logException(e);
+				disposeAwaitingThread();
+			}
+		}
+		
+		private void callReloadForUrl(String url,JSONObject json) {
+			try{
+				if(!Utils.isStringEmpty(url)) {
 					HttpPost someHttpPost = new HttpPost(url);
 					URIBuilder uriBuilder = new URIBuilder(someHttpPost.getURI());
-					JSONObject json = constructReloadJsonBody();
 					if(json != null) {
-						Globals.logString("Call body is " +json.toString());
+						Globals.logString("Call "+url+" body is " +json.toString());
 						StringEntity strEntity = new StringEntity(json.toString());
 						strEntity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
             someHttpPost.setEntity(strEntity);
@@ -167,11 +187,10 @@ public class Cache_DBReloader implements IDBReloader {
 						}
 					}
 				}
-				disposeAwaitingThread();
 			}catch (Exception e){
 				Globals.logException(e);
-				disposeAwaitingThread();
 			}
 		}
+		
 	}
 }
