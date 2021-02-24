@@ -25,6 +25,7 @@ import com.foc.admin.FocUserDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.components.FVButton;
@@ -131,15 +132,24 @@ public class FocUser_Login_Form extends FocXMLLayout {
   
   private void validateLogin() {
     validationCheckData(null);
-    FocUser user = (FocUser) getFocData();
-
+    FocUser user    = (FocUser) getFocData();
+    FocUser userDB  = FocUser.findUser(user.getName());
     String username = user.getName();
     String password = user.getPassword();
+		String salt     = userDB != null && !Utils.isStringEmpty(userDB.getSalt()) ? userDB.getSalt() : Encryptor.CreateSecureRandomString();
+		String encryptedPasswordMD5    = Encryptor.encrypt_MD5(password); // did both hashings to protect against timing attacks
+		String encryptedPasswordPBKDF2 = Encryptor.encrypt_PBKDF2(password, salt, 100000, 128);
+		String encryptedPassword       = null;
+		if(userDB != null && !Utils.isStringEmpty(userDB.getSalt())) {
+			encryptedPassword = encryptedPasswordPBKDF2;
+		}
+		else {
+			encryptedPassword = encryptedPasswordMD5;
+		}
 //    if(Globals.getApp().getCurrentCompany() != null && Globals.getApp().getDataSource().isEmptyDatabaseJustCreated()){
 //    	user.setCurrentCompany(Globals.getApp().getCurrentCompany());
 //    }
     
-    String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
     FocLoginAccess loginAccess = new FocLoginAccess();
     
     Globals.logString("Username "+username+" Password "+encryptedPassword);

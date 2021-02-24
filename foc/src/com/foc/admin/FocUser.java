@@ -681,6 +681,14 @@ public class FocUser extends FocObject {
   	setPropertyString(FocUserDesc.FLD_EMAIL_SEND_COMMAND_LINE, email);
   }
   
+  public String getSalt(){
+  	return getPropertyString(FocUserDesc.FLD_SALT);
+  }
+
+  public void setSalt(String salt){
+  	setPropertyString(FocUserDesc.FLD_SALT, salt);
+  }
+  
   public boolean isContextHelpActivated(){
     return getPropertyBoolean(FocUserDesc.FLD_CONTEXT_HELP_ACTIVATION);
   }
