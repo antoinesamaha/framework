@@ -15,6 +15,7 @@
  ******************************************************************************/
 package com.foc.web.modules.admin;
 
+import com.foc.Application;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
@@ -39,6 +40,7 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.JavaScript;
+import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class FocUser_Login_Form extends FocXMLLayout {
@@ -131,6 +133,76 @@ public class FocUser_Login_Form extends FocXMLLayout {
   
   private void validateLogin() {
     validationCheckData(null);
+    int status = Application.LOGIN_WRONG;
+    
+    FocUser user    = (FocUser) getFocData();
+    String username = user != null && user.getName() != null ? user.getName().trim() : "";
+    FocUser userDB = FocUser.findUser(username);
+    
+    if(userDB != null && user != null) {
+	    String password = user.getPassword();
+//	    String salt  = userDB != null && !Utils.isStringEmpty(userDB.getSalt()) ? userDB.getSalt() : Encryptor.CreateSecureRandomString();
+			
+			String encryptedPassword       = null;
+			if(!Utils.isStringEmpty(userDB.getSalt())) {
+				String encryptedPasswordPBKDF2 = Encryptor.encrypt_PBKDF2(String.valueOf(password), userDB.getSalt(), 100000, 128);
+				encryptedPassword = encryptedPasswordPBKDF2;
+			} else {
+				encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+			}
+	    
+	    FocLoginAccess loginAccess = new FocLoginAccess();
+	    Globals.logString("Username "+username+" Password "+encryptedPassword);
+	    
+	    status = loginAccess.checkUserPassword(userDB, encryptedPassword, false);
+	    if (status != com.foc.Application.LOGIN_VALID) {
+	    	status = loginAccess.checkUserPassword(userDB, encryptedPassword, false, true);
+	    }
+	    if(status == com.foc.Application.LOGIN_VALID){
+	    	approvedFocUser = loginAccess.getUser();
+	      
+	    	anotherApplicationAlreadyRunning = null;
+	      for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
+	      	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
+	      	if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){
+	      		if(app.getFocWebSession().getFocUser().equalsRef(approvedFocUser) && !app.isClosing()){
+	      			anotherApplicationAlreadyRunning = app;
+	      		}
+	      	}
+	      }
+	      
+	      if(anotherApplicationAlreadyRunning != null){
+	      	OptionDialog optionDialog = new OptionDialog("Previous Session Still Opened", "User Already has an opened session.\n Do you wish to neglect the previous sessions and open a new one now?") {
+						
+						@Override
+						public boolean executeOption(String optionName) {
+							if(optionName.equals("USER_ALREADY_CONNECTED")){
+								Globals.logString("DEBUG_SESSION_NOT_VALID FocUser_Login_Form.validateLogin.executeOption() calling Session Logout");
+								anotherApplicationAlreadyRunning.logout(null);
+								loginWithUserAlreadyApproved_Internal(approvedFocUser);
+							}
+							return false;
+						}
+					};
+					optionDialog.addOption("USER_ALREADY_CONNECTED", "Yes. Neglect previous sessions");
+					optionDialog.addOption("CANCEL", "Cancel");
+					Globals.popupDialog(optionDialog);
+	      } else{
+	      	loginWithUserAlreadyApproved_Internal(approvedFocUser);
+	      }
+	    } else {
+	    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+	    }
+	    
+	    loginAccess.dispose();
+	    loginAccess = null;
+	  } else {
+	  	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+	  }
+  }
+  
+  /*private void validateLogin() {
+    validationCheckData(null);
     FocUser user = (FocUser) getFocData();
 
     String username = user.getName();
@@ -208,7 +280,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
     
     loginAccess.dispose();
     loginAccess = null;
-  }
+  }*/
 
   private void loginWithUserAlreadyApproved_Internal(FocUser focUser){
     FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();

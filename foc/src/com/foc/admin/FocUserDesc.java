@@ -80,6 +80,7 @@ public class FocUserDesc extends FocDesc {
   public static final int FLD_SAAS_APPLICATION_ROLE           = 27;
   public static final int FLD_IS_SAAS_ADMIN                   = 28;
   public static final int FLD_CONTEXT_HELP_ACTIVATION         = 29;
+  public static final int FLD_SALT                            = 30;
   
   public static final int COMPANY_MODE_SEE_ONLY_CURRENT    = 0;
   public static final int COMPANY_MODE_SEE_ONLY_READ_WRITE = 1;
@@ -94,8 +95,8 @@ public class FocUserDesc extends FocDesc {
   public static final int THEME_SYSTEM_DEFAULT = 0;
   public static final int THEME_VALO           = 1;
   public static final int THEME_REINDEER       = 2;
-  
-  public static final int LEN_FULL_NAME                    = 40;
+  public static final int LEN_FULL_NAME        = 40;
+  public static final int LEN_SALT             = 40;
   
   public static final String USER_EXTERNAL = "WEB_EXTERNAL";
   
@@ -116,7 +117,10 @@ public class FocUserDesc extends FocDesc {
     focCharFld = new FStringField("FULL_NAME", "Full name", FLD_FULL_NAME, false, LEN_FULL_NAME);
     addField(focCharFld);
     
-    FPasswordField focPassFld = new FPasswordField("PASSWORD", "Password", FLD_PASSWORD, false, 22);
+    focCharFld = new FStringField("SALT", "Salt", FLD_SALT, false, LEN_SALT);
+    addField(focCharFld);
+    
+    FPasswordField focPassFld = new FPasswordField("PASSWORD", "Password", FLD_PASSWORD, false, 130);
     focPassFld.setCapital(true);
     addField(focPassFld);
     
