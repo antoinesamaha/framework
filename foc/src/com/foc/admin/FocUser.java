@@ -26,6 +26,8 @@
 package com.foc.admin;
 
 import java.awt.image.BufferedImage;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -87,7 +89,7 @@ public class FocUser extends FocObject {
   public static final int PASSWORD_POLICY_NONE                           = 0; 
   public static final int PASSWORD_POLICY_SIX_LETTERS_NUMBER             = 1;
   public static final int PASSWORD_POLICY_TWELVE_UPPLER_LOWER_NBR_SYMBOL = 2;
-
+  
 //USERREFACTOR  
 //  private FocList companyList   = null;
 //  private FocList titlesList    = null;
@@ -663,6 +665,14 @@ public class FocUser extends FocObject {
     if(choice != null){
       choice.setInteger(fontSize);
     }
+  }
+
+  public int getPasswordEncryptionMethod() {
+  	return getPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD);
+  }
+
+  public void setPasswordEncryptionMethod(int method) {
+  	setPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD, method);
   }
 
   public boolean isEnableToolTipText(){
@@ -1646,10 +1656,18 @@ public class FocUser extends FocObject {
     return errorMessage;
   }
   
+  public void setPassword_EncryptFirst(String newPassStr) {
+  	if (Utils.isStringEmpty(getSalt())) {
+  		createSalt();
+  	}
+  	setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
+  	String encrypted = encryptPassword(getPasswordEncryptionMethod(), getSalt(), newPassStr);
+  	Globals.logString(" = Username "+getName()+" password encrypted "+encrypted);
+		setPassword(encrypted);
+  }
+  
   public void changePassword(String newPassStr) {
-		Globals.logString(" = Username "+getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
-		newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
-		setPassword(newPassStr);
+  	setPassword_EncryptFirst(newPassStr);
 		validate(true);
   }
 
@@ -1661,6 +1679,59 @@ public class FocUser extends FocObject {
     appendKeyValueForFieldName(builder, null, FocUserDesc.FNAME_SUSPENDED);
     appendKeyValueForFieldName(builder, null, FocUserDesc.FNAME_GROUP);
     builder.endObject();
+	}
+
+	public boolean checkEnteredPassword(String password) {
+		boolean error = true;
+		
+		if(getPassword() != null && getPassword().equals("")) {
+			//If password is empty we check directly if sent password is empty
+			error = !password.equals("");
+		} else {
+			if(getPasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0) {
+				String encrypted = Encryptor.encrypt_MD5(String.valueOf(password));
+				error = encrypted != null ? encrypted.compareTo(getPassword()) != 0 : true;
+			} else if(getPasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+				String encrypted = Encryptor.encrypt_PBKDF2(String.valueOf(password), getSalt(), 100000, 128);
+				error = encrypted != null ? encrypted.compareTo(getPassword()) != 0 : true;
+			} else {
+				Globals.logString("Unknown password encryption method "+getPasswordEncryptionMethod());
+				error = true;
+			}
+		}
+		return error;
+	}
+	
+	public void upgradePasswordIfNeeded(String password) {
+		if (getPasswordEncryptionMethod() < getActivePasswordEncryptionMethod()) {
+			if (getActivePasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+				createSalt();
+				setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
+				setPassword_EncryptFirst(password);
+			}
+		}
+	}
+	
+	private void createSalt() {
+		SecureRandom random = new SecureRandom();
+		String salt = new BigInteger(130, random).toString(32);
+		setSalt(salt);
+	}
+	
+	public static int getActivePasswordEncryptionMethod() {
+		return FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1;
+	}
+	
+	public static String encryptPassword(int encryptionMethod, String salt, String password) {
+		String encrypted = null; 
+		if(encryptionMethod == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0) {
+			encrypted = Encryptor.encrypt_MD5(String.valueOf(password));
+		} else if(encryptionMethod == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+			encrypted = Encryptor.encrypt_PBKDF2(String.valueOf(password), salt, 100000, 128);
+		} else {
+			Globals.logString("Unknown password encryption method "+encryptionMethod);
+		}
+		return encrypted;
 	}
 	
 }

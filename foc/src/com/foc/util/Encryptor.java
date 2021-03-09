@@ -50,21 +50,21 @@ public class Encryptor {
   
   public static String encrypt_PBKDF2(String password, String salt, int numberOfIterations, int keyLength) {
     String hashed = null;
-	try {
-	  SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
-	  PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), numberOfIterations, keyLength*4);
-	  SecretKey key = skf.generateSecret(spec);
-	  byte[] res = key.getEncoded();
-	  hashed = BytesToHex(res);
-	} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-	  e.printStackTrace();
-	}
-	return hashed;
+		try {
+		  SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
+		  PBEKeySpec spec = new PBEKeySpec(password.toCharArray(), salt.getBytes(), numberOfIterations, keyLength*4);
+		  SecretKey key = skf.generateSecret(spec);
+		  byte[] res = key.getEncoded();
+		  hashed = BytesToHex(res);
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+		  e.printStackTrace();
+		}
+		return hashed;
   }
 
-  public static String CreateSecureRandomString() {
-	SecureRandom random = new SecureRandom();
-	return new BigInteger(130, random).toString(32);
+  public static String createSecureRandomString() {
+		SecureRandom random = new SecureRandom();
+		return new BigInteger(130, random).toString(32);
   }
 	
   private static String BytesToHex(byte[] bytes) {

@@ -25,7 +25,6 @@ import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.shared.dataStore.IFocData;
-import com.foc.util.Encryptor;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.components.FVButton;
@@ -40,7 +39,6 @@ import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.JavaScript;
-import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class FocUser_Login_Form extends FocXMLLayout {
@@ -135,30 +133,14 @@ public class FocUser_Login_Form extends FocXMLLayout {
     validationCheckData(null);
     int status = Application.LOGIN_WRONG;
     
-    FocUser user    = (FocUser) getFocData();
-    String username = user != null && user.getName() != null ? user.getName().trim() : "";
-    FocUser userDB = FocUser.findUser(username);
-    
-    if(userDB != null && user != null) {
+    FocUser user = (FocUser) getFocData();
+    if(user != null) {
+	    String username = user.getName().trim();
 	    String password = user.getPassword();
-//	    String salt  = userDB != null && !Utils.isStringEmpty(userDB.getSalt()) ? userDB.getSalt() : Encryptor.CreateSecureRandomString();
-			
-			String encryptedPassword       = null;
-			if(!Utils.isStringEmpty(userDB.getSalt())) {
-				String encryptedPasswordPBKDF2 = Encryptor.encrypt_PBKDF2(String.valueOf(password), userDB.getSalt(), 100000, 128);
-				encryptedPassword = encryptedPasswordPBKDF2;
-			} else {
-				encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-			}
 	    
-	    FocLoginAccess loginAccess = new FocLoginAccess();
-	    Globals.logString("Username "+username+" Password "+encryptedPassword);
-	    
-	    status = loginAccess.checkUserPassword(userDB, encryptedPassword, false);
-	    if (status != com.foc.Application.LOGIN_VALID) {
-	    	status = loginAccess.checkUserPassword(userDB, encryptedPassword, false, true);
-	    }
-	    if(status == com.foc.Application.LOGIN_VALID){
+	    FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+	    status = loginAccess.getLoginStatus();
+	    if (status == Application.LOGIN_VALID) {
 	    	approvedFocUser = loginAccess.getUser();
 	      
 	    	anotherApplicationAlreadyRunning = null;

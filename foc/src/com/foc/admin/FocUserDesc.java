@@ -81,6 +81,7 @@ public class FocUserDesc extends FocDesc {
   public static final int FLD_IS_SAAS_ADMIN                   = 28;
   public static final int FLD_CONTEXT_HELP_ACTIVATION         = 29;
   public static final int FLD_SALT                            = 30;
+  public static final int FLD_PASSWORD_ENCRYPTION_METHOD      = 31;
   
   public static final int COMPANY_MODE_SEE_ONLY_CURRENT    = 0;
   public static final int COMPANY_MODE_SEE_ONLY_READ_WRITE = 1;
@@ -89,6 +90,9 @@ public class FocUserDesc extends FocDesc {
   public static final int APPLICATION_ROLE_NONE                 = 0;
   public static final int APPLICATION_ROLE_REQUESTER            = 1;
   public static final int APPLICATION_ROLE_PROCUREMENT_OFFICER  = 2;
+
+  public static final int PASSWORD_ENCRYPTION_METHOD_0 = 0; 
+  public static final int PASSWORD_ENCRYPTION_METHOD_1 = 1;
 
   public static final String APP_ROLE_NAME_PROCUREMENT_OFFICER = "Procurement Officer";
   		
@@ -245,6 +249,11 @@ public class FocUserDesc extends FocDesc {
   	
   	FBoolField boolField = new FBoolField("CONTEXT_HELP_ACTIVATION", "Context Help Activation", FLD_CONTEXT_HELP_ACTIVATION, false);
     addField(boolField);
+    
+  	FMultipleChoiceField passwordEncryptionMethodField = new FMultipleChoiceField("PASSWORD_ENCRYPTION_METHOD", "Encryption Method", FLD_PASSWORD_ENCRYPTION_METHOD, false, 2);
+  	passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_0, "Method 0");
+  	passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_1, "Method 1");
+  	addField(passwordEncryptionMethodField);
 	}
 
 	public static FMultipleChoiceField addFontSizeField(FocDesc focDesc, String name, int id){
