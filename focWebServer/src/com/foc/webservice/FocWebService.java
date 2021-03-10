@@ -117,7 +117,7 @@ public class FocWebService{
 		FocUser newUser = getEmptyUser();
 		if(newUser != null){
 			newUser.setName(userName);
-			newUser.setPassword(password);
+			newUser.setPassword_EncryptFirst(password);
 			if(userRole != null){
 				newUser.setSaasApplicationRole(userRole);
 				saasConfig.adaptUserRights(newUser);

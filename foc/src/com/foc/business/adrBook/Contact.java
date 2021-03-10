@@ -161,8 +161,7 @@ public class Contact extends FocObject {
   			password = "ABCDEF";
   		}
   		userCreationData.setPassword(password);
-  		String ecryptedPassword = Encryptor.encrypt_MD5(password);
-  		user = FocUser.createUserForContact_UserNameIsEmail(this, ecryptedPassword);
+  		user = FocUser.createUserForContact_UserNameIsEmail(this, password);
   		userCreationData.setCreated(true);
   	}
   	userCreationData.setUser(user);
@@ -200,8 +199,8 @@ public class Contact extends FocObject {
 	    		if(Globals.getApp().isUnitTest()){
 	    			password = "ABCDEF";
 	    		}
-	    		String ecryptedPassword = Encryptor.encrypt_MD5(password);
-	    		FocUser user = FocUser.createUserForContact(this, ecryptedPassword, group, null, title);
+	    		//String ecryptedPassword = Encryptor.encrypt_MD5(password);
+	    		FocUser user = FocUser.createUserForContact(this, password, group, null, title);
 
 	    		boolean sentSuccessfully = false;
 	    		FocNotificationEmailTemplate template = (FocNotificationEmailTemplate) BusinessConfig.getInstance().getEmailTemplateUserCreation();

@@ -29,7 +29,6 @@ import com.foc.list.FocList;
 import com.foc.list.FocListWithFilter;
 import com.foc.shared.json.B01JsonBuilder;
 import com.foc.shared.json.JSONObjectWriter;
-import com.foc.util.Encryptor;
 import com.foc.util.Utils;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
@@ -165,10 +164,8 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 				if (username != null && password != null) {
 					Globals.logString(username);
 					Globals.logString(password);
-					String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-					FocLoginAccess loginAccess = new FocLoginAccess();
-	
-					int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+					FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+					int status = loginAccess.getLoginStatus();
 	
 					if(status == com.foc.Application.LOGIN_VALID){
 						// webSession = newApplication.getFocWebSession();

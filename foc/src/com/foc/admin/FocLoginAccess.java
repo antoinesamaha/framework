@@ -36,7 +36,7 @@ public class FocLoginAccess {
 	
 	public int check(String username, String password, boolean reloadToMakeSure) {
 		loginStatus = Application.LOGIN_WRONG;
-		FocUser user = FocUser.findUser(username);
+		user = FocUser.findUser(username);
 		if (user != null) {
 			if (user.isSuspended()) {
 				// No need to attempt again with reload if suspended

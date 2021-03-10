@@ -287,10 +287,8 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 				if (username != null && password != null) {
 					Globals.logString(username);
 					Globals.logString(password);
-					String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-					FocLoginAccess loginAccess = new FocLoginAccess();
-	
-					status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+					FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+					status = loginAccess.getLoginStatus();
 	
 					if(status == com.foc.Application.LOGIN_VALID){
 						// webSession = newApplication.getFocWebSession();

@@ -597,8 +597,7 @@ public class FocUser extends FocObject {
   
   public String resetPassword(){
 		String newPassStr = newRandomPassword(); 
-		String newPassEncripted = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
-		setPassword(newPassEncripted);
+		setPassword_EncryptFirst(newPassStr);
 		validate(true);
 		return newPassStr;
   }
@@ -850,7 +849,7 @@ public class FocUser extends FocObject {
   	
   		user = (FocUser) focList.newEmptyItem();
 	    user.setName(userName);
-	    user.setPassword(Encryptor.encrypt_MD5(password));
+	    user.setPassword_EncryptFirst(password);
 	    user.setGroup(group);
 	    focList.add(user);
 	    user.validate(true);
@@ -881,14 +880,14 @@ public class FocUser extends FocObject {
       appendedString = Integer.toString(app);
       user = findUser(userName+appendedString);
     }
-      FocList focList = FocUserDesc.getList();
-      user = (FocUser) focList.newEmptyItem();
-      user.setName(userName+appendedString);
-      user.setPassword(Encryptor.encrypt_MD5(password));
-      focList.add(user);
-      user.validate(true);
-      focList.validate(true);
-      return user;    
+    FocList focList = FocUserDesc.getList();
+    user = (FocUser) focList.newEmptyItem();
+    user.setName(userName+appendedString);
+    user.setPassword_EncryptFirst(password);
+    focList.add(user);
+    user.validate(true);
+    focList.validate(true);
+    return user;    
   }
   
   /**
@@ -954,9 +953,9 @@ public class FocUser extends FocObject {
 	        name += appendedString;
 	        user.setName(name);
 	        if(password != null && !password.isEmpty()){
-	        	user.setPassword(password);
+	        	user.setPassword_EncryptFirst(password);
 	        }else{
-	        	user.setPassword(name);
+	        	user.setPassword_EncryptFirst(name);
       		}	        	
 	        user.setContact(contact);
 	        user.setGroup(anyGuestGroup);
@@ -1629,13 +1628,7 @@ public class FocUser extends FocObject {
     if(checkOldPassword){
     	if(oldPassStr == null) errorMessage = "Old password is not available";
     	if (errorMessage == null) {
-    		oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
-        boolean oldPasswordMatches = false;
-        if(getPassword().isEmpty()){
-        	oldPasswordMatches = Encryptor.encrypt_MD5("").equals(oldPassStr);
-        }else{
-        	oldPasswordMatches = getPassword().equals(oldPassStr);
-        }
+    		boolean oldPasswordMatches = checkEnteredPassword(String.valueOf(oldPassStr));
         //If the password was never set it is still empty in the FocUser
         if(!oldPasswordMatches){
         	errorMessage = "Old password is incorrect!";
@@ -1708,6 +1701,7 @@ public class FocUser extends FocObject {
 				createSalt();
 				setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
 				setPassword_EncryptFirst(password);
+				validate(false);
 			}
 		}
 	}
