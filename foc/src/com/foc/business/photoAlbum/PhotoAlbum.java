@@ -156,6 +156,15 @@ public class PhotoAlbum extends FocObject{
 		setPropertyMultiChoice(PhotoAlbumDesc.FLD_KEYWORD, keyWord);
 	}
 	
+	public String getSection(){
+		    return getPropertyString(PhotoAlbumDesc.FLD_SECTION);
+	}
+		  
+	public void setSection(String section){
+		    setPropertyString(PhotoAlbumDesc.FLD_SECTION, section);
+	}
+
+	
 	public int hasAccess(){
 		FocUser currentUser = Globals.getApp().getUser_ForThisSession();
 		return hasAccess(currentUser);
