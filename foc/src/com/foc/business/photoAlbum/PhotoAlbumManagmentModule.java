@@ -22,7 +22,7 @@ import com.foc.desc.FocModule;
 
 public class PhotoAlbumManagmentModule extends FocModule{
 
-	public static final int VERSION_ID = 1001;
+	public static final int VERSION_ID = 1002;
 	
 	public static final String MODULE_NAME = "DocumentManagement";
 

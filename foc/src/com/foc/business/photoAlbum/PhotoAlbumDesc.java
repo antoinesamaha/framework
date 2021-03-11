@@ -46,6 +46,8 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final int FLD_ALLOWED_GROUPS          = 11;
   public static final int FLD_URL_KEY                 = 12;
   public static final int FLD_KEYWORD                 = 13;
+  public static final int FLD_SECTION                 = 14;
+
   
   public static final String KEYWORD_BEFORE_FIX    = "Before Fix";
   public static final String KEYWORD_AFTER_FIX     = "After Fix";
@@ -57,6 +59,8 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final String FNAME_OBJECT_REF    = "OBJECT_REF";
   public static final String FNAME_TABLE_NAME    = "TABLE_NAME";
   public static final String FNAME_URL_KEY       = "URL_KEY";
+  public static final String FNAME_SECTION       = "SECTION";
+
   
   public PhotoAlbumDesc(){
     super(PhotoAlbum.class, FocDesc.DB_RESIDENT, DB_TABLE_NAME, false);
@@ -104,6 +108,9 @@ public class PhotoAlbumDesc extends FocDesc {
     multipleChoiceField.addChoice(KEYWORD_BEFORE_FIX);
     multipleChoiceField.addChoice(KEYWORD_UNDER_PROCESS);
     addField(multipleChoiceField);
+    
+    FStringField secFld = new FStringField(FNAME_SECTION, "Section", FLD_SECTION, false, 200);
+    addField(secFld);
   }
   
   public static FocDesc getInstance() {

@@ -28,6 +28,7 @@ public class PhotoAlbumFilterDesc extends FocDescForFilter{
   public static final String TABLE_NAME_CONDITION = "TABLE_NAME";
   public static final String OBJECT_REF_CONDITION = "REF";
   public static final String URL_KEY_CONDITION    = "URL_KEY";
+  public static final String SECTION_CONDITION    = "SECTION";
   public static final String CONDITION_TYPE       = "TYPE";
   
   public PhotoAlbumFilterDesc(){
@@ -47,6 +48,9 @@ public class PhotoAlbumFilterDesc extends FocDescForFilter{
 
       StringCondition urlKeyCondition = new StringCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_URL_KEY), URL_KEY_CONDITION);
       filterDesc.addCondition(urlKeyCondition);
+      
+      StringCondition sectionCondition = new StringCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_SECTION), SECTION_CONDITION);
+      filterDesc.addCondition(sectionCondition);
 
       ObjectCondition typeCondition = new ObjectCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_DOCUMENT_TYPE), CONDITION_TYPE);
       filterDesc.addCondition(typeCondition);
