@@ -98,6 +98,14 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
       mcCond.forceToValue((FocListFilter) getFocListFilter(), StringCondition.OPERATION_EQUALS, urlKey);
     }
   }
+  
+  public void applyFilterOnSection(String section){
+	    if(section != null && !section.isEmpty()){
+	      FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
+	      StringCondition mcCond = (StringCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.SECTION_CONDITION);
+	      mcCond.forceToValue((FocListFilter) getFocListFilter(), StringCondition.OPERATION_EQUALS, section);
+	    }
+	  }
 
   public void applyFilterOnTableName(String tableName){
     if(tableName != null && !tableName.isEmpty()){
