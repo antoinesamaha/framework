@@ -65,6 +65,8 @@ public class FCalendarDesc extends FocDesc {
     focFld.setLockValueAfterCreation(true);
     focFld.setMandatory(true);
     
+    addExternalCodeField();
+    
     focFld = new FBoolField ("ISDEFAULT", "isDefault", FLD_IS_DEFAULT, false );    
     //focFld.setLockValueAfterCreation(true);
     focFld.setMandatory(true);

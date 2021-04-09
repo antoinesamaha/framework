@@ -38,7 +38,7 @@ import com.foc.menu.FMenuList;
 public class BusinessModule extends FocModule{
 
   public final static String MODULE_NAME  = "BUSINESS";
-  public final static int    MODULE_ID    = 1003;
+  public final static int    MODULE_ID    = 1004;
 
   public static final int MODULE_ID_LAST_WITH_BOTH_ADDRESSES_DIFFERENT_EDITABLE = 1002;
   
