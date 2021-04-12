@@ -126,6 +126,7 @@ public class ConfigInfo {
   private static boolean oracleListAggCLOB = false;
   
   private static String jwtTokenAlgorithmKey = null;
+  private static String allowedUrlsForAdmin = null;
   
   private static Properties props = null; 
   
@@ -252,6 +253,7 @@ public class ConfigInfo {
         blobStorageDirectory = getProperty("blobStorageDirectory");
         
         jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
+        allowedUrlsForAdmin = getProperty("allowedUrlsForAdmin");
         
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
@@ -498,6 +500,10 @@ public class ConfigInfo {
   
   public static String getBlobStorageDirectory(){
   	return blobStorageDirectory;
+  }
+
+  public static String getAllowedUrlsForAdmin() {
+  	return allowedUrlsForAdmin;	
   }
   
   public static String getJWTTokenAlgorithmKey() {

@@ -19,12 +19,15 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
+import com.foc.admin.FocGroup;
 import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.desc.FocConstructor;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.components.FVButton;
@@ -147,6 +150,28 @@ public class FocUser_Login_Form extends FocXMLLayout {
     int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
     if (status != com.foc.Application.LOGIN_VALID) {
     	status = loginAccess.checkUserPassword(username, encryptedPassword, false, true);
+    }
+    
+    if (status == com.foc.Application.LOGIN_VALID && !Utils.isStringEmpty(ConfigInfo.getAllowedUrlsForAdmin())) {
+    	boolean verifyUrls = false;
+    	if(!(getMainWindow() instanceof FocWebVaadinWindow)) {
+    		//Globals.showNotification("", "", notificationType);
+    		status = com.foc.Application.LOGIN_WRONG;
+    	} else {
+        FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();
+        if (window != null) {
+    			FocGroup group = loginAccess.getUser().getGroup();
+    			if(group != null && group.getWebModuleRights(AdminWebModule.MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION) {
+    				verifyUrls = true;
+    			}
+        }
+    	}
+    	if (verifyUrls) {
+    		String url = Globals.getApp().getURL();
+    		if (Utils.isStringEmpty(url) || !url.startsWith(ConfigInfo.getAllowedUrlsForAdmin())) {
+      		status = com.foc.Application.LOGIN_WRONG;    			
+    		}
+    	}
     }
     
     if(status == com.foc.Application.LOGIN_VALID){
