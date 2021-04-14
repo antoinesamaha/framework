@@ -160,8 +160,8 @@ public class FocUser_Login_Form extends FocXMLLayout {
     	} else {
         FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();
         if (window != null) {
-    			FocGroup group = loginAccess.getUser().getGroup();
-    			if(group != null && group.getWebModuleRights(AdminWebModule.MODULE_NAME) == GrpWebModuleRightsDesc.ACCESS_FULL_WITH_CONFIGURTION) {
+    			FocGroup group = loginAccess.getUser() != null ? loginAccess.getUser().getGroup() : null;
+    			if(group != null && group.getWebModuleRights(AdminWebModule.MODULE_NAME) != GrpWebModuleRightsDesc.ACCESS_NONE) {
     				verifyUrls = true;
     			}
         }
