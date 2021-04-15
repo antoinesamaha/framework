@@ -346,6 +346,11 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		public void logout() {
 			//Globals.logString(" FocMicroServlet.logout() Called But COMMENTED OUT. Would remove WebServer from thread"); 
 			Globals.logString(" FocMicroServlet.logout()");
+			
+			FocWebSession focWebSession = getWebSession();
+			if(focWebSession != null){
+				focWebSession.setFocUser(null);
+			}
 			/*
 			if(getWebApplication() != null){
 				getWebApplication().logout(null);
