@@ -1713,7 +1713,7 @@ public class FocUser extends FocObject {
 	}
 	
 	public static int getActivePasswordEncryptionMethod() {
-		return FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1;
+		return ConfigInfo.getPasswordEncryptionMethod();
 	}
 	
 	public static String encryptPassword(int encryptionMethod, String salt, String password) {
