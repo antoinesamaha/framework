@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.foc.Globals;
+import com.foc.admin.GrpMobileModuleRights;
 import com.foc.business.workflow.implementation.FocWorkflowObject;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
@@ -62,6 +63,71 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		return true;
 	}
 
+	// ------------------------------------
+	// ------------------------------------
+	// RIGHTS
+	// ------------------------------------
+	// ------------------------------------
+	
+	protected String mobileModule_GetModuleName(FocServletRequest focRequest) {
+		return null;
+	}
+	
+	protected GrpMobileModuleRights mobileModule_GetModule(FocServletRequest focRequest, String mobileModuleName) {
+		GrpMobileModuleRights mobileModule = null;
+		if (Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && Globals.getApp().getUser_ForThisSession().getGroup() != null) {
+			mobileModule = Globals.getApp().getUser_ForThisSession().getGroup().getMobileModuleRightsObject(mobileModuleName);
+		}
+		return mobileModule;
+	}
+	
+	protected boolean mobileModule_HasRight(FocServletRequest focRequest, char crud) {
+		boolean right = false;
+		String moduleName = mobileModule_GetModuleName(focRequest);
+		if (Utils.isStringEmpty(moduleName)) {
+			right = true;
+		} else {
+			GrpMobileModuleRights module = mobileModule_GetModule(focRequest, moduleName);
+			if(module == null) {
+				right = false;
+			} else {
+				switch (crud) {
+					case 'C':
+						right = module.getCreate();
+						break;
+					case 'R':
+						right = module.getRead();
+						break;
+					case 'U':
+						right = module.getUpdate();
+						break;
+					case 'D':
+						right = module.getDelete();
+						break;
+				}
+			}
+		}
+		return right;
+	}
+	
+	public boolean mobileModule_HasCreate(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'C'); 
+	}
+	
+	public boolean mobileModule_HasRead(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'R'); 
+	}
+	
+	public boolean mobileModule_HasUpdate(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'U'); 
+	}
+	
+	public boolean mobileModule_HasDelete(FocServletRequest focRequest) {
+		return mobileModule_HasRight(focRequest, 'D'); 
+	}
+
+	// --------------------------------------------------------------------------------
+	
 	@Deprecated
 	protected void copyDATEFromJson(FocObject focObj, JSONObject jsonObj) {
 		if(focObj != null){
@@ -243,7 +309,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					focRequest = newFocServletRequest(sessionAndApp, request, response);
 					
 					Globals.logString(" => GET Begin "+getNameInPlural());
-					if(allowGet(null)){
+					if(allowGet(null) && mobileModule_HasRead(focRequest)){
 						logRequestHeaders(request);
 						
 						String userJson = "";
@@ -370,7 +436,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 			String userJson = "";
 			
 			Globals.logString(" => POST Begin "+getNameInPlural());
-			if(allowPost(focRequest)){
+			if(allowPost(focRequest) && (mobileModule_HasCreate(focRequest) || mobileModule_HasUpdate(focRequest))){
 				logRequestHeaders(request);
 				
 				StringBuffer buffer = getRequestAsStringBuffer(request);
@@ -507,12 +573,19 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 		Globals.logString(" => DELETE Begin "+getNameInPlural());
 		
 		String userJson = "";
-		if(allowDelete(null)){
-			B01JsonBuilder builder = new B01JsonBuilder();
-			builder.setPrintForeignKeyFullObject(true);
-			builder.setHideWorkflowFields(true);
-			SessionAndApplication sessionAndApp = pushSession(request, response);
-			if(sessionAndApp != null){
+
+		B01JsonBuilder builder = new B01JsonBuilder();
+		builder.setPrintForeignKeyFullObject(true);
+		builder.setHideWorkflowFields(true);
+		SessionAndApplication sessionAndApp = pushSession(request, response);
+		if(sessionAndApp != null){
+			FocServletRequest focRequest = newFocServletRequest(sessionAndApp, request, response);
+			if (allowDelete(null) && !mobileModule_HasDelete(focRequest)) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				userJson = "{\"message\": \"Delete not allowed by server\"}";
+				setCORS(response);
+				response.getWriter().println(userJson);
+			} else {
 				FocList list = getFocDesc().getFocList(FocList.LOAD_IF_NEEDED);
 				
 				long ref = doGet_GetReference(request, list);
@@ -532,13 +605,14 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					response.setStatus(HttpServletResponse.SC_OK);
 				}
 				sessionAndApp.logout();
-			}else{
-				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				userJson = "{\"message\": \"Unauthorised\"}";
-			}
-			setCORS(response);
-			response.getWriter().println(userJson);
+		  }
+		}else{
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			userJson = "{\"message\": \"Unauthorised\"}";
 		}
+		setCORS(response);
+		response.getWriter().println(userJson);
+
 		Globals.logString("  = Returned: "+userJson);
 		Globals.logString(" <= DELETE End "+getNameInPlural());
 	}
