@@ -307,12 +307,12 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 				FocServletRequest focRequest = null;
 				try {
 					focRequest = newFocServletRequest(sessionAndApp, request, response);
-					
+					String userJson = "";
+
 					Globals.logString(" => GET Begin "+getNameInPlural());
 					if(allowGet(null) && mobileModule_HasRead(focRequest)){
 						logRequestHeaders(request);
 						
-						String userJson = "";
 						String responseBody = "";
 						B01JsonBuilder builder = newJsonBuiler(request);
 						
@@ -374,6 +374,11 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 						String log = responseBody;
 						if(log.length() > 500) log = log.substring(0, 499)+"...";
 						Globals.logString("  = Returned: "+log);
+					}else {
+						response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+						userJson = "{\"message\": \"Get not allowed by server\"}";
+						setCORS(response);
+						response.getWriter().println(userJson);
 					}
 					Globals.logString(" <= GET End "+getNameInPlural()+" "+response.getStatus());
 				} catch (Exception e) {
