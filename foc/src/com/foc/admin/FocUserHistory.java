@@ -207,7 +207,7 @@ public class FocUserHistory extends FocObject implements FocUserHistoryConst {
 	  		
 		    String result = "";
 		    String recentTrans = getRecentTransactions();
-		    if (!recentTrans.equals("")) {
+		    if (recentTrans != null && !recentTrans.equals("")) {
 		      String[] fullHistoryString = recentTrans.split(HISTORY_DELIMITER);
 		      ArrayList fullHistoryArray = new ArrayList(Arrays.asList(fullHistoryString));
 		
