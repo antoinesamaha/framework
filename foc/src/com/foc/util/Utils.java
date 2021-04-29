@@ -33,6 +33,9 @@ import java.util.regex.Pattern;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 import com.foc.Globals;
@@ -435,5 +438,43 @@ public class Utils {
 		text = text.replace("آ", "%");
 		text = text.replace("ء", "%");
 		return text; 
+	}
+	
+	/**
+	 * Get a param from a JSONObject, null if not present
+	 * @param jsonObj
+	 * @param param
+	 * @return String
+	 */
+	public static String getCleanJsonParam(JSONObject jsonObj, String param) {
+		//optString gets the param if exists or null if not.
+		if(jsonObj!=null) {
+			String paramString = jsonObj.optString(param,null);
+			if(!Utils.isStringEmpty(paramString)) {
+				paramString=paramString.trim();
+				if(!Utils.isStringEmpty(paramString))
+				return paramString;		
+			}			
+		}
+		return null;
+	
+	}
+	
+	/**
+	 * Get a param from a HttpServletRequest, null if not present
+	 * @param request
+	 * @param param
+	 * @return String
+	 */
+	public static String getCleanRequestParam(HttpServletRequest request,String param) {
+		
+		String paramString = request != null ? request.getParameter(param) : null;
+		if(!Utils.isStringEmpty(paramString)) {
+			paramString=paramString.trim();
+			if(!Utils.isStringEmpty(paramString))
+			return paramString;	
+		}		
+		return null;
+
 	}
 }
