@@ -1628,11 +1628,15 @@ public class FocUser extends FocObject {
     if(checkOldPassword){
     	if(oldPassStr == null) errorMessage = "Old password is not available";
     	if (errorMessage == null) {
-    		boolean oldPasswordMatches = checkEnteredPassword(String.valueOf(oldPassStr));
-        //If the password was never set it is still empty in the FocUser
-        if(!oldPasswordMatches){
-        	errorMessage = "Old password is incorrect!";
-        }
+//    		boolean oldPasswordDoesntMatches = checkEnteredPassword(String.valueOf(oldPassStr));
+    		//If the password was never set it is still empty in the FocUser
+//	        if(oldPasswordDoesntMatches){
+//	        	errorMessage = "Old password is incorrect!";
+//	        }
+	        boolean error = checkEnteredPassword(oldPassStr);
+			if (error) {
+				errorMessage = "Old password is incorrect!";
+			}
     	}
     }
     
