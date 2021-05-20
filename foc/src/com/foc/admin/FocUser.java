@@ -26,6 +26,7 @@
 package com.foc.admin;
 
 import java.awt.image.BufferedImage;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -688,7 +689,49 @@ public class FocUser extends FocObject {
   public void setContextHelpActivated(boolean mode){
     setPropertyBoolean(FocUserDesc.FLD_CONTEXT_HELP_ACTIVATION, mode);
   }
+  
+	public int getFaliedLoginAttempts() {
+		return getPropertyInteger(FocUserDesc.FLD_FAILED_LOGIN_ATTEMPTS);
+	}
 
+	public void setFaliedLoginAttempts(int val) {
+		setPropertyInteger(FocUserDesc.FLD_FAILED_LOGIN_ATTEMPTS, val);
+	}
+
+	public boolean isLocked() {
+		return getPropertyBoolean(FocUserDesc.FLD_LOCKED);
+	}
+
+	public void setLocked(boolean mode) {
+		setPropertyBoolean(FocUserDesc.FLD_LOCKED, mode);
+	}
+	
+	public Date getLockDateTime(){
+    return (Date) getPropertyDate(FocUserDesc.FLD_LOCK_DATETIME);
+  }
+
+  public void setLockDateTime(Date obj){
+    setPropertyDate(FocUserDesc.FLD_LOCK_DATETIME, obj);
+  }
+  
+	public void updateFailedAttempts() {
+		setFaliedLoginAttempts(getFaliedLoginAttempts() + 1);
+		checkAndLockAccount();
+	}
+
+	public void checkAndLockAccount() {
+		if (getFaliedLoginAttempts() >= 10) {
+			setLocked(true);
+			setLockDateTime(Globals.getDBManager().getCurrentDate());
+		}
+	}
+
+	public void unLockAccount() {
+		setFaliedLoginAttempts(0);
+		setLocked(false);
+		setLockDateTime(new Date(0));
+	}
+  
   public int getRightsLevel() {
     int lvl = 1;
     FocGroup group = getGroup();

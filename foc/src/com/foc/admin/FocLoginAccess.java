@@ -54,7 +54,7 @@ public class FocLoginAccess {
     	}else if(typedPassword.startsWith(user.getPassword())){
     		credentialsCorrect = true;
     	}    	
-    	if(credentialsCorrect && !user.isSuspended()){
+    	if(credentialsCorrect && !user.isSuspended() && !user.isLocked()){
         if(setUserAsRootUser) Globals.getApp().setUser(user);
         if (user.isAdmin()) {
         	loginStatus = Application.LOGIN_ADMIN;
