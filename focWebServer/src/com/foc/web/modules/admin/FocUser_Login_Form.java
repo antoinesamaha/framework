@@ -219,7 +219,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
 				}
 			}
 			if (accountLocked) {
-				Globals.showNotification("ACCOUND LOCKED DUE TO TOO MANY FAILED LOGIN ATTEMPTS", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+				Globals.showNotification("ACCOUNT LOCKED DUE TO TOO MANY FAILED LOGIN ATTEMPTS", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
 			} else {
 				Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
 			}
