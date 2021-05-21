@@ -27,6 +27,8 @@ import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FBoolField;
+import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FImageField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FMultipleChoiceField;
@@ -80,6 +82,9 @@ public class FocUserDesc extends FocDesc {
   public static final int FLD_SAAS_APPLICATION_ROLE           = 27;
   public static final int FLD_IS_SAAS_ADMIN                   = 28;
   public static final int FLD_CONTEXT_HELP_ACTIVATION         = 29;
+  public static final int FLD_FAILED_LOGIN_ATTEMPTS           = 30;
+  public static final int FLD_LOCKED                          = 31;
+  public static final int FLD_LOCK_DATETIME                   = 32;
   
   public static final int COMPANY_MODE_SEE_ONLY_CURRENT    = 0;
   public static final int COMPANY_MODE_SEE_ONLY_READ_WRITE = 1;
@@ -241,6 +246,15 @@ public class FocUserDesc extends FocDesc {
   	
   	FBoolField boolField = new FBoolField("CONTEXT_HELP_ACTIVATION", "Context Help Activation", FLD_CONTEXT_HELP_ACTIVATION, false);
     addField(boolField);
+    
+    iFld = new FIntField("FAILED_LOGIN_ATTEMPTS", "Failed Login Attempts", FLD_FAILED_LOGIN_ATTEMPTS, false, 4);
+    addField(iFld);
+    
+    boolField = new FBoolField("LOCKED", "Account Locked", FLD_LOCKED, false);
+    addField(boolField);
+    
+    FDateTimeField dateFld = new FDateTimeField("LOCK_DATETIME", "Account Lock Date Time", FLD_LOCK_DATETIME, false);
+		addField(dateFld);
 	}
 
 	public static FMultipleChoiceField addFontSizeField(FocDesc focDesc, String name, int id){

@@ -9,6 +9,13 @@
       <Button name="CHANGE_PASSWORD" caption="Change Password" alignment="bottom_left" />
       <GuiField name="SUSPENDED" caption="Suspended" width="180px" alignment="bottom_left" />
     </HorizontalLayout>
+
+    <HorizontalLayout captionMargin="0" margin="true" spacing="true">
+      <GuiField name="FAILED_LOGIN_ATTEMPTS" caption="Number of Failed Login Attempts" width="180px" />
+      <GuiField name="LOCKED" caption="Account Locked" alignment="bottom_left" width="180px" />
+      <GuiField name="LOCK_DATETIME" caption="Lock Date/Time" width="180px" />
+      <Button name="UNLOCK_Account" caption="Unlock Account" alignment="bottom_left" />
+    </HorizontalLayout>
   </VerticalLayout>
 
   <VerticalLayout captionMargin="0" margin="true" spacing="true" style="tableContainer">
@@ -35,7 +42,7 @@
         <GuiField name="IS_SAAS_ADMIN" caption="Is Admin" width="100px" alignment="bottom_left" />
         <GuiField name="IS_GUEST" caption="Is Guest" width="100px" alignment="bottom_left" />
       </HorizontalLayout>
-    </VerticalLayout>    
+    </VerticalLayout>
   </MoreLayout>
-  
+
 </VerticalLayout>

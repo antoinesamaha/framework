@@ -151,6 +151,21 @@ public class FocUser_Form extends FocXMLLayout {
 	      }
 	    });
   	}  	
+  	
+		FVButton unlockAccountBtn = (FVButton) getComponentByName("UNLOCK_Account");
+		if (unlockAccountBtn != null) {
+			unlockAccountBtn.addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					FocUser user = getFocUser();
+					if (user != null) {
+						user.unLockAccount();
+						user.validate(true);
+						goBack(null);
+					}
+				}
+			});
+		}
   }
 	
 	// To automatically fill the company and company rights if only one company exists
