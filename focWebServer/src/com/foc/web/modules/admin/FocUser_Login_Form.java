@@ -171,17 +171,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
       		status = com.foc.Application.LOGIN_WRONG;    			
     		}
     	}
-    }
-    
-		if (status == com.foc.Application.LOGIN_WRONG) {
-			if (!Utils.isStringEmpty(username)) {
-				FocUser failedUser = FocUser.findUser(username);
-				if (failedUser != null) {
-					failedUser.updateFailedAttempts();
-					failedUser.validate(false);
-				}
-			}
-		}
+    }		
     
     if(status == com.foc.Application.LOGIN_VALID){
     	approvedFocUser = loginAccess.getUser();
@@ -216,9 +206,24 @@ public class FocUser_Login_Form extends FocXMLLayout {
       }else{
       	loginWithUserAlreadyApproved_Internal(approvedFocUser);
       }
-    } else {
-    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
-    }
+		} else {
+			boolean accountLocked = false;
+			if (status == com.foc.Application.LOGIN_WRONG) {
+				if (!Utils.isStringEmpty(username)) {
+					FocUser failedUser = FocUser.findUser(username);
+					if (failedUser != null) {
+						failedUser.updateFailedAttempts();
+						failedUser.validate(false);
+						accountLocked = failedUser.isLocked();
+					}
+				}
+			}
+			if (accountLocked) {
+				Globals.showNotification("ACCOUND LOCKED DUE TO TOO MANY FAILED LOGIN ATTEMPTS", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+			} else {
+				Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+			}
+		}
     
     loginAccess.dispose();
     loginAccess = null;

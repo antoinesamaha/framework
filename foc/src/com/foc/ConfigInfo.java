@@ -49,6 +49,7 @@ public class ConfigInfo {
   private static int     passwordPolicy = 0;
   
   private static boolean allowNullProperties = false;
+  private static int accountLockThreshold    = 10;
   
   private static long    dbConnectionDuration = 0;    
   
@@ -458,6 +459,12 @@ public class ConfigInfo {
       	if(allowNullPropertiesString != null) {
       		allowNullProperties = allowNullPropertiesString.equals("1"); 
       	}
+      	
+				// failedLoginsNbr
+				String accountLockThresholdTxt = getProperty("accountLockThreshold");
+				if (accountLockThresholdTxt != null && !Utils.isStringEmpty(accountLockThresholdTxt)) {
+					setAccountLockThreshold(Utils.parseInteger(accountLockThresholdTxt, 0));
+				}
       	
       	String createAdminUserIfNotExistString = getProperty("createAdminUserIfNotExist");
       	createAdminUserIfNotExist = 		createAdminUserIfNotExistString != null 
@@ -914,5 +921,13 @@ public class ConfigInfo {
 
 	public static boolean isAllowNullProperties() {
 		return allowNullProperties;
+	}
+
+	public static int getAccountLockThreshold() {
+		return accountLockThreshold;
+	}
+
+	public static void setAccountLockThreshold(int accountLockThreshold) {
+		ConfigInfo.accountLockThreshold = accountLockThreshold;
 	}
 }
