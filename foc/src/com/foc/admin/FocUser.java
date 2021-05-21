@@ -721,7 +721,7 @@ public class FocUser extends FocObject {
 
 	public void checkAndLockAccount() {
 		int accountLockThreshold = ConfigInfo.getAccountLockThreshold();
-		if (accountLockThreshold > 0 && getFaliedLoginAttempts() >= accountLockThreshold) {
+		if (accountLockThreshold > 0 && getFaliedLoginAttempts() >= accountLockThreshold && !isLocked()) {
 			setLocked(true);
 			setLockDateTime(Globals.getDBManager().getCurrentDate());
 		}
