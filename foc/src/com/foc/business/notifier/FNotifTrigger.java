@@ -24,6 +24,7 @@ import com.foc.annotations.model.FocChoice;
 import com.foc.annotations.model.FocEntity;
 import com.foc.annotations.model.fields.FocDate;
 import com.foc.annotations.model.fields.FocForeignEntity;
+import com.foc.annotations.model.fields.FocInteger;
 import com.foc.annotations.model.fields.FocMultipleChoice;
 import com.foc.annotations.model.fields.FocMultipleChoiceString;
 import com.foc.annotations.model.fields.FocReference;
@@ -60,7 +61,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
   public static final int FREQUENCY_DAILY    = 1;
   public static final int FREQUENCY_HOURLY   = 2;
   public static final int FREQUENCY_WEEKLY   = 7;
-  public static final int FREQUENCY_MONTHLY  = 30;
+  public static final int FREQUENCY_CUSTOM  = 10;
 
   public static final int ACTION_NONE           = 0;
   public static final int ACTION_SEND_EMAIL     = 1;
@@ -93,10 +94,11 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	@FocMultipleChoice(size = 5, choices = {
 			@FocChoice(id=FREQUENCY_ONE_TIME, title="One time"),
 			@FocChoice(id=FREQUENCY_DAILY, title="Daily"),
-			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly")
-//			@FocChoice(id=FREQUENCY_MONTHLY, title="Monthly")
+			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly"),
+			@FocChoice(id=FREQUENCY_CUSTOM, title="Minutes- Custom")
 	})
 	public static final String FIELD_Frequency = "Frequency";
+	
 
 	@FocDate()
 	public static final String FIELD_NextDate = "NextDate";
@@ -132,6 +134,8 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	@FocMultipleChoiceString(size = 200)
 	public static final String FIELD_ReportLayout = "ReportLayout";
 	//-----------------------------------
+	@FocInteger()
+	public static final String FIELD_FrequencyMinutes = "FrequencyMinutes";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -408,6 +412,19 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 					setNextDate(new Date(cal.getTime().getTime()));
 				}
 				setNextTime(new Time(nexTimesMillis));
+			} else if(frequency==FREQUENCY_CUSTOM) {
+				if(getFrequencyMinutes()>0) {
+					long nexTimesMillis = startingTime.getTime();
+					nexTimesMillis += getFrequencyMinutes() * 60 * 1000;
+					if (nexTimesMillis > Globals.DAY_TIME) {
+						nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
+						Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
+						cal.setTime(Globals.getApp().getSystemDate());
+						FCalendar.rollTheCalendar_Day(cal);
+						setNextDate(new Date(cal.getTime().getTime()));
+					}
+					setNextTime(new Time(nexTimesMillis));
+				}
 			}
 		}
 		return error;
@@ -490,5 +507,13 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	public FocList getReportList() {
 		return getPropertyList(FIELD_FNotifTrigReportList);
+	}
+
+	public int getFrequencyMinutes() {
+		return getPropertyInteger(FIELD_FrequencyMinutes);
+	}
+
+	public void setFrequencyMinutes(int value) {
+		setPropertyInteger(FIELD_FrequencyMinutes, value);
 	}
 }

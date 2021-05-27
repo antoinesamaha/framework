@@ -8,6 +8,7 @@
     <TableColumn name="TABLE_NAME" caption="Table Name" width="-1px" />
     <TableColumn name="WFStage>NAME" caption="Stage" width="-1px" />
     <TableColumn name="Frequency" caption="Frequency" width="-1px" />
+    <TableColumn name="FrequencyMinutes" caption="Frequency Minutes" width="-1px" />    
     <TableColumn name="NextDate" caption="Next Date" width="-1px" />
     <TableColumn name="NextTime" caption="Next Time" width="-1px" />
   </GuiTable>

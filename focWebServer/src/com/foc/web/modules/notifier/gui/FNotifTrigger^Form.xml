@@ -11,6 +11,8 @@
 	  	<GuiField name="AdditionalCondition" caption="Additional Condition" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
 			<GuiField name="Frequency" caption="Frequency" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Event=8"/>
 			<HorizontalLayout captionMargin="0" spacing="true">
+			<GuiField name="FrequencyMinutes" caption="Frequency Minutes" captionStyle="f16,bold,text-left" width="130px" visibleWhen="Frequency=10"/>
+			
 		  	<GuiField name="NextDate" caption="Next Date" captionStyle="f16,bold,text-left" width="130px" visibleWhen="Event=8"/>
 				<GuiField name="NextTime" caption="Next Time" captionStyle="f16,bold,text-left" width="70px" visibleWhen="Event=8"/>
 	      <Button name="TEST" caption="Trigger now to Test" captionStyle="f16,bold,text-left" width="150px" visibleWhen="Event=8" alignment="bottom_right"/>
