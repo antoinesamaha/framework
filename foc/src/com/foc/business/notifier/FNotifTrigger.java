@@ -61,7 +61,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
   public static final int FREQUENCY_DAILY    = 1;
   public static final int FREQUENCY_HOURLY   = 2;
   public static final int FREQUENCY_WEEKLY   = 7;
-  public static final int FREQUENCY_CUSTOM  = 10;
+  public static final int FREQUENCY_MINUTES  = 10;
 
   public static final int ACTION_NONE           = 0;
   public static final int ACTION_SEND_EMAIL     = 1;
@@ -95,10 +95,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 			@FocChoice(id=FREQUENCY_ONE_TIME, title="One time"),
 			@FocChoice(id=FREQUENCY_DAILY, title="Daily"),
 			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly"),
-			@FocChoice(id=FREQUENCY_CUSTOM, title="Minutes- Custom")
+			@FocChoice(id=FREQUENCY_MINUTES, title="Minutes")
 	})
 	public static final String FIELD_Frequency = "Frequency";
-	
 
 	@FocDate()
 	public static final String FIELD_NextDate = "NextDate";
@@ -134,8 +133,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	@FocMultipleChoiceString(size = 200)
 	public static final String FIELD_ReportLayout = "ReportLayout";
 	//-----------------------------------
+	
 	@FocInteger()
-	public static final String FIELD_FrequencyMinutes = "FrequencyMinutes";
+	public static final String FIELD_FrequencyDuration = "FrequencyDuration";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -412,10 +412,10 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 					setNextDate(new Date(cal.getTime().getTime()));
 				}
 				setNextTime(new Time(nexTimesMillis));
-			} else if(frequency==FREQUENCY_CUSTOM) {
-				if(getFrequencyMinutes()>0) {
+			} else if(frequency==FREQUENCY_MINUTES) {
+				if(getFrequencyDuration()>0) {
 					long nexTimesMillis = startingTime.getTime();
-					nexTimesMillis += getFrequencyMinutes() * 60 * 1000;
+					nexTimesMillis += getFrequencyDuration() * 60 * 1000;
 					if (nexTimesMillis > Globals.DAY_TIME) {
 						nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
 						Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
@@ -509,11 +509,11 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 		return getPropertyList(FIELD_FNotifTrigReportList);
 	}
 
-	public int getFrequencyMinutes() {
-		return getPropertyInteger(FIELD_FrequencyMinutes);
+	public int getFrequencyDuration() {
+		return getPropertyInteger(FIELD_FrequencyDuration);
 	}
 
-	public void setFrequencyMinutes(int value) {
-		setPropertyInteger(FIELD_FrequencyMinutes, value);
+	public void setFrequencyDuration(int value) {
+		setPropertyInteger(FIELD_FrequencyDuration, value);
 	}
 }
