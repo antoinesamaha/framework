@@ -3,11 +3,13 @@
   <Label value="Event to Action configuration" style="H2,text-center" />
   <GuiTable dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
     <TableColumn name="Event" caption="Event" expandRatio="1"/>
+    <TableColumn name="Action" caption="Action" expandRatio="1"/>
     <TableColumn name="Transaction" caption="Transaction" width="-1px" />
     <TableColumn name="NOTIF_EMAIL_TEMPLATE>NAME" caption="EMail Template" width="-1px" />
     <TableColumn name="TABLE_NAME" caption="Table Name" width="-1px" />
     <TableColumn name="WFStage>NAME" caption="Stage" width="-1px" />
     <TableColumn name="Frequency" caption="Frequency" width="-1px" />
+    <TableColumn name="FrequencyDuration" caption="Duration" width="-1px" />    
     <TableColumn name="NextDate" caption="Next Date" width="-1px" />
     <TableColumn name="NextTime" caption="Next Time" width="-1px" />
   </GuiTable>
