@@ -28,7 +28,7 @@ public class NotifierModule extends FocModule {
 	public static final int VERSION = 1004;
 	
 	public static final int VERSION_MULTI_REPORT_IN_TRIGGER = 1002;
-	public static final int VERSION_ID_MIGRATE_TO_CLOB = 1004;
+	public static final int VERSION_ID_MIGRATE_TO_CLOB = 1003;
 	
 	private boolean copyMonoReportToSlaveTable = false;
 	private boolean migrateToCLOB = false;
