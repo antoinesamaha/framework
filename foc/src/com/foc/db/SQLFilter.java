@@ -44,6 +44,7 @@ public class SQLFilter {
   public static final String KEY_FOREIGN_KEY_ADDITINAL_WHERE   = "FRGN_KEY";
   
   private HashMap<String, String> additionalWhereMap = null;
+  private HashMap<String, String> additionalWhereMap_ForJoinAlias = null;
   
   //private int aliasCount = 1;
   //BTOADD
@@ -108,6 +109,8 @@ public class SQLFilter {
     if(additionalWhereMap != null){
       additionalWhere = null;
     }
+
+   	additionalWhereMap_ForJoinAlias = null;
     
     if (pagination != null) {
     	pagination.dispose();
@@ -469,6 +472,23 @@ public class SQLFilter {
     }else{
       this.additionalWhere.append(additionalWhere);  
     }
+  }
+
+  public void putAliasWhere(String alias, String additionnalWhere){
+    if(additionalWhereMap_ForJoinAlias == null){
+      additionalWhereMap_ForJoinAlias = new HashMap<String, String>();
+    }
+    additionalWhereMap_ForJoinAlias.put(alias, additionnalWhere);
+  }
+
+  public void removeAliasWhere(String alias){
+    if(additionalWhereMap_ForJoinAlias != null){
+    	additionalWhereMap_ForJoinAlias.remove(alias);
+    }
+  }
+
+  public String getAliasWhere(String alias){
+    return additionalWhereMap_ForJoinAlias != null ? additionalWhereMap_ForJoinAlias.get(alias):null;
   }
 
 	public boolean isFilterByCompany(){

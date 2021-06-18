@@ -9,6 +9,7 @@ import com.foc.db.SQLFilter;
 import com.foc.desc.*;
 import com.foc.join.*;
 import com.foc.list.*;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -48,6 +49,13 @@ public class SQLSelectJoinRequest extends SQLSelect {
 		      	Join join = alias.getJoin(i);
 		      	request.append(" ");
 		      	request.append(join.getSQLString());
+		      	if (join.getTargetAlias() != null && join.getTargetAlias().getAlias() != null) {
+		      		String aliasWhere = filter.getAliasWhere(join.getTargetAlias().getAlias());
+		      		if (!Utils.isStringEmpty(aliasWhere)) {
+		      			request.append(" AND ");
+		      			request.append(aliasWhere);
+		      		}
+		      	}
 	      	}
 	      }
 	    }
