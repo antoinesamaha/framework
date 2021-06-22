@@ -43,13 +43,43 @@ public class NotificationScheduledThread extends FocThreadWithSession {
 						Globals.logString("NOTIFICATION TRIGGER:   - Scanning "+eventNotifierList.size()+" Notification Triggers");
 			      for (int i = 0; i < eventNotifierList.size(); i++) {
 			        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
-			        trigger.executeIfSameEvent(event);
+			        if (trigger.getEvent() == FNotifTrigger.EVT_SCHEDULED && trigger.isEventMatch(event) && !trigger.isRunning()) {
+			        	trigger.setRunning(true);
+			        	AtomicNotificationTriggerThread atomicThread = new AtomicNotificationTriggerThread(getClassNameFocWebApplication(), getWebServer(), trigger, event);  
+			        	atomicThread.start();
+			        }
 			      }
 					}
 				}
 			}catch(Exception e) {
 				Globals.logExceptionWithoutPopup(e);
 			}
+		}
+	}
+	
+	public class AtomicNotificationTriggerThread extends FocThreadWithSession {
+		
+		private FNotifTrigger trigger = null;
+		private FocNotificationEvent event = null;
+		
+		public AtomicNotificationTriggerThread(String classNameFocWebApplication, FocWebServer webServer, FNotifTrigger trigger, FocNotificationEvent event) {
+			super(classNameFocWebApplication, webServer);
+			this.trigger = trigger;
+			this.event = event;
+			setInitiallSleep(0);
+		}
+		
+		public void dispose(){
+			super.dispose();
+			trigger.setRunning(false);
+			trigger = null;
+			event = null;
+		}
+		
+		@Override
+		public void main() {
+    	trigger.executeAndReschedule(event);
+    	dispose();
 		}
 	}
 }

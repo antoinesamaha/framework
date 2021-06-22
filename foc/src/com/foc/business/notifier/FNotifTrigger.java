@@ -22,6 +22,7 @@ import java.util.Calendar;
 import com.foc.Globals;
 import com.foc.annotations.model.FocChoice;
 import com.foc.annotations.model.FocEntity;
+import com.foc.annotations.model.fields.FocBoolean;
 import com.foc.annotations.model.fields.FocDate;
 import com.foc.annotations.model.fields.FocForeignEntity;
 import com.foc.annotations.model.fields.FocInteger;
@@ -44,8 +45,10 @@ import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
 import com.foc.formula.FocSimpleFormulaContext;
 import com.foc.formula.Formula;
+import com.foc.gui.FColorProvider;
 import com.foc.list.FocList;
 import com.foc.property.FObject;
+import com.foc.property.FProperty;
 import com.foc.util.Utils;
 
 @FocEntity
@@ -136,6 +139,9 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	@FocInteger()
 	public static final String FIELD_FrequencyDuration = "FrequencyDuration";
+	
+	@FocBoolean(dbResident = false)
+	public static final String FIELD_Running = "Running";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -365,12 +371,17 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 		if(isEventMatch(eventFired)) {
 			try {
 				String error = execute(eventFired);
-				reschedule();
-				validate(false);
 			}catch(Exception e) {
 				Globals.logException(e);
 			}
 		}
+	}
+	
+	public String executeAndReschedule(FocNotificationEvent eventFired) {
+		String error = execute(eventFired);
+		reschedule();
+		validate(false);
+		return error;
 	}
 	
 	public IFocNotificationEventManipulator getEventExecutor() {
@@ -407,7 +418,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 				if (nexTimesMillis > Globals.DAY_TIME) {
 					nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
 					Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
-					cal.setTime(Globals.getApp().getSystemDate());
+					cal.setTime(startingDate);
 					FCalendar.rollTheCalendar_Day(cal);
 					setNextDate(new Date(cal.getTime().getTime()));
 				}
@@ -419,7 +430,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 					if (nexTimesMillis > Globals.DAY_TIME) {
 						nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
 						Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
-						cal.setTime(Globals.getApp().getSystemDate());
+						cal.setTime(startingDate);
 						FCalendar.rollTheCalendar_Day(cal);
 						setNextDate(new Date(cal.getTime().getTime()));
 					}
@@ -515,5 +526,21 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 
 	public void setFrequencyDuration(int value) {
 		setPropertyInteger(FIELD_FrequencyDuration, value);
+	}
+
+	public boolean isRunning() {
+		return getPropertyBoolean(FIELD_Running);
+	}
+
+	public void setRunning(boolean value) {
+		setPropertyBoolean(FIELD_Running, value);
+		FProperty prop = getFocPropertyByName(FIELD_Running);
+		if (prop != null) {
+			if (value) {
+				prop.setBackground(FColorProvider.getAlertColor());
+			} else {
+				prop.setBackground(null);
+			}
+		}
 	}
 }
