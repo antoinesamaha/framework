@@ -37,6 +37,7 @@ public class FTypeReference extends FocFieldTypAbstract<FocReference> {
 		focField.setId(FField.NO_FIELD_ID);
 		focField.setMandatory(a.mandatory());
 		focField.setDBResident(a.dbResident());
+		((FReferenceField) focField).setUseNameInJoin(a.useNameInJoin());
 		return focField;
 	}
 
