@@ -732,6 +732,25 @@ public class FObject extends FProperty implements FPropertyListener{
     //localSourceList = backupLocalSourceList;
   }
 
+  public String getModificationLogString() {
+  	StringBuffer str = new StringBuffer(); 
+  	if(backupObject != null) {
+  		str.append(backupObject.getDisplayTitle());
+  		str.append(" [");
+  		str.append(backupObject.getReferenceInt());
+  		str.append("]");
+  	}
+  	str.append(" -> ");
+  	FocObject value = getObject_CreateIfNeeded();
+  	if(value != null) {
+  		str.append(value.getDisplayTitle());
+  		str.append(" [");
+  		str.append(value.getReferenceInt());
+  		str.append("]");
+  	}
+  	return str.toString();
+  }
+  
   /**
    * @return
    */

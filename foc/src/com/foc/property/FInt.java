@@ -93,6 +93,10 @@ public class FInt extends FProperty {
   public void restore() {
     setInteger(backupInt);
   }
+  
+  public String getModificationLogString() {
+  	return backupInt+" -> "+getInteger();
+  }
 
   public double getDouble() {
     return (double) iVal;
