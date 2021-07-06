@@ -75,7 +75,7 @@ public class PhotoAlbumDesc extends FocDesc {
     FStringField allowedGroups = new FStringField("ALLOWED_GROUPS", "Allowed Groups", FLD_ALLOWED_GROUPS, false, 500);
     addField(allowedGroups);
     
-    FStringField tableName = new FStringField(FNAME_TABLE_NAME, "Image Name", FLD_TABLE_NAME, false, 30);
+    FStringField tableName = new FStringField(FNAME_TABLE_NAME, "Image Name", FLD_TABLE_NAME, false, 100);
     addField(tableName);
     
     FLongField tableRef = new FLongField(FNAME_OBJECT_REF, "Ref", FLD_OBJECT_REF, false, FReferenceField.LEN_REFERENCE);
