@@ -829,6 +829,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	  	fObjProp.setDesactivateListeners(isDesactivateListener);
 	  	SQLUpdate update = new SQLUpdate(refCheck.getFocDesc(), newFocObject, filter);
 	  	update.addQueryField(refCheck.getObjectFieldID());
+	  	update.setWhereMandatory(true);
 	  	try{
 	  		update.execute();
 	  	}catch(Exception e){
