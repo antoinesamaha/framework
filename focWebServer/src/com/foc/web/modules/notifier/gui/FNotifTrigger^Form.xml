@@ -8,13 +8,16 @@
 			<GuiField name="Transaction" caption="Transaction" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=9,Event=10)"/>
 			<GuiField name="TABLE_NAME" caption="Table Name" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=2,Event=3,Event=4)"/>
 			<GuiField name="WFStage>NAME" caption="Stage" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=9,Event=10)"/>
-	  	<GuiField name="AdditionalCondition" caption="Additional Condition" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
-			<GuiField name="Frequency" caption="Frequency" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Event=8"/>
-			<HorizontalLayout captionMargin="0" spacing="true">
-		  	<GuiField name="NextDate" caption="Next Date" captionStyle="f16,bold,text-left" width="130px" visibleWhen="Event=8"/>
+	  	    <GuiField name="AdditionalCondition" caption="Additional Condition" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
+	  	    <HorizontalLayout captionMargin="0" spacing="true" width="380px">
+				<GuiField name="Frequency" caption="Frequency" captionStyle="f16,bold,text-left" width="100%" visibleWhen="Event=8"/>
+				<GuiField name="FrequencyDuration" caption="Duration (min)" captionStyle="f16,bold,text-left" width="100%" visibleWhen="Frequency=10"/>
+			</HorizontalLayout>			
+			<HorizontalLayout captionMargin="0" spacing="true">			    
+		  	    <GuiField name="NextDate" caption="Next Date" captionStyle="f16,bold,text-left" width="130px" visibleWhen="Event=8"/>
 				<GuiField name="NextTime" caption="Next Time" captionStyle="f16,bold,text-left" width="70px" visibleWhen="Event=8"/>
-	      <Button name="TEST" caption="Trigger now to Test" captionStyle="f16,bold,text-left" width="150px" visibleWhen="Event=8" alignment="bottom_right"/>
-	  	</HorizontalLayout>			
+	            <Button name="TEST" caption="Trigger now to Test" captionStyle="f16,bold,text-left" width="150px" visibleWhen="Event=8" alignment="bottom_right"/>
+	  	    </HorizontalLayout>			
 		</VerticalLayout>
 		
 		<VerticalLayout captionMargin="0">

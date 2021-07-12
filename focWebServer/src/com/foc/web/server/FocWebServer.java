@@ -430,6 +430,12 @@ public class FocWebServer implements Serializable {
 			applicationArrayList.add(app);
 		}
 	}
+	
+	public synchronized void removeApplication(FocWebApplication app){
+		if(applicationArrayList != null && app != null){
+			applicationArrayList.remove(app);
+		}
+	}
 
 	public FocWebApplication getApplicationAt(int i){
 		return applicationArrayList != null ? applicationArrayList.get(i) : null;

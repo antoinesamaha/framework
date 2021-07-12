@@ -27,6 +27,8 @@ import com.foc.business.workflow.WFTitleDesc;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FBoolField;
+import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FImageField;
 import com.foc.desc.field.FIntField;
 import com.foc.desc.field.FMultipleChoiceField;
@@ -80,8 +82,11 @@ public class FocUserDesc extends FocDesc {
   public static final int FLD_SAAS_APPLICATION_ROLE           = 27;
   public static final int FLD_IS_SAAS_ADMIN                   = 28;
   public static final int FLD_CONTEXT_HELP_ACTIVATION         = 29;
-  public static final int FLD_SALT                            = 30;
-  public static final int FLD_PASSWORD_ENCRYPTION_METHOD      = 31;
+  public static final int FLD_FAILED_LOGIN_ATTEMPTS           = 30;
+  public static final int FLD_LOCKED                          = 31;
+  public static final int FLD_LOCK_DATETIME                   = 32;
+  public static final int FLD_SALT                            = 33;
+  public static final int FLD_PASSWORD_ENCRYPTION_METHOD      = 34;
   
   public static final int COMPANY_MODE_SEE_ONLY_CURRENT    = 0;
   public static final int COMPANY_MODE_SEE_ONLY_READ_WRITE = 1;
@@ -90,17 +95,18 @@ public class FocUserDesc extends FocDesc {
   public static final int APPLICATION_ROLE_NONE                 = 0;
   public static final int APPLICATION_ROLE_REQUESTER            = 1;
   public static final int APPLICATION_ROLE_PROCUREMENT_OFFICER  = 2;
-
-  public static final int PASSWORD_ENCRYPTION_METHOD_0 = 0; 
-  public static final int PASSWORD_ENCRYPTION_METHOD_1 = 1;
+  
+  public static final int PASSWORD_ENCRYPTION_METHOD_0 = 0;
+  public static final int PASSWORD_ENCRYPTION_METHOD_1 = 1; 
 
   public static final String APP_ROLE_NAME_PROCUREMENT_OFFICER = "Procurement Officer";
   		
   public static final int THEME_SYSTEM_DEFAULT = 0;
   public static final int THEME_VALO           = 1;
   public static final int THEME_REINDEER       = 2;
+  
   public static final int LEN_FULL_NAME        = 40;
-  public static final int LEN_SALT             = 40;
+  public static final int LEN_SALT             = 40; 
   
   public static final String USER_EXTERNAL = "WEB_EXTERNAL";
   
@@ -122,7 +128,7 @@ public class FocUserDesc extends FocDesc {
     addField(focCharFld);
     
     focCharFld = new FStringField("SALT", "Salt", FLD_SALT, false, LEN_SALT);
-    addField(focCharFld);
+    addField(focCharFld); 
     
     FPasswordField focPassFld = new FPasswordField("PASSWORD", "Password", FLD_PASSWORD, false, 130);
     focPassFld.setCapital(true);
@@ -250,10 +256,19 @@ public class FocUserDesc extends FocDesc {
   	FBoolField boolField = new FBoolField("CONTEXT_HELP_ACTIVATION", "Context Help Activation", FLD_CONTEXT_HELP_ACTIVATION, false);
     addField(boolField);
     
-  	FMultipleChoiceField passwordEncryptionMethodField = new FMultipleChoiceField("PASSWORD_ENCRYPTION_METHOD", "Encryption Method", FLD_PASSWORD_ENCRYPTION_METHOD, false, 2);
-  	passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_0, "Method 0");
-  	passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_1, "Method 1");
-  	addField(passwordEncryptionMethodField);
+    FMultipleChoiceField passwordEncryptionMethodField = new FMultipleChoiceField("PASSWORD_ENCRYPTION_METHOD", "Encryption Method", FLD_PASSWORD_ENCRYPTION_METHOD, false, 2); 
+    passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_0, "Method 0"); 
+    passwordEncryptionMethodField.addChoice(PASSWORD_ENCRYPTION_METHOD_1, "Method 1");
+    addField(passwordEncryptionMethodField);
+    
+    iFld = new FIntField("FAILED_LOGIN_ATTEMPTS", "Failed Login Attempts", FLD_FAILED_LOGIN_ATTEMPTS, false, 4);
+    addField(iFld);
+    
+    boolField = new FBoolField("LOCKED", "Account Locked", FLD_LOCKED, false);
+    addField(boolField);
+    
+    FDateTimeField dateFld = new FDateTimeField("LOCK_DATETIME", "Account Lock Date Time", FLD_LOCK_DATETIME, false);
+		addField(dateFld);
 	}
 
 	public static FMultipleChoiceField addFontSizeField(FocDesc focDesc, String name, int id){

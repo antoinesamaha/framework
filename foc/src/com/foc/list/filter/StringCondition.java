@@ -244,14 +244,14 @@ public class StringCondition extends FilterCondition {
         	if(getProvider() == DBManager.PROVIDER_ORACLE){
         		buffer.append("trim("+fieldName +") IS NULL ");
         	}else{
-        		buffer.append(fieldName +" = " + speachMarks_Start + speachMarks_End);
+        		buffer.append("(" + fieldName + " = " + speachMarks_Start + speachMarks_End + " OR " + fieldName + " IS NULL) ");
         	}
           break;
         case OPERATION_NOT_EMPTY :
         	if(getProvider() == DBManager.PROVIDER_ORACLE){
         		buffer.append("not (trim("+fieldName +") IS NULL) ");
         	}else{
-        		buffer.append(fieldName +" <> " + speachMarks_Start + speachMarks_End);
+        		buffer.append("(" + fieldName + " <> " + speachMarks_Start + speachMarks_End + " AND " + fieldName + " IS NOT NULL) ");
         	}
           break;
       }

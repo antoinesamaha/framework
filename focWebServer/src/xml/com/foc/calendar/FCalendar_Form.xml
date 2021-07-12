@@ -1,6 +1,7 @@
 <VerticalLayout margin="true">
    <ValidationSettings formTitle="Day Shift" withApply="true" withSave="false" withAttach="true" withPrint="true" />
    <GuiField name="NAME" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="EXTERNAL_CODE" caption="External Code" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
       
    <HorizontalLayout spacing="true">
    		<VerticalLayout >

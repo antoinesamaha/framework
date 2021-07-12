@@ -29,6 +29,9 @@ public class FocThreadWithSession extends Thread {
 	private String       classNameFocWebApplication = null;
 	private FocWebServer webServer = null;
 	
+	private FocWebApplication webApplication = null; 
+	private FocWebSession     webSession     = null;
+	
 	public FocThreadWithSession(FocWebApplication initialWebApplication, FocWebServer webServer) {
 		super();
 		
@@ -39,9 +42,21 @@ public class FocThreadWithSession extends Thread {
 		}
 	}
 	
+	public FocThreadWithSession(String classNameFocWebApplication, FocWebServer webServer) {
+		super();
+		
+		this.webServer = webServer;
+		this.classNameFocWebApplication = classNameFocWebApplication;
+	}
+	
+	public void dispose() {
+		closeSession();
+		webServer = null;
+	}
+	
 	public void run() {
 		try{
-			sleep(initiallSleep);
+			if(initiallSleep > 0) sleep(initiallSleep);
 			while(!webServer.isReady()) {
 				sleep(10000);
 			}
@@ -62,9 +77,6 @@ public class FocThreadWithSession extends Thread {
 		boolean error = false;
 		
 		if(webServer != null) {
-			FocWebApplication webApplication = null; 
-			FocWebSession     webSession     = null;
-
 			FocUser batchUser = FocUser.findUser(BATCH_USER);
 			if(batchUser != null) {
 				try {
@@ -93,8 +105,28 @@ public class FocThreadWithSession extends Thread {
 		}
 		return error;
 	}
+	
+	public void closeSession() {
+		if (webApplication != null) {
+			if(webServer != null) webServer.removeApplication(webApplication);
+			webApplication.dispose();
+			webApplication = null;
+		}
+		if(webSession != null) {
+			webSession.dispose();
+			webSession = null;
+		}
+	}
 
 	public void setInitiallSleep(long initiallSleep) {
 		this.initiallSleep = initiallSleep;
+	}
+
+	public String getClassNameFocWebApplication() {
+		return classNameFocWebApplication;
+	}
+
+	public FocWebServer getWebServer() {
+		return webServer;
 	}
 }

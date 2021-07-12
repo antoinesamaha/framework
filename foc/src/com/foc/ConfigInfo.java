@@ -10,7 +10,7 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import com.foc.admin.FocUser;
-import com.foc.admin.FocUserDesc;
+import com.foc.admin.FocUserDesc; 
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.gui.DisplayManager;
 import com.foc.gui.MainFrame;
@@ -49,9 +49,10 @@ public class ConfigInfo {
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
   private static int     passwordPolicy = 0;
-  private static int     passwordEncryptionMethod = FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0;
+  private static int     passwordEncryptionMethod = FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0; 
   
   private static boolean allowNullProperties = false;
+  private static int accountLockThreshold    = 10;
   
   private static long    dbConnectionDuration = 0;    
   
@@ -129,6 +130,7 @@ public class ConfigInfo {
   private static boolean oracleListAggCLOB = false;
   
   private static String jwtTokenAlgorithmKey = null;
+  private static String allowedUrlsForAdmin = null;
   
   private static Properties props = null; 
   
@@ -255,6 +257,7 @@ public class ConfigInfo {
         blobStorageDirectory = getProperty("blobStorageDirectory");
         
         jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
+        allowedUrlsForAdmin = getProperty("allowedUrlsForAdmin");
         
         String serverClassName = getProperty("focWebServerClassName");
         if(serverClassName == null){
@@ -413,7 +416,7 @@ public class ConfigInfo {
         if(str != null) passwordPolicy = Utils.parseInteger(str, 0);
 
         str = getProperty("passwordEncryptionMethod");
-        if(str != null) passwordEncryptionMethod = Utils.parseInteger(str, 0);
+        if(str != null) passwordEncryptionMethod = Utils.parseInteger(str, 0); 
         
         str = getProperty("dbConnectionDuration");
         if(str != null) dbConnectionDuration = Utils.parseLong(str, 0);
@@ -463,6 +466,12 @@ public class ConfigInfo {
       		allowNullProperties = allowNullPropertiesString.equals("1"); 
       	}
       	
+				// failedLoginsNbr
+				String accountLockThresholdTxt = getProperty("accountLockThreshold");
+				if (accountLockThresholdTxt != null && !Utils.isStringEmpty(accountLockThresholdTxt)) {
+					setAccountLockThreshold(Utils.parseInteger(accountLockThresholdTxt, 0));
+				}
+      	
       	String createAdminUserIfNotExistString = getProperty("createAdminUserIfNotExist");
       	createAdminUserIfNotExist = 		createAdminUserIfNotExistString != null 
       															&& 	(
@@ -504,6 +513,10 @@ public class ConfigInfo {
   
   public static String getBlobStorageDirectory(){
   	return blobStorageDirectory;
+  }
+
+  public static String getAllowedUrlsForAdmin() {
+  	return allowedUrlsForAdmin;	
   }
   
   public static String getJWTTokenAlgorithmKey() {
@@ -656,8 +669,8 @@ public class ConfigInfo {
 
   public static int getPasswordEncryptionMethod() {
     return passwordEncryptionMethod;
-  }
-  
+  } 
+
   public static boolean isPopupExceptionDialog() {
     return popupExceptionDialog;
   }
@@ -918,5 +931,13 @@ public class ConfigInfo {
 
 	public static boolean isAllowNullProperties() {
 		return allowNullProperties;
+	}
+
+	public static int getAccountLockThreshold() {
+		return accountLockThreshold;
+	}
+
+	public static void setAccountLockThreshold(int accountLockThreshold) {
+		ConfigInfo.accountLockThreshold = accountLockThreshold;
 	}
 }

@@ -22,8 +22,10 @@ import java.util.Calendar;
 import com.foc.Globals;
 import com.foc.annotations.model.FocChoice;
 import com.foc.annotations.model.FocEntity;
+import com.foc.annotations.model.fields.FocBoolean;
 import com.foc.annotations.model.fields.FocDate;
 import com.foc.annotations.model.fields.FocForeignEntity;
+import com.foc.annotations.model.fields.FocInteger;
 import com.foc.annotations.model.fields.FocMultipleChoice;
 import com.foc.annotations.model.fields.FocMultipleChoiceString;
 import com.foc.annotations.model.fields.FocReference;
@@ -43,8 +45,10 @@ import com.foc.desc.parsers.ParsedFocDesc;
 import com.foc.desc.parsers.pojo.PojoFocObject;
 import com.foc.formula.FocSimpleFormulaContext;
 import com.foc.formula.Formula;
+import com.foc.gui.FColorProvider;
 import com.foc.list.FocList;
 import com.foc.property.FObject;
+import com.foc.property.FProperty;
 import com.foc.util.Utils;
 
 @FocEntity
@@ -60,7 +64,7 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
   public static final int FREQUENCY_DAILY    = 1;
   public static final int FREQUENCY_HOURLY   = 2;
   public static final int FREQUENCY_WEEKLY   = 7;
-  public static final int FREQUENCY_MONTHLY  = 30;
+  public static final int FREQUENCY_MINUTES  = 10;
 
   public static final int ACTION_NONE           = 0;
   public static final int ACTION_SEND_EMAIL     = 1;
@@ -93,8 +97,8 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	@FocMultipleChoice(size = 5, choices = {
 			@FocChoice(id=FREQUENCY_ONE_TIME, title="One time"),
 			@FocChoice(id=FREQUENCY_DAILY, title="Daily"),
-			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly")
-//			@FocChoice(id=FREQUENCY_MONTHLY, title="Monthly")
+			@FocChoice(id=FREQUENCY_HOURLY, title="Hourly"),
+			@FocChoice(id=FREQUENCY_MINUTES, title="Minutes")
 	})
 	public static final String FIELD_Frequency = "Frequency";
 
@@ -132,6 +136,12 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	@FocMultipleChoiceString(size = 200)
 	public static final String FIELD_ReportLayout = "ReportLayout";
 	//-----------------------------------
+	
+	@FocInteger()
+	public static final String FIELD_FrequencyDuration = "FrequencyDuration";
+	
+	@FocBoolean(dbResident = false)
+	public static final String FIELD_Running = "Running";
 	
   public FNotifTrigger(FocConstructor constr){
     super(constr);
@@ -361,12 +371,17 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 		if(isEventMatch(eventFired)) {
 			try {
 				String error = execute(eventFired);
-				reschedule();
-				validate(false);
 			}catch(Exception e) {
 				Globals.logException(e);
 			}
 		}
+	}
+	
+	public String executeAndReschedule(FocNotificationEvent eventFired) {
+		String error = execute(eventFired);
+		reschedule();
+		validate(false);
+		return error;
 	}
 	
 	public IFocNotificationEventManipulator getEventExecutor() {
@@ -403,11 +418,24 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 				if (nexTimesMillis > Globals.DAY_TIME) {
 					nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
 					Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
-					cal.setTime(Globals.getApp().getSystemDate());
+					cal.setTime(startingDate);
 					FCalendar.rollTheCalendar_Day(cal);
 					setNextDate(new Date(cal.getTime().getTime()));
 				}
 				setNextTime(new Time(nexTimesMillis));
+			} else if(frequency==FREQUENCY_MINUTES) {
+				if(getFrequencyDuration()>0) {
+					long nexTimesMillis = startingTime.getTime();
+					nexTimesMillis += getFrequencyDuration() * 60 * 1000;
+					if (nexTimesMillis > Globals.DAY_TIME) {
+						nexTimesMillis = nexTimesMillis - Globals.DAY_TIME;
+						Calendar cal = FCalendar.getInstanceOfJavaUtilCalandar();
+						cal.setTime(startingDate);
+						FCalendar.rollTheCalendar_Day(cal);
+						setNextDate(new Date(cal.getTime().getTime()));
+					}
+					setNextTime(new Time(nexTimesMillis));
+				}
 			}
 		}
 		return error;
@@ -490,5 +518,29 @@ public class FNotifTrigger extends PojoFocObject implements FocNotificationConst
 	
 	public FocList getReportList() {
 		return getPropertyList(FIELD_FNotifTrigReportList);
+	}
+
+	public int getFrequencyDuration() {
+		return getPropertyInteger(FIELD_FrequencyDuration);
+	}
+
+	public void setFrequencyDuration(int value) {
+		setPropertyInteger(FIELD_FrequencyDuration, value);
+	}
+
+	public boolean isRunning() {
+		return getPropertyBoolean(FIELD_Running);
+	}
+
+	public void setRunning(boolean value) {
+		setPropertyBoolean(FIELD_Running, value);
+		FProperty prop = getFocPropertyByName(FIELD_Running);
+		if (prop != null) {
+			if (value) {
+				prop.setBackground(FColorProvider.getAlertColor());
+			} else {
+				prop.setBackground(null);
+			}
+		}
 	}
 }

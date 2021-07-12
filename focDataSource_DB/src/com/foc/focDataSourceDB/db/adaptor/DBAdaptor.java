@@ -386,13 +386,12 @@ public class DBAdaptor {
 	    		req = "CREATE SEQUENCE "+focDesc.getSequenceName()+" START WITH "+(maxRef+1)+" INCREMENT BY 1 NOMAXVALUE";
 	    		if(ConfigInfo.isLogDBRequestActive()) Globals.logString(req);
 	        stm.executeUpdate(req);
-	        DBManagerServer.getInstance().unlockStatement(stm);
 	        seq = maxRef+1;
-	  		}catch(FocDBException e){
+	  		}catch(Exception e){
 	  			Globals.logException(e);
-	  		}catch(SQLException e){
-	  			throw e;
-	  		}
+	  		}finally {
+	        DBManagerServer.getInstance().unlockStatement(stm);
+				}
 	
 	  		if(seq < maxRef){
 	  			stm = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());

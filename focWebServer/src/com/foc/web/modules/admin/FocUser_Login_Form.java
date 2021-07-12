@@ -15,16 +15,21 @@
  ******************************************************************************/
 package com.foc.web.modules.admin;
 
-import com.foc.Application;
+import com.foc.Application; 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
 import com.foc.OptionDialog;
+import com.foc.admin.FocGroup;
 import com.foc.admin.FocLoginAccess;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.admin.GrpWebModuleRightsDesc;
 import com.foc.desc.FocConstructor;
+import com.foc.list.FocList;
 import com.foc.shared.dataStore.IFocData;
+import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.vaadin.FocWebVaadinWindow;
 import com.foc.vaadin.gui.components.FVButton;
@@ -131,138 +136,74 @@ public class FocUser_Login_Form extends FocXMLLayout {
   
   private void validateLogin() {
     validationCheckData(null);
-    int status = Application.LOGIN_WRONG;
+    int status = Application.LOGIN_WRONG; 
     
     FocUser user = (FocUser) getFocData();
     if(user != null) {
-	    String username = user.getName().trim();
-	    String password = user.getPassword();
-	    
-	    FocLoginAccess loginAccess = new FocLoginAccess(username, password);
-	    status = loginAccess.getLoginStatus();
-	    if (status == Application.LOGIN_VALID) {
-	    	approvedFocUser = loginAccess.getUser();
-	      
-	    	anotherApplicationAlreadyRunning = null;
-	      for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
-	      	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
-	      	if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){
-	      		if(app.getFocWebSession().getFocUser().equalsRef(approvedFocUser) && !app.isClosing()){
-	      			anotherApplicationAlreadyRunning = app;
-	      		}
-	      	}
-	      }
-	      
-	      if(anotherApplicationAlreadyRunning != null){
-	      	OptionDialog optionDialog = new OptionDialog("Previous Session Still Opened", "User Already has an opened session.\n Do you wish to neglect the previous sessions and open a new one now?") {
-						
-						@Override
-						public boolean executeOption(String optionName) {
-							if(optionName.equals("USER_ALREADY_CONNECTED")){
-								Globals.logString("DEBUG_SESSION_NOT_VALID FocUser_Login_Form.validateLogin.executeOption() calling Session Logout");
-								anotherApplicationAlreadyRunning.logout(null);
-								loginWithUserAlreadyApproved_Internal(approvedFocUser);
-							}
-							return false;
-						}
-					};
-					optionDialog.addOption("USER_ALREADY_CONNECTED", "Yes. Neglect previous sessions");
-					optionDialog.addOption("CANCEL", "Cancel");
-					Globals.popupDialog(optionDialog);
-	      } else{
-	      	loginWithUserAlreadyApproved_Internal(approvedFocUser);
-	      }
-	    } else {
-	    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
-	    }
-	    
-	    loginAccess.dispose();
-	    loginAccess = null;
-	  } else {
+        String username = user.getName().trim();
+        String password = user.getPassword();
+
+        FocLoginAccess loginAccess = new FocLoginAccess(username, password); 
+        status = loginAccess.getLoginStatus(); 
+
+        if(status == com.foc.Application.LOGIN_VALID){
+          approvedFocUser = loginAccess.getUser();
+          approvedFocUser.unLockAccount();
+          approvedFocUser.validate(false);
+
+          anotherApplicationAlreadyRunning = null;
+          for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
+            FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
+            if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){
+              if(app.getFocWebSession().getFocUser().equalsRef(approvedFocUser) && !app.isClosing()){
+                anotherApplicationAlreadyRunning = app;
+              }
+            }
+          }
+
+          if(anotherApplicationAlreadyRunning != null){
+            OptionDialog optionDialog = new OptionDialog("Previous Session Still Opened", "User Already has an opened session.\n Do you wish to neglect the previous sessions and open a new one now?") {
+              @Override
+              public boolean executeOption(String optionName) {
+                if(optionName.equals("USER_ALREADY_CONNECTED")){
+                  Globals.logString("DEBUG_SESSION_NOT_VALID FocUser_Login_Form.validateLogin.executeOption() calling Session Logout");
+                  anotherApplicationAlreadyRunning.logout(null);
+                  loginWithUserAlreadyApproved_Internal(approvedFocUser);
+                }
+                return false;
+              }
+            };
+            optionDialog.addOption("USER_ALREADY_CONNECTED", "Yes. Neglect previous sessions");
+            optionDialog.addOption("CANCEL", "Cancel");
+            Globals.popupDialog(optionDialog);
+          }else{
+            loginWithUserAlreadyApproved_Internal(approvedFocUser);
+          }
+        } else {
+          boolean accountLocked = false;
+          if (status == com.foc.Application.LOGIN_WRONG) {
+            if (!Utils.isStringEmpty(username)) {
+              FocUser failedUser = FocUser.findUser(username);
+              if (failedUser != null) {
+                failedUser.updateFailedAttempts();
+                failedUser.validate(false);
+                accountLocked = failedUser.isLocked();
+              }
+            }
+          }
+          if (accountLocked) {
+            Globals.showNotification("ACCOUNT LOCKED DUE TO TOO MANY FAILED LOGIN ATTEMPTS", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+          } else {
+            Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+          }
+        }
+
+        loginAccess.dispose();
+        loginAccess = null;
+    } else {
 	  	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
 	  }
   }
-  
-  /*private void validateLogin() {
-    validationCheckData(null);
-    FocUser user = (FocUser) getFocData();
-
-    String username = user.getName();
-    String password = user.getPassword();
-//    if(Globals.getApp().getCurrentCompany() != null && Globals.getApp().getDataSource().isEmptyDatabaseJustCreated()){
-//    	user.setCurrentCompany(Globals.getApp().getCurrentCompany());
-//    }
-    
-    String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-    FocLoginAccess loginAccess = new FocLoginAccess();
-    
-    Globals.logString("Username "+username+" Password "+encryptedPassword);
-    
-    int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
-    if (status != com.foc.Application.LOGIN_VALID) {
-    	status = loginAccess.checkUserPassword(username, encryptedPassword, false, true);
-    }
-    
-    if(status == com.foc.Application.LOGIN_VALID){
-    	approvedFocUser = loginAccess.getUser();
-      
-    	anotherApplicationAlreadyRunning = null;
-      for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
-      	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
-      	if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){
-      		if(app.getFocWebSession().getFocUser().equalsRef(approvedFocUser) && !app.isClosing()){
-      			anotherApplicationAlreadyRunning = app;
-      		}
-      	}
-      }
-      
-      if(anotherApplicationAlreadyRunning != null){
-      	OptionDialog optionDialog = new OptionDialog("Previous Session Still Opened", "User Already has an opened session.\n Do you wish to neglect the previous sessions and open a new one now?") {
-					
-					@Override
-					public boolean executeOption(String optionName) {
-						if(optionName.equals("USER_ALREADY_CONNECTED")){
-							Globals.logString("DEBUG_SESSION_NOT_VALID FocUser_Login_Form.validateLogin.executeOption() calling Session Logout");
-							anotherApplicationAlreadyRunning.logout(null);
-							loginWithUserAlreadyApproved_Internal(approvedFocUser);
-						}
-						return false;
-					}
-				};
-				optionDialog.addOption("USER_ALREADY_CONNECTED", "Yes. Neglect previous sessions");
-				optionDialog.addOption("CANCEL", "Cancel");
-				Globals.popupDialog(optionDialog);
-      	
-//      	OptionDialogWindow optionWindow = new OptionDialogWindow("User Already connected.", anotherApplicationAlreadyRunning);
-//      	optionWindow.setWidth("500px");
-//      	optionWindow.setHeight("200px");
-//      	
-//      	optionWindow.addOption("Close the other connection", new IOption() {
-//					@Override
-//					public void optionSelected(Object contextObject) {
-//						FocWebApplication anotherApplicationAlreadyRunning = (FocWebApplication) contextObject;
-//						anotherApplicationAlreadyRunning.logout();
-//						loginWithUserAlreadyApproved(approvedFocUser);
-//					}
-//				});
-//
-//      	optionWindow.addOption("Back to login", new IOption() {
-//					@Override
-//					public void optionSelected(Object contextObject) {
-//					}
-//				});
-//      	
-//    		getUI().addWindow(optionWindow);
-      }else{
-      	loginWithUserAlreadyApproved_Internal(approvedFocUser);
-      }
-    } else {
-    	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
-    }
-    
-    loginAccess.dispose();
-    loginAccess = null;
-  }*/
 
   private void loginWithUserAlreadyApproved_Internal(FocUser focUser){
     FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();

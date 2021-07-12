@@ -26,8 +26,9 @@
 package com.foc.admin;
 
 import java.awt.image.BufferedImage;
+import java.sql.Date;
 import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.security.SecureRandom; 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -89,7 +90,7 @@ public class FocUser extends FocObject {
   public static final int PASSWORD_POLICY_NONE                           = 0; 
   public static final int PASSWORD_POLICY_SIX_LETTERS_NUMBER             = 1;
   public static final int PASSWORD_POLICY_TWELVE_UPPLER_LOWER_NBR_SYMBOL = 2;
-  
+
 //USERREFACTOR  
 //  private FocList companyList   = null;
 //  private FocList titlesList    = null;
@@ -597,7 +598,9 @@ public class FocUser extends FocObject {
   
   public String resetPassword(){
 		String newPassStr = newRandomPassword(); 
-		setPassword_EncryptFirst(newPassStr);
+    setPassword_EncryptFirst(newPassStr);
+		//String newPassEncripted = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
+		//setPassword(newPassEncripted);
 		validate(true);
 		return newPassStr;
   }
@@ -665,14 +668,14 @@ public class FocUser extends FocObject {
       choice.setInteger(fontSize);
     }
   }
-
+  
   public int getPasswordEncryptionMethod() {
-  	return getPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD);
+    return getPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD);
   }
-
+  
   public void setPasswordEncryptionMethod(int method) {
-  	setPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD, method);
-  }
+    setPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD, method);
+  } 
 
   public boolean isEnableToolTipText(){
   	return getPropertyBoolean(FocUserDesc.FLD_ENABLE_TOOL_TIP_TEXT);
@@ -691,12 +694,12 @@ public class FocUser extends FocObject {
   }
   
   public String getSalt(){
-  	return getPropertyString(FocUserDesc.FLD_SALT);
+    return getPropertyString(FocUserDesc.FLD_SALT);
   }
 
   public void setSalt(String salt){
-  	setPropertyString(FocUserDesc.FLD_SALT, salt);
-  }
+    setPropertyString(FocUserDesc.FLD_SALT, salt);
+  } 
   
   public boolean isContextHelpActivated(){
     return getPropertyBoolean(FocUserDesc.FLD_CONTEXT_HELP_ACTIVATION);
@@ -705,7 +708,50 @@ public class FocUser extends FocObject {
   public void setContextHelpActivated(boolean mode){
     setPropertyBoolean(FocUserDesc.FLD_CONTEXT_HELP_ACTIVATION, mode);
   }
+  
+	public int getFaliedLoginAttempts() {
+		return getPropertyInteger(FocUserDesc.FLD_FAILED_LOGIN_ATTEMPTS);
+	}
 
+	public void setFaliedLoginAttempts(int val) {
+		setPropertyInteger(FocUserDesc.FLD_FAILED_LOGIN_ATTEMPTS, val);
+	}
+
+	public boolean isLocked() {
+		return getPropertyBoolean(FocUserDesc.FLD_LOCKED);
+	}
+
+	public void setLocked(boolean mode) {
+		setPropertyBoolean(FocUserDesc.FLD_LOCKED, mode);
+	}
+	
+	public Date getLockDateTime(){
+    return (Date) getPropertyDate(FocUserDesc.FLD_LOCK_DATETIME);
+  }
+
+  public void setLockDateTime(Date obj){
+    setPropertyDate(FocUserDesc.FLD_LOCK_DATETIME, obj);
+  }
+  
+	public void updateFailedAttempts() {
+		setFaliedLoginAttempts(getFaliedLoginAttempts() + 1);
+		checkAndLockAccount();
+	}
+
+	public void checkAndLockAccount() {
+		int accountLockThreshold = ConfigInfo.getAccountLockThreshold();
+		if (accountLockThreshold > 0 && getFaliedLoginAttempts() >= accountLockThreshold && !isLocked()) {
+			setLocked(true);
+			setLockDateTime(Globals.getDBManager().getCurrentDate());
+		}
+	}
+
+	public void unLockAccount() {
+		setFaliedLoginAttempts(0);
+		setLocked(false);
+		setLockDateTime(new Date(0));
+	}
+  
   public int getRightsLevel() {
     int lvl = 1;
     FocGroup group = getGroup();
@@ -849,7 +895,8 @@ public class FocUser extends FocObject {
   	
   		user = (FocUser) focList.newEmptyItem();
 	    user.setName(userName);
-	    user.setPassword_EncryptFirst(password);
+      user.setPassword_EncryptFirst(password);
+	    //user.setPassword(Encryptor.encrypt_MD5(password));
 	    user.setGroup(group);
 	    focList.add(user);
 	    user.validate(true);
@@ -880,14 +927,15 @@ public class FocUser extends FocObject {
       appendedString = Integer.toString(app);
       user = findUser(userName+appendedString);
     }
-    FocList focList = FocUserDesc.getList();
-    user = (FocUser) focList.newEmptyItem();
-    user.setName(userName+appendedString);
-    user.setPassword_EncryptFirst(password);
-    focList.add(user);
-    user.validate(true);
-    focList.validate(true);
-    return user;    
+      FocList focList = FocUserDesc.getList();
+      user = (FocUser) focList.newEmptyItem();
+      user.setName(userName+appendedString);
+      user.setPassword_EncryptFirst(password);
+      //user.setPassword(Encryptor.encrypt_MD5(password));
+      focList.add(user);
+      user.validate(true);
+      focList.validate(true);
+      return user;    
   }
   
   /**
@@ -953,9 +1001,11 @@ public class FocUser extends FocObject {
 	        name += appendedString;
 	        user.setName(name);
 	        if(password != null && !password.isEmpty()){
-	        	user.setPassword_EncryptFirst(password);
+            user.setPassword_EncryptFirst(password);
+	        	//user.setPassword(password);
 	        }else{
-	        	user.setPassword_EncryptFirst(name);
+            user.setPassword_EncryptFirst(password);
+	        	//user.setPassword(name);
       		}	        	
 	        user.setContact(contact);
 	        user.setGroup(anyGuestGroup);
@@ -1628,15 +1678,22 @@ public class FocUser extends FocObject {
     if(checkOldPassword){
     	if(oldPassStr == null) errorMessage = "Old password is not available";
     	if (errorMessage == null) {
-//    		boolean oldPasswordDoesntMatches = checkEnteredPassword(String.valueOf(oldPassStr));
-    		//If the password was never set it is still empty in the FocUser
-//	        if(oldPasswordDoesntMatches){
-//	        	errorMessage = "Old password is incorrect!";
-//	        }
-	        boolean error = checkEnteredPassword(oldPassStr);
-			if (error) {
-				errorMessage = "Old password is incorrect!";
-			}
+    		/*oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
+        boolean oldPasswordMatches = false;
+        if(getPassword().isEmpty()){
+        	oldPasswordMatches = Encryptor.encrypt_MD5("").equals(oldPassStr);
+        }else{
+        	oldPasswordMatches = getPassword().equals(oldPassStr);
+        }
+        //If the password was never set it is still empty in the FocUser
+        if(!oldPasswordMatches){
+        	errorMessage = "Old password is incorrect!";
+        }*/
+        
+        boolean error = checkEnteredPassword(oldPassStr);  
+        if (error) {
+          errorMessage = "Old password is incorrect!";
+        } 
     	}
     }
     
@@ -1654,17 +1711,17 @@ public class FocUser extends FocObject {
   }
   
   public void setPassword_EncryptFirst(String newPassStr) {
-  	if (Utils.isStringEmpty(getSalt())) {
-  		createSalt();
-  	}
-  	setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
-  	String encrypted = encryptPassword(getPasswordEncryptionMethod(), getSalt(), newPassStr);
-  	Globals.logString(" = Username "+getName()+" password encrypted "+encrypted);
-		setPassword(encrypted);
-  }
+    if (Utils.isStringEmpty(getSalt())) {
+            createSalt();
+    }
+    setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
+    String encrypted = encryptPassword(getPasswordEncryptionMethod(), getSalt(), newPassStr);
+    Globals.logString(" = Username "+getName()+" password encrypted "+encrypted);
+    setPassword(encrypted);
+  } 
   
   public void changePassword(String newPassStr) {
-  	setPassword_EncryptFirst(newPassStr);
+		setPassword_EncryptFirst(newPassStr);
 		validate(true);
   }
 
@@ -1677,8 +1734,8 @@ public class FocUser extends FocObject {
     appendKeyValueForFieldName(builder, null, FocUserDesc.FNAME_GROUP);
     builder.endObject();
 	}
-
-	public boolean checkEnteredPassword(String password) {
+	
+  public boolean checkEnteredPassword(String password) {
 		boolean error = true;
 		
 		if(getPassword() != null && getPassword().equals("")) {
@@ -1731,5 +1788,4 @@ public class FocUser extends FocObject {
 		}
 		return encrypted;
 	}
-	
 }

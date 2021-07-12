@@ -194,69 +194,6 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 		}
 		return session;
 	}
-
-	// ------------------------------------
-	// ------------------------------------
-	// RIGHTS
-	// ------------------------------------
-	// ------------------------------------
-	
-	protected String mobileModule_GetModuleName(FocServletRequest focRequest) {
-		return null;
-	}
-	
-	protected GrpMobileModuleRights mobileModule_GetModule(FocServletRequest focRequest, String mobileModuleName) {
-		GrpMobileModuleRights mobileModule = null;
-		if (Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null && Globals.getApp().getUser_ForThisSession().getGroup() != null) {
-			mobileModule = Globals.getApp().getUser_ForThisSession().getGroup().getMobileModuleRightsObject(mobileModuleName);
-		}
-		return mobileModule;
-	}
-	
-	protected boolean mobileModule_HasRight(FocServletRequest focRequest, char crud) {
-		boolean right = false;
-		String moduleName = mobileModule_GetModuleName(focRequest);
-		if (Utils.isStringEmpty(moduleName)) {
-			right = true;
-		} else {
-			GrpMobileModuleRights module = mobileModule_GetModule(focRequest, moduleName);
-			if(module == null) {
-				right = false;
-			} else {
-				switch (crud) {
-					case 'C':
-						right = module.getCreate();
-						break;
-					case 'R':
-						right = module.getRead();
-						break;
-					case 'U':
-						right = module.getUpdate();
-						break;
-					case 'D':
-						right = module.getDelete();
-						break;
-				}
-			}
-		}
-		return right;
-	}
-	
-	public boolean mobileModule_HasCreate(FocServletRequest focRequest) {
-		return mobileModule_HasRight(focRequest, 'C'); 
-	}
-	
-	public boolean mobileModule_HasRead(FocServletRequest focRequest) {
-		return mobileModule_HasRight(focRequest, 'R'); 
-	}
-	
-	public boolean mobileModule_HasUpdate(FocServletRequest focRequest) {
-		return mobileModule_HasRight(focRequest, 'U'); 
-	}
-	
-	public boolean mobileModule_HasDelete(FocServletRequest focRequest) {
-		return mobileModule_HasRight(focRequest, 'D'); 
-	}
 	
 	// ------------------------------------
 	// ------------------------------------
