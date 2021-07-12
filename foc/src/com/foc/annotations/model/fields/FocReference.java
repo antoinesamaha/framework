@@ -27,4 +27,5 @@ public @interface FocReference {
 	public int size() default 15;
 	public boolean mandatory() default false;
 	public boolean dbResident() default true;
+	public boolean useNameInJoin() default false;
 }
