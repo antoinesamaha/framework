@@ -15,6 +15,7 @@ import com.foc.Application;
 import com.foc.FocLangKeys;
 import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
+import com.foc.admin.archived.UserArchivedObj;
 import com.foc.business.BusinessMenu;
 import com.foc.business.BusinessModule;
 import com.foc.business.multilanguage.LanguageDesc;
@@ -259,12 +260,13 @@ public class AdminModule extends FocModule {
       declareFocDescClass(ActiveUserDesc.class);
       declareFocDescClass(DocRightsGroupDesc.class);
       declareFocDescClass(DocRightsGroupUsersDesc.class);
-      declareFocDescClass(SaaSConfigDesc.class);
-      
+      declareFocDescClass(SaaSConfigDesc.class);      
       declareFocDescClass(XMLViewDefinitionDesc.class);
       declareFocDescClass(PrnLayoutDefinitionDesc.class);
       declareFocDescClass(UserXMLViewDesc.class);
       declareFocDescClass(FocUserHistoryDesc.class);
+      
+      scanModelPackage("com.foc.admin.archived");
     }
 	}
 

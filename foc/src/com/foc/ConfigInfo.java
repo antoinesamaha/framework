@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
+import com.foc.admin.FocUser;
+import com.foc.admin.FocUserDesc; 
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.gui.DisplayManager;
 import com.foc.gui.MainFrame;
@@ -47,6 +49,7 @@ public class ConfigInfo {
   private static boolean createAdminUserIfNotExist = false;
   private static boolean exitWithoutValidationPrompt = false;
   private static int     passwordPolicy = 0;
+  private static int     passwordEncryptionMethod = FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0; 
   
   private static boolean allowNullProperties = false;
   private static int accountLockThreshold    = 10;
@@ -412,6 +415,9 @@ public class ConfigInfo {
         str = getProperty("passwordPolicy");
         if(str != null) passwordPolicy = Utils.parseInteger(str, 0);
 
+        str = getProperty("passwordEncryptionMethod");
+        if(str != null) passwordEncryptionMethod = Utils.parseInteger(str, 0); 
+        
         str = getProperty("dbConnectionDuration");
         if(str != null) dbConnectionDuration = Utils.parseLong(str, 0);
         
@@ -660,6 +666,10 @@ public class ConfigInfo {
   public static int getPasswordPolicy() {
     return passwordPolicy;
   }
+
+  public static int getPasswordEncryptionMethod() {
+    return passwordEncryptionMethod;
+  } 
 
   public static boolean isPopupExceptionDialog() {
     return popupExceptionDialog;

@@ -27,6 +27,8 @@ package com.foc.admin;
 
 import java.awt.image.BufferedImage;
 import java.sql.Date;
+import java.math.BigInteger;
+import java.security.SecureRandom; 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -596,8 +598,9 @@ public class FocUser extends FocObject {
   
   public String resetPassword(){
 		String newPassStr = newRandomPassword(); 
-		String newPassEncripted = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
-		setPassword(newPassEncripted);
+    setPassword_EncryptFirst(newPassStr);
+		//String newPassEncripted = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
+		//setPassword(newPassEncripted);
 		validate(true);
 		return newPassStr;
   }
@@ -665,6 +668,14 @@ public class FocUser extends FocObject {
       choice.setInteger(fontSize);
     }
   }
+  
+  public int getPasswordEncryptionMethod() {
+    return getPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD);
+  }
+  
+  public void setPasswordEncryptionMethod(int method) {
+    setPropertyInteger(FocUserDesc.FLD_PASSWORD_ENCRYPTION_METHOD, method);
+  } 
 
   public boolean isEnableToolTipText(){
   	return getPropertyBoolean(FocUserDesc.FLD_ENABLE_TOOL_TIP_TEXT);
@@ -681,6 +692,14 @@ public class FocUser extends FocObject {
   public void setSendEmailCommandLine(String email){
   	setPropertyString(FocUserDesc.FLD_EMAIL_SEND_COMMAND_LINE, email);
   }
+  
+  public String getSalt(){
+    return getPropertyString(FocUserDesc.FLD_SALT);
+  }
+
+  public void setSalt(String salt){
+    setPropertyString(FocUserDesc.FLD_SALT, salt);
+  } 
   
   public boolean isContextHelpActivated(){
     return getPropertyBoolean(FocUserDesc.FLD_CONTEXT_HELP_ACTIVATION);
@@ -876,7 +895,8 @@ public class FocUser extends FocObject {
   	
   		user = (FocUser) focList.newEmptyItem();
 	    user.setName(userName);
-	    user.setPassword(Encryptor.encrypt_MD5(password));
+      user.setPassword_EncryptFirst(password);
+	    //user.setPassword(Encryptor.encrypt_MD5(password));
 	    user.setGroup(group);
 	    focList.add(user);
 	    user.validate(true);
@@ -910,7 +930,8 @@ public class FocUser extends FocObject {
       FocList focList = FocUserDesc.getList();
       user = (FocUser) focList.newEmptyItem();
       user.setName(userName+appendedString);
-      user.setPassword(Encryptor.encrypt_MD5(password));
+      user.setPassword_EncryptFirst(password);
+      //user.setPassword(Encryptor.encrypt_MD5(password));
       focList.add(user);
       user.validate(true);
       focList.validate(true);
@@ -980,9 +1001,11 @@ public class FocUser extends FocObject {
 	        name += appendedString;
 	        user.setName(name);
 	        if(password != null && !password.isEmpty()){
-	        	user.setPassword(password);
+            user.setPassword_EncryptFirst(password);
+	        	//user.setPassword(password);
 	        }else{
-	        	user.setPassword(name);
+            user.setPassword_EncryptFirst(password);
+	        	//user.setPassword(name);
       		}	        	
 	        user.setContact(contact);
 	        user.setGroup(anyGuestGroup);
@@ -1655,7 +1678,7 @@ public class FocUser extends FocObject {
     if(checkOldPassword){
     	if(oldPassStr == null) errorMessage = "Old password is not available";
     	if (errorMessage == null) {
-    		oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
+    		/*oldPassStr = Encryptor.encrypt_MD5(String.valueOf(oldPassStr));
         boolean oldPasswordMatches = false;
         if(getPassword().isEmpty()){
         	oldPasswordMatches = Encryptor.encrypt_MD5("").equals(oldPassStr);
@@ -1665,7 +1688,12 @@ public class FocUser extends FocObject {
         //If the password was never set it is still empty in the FocUser
         if(!oldPasswordMatches){
         	errorMessage = "Old password is incorrect!";
-        }
+        }*/
+        
+        boolean error = checkEnteredPassword(oldPassStr);  
+        if (error) {
+          errorMessage = "Old password is incorrect!";
+        } 
     	}
     }
     
@@ -1682,10 +1710,18 @@ public class FocUser extends FocObject {
     return errorMessage;
   }
   
+  public void setPassword_EncryptFirst(String newPassStr) {
+    if (Utils.isStringEmpty(getSalt())) {
+            createSalt();
+    }
+    setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
+    String encrypted = encryptPassword(getPasswordEncryptionMethod(), getSalt(), newPassStr);
+    Globals.logString(" = Username "+getName()+" password encrypted "+encrypted);
+    setPassword(encrypted);
+  } 
+  
   public void changePassword(String newPassStr) {
-		Globals.logString(" = Username "+getName()+" password encrypted "+Encryptor.encrypt_MD5(String.valueOf(newPassStr)));
-		newPassStr = Encryptor.encrypt_MD5(String.valueOf(newPassStr));
-		setPassword(newPassStr);
+		setPassword_EncryptFirst(newPassStr);
 		validate(true);
   }
 
@@ -1699,4 +1735,57 @@ public class FocUser extends FocObject {
     builder.endObject();
 	}
 	
+  public boolean checkEnteredPassword(String password) {
+		boolean error = true;
+		
+		if(getPassword() != null && getPassword().equals("")) {
+			//If password is empty we check directly if sent password is empty
+			error = !password.equals("");
+		} else {
+			if(getPasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0) {
+				String encrypted = Encryptor.encrypt_MD5(String.valueOf(password));
+				error = encrypted != null ? encrypted.compareTo(getPassword()) != 0 : true;
+			} else if(getPasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+				String encrypted = Encryptor.encrypt_PBKDF2(String.valueOf(password), getSalt(), 100000, 128);
+				error = encrypted != null ? encrypted.compareTo(getPassword()) != 0 : true;
+			} else {
+				Globals.logString("Unknown password encryption method "+getPasswordEncryptionMethod());
+				error = true;
+			}
+		}
+		return error;
+	}
+	
+	public void upgradePasswordIfNeeded(String password) {
+		if (getPasswordEncryptionMethod() < getActivePasswordEncryptionMethod()) {
+			if (getActivePasswordEncryptionMethod() == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+				createSalt();
+				setPasswordEncryptionMethod(getActivePasswordEncryptionMethod());
+				setPassword_EncryptFirst(password);
+				validate(false);
+			}
+		}
+	}
+	
+	private void createSalt() {
+		SecureRandom random = new SecureRandom();
+		String salt = new BigInteger(130, random).toString(32);
+		setSalt(salt);
+	}
+	
+	public static int getActivePasswordEncryptionMethod() {
+		return ConfigInfo.getPasswordEncryptionMethod();
+	}
+	
+	public static String encryptPassword(int encryptionMethod, String salt, String password) {
+		String encrypted = null; 
+		if(encryptionMethod == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_0) {
+			encrypted = Encryptor.encrypt_MD5(String.valueOf(password));
+		} else if(encryptionMethod == FocUserDesc.PASSWORD_ENCRYPTION_METHOD_1) {
+			encrypted = Encryptor.encrypt_PBKDF2(String.valueOf(password), salt, 100000, 128);
+		} else {
+			Globals.logString("Unknown password encryption method "+encryptionMethod);
+		}
+		return encrypted;
+	}
 }

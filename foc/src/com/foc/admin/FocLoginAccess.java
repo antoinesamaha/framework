@@ -26,8 +26,35 @@ public class FocLoginAccess {
 	public FocLoginAccess(){
 	}
 	
+	public FocLoginAccess(String username, String password){
+		check(username, password, true);
+	}
+	
 	public void dispose(){
 		user = null;
+	}
+	
+	public int check(String username, String password, boolean reloadToMakeSure) {
+		loginStatus = Application.LOGIN_WRONG;
+		user = FocUser.findUser(username);
+		if (user != null) {
+			if (user.isSuspended()) {
+				// No need to attempt again with reload if suspended
+				reloadToMakeSure = false;
+			} else {
+				boolean error = user.checkEnteredPassword(password);
+				if (!error) {
+					user.upgradePasswordIfNeeded(password);
+					loginStatus = Application.LOGIN_VALID;
+				}
+			}
+		}
+		
+		if (loginStatus == Application.LOGIN_WRONG && reloadToMakeSure) {
+			loginStatus = check(username, password, false);
+		}
+		
+		return loginStatus;
 	}
 	
 	public int checkUserPassword(String userName, String encryptedPassword){
@@ -38,9 +65,51 @@ public class FocLoginAccess {
 		return checkUserPassword(userName, encryptedPassword, setUserAsRootUser, false);
 	}
 	
+	public int checkUserPassword(FocUser user, String encryptedPassword){
+		return checkUserPassword(user, encryptedPassword, true);
+	}
+
+	public int checkUserPassword(FocUser user, String encryptedPassword, boolean setUserAsRootUser){
+		return checkUserPassword(user, encryptedPassword, setUserAsRootUser, false);
+	}
+	
 	public int checkUserPassword(String userName, String encryptedPassword, boolean setUserAsRootUser, boolean withRefresh){
   	loginStatus   = Application.LOGIN_WRONG;
     user          = FocUser.findUser(userName);
+    
+    //We have a case for unset Passwords
+    if (user != null){
+    	
+    	
+    	loginStatus = checkUserPassword(user, encryptedPassword, setUserAsRootUser, withRefresh);
+    	
+    	
+    	/*
+    	if(withRefresh) user.load();
+    		
+    	boolean credentialsCorrect = false;
+    	if(user.getPassword().isEmpty()){
+    		String emptyEncriptionPassword = Encryptor.encrypt_MD5("");    		
+    		credentialsCorrect = typedPassword.startsWith(emptyEncriptionPassword);
+    	}else if(typedPassword.startsWith(user.getPassword())){
+    		credentialsCorrect = true;
+    	}    	
+    	if(credentialsCorrect && !user.isSuspended()){
+        if(setUserAsRootUser) Globals.getApp().setUser(user);
+        if (user.isAdmin()) {
+        	loginStatus = Application.LOGIN_ADMIN;
+        } else {
+        	loginStatus = Application.LOGIN_VALID;
+        }
+    	}
+    	*/
+    }
+    return loginStatus;
+	}
+	
+	public int checkUserPassword(FocUser user, String encryptedPassword, boolean setUserAsRootUser, boolean withRefresh){
+  	loginStatus   = Application.LOGIN_WRONG;
+    this.user     = user;
     String  typedPassword = encryptedPassword;
     
     //We have a case for unset Passwords
@@ -51,7 +120,7 @@ public class FocLoginAccess {
     	if(user.getPassword().isEmpty()){
     		String emptyEncriptionPassword = Encryptor.encrypt_MD5("");    		
     		credentialsCorrect = typedPassword.startsWith(emptyEncriptionPassword);
-    	}else if(typedPassword.startsWith(user.getPassword())){
+    	} else if(typedPassword.startsWith(user.getPassword())){
     		credentialsCorrect = true;
     	}    	
     	if(credentialsCorrect && !user.isSuspended() && !user.isLocked()){
@@ -72,5 +141,9 @@ public class FocLoginAccess {
 
 	public void setUser(FocUser user) {
 		this.user = user;
+	}
+
+	public int getLoginStatus() {
+		return loginStatus;
 	}
 }

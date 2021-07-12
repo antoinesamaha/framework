@@ -23,9 +23,7 @@ import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
 import com.foc.desc.FocDesc;
 import com.foc.desc.field.FField;
-import com.foc.list.FocList;
 import com.foc.shared.json.B01JsonBuilder;
-import com.foc.util.Encryptor;
 import com.foc.web.microservice.entity.FocSimpleMicroServlet;
 import com.foc.web.microservice.entity.FocSimpleTokenAuth;
 import com.foc.web.modules.restmodule.LoginToken;
@@ -52,23 +50,14 @@ public class LoginServlet extends FocSimpleMicroServlet {
 			if(jsonObj != null && jsonObj.has("username") && jsonObj.has("password")){
 				String username    = jsonObj.getString("username");
 				String password    = jsonObj.getString("password");
-				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
 				
-				// Login
-				FocLoginAccess loginAccess = new FocLoginAccess();
-				Globals.logString("  = Username " + username + " Password encrypted " + encryptedPassword);
-				int status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+				FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+				int status = loginAccess.getLoginStatus();
 
-				if(status != com.foc.Application.LOGIN_VALID) {
-					FocList listOfUsers = FocUserDesc.getList();
-					listOfUsers.reloadFromDB();
-					status = loginAccess.checkUserPassword(username, encryptedPassword, false);
-				}
-				
 				if(status == com.foc.Application.LOGIN_VALID){
 					boolean login_token = jsonObj.has("login_token") ? jsonObj.getBoolean("login_token") : false;
 					
-					FocUser user = FocUser.findUser(username);
+					FocUser user = loginAccess.getUser();
 					String userProfile = buildUserProfileJson(user);
 					
 					B01JsonBuilder builder = new B01JsonBuilder();
