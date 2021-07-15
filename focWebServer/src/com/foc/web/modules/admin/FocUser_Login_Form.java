@@ -135,7 +135,102 @@ public class FocUser_Login_Form extends FocXMLLayout {
   }
   
   private void validateLogin() {
-    validationCheckData(null);
+	  validationCheckData(null);
+	    FocUser user = (FocUser) getFocData();
+
+	    String username = user.getName();
+	    String password = user.getPassword();
+//	    String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
+//	    Globals.logString("Username " + username + " Password " + encryptedPassword);
+	    
+	    FocLoginAccess loginAccess = null;   
+		int status = com.foc.Application.LOGIN_WRONG;
+		
+		if (!Utils.isStringEmpty(password)) {
+			loginAccess = new FocLoginAccess(username, password);
+			status = loginAccess.getLoginStatus(); 
+//			status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+//			if (status != com.foc.Application.LOGIN_VALID) {
+//				status = loginAccess.checkUserPassword(username, encryptedPassword, false, true);
+//			}
+		}
+	    
+	    if (status == com.foc.Application.LOGIN_VALID && loginAccess != null && !Utils.isStringEmpty(ConfigInfo.getAllowedUrlsForAdmin())) {
+	    	boolean verifyUrls = false;
+	    	if(!(getMainWindow() instanceof FocWebVaadinWindow)) {
+	    		status = com.foc.Application.LOGIN_WRONG;
+	    	} else {
+	        FocWebVaadinWindow window = (FocWebVaadinWindow) getMainWindow();
+	        if (window != null) {
+	    			FocGroup group = loginAccess.getUser() != null ? loginAccess.getUser().getGroup() : null;
+	    			if(group != null && group.getWebModuleRights(AdminWebModule.MODULE_NAME) != GrpWebModuleRightsDesc.ACCESS_NONE) {
+	    				verifyUrls = true;
+	    			}
+	        }
+	    	}
+	    	if (verifyUrls) {
+	    		String url = Globals.getApp().getURL();
+	    		if (Utils.isStringEmpty(url) || !url.startsWith(ConfigInfo.getAllowedUrlsForAdmin())) {
+	      		status = com.foc.Application.LOGIN_WRONG;    			
+	    		}
+	    	}
+	    }		
+	    
+	    if(status == com.foc.Application.LOGIN_VALID){
+	    	approvedFocUser = loginAccess.getUser();
+	    	approvedFocUser.unLockAccount();
+	    	approvedFocUser.validate(false);
+	      
+	    	anotherApplicationAlreadyRunning = null;
+	      for(int i=0; i<FocWebServer.getInstance().getApplicationCount(); i++){
+	      	FocWebApplication app = FocWebServer.getInstance().getApplicationAt(i);
+	      	if(app != null && app != getUI() && app.getFocWebSession() != null && app.getFocWebSession().getFocUser() != null){
+	      		if(app.getFocWebSession().getFocUser().equalsRef(approvedFocUser) && !app.isClosing()){
+	      			anotherApplicationAlreadyRunning = app;
+	      		}
+	      	}
+	      }
+	      
+	      if(anotherApplicationAlreadyRunning != null){
+	      	OptionDialog optionDialog = new OptionDialog("Previous Session Still Opened", "User Already has an opened session.\n Do you wish to neglect the previous sessions and open a new one now?") {
+						@Override
+						public boolean executeOption(String optionName) {
+							if(optionName.equals("USER_ALREADY_CONNECTED")){
+								Globals.logString("DEBUG_SESSION_NOT_VALID FocUser_Login_Form.validateLogin.executeOption() calling Session Logout");
+								anotherApplicationAlreadyRunning.logout(null);
+								loginWithUserAlreadyApproved_Internal(approvedFocUser);
+							}
+							return false;
+						}
+					};
+					optionDialog.addOption("USER_ALREADY_CONNECTED", "Yes. Neglect previous sessions");
+					optionDialog.addOption("CANCEL", "Cancel");
+					Globals.popupDialog(optionDialog);
+	      }else{
+	      	loginWithUserAlreadyApproved_Internal(approvedFocUser);
+	      }
+			} else {
+				boolean accountLocked = false;
+				if (status == com.foc.Application.LOGIN_WRONG) {
+					if (!Utils.isStringEmpty(username)) {
+						FocUser failedUser = FocUser.findUser(username);
+						if (failedUser != null) {
+							failedUser.updateFailedAttempts();
+							failedUser.validate(false);
+							accountLocked = failedUser.isLocked();
+						}
+					}
+				}
+				if (accountLocked) {
+					Globals.showNotification("ACCOUNT LOCKED DUE TO TOO MANY FAILED LOGIN ATTEMPTS", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+				} else {
+					Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
+				}
+			}
+	    
+	    loginAccess.dispose();
+	    loginAccess = null;
+    /*validationCheckData(null);
     int status = Application.LOGIN_WRONG; 
     
     FocUser user = (FocUser) getFocData();
@@ -202,7 +297,7 @@ public class FocUser_Login_Form extends FocXMLLayout {
         loginAccess = null;
     } else {
 	  	Globals.showNotification("LOGIN CREDENTIALS ARE INCORRECT", loginErrorMessage, IFocEnvironment.TYPE_WARNING_MESSAGE);
-	  }
+	  }*/
   }
 
   private void loginWithUserAlreadyApproved_Internal(FocUser focUser){

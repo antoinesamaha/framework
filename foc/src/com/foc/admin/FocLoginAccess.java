@@ -27,18 +27,18 @@ public class FocLoginAccess {
 	}
 	
 	public FocLoginAccess(String username, String password){
-		check(username, password, true);
+		check(username, password, false, true);
 	}
 	
 	public void dispose(){
 		user = null;
 	}
 	
-	public int check(String username, String password, boolean reloadToMakeSure) {
+	public int check(String username, String password, boolean setUserAsRootUser, boolean reloadToMakeSure) {
 		loginStatus = Application.LOGIN_WRONG;
 		user = FocUser.findUser(username);
 		if (user != null) {
-			if (user.isSuspended()) {
+			if (user.isSuspended() && !user.isLocked()) {
 				// No need to attempt again with reload if suspended
 				reloadToMakeSure = false;
 			} else {
@@ -50,8 +50,17 @@ public class FocLoginAccess {
 			}
 		}
 		
+		if(loginStatus == Application.LOGIN_VALID){
+	        if(setUserAsRootUser) Globals.getApp().setUser(user);
+	        if (user.isAdmin()) {
+	        	loginStatus = Application.LOGIN_ADMIN;
+	        } else {
+	        	loginStatus = Application.LOGIN_VALID;
+	        }
+		}
+		
 		if (loginStatus == Application.LOGIN_WRONG && reloadToMakeSure) {
-			loginStatus = check(username, password, false);
+			loginStatus = check(username, password, setUserAsRootUser, false);
 		}
 		
 		return loginStatus;
