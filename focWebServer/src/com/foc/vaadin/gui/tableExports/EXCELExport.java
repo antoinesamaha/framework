@@ -173,4 +173,8 @@ public abstract class EXCELExport {
 	public void addNewLine() {
 		if(fSheet != null) fSheet.addNewLine();
 	}
+	
+	public XSSFWorkbook getWorbook() {
+		return this.workbook;
+	}
 }
