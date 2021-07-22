@@ -2310,10 +2310,8 @@ public class FocUnitTestingCommand {
   	String appPlan     = SaaSConfigDesc.PLAN_NAME_FREE;
   	String userRole    = FocUserDesc.APP_ROLE_NAME_PROCUREMENT_OFFICER;
   	
-    String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-  	
 		FocWebService focWebService = FocWebServer.getInstance().newFocWebService();
-		focWebService.initAcount(company, accountName, encryptedPassword, currency, appType, appPlan, userRole, null);
+		focWebService.initAcount(company, accountName, password, currency, appType, appPlan, userRole, null);
   }
   
   /*

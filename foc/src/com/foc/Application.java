@@ -654,7 +654,7 @@ public class Application {
    	BusinessModule.getInstance().declare();
    	PhotoAlbumManagmentModule.getInstance().declare();
    	
-    FocVersion.addVersion("FOC", "foc1.6" , 1631);
+    FocVersion.addVersion("FOC", "foc1.6" , 1633);
     
     //if(withDatabase && !isDoNotCheckTables()){
     //  adminModule.checkTables();

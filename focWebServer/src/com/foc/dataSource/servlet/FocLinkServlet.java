@@ -27,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.foc.Globals;
 import com.foc.SrvConst_ServerSide;
 import com.foc.admin.FocLoginAccess;
-import com.foc.util.Encryptor;
 import com.foc.vaadin.FocWebApplication;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
@@ -119,10 +118,8 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 
 				Globals.logString(username);
 				Globals.logString(password);
-				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-				FocLoginAccess loginAccess = new FocLoginAccess();
-
-				status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+				FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+				status = loginAccess.getLoginStatus();
 
 				if (status == com.foc.Application.LOGIN_VALID) {
 					// webSession = newApplication.getFocWebSession();
@@ -249,10 +246,8 @@ public class FocLinkServlet extends HttpServlet implements SrvConst_ServerSide {
 
 				Globals.logString(username);
 				Globals.logString(password);
-				String encryptedPassword = Encryptor.encrypt_MD5(String.valueOf(password));
-				FocLoginAccess loginAccess = new FocLoginAccess();
-
-				status = loginAccess.checkUserPassword(username, encryptedPassword, false);
+				FocLoginAccess loginAccess = new FocLoginAccess(username, password);
+				status = loginAccess.getLoginStatus();
 
 				if (status == com.foc.Application.LOGIN_VALID) {
 					// webSession = newApplication.getFocWebSession();
