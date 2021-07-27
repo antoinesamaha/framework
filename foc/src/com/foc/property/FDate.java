@@ -336,6 +336,10 @@ public class FDate extends FProperty {
     setDate(backupDate != null ? backupDate : date);
   }  
   
+  public String getModificationLogString() {
+  	return convertDateToDisplayString(backupDate)+" -> "+convertDateToDisplayString(getDate());
+  }
+  
   public void setEmptyValue(){
   	setDate(new java.sql.Date(getZeroReference()));
   }

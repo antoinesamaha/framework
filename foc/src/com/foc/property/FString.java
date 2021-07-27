@@ -206,6 +206,10 @@ public class FString extends FProperty implements Cloneable{
     str = backupStr != null ? backupStr : "" ;
   }
   
+  public String getModificationLogString() {
+  	return backupStr + "->" +getString();
+  }
+  
   public void setEmptyValue(){
   	setString("");
   }

@@ -504,6 +504,10 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	setPropertyString(FField.FLD_NAME, name);
   }
 
+  public String getDisplayTitle() {
+  	return getJSONName();
+  }
+  
   public String getJSONName() {
   	String  str     = "";
   	FocDesc focDesc = getThisFocDesc();
