@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocDBLog;
 import com.foc.db.DBManager;
@@ -314,7 +315,7 @@ public class SQLRequest {
     		//Writing the FocDBLog
     		//--------------------
         String change = null; 
-        if(getSQLRequestType() == TYPE_UPDATE) {
+        if(ConfigInfo.isDbLogActive() && getSQLRequestType() == TYPE_UPDATE) {
         	change = FocDBLog.prepareLogChangeString(getFocObject());
         }
         //--------------------
@@ -336,9 +337,11 @@ public class SQLRequest {
 	          	if(getFocObject() != null){
 	          		//Writing the FocDBLog
 	          		//--------------------
-	          		int action = getSQLRequestType() == TYPE_INSERT ? FocDBLog.ACTION_INSERT : FocDBLog.ACTION_UPDATE;
-	          		FocDBLog.addLog(getFocObject(), action, change);
-	          		//--------------------
+	          		if (ConfigInfo.isDbLogActive()) {
+		          		int action = getSQLRequestType() == TYPE_INSERT ? FocDBLog.ACTION_INSERT : FocDBLog.ACTION_UPDATE;
+		          		FocDBLog.addLog(getFocObject(), action, change);
+	          		}
+		          	//--------------------
 	          		
 	          		getFocObject().backup();
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
@@ -354,9 +357,11 @@ public class SQLRequest {
 	          if(getSQLRequestType() == TYPE_DELETE && getFocObject() != null){
           		//Writing the FocDBLog
           		//--------------------
-          		int action = FocDBLog.ACTION_DELETE;
-          		FocDBLog.addLog(getFocObject(), action, "");
-          		//--------------------
+          		if (ConfigInfo.isDbLogActive()) {
+	          		int action = FocDBLog.ACTION_DELETE;
+	          		FocDBLog.addLog(getFocObject(), action, "");
+          		}
+	          	//--------------------
           		
           		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
           		if (dbReloader!=null) {

@@ -72,6 +72,7 @@ public class ConfigInfo {
   private static boolean logFileActive               = false;
   private static boolean logMemoryUsage              = false;
   private static boolean logFileWithTime             = false;
+  private static boolean dbLogActive                 = true;
   private static boolean unitDevMode                 = true;
   private static boolean devMode                     = false;
   private static boolean contextHelpActive           = false;
@@ -358,7 +359,10 @@ public class ConfigInfo {
         
         str = getProperty("log.fileWithTime");
         logFileWithTime = str != null ? str.compareTo("1") == 0 : false;
-  
+
+        str = getProperty("log.dbLogActive");
+        dbLogActive = str != null ? str.compareTo("1") == 0 : true;
+
         str = getProperty("log.ConsoleActive");
         logConsoleActive = str != null ? str.compareTo("1") == 0 : false;
   
@@ -929,5 +933,9 @@ public class ConfigInfo {
 
 	public static void setAccountLockThreshold(int accountLockThreshold) {
 		ConfigInfo.accountLockThreshold = accountLockThreshold;
+	}
+
+	public static boolean isDbLogActive() {
+		return dbLogActive;
 	}
 }
