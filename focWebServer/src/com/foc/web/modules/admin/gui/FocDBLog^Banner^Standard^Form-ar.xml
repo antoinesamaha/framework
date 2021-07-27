@@ -1,0 +1,9 @@
+<HorizontalLayout  captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="true" withPrint="false" />
+   
+  <Label value="$F{Change}" width="-1px" expandRatio="1"/>  
+  <Label value="$F{Action}" width="100px" />  
+  <Label value="$F{DateTime} - $F{User.NAME}: " width="300px" />
+	  
+</HorizontalLayout>
+

@@ -52,6 +52,8 @@ public class AdminModule extends FocModule {
   
   public AdminModule(boolean activateLogin) {
     this.activateLogin = activateLogin;
+    
+    scanModelPackage("com.foc.admin");
   }
   
   public void checkTables() {

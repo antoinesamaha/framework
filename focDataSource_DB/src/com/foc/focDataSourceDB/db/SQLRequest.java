@@ -7,7 +7,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.admin.FocDBLog;
 import com.foc.db.DBManager;
 import com.foc.db.IDBReloader;
 import com.foc.db.SQLFilter;
@@ -296,6 +298,14 @@ public class SQLRequest {
     if (focDesc.isPersistent()) {
     	StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(getDBSourceKey());
     	if (stmt != null) {
+    		//Writing the FocDBLog
+    		//--------------------
+        String change = null; 
+        if(ConfigInfo.isDbLogActive() && getSQLRequestType() == TYPE_UPDATE) {
+        	change = FocDBLog.prepareLogChangeString(getFocObject());
+        }
+        //--------------------
+        
 	      error = buildRequest();
 	      if(error){
 	      	Globals.logString("DB Error Preparing Request : "+request);
@@ -311,6 +321,14 @@ public class SQLRequest {
 	          
 		        if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
 	          	if(getFocObject() != null){
+	          		//Writing the FocDBLog
+	          		//--------------------
+	          		if (ConfigInfo.isDbLogActive()) {
+		          		int action = getSQLRequestType() == TYPE_INSERT ? FocDBLog.ACTION_INSERT : FocDBLog.ACTION_UPDATE;
+		          		FocDBLog.addLog(getFocObject(), action, change);
+	          		}
+		          	//--------------------
+	          		
 	          		getFocObject().backup();
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
 	          		if(dbReloader!=null) {
@@ -323,6 +341,14 @@ public class SQLRequest {
 	          	}
 	          }
 	          if(getSQLRequestType() == TYPE_DELETE && getFocObject() != null){
+          		//Writing the FocDBLog
+          		//--------------------
+          		if (ConfigInfo.isDbLogActive()) {
+	          		int action = FocDBLog.ACTION_DELETE;
+	          		FocDBLog.addLog(getFocObject(), action, "");
+          		}
+	          	//--------------------
+          		
           		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
           		if (dbReloader!=null) {
           			if (getFocObject().getThisFocDesc() != null) {

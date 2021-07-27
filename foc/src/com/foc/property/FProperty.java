@@ -291,6 +291,10 @@ public class FProperty implements Cloneable, Property, IFocData, Item.PropertySe
 //    Globals.logString("Backup not implemented");
   }
 
+  public String getModificationLogString() {
+  	return "";
+  }
+  
   public boolean containsListener(FPropertyListener propListener) {
   	boolean contains = false;
     if(propListener != null && listeners != null){
