@@ -226,7 +226,7 @@ public class AdminWebModule extends FocWebModule {
 
 		XMLViewDictionary.getInstance().put(OPTION_WINDOW_STORAGE, XMLViewKey.TYPE_FORM, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT, "/xml/com/foc/admin/OptionDialog_Form.xml", 0, OptionDialog_Form.class.getName());
 
-		XMLViewDictionary.getInstance().put(RIGHT_PANEL_STORAGE, XMLViewKey.TYPE_TREE, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT, "/xml/com/foc/admin/ .xml", 0, FocRightPanel_Tree.class.getName());
+		XMLViewDictionary.getInstance().put(RIGHT_PANEL_STORAGE, XMLViewKey.TYPE_TREE, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT, "/xml/com/foc/admin/FocRightPanel_Tree.xml", 0, FocRightPanel_Tree.class.getName());
 
 		XMLViewDictionary.getInstance().put(FocDBLog.DBNAME, XMLViewKey.TYPE_TABLE, XMLViewKey.CONTEXT_DEFAULT, XMLViewKey.VIEW_DEFAULT, "/com/foc/web/modules/admin/gui/FocDBLog^Table.xml", 0, FocDBLog_Table.class.getName());
 		XMLViewDictionary.getInstance().put(FocDBLog.DBNAME, XMLViewKey.TYPE_FORM, "Banner", XMLViewKey.VIEW_DEFAULT, "/com/foc/web/modules/admin/gui/FocDBLog^Banner^Standard^Form.xml", 0, null);
