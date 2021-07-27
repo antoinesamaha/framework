@@ -57,7 +57,7 @@ public class FObject extends FProperty implements FPropertyListener{
   private   FReference localReference               = null ;
   private   FocObject  focObjValue                  = null ;
   private   FocObject  backupObject                 = null ;
-  
+  private   long       backupRef                    = 0;
   /*
   private   FocList    backupLocalSourceList        = null ;
   private   FocList    localSourceList              = null ;
@@ -713,7 +713,16 @@ public class FObject extends FProperty implements FPropertyListener{
   	if(backupObject != focObjValue) {
   		disposeLocallyConstructedBackup(backupObject);
   	}
+  	//if(focObjValue == null) getFocObjValue(true); 
     backupObject = focObjValue;
+    //We only fill the backupRef if the backupObject was null
+    backupRef = 0;
+    if(backupObject == null) {
+  		if(localReference != null && localReference.getLong() != 0) {
+  			backupRef = localReference.getLong();
+  		} 
+  	}
+    //-------------------------------------------------------
     setBackupValueLocalyConstructed(isObjectValueLocalyConstructed());
     //backupLocalSourceList = localSourceList;
   }
@@ -739,6 +748,20 @@ public class FObject extends FProperty implements FPropertyListener{
   		str.append(" [");
   		str.append(backupObject.getReferenceInt());
   		str.append("]");
+  	} else if (backupRef > 0) {
+  		FocObject localbakupObject = null; 
+      FocList focSourceList = getPropertySourceList();
+      if(focSourceList != null){
+      	localbakupObject = focSourceList.searchByReference(backupRef);
+      }
+      if (localbakupObject != null) {
+      	str.append(localbakupObject.getDisplayTitle());
+      } else {
+      	str.append("...");
+      }
+  		str.append(" [");
+  		str.append(backupRef);
+  		str.append("]");  		
   	}
   	str.append(" -> ");
   	FocObject value = getObject_CreateIfNeeded();

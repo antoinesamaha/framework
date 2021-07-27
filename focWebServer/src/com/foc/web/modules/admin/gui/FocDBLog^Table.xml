@@ -1,0 +1,16 @@
+<VerticalLayout captionMargin="0" margin="true" width="100%" height="100%" spacing="true">
+  <ValidationSettings withApply="false" withAttach="true" withPrint="false" />
+<!--   
+  <GuiTable title="TRANSACTION CONFIGURATION" name="WF_ASSIGNEMENT" dataPath="DATAROOT" inLineEditable="false" addEnabled="false" deleteEnabled="false" openEnabled="false" pageLength="10">
+    <TableColumn name="_LINE_NUMBER" caption="#" width="50px" />
+    <TableColumn name="DateTime" caption="Date time" width="-1px" />
+    <TableColumn name="User>NAME" caption="User" width="-1px" />
+    <TableColumn name="Action" caption="Action" width="-1px" />
+    <TableColumn name="Change" caption="Change" width="-1px" />
+  </GuiTable>
+-->
+	<IncludeXMLForEach height="100%" expandRation="1" style="scrollableContainer" name="_ChatTable" dataPath="DATAROOT" storage="FocDBLog" view="Standard" context="Banner" type="form" editable="false" width="100%" separator="false" deleteEnabled="false" openEnabled="false">
+	</IncludeXMLForEach>
+	  
+</VerticalLayout>
+
