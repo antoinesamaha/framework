@@ -79,6 +79,7 @@ public class FocGroupDesc extends FocDesc{
   public static final int FLD_LINK_IN_RIGHTS              = 56;
   public static final int FLD_MOBILE_MODULE_RIGHTS_LIST   = 57;
   public static final int FLD_VIEWS_RIGHT                 = 58;
+  public static final int FLD_ACCESS_DB_LOG               = 59;
   
   public static int FLD_START_APP_GROUPS = 100;
   private int numberOfAppGroupListFieldID = 0; 
@@ -195,6 +196,9 @@ public class FocGroupDesc extends FocDesc{
     addField(multipleChoiceField);
     
     focFld = new FBoolField("DELETE_UNUSED_USERS", "Allow DB restore", FLD_ALLOW_DELETE_ALL_UNUSED_USERS, false);
+    addField(focFld);
+    
+    focFld = new FBoolField("ACCESS_DB_LOG", "Access DB Log", FLD_ACCESS_DB_LOG, false);
     addField(focFld);
   }
   

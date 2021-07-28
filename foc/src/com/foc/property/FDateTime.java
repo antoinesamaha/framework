@@ -208,4 +208,11 @@ public class FDateTime extends FDate {
   		setDate(new java.sql.Date(time));
   	}
   }
+  
+  @Override
+  public String getModificationLogString() {
+  	String before = FDate.isEmpty(backupDate, getZeroReference()) ? "" : convertDateToDisplayString(backupDate);
+  	String after = FDate.isEmpty(getDate(), getZeroReference()) ? "" : convertDateToDisplayString(getDate());
+  	return before + " -> " + after;
+  }
 }

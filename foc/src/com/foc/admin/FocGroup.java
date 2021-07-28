@@ -242,6 +242,11 @@ public class FocGroup extends FocObject{
     return prop != null ? prop.getBoolean() : false;
   }
   
+  public boolean accessDBLog(){
+    FBoolean prop = (FBoolean) getFocProperty(FocGroupDesc.FLD_ACCESS_DB_LOG);
+    return prop != null ? prop.getBoolean() : false;
+  }
+  
   public int getCashDeskAccess(){
     FInt pCashDeskAccess = (FInt) getFocProperty(FocGroupDesc.FLD_CASH_DESKS_ACCESS);
     return pCashDeskAccess != null ? pCashDeskAccess.getInteger() : 0;

@@ -2,7 +2,7 @@
   <ValidationSettings withApply="false" withAttach="true" withPrint="false" />
    
   <Label value="$F{DateTime} - $F{User.NAME}: " width="300px" />
-  <Label value="$F{Action}" width="100px" />  
+  <Label value="$P{MULTIPLE_CHOICE_LABEL(Action)}" width="100px" />  
   <Label value="$F{Change}" width="-1px" expandRatio="1"/>  
 	  
 </HorizontalLayout>
