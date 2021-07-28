@@ -32,6 +32,7 @@
         </HorizontalLayout>
         <HorizontalLayout captionMargin="0" margin="true" spacing="true">
           <GuiField name="DELETE_UNUSED_USERS" caption="Allow Delete Unused Users" captionPos="left" captionWidth="200px"/>
+          <GuiField name="ACCESS_DB_LOG" caption="Access DB Log" captionPos="left" captionWidth="200px"/>
         </HorizontalLayout>
       </VerticalLayout>
       <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">

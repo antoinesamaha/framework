@@ -71,6 +71,10 @@ public class FBoolean extends FProperty {
     this.bVal = backupBool;
   }
 
+  public String getModificationLogString() {
+  	return (backupBool ? "True" : "False") + " -> " + (bVal ? "True" : "False") ;
+  }
+  
   public double getDouble() {
     return (double) getInteger();
   }
@@ -78,8 +82,6 @@ public class FBoolean extends FProperty {
   public void setDouble(double dVal) {
     setInteger((int) dVal);
   }
-
-  
   
   public void setObject(Object obj) {
   	setObject(obj, false);

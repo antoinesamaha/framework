@@ -32,6 +32,7 @@ import com.foc.db.DBManager;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FDateField;
 import com.foc.desc.field.FField;
+import com.foc.util.Utils;
 import com.vaadin.data.util.converter.Converter;
 
 /**
@@ -337,7 +338,9 @@ public class FDate extends FProperty {
   }  
   
   public String getModificationLogString() {
-  	return convertDateToDisplayString(backupDate)+" -> "+convertDateToDisplayString(getDate());
+  	String before = FDate.isEmpty(backupDate, getZeroReference()) ? "" : convertDateToDisplayString(backupDate);
+  	String after = FDate.isEmpty(getDate(), getZeroReference()) ? "" : convertDateToDisplayString(getDate());
+  	return before + " -> " + after;
   }
   
   public void setEmptyValue(){
