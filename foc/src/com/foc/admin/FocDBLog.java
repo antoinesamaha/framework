@@ -20,7 +20,7 @@ import com.foc.desc.parsers.pojo.PojoFocObject;
 import com.foc.property.FProperty;
 import com.foc.util.Utils;
 
-@FocEntity
+@FocEntity(cached = false)
 public class FocDBLog extends PojoFocObject {
 
   public static final String DBNAME = "FocDBLog";
