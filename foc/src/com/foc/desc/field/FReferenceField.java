@@ -26,7 +26,8 @@ import com.foc.property.FReference;
  */
 public class FReferenceField extends FField {  
   private NumberFormat format  = null;
-  public static final int LEN_REFERENCE = 11; 
+  public static final int LEN_REFERENCE = 11;
+  private boolean useNameInJoin = false;
   
   public FReferenceField(String name, String title) {
     super(name, title, FField.REF_FIELD_ID, false, LEN_REFERENCE, 0);
@@ -120,4 +121,12 @@ public class FReferenceField extends FField {
 	public Class vaadin_getClass(){
 		return String.class;
 	}
+  
+  public boolean isUseNameInJoin() {
+	return useNameInJoin;
+  }
+
+  public void setUseNameInJoin(boolean useNameInJoin) {
+	this.useNameInJoin = useNameInJoin;
+  }
 }

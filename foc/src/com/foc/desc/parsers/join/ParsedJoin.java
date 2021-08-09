@@ -143,9 +143,12 @@ public class ParsedJoin implements FXMLDesc {
 					boolean fieldInSource = true;
 					FField fld = getOtherField();
 					if(fld instanceof FReferenceField){
-						fld = getThisField();
-						if(fld == null) fld = getThisField();
-						fieldInSource = false;
+						FReferenceField field = (FReferenceField) fld;
+						if(field != null && !field.isUseNameInJoin()) {
+							fld = getThisField();
+							if(fld == null) fld = getThisField();
+							fieldInSource = false;
+						}
 					}
 					if(fld != null){
 					  Join join = new JoinUsingObjectField(otherJoin.getTableAlias(), fld.getID(), fieldInSource);
