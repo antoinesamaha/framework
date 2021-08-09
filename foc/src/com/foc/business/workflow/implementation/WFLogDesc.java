@@ -16,6 +16,7 @@
 package com.foc.business.workflow.implementation;
 
 import com.foc.ConfigInfo;
+import com.foc.admin.FocDBLog;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.business.workflow.LoggableFactory;
@@ -95,6 +96,8 @@ public class WFLogDesc extends FocDesc {
 		setGuiBrowsePanelClass(WFLogGuiBrowsePanel.class);
 		addReferenceField();
 		setListInCache(false);
+		
+		FocDBLog.addTablesToExclude(getStorageName_ForTransactionStorageName(dbTableSuffix));
 		
 		boolean isWorkflow = iWFDesc instanceof IWorkflowDesc; 
 		

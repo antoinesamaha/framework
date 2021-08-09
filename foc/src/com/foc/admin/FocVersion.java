@@ -156,6 +156,8 @@ public class FocVersion extends FocObject{
 
   private static FocDesc focDesc = null;
 
+  public static final String TABLE_NAME = "FVERSION";
+  
   public static final int FLD_JAR = 1;
   public static final int FLD_NAME = 2;
   public static final int FLD_ID = 3;  
@@ -163,7 +165,7 @@ public class FocVersion extends FocObject{
   public static FocDesc getFocDesc() {
     if (focDesc == null) {
       FField focFld = null;
-      focDesc = new FocDesc(FocVersion.class, FocDesc.DB_RESIDENT, "FVERSION", false, false, false);
+      focDesc = new FocDesc(FocVersion.class, FocDesc.DB_RESIDENT, TABLE_NAME, false, false, false);
 
       focFld = focDesc.addReferenceField();
 
