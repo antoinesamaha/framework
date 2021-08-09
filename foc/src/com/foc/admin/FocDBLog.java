@@ -205,6 +205,7 @@ public class FocDBLog extends PojoFocObject {
 			tablesToExclude = new HashMap<String, String>();
 			tablesToExclude.put(DBNAME, DBNAME);
 			tablesToExclude.put(FocUserHistoryDesc.DB_TABLE_NAME, FocUserHistoryDesc.DB_TABLE_NAME);
+			tablesToExclude.put(FocVersion.TABLE_NAME, FocVersion.TABLE_NAME);
 		}
 		return tablesToExclude;
 	}
