@@ -239,6 +239,16 @@
 			<artifactId>everproTreeGrid</artifactId>
 			<version>1.2.3</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-server</artifactId>
+		    <version>9.4.36.v20210114</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.eclipse.jetty</groupId>
+		    <artifactId>jetty-servlet</artifactId>
+		    <version>9.4.36.v20210114</version>
+		</dependency>		
     <dependency>
       <groupId>org.vaadin.addon</groupId>
       <artifactId>visjs-addon</artifactId>

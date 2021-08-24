@@ -18,6 +18,7 @@ package com.foc.focDataSourceDB.db.connectionPooling;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -37,6 +38,14 @@ public class ConnectionWrapper {
 	private boolean        autoCommit   = true;
 	private long           creationTime = 0;
 	private long           expiryTime   = 0;
+	
+	// Metrics
+	// -------	
+	private int            metrics_maxNbrOfConnectionsAllowed = 10;//This parameter is only used as getter
+	private int            metrics_maxNbrOfConnectionsReached = 0;//Within last 1 min
+	private long           metrics_maxNbrOfConnectionsReachedTime = 0;
+	private long           metrics_lastTimeReachedTheLimit = 0;
+	// -------
 	
   private HashMap<StatementWrapper, StatementWrapper> busyStatements = null;
 //  private ArrayList<StatementWrapper>                 freeStatements = null;
@@ -98,7 +107,9 @@ public class ConnectionWrapper {
   	Connection conn = null;
 		try{
 			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--";
-			Globals.logString(threadID+"  >> >> JDBC ACTIVE CONNECTIONS - Opening = "+apacheConnectionPool.getNumActive());
+			int currentNbrOfConnectionsBusy = apacheConnectionPool.getNumActive();
+			Globals.logString(threadID+"  >> >> JDBC ACTIVE CONNECTIONS - Opening = "+currentNbrOfConnectionsBusy);
+			metrics_Compute(currentNbrOfConnectionsBusy+1);
 			conn = apacheConnectionPool.getConnection();
 		}catch (Exception e){
 			Globals.logException(e);
@@ -225,6 +236,7 @@ public class ConnectionWrapper {
 
       apacheConnectionPool.setMaxIdle(maxidle);
       apacheConnectionPool.setMaxTotal(maxtotal);
+      metrics_maxNbrOfConnectionsAllowed = maxtotal;
       if(maxWait > 0) {
       	apacheConnectionPool.setMaxWaitMillis(maxWait);
       }
@@ -345,4 +357,22 @@ public class ConnectionWrapper {
   public String getDBSourceKey(){
   	return pool != null ? pool.getDBSourceKey() : null;
   }
+
+  private static long METRICS_MEMORY_RESET_TIME = 1 * 60 * 1000;
+  
+  public void metrics_Compute(int currentNbrOfConnectionsBusy) {
+  	if (currentNbrOfConnectionsBusy > 0) {
+  		long now = System.currentTimeMillis();
+	  	if (metrics_maxNbrOfConnectionsAllowed > 0 && currentNbrOfConnectionsBusy >= metrics_maxNbrOfConnectionsAllowed) {
+	  		metrics_lastTimeReachedTheLimit = now;
+	  	}
+	  	if(			metrics_maxNbrOfConnectionsReachedTime == 0 
+	  			|| 	currentNbrOfConnectionsBusy >= metrics_maxNbrOfConnectionsReached 
+	  			||  metrics_maxNbrOfConnectionsReachedTime < now - METRICS_MEMORY_RESET_TIME) {
+	  		metrics_maxNbrOfConnectionsReached = currentNbrOfConnectionsBusy;
+	  		metrics_maxNbrOfConnectionsReachedTime = now;
+	  	}
+  	}
+  }
+  
 }
