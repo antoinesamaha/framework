@@ -33,6 +33,7 @@ public class ConnectionCredentials {
   private String password  = null;
   private String xpassword = null;      
   private int    serverVersion = 0;
+  private String namespace = null;
   
   private int    provider  = DBManager.PROVIDER_MYSQL;
 
@@ -43,6 +44,7 @@ public class ConnectionCredentials {
     password  = null;
     xpassword = null;
     serverVersion = 0;
+    namespace = null;
   }
   
   public void dispose(){
@@ -51,6 +53,7 @@ public class ConnectionCredentials {
     username  = null;
     password  = null;
     xpassword = null;
+    namespace = null;
   }
   
   private void adjustProvider(){
@@ -76,6 +79,7 @@ public class ConnectionCredentials {
     setPassword(ConfigInfo.getJdbcPassword());
     setXpassword(ConfigInfo.getJdbcXPassword());
     setServerVersion(ConfigInfo.getJdbcServerVersion());
+    setNamespace(ConfigInfo.getJdbcNamespace());
     
     StringTokenizer tokenizer = url != null ? new StringTokenizer(url, ":", false) : null;
     for(int count = 0; count < 2 && tokenizer.hasMoreTokens(); count++){
@@ -218,6 +222,14 @@ public class ConnectionCredentials {
 	
 	public int getServerVersion() {
 		return serverVersion;
+	}
+
+	public String getNamespace() {
+		return this.namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
 	}
 
 	private String decrypt(String str) {

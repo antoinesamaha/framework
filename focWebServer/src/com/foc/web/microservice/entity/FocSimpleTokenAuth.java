@@ -1,5 +1,6 @@
 package com.foc.web.microservice.entity;
 
+import java.lang.reflect.Constructor;
 import java.util.Date;
 
 import com.auth0.jwt.JWT;
@@ -13,8 +14,10 @@ import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.desc.FocDesc;
 import com.foc.list.FocList;
 import com.foc.util.Utils;
+import com.foc.web.server.FocWebServer;
 
 public class FocSimpleTokenAuth {
 //	public static final String GUEST_TOKEN_START = "GUEST_TOKEN(";
@@ -38,7 +41,7 @@ public class FocSimpleTokenAuth {
 		}
 		if(!Utils.isStringEmpty(attemptSpringBootAuth_string)) {
 			attemptSpringBootAuth = attemptSpringBootAuth_string.equals("1") || attemptSpringBootAuth_string.equals("true");  
-		}		
+		}
 	}
 	
 	protected String getKEY() {
@@ -107,5 +110,30 @@ public class FocSimpleTokenAuth {
 			// Invalid signature/claims
 		}
 		return jwt;
+	}
+
+	public static boolean tokenHandler_TriedToLoadIt = false;
+	public static IAuthTokenHandler tokenHandler = null;
+	public static synchronized IAuthTokenHandler getTokenHandler() {
+		if (!tokenHandler_TriedToLoadIt && tokenHandler == null) {
+			tokenHandler_TriedToLoadIt = true;
+			
+			String className = ConfigInfo.getProperty("jwt.token.handler");
+			
+			if (!Utils.isStringEmpty(className)) {
+		    try {    
+		      Class<IAuthTokenHandler> cls = (Class<IAuthTokenHandler>) Class.forName(className);
+		      
+	        Class[]  param = null;
+	        Object[] args  = null;
+	        
+	        Constructor<IAuthTokenHandler> constr = cls.getConstructor(param);
+	        tokenHandler = constr.newInstance(args);
+		    } catch (Exception e) {
+		      Globals.logException(e);
+		    }
+			}
+		}
+		return tokenHandler;
 	}
 }

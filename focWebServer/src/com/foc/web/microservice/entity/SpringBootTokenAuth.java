@@ -14,6 +14,7 @@ public class SpringBootTokenAuth {
 
 	public static ArrayList<Algorithm> keys = null;
 	public static String issuer = null;
+	public static String authDBSchema = null;
 	
 	public SpringBootTokenAuth() {
 		
@@ -27,9 +28,21 @@ public class SpringBootTokenAuth {
 		return issuer;
 	}
 	
+	public static String getAuthDBSchema() {
+		if (authDBSchema == null) {
+			authDBSchema = ConfigInfo.getProperty("jwt.auth.schema");
+			if(authDBSchema == null) {
+				authDBSchema = "";
+			} else {
+				authDBSchema += ".";
+			}
+		}
+		return authDBSchema;
+	}
+	
 	public static synchronized void reloadKeys() {
 		Globals.logString("Auth: Reloading the JWT Keys");
-		StringBuffer request = new StringBuffer("select create_date_time, \"key\" from \"XSharedSecret\"");
+		StringBuffer request = new StringBuffer("select create_date_time, \"key\" from "+getAuthDBSchema()+"\"XSharedSecret\"");
 		ArrayList<String[]> securityKeyList = Globals.getApp().getDataSource().command_SelectRequest(request, 2);
 		
 		if(securityKeyList != null) {

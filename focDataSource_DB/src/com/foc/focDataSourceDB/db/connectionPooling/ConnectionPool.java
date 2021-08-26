@@ -23,6 +23,7 @@ import java.util.Hashtable;
 
 import com.foc.Globals;
 import com.foc.db.DBManager;
+import com.foc.util.Utils;
 
 public class ConnectionPool {
 	private ConnectionCredentials        credentials     = null;
@@ -376,12 +377,16 @@ public class ConnectionPool {
 	        if (resultSet != null) {
 	          while (resultSet.next()) {
 	            String tableName = resultSet.getString(3);
+	            String namespace = resultSet.getString(2);
 	            
-	            Globals.logString(" TABLE : "+resultSet.getString(1)+" | "+resultSet.getString(2)+" | "+resultSet.getString(3));
-	            
-	            //String upperTableName = tableName.toUpperCase();
-	            allTables.put(tableName, tableName);
-	            if(exeTablesMap != null) exeTablesMap.put(tableName, tableName);
+	            Globals.logString(" TABLE : "+resultSet.getString(1)+" | "+namespace+" | "+tableName);
+	          	
+	            ConnectionCredentials credencials = getCredentials();
+	          	String credentialsNamespace = credencials != null ? credencials.getNamespace() : null;
+	          	if (Utils.isStringEmpty(credentialsNamespace) || namespace.equals(credentialsNamespace)) {
+		            allTables.put(tableName, tableName);
+		            if(exeTablesMap != null) exeTablesMap.put(tableName, tableName);
+	          	}
 	          }
 	          resultSet.close();
 	        }

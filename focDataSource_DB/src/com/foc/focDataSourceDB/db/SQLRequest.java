@@ -18,6 +18,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
+import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 import com.foc.performance.PerfManager;
 
@@ -120,9 +121,21 @@ public class SQLRequest {
   	}
   }
   
+	public static String getNamespacePrefix(FocDesc focDesc) {
+	  String namespacePart = "";
+	  ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(focDesc.getDbSourceKey());
+	  String namespace = defaultConnection.getCredentials().getNamespace();
+	  if (namespace != null) {
+	  	namespacePart = namespace+".";
+	  }
+	  return namespacePart;
+	}
+  
   public void addFrom(boolean withJoin) {
     if (focDesc != null && request != null) {
       request.append(" FROM ");
+      
+      String namespacePart = getNamespacePrefix(focDesc);
       
       if(filter != null && filter.hasJoinMap()){
         Iterator iter = filter.getJoinMap().getJoinMapIterator();
@@ -130,7 +143,7 @@ public class SQLRequest {
         while (iter.hasNext()){
           SQLJoin join = (SQLJoin)iter.next();
           if(firstTable){
-            request.append(addTableNameSurroundings(focDesc.getStorageName_ForSQL())+" "+filter.getJoinMap().getMainTableAlias());
+            request.append(namespacePart+addTableNameSurroundings(focDesc.getStorageName_ForSQL())+" "+filter.getJoinMap().getMainTableAlias());
             firstTable = false;
           }
           request.append(" ");
@@ -138,7 +151,7 @@ public class SQLRequest {
           //request.append(join.getNewTableName() +" "+join.getNewAlias());  
         }
       }else{
-      	request.append(addTableNameSurroundings(focDesc.getStorageName_ForSQL()));
+      	request.append(namespacePart+addTableNameSurroundings(focDesc.getStorageName_ForSQL()));
       }
     }
   }
