@@ -27,6 +27,7 @@ public class ConfigInfo {
   public static final String JDBC_PASSWORD       = "jdbc.password";
   public static final String JDBC_XPASSWORD      = "jdbc.Xpassword";
   public static final String JDBC_SERVER_VERSION = "jdbc.server.version";
+  public static final String JDBC_NAMESPACE      = "jdbc.namespace";
 	
   private static boolean loaded = false;
   
@@ -35,6 +36,7 @@ public class ConfigInfo {
   private static String  jdbcDrivers   = null; 
   private static String  jdbcURL       = null;  
   private static String  jdbcSchema    = null;
+  private static String  jdbcNamespace = null;
   private static String  jdbcUserName  = null;
   private static String  jdbcPassword  = null;
   private static String  jdbcXPassword = null;
@@ -208,6 +210,7 @@ public class ConfigInfo {
         jdbcUserName  = getProperty(JDBC_USERNAME);
         jdbcPassword  = getProperty(JDBC_PASSWORD);
         jdbcXPassword = getProperty(JDBC_XPASSWORD);
+        jdbcNamespace = getProperty(JDBC_NAMESPACE);
         
         str = getProperty(JDBC_SERVER_VERSION);
         if(str != null) jdbcServerVersion = Utils.parseInteger(str, 0);
@@ -573,6 +576,10 @@ public class ConfigInfo {
     return jdbcUserName;
   }
 
+  public static String getJdbcNamespace() {
+    return jdbcNamespace;
+  }
+  
   public static int getJdbcServerVersion() {
     return jdbcServerVersion;
   }

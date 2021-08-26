@@ -47,6 +47,7 @@ public class SQLInsert extends SQLRequest {
     	DBUtil.focObject_AssignReferenceIfNeeded(focObj, true);//Usefull for Oracle only.
       boolean firstField = true;
       request.append("INSERT INTO ");
+      request.append(SQLRequest.getNamespacePrefix(focDesc));
     	if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
     		request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
     	}else{

@@ -79,10 +79,11 @@ public class SQLUpdate extends SQLRequest {
 		              } else {
 		              	request = new StringBuffer("");
 	                  request.append("UPDATE ");
+	                  String namespacePrefix = SQLUpdate.getNamespacePrefix(focDesc);
 	                	if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
-	                		request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
+	                		request.append(namespacePrefix+"\""+focDesc.getStorageName_ForSQL()+"\"");
 	                	}else{
-	                		request.append(focDesc.getStorageName_ForSQL());	              	
+	                		request.append(namespacePrefix+focDesc.getStorageName_ForSQL());	              	
 	                	}
 		                request.append(" SET ");
 		              }

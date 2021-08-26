@@ -25,6 +25,7 @@ public class SQLCreateTable extends SQLRequest {
 
     if (focDesc != null && focDesc.isPersistent()) {
       request.append("CREATE TABLE ");
+      request.append(SQLRequest.getNamespacePrefix(focDesc));
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())) request.append("\"");
       request.append(focDesc.getStorageName_ForSQL());
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())) request.append("\" ");

@@ -33,6 +33,7 @@ import com.foc.util.Encryptor;
 import com.foc.util.Utils;
 import com.foc.web.microservice.FocObjectServlet;
 import com.foc.web.microservice.FocServletRequest;
+import com.foc.web.microservice.entity.IAuthTokenHandler.AuthTokenHandlerResult;
 
 // RIGHTS
 // LIST
@@ -112,40 +113,54 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			
 			if(authMethod == AUTH_BEARER) {
 				if(!Utils.isStringEmpty(token)){
-					FocSimpleTokenAuth auth = new FocSimpleTokenAuth();
-					String username = auth.verifyToken(token);
-	
-					if(username != null){
-						FocList list = FocUserDesc.getInstance().getFocList();
-						if(list != null){
-							list.loadIfNotLoadedFromDB();
-							FocUser user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
-							// Reload once if we don't find. This is in case a new user was
-							// created
-							if(user == null){
-								Globals.logString(" = Username: " + username + " not found reloading user list");
-								list.reloadFromDB();
-								user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
+					IAuthTokenHandler tokenHandler = FocSimpleTokenAuth.getTokenHandler();
+					if (tokenHandler != null) {
+						AuthTokenHandlerResult result = tokenHandler.decodeToken(session, token);
+						if(result == null || !Utils.isStringEmpty(result.getErrorMessage())) {
+							if (result == null) {
+								Globals.logString(" = Token Error : result = null");
+							} else {
+								Globals.logString(" = Token Error : "+result.getErrorMessage());
 							}
-	
-							if(user != null && !user.isSuspended()){
-								session.getWebSession().setFocUser(user);
-								ActiveUserList.getInstance().serviceSide_updateHeartbeat(user);
-								Globals.logString(" = Session opened for username: " + username);
+							session.logout();
+							session = null;
+						}
+					} else {
+						FocSimpleTokenAuth auth = new FocSimpleTokenAuth();
+						String username = auth.verifyToken(token);
+		
+						if(username != null){
+							FocList list = FocUserDesc.getInstance().getFocList();
+							if(list != null){
+								list.loadIfNotLoadedFromDB();
+								FocUser user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
+								// Reload once if we don't find. This is in case a new user was
+								// created
+								if(user == null){
+									Globals.logString(" = Username: " + username + " not found reloading user list");
+									list.reloadFromDB();
+									user = (FocUser) list.searchByPropertyStringValue(FocUserDesc.FLD_NAME, username, false);
+								}
+		
+								if(user != null && !user.isSuspended()){
+									session.getWebSession().setFocUser(user);
+									ActiveUserList.getInstance().serviceSide_updateHeartbeat(user);
+									Globals.logString(" = Session opened for username: " + username);
+								}else{
+									Globals.logString(" = Username: " + username + " not found, logout()");
+									session.logout();
+									session = null;
+								}
 							}else{
-								Globals.logString(" = Username: " + username + " not found, logout()");
+								Globals.logString(" = FocUser list null");
 								session.logout();
 								session = null;
 							}
 						}else{
-							Globals.logString(" = FocUser list null");
+							Globals.logString(" = Token Subject (Username) null!");
 							session.logout();
 							session = null;
 						}
-					}else{
-						Globals.logString(" = Token Subject (Username) null!");
-						session.logout();
-						session = null;
 					}
 				} else {
 					Globals.logString(" = Authorization header with 'Bearer' missing");
