@@ -257,7 +257,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 					String key = enums.nextElement();
 					if(key != null) {
 						String value = "";							
-						if(key.equals("Authorization")) {
+						if(key.equals("x-authorization") || key.equals("Authorization")) {
 							value = "***";
 						} else {
 							value = request.getHeader(key);
