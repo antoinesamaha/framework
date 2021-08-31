@@ -43,6 +43,7 @@ import com.foc.focDataSourceDB.db.SQLAlterTable;
 import com.foc.focDataSourceDB.db.SQLCreateIndex;
 import com.foc.focDataSourceDB.db.SQLCreateTable;
 import com.foc.focDataSourceDB.db.SQLDropIndex;
+import com.foc.focDataSourceDB.db.SQLRequest;
 import com.foc.focDataSourceDB.db.SQLTableDetails;
 import com.foc.focDataSourceDB.db.SQLTableIndexesDetails;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
@@ -701,9 +702,11 @@ public class DBAdaptor {
 						    //-------------------------------------------------------------------------------------------------------------
 
 				  			if(alterAllFields || allConstraints == null || allConstraints.get(constraintName) == null) {
-									String request = "alter table \""+focDesc.getStorageName_ForSQL()+"\"";
+				  				String schemaName = SQLRequest.getNamespacePrefix(focDesc);
+				  				String otherSchemaName = SQLRequest.getNamespacePrefix(otherFocDesc);
+				  				String request = "alter table "+schemaName+"\""+focDesc.getStorageName_ForSQL()+"\"";
 									request += " add constraint \""+constraintName+"\" foreign key (\""+field.getDBName()+"\")";
-									request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
+									request += " references "+otherSchemaName+"\"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
 									if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
 										StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());										
 										request += " novalidate";

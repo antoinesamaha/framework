@@ -89,10 +89,16 @@ public class FocExcelSheet {
     return dVal;
   }
 
-  public Date getCellDate(int coord0, int coord1) {
-    Row row = sheet.getRow(coord0);
-    Cell cell = row != null ? row.getCell(coord1) : null;
-    return cell != null ? cell.getDateCellValue() : null;
+  public Date getCellDate(int line, int col) {
+    try {
+	  	Row row = sheet.getRow(line);
+	    Cell cell = row != null ? row.getCell(col) : null;
+	    return cell != null ? cell.getDateCellValue() : null;
+    } catch (Exception e) {
+			Globals.logString("Could not read Date Value at Line=" + line + " col=" + col + " Sheet: " + getName());
+			Globals.logException(e);
+			return null;
+    }
   }
 
 	public int getCellType(int coord0, int coord1) {
@@ -128,12 +134,10 @@ public class FocExcelSheet {
 		          type = Cell.CELL_TYPE_NUMERIC;
 		        }
 	      	}catch(Exception e){
-	      		Globals.logString("This EXCEPTION is Handles");
-	      		Globals.logExceptionWithoutPopup(e);
+	      		type = Cell.CELL_TYPE_STRING;
 	      	}
 	      }
-	
-	      if (type == Cell.CELL_TYPE_STRING) {
+		      if (type == Cell.CELL_TYPE_STRING) {
 	        str = cell.getRichStringCellValue().getString();
 	      } else if (type == Cell.CELL_TYPE_NUMERIC) {
 //	        str = String.valueOf((int) cell.getNumericCellValue());
