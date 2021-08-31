@@ -26,7 +26,7 @@ public class SQLCreateIndex extends SQLRequest {
       if(index.isUnique()){
         request.append("UNIQUE ");
       }
-      request.append("INDEX ");    
+      request.append("INDEX ");
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
       	request.append("\""+index.getName()+"\"");
       }else{
@@ -34,6 +34,7 @@ public class SQLCreateIndex extends SQLRequest {
       }
       
       request.append(" ON ");
+      request.append(SQLRequest.getNamespacePrefix(focDesc));
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
     		request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
     	}else{

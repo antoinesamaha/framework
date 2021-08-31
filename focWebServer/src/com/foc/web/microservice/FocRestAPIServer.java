@@ -1,38 +1,7 @@
 package com.foc.web.microservice;
 
-import java.net.URI;
-import java.util.TimeZone;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.HttpConfiguration;
-import org.eclipse.jetty.server.HttpConnectionFactory;
-import org.eclipse.jetty.server.NCSARequestLog;
-import org.eclipse.jetty.server.SecureRequestCustomizer;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.SslConnectionFactory;
-import org.eclipse.jetty.server.handler.HandlerCollection;
-import org.eclipse.jetty.server.handler.RequestLogHandler;
-import org.eclipse.jetty.server.session.SessionHandler;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import org.eclipse.jetty.util.thread.ThreadPool;
-
-import com.foc.Globals;
-import com.foc.util.Utils;
-import com.foc.web.microservice.loockups.WSLookupServlet;
-import com.foc.web.microservice.servlets.ReloadServlet;
-
 public class FocRestAPIServer {
-
+/*
 	public static boolean noJWT = false;
 	private static FocRestAPIServer server = null;
 	private Server jettyServer = null;
@@ -223,5 +192,5 @@ public class FocRestAPIServer {
 	
 	public void initJsonFieldFilter() {
 	}
-
+*/
 }
