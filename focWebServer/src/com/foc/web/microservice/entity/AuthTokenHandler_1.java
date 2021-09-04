@@ -12,6 +12,7 @@ import com.foc.Globals;
 import com.foc.admin.ActiveUserList;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
+import com.foc.admin.UserSession;
 import com.foc.list.FocList;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
 
@@ -94,6 +95,14 @@ public class AuthTokenHandler_1 implements IAuthTokenHandler {
 		if(username != null){
 			result = new AuthTokenHandlerResult();
 			result.setUsername(username);
+			
+			if (session != null && session.getWebSession() != null) {
+				UserSession userSession = session.getWebSession().getUserSession();
+				if (userSession != null) {
+					userSession.putSessionParameter("username", username);
+					userSession.putSessionParameter("provider", "auth");
+				}
+			}
 		}else{
 			Globals.logString(" = Token Subject (Username) null!");
 		}

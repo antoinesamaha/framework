@@ -55,7 +55,7 @@ public class UserSession implements Serializable {
   	user = null;
   }
   
-  private Object getParameterInternal(String key){
+  public Object getSessionParameter(String key){
   	Object obj = null;
   	if(sessionParameters != null){
   		obj = sessionParameters.get(key);
@@ -63,7 +63,7 @@ public class UserSession implements Serializable {
   	return obj;
   }
   
-  private void putParameterInternal(String key, Object obj){
+  public void putSessionParameter(String key, Object obj){
   	if(sessionParameters == null){
   		sessionParameters = new HashMap<String, Object>();
   	}
@@ -71,13 +71,19 @@ public class UserSession implements Serializable {
   		sessionParameters.put(key, obj);
   	}
   }
+  
+  public void clearSessionParameters() {
+  	if(sessionParameters != null){
+  		sessionParameters.clear();
+  	}
+	}
 
   public static Object getParameter(String key){
   	Object obj = null;
   	
   	UserSession userSession = getInstanceForThread();
   	if(userSession != null){
-  		obj = userSession.getParameterInternal(key);
+  		obj = userSession.getSessionParameter(key);
   	}
   	
   	return obj;
@@ -86,10 +92,10 @@ public class UserSession implements Serializable {
   public static void putParameter(String key, Object obj){
   	UserSession userSession = getInstanceForThread();
   	if(userSession != null){
-  		userSession.putParameterInternal(key, obj);
+  		userSession.putSessionParameter(key, obj);
   	}
   }
-
+  
   public FocUser getUser() {
     return user;
   }
