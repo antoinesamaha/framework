@@ -350,6 +350,9 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			FocWebSession focWebSession = getWebSession();
 			if(focWebSession != null){
 				focWebSession.setFocUser(null);
+				if (focWebSession.getUserSession() != null) {
+					focWebSession.getUserSession().clearSessionParameters();
+				}
 			}
 			/*
 			if(getWebApplication() != null){

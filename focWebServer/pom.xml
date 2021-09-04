@@ -218,6 +218,12 @@
 			<groupId>org.vaadin.addon</groupId>
 			<artifactId>jfreechartwrapper</artifactId>
 			<version>3.0.4</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>  				
 		</dependency>
 		<dependency>
 			<groupId>org.vaadin.jonatan</groupId>

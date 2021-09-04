@@ -292,7 +292,7 @@ public class PhotoAlbum extends FocObject{
   }
 	
 	public void fillURLKey(){
-  	String randomKeyStringForURL = ASCII.generateRandomString(5, true, true).trim();
+  	String randomKeyStringForURL = ASCII.generateRandomString(6, true, true).trim();
   	setURLKey(randomKeyStringForURL);
 	}
 }
