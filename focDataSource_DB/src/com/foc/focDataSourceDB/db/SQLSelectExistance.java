@@ -39,6 +39,8 @@ public class SQLSelectExistance extends SQLSelect {
     	request.append("count(*)");
 //    }
  		request.append(" FROM ");
+ 		
+ 		request.append(SQLRequest.getNamespacePrefix(getFocDesc())); 		
  		if(DBManager.provider_TableNamesBetweenSpeachmarks(getFocDesc().getProvider())){
  			request.append("\""+getFocDesc().getStorageName_ForSQL()+"\"");
  		}else{

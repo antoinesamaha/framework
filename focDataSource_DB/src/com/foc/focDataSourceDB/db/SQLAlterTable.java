@@ -69,6 +69,7 @@ public class SQLAlterTable extends SQLRequest {
 
     if (focDesc != null && focDesc.isPersistent()) {           
       request.append("ALTER TABLE ");
+      request.append(SQLRequest.getNamespacePrefix(focDesc));
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
       	request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
       }else{

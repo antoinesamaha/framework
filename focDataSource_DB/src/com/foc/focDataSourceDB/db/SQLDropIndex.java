@@ -22,6 +22,7 @@ public class SQLDropIndex extends SQLRequest {
 
     if (index != null && index.getFieldCount() > 0 && focDesc != null && focDesc.isPersistent()) {
       request.append("DROP INDEX ");
+     
       if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
       	request.append("\""+index.getName()+"\"");
       }else{
