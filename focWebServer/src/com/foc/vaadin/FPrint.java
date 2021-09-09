@@ -15,21 +15,22 @@
  ******************************************************************************/
 package com.foc.vaadin;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.Stack;
 
-import com.foc.vaadin.gui.components.FVTextField;
-import com.lowagie.text.Document;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfWriter;
+//import com.lowagie.text.Document;
+//import com.lowagie.text.PageSize;
+//import com.lowagie.text.Paragraph;
+//import com.lowagie.text.pdf.PdfWriter;
 import com.vaadin.server.StreamResource.StreamSource;
-import com.vaadin.ui.Component;
 
 public class FPrint implements StreamSource {
 
+	@Override
+	public InputStream getStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+/*
   public final ByteArrayOutputStream os = new ByteArrayOutputStream();
   
   public FPrint(Stack<Component> stack){
@@ -71,4 +72,5 @@ public class FPrint implements StreamSource {
     // Here we return the pdf contents as a byte-array
     return new ByteArrayInputStream(os.toByteArray());
   }
+*/  
 }
