@@ -121,7 +121,7 @@ public class FocSimpleTokenAuth {
 			String className = ConfigInfo.getProperty("jwt.token.handler");
 			
 			if (!Utils.isStringEmpty(className)) {
-		    try {    
+		    try {
 		      Class<IAuthTokenHandler> cls = (Class<IAuthTokenHandler>) Class.forName(className);
 		      
 	        Class[]  param = null;

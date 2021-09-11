@@ -9,11 +9,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
-import com.foc.admin.ActiveUserList;
-import com.foc.admin.FocUser;
-import com.foc.admin.FocUserDesc;
 import com.foc.admin.UserSession;
-import com.foc.list.FocList;
 import com.foc.web.microservice.FocMicroServlet.SessionAndApplication;
 
 public class AuthTokenHandler_1 implements IAuthTokenHandler {
