@@ -2658,4 +2658,13 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		}
 		return error;
 	}	
+	
+	public String getNamespacePrefix() {
+	  String namespacePart = "";
+	  String namespace = Globals.getApp().getDataSource().getNamespaceName(getDbSourceKey());
+	  if (namespace != null) {
+	  	namespacePart = namespace+".";
+	  }
+	  return namespacePart;
+	}
 }

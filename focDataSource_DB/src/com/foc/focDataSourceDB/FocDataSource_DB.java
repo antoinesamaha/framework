@@ -1777,4 +1777,10 @@ public class FocDataSource_DB implements IFocDataSource {
 		return false;
 	}
 
+	@Override
+	public String getNamespaceName(String dbSouceKey) {
+		ConnectionPool defaultConnection = DBManagerServer.getInstance() != null ? DBManagerServer.getInstance().getConnectionPool(dbSouceKey) : null;
+	  return defaultConnection != null ? defaultConnection.getCredentials().getNamespace() : "";
+	}
+
 }

@@ -35,6 +35,7 @@ public interface IFocDataSource {
 	public void          setEmptyDatabaseJustCreated(boolean emptyDBJustCreated);
 	
 	public int           getProvider(String dbSouceKey);
+	public String        getNamespaceName(String dbSouceKey);
 	public int           getServerVersion(String dbSourceKey);
 	
 	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
