@@ -28,6 +28,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.Deflater;
@@ -477,4 +479,32 @@ public class Utils {
 		return null;
 
 	}
+	
+	/***
+	 * Injects parameters into template producing a content message. warns about
+	 * parameters with no values passed parameters are case insensitive
+	 * 
+	 * @param template
+	 * @param placeholdersMap
+	 * @return
+	 */
+	public static String replacePlaceholders(String text, Map<String, Object> placeholdersMap) {
+//		final Pattern PARAM_PATTERN = Pattern.compile("(\\$\\{.*\\})");
+		final String PARAM_PREFIX = "${";
+		final String PARAM_SUFFIX = "}";
+
+		String result = text;
+		if (placeholdersMap!= null)
+			for(Entry<String, Object> paramVal : placeholdersMap.entrySet()){
+				result = result.replaceAll("(?i)" + Pattern.quote(PARAM_PREFIX + paramVal.getKey() + PARAM_SUFFIX), paramVal.getValue() == null ? "" : Matcher.quoteReplacement(String.valueOf(paramVal.getValue())));
+			}
+		// check if there are any remaining parameters not received.
+//		Matcher matcher = PARAM_PATTERN.matcher(result);
+//		while (matcher.find()) {
+//			Globals.logString("Warning: Parameter " + matcher.group(1) + " missing from Text: " + text);
+//		}
+
+		return result;
+	}
+
 }
