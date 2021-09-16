@@ -57,6 +57,7 @@ public class AuthTokenHandler_1 implements IAuthTokenHandler {
 			DecodedJWT jwt = verifier.verify(token);
 			subject = jwt.getSubject();
 		}catch (JWTVerificationException exception){
+			Globals.logString(exception.getMessage());
 			// Invalid signature/claims
 			subject = null;
 		}
