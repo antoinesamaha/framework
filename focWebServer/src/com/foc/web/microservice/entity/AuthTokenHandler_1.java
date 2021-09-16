@@ -41,6 +41,7 @@ public class AuthTokenHandler_1 implements IAuthTokenHandler {
 		
 		if(securityKeyList != null) {
 			keys = new ArrayList<Algorithm>();
+			Globals.logString(" Found "+securityKeyList.size()+" keys");
 			for(int i=0; i<securityKeyList.size(); i++) {
 				String[] strKeys = securityKeyList.get(i);
 				Algorithm algorithm = Algorithm.HMAC256(strKeys[0]);
@@ -63,13 +64,14 @@ public class AuthTokenHandler_1 implements IAuthTokenHandler {
 	}
 	
 	private String validateToken_WithAllKeys(String token) {
+		Globals.logString(" AuthTokenHAndler_1 validating token "+token);
 		String subject = null;
 		if (keys != null) {
 			for(int i=0; i<keys.size() && subject == null; i++) {
 				subject = validateToken_WithSingleKey(keys.get(i), token);
 			}
 		}
-		
+		Globals.logString(" AuthTokenHAndler_1 when validating token subject = " + (subject != null ? subject : " null "));
 		return subject;
 	}
 	
