@@ -5,6 +5,7 @@ package com.foc;
 
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -139,6 +140,21 @@ public class ConfigInfo {
   	if(val == null || val.isEmpty()){
   		val = props != null ? props.getProperty(key) : null;
   	}
+
+  	String valueFromEnvVariables = null;
+  	try {
+  		
+	  	if (val != null && val.startsWith("${") && val.endsWith("}") && val.length() > 3) {
+	  		String varName = val.substring(2, val.length()-1);
+	  		valueFromEnvVariables = System.getenv(varName);
+	  		if (valueFromEnvVariables != null) {
+	  			val = valueFromEnvVariables;
+	  		}
+	  	}
+	  	
+  	} catch (Exception e) {
+  		valueFromEnvVariables = null;
+  	}
   	
   	return val;
   }
@@ -152,6 +168,12 @@ public class ConfigInfo {
   }
   
   public static void loadFile() {
+  	
+    Map <String, String> map = System.getenv();
+    for (Map.Entry <String, String> entry: map.entrySet()) {
+        System.out.println("Variable Name:- " + entry.getKey() + " Value:- " + entry.getValue());
+    }
+  	
     if(!loaded){
       loaded = true;
       try{
