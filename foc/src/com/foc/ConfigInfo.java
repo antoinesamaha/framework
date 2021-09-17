@@ -146,9 +146,19 @@ public class ConfigInfo {
   		
 	  	if (val != null && val.startsWith("${") && val.endsWith("}") && val.length() > 3) {
 	  		String varName = val.substring(2, val.length()-1);
+	  		String varDefaultValue = null;
+	  		
+	  		int indexOfColumn = varName.indexOf(":");
+	  		if (indexOfColumn > 0) {
+	  			varDefaultValue = varName.substring(indexOfColumn+1);
+	  			varName = varName.substring(0, indexOfColumn);
+	  		}
+	  		
 	  		valueFromEnvVariables = System.getenv(varName);
 	  		if (valueFromEnvVariables != null) {
 	  			val = valueFromEnvVariables;
+	  		} else if (varDefaultValue != null) {
+	  			val = varDefaultValue;
 	  		}
 	  	}
 	  	
@@ -169,11 +179,14 @@ public class ConfigInfo {
   
   public static void loadFile() {
   	
-    Map <String, String> map = System.getenv();
-    for (Map.Entry <String, String> entry: map.entrySet()) {
-        System.out.println("Variable Name:- " + entry.getKey() + " Value:- " + entry.getValue());
-    }
-  	
+  	//Display all Environment Variables
+  	//---------------------------------
+//    Map <String, String> map = System.getenv();
+//    for (Map.Entry <String, String> entry: map.entrySet()) {
+//        System.out.println("Variable Name:- " + entry.getKey() + " Value:- " + entry.getValue());
+//    }
+  	//---------------------------------
+    
     if(!loaded){
       loaded = true;
       try{
