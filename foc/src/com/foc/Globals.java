@@ -171,18 +171,21 @@ public class Globals{
   	if(ConfigInfo.isLogConsoleActive()){
   		e.printStackTrace();
   	}
-    PrintStream logFile = getLogFile();
-    if(logFile != null){
-    	logString(" -- Exception: "+e.getMessage());
-      e.printStackTrace(logFile);
-    }else{
-    	logString("Log File is NULL");
-    }
-//    String mess = e.getMessage();
-//    if(mess == null || mess.compareTo("") == 0){
-//      mess = new String("Exception occured");
-//    }
-    
+  	if (ConfigInfo.isLog4jActive()) {
+  		 logger.error(e);
+  	} else {
+	    PrintStream logFile = getLogFile();
+	    if(logFile != null){
+	    	logString(" -- Exception: "+e.getMessage());
+	      e.printStackTrace(logFile);
+	    }else{
+	    	logString("Log File is NULL");
+	    }
+  	}
+	//    String mess = e.getMessage();
+	//    if(mess == null || mess.compareTo("") == 0){
+	//      mess = new String("Exception occured");
+	//    }
     if(getApp() != null && getApp().isUnitTest()){
     	try {
     		FocLogger.getInstance().addFailure(e.getMessage());
@@ -235,19 +238,28 @@ public class Globals{
   
   private static boolean insideLogString = false;
   public static void logString(String str, boolean withTime) {
-  	str = logStringFormat(str, withTime);
-  	logger.info(str);
-  	/*
-  	PrintStream logFile = getLogFile();
-    if(logFile != null){ 
-      logFile.println(str);
-      logFile.flush();
-    }
-    if(ConfigInfo.isLogConsoleActive()){
-      System.out.println(str);
-      System.out.flush();
-    }
-  	*/
+  	if (ConfigInfo.isLog4jActive()) {
+	  	str = logStringFormat(str, withTime);
+	  	logger.info(str);
+  	} else {
+	  	if(withTime){
+	  		if(!insideLogString){
+	  			insideLogString = true;
+	  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+	  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+	  			insideLogString = false;
+	  		}
+	  	}
+	    PrintStream logFile = getLogFile();
+	    if(logFile != null){ 
+	      logFile.println(str);
+	      logFile.flush();
+	    }
+	    if(ConfigInfo.isLogConsoleActive()){
+	      System.out.println(str);
+	      System.out.flush();
+	    }
+  	}
   }
   
   public static String getSessionID(){

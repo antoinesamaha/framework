@@ -71,6 +71,7 @@ public class ConfigInfo {
   private static boolean logFileActive               = false;
   private static boolean logMemoryUsage              = false;
   private static boolean logFileWithTime             = false;
+  private static boolean log4jActive                 = false;
   private static boolean unitDevMode                 = true;
   private static boolean devMode                     = false;
   private static boolean contextHelpActive           = false;
@@ -352,7 +353,10 @@ public class ConfigInfo {
         if(str != null && str.compareTo("0") == 0){//Default value is true
         	allowEXCELExport = false;
         } 
-        
+
+        str = getProperty("log.log4j.active");
+        log4jActive = str != null ? str.compareTo("1") == 0 : false;
+
         str = getProperty("log.fileWithTime");
         logFileWithTime = str != null ? str.compareTo("1") == 0 : false;
   
@@ -602,6 +606,10 @@ public class ConfigInfo {
 
   public static boolean isLogFileWithTime() {
   	return logFileWithTime;
+  }
+
+  public static boolean isLog4jActive() {
+  	return log4jActive;
   }
 
   public static void setLogFileWithTime(boolean withTime) {
