@@ -18,10 +18,8 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
-import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
 import com.foc.performance.PerfManager;
-import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
@@ -304,16 +302,17 @@ public class SQLRequest {
     boolean error = false;
     
     if (focDesc.isPersistent()) {
+
+  		//Writing the FocDBLog
+  		//--------------------
+    	String change = null; 
+    	if(ConfigInfo.isDbLogActive() && getFocObject() != null && getSQLRequestType() == TYPE_UPDATE){
+       	change = FocDBLog.prepareLogChangeString(getFocObject());
+    	}
+      //--------------------
+      
     	StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(getDBSourceKey());
     	if (stmt != null) {
-    		//Writing the FocDBLog
-    		//--------------------
-        String change = null; 
-        if(ConfigInfo.isDbLogActive() && getSQLRequestType() == TYPE_UPDATE) {
-        	change = FocDBLog.prepareLogChangeString(getFocObject());
-        }
-        //--------------------
-        
 	      error = buildRequest();
 	      if(error){
 	      	Globals.logString("DB Error Preparing Request : "+request);
@@ -329,14 +328,6 @@ public class SQLRequest {
 	          
 		        if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
 	          	if(getFocObject() != null){
-	          		//Writing the FocDBLog
-	          		//--------------------
-	          		if (ConfigInfo.isDbLogActive()) {
-		          		int action = getSQLRequestType() == TYPE_INSERT ? FocDBLog.ACTION_INSERT : FocDBLog.ACTION_UPDATE;
-		          		FocDBLog.addLog(getFocObject(), action, change);
-	          		}
-		          	//--------------------
-	          		
 	          		getFocObject().backup();
 	          		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
 	          		if(dbReloader!=null) {
@@ -349,14 +340,6 @@ public class SQLRequest {
 	          	}
 	          }
 	          if(getSQLRequestType() == TYPE_DELETE && getFocObject() != null){
-          		//Writing the FocDBLog
-          		//--------------------
-          		if (ConfigInfo.isDbLogActive()) {
-	          		int action = FocDBLog.ACTION_DELETE;
-	          		FocDBLog.addLog(getFocObject(), action, "");
-          		}
-	          	//--------------------
-          		
           		IDBReloader dbReloader=	Globals.getApp().getDbReloader();
           		if (dbReloader!=null) {
           			if (getFocObject().getThisFocDesc() != null) {
@@ -372,6 +355,21 @@ public class SQLRequest {
 		      }
 	      }
 	      DBManagerServer.getInstance().unlockStatement(stmt);
+    	}
+    	
+    	if(!error) {
+    		//Writing the FocDBLog
+    		//--------------------
+      	if(ConfigInfo.isDbLogActive() && getFocObject() != null){
+  	      if(getSQLRequestType() == TYPE_UPDATE || getSQLRequestType() == TYPE_INSERT){
+        		int action = getSQLRequestType() == TYPE_INSERT ? FocDBLog.ACTION_INSERT : FocDBLog.ACTION_UPDATE;
+        		FocDBLog.addLog(getFocObject(), action, change);
+  	      } else if(getSQLRequestType() == TYPE_DELETE){
+        		int action = FocDBLog.ACTION_DELETE;
+        		FocDBLog.addLog(getFocObject(), action, "");
+  	      }
+      	}
+        //--------------------
     	}
     }
 
