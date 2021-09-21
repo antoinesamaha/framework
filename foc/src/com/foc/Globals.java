@@ -14,6 +14,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.foc.access.AccessControl;
 import com.foc.access.FocLogger;
 import com.foc.db.DBManager;
@@ -54,7 +57,7 @@ public class Globals{
   
   public static String notificationMessageToAssert = "";
   
-  //static final Logger logger = LogManager.getLogger(Globals.class);
+  static final Logger logger = LogManager.getLogger(Globals.class);
   
   public static Application newApplication(boolean withDB, boolean withAdmin, boolean mdi){
     return newApplication(withDB, withAdmin, mdi, null, null);
@@ -168,13 +171,17 @@ public class Globals{
   	if(ConfigInfo.isLogConsoleActive()){
   		e.printStackTrace();
   	}
-    PrintStream logFile = getLogFile();
-    if(logFile != null){
-    	logString(" -- Exception: "+e.getMessage());
-      e.printStackTrace(logFile);
-    }else{
-    	logString("Log File is NULL");
-    }
+  	if (ConfigInfo.isLog4jActive()) {
+ 		  logger.error(e);
+  	} else {
+	    PrintStream logFile = getLogFile();
+	    if(logFile != null){
+	    	logString(" -- Exception: "+e.getMessage());
+	      e.printStackTrace(logFile);
+	    }else{
+	    	logString("Log File is NULL");
+	    }
+  	}
 //    String mess = e.getMessage();
 //    if(mess == null || mess.compareTo("") == 0){
 //      mess = new String("Exception occured");
@@ -217,25 +224,43 @@ public class Globals{
   	return dateFormat;
   }
   
-  private static boolean insideLogString = false;
-  public static void logString(String str, boolean withTime) {
+  private static String logStringFormat(String str, boolean withTime) {
   	if(withTime){
   		if(!insideLogString){
   			insideLogString = true;
-  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
-  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			//String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+  			//str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			str = "["+ getUsername() +"] <" + getSessionID() + ">:" + str;
   			insideLogString = false;
   		}
   	}
-    PrintStream logFile = getLogFile();
-    if(logFile != null){ 
-      logFile.println(str);
-      logFile.flush();
-    }
-    if(ConfigInfo.isLogConsoleActive()){
-      System.out.println(str);
-      System.out.flush();
-    }
+  	return str;
+  }
+  
+  private static boolean insideLogString = false;
+  public static void logString(String str, boolean withTime) {
+  	if (ConfigInfo.isLog4jActive()) {
+	  	str = logStringFormat(str, withTime);
+	  	logger.info(str);
+  	} else {
+	  	if(withTime){
+	  		if(!insideLogString){
+	  			insideLogString = true;
+	  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+	  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+	  			insideLogString = false;
+	  		}
+	  	}
+	    PrintStream logFile = getLogFile();
+	    if(logFile != null){ 
+	      logFile.println(str);
+	      logFile.flush();
+	    }
+	    if(ConfigInfo.isLogConsoleActive()){
+	      System.out.println(str);
+	      System.out.flush();
+	    }
+  	}
   }
   
   public static String getSessionID(){

@@ -5,7 +5,6 @@ package com.foc;
 
 import java.io.InputStream;
 import java.net.URLDecoder;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.JOptionPane;
@@ -75,6 +74,7 @@ public class ConfigInfo {
   private static boolean logFileActive               = false;
   private static boolean logMemoryUsage              = false;
   private static boolean logFileWithTime             = false;
+  private static boolean log4jActive                 = false;
   private static boolean dbLogActive                 = true;
   private static boolean unitDevMode                 = true;
   private static boolean devMode                     = false;
@@ -398,6 +398,9 @@ public class ConfigInfo {
         str = getProperty("log.fileWithTime");
         logFileWithTime = str != null ? str.compareTo("1") == 0 : false;
 
+        str = getProperty("log.log4j.active");
+        log4jActive = str != null ? str.compareTo("1") == 0 : false;
+        
         str = getProperty("log.dbLogActive");
         dbLogActive = str != null ? str.compareTo("1") == 0 : true;
 
@@ -663,6 +666,10 @@ public class ConfigInfo {
   	return logFileWithTime;
   }
 
+  public static boolean isLog4jActive() {
+  	return log4jActive;
+  }
+  
   public static void setLogFileWithTime(boolean withTime) {
   	logFileWithTime = withTime;
   }
