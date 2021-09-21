@@ -355,9 +355,11 @@ public class Application {
     modules = new HashMap<FocModule, FocModule>();
     logFile = null;
     try{
-    	String filePrefix = argHash.get(Globals.ARG_LOG_FILE_PREFIX);
-    	if(filePrefix == null) filePrefix ="";
-    	logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(Globals.logFile_GetFileName(filePrefix, "log"), "UTF-8") : null;
+    	if(!ConfigInfo.isLog4jActive()) {
+	    	String filePrefix = argHash.get(Globals.ARG_LOG_FILE_PREFIX);
+	    	if(filePrefix == null) filePrefix ="";
+	    	logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(Globals.logFile_GetFileName(filePrefix, "log"), "UTF-8") : null;
+    	}
     }catch(Exception e){
     	Globals.logException(e);
     }
