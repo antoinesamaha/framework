@@ -14,8 +14,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.foc.access.AccessControl;
 import com.foc.access.FocLogger;
@@ -57,7 +57,7 @@ public class Globals{
   
   public static String notificationMessageToAssert = "";
   
-  static final Logger logger = LogManager.getLogger(Globals.class);
+  static final Logger logger = LoggerFactory.getLogger(Globals.class);
   
   public static Application newApplication(boolean withDB, boolean withAdmin, boolean mdi){
     return newApplication(withDB, withAdmin, mdi, null, null);
@@ -172,7 +172,7 @@ public class Globals{
   		e.printStackTrace();
   	}
   	if (ConfigInfo.isLog4jActive()) {
- 		  logger.error(e);
+ 		  logger.error("", e);
   	} else {
 	    PrintStream logFile = getLogFile();
 	    if(logFile != null){
