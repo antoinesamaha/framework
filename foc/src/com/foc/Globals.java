@@ -239,9 +239,17 @@ public class Globals{
   
   private static boolean insideLogString = false;
   public static void logString(String str, boolean withTime) {
+  	logString(str, withTime, false);
+  }
+  
+  private static void logString(String str, boolean withTime, boolean error) {
   	if (ConfigInfo.isLog4jActive()) {
 	  	str = logStringFormat(str, withTime);
-	  	logger.info(str);
+	  	if (error) {
+	  		logger.error(str);
+	  	} else {
+	  		logger.info(str);
+	  	}
   	} else {
 	  	if(withTime){
 	  		if(!insideLogString){
@@ -287,7 +295,11 @@ public class Globals{
   }
 
   public static void logString(String str) {
-  	logString(str, ConfigInfo.isLogFileWithTime());
+  	logString(str, ConfigInfo.isLogFileWithTime(), false);
+  }
+  
+  public static void logError(String str) {
+  	logString(str, ConfigInfo.isLogFileWithTime(), true);
   }
 
   public static void logString(StringBuffer str) {
