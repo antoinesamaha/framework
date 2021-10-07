@@ -194,6 +194,8 @@ public class FocDBLog extends PojoFocObject {
 				log.setDateTime(new Date(System.currentTimeMillis()));
 				if(change != null) log.setChange(change);
 				log.validate(false);
+				log.dispose();
+				log = null;
 			}
 		}
 	}
