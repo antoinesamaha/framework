@@ -743,7 +743,10 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 							if(list != null){
 								list.loadIfNotLoadedFromDB();
 								O focObj = (O) list.searchByReference(ref);
-								if(focObj != null) focObj.delete();
+								if(focObj != null) {
+									focObj.setDeleted(true);
+//									focObj.validate(true);
+								}
 							}
 							list.validate(true);
 							builder.appendKeyValue("REF", ref);
