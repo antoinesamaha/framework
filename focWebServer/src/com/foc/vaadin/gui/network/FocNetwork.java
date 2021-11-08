@@ -96,6 +96,10 @@ public abstract class FocNetwork extends NetworkDiagram {
 		return level;
 	}
 	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
 	public boolean incrementLevel() {
 		level++;
 		return level < maxLevel;
@@ -196,4 +200,5 @@ public abstract class FocNetwork extends NetworkDiagram {
 	public NetworkList newNetworkList(String listType) {
 		return null;
 	}
+
 }
