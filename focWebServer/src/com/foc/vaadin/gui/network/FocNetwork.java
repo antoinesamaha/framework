@@ -26,10 +26,13 @@ import org.vaadin.visjs.networkDiagram.options.Options;
 import com.foc.ConfigInfo;
 import com.foc.desc.FocObject;
 import com.foc.util.Utils;
+import com.foc.vaadin.gui.network.networkList.NetworkList;
+import com.foc.vaadin.gui.network.networkList.NetworkListContainer;
 
 public abstract class FocNetwork extends NetworkDiagram {
 	
-	private static final int DEFAULT_MAX_LEVEL = 5;
+	private static final int DEFAULT_MAX_LEVEL      = 5;
+	private static final int DEFAULT_DIRECT_LOADING = 1;	
 	
 	private HashMap<String, Node> drawnNodes = null;
 	private HashMap<String, Edge> drawnEdges = null;
@@ -38,6 +41,9 @@ public abstract class FocNetwork extends NetworkDiagram {
 	private int level    = 0;
 	private int maxLevel = 0;
 	
+	private NetworkListContainer listContainer = null; 
+	private int directLoading = 1;
+	
 	public FocNetwork(Options options){
 		this(options, DEFAULT_MAX_LEVEL);
 		
@@ -45,6 +51,13 @@ public abstract class FocNetwork extends NetworkDiagram {
 		if (maxLevelString != null) {
 			maxLevel = Utils.parseInteger(maxLevelString, DEFAULT_MAX_LEVEL);
 		}
+		
+		String directLoadingString = ConfigInfo.getProperty("network.direct.loading");
+		if (directLoadingString != null) {
+			directLoading = Utils.parseInteger(directLoadingString, DEFAULT_DIRECT_LOADING);
+		}
+		
+		listContainer = new NetworkListContainer(this);
 	}
 	
 	public FocNetwork(Options options, int maxLevel){
@@ -73,8 +86,16 @@ public abstract class FocNetwork extends NetworkDiagram {
 			}
 			focObjectNetworks.clear();
 		}
+		
+		if (listContainer != null) {
+			listContainer.dispose();
+		}
 	}
 
+	public int getLevel() {
+		return level;
+	}
+	
 	public boolean incrementLevel() {
 		level++;
 		return level < maxLevel;
@@ -144,5 +165,35 @@ public abstract class FocNetwork extends NetworkDiagram {
 	
 	public void setMaxLevel(int maxLevel) {
 		this.maxLevel = maxLevel;
+	}
+
+	public boolean isDirectLoading() {
+		return directLoading == 1;
+	}
+
+	public void setDirectLoading(boolean cumulativeLoading) {
+		this.directLoading = cumulativeLoading ? 1 : 0;
+	}
+
+	public NetworkListContainer getListContainer() {
+		return listContainer;
+	}
+	
+	public void build(FocObjectNetwork focObjectNetwork) {
+		if (focObjectNetwork != null) {
+			if (isDirectLoading()) {
+				focObjectNetwork.fill();
+			} else {
+				focObjectNetwork.fill();
+				while(getListContainer() != null && getListContainer().hasOrderedLists()) {
+					getListContainer().loadLists();
+					getListContainer().distributeLists();
+				}
+			}
+		}
+	}
+	
+	public NetworkList newNetworkList(String listType) {
+		return null;
 	}
 }

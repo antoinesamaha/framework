@@ -28,6 +28,10 @@ public abstract class FocObjectNetwork<FO extends FocObject> {
 
 	public abstract Node fill(); 
 	
+	public void addUrNode() {};
+	public void makeUrOrders() {};
+	public void pickUrOrders() {};
+	
 	private FO         focObject = null;
 	private FocNetwork network   = null;
 	
