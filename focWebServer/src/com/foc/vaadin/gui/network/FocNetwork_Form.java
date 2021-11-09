@@ -52,6 +52,11 @@ public abstract class FocNetwork_Form extends FocXMLLayout {
 		return button;
 	}
 	
+	public FVButton getIncrementButton() {
+		FVButton button = (FVButton) getComponentByName("INCREMENT");
+		return button;
+	}
+	
 	private void rebuildNetwork() {
 		FVVerticalLayout vLay = (FVVerticalLayout) getComponentByName("MAIN");
 		if (vLay != null) {
@@ -87,6 +92,32 @@ public abstract class FocNetwork_Form extends FocXMLLayout {
 					}
 				}
 			});
+			
+			if (!network.isDirectLoading()) {
+				button.setVisible(false);
+				FVTextField intField = getMaxLevelComponent();
+				if(intField != null) intField.setVisible(false);
+			}
+		}
+		
+		button = getIncrementButton();
+		if (button != null) {
+			button.addClickListener(new ClickListener() {
+				@Override
+				public void buttonClick(ClickEvent event) {
+					int maxLevel = getMaxLevelFromGui();
+					maxLevel++;
+					setMaxLevelFromGui(maxLevel);
+					if (network != null && objectNetwork != null) {
+						network.setMaxLevel(maxLevel);
+						network.increase();
+					}
+				}
+			});
+			
+			if (network.isDirectLoading()) {
+				button.setVisible(false);
+			}
 		}
 	}
 
