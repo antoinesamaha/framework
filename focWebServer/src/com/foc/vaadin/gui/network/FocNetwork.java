@@ -189,11 +189,19 @@ public abstract class FocNetwork extends NetworkDiagram {
 				focObjectNetwork.fill();
 			} else {
 				focObjectNetwork.fill();
-				while(getListContainer() != null && getListContainer().hasOrderedLists()) {
-					getListContainer().loadLists();
-					getListContainer().distributeLists();
+				int count = 1;
+				while(getListContainer() != null && getListContainer().hasOrderedLists() && count > 0) {
+					increase();
+					count--;
 				}
 			}
+		}
+	}
+	
+	public void increase() {
+		if (getListContainer() != null) {
+			getListContainer().loadLists();
+			getListContainer().distributeLists();
 		}
 	}
 	
