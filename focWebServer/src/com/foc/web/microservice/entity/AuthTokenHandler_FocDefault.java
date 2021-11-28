@@ -49,5 +49,11 @@ public class AuthTokenHandler_FocDefault implements IAuthTokenHandler {
 		
 		return result;
 	}
+
+	@Override
+	public AuthRolesAndPermissions loadRolesAndPermissions(SessionAndApplication session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
