@@ -30,9 +30,14 @@ import org.json.JSONObject;
 
 import com.foc.Globals;
 import com.foc.SrvConst_ServerSide;
+import com.foc.admin.FocExternalAuthConfig;
 import com.foc.admin.FocLoginAccess;
 import com.foc.util.Encryptor;
+import com.foc.util.Utils;
 import com.foc.vaadin.FocWebApplication;
+import com.foc.web.microservice.entity.FocSimpleTokenAuth;
+import com.foc.web.microservice.entity.IAuthTokenHandler;
+import com.foc.web.microservice.entity.IAuthTokenHandler.AuthRolesAndPermissions;
 import com.foc.web.server.FocWebServer;
 import com.foc.web.server.session.FocWebSession;
 
@@ -402,5 +407,26 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 			}
 			return value;
 		}
+	}
+	
+	public boolean hasExternalUserPermission(FocServletRequest focRequest) {
+		String permission = null;
+		
+		FocExternalAuthConfig config = FocExternalAuthConfig.getInstance();
+		if (config != null) {
+			permission = config.getPermission();	
+		}	
+		
+		return Utils.isStringEmpty(permission) ? true : hasExternalUserPermission(focRequest, permission);
+	}
+	
+	public boolean hasExternalUserPermission(FocServletRequest focRequest, String permission) {
+		boolean permissionGranted = false;
+		IAuthTokenHandler tokenHandler = FocSimpleTokenAuth.getTokenHandler();
+		if (tokenHandler != null && focRequest != null && focRequest.getSessionAndApp() != null) {
+			AuthRolesAndPermissions rolesPermissions = tokenHandler.loadRolesAndPermissions(focRequest.getSessionAndApp());
+			permissionGranted = rolesPermissions != null ? rolesPermissions.permissionExist(permission) : false;
+		}		
+		return permissionGranted;
 	}
 }

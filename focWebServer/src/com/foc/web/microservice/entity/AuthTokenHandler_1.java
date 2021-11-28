@@ -108,5 +108,11 @@ public class AuthTokenHandler_1 implements IAuthTokenHandler {
 		
 		return result;
 	}
+
+	@Override
+	public AuthRolesAndPermissions loadRolesAndPermissions(SessionAndApplication session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }
