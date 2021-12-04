@@ -90,7 +90,8 @@ public class FocWebServer implements Serializable {
   public static final String SERVLET_CONTEXT_ATTRIBUTE_NAME_FOR_SERVER = "FOC_WEB_SERVER";
   
 	private Application                         focApplication       = null;
-	private ArrayList<FocWebApplication>        applicationArrayList = null;
+	private ArrayList<FocWebApplication>        applicationArrayList = null;//Used for vaadin UI
+	private HashMap<String, FocWebApplication>  applicationHashMap   = null;//Used for web services
 	
 	private XMLViewDictionary                   xmlViewDictionary    = null;
 	private FocUnitDictionary                   focUnitDictionary    = null;
@@ -118,7 +119,12 @@ public class FocWebServer implements Serializable {
     System.setProperty("mail.mime.encodefilename", "true");
     System.setProperty("mail.mime.charset", "UTF-8");
     
-		applicationArrayList = new ArrayList<FocWebApplication>();
+    if(webServicesOnly) {
+    	applicationHashMap = new HashMap<String, FocWebApplication>();
+    } else {
+    	applicationArrayList = new ArrayList<FocWebApplication>();
+    }
+		
 		FocThreadLocal.setWebServer(this);
 		
 		FocWebEnvironment focWebEnvironment = new FocWebEnvironment();
@@ -290,13 +296,22 @@ public class FocWebServer implements Serializable {
 			applicationArrayList.clear();
 			applicationArrayList = null;
 		}
+		if(applicationHashMap != null){
+			Iterator<FocWebApplication> iter = applicationHashMap.values().iterator();
+			while(iter != null && iter.hasNext()) {
+				FocWebApplication app = iter.next();
+				app.dispose();
+			}
+			applicationHashMap.clear();
+			applicationHashMap = null;
+		}		
 		if(configuratorArray != null){
 			for(int i=0; i<configuratorArray.size(); i++){
 				IApplicationConfigurator app = configuratorArray.get(i);
 				app.dispose();
 			}
-			applicationArrayList.clear();
-			applicationArrayList = null;
+			configuratorArray.clear();
+			configuratorArray = null;
 		}		
 	  if(moduleMap != null){
   	  moduleMap.clear();
@@ -387,53 +402,101 @@ public class FocWebServer implements Serializable {
 	  return focHelpBook;
 	}
 
-	public synchronized void removeApplicationsNotRunning(){
-		try {
-			ArrayList<FocWebSession> sessionArray = new ArrayList<FocWebSession>();
-			for(int i=getApplicationCount()-1; i>=0; i--){
-				FocWebApplication app = getApplicationAt(i);
-				if(app.isClosing()){
-					FocWebSession webSession = app.getFocWebSession();
-					if(webSession != null) sessionArray.add(webSession);
-					app.dispose();
-					applicationArrayList.remove(app);
-				}
-			}
+	private long lastRemoveExecuted = 0;
 	
-			//Check if any of the sessions for which UI is disposed is still used.
-			for(int i=getApplicationCount()-1; i>=0; i--){
-				FocWebApplication app = getApplicationAt(i);
-				if(!app.isClosing()){
-					FocWebSession webSession = app.getFocWebSession();
-					if(sessionArray.contains(webSession)){
-						sessionArray.remove(webSession);
+	public synchronized void removeApplicationsNotRunning(){
+		
+		if(lastRemoveExecuted == 0 || lastRemoveExecuted < System.currentTimeMillis() - 60000) {
+			lastRemoveExecuted = System.currentTimeMillis();
+			
+			try {
+				if (isWebServicesOnly()) {
+					ArrayList<FocWebSession> sessionArray = new ArrayList<FocWebSession>();
+					Iterator<FocWebApplication> iter = applicationHashMap.values().iterator();
+					while (iter != null && iter.hasNext()) {
+						FocWebApplication app = iter.next();
+						if(app.isClosing()){
+							FocWebSession webSession = app.getFocWebSession();
+							if(webSession != null) sessionArray.add(webSession);
+							app.dispose();
+						}
 					}
+					
+					if(sessionArray != null) {
+						//Here all FocWebSession in sessionArray are unused
+						for(int i=0; i<sessionArray.size(); i++) {
+							FocWebSession sess = sessionArray.get(i);
+							if (sess != null) {
+								applicationHashMap.remove(sess.getId());
+							}						
+							sess.dispose();
+						}
+					}
+					sessionArray.clear();
+				} else {
+					ArrayList<FocWebSession> sessionArray = new ArrayList<FocWebSession>();
+					for(int i=getApplicationCount()-1; i>=0; i--){
+						FocWebApplication app = getApplicationAt(i);
+						if(app.isClosing()){
+							FocWebSession webSession = app.getFocWebSession();
+							if(webSession != null) sessionArray.add(webSession);
+							app.dispose();
+							applicationArrayList.remove(app);
+						}
+					}
+			
+					//Check if any of the sessions for which UI is disposed is still used.
+					for(int i=getApplicationCount()-1; i>=0; i--){
+						FocWebApplication app = getApplicationAt(i);
+						if(!app.isClosing()){
+							FocWebSession webSession = app.getFocWebSession();
+							if(sessionArray.contains(webSession)){
+								sessionArray.remove(webSession);
+							}
+						}
+					}
+					
+					if(sessionArray != null) {
+						//Here all FocWebSession in sessionArray are unused
+						for(int i=0; i<sessionArray.size(); i++) {
+							FocWebSession sess = sessionArray.get(i); 
+							sess.dispose();
+						}
+					}
+					sessionArray.clear();
 				}
+			}catch(Exception e) {
+				Globals.logException(e);
 			}
 			
-			if(sessionArray != null) {
-				//Here all FocWebSession in sessionArray are unused
-				for(int i=0; i<sessionArray.size(); i++) {
-					FocWebSession sess = sessionArray.get(i); 
-					sess.dispose();
-				}
-			}
-			sessionArray.clear();
-		}catch(Exception e) {
-			Globals.logException(e);
 		}
+
 	}
 	
 	public synchronized void addApplication(FocWebApplication app){
 		removeApplicationsNotRunning();
-		if(!applicationArrayList.contains(app)){
-			applicationArrayList.add(app);
+		if (webServicesOnly) {
+			if (app != null && app.getFocWebSession() != null) {
+				if(applicationHashMap.get(app.getFocWebSession().getId()) == null) {
+					applicationHashMap.put(app.getFocWebSession().getId(), app);
+				}
+			}
+		} else {
+			if(!applicationArrayList.contains(app)){
+				applicationArrayList.add(app);
+			}
 		}
 	}
 	
 	public synchronized void removeApplication(FocWebApplication app){
-		if(applicationArrayList != null && app != null){
-			applicationArrayList.remove(app);
+		if (webServicesOnly) {
+			if (applicationHashMap != null && app != null) {
+				applicationHashMap.remove(app.getFocWebSession().getId());
+			}
+		} else {
+			if(applicationArrayList != null && app != null){
+				applicationArrayList.remove(app);
+			}
 		}
 	}
 
@@ -444,39 +507,44 @@ public class FocWebServer implements Serializable {
 	public int getApplicationCount(){
 		return applicationArrayList != null ? applicationArrayList.size() : 0;
 	}
+
+	public synchronized FocWebApplication findWebApplicationBySessionID(String sessionID){
+		FocWebApplication webApplication_Found = null;
+		
+		removeApplicationsNotRunning();
+		
+		if (isWebServicesOnly()) {
+			webApplication_Found = applicationHashMap.get(sessionID);
+		} else {
+	    for (int i = 0; i < getApplicationCount(); i++) {
+	      FocWebApplication webApplication = getApplicationAt(i);
+	
+	      if (webApplication != null) {
+	        FocWebSession currentWebSession = webApplication.getFocWebSession();
+	
+	        if (currentWebSession != null) {
+	          String currentSessionID = currentWebSession.getId();
+	
+	          if (sessionID.equals(currentSessionID)) {
+	          	webApplication_Found = webApplication;
+	            break;
+	          }
+	        }
+	      }
+	    }
+		}
+
+    return webApplication_Found;
+	}
+	
 	
 	public static FocWebApplication findWebApplicationBySessionID(String sessionID, ServletContext servletContext){
 		FocWebServer webServer = getInstance_FromServletContext(servletContext);
-		return webServer != null ? findWebApplicationBySessionID(sessionID, webServer) : null;
+		return webServer != null ? webServer.findWebApplicationBySessionID(sessionID) : null;
 	}
 	
 	public static synchronized FocWebApplication findWebApplicationBySessionID(String sessionID, FocWebServer webServer){
-		FocWebApplication webApplication_Found = null;
-		
-		webServer.removeApplicationsNotRunning();
-
-    for (int i = 0; i < webServer.getApplicationCount(); i++) {
-      FocWebApplication webApplication = webServer.getApplicationAt(i);
-
-      if (webApplication != null) {
-        FocWebSession currentWebSession = webApplication.getFocWebSession();
-
-        if (currentWebSession != null) {
-          String currentSessionID = currentWebSession.getId();
-
-          if (sessionID.equals(currentSessionID)) {
-          	webApplication_Found = webApplication;
-            break;
-          }
-        }
-      }
-    }
-
-//    if (webServer.getApplicationCount() > 0) {
-//			webApplication_Found = webServer.getApplicationAt(0);
-//		}
-
-    return webApplication_Found;
+		return webServer.findWebApplicationBySessionID(sessionID);
 	}
 	
 	public static FocWebSession findWebSessionBySessionID(String sessionID, FocWebServer webServer){
