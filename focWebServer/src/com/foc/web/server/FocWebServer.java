@@ -402,6 +402,15 @@ public class FocWebServer implements Serializable {
 	  return focHelpBook;
 	}
 
+	public synchronized void closeSession(FocWebSession webSession) {
+		if(webSession != null && applicationHashMap != null) {
+			FocWebApplication app = applicationHashMap.get(webSession.getId());
+			if(app != null) app.dispose();		
+			applicationHashMap.remove(webSession.getId());
+			webSession.dispose();
+		}
+	}
+	
 	private long lastRemoveExecuted = 0;
 	
 	public synchronized void removeApplicationsNotRunning(){
@@ -725,7 +734,7 @@ public class FocWebServer implements Serializable {
   }
   //-------------------------
 	
-	private static FocWebServer getInstance_FromServletContext(ServletContext servletContext){
+	public static FocWebServer getInstance_FromServletContext(ServletContext servletContext){
 	  FocWebServer server = null;
     if(servletContext != null){
     	Object obj = servletContext.getAttribute(FocWebServer.SERVLET_CONTEXT_ATTRIBUTE_NAME_FOR_SERVER);
