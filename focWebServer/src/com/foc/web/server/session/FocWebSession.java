@@ -19,6 +19,8 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
 
 import com.foc.Globals;
 import com.foc.admin.FocUser;
@@ -30,11 +32,12 @@ import com.foc.shared.dataStore.IFocData;
 import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.vaadin.ICentralPanel;
 import com.foc.vaadin.gui.menuTree.FVMenuTree;
+import com.foc.web.server.FocWebServer;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.server.WrappedSession;
 
 @SuppressWarnings("serial")
-public class FocWebSession implements Serializable {
+public class FocWebSession implements Serializable, HttpSessionBindingListener {
 	private UserSession userSession = null;
 	private HttpSession httpSession = null;
 	
@@ -54,6 +57,12 @@ public class FocWebSession implements Serializable {
 	public FocWebSession(HttpSession session){
 		this.httpSession = session;
 		userSession = new UserSession();
+		if(session != null) {
+			if(session.getAttribute("FocWebSession") != null) {
+				Globals.logString("HttpSession already attached to a FocWebSession");
+			}
+			session.setAttribute("FocWebSession", this);
+		}
 	}
 	
 	public void dispose(){
@@ -65,7 +74,7 @@ public class FocWebSession implements Serializable {
 		dataToPrint = null;
 		dataDictionaly_ToPrint = null;
 	}
-
+	
 	public void close(){
 		if(userSession != null){
 //			Globals.logString("DEBUG_SESSION_NOT_VALID in FocWebSession.close() we are closing the session and clearing the userSession user = null");
@@ -178,4 +187,19 @@ public class FocWebSession implements Serializable {
 	public void setFocDataOwner_ToPrint(boolean focDataOwner_ToPrint) {
 		this.focDataOwner_ToPrint = focDataOwner_ToPrint;
 	}
+
+	@Override
+	public void valueBound(HttpSessionBindingEvent event) {
+	}
+
+	@Override
+	public void valueUnbound(HttpSessionBindingEvent event) {
+		if(httpSession != null) {
+			FocWebServer server = FocWebServer.getInstance_FromServletContext(httpSession.getServletContext());
+			if(server != null) {
+				server.closeSession(this);
+			}
+		}
+	}
+
 }
