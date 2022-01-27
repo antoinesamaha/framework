@@ -39,4 +39,18 @@ public class LongCondition extends NumCondition {
   	setToValue(filter, operation, (double) firstValue, (double) lastValue);
   }
 
+  @Override
+  protected String getFirstValueString(FocListFilter filter) {
+    double firstValue = getFirstValue(filter);
+    long l = (long) firstValue;
+  	return "" + l;
+  }
+
+  @Override
+  protected String getLastValueString(FocListFilter filter) {
+    double lastValue = getLastValue(filter);
+    long l = (long) lastValue;
+  	return "" + l;
+  }
+
 }

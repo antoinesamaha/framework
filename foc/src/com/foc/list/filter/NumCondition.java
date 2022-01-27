@@ -154,26 +154,39 @@ public class NumCondition extends FilterCondition {
     }
   }
   
+  protected String getFirstValueString(FocListFilter filter) {
+    double firstValue = getFirstValue(filter);
+  	return "" + firstValue;
+  }
+
+  protected String getLastValueString(FocListFilter filter) {
+    double lastValue = getLastValue(filter);
+  	return "" + lastValue;
+  }
+
   public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
     StringBuffer buffer = null;
-    double firstValue = getFirstValue(filter);
-    double lastValue  = getLastValue(filter);
+//    double firstValue = getFirstValue(filter);
+//    double lastValue  = getLastValue(filter);
     int op = getOperator(filter);
     buffer = new StringBuffer();
 
+    String firstValueString = getFirstValueString(filter);
+    String lastValueString = getLastValueString(filter);
+    
     fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
     
     if (op != OPERATOR_INDIFERENT){
       if (op == OPERATOR_GREATER_THAN){
-        buffer.append(fieldName + ">=" + firstValue);
+        buffer.append(fieldName + ">=" + firstValueString);
       }else if (op == OPERATOR_LESS_THAN) {
-        buffer.append(fieldName + "<=" + lastValue);
+        buffer.append(fieldName + "<=" + lastValueString);
       }else if (op == OPERATOR_BETWEEN){
-        buffer.append(fieldName + ">=" + firstValue +" AND "+ fieldName + "<=" + lastValue);
+        buffer.append(fieldName + ">=" + firstValueString +" AND "+ fieldName + "<=" + lastValueString);
       }else if (op == OPERATOR_EQUALS){
 //        buffer.append(fieldName + " = \"" + firstValue + "\"");
-      	buffer.append(fieldName + " = " + firstValue);
+      	buffer.append(fieldName + " = " + firstValueString);
       }
     }
     return buffer;

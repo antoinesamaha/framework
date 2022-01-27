@@ -19,6 +19,7 @@ import com.foc.desc.FocDesc;
 import com.foc.desc.field.FFieldPath;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.FocDescForFilter;
+import com.foc.list.filter.LongCondition;
 import com.foc.list.filter.NumCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
@@ -43,7 +44,7 @@ public class PhotoAlbumFilterDesc extends FocDescForFilter{
       StringCondition tableNameCondition = new StringCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_TABLE_NAME), TABLE_NAME_CONDITION);
       filterDesc.addCondition(tableNameCondition);
       
-      NumCondition refCondition = new NumCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_OBJECT_REF), OBJECT_REF_CONDITION);
+      LongCondition refCondition = new LongCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_OBJECT_REF), OBJECT_REF_CONDITION);
       filterDesc.addCondition(refCondition);
 
       StringCondition urlKeyCondition = new StringCondition(FFieldPath.newFieldPath(PhotoAlbumDesc.FLD_URL_KEY), URL_KEY_CONDITION);
