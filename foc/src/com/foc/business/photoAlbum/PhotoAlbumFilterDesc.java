@@ -21,7 +21,6 @@ import com.foc.list.filter.BooleanCondition;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.FocDescForFilter;
 import com.foc.list.filter.LongCondition;
-import com.foc.list.filter.NumCondition;
 import com.foc.list.filter.ObjectCondition;
 import com.foc.list.filter.StringCondition;
 
