@@ -22,6 +22,7 @@ import com.foc.desc.FocObject;
 import com.foc.list.FocLinkSimple;
 import com.foc.list.FocListOrder;
 import com.foc.list.FocListWithFilter;
+import com.foc.list.filter.BooleanCondition;
 import com.foc.list.filter.FilterDesc;
 import com.foc.list.filter.FocListFilter;
 import com.foc.list.filter.LongCondition;
@@ -106,6 +107,12 @@ public class PhotoAlbumListWithFilter extends FocListWithFilter {
 	      mcCond.forceToValue((FocListFilter) getFocListFilter(), StringCondition.OPERATION_EQUALS, section);
 	    }
 	  }
+  
+  public void applyFilterOnVersion() {
+	  FilterDesc filterDesc = getFocListFilter().getThisFilterDesc();
+	  BooleanCondition mcCond = (BooleanCondition) filterDesc.findConditionByFieldPrefix(PhotoAlbumFilterDesc.VERSIONED_CONDITION);
+	  mcCond.forceToValue((FocListFilter) getFocListFilter(), BooleanCondition.VALUE_FALSE);
+  }
 
   public void applyFilterOnTableName(String tableName){
     if(tableName != null && !tableName.isEmpty()){
