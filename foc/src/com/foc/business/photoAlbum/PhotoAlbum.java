@@ -163,6 +163,22 @@ public class PhotoAlbum extends FocObject{
 	public void setSection(String section){
 		    setPropertyString(PhotoAlbumDesc.FLD_SECTION, section);
 	}
+	
+	public Boolean isVersioned(){
+	    return getPropertyBoolean(PhotoAlbumDesc.FLD_VERSIONED);
+	}
+		  
+	public void setVersioned(Boolean versioned){
+		setPropertyBoolean(PhotoAlbumDesc.FLD_VERSIONED, versioned);
+	}
+	
+	public void setVersionDate(Date versionDate){
+	    setPropertyDate(PhotoAlbumDesc.FLD_VERSION_DATE_TIME, versionDate);
+    }
+  
+    public Date getVersionDate(){
+    	return getPropertyDate(PhotoAlbumDesc.FLD_VERSION_DATE_TIME);
+    }
 
 	
 	public int hasAccess(){

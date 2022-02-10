@@ -21,8 +21,10 @@ import com.foc.SrvConst_ServerSide;
 import com.foc.admin.FocUser;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
+import com.foc.desc.field.FBoolField;
 import com.foc.desc.field.FCloudStorageField;
 import com.foc.desc.field.FDateField;
+import com.foc.desc.field.FDateTimeField;
 import com.foc.desc.field.FLongField;
 import com.foc.desc.field.FMultipleChoiceStringField;
 import com.foc.desc.field.FObjectField;
@@ -47,6 +49,8 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final int FLD_URL_KEY                 = 12;
   public static final int FLD_KEYWORD                 = 13;
   public static final int FLD_SECTION                 = 14;
+  public static final int FLD_VERSIONED               = 15;
+  public static final int FLD_VERSION_DATE_TIME       = 16;
 
   
   public static final String KEYWORD_BEFORE_FIX    = "Before Fix";
@@ -60,6 +64,8 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final String FNAME_TABLE_NAME    = "TABLE_NAME";
   public static final String FNAME_URL_KEY       = "URL_KEY";
   public static final String FNAME_SECTION       = "SECTION";
+  public static final String FNAME_VERSIONED     = "VERSIONED";
+  public static final String FNAME_VERSION_DATE_TIME     = "VERSION_DATE_TIME";
 
   
   public PhotoAlbumDesc(){
@@ -111,6 +117,12 @@ public class PhotoAlbumDesc extends FocDesc {
     
     FStringField secFld = new FStringField(FNAME_SECTION, "Section", FLD_SECTION, false, 200);
     addField(secFld);
+    
+    FBoolField versionedFld = new FBoolField(FNAME_VERSIONED, "Versioned", FLD_VERSIONED, false);
+    addField(versionedFld);
+    
+    FDateTimeField versionDateTime = new FDateTimeField(FNAME_VERSION_DATE_TIME, "Version date time", FLD_VERSION_DATE_TIME, false);
+    addField(versionDateTime);
   }
   
   public static FocDesc getInstance() {
