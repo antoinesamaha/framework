@@ -179,6 +179,15 @@ public class PhotoAlbum extends FocObject{
     public Date getVersionDate(){
     	return getPropertyDate(PhotoAlbumDesc.FLD_VERSION_DATE_TIME);
     }
+    
+    
+    public long getFileSize(){
+  		return getPropertyLong(PhotoAlbumDesc.FLD_FILE_SIZE);
+  	}
+    
+  	public void setFileSize(long fileSize){
+  		setPropertyLong(PhotoAlbumDesc.FLD_FILE_SIZE, fileSize);
+  	}
 
 	
 	public int hasAccess(){
