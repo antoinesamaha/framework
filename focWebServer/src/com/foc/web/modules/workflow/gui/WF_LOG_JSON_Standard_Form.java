@@ -19,6 +19,7 @@ import org.json.JSONException;
 
 import com.foc.Globals;
 import com.foc.business.workflow.implementation.WFLog;
+import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.FVTextArea;
 import com.foc.vaadin.gui.layouts.FVVerticalLayout;
 import com.foc.vaadin.gui.xmlForm.FocXMLLayout;
@@ -38,7 +39,7 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 //		val = "{\"key1\":\"val1\",\"key2\":\"val2\"}";
 		try{
 			Globals.logString(val);
-			
+			if(Utils.isStringEmpty(val)) val = "{}";
 			org.json.JSONObject jsonObj = new org.json.JSONObject(val);
 			val = jsonObj.toString(4);
 
@@ -49,7 +50,8 @@ public class WF_LOG_JSON_Standard_Form extends FocXMLLayout {
 			textArea.setHeight("200px");
 			textArea.setValue(val);
 			vLay.addComponent(textArea);
-
+			
+			if(Utils.isStringEmpty(changes)) changes = "{}";
 			jsonObj = new org.json.JSONObject(changes);
 			val = jsonObj.toString(4);
 
