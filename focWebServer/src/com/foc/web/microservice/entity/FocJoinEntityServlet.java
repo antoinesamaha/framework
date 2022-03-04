@@ -101,8 +101,12 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			String token = null;
 			if(authMethod == AUTH_BEARER || authMethod == AUTH_BEARER_THEN_USER_PASS) {
 				String authTokenHeader = request.getHeader("Authorization");
+				String authTokenParam = request.getParameter("access_token");
 				if(authTokenHeader != null && authTokenHeader.startsWith("Bearer")){
 					token = authTokenHeader.substring("Bearer".length()).trim();
+					authMethod = AUTH_BEARER; 
+				} else if(Utils.isStringEmpty(authTokenHeader) && !Utils.isStringEmpty(authTokenParam)){
+					token = authTokenParam;
 					authMethod = AUTH_BEARER; 
 				} else if(authMethod == AUTH_BEARER_THEN_USER_PASS){
 					authMethod = AUTH_USERNAME_PASSWORD;
