@@ -1693,7 +1693,7 @@ public class FocUser extends FocObject {
 	private static boolean containsEnglishLetters(String text) {
 		if(!Utils.isStringEmpty(text)) {
 			 for (char charac : text.toCharArray()) {
-	       if (text.matches("[a-zA-Z]+")) return true;
+	       if (String.valueOf(charac).matches("[a-zA-Z]+")) return true;
 			 }
 		}
     return false;
