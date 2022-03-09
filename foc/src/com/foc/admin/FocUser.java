@@ -1625,25 +1625,44 @@ public class FocUser extends FocObject {
 				boolean hasLowerLetter = false;
 				boolean hasDigit  = false;
 				boolean hasSymbol = false;
-			  for (int i = 0; i < password.length(); i++) {
-	        char x = password.charAt(i);
-	        if(Character.isLetter(x)) {
-	        	if(!ConfigInfo.isArabic()) {
-		        	if (Character.isUpperCase(x)) {
-		        		hasUpperLetter = true;
-		        	} else if (Character.isLowerCase(x)) {
-		        		hasLowerLetter = true;
-		        	}
-	        	} else if(Character.isLetter(x)) {
-	        		hasUpperLetter = true;
-	        		hasLowerLetter = true;
-		        } 
-	        } else if (Character.isDigit(x)) {
-	          hasDigit = true;
-	        } else if (containsSpecialCharacter(String.valueOf(x))) {
-	        	hasSymbol = true;
-	        }
-			  }
+				if(!containsEnglishLetters(password) && containsArabicLetters(password)) {
+      		hasUpperLetter = true;
+      		hasLowerLetter = true;
+				}
+					for (int i = 0; i < password.length(); i++) {
+		        char x = password.charAt(i);
+		        if(Character.isLetter(x)) {
+			        	if (Character.isUpperCase(x)) {
+			        		hasUpperLetter = true;
+			        	} else if (Character.isLowerCase(x)) {
+			        		hasLowerLetter = true;
+			        	}
+		        } else if (Character.isDigit(x)) {
+		          hasDigit = true;
+		        } else if (containsSpecialCharacter(String.valueOf(x))) {
+		        	hasSymbol = true;
+		        }
+				  }
+				
+//			  for (int i = 0; i < password.length(); i++) {
+//	        char x = password.charAt(i);
+//	        if(Character.isLetter(x)) {
+//	        	if(!ConfigInfo.isArabic()) {
+//		        	if (Character.isUpperCase(x)) {
+//		        		hasUpperLetter = true;
+//		        	} else if (Character.isLowerCase(x)) {
+//		        		hasLowerLetter = true;
+//		        	}
+//	        	} else if(Character.isLetter(x)) {
+//	        		hasUpperLetter = true;
+//	        		hasLowerLetter = true;
+//		        } 
+//	        } else if (Character.isDigit(x)) {
+//	          hasDigit = true;
+//	        } else if (containsSpecialCharacter(String.valueOf(x))) {
+//	        	hasSymbol = true;
+//	        }
+//			  }
 			  
 	      if(!hasUpperLetter){
 	      	error = true;
@@ -1656,9 +1675,9 @@ public class FocUser extends FocObject {
 	      }
 	    }
 			if (error) {
-				errorText = "Password should be at least 12 characters containing at least a symbol, an upper and lower case letter and a number.";
+				errorText = "Password should be at least 12 characters containing at least a symbol, an upper and lower case letter (unless it is completely written in arabic) and a number.";
 				if (ConfigInfo.isArabic()) {
-					errorText = "يجب على كلمة السر ان تكون اكبر من 12 حرف و ان تكون مكونة من احرف، ارقام و رموز";
+					errorText = "يجب على كلمة السر ان تكون اكبر من 12 حرف و ان تكون مكونة من ارقام, رموز, احرف كبيرة و احرف صغيرة (ما لم تكن مكتوبة بالكامل باللغة العربية).";
 				}
 			}
 		}
@@ -1669,6 +1688,19 @@ public class FocUser extends FocObject {
 	private static boolean containsSpecialCharacter(String s) {
 		String specialChars = "/*!@#$%^&*()\"{}_[]|\\?/<>,.";
     return (s == null) ? false : specialChars.contains(s);
+	}
+	
+	private static boolean containsEnglishLetters(String text) {
+   return !Utils.isStringEmpty(text) ? text.matches("[a-zA-Z]+") : false;
+	}
+	
+	private static boolean containsArabicLetters(String text) {
+		if(!Utils.isStringEmpty(text)) {
+			 for (char charac : text.toCharArray()) {
+	       if (Character.UnicodeBlock.of(charac) == Character.UnicodeBlock.ARABIC) return true;
+			 }
+		}
+    return false;
 	}
 
   public String canChangePassword(String oldPassStr, String newPassStr, String confPassStr, boolean checkOldPassword){
