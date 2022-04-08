@@ -333,11 +333,13 @@ public class FVMenuTree extends FocXMLLayout {
 		ArrayList<IFocWebModule> modulesSortedArrayList = FocWebServer.getInstance().newModulesArrayList();
 		for(int i=0; i<modulesSortedArrayList.size(); i++){
 			IFocWebModule module = (IFocWebModule) modulesSortedArrayList.get(i);
-			if ((isAdminConsole() && module.isAdminConsole()) || (!isAdminConsole() && !module.isAdminConsole()) || (isHistory())) {
-				boolean allow = allowAccessToModule(module.getName());
-				if (allow) {
-					module.menu_FillMenuTree(this, root);
-				}
+			if(module.isActivated()) {
+				if ((isAdminConsole() && module.isAdminConsole()) || (!isAdminConsole() && !module.isAdminConsole()) || (isHistory())) {
+					boolean allow = allowAccessToModule(module.getName());
+					if (allow) {
+						module.menu_FillMenuTree(this, root);
+					}
+				}				
 			}
 		}
 

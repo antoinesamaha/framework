@@ -40,6 +40,8 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 	private int     priorityInDeclaration = 0;
 	private int     order                 = 0;
 	
+	private boolean activated             = true;
+	
 	private HashMap<String, FocMenuItem> menuDictionary = null;
 
 	private ArrayList<FoldersToScan> packages2Scan = null;
@@ -124,6 +126,14 @@ public abstract class FocWebModule extends FocModule implements IFocWebModule{
 				scanModelPackage(f2s.getModelPackage());
 			}
 		}
+	}
+	
+	public boolean isActivated() {
+		return activated;
+	}
+	
+	public void setActivated(boolean activated) {
+		this.activated = activated;
 	}
 	
 	public void declareXMLViewsInDictionary() {

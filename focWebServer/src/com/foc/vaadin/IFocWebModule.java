@@ -24,5 +24,7 @@ import com.foc.web.gui.INavigationWindow;
 
 public interface IFocWebModule extends IFocWebModuleShared {
   public void    menu_FillMenuTree(FVMenuTree menuTree, FocMenuItem fatherMenuITem);
+  
+  public boolean isActivated();
 //  public XMLViewKey popupView(IFocData iFocData, INavigationWindow mainWindow, String menuCode, int xmlViewType);
 }
