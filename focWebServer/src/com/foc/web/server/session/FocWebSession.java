@@ -56,7 +56,9 @@ public class FocWebSession implements Serializable, HttpSessionBindingListener {
 	
 	public FocWebSession(HttpSession session){
 		this.httpSession = session;
+		Globals.logString("FocWebSession - Creating UserSession");
 		userSession = new UserSession();
+		Globals.logString("FocWebSession - Creating UserSession Done");
 		if(session != null) {
 			if(session.getAttribute("FocWebSession") != null) {
 				Globals.logString("HttpSession already attached to a FocWebSession");
@@ -66,6 +68,7 @@ public class FocWebSession implements Serializable, HttpSessionBindingListener {
 	}
 	
 	public void dispose(){
+		Globals.logString("FocWebSession - Dispose");
 		if(userSession != null){
 		  userSession.dispose();
 		  userSession = null;
@@ -92,15 +95,19 @@ public class FocWebSession implements Serializable, HttpSessionBindingListener {
 	}
 
 	public void setFocUser(FocUser user) {
-	  userSession.setUser(user);
+		if (userSession == null) {
+			Globals.logString("FocWebSession - setFocUser - userSession is NULL");
+		} else {
+			userSession.setUser(user);
+		}
 	}
 	
 	public WFSite getSite(){
-	  return userSession.getSite();
+	  return userSession != null ? userSession.getSite() : null;
 	}
 	
 	public Company getCompany(){
-	  return userSession.getCompany();
+	  return userSession != null ? userSession.getCompany() : null;
 	}
 
   public UserSession getUserSession() {

@@ -51,7 +51,7 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final int FLD_SECTION                 = 14;
   public static final int FLD_VERSIONED               = 15;
   public static final int FLD_VERSION_DATE_TIME       = 16;
-
+  public static final int FLD_FILE_SIZE               = 17;
   
   public static final String KEYWORD_BEFORE_FIX    = "Before Fix";
   public static final String KEYWORD_AFTER_FIX     = "After Fix";
@@ -66,6 +66,7 @@ public class PhotoAlbumDesc extends FocDesc {
   public static final String FNAME_SECTION       = "SECTION";
   public static final String FNAME_VERSIONED     = "VERSIONED";
   public static final String FNAME_VERSION_DATE_TIME     = "VERSION_DATE_TIME";
+  public static final String FNAME_FILE_SIZE     = "FILE_SIZE";
 
   
   public PhotoAlbumDesc(){
@@ -123,6 +124,9 @@ public class PhotoAlbumDesc extends FocDesc {
     
     FDateTimeField versionDateTime = new FDateTimeField(FNAME_VERSION_DATE_TIME, "Version date time", FLD_VERSION_DATE_TIME, false);
     addField(versionDateTime);
+    
+    FLongField longField = new FLongField(FNAME_FILE_SIZE, "File Size", FLD_FILE_SIZE, false, FReferenceField.LEN_REFERENCE);
+    addField(longField);
   }
   
   public static FocDesc getInstance() {
