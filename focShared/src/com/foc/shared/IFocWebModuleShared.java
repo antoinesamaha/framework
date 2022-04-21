@@ -24,4 +24,5 @@ public interface IFocWebModuleShared {
   public void    declareXMLViewsInDictionary();
   public void    declareLeafMenuItems();
   public void    declareUnitTestingSuites();
+  public boolean isActivated();
 }

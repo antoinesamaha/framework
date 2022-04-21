@@ -522,7 +522,7 @@ public class FocGroup extends FocObject{
     Iterator<IFocWebModuleShared> iter = Globals.getIFocNotification().newWebModuleIterator();
     while(iter != null && iter.hasNext()){
     	IFocWebModuleShared focWebModule = iter.next();
-      if(focWebModule.getName() != null && !focWebModule.getName().isEmpty()){
+      if(focWebModule.getName() != null && !focWebModule.getName().isEmpty() && focWebModule.isActivated()){
         addWebModule(focWebModule.getName(), focWebModule.getTitle(), focWebModule.isAdminConsole());
       }
     }
