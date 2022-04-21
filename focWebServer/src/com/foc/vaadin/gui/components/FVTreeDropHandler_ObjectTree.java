@@ -115,6 +115,7 @@ public class FVTreeDropHandler_ObjectTree implements DropHandler {
 											if(treeTable != null && treeTable instanceof FVTreeTable){
 												getOptionDialog_Form().goBack(null);
 												treeTable.markAsDirty();
+												treeTable.applyFocListAsContainer();
 												treeTable.refreshRowCache_Foc();
 												focXMLLayout.refresh();
 											}

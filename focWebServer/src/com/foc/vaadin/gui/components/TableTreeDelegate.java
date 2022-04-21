@@ -44,6 +44,7 @@ import com.foc.shared.xmlView.XMLViewKey;
 import com.foc.tree.FNode;
 import com.foc.tree.FTree;
 import com.foc.tree.TreeScanner;
+import com.foc.tree.objectTree.FObjectNode;
 import com.foc.util.ASCII;
 import com.foc.util.Utils;
 import com.foc.vaadin.FocCentralPanel;
@@ -1819,6 +1820,30 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 			getTreeOrTable().getFocList().add(newObj);
 			// }
 		}
+//		if(getTreeOrTable() != null) getTreeOrTable().applyFocListAsContainer();
+
+//		if(getTreeOrTable() != null && getTreeOrTable() instanceof FVTreeTable){
+//			if(fatherObject != null) {
+//				FObjectNode targetNode = (FObjectNode) ((FVTreeTable)getTreeOrTable()).getFTree().findNode(fatherObject.getReference().getLong());
+//				FObjectNode sourceNode = (FObjectNode) ((FVTreeTable)getTreeOrTable()).getFTree().findNode(newObj.getReference().getLong());
+//				if(targetNode != null && sourceNode != null) {
+//					sourceNode.moveTo(targetNode);
+//					FVTableWrapperLayout bkdnTreeWrapper = (FVTableWrapperLayout) getFocXMLLayout().getComponentByName(tableName);
+//					if(bkdnTreeWrapper != null){
+//						FVTreeTable treeTable = ((FVTreeTable) bkdnTreeWrapper.getTableOrTree());
+//						if(treeTable != null && treeTable instanceof FVTreeTable){
+//							treeTable.markAsDirty();
+//							treeTable.applyFocListAsContainer();
+//							treeTable.refreshRowCache_Foc();
+//							getFocXMLLayout().refresh();
+//						}
+//					}
+//				}
+//			} else {
+//				getTreeOrTable().applyFocListAsContainer();
+//				getTreeOrTable().refreshRowCache_Foc();				
+//			}
+//		}
 		return newObj;
 		/*
 		 * getMainWindow().changeCentralPanelContent(panel, true);
@@ -1918,6 +1943,96 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 				getWrapperLayout().innerLayout_Replace(panel);
 			}else if(viewContainer == ITableTree.VIEW_CONTAINER_NEW_BROWSER_TAB){
 			}
+			addValidationListener(panel);
+		}
+	}
+	
+	private void addValidationListener(ICentralPanel panel) {
+		if(panel != null && panel.getValidationLayout() != null) {
+			FVValidationLayout vLay = panel.getValidationLayout();
+			if (vLay != null) {
+				vLay.addValidationListener(new IValidationListener() {
+					@Override
+					public void validationDiscard(FVValidationLayout validationLayout) {
+					}
+
+					@Override
+					public boolean validationCommit(FVValidationLayout validationLayout) {
+						return false;
+					}
+
+					@Override
+					public boolean validationCheckData(FVValidationLayout validationLayout) {
+						return false;
+					}
+
+					@Override
+					public void validationAfter(FVValidationLayout validationLayout, boolean commited) {
+						if(commited && panel.getFocData() != null) {
+//							redraw();
+							if(panel.getFocData() instanceof FocObject && ((FocObject) panel.getFocData()).getFatherObject() != null && getTreeOrTable() != null 
+									&& getTreeOrTable() instanceof FVTreeTable && ((FVTreeTable)getTreeOrTable()).getFTree() != null) {
+//								Long fatherId = ((FocObject) panel.getFocData()).getFatherObject().getReference().getLong();
+//								Long objectId = ((FocObject) panel.getFocData()).getReference().getLong();
+								FocObject object = (FocObject) panel.getFocData();
+								FVTreeTable treeTable = (FVTreeTable) getTreeOrTable();
+								if(treeTable != null && object != null && object.getFatherObject() != null){
+									FTree fTree = treeTable.getFTree();
+									if(fTree != null){
+										FObjectNode targetNode = (FObjectNode) fTree.findNodeFromFocObject(object.getFatherObject());
+										FObjectNode sourceNode = (FObjectNode) fTree.findNodeFromFocObject(object);
+										if(targetNode != null && sourceNode != null) {
+											sourceNode.moveTo(targetNode);
+											fullTreeRefresh();
+										}
+//										FNode foundNode = fTree.findNodeFromFocObject(focObject);
+									}
+								}
+								
+								
+//								FObjectNode targetNode = (FObjectNode) ((FVTreeTable)getTreeOrTable()).getFTree().findNode(fatherId);
+//								FObjectNode sourceNode = (FObjectNode) ((FVTreeTable)getTreeOrTable()).getFTree().findNode(objectId);
+//								if(targetNode != null && sourceNode != null) {
+//									sourceNode.moveTo(targetNode);
+//									fullTreeRefresh();
+//								}
+							} else {
+								refreshTree();
+							}
+						} else {
+							fullTreeRefresh();
+						}
+					}
+				});
+			}
+		}
+	}
+	
+	private void fullTreeRefresh() {
+		if(getTreeOrTable() != null){
+			if(getTreeOrTable().getTableTreeDelegate() != null) {
+				FVTableWrapperLayout officerTreeWrapper = getTreeOrTable().getTableTreeDelegate().getWrapperLayout();
+				if(officerTreeWrapper != null) officerTreeWrapper.refresh();				
+			}
+			
+			if(getTreeOrTable() instanceof FVTreeTable) {
+				FVTreeTable officerTable = ((FVTreeTable) getTreeOrTable());
+				if(officerTable != null && officerTable instanceof FVTreeTable){
+					officerTable.markAsDirty();
+					officerTable.applyFocListAsContainer();
+					officerTable.refreshRowCache_Foc();
+				}
+			}	
+		}
+	}
+	
+	private void refreshTree(){
+		if(getTreeOrTable() != null && getTreeOrTable() instanceof FVTreeTable) {
+			FVTreeTable officerTable = ((FVTreeTable) getTreeOrTable());
+			if(officerTable != null) {
+				officerTable.applyFocListAsContainer();
+				officerTable.refreshRowCache_Foc();			
+			}			
 		}
 	}
 
