@@ -169,9 +169,11 @@ public class WFSiteDesc extends FocDesc {
   	ArrayList<WFSite> siteList = new ArrayList<WFSite>();
   	if(company != null) {
 	  	FocList list = getList(FocList.LOAD_IF_NEEDED);
-	  	for(int i=0; i<list.size(); i++){
-	  		WFSite site = (WFSite) list.getFocObject(i);
-	  		if(site.getCompany().equalsRef(company)) siteList.add(site);
+	  	if(list != null) {
+	  		for(int i=0; i < list.size(); i++){
+	  			WFSite site = (WFSite) list.getFocObject(i);
+	  			if(site != null && site.getCompany() != null && site.getCompany().equalsRef(company)) siteList.add(site);
+	  		}	  		
 	  	}
   	}
   	return siteList;
