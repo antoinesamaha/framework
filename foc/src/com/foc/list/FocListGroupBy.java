@@ -34,6 +34,7 @@ public class FocListGroupBy {
 	private static final String COUNT_DISTINCT_QUERY = "COUNT(DISTINCT ";
 	
 	private ArrayList<String>                     arrayOfAtomicExpressions = null;
+	private boolean 															concatGroupByExpressions = true;
 	private String                                groupByExpression        = null;
 	private HashMap<Integer, GroupByFieldFormula> fieldsInFormulas         = null;
 	
@@ -68,6 +69,14 @@ public class FocListGroupBy {
 		getArrayOfAtomicExpressions(true).add(atomic);
 	}
 	
+	public boolean isConcatGroupByExpression() {
+		return concatGroupByExpressions;
+	}
+
+	public void setConcatGroupByExpression(boolean value) {
+		concatGroupByExpressions = value;
+	}
+	
 	private void buildExpressionFromAtomicArrayOfExpressions(FocDesc focDesc){
 		ArrayList<String> arr = getArrayOfAtomicExpressions(false);
 		
@@ -76,13 +85,21 @@ public class FocListGroupBy {
 			String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(0)) : arr.get(0);
 			buff.append(fName);
 		}else if(arr.size() > 1){
-			buff.append("concat(");
-			for(int i=0; i<arr.size(); i++){
-				if(i>0) buff.append(",'|',");
-				String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(i)) : arr.get(i);
-				buff.append(fName);
+			if(isConcatGroupByExpression()) {
+				buff.append("concat(");
+				for(int i=0; i<arr.size(); i++){
+					if(i > 0) buff.append(",'|',");
+					String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(i)) : arr.get(i);
+					buff.append(fName);
+				}
+				buff.append(")");
+			} else {
+				for(int i=0; i<arr.size(); i++){
+					if(i > 0) buff.append(", ");
+					String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(i)) : arr.get(i);
+					buff.append(fName);
+				}
 			}
-			buff.append(")");
 		}
 		setGroupByExpression(buff.toString());
 	}

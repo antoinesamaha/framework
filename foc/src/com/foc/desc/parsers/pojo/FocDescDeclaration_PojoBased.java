@@ -149,6 +149,7 @@ public class FocDescDeclaration_PojoBased extends FocDescDeclaration_ParsedBased
 	      				focDesc.setGroupBy(groupByList);
 	      			}
 	      			groupByList.addAtomicExpression(groupByField.name());
+	      			groupByList.setConcatGroupByExpression(entity.concatGroupByExpression());
       			}
       		}
       	}

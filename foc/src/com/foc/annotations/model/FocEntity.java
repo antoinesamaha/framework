@@ -36,6 +36,7 @@ public @interface FocEntity {
 	public String filterOnTable() default "";
 	public FocFilterCondition[] filterConditions() default {};
 	public FocGroupByField[] groupByFields() default {};
+	public boolean concatGroupByExpression() default true;
 	public String reportContext() default "";
 	public boolean cached() default true;
 	public int filterLevel() default FocListFilter.LEVEL_DATABASE;
