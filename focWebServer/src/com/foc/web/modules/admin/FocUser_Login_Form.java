@@ -15,6 +15,11 @@
  ******************************************************************************/
 package com.foc.web.modules.admin;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.foc.Application; 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -209,6 +214,25 @@ public class FocUser_Login_Form extends FocXMLLayout {
 	      }else{
 	      	loginWithUserAlreadyApproved_Internal(approvedFocUser);
 	      }
+//	      Map<String, List<String>> attributesToSkip = new HashMap<String, List<String>>();
+//	      List<String> addressCol = new ArrayList<String>();
+//	      addressCol.add("SDOPoint");
+//	      attributesToSkip.put("Addresses", addressCol);
+//	      
+//	      List<String> companyCol = new ArrayList<String>();
+//	      companyCol.add("LOGO");
+//	      attributesToSkip.put("COMPANY", companyCol);
+//	      
+//	      List<String> userCol = new ArrayList<String>();
+//	      userCol.add("SIGNATURE");
+//	      attributesToSkip.put("FUSER", userCol);
+//	      
+//	      List<String> siteCol = new ArrayList<String>();
+//	      siteCol.add("LOGO");
+//	      attributesToSkip.put("WF_AREA", siteCol);
+	      
+//	      Globals.getApp().getDataSource().backupRestore("/tmp/test_dump.out", false, true, attributesToSkip);
+	                    
 			} else {
 				boolean accountLocked = false;
 				if (status == com.foc.Application.LOGIN_WRONG) {

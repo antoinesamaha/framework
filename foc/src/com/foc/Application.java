@@ -1422,6 +1422,11 @@ public class Application {
   	Globals.logString("Init Web Server "+(debug++));
   	getDataSource().command_AdaptDataModel(forceAlterTables, schemaEmpty);
   }
+  
+  public void replaceFkZeroByNull(){
+  	Globals.logString("Replace foreign key with zero by null "+(debug++));
+  	getDataSource().command_replaceFkZeroByNull();
+  }
 
   public String getType(int type){
   	switch(type){

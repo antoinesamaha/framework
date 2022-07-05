@@ -298,7 +298,30 @@ public class AdminWebModule extends FocWebModule {
 				Globals.popupDialog(dialog);
 			}
 		});
+		
+		menuItem = systemMenu.pushMenu("REPLACE_ZERO_TO_NULL_FK", "Replace FK with Zero value by null");
+		menuItem.setMenuAction(new IFocMenuItemAction() {
 
+			@Override
+			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
+				OptionDialog dialog = new OptionDialog("Replace FK with Zero value by null", "This may take a few minutes to adapt the database tables and fields according to the executable's version.") {
+
+					@Override
+					public boolean executeOption(String optionName) {
+						if (optionName != null && optionName.equals("ADAPT")) {
+							Globals.getApp().replaceFkZeroByNull();
+						}
+						return false;
+					}
+				};
+				dialog.addOption("ADAPT", "Yes Adapt");
+				dialog.addOption("CANCEL", "No Cancel Adapt");
+				dialog.setWidth("500px");
+				dialog.setHeight("200px");
+				Globals.popupDialog(dialog);
+			}
+		});
+		
 		menuItem = systemMenu.pushMenu("DB_CONNECTION_MONITORING", "Database Connection Monitoring");
 		menuItem.setMenuAction(new IFocMenuItemAction() {
 

@@ -35,6 +35,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
@@ -87,7 +89,9 @@ import com.foc.focDataSourceDB.db.ScriptRunner;
 import com.foc.focDataSourceDB.db.adaptor.DBAdaptor;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
+import com.foc.focDataSourceDB.db.util.DB2ASCII;
 import com.foc.focDataSourceDB.db.util.DBUtil;
+import com.foc.focDataSourceDB.db.util.MigrationToTargetDbHandler;
 import com.foc.list.FocLinkJoinRequest;
 import com.foc.list.FocList;
 import com.foc.property.FDate;
@@ -938,6 +942,11 @@ public class FocDataSource_DB implements IFocDataSource {
   public boolean command_AdaptDataModel(boolean forceAlterTables, boolean schemaEmpty){
   	return getDBAdaptor().adaptDataModel(forceAlterTables, schemaEmpty);
   }
+  
+  @Override
+  public boolean command_replaceFkZeroByNull() {
+  	return getDBAdaptor().replaceFkZeroByNull();
+  }
 
 	//-----------------------------------------------------
 	//-----------------------------------------------------
@@ -1776,5 +1785,50 @@ public class FocDataSource_DB implements IFocDataSource {
 		}
 		return false;
 	}
+
+	public void backupRestore(String filename, String fileTableName, boolean restore) {
+		backupRestore(filename, fileTableName, restore, false, null);
+	}
+	
+	public void backupRestore(String filename, String fileTableName, boolean restore, boolean replaceNewLine, Map<String, List<String>> attributesToSkip) {
+		try {
+			Globals.logString("########################################################################");
+			Globals.logString("############ STARTING DB " + (restore ? "RESTORE": "BACKUP") + " ############");
+			Globals.logString("########################################################################");
+			try{
+				DB2ASCII db2ascii = new DB2ASCII(filename, fileTableName, restore ? DB2ASCII.COPY_DIRECTION_ASCII_TO_DB : DB2ASCII.COPY_DIRECTION_DB_TO_ASCII, replaceNewLine, attributesToSkip);
+				db2ascii.backupRestore();				
+			} catch (Exception e) {
+				Globals.logString("ERROR : An error ahs occured while DB migration action was in progress");
+				e.printStackTrace();
+			}
+			Globals.logString("########################################################################");
+			Globals.logString("############ DB " + (restore ? "RESTORE": "BACKUP") + " COMPLETE ############");
+			Globals.logString("########################################################################");
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
+	}
+	
+	public void migrateDataToTargetDb(String logFile) {
+		try {
+			Globals.logString("################################################");
+			Globals.logString("##### STARTING DATA MIGRATION TO TARGET DB #####");
+			Globals.logString("################################################");
+			try{
+				MigrationToTargetDbHandler migrationToTargetDbHandler = new MigrationToTargetDbHandler(logFile);
+				migrationToTargetDbHandler.startMigration();				
+			} catch (Exception e) {
+				Globals.logString("ERROR : An error ahs occured while migrating data to target DB! error: " + e.getLocalizedMessage());
+				e.printStackTrace();
+			}
+			Globals.logString("#################################################");
+			Globals.logString("##### DATA MIGRATION TO TARGET DB COMPLETED #####");
+			Globals.logString("#################################################");
+		} catch (Exception e) {
+			Globals.logException(e);
+		}
+	}
+	
 
 }

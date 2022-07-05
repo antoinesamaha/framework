@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -29,6 +31,11 @@ import com.foc.desc.ReferenceCheckerToPutToZero;
 import com.foc.list.FocList;
 
 public interface IFocDataSource {
+	public void          backupRestore(String filename, String fileTableName, boolean restore);
+	public void          backupRestore(String filename, String fileTableName, boolean restore, boolean replaceNewLine, Map<String, List<String>> attributesToSkip);
+	
+	public void          migrateDataToTargetDb(String logFile);
+	
 	public IFocDataUtil  getUtility();
 	public boolean       isServer();
 	public boolean       isEmptyDatabaseJustCreated();
@@ -42,6 +49,8 @@ public interface IFocDataSource {
 	public boolean       command_AdaptDataModel_SingleTable(FocDesc focDesc);
 	public boolean       command_AdaptDataModel_Reindex();
 	public boolean       command_AdaptDataModel(boolean forceAlterTables, boolean schemaEmpty);
+	public boolean 			 command_replaceFkZeroByNull();
+	
 	public boolean       command_executeRequestForModulesSP(String spFileName);
 	public ArrayList     command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression);
 	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest);

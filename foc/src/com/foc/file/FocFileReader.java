@@ -139,7 +139,11 @@ public abstract class FocFileReader extends FocLineReader{
   public boolean readLine(){
   	StringBuffer buff = loadLine();
   	boolean error = buff == null || buff.length() <= 0;
-
+  	if(lineNumber % 1000 == 0) {
+  		Globals.logString("Resotre is at line : " + lineNumber);
+  	} /*else if(lineNumber == 10000) {
+  		error = true;
+  	}*/
     if(!error){
     	lineNumber++;
     	if(getLineNumber() >= (getFirstReadingLineIndex() - 1)){

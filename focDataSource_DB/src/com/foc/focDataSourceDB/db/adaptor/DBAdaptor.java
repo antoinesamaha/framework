@@ -350,6 +350,35 @@ public class DBAdaptor {
   	return false;
   }
   
+  public boolean replaceFkZeroByNull() {
+  	Iterator<IFocDescDeclaration> iter = Globals.getApp().getFocDescDeclarationIterator();
+    while(iter != null && iter.hasNext()){
+    	IFocDescDeclaration focDescDeclaration = iter.next();
+    	if(focDescDeclaration != null){
+    		focDescDeclaration.getFocDescription();
+    	}
+    }
+    
+    if(ConfigInfo.isAdaptConstraints()) {
+	    iter = Globals.getApp().getFocDescDeclarationIterator();
+	    while(iter != null && iter.hasNext()){
+	    	IFocDescDeclaration focDescDeclaration = iter.next();
+	    	if(focDescDeclaration != null){
+		    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
+		    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
+		    		try{
+		    			alterAllFields = true;
+		    			constraint_Adapt(focDesc);
+		        }catch(Exception e){
+		        	Globals.logException(e);
+		    		}
+		    	}
+	      }
+	    }
+    }
+  	return false;
+  }
+  
   public void adaptTableSequence(FocDesc focDesc) throws Exception{
   	if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE
   			&&  focDesc.isPersistent()

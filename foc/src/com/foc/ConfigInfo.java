@@ -386,8 +386,9 @@ public class ConfigInfo {
         str = getProperty("adaptIndexesEnabled");
         adaptIndexesEnabled = str != null ? str.compareTo("1") == 0 : true;
 
-        str = getProperty("adaptConstraints");
-        adaptConstraints = str != null ? str.compareTo("1") == 0 : false;
+//        str = getProperty("adaptConstraints");
+//        adaptConstraints = str != null ? str.compareTo("1") == 0 : false;
+        adaptConstraints = getBooleanValueForProperty("adaptConstraints");
         
         str = getProperty("log.details");
         logDetails = str != null ? str.compareTo("1") == 0 : false;
@@ -501,6 +502,10 @@ public class ConfigInfo {
             null);
       }
     }
+  }
+  
+  private static boolean getBooleanValueForProperty(String property){
+    return Utils.getBooleanValue(getProperty(property));
   }
   
   public static String getDataModelFileName(){

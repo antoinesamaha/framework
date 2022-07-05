@@ -55,6 +55,10 @@ public class Utils {
 		return input == null || input.isEmpty();
 	}
 	
+	public static boolean stringNotEmpty(String input){
+		return !isStringEmpty(input);
+	}
+	
 	public static boolean isEmail(String input){
 		boolean error = isStringEmpty(input);
 		if(!error){
@@ -477,4 +481,13 @@ public class Utils {
 		return null;
 
 	}
+
+
+	public static boolean getBooleanValue(String stringValue) {
+		boolean booleanValue = false;
+		if(stringNotEmpty(stringValue)) booleanValue = stringValue.trim().compareTo("1") == 0 
+				|| stringValue.trim().compareToIgnoreCase("true") == 0;
+		return booleanValue;
+	}
+
 }

@@ -8,12 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.StringTokenizer;
 
 import com.foc.Globals;
+import com.foc.util.Utils;
 
 /**
  * @author 01Barmaja
  */
 public abstract class FocLineReader {
 
+	public final static String NEW_LINE_REPLACEMENT_STR = "---$$$---";
   public abstract void readToken(String token, int pos);// This function can be
                                                         // called from the
                                                         // readLine function
@@ -36,6 +38,10 @@ public abstract class FocLineReader {
     fieldSeparator = new char[2];
     fieldSeparator[0] = fieldDelimiter1;
     fieldSeparator[1] = fieldDelimiter2;
+  }
+
+  public boolean shouldRevertNewLineChanges() {
+  	return false;
   }
 
   public void dispose() {
@@ -91,6 +97,10 @@ public abstract class FocLineReader {
           stringInsideSpeachMarks = "";
         }
       } else {
+      	if(str.contains("VerticalLayout")){
+					int i=0; 
+					i++;
+      	}
         for (int i = 0; i < fieldSeparator.length; i++) {
           if (str.compareTo(String.valueOf(fieldSeparator[i])) == 0) {
             pos++;
@@ -104,11 +114,17 @@ public abstract class FocLineReader {
         }
 
         if (callReadToken) {
+					if(!Utils.isStringEmpty(str) && shouldRevertNewLineChanges()) str = revertReplaceNewLineInString(str);
           readToken(str, pos);
         }
       }
     }
   }
+	
+	private String revertReplaceNewLineInString(String value) {
+		if(!Utils.isStringEmpty(value)) value = value.replace(NEW_LINE_REPLACEMENT_STR, "\n");
+		return value;
+	}
 
   public char getFieldSeparator() {
     return fieldSeparator[0];
