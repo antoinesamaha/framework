@@ -4,6 +4,7 @@
 package com.foc.util;
 
 import java.io.*;
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Random;
 import java.util.StringTokenizer;
@@ -154,7 +155,7 @@ public class ASCII {
   
   public static String generateRandomString(int nbrChars, boolean withNumbers, boolean caseSensitive){
   	StringBuffer str = new StringBuffer();
-  	Random ran = new Random(Globals.getDBManager().getCurrentTimeStamp_AsTime().getTime());
+	SecureRandom ran = new SecureRandom();
   	char cA = 'A';
   	char ca = 'a';
   	char c0 = '0';
