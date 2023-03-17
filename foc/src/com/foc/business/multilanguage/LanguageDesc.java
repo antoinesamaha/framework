@@ -70,7 +70,7 @@ public class LanguageDesc extends FocDesc implements AutoPopulatable{
   @Override
 	public void beforeLogin() {
 		super.beforeLogin();
-		
+		/*
 		FocList list = getList(FocList.FORCE_RELOAD);
 		for(int i=0; i<list.size(); i++){
 			Language lang = (Language) list.getFocObject(i);
@@ -103,7 +103,8 @@ public class LanguageDesc extends FocDesc implements AutoPopulatable{
 				}
 			}
 		}
-		list.validate(true);		
+		list.validate(true);
+		*/		
 	}
   
 	private void createDefaultLanguages(){
