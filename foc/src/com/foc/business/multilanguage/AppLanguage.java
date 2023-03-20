@@ -18,7 +18,6 @@ public class AppLanguage {
   
   private HashMap<String, ResourceBundle> resourceBundles = null;
   
-  @Deprecated
   public AppLanguage(int id, String name, Locale locale){
     this.id         = id;
     this.name       = name;

@@ -69,9 +69,11 @@ public class FocMainClass {
     	if(noLicense) ConfigInfo.setWithLicenseBooking(false);
     	accessContinueInits2();
     	if(accessContinueInits()){
-	      //CodeMeterChecker.getInstance().updateCertifiedTime();    		
-    		Locale englishLocale = Locale.ENGLISH;
-    		MultiLanguage.addLanguage(new AppLanguage(englishLocale.getDisplayLanguage(), englishLocale));
+	      //CodeMeterChecker.getInstance().updateCertifiedTime();
+    		if (MultiLanguage.isLanguageListEmpty()) {
+	    		Locale englishLocale = Locale.ENGLISH;
+	    		MultiLanguage.addLanguage(new AppLanguage(englishLocale.getDisplayLanguage(), englishLocale));
+    		}
     		BusinessModule.getInstance().setMultiCompany(true);
     		
 	      app = Globals.newApplication(true, true, noGUI ? DisplayManager.GUI_NAVIGATOR_NONE : DisplayManager.GUI_NAVIGATOR_MDI, args);

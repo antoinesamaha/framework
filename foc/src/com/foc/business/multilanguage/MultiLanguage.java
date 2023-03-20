@@ -25,6 +25,10 @@ public class MultiLanguage {
     return languageList;
   }
   
+  public static boolean isLanguageListEmpty(){
+    return languageList == null || languageList.size() == 0;
+  }
+  
   public static void addLanguage(AppLanguage language){
     getLanguageList().add(language);
   }
@@ -73,6 +77,18 @@ public class MultiLanguage {
   
   public static AppLanguage getLanguageAt(int i){
     return (AppLanguage) (languageList != null ? languageList.get(i) : null);
+  }
+  
+  public static String getLanguageCodeById(int id){
+  	String languageCode = null;
+  	if (languageList != null) {
+  		for(int i=0; i<languageList.size(); i++) {
+  			if (languageList.get(i).getId() == id) {
+  				languageCode = languageList.get(i).getLocale().getLanguage();
+  			}
+  		}
+  	}
+  	return languageCode;
   }
   
   public static void fillMutipleChoices(FMultipleChoiceField multiFld){
