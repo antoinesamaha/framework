@@ -1,10 +1,10 @@
 <VerticalLayout captionMargin="0" margin="true" spacing="true" width="98%">
   <ValidationSettings withApply="true" withAttach="false" withPrint="false" />
-  <Label value="Broadcasted Messages" style="H2,text-center" />
-  <GuiTable name="BroadcastedMessages" dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
-    <TableColumn name="User>FULL_NAME" caption="User" width="-1px" />
-    <TableColumn name="DATE" caption="Date" width="-1px" />
-    <TableColumn name="Time" caption="Time" width="-1px" />
-    <TableColumn name="Message" caption="Message" expandRatio="1"/>
+  <Label value="Broadcasted $T{message}s" style="H2,text-center" />
+  <GuiTable name="Broadcasted$T{message}s" dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
+    <TableColumn name="$T{user}>FULL_NAME" caption="$T{user}" width="-1px" />
+    <TableColumn name="DATE" caption="$T{date}" width="-1px" />
+    <TableColumn name="$T{time}" caption="$T{time}" width="-1px" />
+    <TableColumn name="$T{message}" caption="$T{message}" expandRatio="1"/>
   </GuiTable>
 </VerticalLayout>

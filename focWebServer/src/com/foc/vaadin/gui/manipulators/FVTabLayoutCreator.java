@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.manipulators;
 
 import org.xml.sax.Attributes;
 
+import com.foc.admin.UserSession;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.fields.FocXMLGuiComponentCreator;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -31,6 +32,8 @@ public class FVTabLayoutCreator implements FocXMLGuiComponentCreator {
   public FocXMLGuiComponent newGuiComponent(FocXMLLayout xmlLayout, IFocData focData, Attributes attributes, IFocData rootFocData, String dataPathFromRootFocData) {
     FVTabbedLayout layout = new FVTabbedLayout(attributes);
     layout.setType(FXML.TAG_TAB_LAYOUT);
+    if(UserSession.getInstanceForThread() != null && UserSession.getInstanceForThread().getRightToLeft())
+    	layout.addStyleName("foc-rtl-style");
   	FocXMLGuiComponentStatic.setRootFocDataWithDataPath(layout, rootFocData, dataPathFromRootFocData);
 
     return layout;

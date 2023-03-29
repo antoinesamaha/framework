@@ -3,12 +3,12 @@
     
 	  <Label value="Sent emails" style="H2,text-center" />
 	  <GuiTable name="Sent emails" dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
-	    <TableColumn name="TEMPLATE>NAME" caption="Template" expandRatio="1"/>
-	    <TableColumn name="SENDER" caption="Sender" width="-1px" />
-	    <TableColumn name="RECIPIENTS" caption="Recepients" width="-1px" />
-	    <TableColumn name="CC" caption="CC" width="-1px" />
-	    <TableColumn name="BCC" caption="BCC" width="-1px" />
-	    <TableColumn name="SUBJECT" caption="SUBJECT" width="-1px" />
+	    <TableColumn name="TEMPLATE>NAME" caption="$T{template}" expandRatio="1"/>
+	    <TableColumn name="SENDER" caption="$T{sender}" width="-1px" />
+	    <TableColumn name="RECIPIENTS" caption="$T{recipients}" width="-1px" />
+	    <TableColumn name="$T{cc}" caption="$T{cc}" width="-1px" />
+	    <TableColumn name="B$T{cc}" caption="B$T{cc}" width="-1px" />
+	    <TableColumn name="$T{subject}" caption="$T{subject}" width="-1px" />
 	  </GuiTable>
     
 </VerticalLayout>

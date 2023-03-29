@@ -3,21 +3,21 @@
   <GuiTable title="TRANSACTION CONFIGURATION" name="WF_ASSIGNEMENT" dataPath="DATAROOT" inLineEditable="true" addEnabled="false" deleteEnabled="false" openEnabled="true" pageLength="10">
     <OpenForm containerWindow="same window" />
     <TableColumn name="_LINE_NUMBER" caption="#" width="50px" />
-    <TableColumn name="TRANSACTION" caption="Transaction" editable="true" width="100px" />
-    <TableColumn name="TRANS_TITLE_PREFIX" caption="Title When Proposal" editable="true" width="100px" />
-    <TableColumn name="TRANS_TITLE" caption="Title After Approve" editable="true" width="100px" />
-    <TableColumn name="LEAVE_CODE_EMPTY" caption="Code Empty" editable="true" width="100px" />
-    <TableColumn name="CODE_PREFIX_TRANSACTION_PREFIX" caption="Prefix" editable="true" width="100px" />
-    <TableColumn name="CODE_PREFIX_PROPOSAL" caption="Proposal Prefix" editable="true" width="100px" />
-    <TableColumn name="CODE_PREFIX_NUMBER_OF_DIGITS" caption="Code Digits (max 6)" editable="true" width="100px" />
-    <TableColumn name="CODE_PREFIX_USE_SITE_PREFIX" caption="Use Site Prefix" editable="true" width="100px" />
-    <TableColumn name="APPROVAL_METHOD" caption="Approval Method" editable="true" width="100px" />
-    <TableColumn name="MAP" caption="Map" captionProperty="NAME" captionProperty2="DESCRIP" editable="true" width="100px" usePopupView="true" />
-    <TableColumn name="WF_AREA" caption="Area" captionProperty="NAME" editable="true" width="100px" usePopupView="true" />
-    <TableColumn name="PROMPT_APPROVE_UPON_VALID" caption="Prompt for Aprv. Upon Save" editable="true" width="100px" />
-    <TableColumn name="INCLUDE_PROJECT_CODE" caption="Include Project Code" editable="true" width="100px" />
-    <TableColumn name="CODE_BY_SITE" caption="Code By Site" editable="true" width="-1px" />
-    <TableColumn name="FORBID_ANCESTOR_ACCESS" caption="Forbid Ancestor Site Access" editable="true" width="-1px" />
+    <TableColumn name="TRANSACTION" caption="$T{transaction}" editable="true" width="100px" />
+    <TableColumn name="TRANS_TITLE_PREFIX" caption="$T{title_when_proposal}" editable="true" width="100px" />
+    <TableColumn name="TRANS_TITLE" caption="$T{title_after_approval}" editable="true" width="100px" />
+    <TableColumn name="LEAVE_CODE_EMPTY" caption="$T{code_empty}" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_TRANSACTION_PREFIX" caption="$T{prefix}" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_PROPOSAL" caption="Proposal $T{prefix}" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_NUMBER_OF_DIGITS" caption="$T{code_digits_(max_6)}" editable="true" width="100px" />
+    <TableColumn name="CODE_PREFIX_USE_SITE_PREFIX" caption="Use Site $T{prefix}" editable="true" width="100px" />
+    <TableColumn name="APPROVAL_METHOD" caption="$T{approval_method}" editable="true" width="100px" />
+    <TableColumn name="MAP" caption="$T{map}" captionProperty="NAME" captionProperty2="DESCRIP" editable="true" width="100px" usePopupView="true" />
+    <TableColumn name="WF_AREA" caption="$T{area}" captionProperty="NAME" editable="true" width="100px" usePopupView="true" />
+    <TableColumn name="PROMPT_APPROVE_UPON_VALID" caption="$T{prompt_for_aprv._uponsave}" editable="true" width="100px" />
+    <TableColumn name="INCLUDE_PROJECT_CODE" caption="$T{include_project_code}" editable="true" width="100px" />
+    <TableColumn name="CODE_BY_SITE" caption="$T{code_by_site}" editable="true" width="-1px" />
+    <TableColumn name="FORBID_ANCESTOR_ACCESS" caption="$T{forbid_ancestor_site_access}" editable="true" width="-1px" />
   </GuiTable>
 </VerticalLayout>
 

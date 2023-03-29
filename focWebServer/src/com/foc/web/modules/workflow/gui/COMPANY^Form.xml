@@ -5,17 +5,17 @@
 
   <VerticalLayout captionMargin="0" margin="true" spacing="true">
     <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
-      <Label value="VAT Rule" style="black,bold,f16" />
+      <Label value="$T{vat_rule}" style="black,bold,f16" />
       <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-        <GuiField name="VAT_RULE" caption="VAT Rule" width="180px" maskDataFoundError="true" />
+        <GuiField name="VAT_RULE" caption="$T{vat_rule}" width="180px" maskDataFoundError="true" />
       </HorizontalLayout>
-      <Label value="Official Address" style="black,bold,f16" />
+      <Label value="$T{official_address}" style="black,bold,f16" />
       <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-        <GuiField name="OFFICIAL_ADDRESS" caption="Official Address" width="180px" />
+        <GuiField name="OFFICIAL_ADDRESS" caption="$T{official_address}" width="180px" />
       </HorizontalLayout>
-      <Label value="Logo" style="black,bold,f16" />
+      <Label value="$T{logo}" style="black,bold,f16" />
       <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-        <GuiField name="LOGO" caption="Logo" width="200px" height="200px" border="true" />
+        <GuiField name="LOGO" caption="$T{logo}" width="200px" height="200px" border="true" />
       </HorizontalLayout>
     </VerticalLayout>
   </VerticalLayout>

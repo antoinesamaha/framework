@@ -17,6 +17,7 @@ package com.foc.vaadin.gui.components;
 
 import org.xml.sax.Attributes;
 
+import com.foc.admin.UserSession;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -24,6 +25,7 @@ import com.foc.vaadin.gui.FocXMLGuiComponentDelegate;
 import com.foc.vaadin.gui.FocXMLGuiComponentStatic;
 import com.foc.vaadin.gui.xmlForm.FXML;
 import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Field;
 
 @SuppressWarnings("serial")

@@ -1,13 +1,13 @@
 <VerticalLayout spacing="true" width="100%" captionMargin="0" margin="true" height="100%" name="_MAIN">
   <ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" withStatus="false" />
   <HorizontalLayout captionMargin="0" spacing="true" height="-1px">
-    <GuiField name="SITE" caption="المركز" />
-    <GuiField name="STATUS" caption="الحالة" />
-    <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="المرحلة" />
-    <GuiField name="CREATION_USER" caption="تمت الإضافة بواسطة" />
-    <GuiField name="CREATTION_DATE" caption="تاريخ الإضافة" />
-    <GuiField name="VALIDATION_DATE" caption="تاريخ الموافقة" />
-    <GuiField name="CLOSURE_DATE" caption="تاريخ الإغلاق" />
+    <GuiField name="SITE" caption="$T{center}" />
+    <GuiField name="STATUS" caption="$T{the_condition}" />
+    <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="$T{stage}" />
+    <GuiField name="CREATION_USER" caption="$T{added_by}" />
+    <GuiField name="CREATTION_DATE" caption="$T{added_date}" />
+    <GuiField name="VALIDATION_DATE" caption="$T{approval_date}" />
+    <GuiField name="CLOSURE_DATE" caption="$T{closing_date}" />
   </HorizontalLayout>
-  <GuiField name="ALL_SIGNATURES" caption="التواقيع" width="1125px" height="50px" />
+  <GuiField name="ALL_SIGNATURES" caption="$T{signatures}" width="1125px" height="50px" />
 </VerticalLayout>

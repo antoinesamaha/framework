@@ -2,18 +2,18 @@
   <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
   <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="100%" openEnabled="true" addEnabled="false" deleteEnabled="false">
     <OpenForm containerWindow="same window" storage="WF_LOG" context="JSON" />
-    <TableColumn name="DATE_TIME" caption="التاريخ" width="-1px" />
-    <TableColumn name="EVENT_TYPE" caption="نوع التغيير" width="-1px" />
-    <TableColumn name="EVENT_UNDONE" caption="الإلغاء" width="-1px" />
-    <TableColumn name="USER" caption="المستخدم" width="-1px" />
-    <TableColumn name="DESCRIP" caption="شرح" width="-1px" />
+    <TableColumn name="DATE_TIME" caption="$T{the_date}" width="-1px" />
+    <TableColumn name="EVENT_TYPE" caption="$T{change_type}" width="-1px" />
+    <TableColumn name="EVENT_UNDONE" caption="$T{cancellation}" width="-1px" />
+    <TableColumn name="USER" caption="$T{the_user}" width="-1px" />
+    <TableColumn name="DESCRIP" caption="$T{to_explain}" width="-1px" />
     <!-- <TableColumn name="ON_BEHALF_OF" caption="نيابة عن" /> 
     <TableColumn name="TITLE" caption="العنوان" /> -->
-    <TableColumn name="COMMENT" caption="ملاحظات" expandRatio="0.5"/>
-    <TableColumn name="CHANGES" caption="التعديلات" expandRatio="0.5" />
-    <TableColumn name="EVT_STATUS" caption="الوضع" width="-1px" />
-    <TableColumn name="STATUS_ERROR" caption="الخطأ" width="-1px" />
-    <TableColumn name="PREVIOUS_STAGE" caption="المرحلة السابقة" width="-1px"/>
-    <TableColumn name="TARGET_STAGE" caption="المرحلة المستهدفة" width="-1px"/>
+    <TableColumn name="COMMENT" caption="$T{comments}" expandRatio="0.5"/>
+    <TableColumn name="CHANGES" caption="$T{modifications}" expandRatio="0.5" />
+    <TableColumn name="EVT_STATUS" caption="$T{the_situation}" width="-1px" />
+    <TableColumn name="STATUS_ERROR" caption="$T{the_error}" width="-1px" />
+    <TableColumn name="PREVIOUS_STAGE" caption="$T{previous_stage}" width="-1px"/>
+    <TableColumn name="TARGET_STAGE" caption="$T{target_stage}" width="-1px"/>
   </GuiTable>
 </VerticalLayout>

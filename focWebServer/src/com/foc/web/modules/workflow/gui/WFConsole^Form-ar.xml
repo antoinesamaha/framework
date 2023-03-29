@@ -1,12 +1,12 @@
 <HorizontalLayout width="100%" border="false" captionMargin="0" spacing="true">
 	<TextField prompt="اكتب الملاحظات هنا" textArea="true" name="MY_COMMENT" style="orange-bubble" width="100%" height="75px" expandRatio="1" />
 	<VerticalLayout name="_WFConsoleButtonsLayout" captionMargin="0" margin="false" spacing="true" width="350px" height="100%">
-	  <Button name="SEND_COMMENT" caption="وضع الملاحظة" icon="send" description="Comment only" border="false" style="f17,bold,text-white" width="100%"/>
+	  <Button name="SEND_COMMENT" caption="$T{note_mode}" icon="send" description="Comment only" border="false" style="f17,bold,text-white" width="100%"/>
 	  <HorizontalLayout name="_BUTTONS_HORIZONTAL_LAYOUT" captionMargin="0" width="100%" spacing="true">
-	    <Button name="NEXT" caption="التالي" icon="arrow_right" description="Next" style="f17,bold,text-white" width="100%"/>
-		  <Button name="SIGN" caption="موافقة" icon="check_circle" description="Sign" style="f17,bold,text-white" width="100%"/>
-		  <Button name="REJECT" caption="رفض" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
-		  <Button name="UNDO_MY_SIG" caption="عودة عن الموافقة" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
+	    <Button name="NEXT" caption="$T{the_next}" icon="arrow_right" description="Next" style="f17,bold,text-white" width="100%"/>
+		  <Button name="SIGN" caption="$T{consent}" icon="check_circle" description="Sign" style="f17,bold,text-white" width="100%"/>
+		  <Button name="REJECT" caption="$T{to_reject}" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
+		  <Button name="UNDO_MY_SIG" caption="عودة عن ال$T{consent}" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
 		</HorizontalLayout>
 	</VerticalLayout>
 </HorizontalLayout>

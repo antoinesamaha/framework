@@ -1,12 +1,12 @@
 <HorizontalLayout width="100%" border="false" captionMargin="0" spacing="true">
 	<TextField prompt="Write your comments here" textArea="true" name="MY_COMMENT" style="orange-bubble" width="100%" height="100%" expandRatio="1" />
 	<VerticalLayout name="_WFConsoleButtonsLayout" captionMargin="0" margin="false" spacing="true" width="100%" height="100%">
-	  <Button name="SEND_COMMENT" caption="Poste Comment" icon="send" description="Comment only" border="false" style="f17,bold,text-white" width="200px"/>
+	  <Button name="SEND_COMMENT" caption="$T{post_comment}" icon="send" description="Comment only" border="false" style="f17,bold,text-white" width="200px"/>
 	  <HorizontalLayout captionMargin="0" width="100%" spacing="true">
-      <Button name="NEXT" caption="Next" icon="arrow_right" description="Next" style="f17,bold,text-white" width="100%"/>	  
-		  <Button name="SIGN" caption="Sign" icon="check_circle" description="Sign" style="f17,bold,text-white" width="100%"/>
-		  <Button name="REJECT" caption="Reject" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
-		  <Button name="UNDO_MY_SIG" caption="Undo My Sig" icon="times" description="Reject" style="f17,bold,text-white" width="100%"/>
+      <Button name="NEXT" caption="$T{next}" icon="arrow_right" description="$T{next}" style="f17,bold,text-white" width="100%"/>	  
+		  <Button name="SIGN" caption="$T{sign}" icon="check_circle" description="$T{sign}" style="f17,bold,text-white" width="100%"/>
+		  <Button name="REJECT" caption="$T{reject}" icon="times" description="$T{reject}" style="f17,bold,text-white" width="100%"/>
+		  <Button name="UNDO_MY_SIG" caption="$T{undo_my_sign}" icon="times" description="$T{reject}" style="f17,bold,text-white" width="100%"/>
 		</HorizontalLayout>
 	</VerticalLayout>
 </HorizontalLayout>

@@ -2,8 +2,8 @@
   <ValidationSettings withApply="false" withAttach="true" withPrint="true" />
   <GuiTable title="COMPANIES" name="COMPANY_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
     <OpenForm containerWindow="same window" />
-    <TableColumn name="NAME" caption="Name" link="true"/>
-    <TableColumn name="DESCRIP" caption="Description" />
+    <TableColumn name="NAME" caption="$T{name}" link="true"/>
+    <TableColumn name="DESCRIP" caption="$T{description}" />
   </GuiTable>
 </VerticalLayout>
 

@@ -6,18 +6,18 @@
     <Label value="$F{EntityName}" style="f22,text-center" width="100%" />
     <!-- 
     <HorizontalLayout>
-      <GuiField name="DATE" caption="التاريخ" width="100%" row1="1" col1="0" col2="1"/>
-      <GuiField name="IncidentTime" caption="الوقت" width="100%" row1="1" col1="0" col2="1"/>
+      <GuiField name="DATE" caption="$T{the_date}" width="100%" row1="1" col1="0" col2="1"/>
+      <GuiField name="IncidentTime" caption="$T{the_time}" width="100%" row1="1" col1="0" col2="1"/>
     </HorizontalLayout>
      -->
 	  <GridLayout captionMargin="0" margin="0" height="100%" spacing="true" width="100%" cols="4" rows="3" style="container">
-		  <GuiField name="IncidentPlace>NAME" caption="مكان وقوع الحدث" width="100%" alignment="bottom_right" row1="0" col1="0" />
-		  <GuiField name="IncidentType>NAME" caption="نوع الحدث" width="100%" alignment="bottom_right" row1="0" col1="1" />
-      <GuiField name="DATE" caption="التاريخ" width="100%" row1="0" col1="2" />
-      <GuiField name="IncidentTime" caption="الوقت" width="100%" row1="0" col1="3" alignment="bottom_right"/>
+		  <GuiField name="IncidentPlace>NAME" caption="$T{the_location_of_the_event}" width="100%" alignment="bottom_right" row1="0" col1="0" />
+		  <GuiField name="IncidentType>NAME" caption="$T{event_type}" width="100%" alignment="bottom_right" row1="0" col1="1" />
+      <GuiField name="DATE" caption="$T{the_date}" width="100%" row1="0" col1="2" />
+      <GuiField name="IncidentTime" caption="$T{the_time}" width="100%" row1="0" col1="3" alignment="bottom_right"/>
 		  		
-	    <GuiField name="Details" textArea="true" caption="تفاصيل الحدث" width="100%" row1="1" col1="0" col2="3"/>
-	    <GuiField name="People" textArea="true" caption="تفاصيل الأشخاص المبلغ عنهم"  width="100%" row1="2" col1="0" col2="1" />
-	    <GuiField name="Action" textArea="true" caption="التدابير المتخذة" width="100%" alignment="bottom_right" row1="2" col1="2" col2="3" />
+	    <GuiField name="Details" textArea="true" caption="$T{event_details}" width="100%" row1="1" col1="0" col2="3"/>
+	    <GuiField name="People" textArea="true" caption="$T{details_of_the_persons_reported}"  width="100%" row1="2" col1="0" col2="1" />
+	    <GuiField name="Action" textArea="true" caption="$T{measures_taken}" width="100%" alignment="bottom_right" row1="2" col1="2" col2="3" />
 		</GridLayout>
 </VerticalLayout>

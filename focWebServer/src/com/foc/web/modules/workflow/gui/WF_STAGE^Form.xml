@@ -2,12 +2,12 @@
   <ValidationSettings withApply="true" withAttach="true" withPrint="false" />
   <VerticalLayout captionMargin="0" margin="true" spacing="true" style="container">
     <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-      <GuiField name="NAME" caption="Name" width="180px" />
-      <GuiField name="DESCRIP" caption="Description" width="180px" />
+      <GuiField name="NAME" caption="$T{name}" width="180px" />
+      <GuiField name="DESCRIP" caption="$T{description}" width="180px" />
     </HorizontalLayout>
     <HorizontalLayout captionMargin="0" margin="true" spacing="true">
-      <GuiField name="IS_APPROVAL" caption="Approves Document" captionPos="left" captionWidth="-1px" />
-      <GuiField name="IS_CLOSE" caption="Closes Document" captionPos="left" captionWidth="-1px" />
+      <GuiField name="IS_APPROVAL" caption="$T{approves_document}" captionPos="left" captionWidth="-1px" />
+      <GuiField name="IS_CLOSE" caption="$T{close_document}" captionPos="left" captionWidth="-1px" />
     </HorizontalLayout>
   </VerticalLayout>
 </VerticalLayout>

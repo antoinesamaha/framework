@@ -90,6 +90,7 @@ public class FVObjectComboBox extends ComboBox implements FocXMLGuiComponent {//
     addStyleName("component-margin");
     setImmediate(true);
     init();
+    FocXMLGuiComponentStatic.applyRightToLeftStyle(this);
   }
 
   //This is used when no Gear

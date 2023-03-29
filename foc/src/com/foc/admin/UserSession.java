@@ -217,6 +217,10 @@ public class UserSession implements Serializable {
   	}
 		return lang;
 	}
+  
+  public boolean getRightToLeft() {
+  	return getLanguage() != null && getLanguage().equalsIgnoreCase("ar");
+  }
 
   //--------------------------------
   // STATIC THREAD LOCAL

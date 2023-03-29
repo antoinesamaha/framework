@@ -2,18 +2,18 @@
   <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
   <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="100%" openEnabled="true" addEnabled="false" deleteEnabled="false">
     <OpenForm containerWindow="same window" storage="WF_LOG" context="JSON" />
-    <TableColumn name="DATE_TIME" caption="Date Time" width="-1px" />
-    <TableColumn name="EVENT_TYPE" caption="Event Type" width="-1px" />
-    <TableColumn name="EVENT_UNDONE" caption="Undone" width="-1px" />
-    <TableColumn name="USER" caption="User" width="-1px" />
-    <TableColumn name="DESCRIP" caption="Description" expandRation="1" />
-    <TableColumn name="ON_BEHALF_OF" caption="On Behalf" width="-1px" />
-    <TableColumn name="TITLE" caption="Title" width="-1px" />
-    <TableColumn name="COMMENT" caption="Comment" expandRation="0.5" />
-    <TableColumn name="CHANGES" caption="Changes" expandRatio="0.5" />    
-    <TableColumn name="EVT_STATUS" caption="Status" width="-1px" />
-    <TableColumn name="STATUS_ERROR" caption="Status Error" width="-1px" />
-    <TableColumn name="PREVIOUS_STAGE" caption="From Stage" width="-1px" />
-    <TableColumn name="TARGET_STAGE" caption="To Stage" width="-1px" />
+    <TableColumn name="DATE_TIME" caption="$T{date_time}" width="-1px" />
+    <TableColumn name="EVENT_TYPE" caption="$T{eventtype}" width="-1px" />
+    <TableColumn name="EVENT_UNDONE" caption="$T{undone}" width="-1px" />
+    <TableColumn name="USER" caption="$T{user}" width="-1px" />
+    <TableColumn name="DESCRIP" caption="$T{description}" expandRation="1" />
+    <TableColumn name="ON_BEHALF_OF" caption="$T{on_the_other_hand}" width="-1px" />
+    <TableColumn name="TITLE" caption="$T{title}" width="-1px" />
+    <TableColumn name="COMMENT" caption="$T{comment}" expandRation="0.5" />
+    <TableColumn name="CHANGES" caption="$T{changes}" expandRatio="0.5" />    
+    <TableColumn name="EVT_STATUS" caption="$T{status}" width="-1px" />
+    <TableColumn name="STATUS_ERROR" caption="$T{status} Error" width="-1px" />
+    <TableColumn name="PREVIOUS_STAGE" caption="$T{from_stage}" width="-1px" />
+    <TableColumn name="TARGET_STAGE" caption="$T{to_stage}" width="-1px" />
   </GuiTable>
 </VerticalLayout>

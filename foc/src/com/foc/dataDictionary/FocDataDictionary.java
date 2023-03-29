@@ -24,9 +24,11 @@ import java.util.Iterator;
 
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.LanguageConfigInfo;
 import com.foc.access.FocDataConstant;
 import com.foc.access.FocDataMap;
 import com.foc.admin.FocUser;
+import com.foc.admin.UserSession;
 import com.foc.business.company.Company;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -553,6 +555,9 @@ public class FocDataDictionary implements IFocDataDictionary {
 	      Object value = null;
 	      if(type == 'P'){
 	        value = getValue(focData, fieldOfParameter, args);
+	      }else if(type == 'T'){
+	      	String userLang = UserSession.getInstanceForThread() != null ? UserSession.getInstanceForThread().getLanguage() : null;
+	      	value = LanguageConfigInfo.getProperty(fieldOfParameter, userLang != null? userLang : "en");
 	      }else if(focData != null){
 	      	value = getValue_WithTableDisplayObjectCall(focData, fieldOfParameter);
 	      }

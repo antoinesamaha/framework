@@ -2,10 +2,10 @@
   <ValidationSettings withApply="false" withAttach="true" withPrint="true" />
   <GuiTable title="STAGES" name="WFSTAGE_TABLE" dataPath="DATAROOT" sortingExpression="NAME" pageLength="10">
     <OpenForm containerWindow="same window" />
-    <TableColumn name="NAME" caption="Name" link="true" />
-    <TableColumn name="DESCRIP" caption="Description" />
-    <TableColumn name="IS_APPROVAL" caption="Approves Document" />
-    <TableColumn name="IS_CLOSE" caption="Closes Document" />
+    <TableColumn name="NAME" caption="$T{name}" link="true" />
+    <TableColumn name="DESCRIP" caption="$T{description}" />
+    <TableColumn name="IS_APPROVAL" caption="$T{approves_document}" />
+    <TableColumn name="IS_CLOSE" caption="$T{close_document}" />
   </GuiTable>
 </VerticalLayout>
 

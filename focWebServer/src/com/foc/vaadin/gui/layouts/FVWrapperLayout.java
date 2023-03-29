@@ -19,6 +19,7 @@ import org.xml.sax.Attributes;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.admin.UserSession;
 import com.foc.property.FProperty;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.vaadin.gui.FocXMLGuiComponent;
@@ -35,8 +36,7 @@ import com.vaadin.ui.Label;
 public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiComponent {
   private Label                      caption  = null;
   private FocXMLGuiComponent         field    = null;
-  
-  public FVWrapperLayout(FocXMLGuiComponent field, Attributes attributes) {
+    public FVWrapperLayout(FocXMLGuiComponent field, Attributes attributes) {
     this.caption = new Label("");
     this.caption.addStyleName("foc-f12");
     this.field = field;
@@ -81,7 +81,11 @@ public class FVWrapperLayout extends HorizontalLayout implements FocXMLGuiCompon
 	    	caption.setWidth("75px");
 	    }
 	    
-	    String captionPosition = attributes.getValue(FXML.ATT_CAPTION_POSITION);
+//	    String captionPosition = attributes.getValue(FXML.ATT_CAPTION_POSITION);
+	    String captionPosition = "";
+	    boolean isRtl = ConfigInfo.isGuiRTL();
+	    if(isRtl) captionPosition = FXML.VAL_CAPTION_POS__RIGHT;
+	    else captionPosition = FXML.VAL_CAPTION_POS__LEFT;
 	    if (captionPosition.equals(FXML.VAL_CAPTION_POS__RIGHT)) {
 	    	removeAllComponents();
 	      addComponent((Component) field);

@@ -1,13 +1,13 @@
 <VerticalLayout captionMargin="0" margin="true" spacing="true" height="100%" width="100%">
   <ValidationSettings withApply="true" withAttach="false" withPrint="false" />
   <HorizontalLayout width="100%" spacing="true">
-	  <IncludeXML name="FILTER" dataPath="FILTER" storage="LoginTokenFilter" type="form" context="Sumary" expandRatio="1"/>
+	  <IncludeXML name="FILTER" dataPath="FILTER" storage="Login$T{token}Filter" type="form" context="Sumary" expandRatio="1"/>
   </HorizontalLayout>
-  <GuiTable name="LoginToken" title="Tokens" dataPath="DATAROOT" expandRatio="1" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="true" openEnabled="true" width="100%" height="100%">
-    <TableColumn name="FocUser>NAME" caption="User" />
-    <TableColumn name="DateTime" caption="DateTime" />
-    <TableColumn name="Token" caption="Token" />
-    <TableColumn name="Consumed" caption="Consumed" />
-    <TableColumn name="SubmittalDateTime" caption="Submission Time" />
+  <GuiTable name="Login$T{token}" title="$T{token}s" dataPath="DATAROOT" expandRatio="1" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="true" openEnabled="true" width="100%" height="100%">
+    <TableColumn name="Foc$T{user}>NAME" caption="$T{user}" />
+    <TableColumn name="$T{datetime}" caption="$T{datetime}" />
+    <TableColumn name="$T{token}" caption="$T{token}" />
+    <TableColumn name="$T{consumed}" caption="$T{consumed}" />
+    <TableColumn name="Submittal$T{datetime}" caption="$T{submission_time}" />
   </GuiTable>
 </VerticalLayout>

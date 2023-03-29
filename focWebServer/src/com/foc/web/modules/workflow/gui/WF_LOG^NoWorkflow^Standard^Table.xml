@@ -2,13 +2,13 @@
   <ValidationSettings withApply="true" withAttach="true" withPrint="true" />
   <GuiTable name="LOG_TABLE" dataPath="DATAROOT" width="100%" height="100%" openEnabled="false" addEnabled="false" deleteEnabled="false">
     <OpenForm containerWindow="same window" />
-    <TableColumn name="DATE_TIME" caption="Date Time" width="-1px" />
-    <TableColumn name="EVENT_TYPE" caption="Event Type" width="-1px" />
-    <TableColumn name="USER" caption="User" width="-1px" />
-    <TableColumn name="DESCRIP" caption="Description" />
-    <TableColumn name="TITLE" caption="Title" width="-1px" />
-    <TableColumn name="COMMENT" caption="Comment" expandRation="0.5" />
-    <TableColumn name="CHANGES" caption="Changes" expandRatio="0.5" />
-    <TableColumn name="EVT_STATUS" caption="Status" width="-1px" />
+    <TableColumn name="DATE_TIME" caption="$T{date_time}" width="-1px" />
+    <TableColumn name="EVENT_TYPE" caption="$T{eventtype}" width="-1px" />
+    <TableColumn name="USER" caption="$T{user}" width="-1px" />
+    <TableColumn name="DESCRIP" caption="$T{description}" />
+    <TableColumn name="TITLE" caption="$T{title}" width="-1px" />
+    <TableColumn name="COMMENT" caption="$T{comment}" expandRation="0.5" />
+    <TableColumn name="CHANGES" caption="$T{changes}" expandRatio="0.5" />
+    <TableColumn name="EVT_STATUS" caption="$T{status}" width="-1px" />
   </GuiTable>
 </VerticalLayout>

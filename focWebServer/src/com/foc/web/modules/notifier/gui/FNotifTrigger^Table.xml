@@ -1,17 +1,17 @@
 <VerticalLayout captionMargin="0" margin="true" spacing="true">
   <ValidationSettings withApply="true" withAttach="false" withPrint="false" />
-  <Label value="Event to Action configuration" style="H2,text-center" />
+  <Label value="$T{event} to $T{action} configuration" style="H2,text-center" />
   <GuiTable dataPath="DATAROOT" redirectEnabled="true" redirectCaptionProperty="NAME" inLineEditable="false" openEnabled="true" pageLength="10" width="100%" height="99%">
-    <TableColumn name="Event" caption="Event" expandRatio="1"/>
-    <TableColumn name="Action" caption="Action" expandRatio="1"/>
-    <TableColumn name="Transaction" caption="Transaction" width="-1px" />
-    <TableColumn name="NOTIF_EMAIL_TEMPLATE>NAME" caption="EMail Template" width="-1px" />
-    <TableColumn name="TABLE_NAME" caption="Table Name" width="-1px" />
-    <TableColumn name="Running" caption="Running" width="-1px" />
+    <TableColumn name="$T{event}" caption="$T{event}" expandRatio="1"/>
+    <TableColumn name="$T{action}" caption="$T{action}" expandRatio="1"/>
+    <TableColumn name="$T{transaction}" caption="$T{transaction}" width="-1px" />
+    <TableColumn name="NOTIF_EMAIL_TEMPLATE>NAME" caption="$T{email_template}" width="-1px" />
+    <TableColumn name="TABLE_NAME" caption="$T{table_name}" width="-1px" />
+    <TableColumn name="$T{running}" caption="$T{running}" width="-1px" />
     <!-- TableColumn name="WFStage>NAME" caption="Stage" width="-1px" / -->
-    <TableColumn name="Frequency" caption="Frequency" width="-1px" />
-    <TableColumn name="FrequencyDuration" caption="Duration" width="-1px" />    
-    <TableColumn name="NextDate" caption="Next Date" width="-1px" />
-    <TableColumn name="NextTime" caption="Next Time" width="-1px" />
+    <TableColumn name="$T{frequency}" caption="$T{frequency}" width="-1px" />
+    <TableColumn name="$T{frequency}$T{duration}" caption="$T{duration}" width="-1px" />    
+    <TableColumn name="NextDate" caption="$T{next_date}" width="-1px" />
+    <TableColumn name="NextTime" caption="$T{next_time}" width="-1px" />
   </GuiTable>
 </VerticalLayout>

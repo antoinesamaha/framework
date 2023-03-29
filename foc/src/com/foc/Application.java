@@ -370,6 +370,7 @@ public class Application {
   		initDisplay();
   	}
   	ConfigInfo.loadFile();
+  	LanguageConfigInfo.loadFiles();
   	PerfManager.start("Main");//This start is ended in the Exit function of the application
   	initApp();
   }

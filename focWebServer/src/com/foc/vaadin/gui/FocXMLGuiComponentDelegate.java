@@ -19,6 +19,7 @@ import org.xml.sax.Attributes;
 
 import com.foc.access.AccessSubject;
 import com.foc.access.FocDataMap;
+import com.foc.admin.UserSession;
 import com.foc.desc.FocObject;
 import com.foc.list.FocList;
 import com.foc.property.FObject;
@@ -47,6 +48,8 @@ public class FocXMLGuiComponentDelegate {
 
 	public FocXMLGuiComponentDelegate(FocXMLGuiComponent component){
     this.component = component;
+    if(UserSession.getInstanceForThread() != null && UserSession.getInstanceForThread().getRightToLeft())
+    	if(component instanceof Component) ((Component)component).addStyleName("foc-rtl-style");
   }
   
   public void dispose(){

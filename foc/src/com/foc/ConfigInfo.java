@@ -10,7 +10,8 @@ import java.util.Properties;
 import javax.swing.JOptionPane;
 
 import com.foc.admin.FocUser;
-import com.foc.admin.FocUserDesc; 
+import com.foc.admin.FocUserDesc;
+import com.foc.admin.UserSession;
 import com.foc.business.status.StatusHolderDesc;
 import com.foc.gui.DisplayManager;
 import com.foc.gui.MainFrame;
@@ -144,7 +145,9 @@ public class ConfigInfo {
   }
   
   public static boolean isGuiRTL(){
-  	return rtl;
+  	boolean rightToLeft = false;
+    if(UserSession.getInstanceForThread() != null) rightToLeft = UserSession.getInstanceForThread().getRightToLeft();
+    return rightToLeft;
   }
   
   public static boolean isArabic(){

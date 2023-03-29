@@ -2,9 +2,9 @@
 	<ValidationSettings formTitle="Report Printing Config" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
 
 	<VerticalLayout captionMargin="0">
-  	<GuiField name="ReportTableName" caption="Report Context" captionStyle="f16,bold,text-left" width="380px" immediate="true"/>
-  	<GuiField name="ReportConfiguration>NAME" caption="Report Configuration" captionStyle="f16,bold,text-left" width="380px" immediate="true"/>
-  	<GuiField name="ReportLayout" caption="Report Layout" captionStyle="f16,bold,text-left" width="380px" />
+  	<GuiField name="ReportTableName" caption="$T{report_context}" captionStyle="f16,bold,text-left" width="380px" immediate="true"/>
+  	<GuiField name="ReportConfiguration>NAME" caption="$T{report_configuration}" captionStyle="f16,bold,text-left" width="380px" immediate="true"/>
+  	<GuiField name="ReportLayout" caption="$T{report_layout}" captionStyle="f16,bold,text-left" width="380px" />
 	</VerticalLayout>
 	
 </VerticalLayout>

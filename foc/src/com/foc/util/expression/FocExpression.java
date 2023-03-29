@@ -38,7 +38,7 @@ public class FocExpression {
     if(exp != null){
       char type = exp.charAt(idxDollar + 1);
       char acc1 = exp.charAt(idxDollar + 2);
-      if(acc1 == '{' && (type == 'P' || type == 'F' || type == 'V')){
+      if(acc1 == '{' && (type == 'P' || type == 'F' || type == 'V' || type == 'T')){
         int idxAccolade2 = exp.indexOf("}", idxDollar);
         if(idxAccolade2 > 0){
         	String allExpression = exp.substring(idxDollar + 3, idxAccolade2);

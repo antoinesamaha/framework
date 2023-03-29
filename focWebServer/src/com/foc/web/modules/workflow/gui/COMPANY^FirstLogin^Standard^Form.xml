@@ -1,10 +1,10 @@
 <VerticalLayout width="100%" >
    <ValidationSettings formTitle="Company Information" withApply="true" withAttach="true" withPrint="true" />
-   <GuiField name="NAME" caption="Alias" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
-   <GuiField name="DESCRIP" caption="Name" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="NAME" caption="$T{alias}" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
+   <GuiField name="DESCRIP" caption="$T{name}" captionPos="top" captionWidth="-1px" width="-1px" height="-1px"  />
    <HorizontalLayout>
    </HorizontalLayout>
-   <GuiField name="OFFICIAL_ADDRESS" caption="Official Address" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
-   <Button name="NEXT_STEP" caption="Next Step" style="bold,f12"/>
+   <GuiField name="OFFICIAL_ADDRESS" caption="$T{official_address}" captionPos="top" captionWidth="-1px" width="-1px" height="-1px" />
+   <Button name="NEXT_STEP" caption="$T{next_step}" style="bold,f12"/>
 </VerticalLayout>
 

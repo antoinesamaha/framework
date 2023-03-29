@@ -1,13 +1,13 @@
 <VerticalLayout spacing="true" width="100%" height="100%" captionMargin="0" margin="true" name="_MAIN">
-  <ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" withStatus="false" />
+  <ValidationSettings formTitle="Log details" withApply="true" withAttach="false" withPrint="false" with$T{status}="false" />
   <HorizontalLayout spacing="true" captionMargin="0">
-    <GuiField name="SITE" caption="Site" />
-    <GuiField name="STATUS" caption="Status" />
-    <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="Signature Stage" />
-    <GuiField name="CREATION_USER" caption="Creation User" />
-    <GuiField name="CREATTION_DATE" caption="Creation Date" />
-    <GuiField name="VALIDATION_DATE" caption="Approval Date" />
-    <GuiField name="CLOSURE_DATE" caption="Closure Date" />
+    <GuiField name="SITE" caption="$T{site}" />
+    <GuiField name="STATUS" caption="$T{status}" />
+    <GuiField name="WF_CURRENT_STAGE" captionProperty="NAME" caption="$T{signature_stage}" />
+    <GuiField name="CREATION_USER" caption="$T{creationuser}" />
+    <GuiField name="CREATTION_DATE" caption="$T{creation_date}" />
+    <GuiField name="VALIDATION_DATE" caption="$T{approval_date}" />
+    <GuiField name="CLOSURE_DATE" caption="$T{closure_date}" />
   </HorizontalLayout>
-  <GuiField name="ALL_SIGNATURES" caption="Signatures" width="100%" height="50px" />
+  <GuiField name="ALL_SIGNATURES" caption="$T{signatures}" width="100%" height="50px" />
 </VerticalLayout>

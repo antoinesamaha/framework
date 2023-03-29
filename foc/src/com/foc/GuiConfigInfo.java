@@ -84,6 +84,7 @@ public class GuiConfigInfo {
     FPanel configInfoPanel = new FPanel("", FPanel.FILL_NONE);
 
     ConfigInfo.loadFile();
+    LanguageConfigInfo.loadFiles();
     configInfoPanel.add(new FGLabel("Database credentials:"), 0, 0);
     
     FocList configInfoList = ConfigInfoObjectDesc.getList(FocList.LOAD_IF_NEEDED);

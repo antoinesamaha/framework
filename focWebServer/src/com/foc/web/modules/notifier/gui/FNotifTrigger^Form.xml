@@ -1,41 +1,41 @@
 <VerticalLayout margin="true" width="700px" captionMargin="0" spacing="true" height="-1px">
-	<ValidationSettings formTitle="Notification Events" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
+	<ValidationSettings formTitle="Notification $T{event}s" withApply="true" withAttach="false" withPrint="false" viewSelector="false"/>
 
 	<HorizontalLayout captionMargin="0" spacing="true">
 	
 		<VerticalLayout captionMargin="0">
-			<GuiField name="Event" caption="Event" captionStyle="f16,bold,text-left" width="380px" />
-			<GuiField name="Transaction" caption="Transaction" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=9,Event=10)"/>
-			<GuiField name="TABLE_NAME" caption="Table Name" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=2,Event=3,Event=4)"/>
-			<GuiField name="WFStage>NAME" caption="Stage" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Event=9,Event=10)"/>
-	  	    <GuiField name="AdditionalCondition" caption="Additional Condition" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT(Event=8)"/>
+			<GuiField name="$T{event}" caption="$T{event}" captionStyle="f16,bold,text-left" width="380px" />
+			<GuiField name="$T{transaction}" caption="$T{transaction}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR($T{event}=9,$T{event}=10)"/>
+			<GuiField name="TABLE_NAME" caption="$T{table_name}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR($T{event}=2,$T{event}=3,$T{event}=4)"/>
+			<GuiField name="WF$T{stage}>NAME" caption="$T{stage}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR($T{event}=9,$T{event}=10)"/>
+	  	    <GuiField name="AdditionalCondition" caption="$T{additional_condition}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="NOT($T{event}=8)"/>
 	  	    <HorizontalLayout captionMargin="0" spacing="true" width="380px">
-				<GuiField name="Frequency" caption="Frequency" captionStyle="f16,bold,text-left" width="100%" visibleWhen="Event=8"/>
-				<GuiField name="FrequencyDuration" caption="Duration (min)" captionStyle="f16,bold,text-left" width="100%" visibleWhen="Frequency=10"/>
+				<GuiField name="$T{frequency}" caption="$T{frequency}" captionStyle="f16,bold,text-left" width="100%" visibleWhen="$T{event}=8"/>
+				<GuiField name="$T{frequency}Duration" caption="$T{duration_(min)}" captionStyle="f16,bold,text-left" width="100%" visibleWhen="$T{frequency}=10"/>
 			</HorizontalLayout>			
 			<HorizontalLayout captionMargin="0" spacing="true">			    
-		  	    <GuiField name="NextDate" caption="Next Date" captionStyle="f16,bold,text-left" width="130px" visibleWhen="Event=8"/>
-				<GuiField name="NextTime" caption="Next Time" captionStyle="f16,bold,text-left" width="70px" visibleWhen="Event=8"/>
-	            <Button name="TEST" caption="Trigger now to Test" captionStyle="f16,bold,text-left" width="150px" visibleWhen="Event=8" alignment="bottom_right"/>
+		  	    <GuiField name="NextDate" caption="$T{next_date}" captionStyle="f16,bold,text-left" width="130px" visibleWhen="$T{event}=8"/>
+				<GuiField name="NextTime" caption="$T{next_time}" captionStyle="f16,bold,text-left" width="70px" visibleWhen="$T{event}=8"/>
+	            <Button name="TEST" caption="$T{trigger_now_to_test}" captionStyle="f16,bold,text-left" width="150px" visibleWhen="$T{event}=8" alignment="bottom_right"/>
 	  	    </HorizontalLayout>			
 		</VerticalLayout>
 		
 		<VerticalLayout captionMargin="0">
- 		  <GuiField name="Action" caption="Action" captionStyle="f16,bold,text-left" width="380px" />
-	  	<GuiField name="NOTIF_EMAIL_TEMPLATE>NAME" caption="Email Template" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR(Action=1,Action=2)" />
+ 		  <GuiField name="$T{action}" caption="$T{action}" captionStyle="f16,bold,text-left" width="380px" />
+	  	<GuiField name="NOTIF_EMAIL_TEMPLATE>NAME" caption="$T{email_template}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="OR($T{action}=1,$T{action}=2)" />
 	  	<!--
-	  	<GuiField name="ReportTableName" caption="Report Context" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Action=2" immediate="true"/>
-	  	<GuiField name="ReportConfiguration>NAME" caption="Report Configuration" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Action=2" immediate="true"/>
-	  	<GuiField name="ReportLayout" caption="Report Layout" captionStyle="f16,bold,text-left" width="380px" visibleWhen="Action=2"/>
+	  	<GuiField name="ReportTableName" caption="$T{report_context}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="$T{action}=2" immediate="true"/>
+	  	<GuiField name="ReportConfiguration>NAME" caption="$T{report_configuration}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="$T{action}=2" immediate="true"/>
+	  	<GuiField name="ReportLayout" caption="$T{report_layout}" captionStyle="f16,bold,text-left" width="380px" visibleWhen="$T{action}=2"/>
       -->	  	
 		</VerticalLayout>
 	</HorizontalLayout>
 	
-	<GuiTable name="FNotifTrigReportList" dataPath="FNotifTrigReport_LIST" title="Reports" width="100%" pageLength="10" inLineEditable="false" refreshEnabled="true" withFilter="false" visibleWhen="Action=2" >
+	<GuiTable name="FNotifTrigReportList" dataPath="FNotifTrigReport_LIST" title="Reports" width="100%" pageLength="10" inLineEditable="false" refreshEnabled="true" withFilter="false" visibleWhen="$T{action}=2" >
 	  <OpenForm containerWindow="popup window" />
-    <TableColumn name="ReportTableName" caption="Report Context" width="-1px" />
-    <TableColumn name="ReportConfiguration>NAME" caption="Report Configuration" width="-1px" />
-    <TableColumn name="ReportLayout" caption="Report Layout" width="-1px" />
+    <TableColumn name="ReportTableName" caption="$T{report_context}" width="-1px" />
+    <TableColumn name="ReportConfiguration>NAME" caption="$T{report_configuration}" width="-1px" />
+    <TableColumn name="ReportLayout" caption="$T{report_layout}" width="-1px" />
   </GuiTable>
 	
 </VerticalLayout>

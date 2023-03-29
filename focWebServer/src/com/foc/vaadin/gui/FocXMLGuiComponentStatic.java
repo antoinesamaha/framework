@@ -19,6 +19,7 @@ import org.xml.sax.Attributes;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
+import com.foc.admin.UserSession;
 import com.foc.shared.dataStore.IFocData;
 import com.foc.util.Utils;
 import com.foc.vaadin.gui.components.FVComboBox;
@@ -293,5 +294,10 @@ public class FocXMLGuiComponentStatic {
 	
 	public static void applyStyleForArabicLabel(Component component){
 		applyStyle(component, "f16,bold");		
+	}
+	
+	public static void applyRightToLeftStyle(Object component) {
+    if(UserSession.getInstanceForThread() != null && UserSession.getInstanceForThread().getRightToLeft())
+    	if(component instanceof Component) ((Component)component).addStyleName("foc-rtl-style");
 	}
 }
