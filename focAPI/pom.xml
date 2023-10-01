@@ -112,7 +112,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<foc.version>1.7.4-SNAPSHOT</foc.version>
+		<foc.version>1.7.4</foc.version>
 	</properties>
 	<scm>
 		<url>https://github.com/FOC-framework/framework.git</url>
