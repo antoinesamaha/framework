@@ -171,7 +171,7 @@ public class Loggable {
 
 				String dateSQLStr = FDateTime.getSqlString_Static(focDesc.getProvider(), dateTime);
 				
-				if(lastModifDateFld != null && lastModifUserFld != null) {
+				if(lastModifDateFld != null && lastModifUserFld != null && userRef>0) {
 					StringBuffer buffer = null;
 					if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
 						buffer = new StringBuffer("UPDATE " + focDesc.getStorageName_ForSQL() + " ");
