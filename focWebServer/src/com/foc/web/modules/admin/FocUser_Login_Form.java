@@ -228,8 +228,11 @@ public class FocUser_Login_Form extends FocXMLLayout {
 				}
 			}
 	    
-	    loginAccess.dispose();
-	    loginAccess = null;
+	    if(loginAccess != null)
+	    {
+	    	loginAccess.dispose();
+	    	loginAccess = null;
+	    }
     /*validationCheckData(null);
     int status = Application.LOGIN_WRONG; 
     
