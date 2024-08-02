@@ -21,12 +21,10 @@ import java.util.HashMap;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.business.company.Company;
-import com.foc.business.multilanguage.MultiLanguage;
 import com.foc.business.workflow.WFSite;
 import com.foc.business.workflow.WFTitle;
 import com.foc.dataSource.store.DataStore;
 import com.foc.list.FocList;
-import com.foc.util.Utils;
 
 @SuppressWarnings("serial")
 public class UserSession implements Serializable {
@@ -205,17 +203,7 @@ public class UserSession implements Serializable {
   }
 
   public String getLanguage() {
-  	String lang = ConfigInfo.getLanguage();
-  	if (user != null) {
-  		int id = user.getPropertyInteger(FocUserDesc.FLD_LANGUAGE);
-  		if (id > 0) {
-  			String userLangCode = MultiLanguage.getLanguageCodeById(id);
-  			if (!Utils.isStringEmpty(userLangCode)) {
-  				lang = userLangCode;
-  			}
-  		}
-  	}
-		return lang;
+		return ConfigInfo.getLanguage();
 	}
 
   //--------------------------------
