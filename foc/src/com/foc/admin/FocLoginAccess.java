@@ -41,7 +41,7 @@ public class FocLoginAccess {
 			if (user.isSuspended() && !user.isLocked()) {
 				// No need to attempt again with reload if suspended
 				reloadToMakeSure = false;
-			} else {
+			} else if(!user.isSuspended()){
 				boolean error = user.checkEnteredPassword(password);
 				if (!error) {
 					user.upgradePasswordIfNeeded(password);
