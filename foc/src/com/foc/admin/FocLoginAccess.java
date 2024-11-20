@@ -38,14 +38,16 @@ public class FocLoginAccess {
 		loginStatus = Application.LOGIN_WRONG;
 		user = FocUser.findUser(username);
 		if (user != null) {
-			if (user.isSuspended() && !user.isLocked()) {
-				// No need to attempt again with reload if suspended
-				reloadToMakeSure = false;
-			} else if(!user.isSuspended()){
-				boolean error = user.checkEnteredPassword(password);
-				if (!error) {
-					user.upgradePasswordIfNeeded(password);
-					loginStatus = Application.LOGIN_VALID;
+			if (!user.isLocked()) {
+				if (user.isSuspended()) {
+					// No need to attempt again with reload if suspended
+					reloadToMakeSure = false;
+				} else {
+					boolean error = user.checkEnteredPassword(password);
+					if (!error) {
+						user.upgradePasswordIfNeeded(password);
+						loginStatus = Application.LOGIN_VALID;
+					}
 				}
 			}
 		}
