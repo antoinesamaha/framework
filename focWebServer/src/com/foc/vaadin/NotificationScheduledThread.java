@@ -31,55 +31,72 @@ public class NotificationScheduledThread extends FocThreadWithSession {
 	@Override
 	public void main() {
 		FocNotificationEvent event = new FocNotificationEvent(FNotifTrigger.EVT_SCHEDULED, null);
-		
-		while(true) {
-			try {
+
+		while (true){
+			Globals.logString("NOTIFICATION TRIGGER: Starting a new scan cycle.");
+
+			try{
 				Thread.sleep(60000);
-				
-				Globals.logString("NOTIFICATION TRIGGER: Scanning Notification Triggers for scheduled threads every 60000");
-				if(FocNotificationManager.getInstance() != null) {
-					FocList eventNotifierList = FocNotificationManager.getInstance().getEventNotifierList();
-					if(eventNotifierList != null) {
-						Globals.logString("NOTIFICATION TRIGGER:   - Scanning "+eventNotifierList.size()+" Notification Triggers");
-			      for (int i = 0; i < eventNotifierList.size(); i++) {
-			        FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
-			        if (trigger.getEvent() == FNotifTrigger.EVT_SCHEDULED && trigger.isEventMatch(event) && !trigger.isRunning()) {
-			        	trigger.setRunning(true);
-			        	AtomicNotificationTriggerThread atomicThread = new AtomicNotificationTriggerThread(getClassNameFocWebApplication(), getWebServer(), trigger, event);  
-			        	atomicThread.start();
-			        }
-			      }
+				Globals.logString("NOTIFICATION TRIGGER: Woke up after 60 seconds.");
+
+				FocNotificationManager manager = FocNotificationManager.getInstance();
+				if(manager != null){
+					Globals.logString("NOTIFICATION TRIGGER: Retrieved FocNotificationManager.");
+
+					FocList eventNotifierList = manager.getEventNotifierList();
+					if(eventNotifierList != null){
+						Globals.logString("NOTIFICATION TRIGGER: Found " + eventNotifierList.size() + " notification triggers to scan.");
+
+						for(int i = 0; i < eventNotifierList.size(); i++){
+							FNotifTrigger trigger = (FNotifTrigger) eventNotifierList.getFocObject(i);
+
+							if(trigger.getEvent() == FNotifTrigger.EVT_SCHEDULED && trigger.isEventMatch(event) && !trigger.isRunning()){
+								Globals.logString("NOTIFICATION TRIGGER: Found matching trigger at index " + i + ", starting thread.");
+								trigger.setRunning(true);
+								AtomicNotificationTriggerThread atomicThread = new AtomicNotificationTriggerThread(getClassNameFocWebApplication(), getWebServer(), trigger, event);
+								atomicThread.start();
+								Globals.logString("NOTIFICATION TRIGGER: Thread started for trigger at index " + i + ".");
+							}
+						}
+						Globals.logString("NOTIFICATION TRIGGER: Completed scanning triggers.");
+					}else{
+						Globals.logString("NOTIFICATION TRIGGER: No notification triggers found.");
 					}
+				}else{
+					Globals.logString("NOTIFICATION TRIGGER: FocNotificationManager not available.");
 				}
 			}catch(Exception e) {
+				Globals.logString("Error while processing notification triggers !!!");
 				Globals.logExceptionWithoutPopup(e);
 			}
+			Globals.logString("NOTIFICATION TRIGGER: Scan cycle completed.");
 		}
 	}
-	
+
 	public class AtomicNotificationTriggerThread extends FocThreadWithSession {
-		
+
 		private FNotifTrigger trigger = null;
+
 		private FocNotificationEvent event = null;
-		
+
 		public AtomicNotificationTriggerThread(String classNameFocWebApplication, FocWebServer webServer, FNotifTrigger trigger, FocNotificationEvent event) {
 			super(classNameFocWebApplication, webServer);
 			this.trigger = trigger;
 			this.event = event;
 			setInitiallSleep(0);
 		}
-		
-		public void dispose(){
+
+		public void dispose() {
 			super.dispose();
 			trigger.setRunning(false);
 			trigger = null;
 			event = null;
 		}
-		
+
 		@Override
 		public void main() {
-    	trigger.executeAndReschedule(event);
-    	dispose();
+			trigger.executeAndReschedule(event);
+			dispose();
 		}
 	}
 }
