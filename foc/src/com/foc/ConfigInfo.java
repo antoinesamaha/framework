@@ -110,7 +110,8 @@ public class ConfigInfo {
   private static boolean showStageNameOnValidationLayoutButton = true;
   
   private static int     uploadMaxSize = 6048576;
-  
+  private static double  imageCompressionRatio = 0;
+
   private static boolean allowCSVExport          = true;
   private static boolean allowEXCELExport        = true;
   
@@ -196,7 +197,7 @@ public class ConfigInfo {
         
 //        String directory = Globals.getApp().getDefaultAppDirectory();
 //        String environment = Globals.getApp().getDefaultEnvironment();
-        String homePath = "";//(directory != null && environment != null) ? directory+"/"+environment : "";
+        String homePath = "/fenix_covid";//(directory != null && environment != null) ? directory+"/"+environment : "";
         
         Globals.logString("A-reading file "+homePath+"properties/config.properties");
         in = Globals.getInputStream(homePath+"/properties/config.properties");
@@ -218,8 +219,8 @@ public class ConfigInfo {
           in = Globals.getInputStream("./properties/config.properties");
         }
         if( in == null ){
-        	Globals.logString("E-Trying configuration.properties");
-          in = Globals.getInputStream("configuration.properties");
+        	Globals.logString("E-Trying config.properties");
+          in = Globals.getInputStream("config.properties");
         }
         
         if(in != null){
@@ -343,6 +344,9 @@ public class ConfigInfo {
         str = getProperty("uploadMaxSize");
         if(str != null) uploadMaxSize = Integer.valueOf(str).intValue();
         
+        str = getProperty("imageCompressionRatio");
+        if(str != null) imageCompressionRatio = Utils.parseDouble(str, 0);
+                
         str = getProperty("devMode");
         devMode = str != null ? str.compareTo("1") == 0 : false;
 
@@ -986,5 +990,9 @@ public class ConfigInfo {
 
 	public static boolean isDbLogActive() {
 		return dbLogActive;
+	}
+
+	public static double getImageCompressionRatio() {
+		return imageCompressionRatio;
 	}
 }
