@@ -121,18 +121,21 @@ public class DBManagerServer {
         Globals.logString(fcts);
         while(tokenizer.hasMoreTokens()){
           String tok = tokenizer.nextToken();        
-          if(tok.compareTo("CURDATE") == 0){
+          if(tok.compareToIgnoreCase("CURDATE") == 0){
             if (Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
               dateRequestSQL = "select sysdate from dual";
               break;
-            }else{
+            } else if (Globals.getDBManager().getProvider() == DBManager.PROVIDER_POSTGRES) {
+            	dateRequestSQL = "select clock_timestamp()";
+            	break;
+          	}else{
               dateRequestSQL = "select CURDATE()";
               break;              
             }
-          }else if(tok.compareTo("CURRENT_DATE") == 0){
+          }else if(tok.compareToIgnoreCase("CURRENT_DATE") == 0){
             dateRequestSQL = "select CURRENT_DATE()";
             break;
-          }else if(tok.compareTo("CURRENT_TIMESTAMP") == 0){
+          }else if(tok.compareToIgnoreCase("CURRENT_TIMESTAMP") == 0){
             timeStampRequestSQL = "select CURRENT_TIMESTAMP()";
           }
         }

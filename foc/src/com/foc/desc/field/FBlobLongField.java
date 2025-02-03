@@ -34,7 +34,9 @@ public class FBlobLongField extends FBlobField{
   public String getCreationString(String name) {
     if (getProvider()== DBManager.PROVIDER_ORACLE){
       return " \"" + name + "\" BLOB";
-    }else{
+    }else if (getProvider() == DBManager.PROVIDER_POSTGRES) {
+    	return " \"" + name + "\" BYTEA";
+  	}else{
       return " " + name + " LONGBLOB";
     }
   }

@@ -86,6 +86,8 @@ public class ConnectionCredentials {
           setProvider(DBManager.PROVIDER_ORACLE);
         }else if (token.equals("mysql")){
           setProvider(DBManager.PROVIDER_MYSQL);
+        }else if (token.equals("postgresql")) {
+        	setProvider(DBManager.PROVIDER_POSTGRES);
         }
       }
     }
@@ -101,6 +103,12 @@ public class ConnectionCredentials {
     	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
     		String newURL  = url.substring(0, 17);
     		int    indexOf = url.indexOf(':', 18); 
+    		newURL += dbHost;
+    		newURL += url.substring(indexOf);
+    		url = newURL;
+    	}else if(getProvider() == DBManager.PROVIDER_POSTGRES) {
+    		String newURL = url.substring(0, 18);
+    		int indexOf = url.indexOf(':', 17);
     		newURL += dbHost;
     		newURL += url.substring(indexOf);
     		url = newURL;
@@ -123,6 +131,13 @@ public class ConnectionCredentials {
     		newURL += dbPort.trim();
     		newURL += url.substring(indexOfSlash);
     		url = newURL;
+    	}else if(getProvider() == DBManager.PROVIDER_POSTGRES){
+    		int    indexOf2Points = url.indexOf(':', 17);
+    		int    indexOfSlash   = url.indexOf('/', indexOf2Points+1);
+    		String newURL  = url.substring(0, indexOf2Points + 1);
+    		newURL += dbPort.trim();
+    		newURL += url.substring(indexOfSlash);
+    		url = newURL;
     	}
     }
 
@@ -137,6 +152,13 @@ public class ConnectionCredentials {
     		}
     	}else if(getProvider() == DBManager.PROVIDER_ORACLE){
     		int    lastSlash = url.lastIndexOf(':');
+    		if(lastSlash > 0){
+      		String newURL    = url.substring(0, lastSlash+1);
+      		newURL += dbSchema;
+      		url = newURL;
+    		}
+    	}else if(getProvider() == DBManager.PROVIDER_POSTGRES){
+    		int    lastSlash = url.lastIndexOf('/');
     		if(lastSlash > 0){
       		String newURL    = url.substring(0, lastSlash+1);
       		newURL += dbSchema;
