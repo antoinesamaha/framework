@@ -80,7 +80,7 @@ public class FocListGroupBy {
 	private void buildExpressionFromAtomicArrayOfExpressions(FocDesc focDesc){
 		ArrayList<String> arr = getArrayOfAtomicExpressions(false);
 		
-		StringBuffer buff = new StringBuffer();
+		StringBuffer buff = new StringBuffer(); // adapt_proofread
 		if(arr.size() == 1){
 			String fName = focDesc != null ? FField.adaptFieldNameToProvider(focDesc.getProvider(), arr.get(0)) : arr.get(0);
 			buff.append(fName);
@@ -144,7 +144,7 @@ public class FocListGroupBy {
 			String formulaAfter  = "";
 			
 			if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE) {
-				if(ConfigInfo.isOracleListAggCLOB() && focDesc.isUseOracleListAggCLOB()) {
+				if(ConfigInfo.isOracleListAggCLOB() && focDesc.isUseOracleListAggCLOB()) { // adapt_proofread
 					formulaBefore = "LISTAGG_CLOB(";
 					formulaAfter  = ")";
 					

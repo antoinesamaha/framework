@@ -301,8 +301,8 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 			
 			if(!isAStringExpression_NotToBeInterpreted){
 				String operatorWithMinimumPriority = "";// do not initialize to null because we are appending it to beforeOperator 
-				StringBuffer beforeOperator = new StringBuffer();
-				StringBuffer afterOperator = new StringBuffer();
+				StringBuffer beforeOperator = new StringBuffer(); // adapt_notQuery
+				StringBuffer afterOperator = new StringBuffer(); // adapt_notQuery
 				int numberOfOpenParentheses = 0;
 				boolean containsGlobalParentethese = false;
 				String beforeFirstParentethese = "";
@@ -332,7 +332,7 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 									beforeOperator.append(operatorWithMinimumPriority);
 									beforeOperator.append(afterOperator);
 									operatorWithMinimumPriority = token;
-									afterOperator = new StringBuffer();
+									afterOperator = new StringBuffer(); // adapt_notQuery
 									addTokenToBeforeOrAfterOperator = false;
 								}
 							}
@@ -395,7 +395,7 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 		if(functionName != null){
 			String nodeExpression = getExpression();
 			int numberOfOpenParentethese = 0;
-			StringBuffer operand = new StringBuffer();
+			StringBuffer operand = new StringBuffer(); // adapt_notQuery
 			nodeExpression = nodeExpression.substring(functionName.length() +1, nodeExpression.length()-1);//nodeExpression = nodeExpression.substring(functionName.length() -1 +1, nodeExpression.length()-1);// : thus we have removed the functionName, the first opened parentethese and the last closed parentethese
 			String delimiters = FunctionFactory.ARGUMENT_SEPARATOR + FunctionFactory.OPEN_PARENTHESIS + FunctionFactory.CLOSE_PARENTHESIS;
 			StringTokenizer tokenizer = new StringTokenizer(nodeExpression, delimiters, true);
@@ -417,7 +417,7 @@ public class FFormulaNode extends FNode<FFormulaNode, Object>{
 //									childNode.setExpression(String.valueOf(operand));
 									childNode.setExpression(operandNotNull);
 									childNode.growNode();
-									operand = new StringBuffer();
+									operand = new StringBuffer(); // adapt_notQuery
 								}
 //							}
 						}else{

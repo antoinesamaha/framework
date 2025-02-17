@@ -99,7 +99,7 @@ public class FSerializerDictionary {
 	
 	public String buildJSON(FocObject focObject) {
 		String fullJson = "";
-		StringBuffer buff = new StringBuffer();
+		StringBuffer buff = new StringBuffer(); // adapt_notQuery
 		FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObject, buff, FSerializer.TYPE_JSON);
 		if(ser != null) {
 			try {
@@ -113,11 +113,11 @@ public class FSerializerDictionary {
 		return fullJson;
 	}
 	
-	public FSerializer newSerializer(FocObject focObject, StringBuffer buffer, String type) {
+	public FSerializer newSerializer(FocObject focObject, StringBuffer buffer, String type) { // adapt_notQuery
 		return newSerializer(focObject, buffer, type, 0);
 	}
 	
-	public FSerializer newSerializer(FocObject focObject, StringBuffer buffer, String type, int version) {
+	public FSerializer newSerializer(FocObject focObject, StringBuffer buffer, String type, int version) { // adapt_notQuery
 		FSerializer serializer = null;
 		if(focObject != null && buffer != null && focObject.getThisFocDesc() != null) {
 			String storageName = focObject.getThisFocDesc().getStorageName();
@@ -132,7 +132,7 @@ public class FSerializerDictionary {
 		      if(serializerClass != null){ 
 		        Class[] classes = new Class[3];
 		        classes[0] = focObject.getClass();
-		        classes[1] = StringBuffer.class;
+		        classes[1] = StringBuffer.class; // adapt_notQuery
 		        classes[2] = Integer.TYPE;
 		    
 		        Object[] objects = new Object[3];

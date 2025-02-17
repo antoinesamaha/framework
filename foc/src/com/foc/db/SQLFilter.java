@@ -29,7 +29,7 @@ public class SQLFilter {
   private FocObject          masterObject    = null;
   private int                filterFields    = 0;
   private ArrayList<Integer> selectedFields  = null;
-  private StringBuffer       additionalWhere = null;
+  private StringBuffer       additionalWhere = null; // adapt_proofread (all additional where are introduced as is without field adaptation into query)
   private SQLJoinMap         joinMap         = null;
   private boolean            filterByCompany = (Globals.getApp() != null && Globals.getApp().isWebServer()) ? false : true;
   
@@ -184,7 +184,7 @@ public class SQLFilter {
     return joinMap;
   }
   
-  private boolean addFieldToWhere(int provider, StringBuffer sql, String fldName, String sqlValue, boolean isFirst, boolean withWhere) {
+  private boolean addFieldToWhere(int provider, StringBuffer sql, String fldName, String sqlValue, boolean isFirst, boolean withWhere) { // adapt_proofread
     //String value = objProp.getString();
     boolean errorAddingField = true;
     boolean valueNotNull = true;// (fieldID == FField.REF_FIELD_ID) ?
@@ -221,7 +221,7 @@ public class SQLFilter {
     return errorAddingField;
   }
   
-  private boolean addFieldToWhere(StringBuffer sql, FocObject template, String fldName, int fieldID, boolean isFirst, boolean withWhere) {
+  private boolean addFieldToWhere(StringBuffer sql, FocObject template, String fldName, int fieldID, boolean isFirst, boolean withWhere) { // adapt_proofread
     FProperty objProp = template.getFocProperty(fieldID);
     //String value = objProp.getString();
     String sqlValue = objProp.getSqlString();
@@ -230,7 +230,7 @@ public class SQLFilter {
     		sql, fldName, sqlValue, isFirst, withWhere);
   }
 
-  public boolean addWhereToRequest_WithoutWhere(StringBuffer requestBuffer, FocDesc requestFocDesc) {
+  public boolean addWhereToRequest_WithoutWhere(StringBuffer requestBuffer, FocDesc requestFocDesc) { // adapt_proofread
   	return addWhereToRequest(requestBuffer, requestFocDesc, false, true);
   }
   
@@ -238,7 +238,7 @@ public class SQLFilter {
 //  	return addWhereToRequest(requestBuffer, requestFocDesc, true, true);
 //  }
   
-  public boolean addWhereToRequest(StringBuffer requestBuffer, FocDesc requestFocDesc, boolean withWhere, boolean includeCompanyConditionIfApplicable) {
+  public boolean addWhereToRequest(StringBuffer requestBuffer, FocDesc requestFocDesc, boolean withWhere, boolean includeCompanyConditionIfApplicable) { // adapt_proofread
   	boolean atLeastOneFieldAdded = false;
     if (requestBuffer != null) {
       boolean isFirst = true;
@@ -344,7 +344,7 @@ public class SQLFilter {
       	requestBuffer.append(")");
       }
       
-      StringBuffer additionalWhere = getAdditionalWhere();
+      StringBuffer additionalWhere = getAdditionalWhere(); // adapt_proofread (as process)
       if(additionalWhere != null && additionalWhere.length() > 0){
         if(atLeastOneFieldAdded){
         	requestBuffer.append(" and (");
@@ -444,11 +444,11 @@ public class SQLFilter {
     return res;
   }
 
-  public void setAdditionalWhere(StringBuffer buff) {
+  public void setAdditionalWhere(StringBuffer buff) { // adapt_proofread
     additionalWhere = buff;
   }
   
-  public void putAdditionalWhere(String key, String additionnalWhere){
+  public void putAdditionalWhere(String key, String additionnalWhere){ // adapt_proofread (386)
     if(additionalWhereMap == null){
       additionalWhereMap = new HashMap<String, String>();
     }
@@ -466,9 +466,9 @@ public class SQLFilter {
   }
   
   @Deprecated
-  public void addAdditionalWhere(StringBuffer additionalWhere) {
+  public void addAdditionalWhere(StringBuffer additionalWhere) { // adapt_proofread
     if(this.additionalWhere == null){
-      this.additionalWhere = new StringBuffer(additionalWhere);
+      this.additionalWhere = new StringBuffer(additionalWhere); // adapt_proofread
     }else{
       this.additionalWhere.append(additionalWhere);  
     }
@@ -513,7 +513,7 @@ public class SQLFilter {
 		this.ownerOfTemplate = ownerOfTemplate;
 	}
 
-	public void addOrderBy(StringBuffer requestBuffer) {
+	public void addOrderBy(StringBuffer requestBuffer) {  // adapt_proofread
 		if (requestBuffer != null && !Utils.isStringEmpty(orderBy)) {
 			requestBuffer.append(" ORDER BY ");
 			requestBuffer.append(orderBy);

@@ -99,7 +99,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 			String  additionalWhere = buildWhere(workflowDesc, siteStageCoupleArrayList);
 			if(!Utils.isStringEmpty(additionalWhere)) {
 				transList = focDesc.newFocList();
-				transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
+				transList.getFilter().putAdditionalWhere("SIGNING", additionalWhere); // adapt_proofread
 				transList.loadIfNotLoadedFromDB();
 			}
 		}
@@ -226,7 +226,7 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 				FocList originalList    = new FocList(new FocLinkSimple(focDesc));
 				originalList.setDirectImpactOnDatabase(true);
 				originalList.setDirectlyEditable(false);
-				originalList.getFilter().putAdditionalWhere("SIGNING", additionalWhere);
+				originalList.getFilter().putAdditionalWhere("SIGNING", additionalWhere); // adapt_proofread
 				originalList.loadIfNotLoadedFromDB();
 				
 				//Case of all WBSPointerDesc. We need to remove all items from other Sites because filter could not be in the request
@@ -485,9 +485,9 @@ public class WFTransactionWrapperList extends FocListWithFilter{
 						str = "";
 					}
 					if(isSiteAReflectingField(workflowDesc)){//This is the case of all WBSPointerDesc. They are filtered in the memory after the request
-						str += "("+stageField.getDBName()+"="+stageRef+")";
+						str += "(\""+stageField.getDBName()+"\"="+stageRef+")"; // adapt_done_P (pr / unreachable)
 					}else{
-						str += "("+areaField.getDBName()+"="+area.getReferenceInt()+" AND "+stageField.getDBName()+"="+stageRef+")";	
+						str += "(\""+areaField.getDBName()+"\"="+area.getReferenceInt()+" AND \""+stageField.getDBName()+"\"="+stageRef+")";	// adapt_done_P (pr / unreachable)
 					}
 				}
 			}

@@ -180,12 +180,12 @@ public class Loggable {
 						buffer.append(" where "+focDesc.getRefFieldName()+" = "+ref+" ");						
 					} else {
 						if(ConfigInfo.isAdaptConstraints() && userRef == 0) {
-							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" "); // adapt_proofread
 							buffer.append("set \""+lastModifUserFld.getDBName()+"\" = NULL ");
 							buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
 							buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
 						} else {
-							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" ");
+							buffer = new StringBuffer("UPDATE \"" + focDesc.getStorageName_ForSQL() + "\" "); // adapt_proofread
 							buffer.append("set \""+lastModifUserFld.getDBName()+"\" = "+userRef+" ");
 							buffer.append(", \""+lastModifDateFld.getDBName()+"\" = "+dateSQLStr+" ");
 							buffer.append(" where \""+focDesc.getRefFieldName()+"\" = "+ref+" ");
@@ -263,7 +263,7 @@ public class Loggable {
 				if(!Utils.isStringEmpty(changes)) log.setChanges(changes);
 				
 				//Preparing the JSON with the latest version 
-				StringBuffer buff = new StringBuffer();
+				StringBuffer buff = new StringBuffer(); // adapt_notQuery
 				FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON);
 				if(ser != null) {
 					try {
@@ -408,7 +408,7 @@ public class Loggable {
 						focObj.load();
 					}
 					
-					StringBuffer buff = new StringBuffer();
+					StringBuffer buff = new StringBuffer(); // adapt_notQuery
 					FSerializer ser = FSerializerDictionary.getInstance().newSerializer(focObj, buff, FSerializer.TYPE_JSON, versionOfStored);
 					if(ser != null) {
 						ser.serializeToBuffer();

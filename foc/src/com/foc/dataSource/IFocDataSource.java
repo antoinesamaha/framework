@@ -37,15 +37,15 @@ public interface IFocDataSource {
 	public int           getProvider(String dbSouceKey);
 	public int           getServerVersion(String dbSourceKey);
 	
-	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
-	public boolean       command_ExecuteRequest(StringBuffer sqlRequest);
+	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest); // adapt_proofread
+	public boolean       command_ExecuteRequest(StringBuffer sqlRequest); // adapt_proofread
 	public boolean       command_AdaptDataModel_SingleTable(FocDesc focDesc);
 	public boolean       command_AdaptDataModel_Reindex();
 	public boolean       command_AdaptDataModel(boolean forceAlterTables, boolean schemaEmpty);
 	public boolean       command_executeRequestForModulesSP(String spFileName);
-	public ArrayList     command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression);
-	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest);
-	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns);
+	public ArrayList     command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression); // adapt_proofread
+	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest); // adapt_proofread
+	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns); // adapt_proofread
 	public boolean       command_Replace(FocDesc desc, int fieldID, String originalValue, String newValue);
 	public boolean       command_CheckTables();
 	
@@ -56,7 +56,7 @@ public interface IFocDataSource {
 	public boolean       focObject_Delete(FocObject focObject, ReferenceChecker refCheck);
 	public boolean       focObject_Save(FocObject focObject, int fieldsArray[]);
 	public boolean       focObject_Redirect(FocObject initialFocObject, FocObject newFocObject);
-	public int           focObject_GetNumberOfReferences(FocObject focObj, StringBuffer message, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete);
+	public int           focObject_GetNumberOfReferences(FocObject focObj, StringBuffer message, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete); // adapt_notQuery
 	public int           focObject_GetReference_ForUniqueKey(FocObject focObj);
 	public int           focObject_GetReference_ForFilter(FocDesc focDesc, String filterExpression);
 	public BufferedImage focObject_LoadImage(FocObject focObject, int fieldID);
@@ -77,10 +77,10 @@ public interface IFocDataSource {
 	public Object        getDBManagerServer();
 	public CallableStatement sp_Call(String name, Object[] params);
 	
-	public void          executeCustomQuery(StringBuffer sqlRequest, IExecuteResultSet iExecuteResultSet);
+	public void          executeCustomQuery(StringBuffer sqlRequest, IExecuteResultSet iExecuteResultSet); // adapt_proofread
 	
 	public String command_DataModel2Code();
-	public StringBuffer getMonitoringText();
+	public StringBuffer getMonitoringText(); // adapt_notQuery
 	
 	public boolean      command_executeSQLScript(String key, String spFileName);
 }

@@ -73,7 +73,7 @@ public class FileExporter {
 		if(!error){
 			for(int i=0; i<list.size(); i++){
 				FocObject objToExport = list.getFocObject(i);
-				StringBuffer line = new StringBuffer();
+				StringBuffer line = new StringBuffer(); // adapt_notQuery
 				for(int f=0; f<fieldSelection.size(); f++){
 					ExportField field = fieldSelection.get(f);
 					if(field != null){

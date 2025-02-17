@@ -328,7 +328,7 @@ public class FieldDefinitionDesc extends FocDesc {
 						String name = fieldDefinition.getName();
 						if(name != null && name.length() > 0){
 							name  = name.replace("_", " ");
-							StringBuffer title = new StringBuffer(name.toLowerCase());
+							StringBuffer title = new StringBuffer(name.toLowerCase()); // adapt_notQuery
 							title.setCharAt(0, Character.toUpperCase(title.charAt(0)));
 							fieldDefinition.setTitle(String.valueOf(title));
 						}

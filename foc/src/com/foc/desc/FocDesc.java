@@ -2520,7 +2520,7 @@ public class FocDesc implements Cloneable, IFocDesc, IFocData {
 		this.listInCache = listInCache;
 	}
 	
-	public FocObject findObjectByFilterExpression(String filterExpression){
+	public FocObject findObjectByFilterExpression(String filterExpression){ // adapt_proofread
 		FocList list = getFocList();
 		return list != null ? list.findObjectByFilterExpression(filterExpression) : null;
 	}

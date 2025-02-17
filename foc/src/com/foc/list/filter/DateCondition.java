@@ -177,14 +177,14 @@ public class DateCondition extends FilterCondition {
     return op;
   }
   
-  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) {
+  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
-    StringBuffer buffer = null;
+    StringBuffer buffer = null; // adapt_proofread
     //Date firstDate = getFirstDate(filter);
     //Date lastDate = getLastDate(filter);
     //int op = getOperator(filter);
     
-    buffer = new StringBuffer();
+    buffer = new StringBuffer(); // adapt_proofread
     
 //    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-yy");
 //    if(Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
@@ -252,7 +252,7 @@ public class DateCondition extends FilterCondition {
     return buffer;
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
   	return buildSQLWhere(getProvider(), fieldName, getOperator(filter), getFirstDate(filter), getLastDate(filter));
   }

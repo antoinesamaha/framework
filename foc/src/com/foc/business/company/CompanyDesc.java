@@ -144,14 +144,14 @@ public class CompanyDesc extends FocDesc{
 
 	public static void addCompanyFilter_IfNeeded(FocList list){
 		FCompanyField field = (FCompanyField) list.getFocDesc().getFieldByID(FField.FLD_COMPANY);
-		addCompanyFilter_IfNeeded(list, field.getDBName());
+		addCompanyFilter_IfNeeded(list, "\"" + field.getDBName() + "\"");  // adapt_done_P (pr / unreachable)
 	}
 	
 	public static void addCompanyFilter_IfNeeded(FocList list, String fieldName){
 		String whereKey = "COMPANY";
 		if(list.getFilter().getAdditionalWhere(whereKey) == null){
 			String whereExpression = getCompanyFilter_IfNeeded(fieldName);
-			list.getFilter().putAdditionalWhere(whereKey, whereExpression);
+			list.getFilter().putAdditionalWhere(whereKey, whereExpression);  // adapt_proofread
 		}
 	}
 	
@@ -164,7 +164,7 @@ public class CompanyDesc extends FocDesc{
 		FocUser user            = Globals.getApp().getUser_ForThisSession();
 		
 		if(user != null){
-			StringBuffer where       = new StringBuffer();
+			StringBuffer where       = new StringBuffer(); // adapt_proofread
 			Company      currCompany = Globals.getApp().getCurrentCompany();
 			
 			if(!companyFieldMandatory){
@@ -181,7 +181,7 @@ public class CompanyDesc extends FocDesc{
 					break;
 				case FocUserDesc.COMPANY_MODE_SEE_ONLY_READ_WRITE:
 				case FocUserDesc.COMPANY_MODE_SEE_ALL:
-					StringBuffer refsList = new StringBuffer();
+					StringBuffer refsList = new StringBuffer(); // adapt_proofread
 					FocList rightsList = user.getCompanyRightsList();
 					for(int i=0; i<rightsList.size(); i++){
 						UserCompanyRights compRights = (UserCompanyRights) rightsList.getFocObject(i);

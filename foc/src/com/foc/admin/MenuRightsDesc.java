@@ -129,7 +129,7 @@ public class MenuRightsDesc extends FocDesc{
   	boolean firstTime = globalListOfMenus == null;
   	globalListOfMenus = getInstance().getList(globalListOfMenus, FocList.NONE);
   	if(firstTime){
-  		globalListOfMenus.getFilter().putAdditionalWhere("GLOBAL", FLD_NAME_GROUP_PREFIX+"REF=0");
+  		globalListOfMenus.getFilter().putAdditionalWhere("GLOBAL", "\"" + FLD_NAME_GROUP_PREFIX+"REF\"=0");  // adapt_done_P (pr / unreachable)
   	}
   	if(mode == FocList.LOAD_IF_NEEDED){
   		globalListOfMenus.loadIfNotLoadedFromDB();

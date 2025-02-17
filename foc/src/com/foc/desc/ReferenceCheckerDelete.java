@@ -15,6 +15,8 @@
  ******************************************************************************/
 package com.foc.desc;
 
+import com.foc.Globals;
+import com.foc.desc.field.FField;
 import com.foc.desc.field.FObjectField;
 import com.foc.util.Utils;
 
@@ -71,11 +73,11 @@ public class ReferenceCheckerDelete {
 				String fiedlName = objFld.getDBName();
 		
 				if(ref > 0 && !Utils.isStringEmpty(fiedlName)){
-					sql = new StringBuffer("delete from ");
-					sql.append(focDesc.getStorageName_ForSQL());
+					sql = new StringBuffer("delete from "); // adapt_done_P (pr / general testing)
+					sql.append(FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), focDesc.getStorageName_ForSQL())); 
 					sql.append(" where ");
 					
-					sql.append(fiedlName);
+					sql.append(FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), fiedlName));
 					sql.append(" = ");
 					sql.append(ref);
 				}
@@ -84,4 +86,3 @@ public class ReferenceCheckerDelete {
 		return sql;
 	}
 }
-
