@@ -95,7 +95,7 @@ public class DataModelNode extends FocObject {
 	}
 
 	public String getFullPath(){
-		StringBuffer buffer = new StringBuffer();
+		StringBuffer buffer = new StringBuffer();  // adapt_notQuery
 		
 		DataModelNode node = this;
 		while(node != null){

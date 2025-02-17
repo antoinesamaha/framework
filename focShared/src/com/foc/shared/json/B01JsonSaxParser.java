@@ -22,7 +22,7 @@ public class B01JsonSaxParser {
 	
 	private boolean      insideAString = false;
 	private boolean      insideAValue  = false;
-	private StringBuffer currentString = new StringBuffer();
+	private StringBuffer currentString = new StringBuffer(); // adapt_notQuery
 	
 	private String  lastKey                       = null;
 	private String  lastValue                     = null;
@@ -42,7 +42,7 @@ public class B01JsonSaxParser {
 	public void parse(){
 		insideAString = false;
 		insideAValue  = false;
-		currentString = new StringBuffer();
+		currentString = new StringBuffer(); // adapt_notQuery
 		//looking for { or [
 		for(int i=0; i<str2Parse.length(); i++){
 			char c = str2Parse.charAt(i);
@@ -70,7 +70,7 @@ public class B01JsonSaxParser {
 					callBack.newKey(currentString);
 					insideAValue = true;
 					lastKey = currentString.toString();
-					currentString = new StringBuffer();
+					currentString = new StringBuffer(); // adapt_notQuery
 				}else if(c == ','){
 					valueNotification();
 				}else if(c == '"'){
@@ -108,7 +108,7 @@ public class B01JsonSaxParser {
 		lastKey   = null;
 		lastValue = null;
 		
-		currentString = new StringBuffer();
+		currentString = new StringBuffer(); // adapt_notQuery
 		insideAValue = false;
 	}
 }

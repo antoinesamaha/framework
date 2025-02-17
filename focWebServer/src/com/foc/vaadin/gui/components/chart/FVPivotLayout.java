@@ -111,7 +111,7 @@ public class FVPivotLayout extends FVVerticalLayout implements FocXMLGuiComponen
 								debugPrinted = true;
 								pivotTable.debug(new IFocObjectDebug(){
 									@Override
-									public void debug(FocObject focObject, StringBuffer buffer) {
+									public void debug(FocObject focObject, StringBuffer buffer) { // adapt_notQuery
 										if(focObject != null){
 											FProperty prop = focObject.getFocPropertyForPath("MVT_DEBIT");
 											buffer.append("Db="+prop.getString()+" ");

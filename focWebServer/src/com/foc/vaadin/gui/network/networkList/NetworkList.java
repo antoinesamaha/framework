@@ -47,7 +47,7 @@ public abstract class NetworkList {
 	}
 	
 	public String buildWhereRefList() {
-		StringBuffer buffer = new StringBuffer(); 
+		StringBuffer buffer = new StringBuffer(); // adapt_proofread
 		Iterator<NetworkListOrderer> iter = orderers.values().iterator(); 
 		while (iter != null && iter.hasNext()) {
 			NetworkListOrderer orderer = iter.next();

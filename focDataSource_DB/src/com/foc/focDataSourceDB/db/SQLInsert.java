@@ -41,7 +41,7 @@ public class SQLInsert extends SQLRequest {
   //EAntoineS - AUTOINCREMENT
   
   public boolean buildRequest() {
-    request = new StringBuffer("");
+    request = new StringBuffer("");  // adapt_proofread
 
     if (focDesc != null && focDesc.isPersistent()) {
     	DBUtil.focObject_AssignReferenceIfNeeded(focObj, true);//Usefull for Oracle only.

@@ -132,7 +132,7 @@ public class FocDataDictionary implements IFocDataDictionary {
 						double val = total*100-dollars*100+0.00001;
 						int cent = (int)FocMath.floor(val, 1);
 						
-						StringBuffer buff = new StringBuffer();
+						StringBuffer buff = new StringBuffer(); // adapt_notQuery
 						String dollarsStr = EnglishNumberToWords.convert( (int) dollars );
 						dollarsStr = ASCII.convertAllWordBeginningToCapital(dollarsStr);
 						buff.append(dollarsStr);

@@ -212,7 +212,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 	public void applyRefFilterIfNeeded(HttpServletRequest request, FocList list) {
 		if(list != null && request != null) {
 			long filter_Ref = doGet_GetReference(request, list);
-			if(filter_Ref > 0 && list.getFilter() != null) list.getFilter().putAdditionalWhere("REF", "\"REF\"="+filter_Ref);
+			if(filter_Ref > 0 && list.getFilter() != null) list.getFilter().putAdditionalWhere("REF", "\"REF\"="+filter_Ref); // adapt_proofread
 		}
 	}
 	
@@ -444,7 +444,7 @@ public abstract class FocObjectServlet<O extends FocObject> extends FocMicroServ
 			if(allowPost(focRequest) && (mobileModule_HasCreate(focRequest) || mobileModule_HasUpdate(focRequest))){
 				logRequestHeaders(request);
 				
-				StringBuffer buffer = getRequestAsStringBuffer(request);
+				StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 				String reqStr = buffer.toString();
 				
 				if (reqStr != null) {

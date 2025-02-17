@@ -29,7 +29,7 @@ public abstract class FJSONSerializer<O extends FocObject> extends B01JsonBuilde
 	private O            focObject = null;
 	private int          version   = 0;
 	
-	public FJSONSerializer(O focObject, StringBuffer buffer, int version) {
+	public FJSONSerializer(O focObject, StringBuffer buffer, int version) { // adapt_notQuery
 		super(buffer);
 		this.focObject = focObject;
 		this.version = version;

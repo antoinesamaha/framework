@@ -83,7 +83,7 @@ public class AbstractDataStore implements IDataStoreConst {
 	}
 	
 	public String buildKey(String tableName, int transactionType, String context){
-		StringBuffer key = new StringBuffer("TABLE:"+tableName);
+		StringBuffer key = new StringBuffer("TABLE:"+tableName); // adapt_notQuery
 		if(transactionType != TRANSACTION_TYPE_NONE){
 			key.append("|TYPE:"+transactionType);
 		}

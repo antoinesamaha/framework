@@ -45,11 +45,11 @@ public class FocVaadinServletRequest extends VaadinServletRequest {
 	
 	private class FocServletInputStream extends ServletInputStream {
 		private ServletInputStream original = null;
-		private StringBuffer       buff     = null;
+		private StringBuffer       buff     = null; // adapt_notQuery
 		
 		public FocServletInputStream(ServletInputStream original){
 			this.original = original;
-			buff = new StringBuffer();
+			buff = new StringBuffer(); // adapt_notQuery
 		}
 		
 		@Override

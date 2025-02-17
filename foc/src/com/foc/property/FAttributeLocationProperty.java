@@ -38,8 +38,8 @@ public class FAttributeLocationProperty extends FString implements Cloneable{
     return zClone;
   }
   
-  private String getString(boolean forSQL){
-    StringBuffer str = new StringBuffer();
+  private String getString(boolean forSQL){ // adapt_notQuery
+    StringBuffer str = new StringBuffer(); 
     
     if(fieldPath != null){      
       FocDesc currDesc = getBaseFocDesc();

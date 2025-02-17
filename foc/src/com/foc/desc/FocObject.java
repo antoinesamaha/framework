@@ -1444,7 +1444,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	        if(!valid && displayMessage){ 
 	        	String fieldStr = (field.getTitle() != null && !field.getTitle().isEmpty()) ? field.getTitle() + " ("+field.getName()+")" : field.getName();
 	        	String tableStr = getThisFocDesc() != null ? getThisFocDesc().getStorageName() : "";
-	          StringBuffer message = new StringBuffer("The field \""+fieldStr+"\" in "+tableStr+" cannot remain empty!\n");
+	          StringBuffer message = new StringBuffer("The field \""+fieldStr+"\" in "+tableStr+" cannot remain empty!\n");  // adapt_notQuery
 	          popupContentValidMessage(message);	        	
 	        }
         }
@@ -1482,26 +1482,26 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     setContentValidMessageOn(false);    
   }
 
-  public void popupContentValidMessage(StringBuffer message){
+  public void popupContentValidMessage(StringBuffer message){  // adapt_notQuery
     popupContentValidMessage(message.toString());
   }
   
   public StringBuffer checkDeletionWithMessage(){
-  	StringBuffer message = null;
+  	StringBuffer message = null;  // adapt_notQuery
     
     if(!isDeletable()){
-    	message = new StringBuffer("This item cannot be deleted.\nIt might be a system object.\nFor further assistance please call 01Barmaja.");
+    	message = new StringBuffer("This item cannot be deleted.\nIt might be a system object.\nFor further assistance please call 01Barmaja.");  // adapt_notQuery
     }else if(focObject_IsLocked()){
-    	message = new StringBuffer("This item is Locked and cannot be deleted.");
+    	message = new StringBuffer("This item is Locked and cannot be deleted.");  // adapt_notQuery
     }else if(!workflow_IsAllowDeletion()){
     	workflow_IsAllowDeletion();
     	if (ConfigInfo.isArabic()) {
-    		message = new StringBuffer("ليس لديك صلحية حذف هذا البيان");
+    		message = new StringBuffer("ليس لديك صلحية حذف هذا البيان");  // adapt_notQuery
 			} else {				
-				message = new StringBuffer("You don't have deletion rights on this transaction.");
+				message = new StringBuffer("You don't have deletion rights on this transaction.");  // adapt_notQuery
 			}
     }else{
-    	StringBuffer messageInternal = new StringBuffer();
+    	StringBuffer messageInternal = new StringBuffer();  // adapt_notQuery
       int refNbr = referenceCheck_GetNumber(messageInternal);
       if(refNbr > 0){
       	message = messageInternal;
@@ -1943,8 +1943,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     }
   }
   
-  public StringBuffer getDebugInfo(){
-    StringBuffer str = new StringBuffer();
+  public StringBuffer getDebugInfo(){  // adapt_notQuery
+    StringBuffer str = new StringBuffer(); // adapt_notQuery
     FocDesc focDesc = getThisFocDesc();
     if(focDesc != null){
       str.append(focDesc.getStorageName());
@@ -2627,15 +2627,15 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   // oooooooooooooooooooooooooooooooooo
   // oooooooooooooooooooooooooooooooooo
 
-  public int referenceCheck_GetNumber(StringBuffer message){
+  public int referenceCheck_GetNumber(StringBuffer message){ // adapt_notQuery
   	return referenceCheck_GetNumber(message, false);
   }
   
-  public int referenceCheck_GetNumber(StringBuffer message, boolean popupMessage){
+  public int referenceCheck_GetNumber(StringBuffer message, boolean popupMessage){ // adapt_notQuery
   	return referenceCheck_GetNumber(message, popupMessage, null, null, null);
   }
   
-  public int referenceCheck_GetNumber(StringBuffer message, boolean popupMessage, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete){
+  public int referenceCheck_GetNumber(StringBuffer message, boolean popupMessage, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete){ // adapt_notQuery
   	int nbOfReferences = Globals.getApp().getDataSource().focObject_GetNumberOfReferences(this, message, referenceCjeckerToIgnore, arrayPutToZero, arrayDelete);
   	/*
     int nbOfReferences = 0;
@@ -2665,8 +2665,8 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     return nbOfReferences;
   }
 
-  public String referenceCheck_CompleteTheMessage(int nbOfReferences, StringBuffer message){
-  	StringBuffer newBuffer = new StringBuffer("Object ");
+  public String referenceCheck_CompleteTheMessage(int nbOfReferences, StringBuffer message){ // adapt_notQuery
+  	StringBuffer newBuffer = new StringBuffer("Object "); // adapt_notQuery
   	FocDesc focDesc = getThisFocDesc();
   	newBuffer.append(focDesc.getStorageName());
   	newBuffer.append(":");
@@ -2678,7 +2678,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
   	return newBuffer.toString();
   }
   
-  public void referenceCheck_PopupDialog(int nbOfReferences, StringBuffer message){
+  public void referenceCheck_PopupDialog(int nbOfReferences, StringBuffer message){ // adapt_notQuery
     if(nbOfReferences > 0){
     	String completeMessage = referenceCheck_CompleteTheMessage(nbOfReferences, message);
     	if(Globals.getDisplayManager() != null){
@@ -3645,13 +3645,13 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     	WFTransactionConfig transConfig = workflow_getTransactionConfig();
     	if(transConfig != null && !transConfig.isCodeBySITE()) filterType = SQLFilter.FILTER_ON_KEY_EXCLUDE_SITE;
     	
-    	StringBuffer buff = new StringBuffer();
+    	StringBuffer buff = new StringBuffer(); // adapt_proofread
     	SQLFilter filter = new SQLFilter(this, filterType);
     	filter.setOwnerOfTemplate(false);
     	filter.addWhereToRequest_WithoutWhere(buff, getThisFocDesc());
     	filter.dispose();
 	    
-	    ArrayList valuesArray = Globals.getApp().getDataSource().command_Select(desc, FField.FLD_CODE, false, buff);
+	    ArrayList valuesArray = Globals.getApp().getDataSource().command_Select(desc, FField.FLD_CODE, false, buff); // adapt_proofread
 	    exist = valuesArray.size() > 0;
     }
     return exist;
@@ -3694,17 +3694,17 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     String prefixWithSeperator = prefix;
     if(separator != null) prefixWithSeperator += separator; 
     
-    StringBuffer buff = null;
+    StringBuffer buff = null; // adapt_proofread
     if(resetWhenPrefixChange){
     	if(desc.getProvider() == DBManager.PROVIDER_MSSQL){
-    		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \'"+prefixWithSeperator+"%\'");
+    		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \'"+prefixWithSeperator+"%\'"); // adapt_proofread
     	}else if(desc.getProvider() == DBManager.PROVIDER_ORACLE
     			  || desc.getProvider() == DBManager.PROVIDER_H2
     			  || desc.getProvider() == DBManager.PROVIDER_POSTGRES
     			  ){
-      	buff = new StringBuffer("\""+desc.getFieldByID(fieldID).getName()+"\" like \'"+prefixWithSeperator+"%\'");
+      	buff = new StringBuffer("\""+desc.getFieldByID(fieldID).getName()+"\" like \'"+prefixWithSeperator+"%\'"); // adapt_proofread
     	}else{
-    		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \""+prefixWithSeperator+"%\"");
+    		buff = new StringBuffer(desc.getFieldByID(fieldID).getName()+" like \""+prefixWithSeperator+"%\""); // adapt_proofread
     	}
     }
     if(desc.isByCompany()){
@@ -3719,7 +3719,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
       	}
       	
 	      if(buff == null){
-	       	buff = new StringBuffer(expression);
+	       	buff = new StringBuffer(expression); // adapt_proofread
 	      }else{
 	      	buff.append(" and ");
 	      	buff.append(expression);
@@ -3748,7 +3748,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 			  	    	}
 			  	    	
 			  	      if(buff == null){
-			  	       	buff = new StringBuffer(expression);
+			  	       	buff = new StringBuffer(expression); // adapt_proofread
 			  	      }else{
 			  	      	buff.append(" and ");
 			  	      	buff.append(expression);
@@ -3761,7 +3761,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
 	  	}
 		}
     
-    ArrayList valuesArray = Globals.getApp().getDataSource().command_Select(desc, fieldID, false, buff);
+    ArrayList valuesArray = Globals.getApp().getDataSource().command_Select(desc, fieldID, false, buff); // adapt_proofread
     for(int i=0; i<valuesArray.size(); i++){
       String  str  = (String) valuesArray.get(i);
 
@@ -3805,7 +3805,7 @@ public abstract class FocObject extends AccessSubject implements FocListener, IF
     if(separator != null) prefixWithSeperator += separator; 
     
     String nextStr = String.valueOf(next);
-    StringBuffer nextCode = new StringBuffer(prefixWithSeperator);
+    StringBuffer nextCode = new StringBuffer(prefixWithSeperator); // adapt_notQuery
     for(int i=nextStr.length(); i<nbrOfCodeDigits; i++) nextCode.append('0');
     nextCode.append(nextStr);
     

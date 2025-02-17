@@ -83,7 +83,7 @@ public class ExcelSyncDesc extends FocDesc {
     list.setDirectlyEditable(false);
     list.setDirectImpactOnDatabase(true);
     SQLFilter filter = list.getFilter();
-    filter.putAdditionalWhere("STORAGE_NAME", FNAME_DESC + " = '" + storageName +"'");
+    filter.putAdditionalWhere("STORAGE_NAME", "\"" + FNAME_DESC + "\" = '" + storageName +"'"); // adapt_done (pr / unreachable)
     if(list.getListOrder() == null){
       FocListOrder order = new FocListOrder(FField.FLD_NAME);
       list.setListOrder(order);

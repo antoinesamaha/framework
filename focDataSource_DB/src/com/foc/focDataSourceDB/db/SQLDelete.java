@@ -33,7 +33,7 @@ public class SQLDelete extends SQLRequest {
   }
 
   public boolean buildRequest() {
-    request = new StringBuffer("");
+    request = new StringBuffer("");  // adapt_proofread
 
     if (focDesc != null && focDesc.isPersistent()) {
       request.append("DELETE ");

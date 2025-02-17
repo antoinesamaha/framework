@@ -100,7 +100,7 @@ public class FFormulaTree extends FTree {
 	
 	private static class FFormulaTreeScaner implements TreeScanner<FFormulaNode>{
 		
-		private StringBuffer formulaLevel0Format = new StringBuffer();
+		private StringBuffer formulaLevel0Format = new StringBuffer(); // adapt_notQuery
 
 		public void afterChildren(FFormulaNode node) {
 			if(!node.isRoot()){

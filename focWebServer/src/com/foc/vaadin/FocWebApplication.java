@@ -347,7 +347,7 @@ public abstract class FocWebApplication extends UI {
 					}
 				});
 				
-				StringBuffer dropTable = new StringBuffer("DROP TABLE " + INITIAL_SAAS_CONFIG_DB_NAME);
+				StringBuffer dropTable = new StringBuffer("DROP TABLE " + INITIAL_SAAS_CONFIG_DB_NAME); // adapt_proofread 
 				Globals.getApp().getDataSource().command_ExecuteRequest(dropTable);
 				
 			}else{

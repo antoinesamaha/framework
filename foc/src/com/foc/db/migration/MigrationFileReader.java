@@ -174,7 +174,7 @@ public class MigrationFileReader extends FocFileReader{
   }
   
 	@Override
-	public void readLine(StringBuffer buffer) {
+	public void readLine(StringBuffer buffer) { // adapt_notQuery
 		if(isFirstLine()){
 			scanTokens(buffer);			
 		}else{

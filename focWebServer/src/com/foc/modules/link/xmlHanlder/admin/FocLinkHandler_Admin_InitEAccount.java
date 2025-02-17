@@ -73,7 +73,7 @@ public class FocLinkHandler_Admin_InitEAccount extends AbstractSpecificHandler i
 	}
 	
 	@Override
-	public StringBuffer getResponse() {
+	public StringBuffer getResponse() { // adapt_notQuery
 		return null;
 	}
 

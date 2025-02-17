@@ -26,7 +26,7 @@ public class DepartmentList extends FocList{
 		super(new FocLinkSimple(DepartmentDesc.getInstance()));
 		if(endDepartmentsOnly){
 			FBoolField bFld = (FBoolField) DepartmentDesc.getInstance().getFieldByID(DepartmentDesc.FLD_END_DEPARTMENT);
-			getFilter().putAdditionalWhere("END_DEP", bFld.getName()+"=1");
+			getFilter().putAdditionalWhere("END_DEP", "\"" + bFld.getName() + "\"=1"); // adapt_done_P (pr / unreachable)
 		}
 	  setDirectlyEditable(false);
 	  setDirectImpactOnDatabase(true);

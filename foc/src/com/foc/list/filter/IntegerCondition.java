@@ -154,13 +154,13 @@ public class IntegerCondition extends FilterCondition {
     }
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
-    StringBuffer buffer = null;
+    StringBuffer buffer = null; // adapt_proofread
     double firstValue = getFirstValue(filter);
     double lastValue  = getLastValue(filter);
     int op = getOperator(filter);
-    buffer = new StringBuffer();
+    buffer = new StringBuffer(); // adapt_proofread
 
     fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
     

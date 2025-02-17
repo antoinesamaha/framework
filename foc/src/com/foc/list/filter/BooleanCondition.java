@@ -125,11 +125,11 @@ public class BooleanCondition extends FilterCondition{
     }
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
-    StringBuffer buffer = null;
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
+    StringBuffer buffer = null; // adapt_proofread
     int valueCondition = getValue(filter);
     if(valueCondition != VALUE_INDIFFERENT){
-      buffer = new StringBuffer();
+      buffer = new StringBuffer(); // adapt_proofread
       
       fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
       

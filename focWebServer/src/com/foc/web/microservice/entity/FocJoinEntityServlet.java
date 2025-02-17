@@ -267,7 +267,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					FocDesc desc = list.getFocDesc();
 					String fieldName = desc.getRefFieldName();
 					fieldName = DBManager.provider_ConvertFieldName(desc.getProvider(), fieldName);
-					list.getFilter().putAdditionalWhere("REF", fieldName+"="+ref);
+					list.getFilter().putAdditionalWhere("REF", fieldName+"="+ref); // adapt_proofread
 					//list.getFilter().putAdditionalWhere("REF", "I.\"REF\"="+ref);
 				} else {
 					int start = getStartParameter(request);
@@ -555,7 +555,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 			//--------------------------
 			String userJson = "";
 		
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String       reqStr = buffer.toString();
 			
 			if (reqStr != null) Globals.logString(" = Body: "+reqStr);
@@ -703,7 +703,7 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 
 		// Here starts the CORE Delete 
 		//----------------------------
-		StringBuffer buffer  = getRequestAsStringBuffer(request);
+		StringBuffer buffer  = getRequestAsStringBuffer(request); // adapt_notQuery
 		String       reqStr  = buffer != null ? buffer.toString() : null;
 		JSONArray    jsonArr = new JSONArray(reqStr);
 

@@ -33,7 +33,7 @@ public abstract class LogResultFileAbstract implements LogInterface {
 	}
 	
 	protected String getIndentationSpaces(int nbrOfSpaces) {
-		StringBuffer spaces = new StringBuffer("");
+		StringBuffer spaces = new StringBuffer(""); // adapt_notQuery
 		for (int i = 0; i < nbrOfSpaces; i++){
 			spaces.append("    ");
 		}

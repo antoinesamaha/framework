@@ -29,7 +29,7 @@ public class SpringBootTokenAuth {
 	
 	public static synchronized void reloadKeys() {
 		Globals.logString("Auth: Reloading the JWT Keys");
-		StringBuffer request = new StringBuffer("select \"create_date_time\", \"key\" from \"XSharedSecret\"");
+		StringBuffer request = new StringBuffer("select \"create_date_time\", \"key\" from \"XSharedSecret\""); // adapt_proofread
 		ArrayList<String[]> securityKeyList = Globals.getApp().getDataSource().command_SelectRequest(request, 2);
 		
 		if(securityKeyList != null) {

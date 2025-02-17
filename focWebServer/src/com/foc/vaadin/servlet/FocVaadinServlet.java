@@ -41,7 +41,7 @@ public class FocVaadinServlet extends VaadinServlet {
 	}
 	
 	protected String getFullURL(HttpServletRequest request) {
-    StringBuffer requestURL = request.getRequestURL();
+    StringBuffer requestURL = request.getRequestURL(); // adapt_notQuery
     String queryString = request.getQueryString();
 
     if (queryString == null) {

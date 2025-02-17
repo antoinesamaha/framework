@@ -71,7 +71,7 @@ public class FTableModel extends FAbstractTableModel implements FocListener {
     }
     FocObject rowObject = getRowFocObject(row);
     if(rowObject != null){
-      StringBuffer str = new StringBuffer();
+      StringBuffer str = new StringBuffer(); // adapt_notQuery
       if(rowObject.isModified()){
         str.append("M");
       }

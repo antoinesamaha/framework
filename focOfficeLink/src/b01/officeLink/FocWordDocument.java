@@ -50,7 +50,7 @@ public class FocWordDocument extends ExtendedWordDocument{
         PropertyNode propertyNode = (PropertyNode)list.get(i);
         if(propertyNode instanceof TextPiece){
           TextPiece textPiece = (TextPiece)propertyNode;
-          StringBuffer buffer = textPiece.getStringBuffer();
+          StringBuffer buffer = textPiece.getStringBuffer(); // adapt_notQuery
           System.out.println("BEFORE REPLACE");
           System.out.println("Buffer = "+buffer);
           int startIndex = 0;

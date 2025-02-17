@@ -205,7 +205,7 @@ public class FocRequestDesc {
   }
   
   public String getLinkCondition(){
-    StringBuffer str = new StringBuffer();
+    StringBuffer str = new StringBuffer(); // adapt_proofread
     
     boolean firstCondition = true;
     

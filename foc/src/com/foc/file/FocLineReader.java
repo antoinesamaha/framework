@@ -49,7 +49,7 @@ public abstract class FocLineReader {
     return tokenDelimiters;
   }
 
-  public String getTokenAt(StringBuffer buff, int at) {
+  public String getTokenAt(StringBuffer buff, int at) { // adapt_notQuery
     String token = null;
     StringTokenizer tok = new StringTokenizer(buff.toString(), getTokenDelimiters(), false);
 
@@ -64,7 +64,7 @@ public abstract class FocLineReader {
     return token;
   }
 
-  public void scanTokens(StringBuffer buff) {
+  public void scanTokens(StringBuffer buff) { // adapt_notQuery
     boolean insideSpeachMarks = false;
     String stringInsideSpeachMarks = "";
 
@@ -118,7 +118,7 @@ public abstract class FocLineReader {
     this.fieldSeparator[0] = fieldSeparator;
   }
 
-  private String readString(StringBuffer buffer, int start, int end) {
+  private String readString(StringBuffer buffer, int start, int end) { // adapt_notQuery
     String str = buffer.substring(start, end);
     if (str != null && !str.isEmpty()) {
       str = str.trim();
@@ -128,18 +128,18 @@ public abstract class FocLineReader {
     return str;
   }
 
-  protected int readInt(StringBuffer buffer, int start, int end) {
+  protected int readInt(StringBuffer buffer, int start, int end) { // adapt_notQuery
     String str = readString(buffer, start, end);
     int val = (str != null && !str.isEmpty()) ? Integer.valueOf(str) : 0;
     return val;
   }
 
-  protected double readDouble(StringBuffer buffer, int start, int end) {
+  protected double readDouble(StringBuffer buffer, int start, int end) { // adapt_notQuery
     String str = readString(buffer, start, end);
     return (str != null && !str.isEmpty()) ? Double.valueOf(str) : 0;
   }
 
-  protected char readChar(StringBuffer buffer, int start) {
+  protected char readChar(StringBuffer buffer, int start) { // adapt_notQuery
     String str = readString(buffer, start, start + 1);
     return (str != null && !str.isEmpty()) ? str.charAt(0) : 0;
   }

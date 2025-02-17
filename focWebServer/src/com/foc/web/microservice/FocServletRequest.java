@@ -173,13 +173,13 @@ public class FocServletRequest {
 									if(field instanceof FStringField) {
 										String fieldNameSQL = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fieldName);
 										String value = getRequest().getParameter(name);
-										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"='"+value+"'");
+										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"='"+value+"'"); // adapt_proofread
 									} else if(field instanceof FObjectField) {
 										String fieldNameSQL = fieldName+"_"+FField.REF_FIELD_NAME;
 										fieldNameSQL = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fieldNameSQL);
 										String value = getRequest().getParameter(name);
 										long ref = Utils.parseLong(value, -1);
-										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"="+ref+"");
+										list.getFilter().putAdditionalWhere("PARAM_FILTER"+fieldName, fieldNameSQL+"="+ref+""); // adapt_proofread
 									}
 								}
 							}

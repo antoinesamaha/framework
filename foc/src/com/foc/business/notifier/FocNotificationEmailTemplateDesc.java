@@ -109,7 +109,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setSystemObject(true);
 		template.setRecipients("$F{SUPPLIER_EMAILLIST}");
 		template.setSubject("EVERPRO new RFQ [$F{RFQ.CODE}] from $P{CURRENT_COMPANY.NAME}");
-		StringBuffer buffer = new StringBuffer("Dear $F{SUPPLIER_CONTACT.FULL_NAME},\n");
+		StringBuffer buffer = new StringBuffer("Dear $F{SUPPLIER_CONTACT.FULL_NAME},\n"); // adapt_notQuery
 		buffer.append("You have been invited by: '$P{CURRENT_COMPANY.NAME}' ");
 		buffer.append("to bid on a new RFQ ($F{RFQ.CODE}).\n");
 		buffer.append("\n");
@@ -127,7 +127,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setSystemObject(true);
 		template.setRecipients("$F{NAME}");
 		template.setSubject("Congratulations you have a user account at EVERPRO");
-		buffer = new StringBuffer("Dear $F{CONTACT.FULL_NAME},\n");
+		buffer = new StringBuffer("Dear $F{CONTACT.FULL_NAME},\n"); // adapt_notQuery
 		buffer.append("    Please find here under the user credential to login to Everpro:\n");
 		buffer.append("    EVerpro URL: $P{URL}\n");
 		buffer.append("    \n");
@@ -144,7 +144,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setSystemObject(true);
 		template.setRecipients("$P{PROCUREMENT_CONFIG.OUR_PROCUREMENT_EMAIL}");
 		template.setSubject("RFQ Supplier Submit");
-		buffer = new StringBuffer("Dear $F{COMPANY.NAME},\n");
+		buffer = new StringBuffer("Dear $F{COMPANY.NAME},\n"); // adapt_notQuery
 		buffer.append("    We have reviewed your quotation and we decided to $P{MULTIPLE_CHOICE_LABEL(SBMISSION_STATE)} quotation $F{RFQ.CODE}.\n");
 		buffer.append("    For more info please contact $F{SUPPLIER_CONTACT.FULL_NAME}\n");
 		buffer.append("    Email: $F{SUPPLIER_CONTACT.ADR_BK_PARTY.EMAIL}\n");
@@ -160,7 +160,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setSystemObject(true);
 		template.setRecipients("$P{PROCUREMENT_CONFIG.OUR_PROCUREMENT_EMAIL}");
 		template.setSubject("RFQ Supplier Reject");
-		buffer = new StringBuffer("Dear $F{COMPANY.NAME},\n");
+		buffer = new StringBuffer("Dear $F{COMPANY.NAME},\n"); // adapt_notQuery
 		buffer.append("    We have reviewed your quotation and we decided to $P{MULTIPLE_CHOICE_LABEL(SBMISSION_STATE)} quotation $F{RFQ.CODE} .\n");
 		buffer.append("    For more info please contact $F{SUPPLIER_CONTACT.FULL_NAME}\n");
 		buffer.append("    Email: $F{SUPPLIER_CONTACT.ADR_BK_PARTY.EMAIL}\n");
@@ -177,7 +177,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setRecipients("");
 		template.setSubject("RFQ Supplier Reminder");
 		template.setPrintFileName("RFQ Reply / Simple");
-		buffer = new StringBuffer("Dear $F{SUPPLIER_CONTACT.FULL_NAME},\n");
+		buffer = new StringBuffer("Dear $F{SUPPLIER_CONTACT.FULL_NAME},\n"); // adapt_notQuery
 		buffer.append("This email to remind you .\n");
 		buffer.append("\n");
 		buffer.append("\n");
@@ -190,7 +190,7 @@ public class FocNotificationEmailTemplateDesc extends FocDesc implements FocNoti
 		template.setSystemObject(true);
 		template.setRecipients("");
 		template.setSubject("Email sent by $P{CURRENT_COMPANY.NAME} using EVERPRO");
-		buffer = new StringBuffer("Hello,\n");
+		buffer = new StringBuffer("Hello,\n"); // adapt_notQuery
 		buffer.append("\n");
 		buffer.append("Kindly find the attached document sent to you on behalf of $P{CURRENT_COMPANY.NAME} using EVERPRO software.\n");
 		buffer.append("\n");

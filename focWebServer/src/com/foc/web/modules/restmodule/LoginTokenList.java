@@ -41,10 +41,10 @@ public class LoginTokenList extends FocListWithFilter{
 			String datetime = df.format(dateSince30Sec);
 			
 			SQLFilter filter = getFilter();
-			filter.putAdditionalWhere("TOKEN", "\""+LoginToken.FIELD_Token+"\"='"+token+"' AND \""+LoginToken.FIELD_Consumed+"\"=0 AND \""+LoginToken.FIELD_DateTime+"\">'"+datetime+"'");
+			filter.putAdditionalWhere("TOKEN", "\""+LoginToken.FIELD_Token+"\"='"+token+"' AND \""+LoginToken.FIELD_Consumed+"\"=0 AND \""+LoginToken.FIELD_DateTime+"\">'"+datetime+"'"); // adapt_proofread
 		} else {
 			SQLFilter filter = getFilter();
-			filter.putAdditionalWhere("TOKEN", "\""+LoginToken.FIELD_Token+"\"='"+token+"'");
+			filter.putAdditionalWhere("TOKEN", "\""+LoginToken.FIELD_Token+"\"='"+token+"'"); // adapt_proofread
 		}
 	}
 

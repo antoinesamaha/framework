@@ -25,7 +25,7 @@ public abstract class AbstractSpecificHandler extends DefaultHandler implements 
 
 	private String errorMessage = null;
 	
-	public abstract StringBuffer getResponse();
+	public abstract StringBuffer getResponse(); // adapt_notQuery
 	public abstract void commit();
 	
 	public void dispose(){

@@ -1488,7 +1488,7 @@ public class Application {
     coordinates.appendChild(hElmt);
     
     
-    StringBuffer content = new StringBuffer(focDescName+"\n--\n"); 
+    StringBuffer content = new StringBuffer(focDescName+"\n--\n"); // adapt_notQuery
     
     FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_DB);
     while(enumer != null && enumer.hasNext()){
@@ -2191,13 +2191,13 @@ public class Application {
 					statusCommitError = statusCommitError.substring(0, (WFLogDesc.LEN_STATUS_ERROR/2));
 				}
 				
-				StringBuffer buffer = null;
+				StringBuffer buffer = null; // adapt_proofread
 				if(focDesc.getProvider() == DBManager.PROVIDER_MYSQL) {
-					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " ");
+					buffer = new StringBuffer("UPDATE " + logFocDesc.getStorageName_ForSQL() + " "); // adapt_proofread
 					buffer.append("set EVT_STATUS = "+status+" , STATUS_ERROR = \""+statusCommitError+"\"");
 					buffer.append(" where "+logFocDesc.getRefFieldName()+" = "+logEventRef+" ");						
 				} else {
-					buffer = new StringBuffer("UPDATE \"" + logFocDesc.getStorageName_ForSQL() + "\" ");
+					buffer = new StringBuffer("UPDATE \"" + logFocDesc.getStorageName_ForSQL() + "\" "); // adapt_proofread
 					buffer.append("set \"EVT_STATUS\" = "+status+" , \"STATUS_ERROR\" = \'"+statusCommitError+"\'");
 					buffer.append(" where \""+logFocDesc.getRefFieldName()+"\" = "+logEventRef+" ");
 				}					
@@ -2253,7 +2253,7 @@ public class Application {
 	}
 
 	public String dumpLivingFocObjectCounts(boolean withGuiMessage, boolean includeCached, boolean html) {
-		StringBuffer buffer = new StringBuffer();
+		StringBuffer buffer = new StringBuffer(); // adapt_notQuery
 		String fileName = null;
     try {
     	fileName = Globals.logFile_GetFileName("EntityCounts", "csv");

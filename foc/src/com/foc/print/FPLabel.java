@@ -122,7 +122,7 @@ public class FPLabel extends FPComponent implements Cloneable{
         lines[0] = new TextLine(text);
       }else{
         ArrayList a = new ArrayList();
-        StringBuffer buff = new StringBuffer();
+        StringBuffer buff = new StringBuffer(); // adapt_notQuery
        
         StringTokenizer st = new StringTokenizer(text, " \n", true);
         while (st.hasMoreTokens()) {
@@ -130,7 +130,7 @@ public class FPLabel extends FPComponent implements Cloneable{
              
           if(token.compareTo("\n") == 0){
             a.add(buff);
-            buff = new StringBuffer();
+            buff = new StringBuffer(); // adapt_notQuery
           }else if((buff.length() + token.length() + 1) <= charPerLine){
             if(buff.length() > 0) buff.append(" ");
             buff.append(token);
@@ -145,7 +145,7 @@ public class FPLabel extends FPComponent implements Cloneable{
                 String chunk = token.substring(b, e);
                 buff.append(chunk);
                 a.add(buff);
-                buff = new StringBuffer();
+                buff = new StringBuffer(); // adapt_notQuery
   
                 b = e + 1;
                 e = e + charPerLine;
@@ -155,7 +155,7 @@ public class FPLabel extends FPComponent implements Cloneable{
               }
             }else{
               a.add(buff);
-              buff = new StringBuffer(token);
+              buff = new StringBuffer(token); // adapt_notQuery
             }
           }
         }
@@ -166,7 +166,7 @@ public class FPLabel extends FPComponent implements Cloneable{
         
         lines = new TextLine[a.size()];
         for(int i=0; i<a.size(); i++){
-          lines[i] = new TextLine(new String((StringBuffer)a.get(i)));
+          lines[i] = new TextLine(new String((StringBuffer)a.get(i))); // adapt_notQuery
         }
       }  
     }

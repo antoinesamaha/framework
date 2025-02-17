@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.foc.Globals;
+import com.foc.db.DBManager;
 import com.foc.db.SQLFilter;
 import com.foc.desc.*;
 import com.foc.desc.field.FField;
@@ -36,10 +37,10 @@ public class SQLSelectFindReferenceForUniqueKey extends SQLSelect {
   	boolean error = getFocDesc().getFieldByID(FField.REF_FIELD_ID) == null;
  		error = error || !getFocDesc().isKeyUnique();
   	if(!error){
-    	request = new StringBuffer("SELECT ");
-    	request.append(getFocDesc().getRefFieldName());
+    	request = new StringBuffer("SELECT ");  // adapt_done_P (pr / general testing)
+    	request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), getFocDesc().getRefFieldName()));
    		request.append(" FROM ");
-    	request.append(getFocDesc().getStorageName_ForSQL());
+    	request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), getFocDesc().getStorageName_ForSQL()));
     	addWhere();
   	}else{
   		Globals.logString("TABLE : "+getFocDesc().getStorageName_ForSQL());

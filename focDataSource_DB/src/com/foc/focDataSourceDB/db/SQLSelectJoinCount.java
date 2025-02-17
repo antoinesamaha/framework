@@ -29,7 +29,7 @@ public class SQLSelectJoinCount extends SQLSelectJoinRequest {
 	}
   
 	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){
-		StringBuffer fakeBuffer = new StringBuffer();
+		StringBuffer fakeBuffer = new StringBuffer();  // adapt_proofread
 		super.addTableFieldsToSelect(focDesc, fakeBuffer, tableAlias);
 		
     fieldsCommaSeparated.append("COUNT(DISTINCT ");
@@ -39,8 +39,8 @@ public class SQLSelectJoinCount extends SQLSelectJoinRequest {
   
 	@Override
   public boolean buildRequest(){
-    request = new StringBuffer("SELECT ");
-    StringBuffer fieldsCommaSeparated = new StringBuffer();
+    request = new StringBuffer("SELECT ");  // adapt_proofread
+    StringBuffer fieldsCommaSeparated = new StringBuffer();  // adapt_proofread
     boolean error = false;
     
     if (focDesc != null && focDesc.isPersistent()) {

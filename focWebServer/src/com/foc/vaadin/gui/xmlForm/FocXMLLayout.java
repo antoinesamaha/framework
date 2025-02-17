@@ -1881,7 +1881,7 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			
 			private String qName = null;
 			private FocXMLAttributes attributes = null;
-			private StringBuffer cData = null;
+			private StringBuffer cData = null; // adapt_notQuery
 			
 			public FocElement(String qName, FocXMLAttributes attributes) {
 				this.qName = qName;
@@ -1902,11 +1902,11 @@ public class FocXMLLayout extends VerticalLayout implements ICentralPanel, IVali
 			}
 			
 			public void appendCData(String data){
-				if(cData == null) cData = new StringBuffer();
+				if(cData == null) cData = new StringBuffer(); // adapt_notQuery
 				cData.append(data);
 			}
 			
-			public StringBuffer getCData(){
+			public StringBuffer getCData(){ // adapt_notQuery
 				return cData;
 			}
 		}

@@ -97,7 +97,7 @@ public class SQLSelect extends SQLSelectPlain {
 		return newPath;
 	}
 	
-	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){
+	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){  // adapt_proofread
     FocFieldEnum enumer = focDesc.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_PLAIN);
     while(enumer.hasNext()){
       FField focField = (FField) enumer.next();
@@ -113,7 +113,7 @@ public class SQLSelect extends SQLSelectPlain {
 	        	SQLJoin newJoin = filter.getJoinMap().addJoin(new SQLJoin(focDesc.getProvider(), obj121.getFocDesc().getStorageName_ForSQL(), tableAlias, obj121.getDBName(), obj121.getFocDesc().getRefFieldName()));
 	        	if(obj121.getFocDesc().isByCompany() && filter.isFilterByCompany()){
 		        	//newJoin.setType(SQLJoin.JOIN_TYPE_RIGHT);
-		        	String filterExpression = CompanyDesc.getCompanyFilter_IfNeeded(newJoin.getNewAlias()+"."+obj121.getFocDesc().getFieldByID(FField.FLD_COMPANY).getDBName());
+		        	String filterExpression = CompanyDesc.getCompanyFilter_IfNeeded(newJoin.getNewAlias()+".\""+obj121.getFocDesc().getFieldByID(FField.FLD_COMPANY).getDBName()+"\""); // adapt_done_P (pr / general testing)
 		        	newJoin.setAdditionalWhere(filterExpression);
 	        	}
 	        	addTableFieldsToSelect(obj121.getFocDesc(), fieldsCommaSeparated, newJoin.getNewAlias());
@@ -158,8 +158,8 @@ public class SQLSelect extends SQLSelectPlain {
 	
 	@Override
   public boolean buildRequest(){
-    request = new StringBuffer("SELECT ");
-    StringBuffer fieldsCommaSeparated = new StringBuffer();
+    request = new StringBuffer("SELECT ");  // adapt_proofread
+    StringBuffer fieldsCommaSeparated = new StringBuffer();  // adapt_proofread
     boolean error = false;
     
     if (focDesc != null && focDesc.isPersistent()) {
