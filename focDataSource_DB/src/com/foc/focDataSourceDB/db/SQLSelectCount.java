@@ -17,7 +17,7 @@ public class SQLSelectCount extends SQLSelect {
 		super(initialList, focDesc, filter);
 	}
 	
-	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){
+	protected void addTableFieldsToSelect(FocDesc focDesc, StringBuffer fieldsCommaSeparated, String tableAlias){  // adapt_proofread
 		super.addTableFieldsToSelect(focDesc, fieldsCommaSeparated, tableAlias);
 		
     String fieldNameString = FField.REF_FIELD_NAME;

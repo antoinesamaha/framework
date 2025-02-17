@@ -77,7 +77,7 @@ public class SQLUpdate extends SQLRequest {
 		              if (!firstField) {
 		                request.append(",");
 		              } else {
-		              	request = new StringBuffer("");
+		              	request = new StringBuffer(""); // adapt_proofread
 	                  request.append("UPDATE ");
 	                	if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
 	                		request.append("\""+focDesc.getStorageName_ForSQL()+"\"");

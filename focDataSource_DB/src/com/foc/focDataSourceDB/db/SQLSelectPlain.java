@@ -92,7 +92,7 @@ public class SQLSelectPlain extends SQLRequest {
   }
   
   public boolean buildRequest() {
-    request = new StringBuffer("");
+    request = new StringBuffer("");  // adapt_proofread (operational?)
     boolean error = false;
 
     if (focDesc != null && focDesc.isPersistent()) {

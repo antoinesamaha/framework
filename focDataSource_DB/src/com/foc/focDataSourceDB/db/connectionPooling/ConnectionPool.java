@@ -135,7 +135,7 @@ public class ConnectionPool {
 		}
 	}
 
-	public StringBuffer getMonitoringText() {
+	public StringBuffer getMonitoringText() {  // adapt_notQuery
 		ConnectionWrapper wrapper = getConnectionWrapper();
 		return wrapper != null ? wrapper.getMonitoringText() : null;
 	}

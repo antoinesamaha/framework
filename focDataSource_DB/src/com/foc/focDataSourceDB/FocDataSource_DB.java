@@ -234,7 +234,7 @@ public class FocDataSource_DB implements IFocDataSource {
     	for(int i=0; i<arrayToDelete.size(); i++){
   			ReferenceCheckerDelete toDelete = arrayToDelete.get(i);
   			if(toDelete != null){
-  				StringBuffer sql = toDelete.buildDeleteRequest();
+  				StringBuffer sql = toDelete.buildDeleteRequest(); // adapt_proofread (as process)
   				command_ExecuteRequest(sql);
   			}
   		}
@@ -269,7 +269,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	    FocDesc focDesc = focObject.getThisFocDesc();
 	    if(focDesc != null){
 		    if(!focDesc.getWithReference() || focObject.hasRealReference()){
-		      StringBuffer message = new StringBuffer();
+		      StringBuffer message = new StringBuffer(); // adapt_notQuery
 		      can = focObject.referenceCheck_GetNumber(message, true, referenceCjeckerToIgnore, arrayPutToZero, arrayDelete) == 0;
 		    }else{
 		    	can = true;
@@ -308,7 +308,7 @@ public class FocDataSource_DB implements IFocDataSource {
     		for(int i=0; i<arrayToDelete.size(); i++){
     			ReferenceCheckerDelete toDelete = arrayToDelete.get(i);
     			if(toDelete != null){
-    				StringBuffer sql = toDelete.buildDeleteRequest();
+    				StringBuffer sql = toDelete.buildDeleteRequest(); // adapt_proofread (as process)
     				command_ExecuteRequest(sql);
     			}
     		}
@@ -586,7 +586,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	      	if(!Utils.isStringEmpty(fldName)) {
 		      	if(slaveDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ; 
 		      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(slaveDesc.getProvider())) fldName = "\""+fldName+"\"" ;
-				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded));
+				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded)); // adapt_proofread
 	      	}
 			  }
 		  }
@@ -645,7 +645,7 @@ public class FocDataSource_DB implements IFocDataSource {
 						}
 		      	fldName = DBManager.provider_ConvertFieldName(focDesc.getProvider(), fldName);
 //		      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())) fldName = "\""+fldName+"\"" ;
-				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded));
+				  	focList.getFilter().putAdditionalWhere(FocList.FILTER_KEY_FOR_INCREMENTAL_UPDATE, fldName + "=" + String.valueOf(refToBeReloaded)); // adapt_proofread
 	      	}
 			  }
 		  }
@@ -814,7 +814,7 @@ public class FocDataSource_DB implements IFocDataSource {
   private void focObject_Redirect_ForReferenceChecker(ReferenceChecker refCheck, FocObject initialFocObject, FocObject focObjectToRedirectTo){
   	SQLFilter filter = getFilterAdapted(refCheck, initialFocObject);
   	
-  	StringBuffer sqlWhere = new StringBuffer(); 
+  	StringBuffer sqlWhere = new StringBuffer(); // adapt_proofread
   	filter.addWhereToRequest_WithoutWhere(sqlWhere, refCheck.getFocDesc());
   	SQLSelectExistance selectExistance = new SQLSelectExistance(refCheck.getFocDesc(), sqlWhere);
   	selectExistance.execute();
@@ -849,7 +849,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	//-----------------------------------------------------
 
   @Override
-  public int focObject_GetNumberOfReferences(FocObject focObj, StringBuffer message, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete){
+  public int focObject_GetNumberOfReferences(FocObject focObj, StringBuffer message, ReferenceChecker referenceCjeckerToIgnore, ArrayList<ReferenceCheckerToPutToZero> arrayPutToZero, ArrayList<ReferenceCheckerDelete> arrayDelete){ // adapt_notQuery
     int     nbOfReferences = 0;
     FocDesc focDesc        = focObj.getThisFocDesc();
     
@@ -881,7 +881,7 @@ public class FocDataSource_DB implements IFocDataSource {
     return nbOfReferences;
   }
 
-  private int focObject_GetNumberOfReferences_ForChecker(ReferenceChecker refCheck, FocObject obj, StringBuffer message){
+  private int focObject_GetNumberOfReferences_ForChecker(ReferenceChecker refCheck, FocObject obj, StringBuffer message){ // adapt_notQuery
     int nbRef = 0;
     
     if(refCheck.getFocDesc() != null && !obj.isCreated()){
@@ -889,7 +889,7 @@ public class FocDataSource_DB implements IFocDataSource {
       if(!objField.isReferenceChecker_PutToZeroWhenReferenceDeleted() && !objField.isReferenceChecker_DeleteWhenReferenceDeleted()){      
 	      SQLFilter     filter        = getFilterAdapted(refCheck, obj);
 	      
-	    	StringBuffer sqlWhere = new StringBuffer(); 
+	    	StringBuffer sqlWhere = new StringBuffer();  // adapt_proofread
 	    	filter.addWhereToRequest_WithoutWhere(sqlWhere, refCheck.getFocDesc());
 	    	SQLSelectExistance selectExistance = new SQLSelectExistance(refCheck.getFocDesc(), sqlWhere);
 	    	selectExistance.execute();
@@ -986,13 +986,13 @@ public class FocDataSource_DB implements IFocDataSource {
 	//-----------------------------------------------------
 
 	@Override
-	public ArrayList command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression) {
+	public ArrayList command_Select(FocDesc desc, int fieldID, boolean distinct, StringBuffer filterExpression) { // adapt_proofread (as process)
 		ArrayList array = new ArrayList();
 		
     SQLFilter filter = null;
     if(filterExpression != null){
 	    filter = new SQLFilter(null, SQLFilter.FILTER_ON_SELECTED);
-	    StringBuffer buff   = new StringBuffer(filterExpression);
+	    StringBuffer buff   = new StringBuffer(filterExpression); // adapt_proofread (as process)
 	    filter.setAdditionalWhere(buff);
     }
 		
@@ -1027,7 +1027,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 
 	@Override
-	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest){
+	public ArrayList<String> command_SelectRequest(StringBuffer sqlRequest){ // adapt_proofread (as process)
 		ArrayList<String> array = new ArrayList();
 		
 		boolean error = true;
@@ -1062,7 +1062,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 	
 	@Override
-	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns){
+	public ArrayList<String[]> command_SelectRequest(StringBuffer sqlRequest, int nbrColumns){ // adapt_proofread
 		ArrayList<String[]> array = new ArrayList();
 		
 		boolean error = true;
@@ -1113,7 +1113,7 @@ public class FocDataSource_DB implements IFocDataSource {
   	boolean exist = false;
   	FocUserDesc userDesc = (FocUserDesc) FocUser.getFocDesc(); 
   	FStringField nameFld = (FStringField) userDesc.getFieldByID(FocUserDesc.FLD_NAME);
-  	StringBuffer sqlWhere = new StringBuffer(nameFld.getDBName()+"='"+AdminModule.ADMIN_USER+"'");
+  	StringBuffer sqlWhere = new StringBuffer(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), nameFld.getDBName())+"='"+AdminModule.ADMIN_USER+"'"); // adapt_done_P (pr / unreachable)
   	SQLSelectExistance selectExistance = new SQLSelectExistance(FocUser.getFocDesc(), sqlWhere);
   	selectExistance.execute();
   	exist = selectExistance.getExist() == SQLSelectExistance.EXIST_YES;
@@ -1246,9 +1246,9 @@ public class FocDataSource_DB implements IFocDataSource {
   	
     StatementWrapper stmt = getDBManagerServer().lockStatement();
     if (stmt != null && desc.isPersistent()) {
-    	StringBuffer sqlRequest = new StringBuffer();
-    	sqlRequest.append("UPDATE "+desc.getStorageName()+" SET ");
-    	sqlRequest.append(cFld.getDBName()+"='"+newValue+"' WHERE "+cFld.getDBName()+"='"+originalValue+"'");
+    	StringBuffer sqlRequest = new StringBuffer(); // adapt_done (pr / unreachable)
+    	sqlRequest.append("UPDATE "+ DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), desc.getStorageName()) + " SET ");
+    	sqlRequest.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), cFld.getDBName()) +"='"+newValue+"' WHERE "+ DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), cFld.getDBName()) +"='"+originalValue+"'");
       try {
       	String req = SQLRequest.adapteRequestToDBProvider(sqlRequest);
         if(ConfigInfo.isLogDBRequestActive()){
@@ -1495,7 +1495,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 
 	@Override
-	public boolean command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest) {
+	public boolean command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest) { // adapt_proofread
 		boolean error = true;
     StatementWrapper stmt = getDBManagerServer().lockStatement(dbSourceKey);
     if (stmt != null) {
@@ -1522,7 +1522,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 	
 	@Override
-	public boolean command_ExecuteRequest(StringBuffer sqlRequest) {
+	public boolean command_ExecuteRequest(StringBuffer sqlRequest) { // adapt_proofread (as process)
 		return command_ExecuteRequest(null, sqlRequest);
 	}
 
@@ -1580,7 +1580,7 @@ public class FocDataSource_DB implements IFocDataSource {
 		try{
 			Connection connection = getDBManagerServer() != null ? getDBManagerServer().getConnection() : null;
 			if(connection != null){
-				StringBuffer callString = new StringBuffer("call " + name);
+				StringBuffer callString = new StringBuffer("call " + name); // adapt_notQuery
 				if(params != null && params.length > 0){
 					callString.append("(");
 					for(int i=0; i<params.length; i++){
@@ -1675,7 +1675,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 
 	@Override
-	public void executeCustomQuery(StringBuffer sqlRequest, IExecuteResultSet iExecuteResultSet) {
+	public void executeCustomQuery(StringBuffer sqlRequest, IExecuteResultSet iExecuteResultSet) { // adapt_proofread (examined the usages)
     StatementWrapper stmt = getDBManagerServer().lockStatement();
     if (stmt != null) {
       try {
@@ -1741,7 +1741,7 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 
 	@Override
-	public StringBuffer getMonitoringText() {
+	public StringBuffer getMonitoringText() { // adapt_notQuery
 		DBManagerServer dbServer = getDBManagerServer();
 		return dbServer != null ? dbServer.getMonitoringText() : null;
 	}

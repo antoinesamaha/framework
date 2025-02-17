@@ -741,7 +741,7 @@ public class DBAdaptor {
 				  			if(alterAllFields) {
 									String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
 									Globals.logString(replaceRequest);
-									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
+									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));  // adapt_proofread
 				  			}				  			
 						    //-------------------------------------------------------------------------------------------------------------
 
@@ -755,7 +755,7 @@ public class DBAdaptor {
 										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
 								    DBManagerServer.getInstance().unlockStatement(stmt);
 									} else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
-								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
+								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));  // adapt_proofread
 									}
 				  			}								
 				  		}
