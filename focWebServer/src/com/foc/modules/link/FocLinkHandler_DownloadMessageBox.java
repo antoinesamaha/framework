@@ -58,8 +58,8 @@ public class FocLinkHandler_DownloadMessageBox extends AbstractSpecificHandler i
 	}
 	
 	@Override
-	public StringBuffer getResponse() {
-		StringBuffer buffer = new StringBuffer();
+	public StringBuffer getResponse() { // adapt_notQuery
+		StringBuffer buffer = new StringBuffer(); // adapt_notQuery
 		
 		buffer.append("<"+TAG_LINK_RESPONSE+">");
 
@@ -74,7 +74,7 @@ public class FocLinkHandler_DownloadMessageBox extends AbstractSpecificHandler i
 		return FocLinkOutBoxDesc.getList();
 	}
 
-	public void scanOutLogList(StringBuffer buffer){
+	public void scanOutLogList(StringBuffer buffer){ // adapt_notQuery
 		if(getOutLogList() != null && Globals.getApp().getUser_ForThisSession() != null){
 			getOutLogList().reloadFromDB();
 			for(int i=0; i<getOutLogList().size(); i++){
@@ -109,7 +109,7 @@ public class FocLinkHandler_DownloadMessageBox extends AbstractSpecificHandler i
 		}
 	}
 	
-	public void generateObjectXmlWrapper(StringBuffer buffer, FocLinkOutBox outLog){
+	public void generateObjectXmlWrapper(StringBuffer buffer, FocLinkOutBox outLog){ // adapt_notQuery
 		buffer.append("<LINK_DOWNLOAD ref=\""+outLog.getReference()+"\">");
 		buffer.append(outLog.getXmlMessage());
 		buffer.append("</LINK_DOWNLOAD>");		

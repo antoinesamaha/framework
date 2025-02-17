@@ -106,8 +106,8 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 		return value;
 	}
 	
-	protected StringBuffer getRequestAsStringBuffer(HttpServletRequest request) {
-		StringBuffer sb = new StringBuffer();
+	protected StringBuffer getRequestAsStringBuffer(HttpServletRequest request) { // adapt_notQuery
+		StringBuffer sb = new StringBuffer(); // adapt_notQuery
 		String s = null;
 		try {
 			while ((s = request.getReader().readLine()) != null) {

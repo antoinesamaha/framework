@@ -24,7 +24,7 @@ public class GCCallServlet extends FocSimpleMicroServlet {
 
 		NumberFormat numFmt = NumberFormat.getNumberInstance();
 		
-		StringBuffer buffer = new StringBuffer();
+		StringBuffer buffer = new StringBuffer(); // adapt_notQuery
 		buffer.append("<html>");
 		buffer.append("<body>");
 		buffer.append("<h1>Garbage collector launched</h1>");

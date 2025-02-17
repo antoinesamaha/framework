@@ -22,11 +22,11 @@ public interface B01JsonSaxCallBack_Interface {
 	public void endObject();
 	public void endList();
 	public void startString();
-	public void endString(StringBuffer strBuff);
+	public void endString(StringBuffer strBuff); // adapt_notQuery
 
 	//These are low level functions better use newKeyValuePair method
-	public void newKey(StringBuffer key);
-	public void newValue(StringBuffer value);
+	public void newKey(StringBuffer key); // adapt_notQuery
+	public void newValue(StringBuffer value); // adapt_notQuery
 	
 	//For an easier SAX implement these functions
 	public void newKeyValuePair(String key, String value);

@@ -1836,7 +1836,7 @@ public class FVValidationLayout extends VerticalLayout {//extends HorizontalLayo
 		}
   	FocObject focObj = getFocObject();
   	if(focObj != null){
-  		StringBuffer message = focObj.checkDeletionWithMessage();
+  		StringBuffer message = focObj.checkDeletionWithMessage(); // adapt_notQuery
 			if(message != null){
 				Globals.showNotification("Cannot delete Item.", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	
 			}else{

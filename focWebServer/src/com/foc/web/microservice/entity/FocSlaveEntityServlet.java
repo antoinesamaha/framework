@@ -76,7 +76,7 @@ public abstract class FocSlaveEntityServlet<O extends FocObject, M extends FocOb
 			//--------------------------
 			String userJson = "";
 
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String       reqStr = buffer.toString();
 			
 			if (reqStr != null) Globals.logString(" = Body: "+reqStr);
@@ -169,7 +169,7 @@ public abstract class FocSlaveEntityServlet<O extends FocObject, M extends FocOb
 
 			//Here starts the CORE Poste 
 			//--------------------------
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String       reqStr  = buffer != null ? buffer.toString() : null;
 			JSONArray    jsonArr = new JSONArray(reqStr);
 			

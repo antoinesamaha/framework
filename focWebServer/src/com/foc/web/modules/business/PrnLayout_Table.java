@@ -257,7 +257,7 @@ public class PrnLayout_Table extends FocXMLLayout{
 
     FVUploadLayout_Form uploadLayout = (FVUploadLayout_Form) XMLViewDictionary.getInstance().newCentralPanel(getMainWindow(), key, null);
     uploadLayout.setUploadReader(new FocExcelUploadThenEdit_UploadReader(table));
-    StringBuffer explanation = new StringBuffer();
+    StringBuffer explanation = new StringBuffer(); // adapt_notQuery
     explanation.append("Click the 'Choose File' button bellow to choose the Excel file that contains your original BOQ.<br>");
     explanation.append("Please follow these constraints for the import to go smooth:<br>");
     explanation.append("<ol>");

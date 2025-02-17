@@ -38,7 +38,7 @@ public class FDataRequest_Server extends FDataRequest_Abstract {
 	}
 
 	@Override
-	public void parseJson(StringBuffer buffer) {
+	public void parseJson(StringBuffer buffer) { // adapt_notQuery
 		// TODO Auto-generated method stub
 		
 	}

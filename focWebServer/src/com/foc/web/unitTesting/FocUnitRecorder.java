@@ -20,11 +20,11 @@ import com.foc.Globals;
 
 public class FocUnitRecorder {
 	
-	private StringBuffer buffer = null;
+	private StringBuffer buffer = null; // adapt_notQuery
 	private boolean      pause  = false; 
 	
 	public FocUnitRecorder(){
-		buffer = new StringBuffer();
+		buffer = new StringBuffer(); // adapt_notQuery
 	}
 	
 	private boolean isPause() {

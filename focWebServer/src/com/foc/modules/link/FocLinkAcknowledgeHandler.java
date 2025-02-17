@@ -20,8 +20,8 @@ import com.foc.link.IFocOperation;
 public class FocLinkAcknowledgeHandler extends AbstractSpecificHandler{
 
 	@Override
-	public StringBuffer getResponse() {
-		StringBuffer buffer = new StringBuffer();
+	public StringBuffer getResponse() { // adapt_notQuery
+		StringBuffer buffer = new StringBuffer(); // adapt_notQuery
 		buffer.append("<LINK_ACKNOWLEDGE>");
 		IFocOperation operation = null;
 //		FocOperationFactory.getInstance().getOperationByName("");                  //just to make it work

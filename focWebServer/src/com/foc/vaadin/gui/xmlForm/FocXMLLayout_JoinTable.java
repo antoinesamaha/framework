@@ -194,7 +194,7 @@ public abstract class FocXMLLayout_JoinTable extends FocXMLLayout {
 		newObject.setReference(getOriginalObjectReference(focObject));
 		newObject.load();
 
-		StringBuffer checkDeletion = newObject.checkDeletionWithMessage(); 
+		StringBuffer checkDeletion = newObject.checkDeletionWithMessage(); // adapt_notQuery
 		if(checkDeletion != null && checkDeletion.length() > 0){
 			Globals.showNotification("Cannot Delete", checkDeletion.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);
 		}else{

@@ -107,14 +107,14 @@ public abstract class B01JsonSaxCallBack_Abstract implements B01JsonSaxCallBack_
 	}
 
 	@Override
-	public void endString(StringBuffer strBuff) {
+	public void endString(StringBuffer strBuff) {// adapt_notQuery
 	}
 
 	@Override
-	public void newKey(StringBuffer key) {
+	public void newKey(StringBuffer key) {// adapt_notQuery
 	}
 
 	@Override
-	public void newValue(StringBuffer value) {
+	public void newValue(StringBuffer value) {// adapt_notQuery
 	}
 }

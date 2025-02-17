@@ -77,7 +77,7 @@ public class FocUserContactServlet extends FocEntityServlet<Contact> {
 			//--------------------------
 			String userJson = "";
 		
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String       reqStr = buffer.toString();
 			
 			if (reqStr != null) Globals.logString(" = Body: "+reqStr);

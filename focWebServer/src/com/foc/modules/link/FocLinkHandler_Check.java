@@ -18,8 +18,8 @@ package com.foc.modules.link;
 public class FocLinkHandler_Check extends AbstractSpecificHandler implements IFocLinkConst {
 
 	@Override
-	public StringBuffer getResponse() {
-		StringBuffer buff = new StringBuffer("<");
+	public StringBuffer getResponse() { // adapt_notQuery
+		StringBuffer buff = new StringBuffer("<"); // adapt_notQuery
 		buff.append(TAG_LINK_CHECK);
 		buff.append("></");
 		buff.append(TAG_LINK_CHECK);

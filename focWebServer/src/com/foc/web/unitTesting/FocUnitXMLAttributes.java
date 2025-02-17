@@ -47,7 +47,7 @@ public class FocUnitXMLAttributes extends FXMLAbstractAttributes {
   }
   
   public String getString(String[] excludeAttributes){
-  	StringBuffer buff = new StringBuffer();
+  	StringBuffer buff = new StringBuffer(); // adapt_notQuery
   	
   	for(int i=0; i<getLength(); i++){
   		boolean include = true; 
