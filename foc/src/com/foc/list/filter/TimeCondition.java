@@ -183,6 +183,16 @@ public class TimeCondition extends FilterCondition {
 	      }else if (op == OPERATOR_EQUALS){
 	      	buffer.append(fieldName + " =  TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
 	      }
+	    } else if(provider == DBManager.PROVIDER_POSTGRES) {
+	      if (op == OPERATOR_GREATER_THAN){
+	        buffer.append(fieldName + ">= '" + firstDateFormat + "'");
+	      }else if (op == OPERATOR_LESS_THAN) {
+	        buffer.append(fieldName + "<= '" + lastDateFormat + "'");
+	      }else if (op == OPERATOR_BETWEEN){
+	        buffer.append(fieldName + " BETWEEN '"+ firstDateFormat +"' AND '" + lastDateFormat + "'");
+	      }else if (op == OPERATOR_EQUALS){
+	        buffer.append(fieldName + " = '" + firstDateFormat + "'");
+	      }	    	
 	    } else {
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
 	        buffer.append(fieldName + ">= " + firstDateFormat);
