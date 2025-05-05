@@ -1375,8 +1375,18 @@ public class FocDataSource_DB implements IFocDataSource {
 			FocDesc focDesc        = focObject.getThisFocDesc();
 			FField  focField       = focDesc.getFieldByID(fieldID);
 	    String  imageFieldName = focField != null ? focField.getName() : null;
-
-	    String sqlRequest = "UPDATE "+ focDesc.getStorageName_ForSQL()+" SET "+ imageFieldName +" = (?) WHERE REF = "+ focObject.getReference().getInteger();
+	    String dbName = focDesc.getStorageName_ForSQL();
+	    String refFieldName = focDesc.getRefFieldName();
+	    
+	    boolean tableBetweenSpeechmarks = DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider());
+	    boolean fieldBetweenSpeechmarks = DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider());
+		if(tableBetweenSpeechmarks) dbName = "\"" + dbName + "\"";
+		if(fieldBetweenSpeechmarks) {
+			imageFieldName = "\"" + imageFieldName + "\"";
+			refFieldName = "\"" + refFieldName + "\"";
+		}
+				
+	    String sqlRequest = "UPDATE "+ dbName +" SET "+ imageFieldName +" = (?) WHERE " + refFieldName + " = "+ focObject.getReference().getInteger();
 	    try{
 	      Connection        connection      = getDBManagerServer().getConnection();
 	      PreparedStatement stmt            = connection.prepareStatement(sqlRequest);
