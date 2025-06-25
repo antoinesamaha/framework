@@ -198,15 +198,15 @@ public class DateTimeCondition extends FilterCondition {
 	      	buffer.append("TRUNC(" +fieldName+",'MI')" + " =  TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
 	      }
 	    } else {
-	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
-	        buffer.append(fieldName + ">= '" + firstDateFormat+"'");
-	      }else if (op == OPERATOR_LESS_THAN) {
-	        buffer.append(fieldName + "<= '" + lastDateFormat+"'");
-	      }else if (op == OPERATOR_BETWEEN){
-	        buffer.append(fieldName + " BETWEEN '"+ firstDateFormat +"' AND '" + lastDateFormat+"'");
-	      }else if (op == OPERATOR_EQUALS){
-	        buffer.append(fieldName + " = '" + firstDateFormat+"'");
-	      }	    	
+	    	if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
+		        buffer.append("DATE_TRUNC('minute', " + fieldName + ")" + ">= '" + firstDateFormat+"'");
+	    	}else if (op == OPERATOR_LESS_THAN) {
+		        buffer.append("DATE_TRUNC('minute', " + fieldName + ")" + "<= '" + lastDateFormat+"'");
+	    	}else if (op == OPERATOR_BETWEEN){
+		        buffer.append("DATE_TRUNC('minute', " + fieldName + ")" + " BETWEEN '"+ firstDateFormat +"' AND '" + lastDateFormat+"'");
+	    	}else if (op == OPERATOR_EQUALS){
+		        buffer.append("DATE_TRUNC('minute', " + fieldName + ")" + " = '" + firstDateFormat+"'");
+	    	}
 	    }
     }
     return buffer;
