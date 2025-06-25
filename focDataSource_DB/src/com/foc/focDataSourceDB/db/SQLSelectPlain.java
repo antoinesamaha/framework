@@ -434,10 +434,15 @@ public class SQLSelectPlain extends SQLRequest {
         if(resultSet != null){
         	PerfManager.startDBRead();
         	long startTimeDBRead = System.currentTimeMillis();
+        	PerfManager.startDBRead();
+        	long endTimeDBRead = System.currentTimeMillis();
+        	Globals.logString(" - SQL START DB READ DURATION = "+(endTimeDBRead-startTimeDBRead));
           treatResultSet(resultSet);
+          endTimeDBRead = System.currentTimeMillis();
+          Globals.logString(" - SQL TREAT RESULT SET DURATION = "+(endTimeDBRead-startTimeDBRead));
           afterTreatResultSet();
-          long endTimeDBRead = System.currentTimeMillis();
-          Globals.logString(" - SQL READ DURATION = "+(endTimeDBRead-startTimeDBRead));
+          endTimeDBRead = System.currentTimeMillis();
+          Globals.logString(" - SQL AFTER TREAT RESULT SET DURATION = "+(endTimeDBRead-startTimeDBRead));
           PerfManager.endDBRead();
           try{
             resultSet.close();

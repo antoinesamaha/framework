@@ -299,7 +299,7 @@ public class DBManagerServer {
 			    	  	}
 			    	  	
 			    	  	while(rs.next()){
-			    	  		int ref = rs.getInt(indexOfREF);
+			    	  		long ref = rs.getLong(indexOfREF);
 	
 			    	  		focObject.setReference_WithFocListRefHashMapAdjustment(ref);
 			    	  	}
