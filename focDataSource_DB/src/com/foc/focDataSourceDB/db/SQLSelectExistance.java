@@ -25,14 +25,14 @@ public class SQLSelectExistance extends SQLSelect {
   public static int EXIST_NO           = 2;
   public static int EXIST_UNDETERMINED = 0;
   
-  public SQLSelectExistance(FocDesc desc, StringBuffer sqlWhere) {
+  public SQLSelectExistance(FocDesc desc, StringBuffer sqlWhere) {  // adapt_proofread
     super((FocObject)null, desc, null);
     this.sqlWhere = sqlWhere;
     exist = EXIST_UNDETERMINED;
   }
  
   public boolean buildRequest() {
-  	request = new StringBuffer("SELECT ");
+  	request = new StringBuffer("SELECT ");  // adapt_proofread
 //    if (getFocDesc().getFieldByID(FField.REF_FIELD_ID) != null) {
 //    	request.append(FField.REF_FIELD_NAME);
 //    }else{

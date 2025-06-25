@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.foc.Globals;
+import com.foc.db.DBManager;
 import com.foc.db.SQLFilter;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -23,7 +24,7 @@ public class SQLSelectFindReferenceForWhereExpression extends SQLSelect {
   public SQLSelectFindReferenceForWhereExpression(FocDesc focDesc, String whereExpression) {
     super((FocObject)null, focDesc, null);
     filter = new SQLFilter(null, SQLFilter.FILTER_ON_NOTHING);
-    filter.putAdditionalWhere("SPECIAL", whereExpression);
+    filter.putAdditionalWhere("SPECIAL", whereExpression); // adapt_proofread
   }
  
   public void dispose(){
@@ -37,10 +38,10 @@ public class SQLSelectFindReferenceForWhereExpression extends SQLSelect {
   public boolean buildRequest() {
   	boolean error = getFocDesc().getFieldByID(FField.REF_FIELD_ID) == null;
   	if(!error){
-    	request = new StringBuffer("SELECT ");
-    	request.append(getFocDesc().getRefFieldName());
+    	request = new StringBuffer("SELECT ");  // adapt_done (pr)
+    	request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), getFocDesc().getRefFieldName()));
    		request.append(" FROM ");
-    	request.append(getFocDesc().getStorageName_ForSQL());
+    	request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), getFocDesc().getStorageName_ForSQL()));
     	addWhere();
   	}else{
   		Globals.logString("TABLE : "+getFocDesc().getStorageName_ForSQL()+" REF field does not exist");

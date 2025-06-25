@@ -31,7 +31,7 @@ public class CodeWriter_OneFile {
 	private String      						packageName   = null;
 	private PrintStream 						fileStream    = null;
 	private HashMap<String, String> importsMap    = null;
-	private StringBuffer            coreBuffer    = null;
+	private StringBuffer            coreBuffer    = null; // adapt_notQuery
 	private String      						fileExtention = "java";
 	
 	public CodeWriter_OneFile(CodeWriter codeWriter, String packageName, String className){
@@ -39,7 +39,7 @@ public class CodeWriter_OneFile {
 		this.packageName = packageName;
 		this.className   = className  ;
 		
-		coreBuffer = new StringBuffer();
+		coreBuffer = new StringBuffer(); // adapt_notQuery
 		importsMap = new HashMap<String, String>();
 	}
 	

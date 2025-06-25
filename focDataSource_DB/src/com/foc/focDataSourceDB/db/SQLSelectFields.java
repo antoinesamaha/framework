@@ -38,7 +38,7 @@ public class SQLSelectFields extends SQLRequest {
   }
   
   public boolean buildRequest(String selectCommand) {
-    request = new StringBuffer("");
+    request = new StringBuffer("");  // adapt_proofread
     boolean error = false;
 
     if (focDesc != null && focDesc.isPersistent()) {

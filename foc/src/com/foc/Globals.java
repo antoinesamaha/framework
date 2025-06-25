@@ -265,7 +265,7 @@ public class Globals{
   	logString(str, ConfigInfo.isLogFileWithTime());
   }
 
-  public static void logString(StringBuffer str) {
+  public static void logString(StringBuffer str) {  // adapt_notQuery
     Globals.logString(str.toString());
   }
   
@@ -310,7 +310,7 @@ public class Globals{
 	public static void logUserAction(String action){
 		try{
 			if(action != null){
-				StringBuffer buffer = new StringBuffer("User Action LOG: ");
+				StringBuffer buffer = new StringBuffer("User Action LOG: ");  // adapt_notQuery
 				
 				String userForThisSession = null;
 				if(Globals.getApp() != null && Globals.getApp().getUser_ForThisSession() != null){

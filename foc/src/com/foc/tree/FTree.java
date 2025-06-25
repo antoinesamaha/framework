@@ -619,7 +619,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
         if(Globals.getDisplayManager() != null){
           Globals.getDisplayManager().removeLockFocusForObject(focObj);
         }
-        StringBuffer message = new StringBuffer();
+        StringBuffer message = new StringBuffer(); // adapt_notQuery
 
         int refNbr = focObj.referenceCheck_GetNumber(message);
         if(refNbr > 0){
@@ -649,7 +649,7 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
               
               DeleteScanner deleteScanner = new DeleteScanner(getFocList());
               node.scan(deleteScanner);
-              StringBuffer errorMessage = deleteScanner.canDeleteAll();
+              StringBuffer errorMessage = deleteScanner.canDeleteAll(); // adapt_notQuery
               
               if(errorMessage.toString().isEmpty()){
                 deleteScanner.doDelete();
@@ -690,8 +690,8 @@ public abstract class FTree<N extends FNode, O extends Object> implements IFocDa
   		this.list = list;
   	}
   	
-  	public StringBuffer canDeleteAll(){
-  	  StringBuffer message = new StringBuffer();
+  	public StringBuffer canDeleteAll(){ // adapt_notQuery
+  	  StringBuffer message = new StringBuffer(); // adapt_notQuery
   	  int count = 0;
   	  for(int i=0; i<toDelete.size() && count <= 3; i++){
   	    FocObject obj = toDelete.get(i);

@@ -296,13 +296,13 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
   
   private void internalExec(SQLFilter filter, boolean addingJoins /*first time only*/){ 
     FilterDesc filterDesc = getThisFilterDesc();
-    StringBuffer buffer = new StringBuffer();
+    StringBuffer buffer = new StringBuffer(); // adapt_proofread
     
     shouldColorRed = false;
     for(int i=0; i<filterDesc.getConditionCount(); i++){
       FilterCondition cond = filterDesc.getConditionAt(i);
       SQLJoin lastJoin = null; 
-      StringBuffer condWhere = (cond.getLevel() != FocListFilter.LEVEL_MEMORY) ? cond.buildSQLWhere(this, cond.getDBFieldName()) : null;
+      StringBuffer condWhere = (cond.getLevel() != FocListFilter.LEVEL_MEMORY) ? cond.buildSQLWhere(this, cond.getDBFieldName()) : null; // adapt_proofread (as process)
       if(condWhere != null && condWhere.length() > 0){
       	shouldColorRed = true;
         FFieldPath condFieldPath = cond.getFieldPath();
@@ -376,7 +376,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
 	      filter.setFilterFields(SQLFilter.FILTER_ON_SELECTED);
 	      filter.resetSelectedFields();
 	      
-	      filter.setAdditionalWhere(null);
+	      filter.setAdditionalWhere(null); // adapt_proofread
 	      filter.getJoinMap().clearJoinMap();
 	      internalExec(filter, true);
 	      internalExec(filter, false);
@@ -413,7 +413,7 @@ public abstract class FocListFilter extends FocObject implements IFocListFilter,
     for(int i=0; i<filterDesc.getConditionCount(); i++){
       FilterCondition cond = filterDesc.getConditionAt(i);
       if(cond.getLevel() != FocListFilter.LEVEL_MEMORY) {
-	      StringBuffer condWhere = cond.buildSQLWhere(this, cond.getDBFieldName());
+	      StringBuffer condWhere = cond.buildSQLWhere(this, cond.getDBFieldName()); // adapt_proofread (as process)
 	      if(condWhere != null && condWhere.length() > 0){
 	      	active = true;
 	      }

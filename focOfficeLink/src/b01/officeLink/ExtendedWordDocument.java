@@ -182,7 +182,7 @@ public class ExtendedWordDocument {
         
         if(p instanceof TextPiece){
           TextPiece tp = (TextPiece)p;
-          StringBuffer buffer = tp.getStringBuffer();
+          StringBuffer buffer = tp.getStringBuffer(); // adapt_notQuery
           
           int start = buffer.indexOf(oldString);
           int end = start + oldString.length();
@@ -207,7 +207,7 @@ public class ExtendedWordDocument {
       }
     }
     
-    StringBuffer buffer = textPiece.getStringBuffer();
+    StringBuffer buffer = textPiece.getStringBuffer(); // adapt_notQuery
     
     buffer.replace(start, end, newText.substring(0, lengthToReplace));        
     Range range = new Range(start, end, getHwpfDocument());
@@ -226,7 +226,7 @@ public class ExtendedWordDocument {
         
         if(p instanceof TextPiece){
           TextPiece tp = (TextPiece)p;
-          StringBuffer buffer = tp.getStringBuffer();
+          StringBuffer buffer = tp.getStringBuffer(); // adapt_notQuery
           System.out.println("Buffer = "+buffer);
           
           int start = buffer.indexOf(oldString);

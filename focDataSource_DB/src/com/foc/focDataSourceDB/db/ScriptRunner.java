@@ -142,13 +142,13 @@ public class ScriptRunner {
 	 *           if there is an error reading from the Reader
 	 */
 	private void runScript(Connection conn, Reader reader) throws IOException, SQLException {
-		StringBuffer command = null;
+		StringBuffer command = null;  // adapt_notQuery
 		try{
 			LineNumberReader lineReader = new LineNumberReader(reader);
 			String line;
 			while ((line = lineReader.readLine()) != null){
 				if(command == null){
-					command = new StringBuffer();
+					command = new StringBuffer();  // adapt_notQuery
 				}
 				String trimmedLine = line.trim();
 				final Matcher delimMatch = delimP.matcher(trimmedLine);
@@ -183,7 +183,7 @@ public class ScriptRunner {
 		}
 	}
 
-	private void execCommand(Connection conn, StringBuffer command, LineNumberReader lineReader) throws IOException, SQLException {
+	private void execCommand(Connection conn, StringBuffer command, LineNumberReader lineReader) throws IOException, SQLException {  // adapt_notQuery
 
 		if(command.length() == 0){
 			return;
@@ -203,7 +203,7 @@ public class ScriptRunner {
 		this.runScript(conn, new BufferedReader(new FileReader(file)));
 	}
 
-	private void execSqlCommand(Connection conn, StringBuffer command, LineNumberReader lineReader) throws SQLException {
+	private void execSqlCommand(Connection conn, StringBuffer command, LineNumberReader lineReader) throws SQLException {  // adapt_notQuery
 
 		Statement statement = conn.createStatement();
 

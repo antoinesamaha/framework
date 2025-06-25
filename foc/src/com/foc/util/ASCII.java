@@ -90,7 +90,7 @@ public class ASCII {
   }
 
   public static String convertNonCharactersToDescriptions(String str){
-    StringBuffer newStr = new StringBuffer();
+    StringBuffer newStr = new StringBuffer(); // adapt_notQuery
     
     for(int i=0; i<str.length(); i++){
       char c = str.charAt(i);
@@ -153,7 +153,7 @@ public class ASCII {
   }
   
   public static String generateRandomString(int nbrChars, boolean withNumbers, boolean caseSensitive){
-  	StringBuffer str = new StringBuffer();
+  	StringBuffer str = new StringBuffer(); // adapt_notQuery
   	Random ran = new Random(Globals.getDBManager().getCurrentTimeStamp_AsTime().getTime());
   	char cA = 'A';
   	char ca = 'a';
@@ -226,7 +226,7 @@ public class ASCII {
 	}
 	
   public static String newCodeName(String code, String name, int codeLength){
-  	StringBuffer buff = new StringBuffer(code);
+  	StringBuffer buff = new StringBuffer(code); // adapt_notQuery
   	/*  	
   	boolean dot = false;
   	for(int i=code.length(); i<codeLength; i++){

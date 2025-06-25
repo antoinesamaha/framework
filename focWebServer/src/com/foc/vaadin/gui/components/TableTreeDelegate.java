@@ -1017,13 +1017,13 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	}
 
 	public static String newComponentName(String tableName, String objRef, String colProperty) {
-		StringBuffer buff = new StringBuffer(newComponentNamePrefix(tableName, objRef));
+		StringBuffer buff = new StringBuffer(newComponentNamePrefix(tableName, objRef)); // adapt_notQuery
 		buff.append(colProperty);
 		return buff.toString();
 	}
 
 	public static String newComponentNamePrefix(String tableName, String objRef) {
-		StringBuffer buff = new StringBuffer(tableName);
+		StringBuffer buff = new StringBuffer(tableName); // adapt_notQuery
 		buff.append("|");
 		buff.append(objRef);
 		buff.append("|");
@@ -1654,7 +1654,7 @@ public class TableTreeDelegate implements ITableTreeDelegate {
 	
 	public void delete(FocObject focObject){
 		if(focObject != null){
-			StringBuffer message = focObject.checkDeletionWithMessage();
+			StringBuffer message = focObject.checkDeletionWithMessage(); // adapt_notQuery
 			if(message != null){
 				if (ConfigInfo.isArabic()) {
 					Globals.showNotification("حذف البيان غير ممكن", message.toString(), IFocEnvironment.TYPE_WARNING_MESSAGE);	

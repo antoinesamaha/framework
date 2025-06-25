@@ -42,7 +42,7 @@ public class DataModelGuiPanel_ForReporting extends FPanel {
 		vPanel.setValidationListener(new FValidationListener() {
 			@Override
 			public boolean proceedValidation(FValidationPanel panel) {
-				StringBuffer strBuffer = new StringBuffer();
+				StringBuffer strBuffer = new StringBuffer();  // adapt_notQuery
 				addListToBuffer(strBuffer, fieldList, false);
 				addListToBuffer(strBuffer, parameterList, true);
 				Globals.logString(strBuffer.toString());
@@ -84,7 +84,7 @@ public class DataModelGuiPanel_ForReporting extends FPanel {
 		tabbedPane.add("Fields", treePanel);
 	}
 	
-	public void addListToBuffer(StringBuffer strBuffer, DataModelNodeList fieldList, boolean isParameter){
+	public void addListToBuffer(StringBuffer strBuffer, DataModelNodeList fieldList, boolean isParameter){  // adapt_notQuery
 		for(int i=0; fieldList != null && i<fieldList.size(); i++){
 			DataModelNode dataNode = (DataModelNode) fieldList.getFocObject(i);
 			if(dataNode.isSelected()){

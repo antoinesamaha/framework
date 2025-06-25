@@ -217,8 +217,8 @@ public class ObjectCondition extends FilterCondition {
 		}
 	}
 
-	public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
-		StringBuffer buffer = null;
+	public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
+		StringBuffer buffer = null; // adapt_proofread
 
 		String fieldPrefix = "";
 		int dot = fieldName.indexOf('.');
@@ -228,7 +228,7 @@ public class ObjectCondition extends FilterCondition {
 
 		int operation = getOperation(filter);
 		if (operation != OPERATION_NONE) {
-			buffer = new StringBuffer();
+			buffer = new StringBuffer(); // adapt_proofread
 			FocObject condObject = getObject(filter);
 
 			FObjectField objField = (FObjectField) getFieldPath().getFieldFromDesc(filter.getThisFilterDesc().getSubjectFocDesc());

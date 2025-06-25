@@ -182,6 +182,7 @@ public class DBUtil implements IFocDataUtil {
   //BAntoineS - AUTOINCREMENT
   private static long getNextOrCurrentSequence(FocDesc focDesc, boolean next) throws FocDBException, SequenceDoesNotExistException, SQLException{
   	//This is oracle specific
+    // Postgres already has an auto-increment mechanism in place that does not need to manually call on the next sequence.  
   	if(focDesc.getProvider() != DBManager.PROVIDER_ORACLE){
   		throw new FocDBException("Illegal Call of an Oracle Specific fucntion");
   	}
@@ -211,6 +212,9 @@ public class DBUtil implements IFocDataUtil {
   }
 
   public static void focObject_AssignReferenceIfNeeded(FocObject focObject, boolean callFromInsertWithProviderSpecificTreatment) {
+	  // This behavior is needed for Oracle only. 
+      // Postgres already has an auto-increment mechanism in place that does not need to manually call on the next sequence.  
+	  
     FocDesc focDesc = focObject.getThisFocDesc();
     //BAntoineS - AUTOINCREMENT
     if (focObject.needsAssignReference()) {

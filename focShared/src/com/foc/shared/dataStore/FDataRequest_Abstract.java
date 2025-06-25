@@ -24,7 +24,7 @@ public abstract class FDataRequest_Abstract implements IDataStoreConst {
 	private int       command      = COMMAND_QUERY;
 	private String    dataKey      = null;
 	
-	public abstract void parseJson(StringBuffer buffer);
+	public abstract void parseJson(StringBuffer buffer); // adapt_notQuery
 	public abstract void toJson(B01JsonBuilder buffer);
 	
 	public FDataRequest_Abstract(){

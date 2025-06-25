@@ -48,7 +48,7 @@ public class SyncTable {
 	
 	public void fillFromDatabase(){
 		focList = new FocList(new FocLinkSimple(focDesc));
-		focList.getFilter().setAdditionalWhere(new StringBuffer(FField.FNAME_SYNC_IS_NEW_OBJECT+"=1"));
+		focList.getFilter().setAdditionalWhere(new StringBuffer("\""+FField.FNAME_SYNC_IS_NEW_OBJECT+"\"=1")); // adapt_done_P (pr / unreachable)
 		focList.loadIfNotLoadedFromDB();
 		
 		fieldArray = new ArrayList<FField>();

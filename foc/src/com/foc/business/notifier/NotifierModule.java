@@ -76,7 +76,7 @@ public class NotifierModule extends FocModule {
 		if (version == null || version.getId() < VERSION_ID_MIGRATE_TO_CLOB) {
 			if(Globals.getDBManager() != null && Globals.getDBManager().getProvider(null) == DBManager.PROVIDER_ORACLE) {
 				migrateToCLOB = true;
-				StringBuffer buffer = new StringBuffer();
+				StringBuffer buffer = new StringBuffer(); // adapt_proofread
 				buffer.append("ALTER TABLE \"NOTIF_EMAIL\" RENAME COLUMN \"TEXT\" TO \"TEXTOLD\"");
 				Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
 			}
@@ -105,7 +105,7 @@ public class NotifierModule extends FocModule {
 		}
 		
 		if (migrateToCLOB) {
-			StringBuffer buffer = new StringBuffer();
+			StringBuffer buffer = new StringBuffer(); // adapt_proofread
 			buffer.append("UPDATE \"NOTIF_EMAIL\" SET \"TEXT\" = \"TEXTOLD\"");
 			Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
 		}

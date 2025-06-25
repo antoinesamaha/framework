@@ -187,9 +187,9 @@ public class StringCondition extends FilterCondition {
     }
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
-    StringBuffer buffer = null;
+    StringBuffer buffer = null; // adapt_proofread
     String text = getText(filter) != null ? getText(filter).trim() : "";
     int operation = getOperation(filter);
     
@@ -210,7 +210,7 @@ public class StringCondition extends FilterCondition {
     	
     	if(ignoreCase) text = text.toUpperCase();
     	
-      buffer = new StringBuffer();
+      buffer = new StringBuffer(); // adapt_proofread
       switch (operation){
         case OPERATION_EQUALS:
         	if(ignoreCase){

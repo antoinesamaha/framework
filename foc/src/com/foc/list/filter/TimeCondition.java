@@ -162,10 +162,10 @@ public class TimeCondition extends FilterCondition {
     }
   }
 
-  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Time firstTime, Time lastTime) {
-    StringBuffer buffer = null;
+  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Time firstTime, Time lastTime) { // adapt_proofread
+    StringBuffer buffer = null; // adapt_proofread
     
-    buffer = new StringBuffer();
+    buffer = new StringBuffer(); // adapt_proofread
     
     String firstDateFormat = FTime.convertTimeToSQLString(provider, firstTime);
     String lastDateFormat = FTime.convertTimeToSQLString(provider, lastTime);
@@ -183,6 +183,16 @@ public class TimeCondition extends FilterCondition {
 	      }else if (op == OPERATOR_EQUALS){
 	      	buffer.append(fieldName + " =  TO_DATE('" + firstDateFormat + "', 'dd-MM-yyyy HH24:MI:SS')");
 	      }
+	    } else if(provider == DBManager.PROVIDER_POSTGRES) {
+	      if (op == OPERATOR_GREATER_THAN){
+	        buffer.append(fieldName + ">= '" + firstDateFormat + "'");
+	      }else if (op == OPERATOR_LESS_THAN) {
+	        buffer.append(fieldName + "<= '" + lastDateFormat + "'");
+	      }else if (op == OPERATOR_BETWEEN){
+	        buffer.append(fieldName + " BETWEEN '"+ firstDateFormat +"' AND '" + lastDateFormat + "'");
+	      }else if (op == OPERATOR_EQUALS){
+	        buffer.append(fieldName + " = '" + firstDateFormat + "'");
+	      }	    	
 	    } else {
 	      if (op == OPERATOR_GREATER_THAN){//CAST(N'2016-06-08' AS Date) 
 	        buffer.append(fieldName + ">= " + firstDateFormat);
@@ -198,7 +208,7 @@ public class TimeCondition extends FilterCondition {
     return buffer;
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
   	return buildSQLWhere(getProvider(), fieldName, getOperator(filter), getFirstTime(filter), getLastTime(filter));
   }

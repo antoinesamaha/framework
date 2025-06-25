@@ -176,10 +176,10 @@ public class DateTimeCondition extends FilterCondition {
     return op;
   }
   
-  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) {
-    StringBuffer buffer = null;
+  public static StringBuffer buildSQLWhere(int provider, String fieldName, int op, Date firstDate, Date lastDate) { // adapt_proofread
+    StringBuffer buffer = null; // adapt_proofread
     
-    buffer = new StringBuffer();
+    buffer = new StringBuffer(); // adapt_proofread
     
     String firstDateFormat = FTime.convertTimeToSQLString(provider, firstDate);
     String lastDateFormat = FTime.convertTimeToSQLString(provider, lastDate);
@@ -278,7 +278,7 @@ public class DateTimeCondition extends FilterCondition {
     return buffer;
   }*/
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
     //b01.foc.Globals.logString("Condition sql build not implemented yet");
   	return buildSQLWhere(getProvider(), fieldName, getOperator(filter), getFirstDateTime(filter), getLastDateTime(filter));
   }

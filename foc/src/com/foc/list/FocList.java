@@ -310,11 +310,11 @@ public class FocList extends AccessSubject implements IFocList, Container {
 			if(!getFocDesc().isJoin()) {
 				if(getFocDesc().isLogicalDeleteEnabled()) {
 					String name = FField.adaptFieldNameToProvider(getFocDesc().getProvider(), FField.LOGICAL_DELETE_FIELD_NAME);
-					getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", name + " = 0 OR " + name + " IS NULL");
+					getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", name + " = 0 OR " + name + " IS NULL"); // adapt_proofread
 				}
 			} else {
 				String fullJoinWhere = getFullJoinWhereClause();
-      	if(!Utils.isStringEmpty(fullJoinWhere)) getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", fullJoinWhere);
+      	if(!Utils.isStringEmpty(fullJoinWhere)) getFilter().putAdditionalWhere("FOC_LOGICAL_DELETE_FILTER", fullJoinWhere); // adapt_proofread
 			}
 		}
 	}
@@ -343,9 +343,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	  		FField areaFld1 = getFocDesc().getFieldByID(((IWorkflowDesc)getFocDesc()).iWorkflow_getWorkflowDesc().getFieldID_Site_1());
 	  		FField areaFld2 = getFocDesc().getFieldByID(((IWorkflowDesc)getFocDesc()).iWorkflow_getWorkflowDesc().getFieldID_Site_2());
 	
-	  		StringBuffer cond1 = null;
+	  		StringBuffer cond1 = null; // adapt_proofread
 	  		if(areaFld1 != null && !areaFld1.isReflectingField()){
-		  		cond1 = new StringBuffer(areaFld1.getDBName());
+		  		cond1 = new StringBuffer(FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), areaFld1.getDBName())); // adapt_proofread
 		  		cond1.append(" in (");
 		  		for(int i=0; i<list.size(); i++){
 		  			FocObject site = (FocObject) list.getFocObject(i);
@@ -355,9 +355,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		  		cond1.append(")");
 	  		}
 
-	  		StringBuffer cond2 = null;
+	  		StringBuffer cond2 = null; // adapt_proofread
 	  		if(areaFld2 != null && !areaFld2.isReflectingField()){
-		  		cond2 = new StringBuffer(areaFld2.getDBName());
+		  		cond2 = new StringBuffer(FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), areaFld2.getDBName())); // adapt_proofread
 		  		cond2.append(" in (");
 		  		for(int i=0; i<list.size(); i++){
 		  			FocObject site = (FocObject) list.getFocObject(i);
@@ -376,9 +376,9 @@ public class FocList extends AccessSubject implements IFocList, Container {
 	  			cond = cond2.toString();
 	  		}
 	  		
-	  		getFilter().putAdditionalWhere("SITE_READ_ACCESS", cond);
+	  		getFilter().putAdditionalWhere("SITE_READ_ACCESS", cond); // adapt_proofread
 	  	}else{
-	  		getFilter().putAdditionalWhere("SITE_READ_ACCESS", "1>2");
+	  		getFilter().putAdditionalWhere("SITE_READ_ACCESS", "1>2"); // adapt_proofread
 	  	}
 	  }
   }
@@ -2576,7 +2576,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
     return super.iFocData_getDataByPath(path);
   }
 
-	public FocObject findObjectByFilterExpression(String filterExpression){
+	public FocObject findObjectByFilterExpression(String filterExpression){ // adapt_proofread (unreachable)
 		FocObject foundObject = null;
 		if(filterExpression != null && !filterExpression.isEmpty()){
 			boolean treated = false;
@@ -2635,7 +2635,7 @@ public class FocList extends AccessSubject implements IFocList, Container {
 		int count = 0;
 		FocDesc focDesc = getFocDesc();
 		if (focDesc != null) {
-			StringBuffer request = new StringBuffer();
+			StringBuffer request = new StringBuffer(); // adapt_proofread
 			request.append("SELECT COUNT( " + fieldName + ") ");
 			request.append("FROM \"" + focDesc.getStorageName_ForSQL() + "\" ");
 			

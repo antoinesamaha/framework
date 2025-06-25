@@ -44,7 +44,7 @@ public class FMultipleChoiceStringField extends FStringField {
 	private boolean      allowOutofListSelection          = false;
 	private FocDesc      choicesSelection_FocDesc         = null;
 	private int          choicesSelection_FieldID         = FField.NO_FIELD_ID; 
-	private StringBuffer filterExpressionForChoicesSelect = null;     
+	private StringBuffer filterExpressionForChoicesSelect = null;      // adapt_proofread
 	private ArrayList    choicesArrayList                 = null;
 	private boolean      needRefresh                      = false;
 	private boolean      useSameColumnValues              = false;
@@ -214,11 +214,11 @@ public class FMultipleChoiceStringField extends FStringField {
 		}
 	}
 
-	public StringBuffer getFilterExpressionForChoicesSelect() {
+	public StringBuffer getFilterExpressionForChoicesSelect() {  // adapt_proofread (as process)
 		return filterExpressionForChoicesSelect;
 	}
 
-	public void setFilterExpressionForChoicesSelect(StringBuffer whereConditionForChoicesSelect) {
+	public void setFilterExpressionForChoicesSelect(StringBuffer whereConditionForChoicesSelect) {  // adapt_proofread (unused)
 		this.filterExpressionForChoicesSelect = whereConditionForChoicesSelect;
 	}
 

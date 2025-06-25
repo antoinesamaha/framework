@@ -53,7 +53,7 @@ public class SQLJoin {
   }
 
   public String getSQLString(){
-  	StringBuffer str = new StringBuffer();
+  	StringBuffer str = new StringBuffer();  // adapt_proofread
   	switch(type){
   	case JOIN_TYPE_RIGHT:
   		str.append(" RIGHT JOIN ");

@@ -31,6 +31,7 @@ import com.fab.FabModule;
 import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocDescDeclaration;
+import com.foc.db.DBManager;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocDesc;
 import com.foc.desc.FocObject;
@@ -88,12 +89,12 @@ public class DB2ASCII {
 			
 			StatementWrapper stmt = DBManagerServer.getInstance().lockStatement();
 			try{
-				stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, "SELECT * FROM "+tableName);
+				stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, "SELECT * FROM "+DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), tableName));
 				ResultSet resultSet = stmt != null ? stmt.getResultSet() : null; 
 		    //ResultSet resultSet = stmt.executeQuery("SELECT * FROM "+tableName);
 		    
 		    while(resultSet.next()){
-		    	StringBuffer line = new StringBuffer(tableName+"|");
+		    	StringBuffer line = new StringBuffer(tableName+"|");  // adapt_done_P (pr / unreachable)
 		    	
 		    	ResultSetMetaData metaData= resultSet.getMetaData();
 		    	for(int c=1; c<metaData.getColumnCount()+1; c++){
@@ -212,7 +213,7 @@ public class DB2ASCII {
 	    	String tableName = iter.next();
         StatementWrapper stmt = DBManagerServer.getInstance().lockStatement();
         try {
-          StringBuffer request = new StringBuffer("DELETE FROM "+tableName);
+          StringBuffer request = new StringBuffer("DELETE FROM "+DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), tableName));  // adapt_done_P (pr / unreachable)
           Globals.logString(request);
           stmt.executeUpdate(request.toString());
         } catch (SQLException e) {
@@ -250,8 +251,8 @@ public class DB2ASCII {
 		private FocDesc           focDesc             = null;
 		private FocObject	        tempObject          = null;
 		private String            fieldName           = null;
-		private StringBuffer      fields              = null;
-		private StringBuffer      values              = null;
+		private StringBuffer      fields              = null;  // adapt_proofread
+		private StringBuffer      values              = null;  // adapt_proofread
 		
 		//Used only for table names gathering
 		private Hashtable<String, String> allTablesInThisFile = null ;
@@ -295,9 +296,9 @@ public class DB2ASCII {
 		}
 		
 		@Override
-		public void readLine(StringBuffer buffer) {
-			fields = new StringBuffer();
-			values = new StringBuffer();
+		public void readLine(StringBuffer buffer) {  // adapt_proofread
+			fields = new StringBuffer();  // adapt_proofread
+			values = new StringBuffer();  // adapt_proofread
 			
 			scanTokens(buffer);
 			
@@ -307,7 +308,7 @@ public class DB2ASCII {
 				if(fields != null && fields.toString().trim().compareTo("") != 0){
 					StatementWrapper stmt = DBManagerServer.getInstance().lockStatement();
 					
-					StringBuffer request = new StringBuffer("INSERT INTO "+tableName+" ("+fields+") VALUES ("+values+")");
+					StringBuffer request = new StringBuffer("INSERT INTO " + DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), tableName) + " ("+fields+") VALUES ("+values+")");  // adapt_done (pr / general testing / reachable?)
 					
 					try {
 						Globals.logString(request.toString());
@@ -354,7 +355,7 @@ public class DB2ASCII {
 						values.append(prop.getSqlString());
 						
 						if(fields.length() > 0) fields.append(','); 
-						fields.append(fieldName);
+						fields.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), fieldName)); // adapt_done_P (pr / non-reachable)
 					}
 					break;
 				}

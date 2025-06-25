@@ -54,7 +54,7 @@ public class FMainCache {
 		return tableCache;
 	}
 	
-	public void getList(StringBuffer stringBuffer, String storageName, String filter){
+	public void getList(StringBuffer stringBuffer, String storageName, String filter){  // adapt_notQuery
 		FTableCache tableCache = pushTableCache(storageName);
 		if(tableCache != null){
 			FListCache listCache = tableCache.pushListCache(filter);

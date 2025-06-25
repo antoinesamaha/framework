@@ -121,18 +121,21 @@ public class DBManagerServer {
         Globals.logString(fcts);
         while(tokenizer.hasMoreTokens()){
           String tok = tokenizer.nextToken();        
-          if(tok.compareTo("CURDATE") == 0){
+          if(tok.compareToIgnoreCase("CURDATE") == 0){
             if (Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
               dateRequestSQL = "select sysdate from dual";
               break;
-            }else{
+            } else if (Globals.getDBManager().getProvider() == DBManager.PROVIDER_POSTGRES) {
+            	dateRequestSQL = "select clock_timestamp()";
+            	break;
+          	}else{
               dateRequestSQL = "select CURDATE()";
               break;              
             }
-          }else if(tok.compareTo("CURRENT_DATE") == 0){
+          }else if(tok.compareToIgnoreCase("CURRENT_DATE") == 0){
             dateRequestSQL = "select CURRENT_DATE()";
             break;
-          }else if(tok.compareTo("CURRENT_TIMESTAMP") == 0){
+          }else if(tok.compareToIgnoreCase("CURRENT_TIMESTAMP") == 0){
             timeStampRequestSQL = "select CURRENT_TIMESTAMP()";
           }
         }
@@ -214,7 +217,7 @@ public class DBManagerServer {
     	if (Globals.getDBManager() != null && Globals.getDBManager().getProvider() == DBManager.PROVIDER_ORACLE){
     		//The JDBC way can be very slow on Oracle especially 12c with JDBC 8
     		if(Globals.getApp() != null && Globals.getApp().getDataSource() != null) {
-	    		ArrayList<String> tablesArrayList = Globals.getApp().getDataSource().command_SelectRequest(new StringBuffer("SELECT table_name FROM all_tables"));
+	    		ArrayList<String> tablesArrayList = Globals.getApp().getDataSource().command_SelectRequest(new StringBuffer("SELECT table_name FROM all_tables")); // adapt_proofread
 	    		if(tablesArrayList != null) {
 		    		for(int i=0; i<tablesArrayList.size(); i++) {
 		    			String tableName = tablesArrayList.get(i);
@@ -407,11 +410,11 @@ public class DBManagerServer {
 		scanner.dispose();
   }
 
-  public StringBuffer getMonitoringText() {
-  	StringBuffer buffer = new StringBuffer();
+  public StringBuffer getMonitoringText() {  // adapt_notQuery
+  	StringBuffer buffer = new StringBuffer();  // adapt_notQuery
   	
   	if(getConnectionPool() != null) {
-	  	StringBuffer poolBuffer = getConnectionPool().getMonitoringText();
+	  	StringBuffer poolBuffer = getConnectionPool().getMonitoringText();  // adapt_notQuery
 	  	buffer.append(poolBuffer);
 	  		
 		  Iterator<ConnectionPool> iter = auxPools_Iterator();

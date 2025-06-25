@@ -602,7 +602,7 @@ public class FPivotRowTree extends FObjectTree<FPivotRowNode, FPivotRow> {
   	if(pivotTree != null){
   		pivotTree.scan(new TreeScanner<FPivotRowNode>() {
   			int indent = 0;
-  			StringBuffer buffer = new StringBuffer("");
+  			StringBuffer buffer = new StringBuffer(""); // adapt_notQuery
   			
 				@Override
 				public boolean beforChildren(FPivotRowNode node) {

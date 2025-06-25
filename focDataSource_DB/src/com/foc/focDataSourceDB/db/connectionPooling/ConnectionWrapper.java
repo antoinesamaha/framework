@@ -106,8 +106,8 @@ public class ConnectionWrapper {
 		return conn;
 	}
 	
-	public StringBuffer getMonitoringText() {
-		StringBuffer buffer = new StringBuffer();
+	public StringBuffer getMonitoringText() {  // adapt_notQuery
+		StringBuffer buffer = new StringBuffer();  // adapt_notQuery
 		String sourceKey = getDBSourceKey();
 		
 		if(Utils.isStringEmpty(sourceKey)) sourceKey = "Main";

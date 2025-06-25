@@ -20,10 +20,10 @@ import com.foc.desc.FocObject;
 public abstract class FHTMLSerializer<O extends FocObject> implements FSerializer {
 
 	private O            focObject = null;
-	private StringBuffer buffer    = null;
+	private StringBuffer buffer    = null; // adapt_notQuery
 	private int          version   = 0;
 	
-	public FHTMLSerializer(O focObject, StringBuffer buffer, int version) {
+	public FHTMLSerializer(O focObject, StringBuffer buffer, int version) { // adapt_notQuery
 		this.focObject = focObject;
 		this.buffer = buffer;
 		this.version = version;

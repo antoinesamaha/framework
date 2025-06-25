@@ -71,7 +71,7 @@ public class FTime extends FProperty {
         sqlTimeFormat = new SimpleDateFormat("dd-MMM-yyyy H:m:ss");
       }else{
         str = "1970-01-01 ";
-        sqlTimeFormat = new SimpleDateFormat("yyyy-MM-dd H:m:ss");
+        sqlTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
       }
     }
     str = date != null ? sqlTimeFormat.format(date) : sqlTimeFormat.format(getZeroTime());

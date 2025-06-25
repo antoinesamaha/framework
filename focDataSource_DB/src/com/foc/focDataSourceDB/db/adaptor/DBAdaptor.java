@@ -43,6 +43,7 @@ import com.foc.focDataSourceDB.db.SQLAlterTable;
 import com.foc.focDataSourceDB.db.SQLCreateIndex;
 import com.foc.focDataSourceDB.db.SQLCreateTable;
 import com.foc.focDataSourceDB.db.SQLDropIndex;
+import com.foc.focDataSourceDB.db.SQLRequest;
 import com.foc.focDataSourceDB.db.SQLTableDetails;
 import com.foc.focDataSourceDB.db.SQLTableIndexesDetails;
 import com.foc.focDataSourceDB.db.connectionPooling.ConnectionPool;
@@ -117,6 +118,8 @@ public class DBAdaptor {
 		ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
 		if(defaultConnection.getProvider() == DBManager.PROVIDER_ORACLE){
 			rebuildConstrains_Oracle(null);
+		} else if (defaultConnection.getProvider() == DBManager.PROVIDER_POSTGRES) {
+			rebuildConstraints_Postgres(null);
 		}
   }
 	
@@ -350,6 +353,9 @@ public class DBAdaptor {
   	return false;
   }
   
+  /** 
+   * @implNote When a SERIAL type column is added to a table in Postgres, a new sequence is automatically added, hence no need for sequence adaptation in case of a Postgres provider
+   * */
   public void adaptTableSequence(FocDesc focDesc) throws Exception{
   	if(			focDesc.getProvider() == DBManager.PROVIDER_ORACLE
   			&&  focDesc.isPersistent()
@@ -651,6 +657,45 @@ public class DBAdaptor {
     }
   }
   
+  private void rebuildConstraints_Postgres(String dbSourceKey){
+	    try{
+	    	ArrayList<String> constraintsReindexRequests = new ArrayList<String>();
+	    	
+	    	ConnectionPool pool = DBManagerServer.getInstance() != null ? DBManagerServer.getInstance().getConnectionPool(dbSourceKey) : null;
+	    	String ownerName = pool != null ? pool.getCredentials().getUsername() : null;
+	    	if(ownerName != null){
+					StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+					String request = "SELECT i.tablename, i.indexname from pg_indexes i"
+							+ " INNER JOIN information_schema.tables t ON t.table_name = i.tablename"
+							+ " INNER JOIN pg_catalog.pg_user us ON us.usename = '" + ownerName + "'"
+							+ " INNER JOIN pg_namespace pg ON pg.nspowner = us.usesysid AND pg.nspname = current_schema" 
+							+ " WHERE t.table_schema = pg.nspname ";
+			    stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+			    ResultSet resSet = stmt.getResultSet();
+			    if(resSet != null){
+			    	while(resSet.next()){
+			  			String tableName = resSet.getString(1);
+			  			String indexName = resSet.getString(2);
+			  			if(Globals.getApp().getFocDescByName(tableName) != null) {
+			  				constraintsReindexRequests.add("REINDEX INDEX \"" + indexName + "\" ");
+			  			}
+			    	}
+			    	resSet.close();
+			    }
+			    DBManagerServer.getInstance().unlockStatement(stmt);
+			    
+			    for(int i=0; i<constraintsReindexRequests.size(); i++){
+			    	request = constraintsReindexRequests.get(i);
+			    	StatementWrapper constraintStmt = DBManagerServer.getInstance().lockStatement(dbSourceKey);
+		    		constraintStmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(constraintStmt, request, SQLRequest.TYPE_UPDATE, null);
+			    	DBManagerServer.getInstance().unlockStatement(constraintStmt);
+			    }
+	    	}
+	    }catch(Exception e){
+	    	Globals.logException(e);
+	    }
+	  }
+  
   private void constraint_Adapt(FocDesc focDesc){
   	if(focDesc != null && focDesc.isDbResident() && (focDesc.getProvider() == DBManager.PROVIDER_ORACLE || focDesc.getProvider() == DBManager.PROVIDER_POSTGRES)){
   		String         dbSourceKey = focDesc.getDbSourceKey();
@@ -696,7 +741,7 @@ public class DBAdaptor {
 				  			if(alterAllFields) {
 									String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
 									Globals.logString(replaceRequest);
-									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
+									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));  // adapt_proofread
 				  			}				  			
 						    //-------------------------------------------------------------------------------------------------------------
 
@@ -710,7 +755,7 @@ public class DBAdaptor {
 										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
 								    DBManagerServer.getInstance().unlockStatement(stmt);
 									} else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
-								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
+								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));  // adapt_proofread
 									}
 				  			}								
 				  		}

@@ -123,7 +123,7 @@ public abstract class PrintingAction implements IPrnReportCreator{
 
 	public void outputFieldsAndParameters() {
 		if(ConfigInfo.isDevMode()){
-		  StringBuffer strBuffer = new StringBuffer();
+		  StringBuffer strBuffer = new StringBuffer(); // adapt_notQuery
 		  
 		  printForJasperDevelopers(strBuffer, getLauncher().getParameterDictionaryFocDesc(), false);
 		  printForJasperDevelopers(strBuffer, getLauncher().getFieldDictionaryFocDesc(), false);
@@ -131,7 +131,7 @@ public abstract class PrintingAction implements IPrnReportCreator{
 		}
 	}
 
-	private void printForJasperDevelopers(StringBuffer strBuffer, FocDesc focDesc, boolean isParameter) {
+	private void printForJasperDevelopers(StringBuffer strBuffer, FocDesc focDesc, boolean isParameter) { // adapt_notQuery
 		if(focDesc != null) {
 			DataModelNodeList fieldList = new DataModelNodeList(focDesc, 2);
 			for(int i=0; fieldList != null && i<fieldList.size(); i++){

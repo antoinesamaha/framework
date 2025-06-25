@@ -39,7 +39,7 @@ public class LoginServlet extends FocSimpleMicroServlet {
 		Globals.logString(" => POST Begin LoginServlet /login");
 		
 		try{
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String reqStr = buffer != null ? buffer.toString() : null;
 
 			String userJson   = "";

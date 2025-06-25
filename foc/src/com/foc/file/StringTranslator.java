@@ -30,7 +30,7 @@ public class StringTranslator extends FocFileReader{
     }
   }
   
-  public void readLine(StringBuffer buff){
+  public void readLine(StringBuffer buff){ // adapt_notQuery
     scanTokens(buff);
 
     table.put(key, value);

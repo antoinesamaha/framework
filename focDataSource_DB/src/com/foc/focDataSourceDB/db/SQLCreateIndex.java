@@ -19,7 +19,7 @@ public class SQLCreateIndex extends SQLRequest {
   }
 
   public boolean buildRequest() {
-    request = new StringBuffer("");
+    request = new StringBuffer("");  // adapt_proofread
 
     if (index != null && index.getFieldCount() > 0 && focDesc != null && focDesc.isPersistent()) {
       request.append("CREATE ");

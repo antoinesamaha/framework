@@ -77,7 +77,7 @@ public class FocLinkForeignKey extends FocLink {
   }
   
   private String getAdditionalWhereForForeignKey(FocList list){
-    StringBuffer additionalWhere = new StringBuffer();
+    StringBuffer additionalWhere = new StringBuffer(); // adapt_proofread
     boolean isFirstCondition = true;
     if(foreignKeyFieldList != null){
       HashMap<Integer , FocObject> listForeignObjectsMap = list.getForeignObjectsMap();
@@ -124,7 +124,7 @@ public class FocLinkForeignKey extends FocLink {
   public void adaptSQLFilter(FocList list, SQLFilter filter) {
     if (list != null && filter != null) {
       String additionalWhere = getAdditionalWhereForForeignKey(list); 
-      filter.putAdditionalWhere(SQLFilter.KEY_FOREIGN_KEY_ADDITINAL_WHERE, additionalWhere);
+      filter.putAdditionalWhere(SQLFilter.KEY_FOREIGN_KEY_ADDITINAL_WHERE, additionalWhere); // adapt_proofread
       filter.setMasterObject(list.getMasterObject());
     }
   }

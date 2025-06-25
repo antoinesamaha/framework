@@ -46,7 +46,7 @@ public class LockableDescription {
   public FocList getListOfRecords(){
     if(listOfRecords == null){
       SQLFilter filter = new SQLFilter(null, SQLFilter.FILTER_ON_SELECTED);
-      filter.setAdditionalWhere(new StringBuffer(FField.CONCURRENCY_LOCK_USER_FIELD_PREFIX + FField.REF_FIELD_NAME +">0"));
+      filter.setAdditionalWhere(new StringBuffer("\"" + FField.CONCURRENCY_LOCK_USER_FIELD_PREFIX + FField.REF_FIELD_NAME + "\"" +">0")); // adapt_done_P (pr / unreachable)
       listOfRecords = new FocList(null, new FocLinkSimple(desc), filter);
     }
     listOfRecords.loadIfNotLoadedFromDB();

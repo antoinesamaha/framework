@@ -27,7 +27,7 @@ public abstract class FilterCondition {
   public abstract void         fillProperties(FocObject focFatherObject);
 	public abstract void         copyCondition(FocObject tarObject, FocObject srcObject, FilterCondition srcCondition);
   public abstract boolean      includeObject(FocListFilter filter, FocObject object);
-  public abstract StringBuffer buildSQLWhere(FocListFilter filter, String fieldName);
+  public abstract StringBuffer buildSQLWhere(FocListFilter filter, String fieldName); // adapt_proofread (as process)
   public abstract GuiSpace     putInPanel(FocListFilter filter, FPanel panel, int x, int y);
   public abstract boolean      isValueLocked(FocListFilter filter);
   public abstract void         resetToDefaultValue(FocListFilter filter);

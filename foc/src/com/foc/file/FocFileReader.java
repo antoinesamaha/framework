@@ -18,7 +18,7 @@ import com.foc.Globals;
  */
 public abstract class FocFileReader extends FocLineReader{
 	
-  public abstract void readLine(StringBuffer buffer);
+  public abstract void readLine(StringBuffer buffer); // adapt_notQuery
 	
   protected File              file       = null;
   protected InputStreamReader reader     = null;
@@ -112,8 +112,8 @@ public abstract class FocFileReader extends FocLineReader{
     return file;
   }
 
-  public StringBuffer loadLine(){
-    StringBuffer ret = new StringBuffer();
+  public StringBuffer loadLine(){ // adapt_notQuery
+    StringBuffer ret = new StringBuffer(); // adapt_notQuery
     try{
       boolean stop = false; 
       int aChar = 0;
@@ -132,12 +132,12 @@ public abstract class FocFileReader extends FocLineReader{
     return ret;
   }
   
-  public void readFirstLine(StringBuffer buffer){
+  public void readFirstLine(StringBuffer buffer){ // adapt_notQuery
   	readLine(buffer);//By default there is no difference between reading the first line and any other
   }
   
   public boolean readLine(){
-  	StringBuffer buff = loadLine();
+  	StringBuffer buff = loadLine(); // adapt_notQuery
   	boolean error = buff == null || buff.length() <= 0;
 
     if(!error){

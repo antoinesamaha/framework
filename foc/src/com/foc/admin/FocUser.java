@@ -1206,7 +1206,7 @@ public class FocUser extends FocObject {
   }
   
   private synchronized void userSites_RebuildIfNeeded() {
-  	if (userSites == null) {
+  	if (userSites == null) { // list is only modified once per server lifetime
   		userSites_Rebuild();
   	}
   }

@@ -94,7 +94,7 @@ public class ParsedJoin implements FXMLDesc {
 			FocDesc desc = Globals.getApp().getFocDescByName(table);
 			if(desc != null && desc.isLogicalDeleteEnabled()) {
 				String name = alias + "." + FField.LOGICAL_DELETE_FIELD_NAME;
-				name = FField.adaptFieldNameToProvider(desc.getProvider(), name);
+				name = FField.adaptFieldNameToProvider(desc.getProvider(), name); // adapt_proofread
 				String whereClause = "(" + name + " = 0 OR " + name + " IS NULL )";
 				if(!Utils.isStringEmpty(where)) where += " AND ";
 				if(where == null) where = "";

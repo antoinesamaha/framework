@@ -131,14 +131,14 @@ public class MultipleChoiceCondition extends FilterCondition{
     }
   }
 
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
-    StringBuffer buffer = null;
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
+    StringBuffer buffer = null; // adapt_proofread
     
     fieldName = FField.adaptFieldNameToProvider(getProvider(), fieldName);
     
     int operation = getOperation(filter);
     if(operation != OPERATION_NONE){
-      buffer = new StringBuffer();
+      buffer = new StringBuffer(); // adapt_proofread
       int condChoice = getValue(filter);
       
       switch(operation){

@@ -272,7 +272,7 @@ public class AdrBookPartyDesc extends FocDesc {
 		try{
 	  	FocVersion dbVersion = FocVersion.getDBVersionForModule(BusinessModule.MODULE_NAME);
 	  	if(dbVersion != null && dbVersion.getId() <= BusinessModule.MODULE_ID_LAST_WITH_BOTH_ADDRESSES_DIFFERENT_EDITABLE){
-				StringBuffer strBuffer = new StringBuffer("UPDATE "+DB_TABLE_NAME+" set DIFFERENT_ADDRESSES=1 where INVOICING_ADDRESS <> DELIVERY_ADDRESS");
+				StringBuffer strBuffer = new StringBuffer("UPDATE \""+DB_TABLE_NAME+"\" set \"DIFFERENT_ADDRESSES\"=1 where \"INVOICING_ADDRESS\" <> \"DELIVERY_ADDRESS\""); // adapt_done_P
 				Globals.getApp().getDataSource().command_ExecuteRequest(strBuffer);
 	  	}
 		}catch(Exception e){

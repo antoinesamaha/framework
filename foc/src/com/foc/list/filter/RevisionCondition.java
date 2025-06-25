@@ -24,6 +24,7 @@ import java.awt.GridBagConstraints;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import com.foc.Globals;
 import com.foc.desc.*;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
@@ -140,15 +141,16 @@ public class RevisionCondition extends FilterCondition{
     }
   }
   
-  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) {
-    StringBuffer buffer = null;
+  public StringBuffer buildSQLWhere(FocListFilter filter, String fieldName) { // adapt_proofread
+    StringBuffer buffer = null; // adapt_proofread
     int rev  = getRev(filter);
     
     int op = getOperator(filter);
-    buffer = new StringBuffer();
+    buffer = new StringBuffer(); // adapt_done_P (pr / general testing )
     
     if (op == OPERATOR_EQUALS){
-      String D_R = FField.DELETION_REVISION_FIELD_ID_NAME;
+      String D_R = FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), FField.DELETION_REVISION_FIELD_ID_NAME);
+      fieldName = FField.adaptFieldNameToProvider(Globals.getDBManager().getProvider(), fieldName);
       buffer.append(fieldName + " <= " + rev + " AND ( " + D_R + " = " + 0 + " OR " + D_R + " > " + rev + " ) ");
     }
     return buffer;

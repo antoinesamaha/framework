@@ -91,8 +91,8 @@ public class FocLinkRootHandler extends DefaultHandler implements IFocLinkConst 
   	}
   }
   
-  public StringBuffer getResponse(){
-  	StringBuffer buffer = null; 
+  public StringBuffer getResponse(){ // adapt_notQuery
+  	StringBuffer buffer = null; // adapt_notQuery
   	if(specificHandler != null){
   		buffer = specificHandler.getResponse();
   	}

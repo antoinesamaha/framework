@@ -36,7 +36,7 @@ public class ReloadServlet extends FocSimpleMicroServlet {
 		SessionAndApplication sessionAndApp = pushSession(request, response);
 		Globals.logString(" => GET Begin ReloadServlet /reload");
 		try{
-			StringBuffer buffer = getRequestAsStringBuffer(request);
+			StringBuffer buffer = getRequestAsStringBuffer(request); // adapt_notQuery
 			String       reqStr = buffer.toString();
 			JSONObject mainObject = new JSONObject(reqStr);
 			if(mainObject.has(PARAM_TABLE_LIST)) {

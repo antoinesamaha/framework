@@ -385,7 +385,7 @@ public class FListPanel extends FAbstractListPanel {
               int row = ftable.getSelectedRow();
               if(row >= 0){
                 FocObject focObj = (FocObject) ftable.getElementAt(row);
-                StringBuffer messageBuffer = focObj.checkDeletionWithMessage();
+                StringBuffer messageBuffer = focObj.checkDeletionWithMessage(); // adapt_notQuery
                 
                 if(messageBuffer != null && messageBuffer.length() > 0){
                 	Globals.getApp().getDisplayManager().popupMessage(messageBuffer.toString());

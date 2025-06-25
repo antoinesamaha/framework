@@ -16,9 +16,9 @@ import com.foc.list.*;
  */
 public class SQLSelectString extends SQLSelect{
   
-  protected StringBuffer request = null;
+  protected StringBuffer request = null;  // adapt_proofread (as process)
   
-  public SQLSelectString(StringBuffer request) {
+  public SQLSelectString(StringBuffer request) {  // adapt_proofread (as process)
     super((FocObject)null, null, null);
     this.request = request;
   }

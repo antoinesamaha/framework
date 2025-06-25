@@ -11,6 +11,7 @@ import java.util.Iterator;
 
 import com.foc.Application;
 import com.foc.Globals;
+import com.foc.db.DBManager;
 import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.focDataSourceDB.db.connectionPooling.StatementWrapper;
@@ -41,8 +42,8 @@ public class DatabaseExtractor {
           Globals.logString("Table :"+tableName);
           PrintStream logFile = new PrintStream("c:/avisleb_txt/"+tableName+".csv");  
           
-          StringBuffer request = new StringBuffer("SELECT * from ");
-          request.append(tableName);
+          StringBuffer request = new StringBuffer("SELECT * from ");  // adapt_done_P (pr / unreachable)
+          request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), tableName));
           
           Globals.logString(request);
           SQLSelectString sqlSelect = new SQLSelectString(request);
@@ -70,7 +71,7 @@ public class DatabaseExtractor {
     }
   }
       
-  public static void runRequestAndPrintFile(StringBuffer request, String fileName){
+  public static void runRequestAndPrintFile(StringBuffer request, String fileName){  // adapt_proofread
     try{
       DBManagerServer dbManagerServer = Globals.getApp().getDataSource() != null ? (DBManagerServer) Globals.getApp().getDataSource().getDBManagerServer() : null;
       //Making the request
@@ -133,8 +134,8 @@ public class DatabaseExtractor {
           String tableName = (String) iter.next();
           
           if(tableName != null){  
-            StringBuffer request = new StringBuffer("SELECT * from ");
-            request.append(tableName);
+            StringBuffer request = new StringBuffer("SELECT * from ");  // adapt_done (pr)
+            request.append(DBManager.provider_ConvertFieldName(Globals.getDBManager().getProvider(), tableName));
 
             runRequestAndPrintFile(request, "c:/temp/dbCopy/"+tableName+".csv");
           }
@@ -168,7 +169,7 @@ public class DatabaseExtractor {
 
   public void extract(){
     try{
-      StringBuffer request = new StringBuffer();
+      StringBuffer request = new StringBuffer();  // adapt_proofread (table characteristics unknown, will not change query)
       
       request.append("select ");
       request.append("MAKE1.NAME, ");
@@ -232,4 +233,3 @@ public class DatabaseExtractor {
     }
   }
 }
-

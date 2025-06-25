@@ -306,7 +306,7 @@ public class AdminWebModule extends FocWebModule {
 			public void actionPerformed(Object navigationWindow, FocMenuItem menuItem, int extraActionIndex) {
 				String message = "";
 				if (Globals.getApp() != null && Globals.getApp().getDataSource() != null) {
-					StringBuffer buff = Globals.getApp().getDataSource().getMonitoringText();
+					StringBuffer buff = Globals.getApp().getDataSource().getMonitoringText(); // adapt_notQuery
 					if (buff != null) {
 						message = buff.toString();
 

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class B01JsonBuilder {
-	private StringBuffer buffer = null;
+	private StringBuffer buffer = null; // adapt_notQuery
 	
 	private ArrayList<Boolean> firstIndicator       = new ArrayList<Boolean>();
 	private ArrayList<String>  masterObjectsPrinted = new ArrayList<String>();
@@ -43,7 +43,7 @@ public class B01JsonBuilder {
 	private int     listCount                 = -1;
 	
 	public B01JsonBuilder(){
-		buffer = new StringBuffer();
+		buffer = new StringBuffer(); // adapt_notQuery
 	}
 	
 	public B01JsonBuilder(B01JsonBuilder src){
@@ -68,7 +68,7 @@ public class B01JsonBuilder {
 		masterObjectsPrinted = new ArrayList<String>(src.masterObjectsPrinted);
 	}
 	
-	public B01JsonBuilder(StringBuffer buffer){
+	public B01JsonBuilder(StringBuffer buffer){ // adapt_notQuery
 		this.buffer = buffer;
 	}
 	
@@ -320,7 +320,7 @@ public class B01JsonBuilder {
 		char c = 0;
 		int i;
 		int len = string.length();
-		StringBuffer sb = new StringBuffer(len + 4);
+		StringBuffer sb = new StringBuffer(len + 4); // adapt_notQuery
 		String t;
 
 		sb.append('"');

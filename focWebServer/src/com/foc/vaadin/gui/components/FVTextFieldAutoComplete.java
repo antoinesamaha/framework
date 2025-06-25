@@ -58,7 +58,7 @@ public class FVTextFieldAutoComplete extends FVMultipleChoiceComboBox implements
       FField field = (FField) property.getFocField();
       FocDesc focDesc = property.getFocObject() != null ? property.getFocObject().getThisFocDesc() : null;
       if(field != null && focDesc != null){
-  			ArrayList<String> arrayList = Globals.getApp().getDataSource().command_Select(focDesc, field.getID(), true, null);
+  			ArrayList<String> arrayList = Globals.getApp().getDataSource().command_Select(focDesc, field.getID(), true, null); // adapt_proofread
   			for(int i=0; i<arrayList.size(); i++){
   				addItem((String)arrayList.get(i));
   			}

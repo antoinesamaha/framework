@@ -46,7 +46,7 @@ public class DateMap {
   }
   
   public void fillFromTableColumn(FocDesc focDesc, int fieldID){
-  	ArrayList arrayList = Globals.getApp().getDataSource().command_Select(focDesc, fieldID, true, null);
+  	ArrayList arrayList = Globals.getApp().getDataSource().command_Select(focDesc, fieldID, true, null); // adapt_proofread
   	for(int l=0; l<arrayList.size(); l++)	{
       put((Date)arrayList.get(l));
   	}
