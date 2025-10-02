@@ -250,6 +250,10 @@ public class DBManagerServer {
   	return executeQuery_WithMultipleAttempts(stmt, req, SQLRequest.TYPE_SELECT, null);
   }
   
+  public StatementWrapper executeQuery_WithMultipleAttemptsRefIntegrity(StatementWrapper stmt, String req){
+  	return executeQuery_WithMultipleAttemptsRefIntegrity(stmt, req, SQLRequest.TYPE_SELECT, null);
+  }
+  
   public StatementWrapper executeQuery_WithMultipleAttempts(StatementWrapper stmt, String req, int queryType, FocObject focObject){
   	if(req != null){
   		if(ConfigInfo.isLogDBRequestActive() && (queryType != SQLRequest.TYPE_SELECT || ConfigInfo.isLogDBSelectActive())){
@@ -354,6 +358,120 @@ public class DBManagerServer {
 		  			stmt = lockStatement(stmt.getDBSourceKey());
 		  		}else{
 		  			Globals.logException(e);
+		  			if (ConfigInfo.isPopupExceptionDialog()) {
+		  				Globals.showNotification("DB ERROR", ""+e.getMessage(), IFocEnvironment.TYPE_ERROR_MESSAGE);
+		  			}
+		  		}
+		  	}
+	  	}
+  	}
+    return stmt;
+  }
+  
+  public StatementWrapper executeQuery_WithMultipleAttemptsRefIntegrity(StatementWrapper stmt, String req, int queryType, FocObject focObject){
+  	if(req != null){
+  		if(ConfigInfo.isLogDBRequestActive() && (queryType != SQLRequest.TYPE_SELECT || ConfigInfo.isLogDBSelectActive())){
+    		Globals.logString(req);
+    	}
+	  	
+    	boolean successful    = false;
+	  	int     attemptsCount = 0;
+	  	while(attemptsCount < MAX_NUMBER_OF_ATTEMPTS && !successful){
+	  		attemptsCount++;
+		  	try{
+		  		if(queryType != SQLRequest.TYPE_SELECT){
+		  			FocDesc focDesc = focObject != null ? focObject.getThisFocDesc() : null;
+		      	if(queryType == SQLRequest.TYPE_INSERT 
+		      			&& focObject != null
+		      			&& focDesc != null
+		      			&& (
+		      					   focDesc.getProvider() == DBManager.PROVIDER_MYSQL
+		      					|| focDesc.getProvider() == DBManager.PROVIDER_MSSQL
+		      					|| focDesc.getProvider() == DBManager.PROVIDER_H2
+		      					|| focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
+		      					)
+		      			){
+		      		//We are here if we are MySQL and Insert
+		      		Statement s = stmt != null ? stmt.getStatement() : null;
+		      		if(s != null){
+			    	  	s.executeUpdate(req, Statement.RETURN_GENERATED_KEYS);
+			    	  	ResultSet rs = s.getGeneratedKeys();
+
+			    	  	int indexOfREF = 1;
+			    	  	if(focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
+//				    	  	ResultSetMetaData metaData = rs.getMetaData();
+//				    	  	indexOfREF = metaData.getColumnCount();
+				    	  	
+			    	  		indexOfREF = -1;
+				    	  	ResultSetMetaData metaData = rs.getMetaData();
+				    	  	for(int i=1; i<=metaData.getColumnCount() && indexOfREF < 0; i++) {
+				    	  		String colName = metaData.getColumnName(i);
+				    	  		if(colName.equals(focDesc.getRefFieldName())) {
+				    	  			indexOfREF = i;
+				    	  		}
+//				    	  		Globals.logString("Column["+i+"]="+colName);
+				    	  	}
+			    	  	}
+			    	  	
+			    	  	while(rs.next()){
+			    	  		long ref = rs.getLong(indexOfREF);
+	
+			    	  		focObject.setReference_WithFocListRefHashMapAdjustment(ref);
+			    	  	}
+			    	  	if(rs != null) rs.close();
+		      		}
+		      	}else if(queryType == SQLRequest.TYPE_DELETE){
+//		      		Globals.getApp().getDataSource().transaction_BeginTransactionIfRequestIsToBeExecuted();
+			      	DBManagerServer.getInstance().transaction_BeginTransactionIfRequestIsToBeExecuted();
+		      		Statement s = stmt != null ? stmt.getStatement() : null;
+		      		if(s != null){
+			      		s.executeUpdate(req);
+		      		}
+			      	Globals.getApp().getDataSource().transaction_SeeIfShouldCommit();
+		      	}else{
+		      		Statement s = stmt != null ? stmt.getStatement() : null;
+		      		if(s != null){
+		      			s.executeUpdate(req);
+		      		}
+		      	}
+		      	
+		  		}else{
+	      		Statement s = stmt != null ? stmt.getStatement() : null;
+	      		if(s != null){
+	      			s.executeQuery(req);
+	      		}
+		  		}
+		  		successful = true;
+		  		
+		  		if(focObject != null){
+		  		  FocDataMap focDataMap = new FocDataMap(focObject);
+  		  		focDataMap.putString("TABLE_NAME", focObject.getThisFocDesc().getStorageName());
+		  		
+  		  		switch(queryType){
+  		  		case SQLRequest.TYPE_INSERT :
+  	          FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_TABLE_ADD, focDataMap));
+  	          break;
+  		  		case SQLRequest.TYPE_DELETE:
+  	          FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_TABLE_DELETE, focDataMap));
+  	          break;
+  		  		case SQLRequest.TYPE_UPDATE:
+  	          FocNotificationManager.getInstance().fireEvent(new FocNotificationEvent(FocNotificationConst.EVT_TABLE_UPDATE, focDataMap));
+  	          break;
+  		  		default:
+  		  		  break;
+  		  		
+  		  		}
+		  		}		  		
+
+		  	}catch(Exception e){
+		  		if(attemptsCount < MAX_NUMBER_OF_ATTEMPTS){
+		  			Globals.logExceptionWithoutPopup(e);
+		  			Globals.logString("FOC will Attempt Again");
+		  			
+		  			stmt.unlockStatement();
+		  			stmt = lockStatement(stmt.getDBSourceKey());
+		  		}else{
+		  			Globals.refIntegrity_logExceptionWithoutPopup(e);
 		  			if (ConfigInfo.isPopupExceptionDialog()) {
 		  				Globals.showNotification("DB ERROR", ""+e.getMessage(), IFocEnvironment.TYPE_ERROR_MESSAGE);
 		  			}

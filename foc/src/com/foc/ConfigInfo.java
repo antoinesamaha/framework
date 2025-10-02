@@ -397,7 +397,7 @@ public class ConfigInfo {
         adaptIndexesEnabled = str != null ? str.compareTo("1") == 0 : true;
 
         str = getProperty("adaptConstraints");
-        adaptConstraints = str != null && jdbcURL.contains("local") ? str.compareTo("1") == 0 : false;
+        adaptConstraints = str != null ? str.compareTo("1") == 0 : false;
         
         str = getProperty("log.details");
         logDetails = str != null ? str.compareTo("1") == 0 : false;
