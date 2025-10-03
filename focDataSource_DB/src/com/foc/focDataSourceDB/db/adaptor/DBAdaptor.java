@@ -717,7 +717,6 @@ public class DBAdaptor {
 									request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
 									if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
 										StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());										
-										request += " novalidate";
 										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttemptsRefIntegrity(stmt, request);
 								    DBManagerServer.getInstance().unlockStatement(stmt);
 									} else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
