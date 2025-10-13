@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
 import java.sql.CallableStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.foc.desc.FocDesc;
@@ -38,6 +39,7 @@ public interface IFocDataSource {
 	public int           getServerVersion(String dbSourceKey);
 	
 	public boolean       command_ExecuteRequest(String dbSourceKey, StringBuffer sqlRequest);
+	public void          command_ExecuteRequest_refIntegrity(String dbSourceKey, StringBuffer sqlRequest) throws SQLException;
 	public boolean       command_ExecuteRequest(StringBuffer sqlRequest);
 	public boolean       command_AdaptDataModel_SingleTable(FocDesc focDesc);
 	public boolean       command_AdaptDataModel_Reindex();

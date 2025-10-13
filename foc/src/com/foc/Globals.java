@@ -164,6 +164,11 @@ public class Globals{
     return app != null ? app.getLogFile() : null;
   }
   
+  private static PrintStream getReferentialIntegrityLogFile() {
+    Application app = getApp();
+    return app != null ? app.getReferentialIntegrityLogFile() : null;
+  }
+  
   public static void logExceptionWithoutPopup(Exception e) {
   	if(ConfigInfo.isLogConsoleActive()){
   		e.printStackTrace();
@@ -188,6 +193,16 @@ public class Globals{
     	}
 //      getApp().exit(true);
       //getApp().getFocTestSuite().exceptionOccured(e);
+    }
+  }
+  
+  public static void refIntegrity_logExceptionWithoutPopup(Exception e) {
+    PrintStream logFile = getReferentialIntegrityLogFile();
+    if(logFile != null){
+    	refInetgrity_logString(" -- Exception: "+e.getMessage(), true);
+      e.printStackTrace(logFile);
+    }else{
+    	refInetgrity_logString("Log File is NULL", true);
     }
   }
 
@@ -228,6 +243,26 @@ public class Globals{
   		}
   	}
     PrintStream logFile = getLogFile();
+    if(logFile != null){ 
+      logFile.println(str);
+      logFile.flush();
+    }
+    if(ConfigInfo.isLogConsoleActive()){
+      System.out.println(str);
+      System.out.flush();
+    }
+  }
+  
+  public static void refInetgrity_logString(String str, boolean withTime) {
+  	if(withTime){
+  		if(!insideLogString){
+  			insideLogString = true;
+  			String threadID = Thread.currentThread() != null ? String.valueOf(Thread.currentThread().getId()) : "--"; 
+  			str = getLogFileTimeFormat().format(new Date(System.currentTimeMillis())) + " " + threadID + " ["+ getUsername() +"] <" + getSessionID() + ">:" + str;
+  			insideLogString = false;
+  		}
+  	}
+    PrintStream logFile = getReferentialIntegrityLogFile();
     if(logFile != null){ 
       logFile.println(str);
       logFile.flush();
@@ -367,8 +402,22 @@ public class Globals{
   	return error;
   }
   
+  public static boolean refIntegrity_logFile_CheckLogDir(){
+  	boolean error = true;
+  	String archDir = ConfigInfo.getRefIntegrityLogDir();
+  	if(archDir != null && archDir.compareTo("") != 0){
+  		File file = new File(archDir);
+  		error = !file.exists() || !file.isDirectory();
+  	}
+  	return error;
+  }
+  
   public static String logFile_GetFileName(String suffix, String extension){
   	return logFile_GetFileName(ConfigInfo.getLogDir(), suffix, extension);
+  }
+  
+  public static String refIntegrity_logFile_GetFileName(String suffix, String extension){
+  	return logFile_GetFileName(ConfigInfo.getRefIntegrityLogDir(), suffix, extension);
   }
 
   public static String logFile_GetTimeStampString(){

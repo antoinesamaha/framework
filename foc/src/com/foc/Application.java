@@ -131,6 +131,7 @@ public class Application {
   private UnitFactory    unitFactory              = null;
   private FocIcons       focIcons                 = null;
   private PrintStream    logFile                  = null;
+  private PrintStream    refIntegrityLogFile      = null;
   private PrintStream    pushedLogFile            = null;
   private boolean        withDatabase             = false;
   private boolean        doNotCheckTables         = false;
@@ -358,6 +359,7 @@ public class Application {
     	String filePrefix = argHash.get(Globals.ARG_LOG_FILE_PREFIX);
     	if(filePrefix == null) filePrefix ="";
     	logFile = (ConfigInfo.isLogFileActive() && !Globals.logFile_CheckLogDir()) ? new PrintStream(Globals.logFile_GetFileName(filePrefix, "log"), "UTF-8") : null;
+    	refIntegrityLogFile = (ConfigInfo.isRefIntegrityLogFileActive() && !Globals.refIntegrity_logFile_CheckLogDir()) ? new PrintStream(Globals.refIntegrity_logFile_GetFileName(filePrefix, "log"), "UTF-8") : null;    
     }catch(Exception e){
     	Globals.logException(e);
     }
@@ -1654,6 +1656,10 @@ public class Application {
   		ret = logFile;
   	}
     return ret;
+  }
+  
+  public PrintStream getReferentialIntegrityLogFile() {
+    return refIntegrityLogFile;
   }
   
   public boolean isWithLogin() {

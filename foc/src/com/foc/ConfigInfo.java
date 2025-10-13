@@ -65,6 +65,7 @@ public class ConfigInfo {
   private static String  dataModelFileName           = null;
   private static String  helpURL                     = null;
   private static String  logDir                      = null;
+  private static String  refIntegrityLogDir          = null;
   private static boolean rtl                         = false;
   private static String  language                    = null;
 	private static boolean logDetails                  = false;
@@ -73,6 +74,7 @@ public class ConfigInfo {
   private static boolean logDBRequest                = true;
   private static boolean logDBSelect                 = true;
   private static boolean logFileActive               = false;
+  private static boolean refIntegrityLogFileActive   = false;
   private static boolean logMemoryUsage              = false;
   private static boolean logFileWithTime             = false;
   private static boolean unitDevMode                 = true;
@@ -326,6 +328,11 @@ public class ConfigInfo {
   	      logDir = getProperty("log.dir");
   	      if(logDir == null) logDir = ".";
         }
+        
+        if(refIntegrityLogDir == null){//In few cases we set the logDir from the main without passing by the config.properties
+        	refIntegrityLogDir = getProperty("ref.log.dir");
+  	      if(refIntegrityLogDir == null) refIntegrityLogDir = ".";
+        }
   
         helpURL = getProperty("help.URL");
         
@@ -333,6 +340,9 @@ public class ConfigInfo {
         
         str = getProperty("log.fileActive");
         logFileActive = str != null ? str.compareTo("1") == 0 : false;
+        
+        str = getProperty("ref.log.fileActive");
+        refIntegrityLogFileActive = str != null ? str.compareTo("1") == 0 : false;
 
         str = getProperty("log.memoryUsage");
         logMemoryUsage = str != null ? str.compareTo("1") == 0 : false;//Default value is false log Memory usage
@@ -602,6 +612,10 @@ public class ConfigInfo {
   public static String getLogDir(){
   	return logDir;
   }
+  
+  public static String getRefIntegrityLogDir(){
+  	return refIntegrityLogDir;
+  }
 
   public static String getHelpURL(){
   	return helpURL;
@@ -617,6 +631,10 @@ public class ConfigInfo {
   
   public static boolean isLogFileActive() {
     return logFileActive;
+  }
+  
+  public static boolean isRefIntegrityLogFileActive() {
+    return refIntegrityLogFileActive;
   }
 
   public static boolean isLogFileWithTime() {

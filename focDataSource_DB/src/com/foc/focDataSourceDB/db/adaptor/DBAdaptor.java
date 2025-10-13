@@ -121,6 +121,16 @@ public class DBAdaptor {
   }
 	
   public boolean adaptDataModel(boolean forceAlterTables, boolean schemaEmpty){
+//  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
+//		constrains_DropAll(defaultConnection);
+//
+//  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
+//  	while(auxConnIter != null && auxConnIter.hasNext()){
+//  		ConnectionPool connectionPool = auxConnIter.next();
+//  		if(connectionPool != null){
+//	  		constrains_DropAll(connectionPool);
+//  		}
+//  	}
   	alterAllFields = forceAlterTables;
   	DBManager dbManager = Globals.getDBManager(); 
   	try{
@@ -142,18 +152,18 @@ public class DBAdaptor {
 	    }
 	
 	    //Drop all FFK_ constraints on all Oracle connections
-	    if(ConfigInfo.isAdaptConstraints() && isAlterAllFields()) {
-		  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
-	  		constrains_DropAll(defaultConnection);
-
-		  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
-		  	while(auxConnIter != null && auxConnIter.hasNext()){
-		  		ConnectionPool connectionPool = auxConnIter.next();
-		  		if(connectionPool != null){
-			  		constrains_DropAll(connectionPool);
-		  		}
-		  	}
-	    }
+//	    if(ConfigInfo.isAdaptConstraints() && isAlterAllFields()) {
+//		  	ConnectionPool defaultConnection = DBManagerServer.getInstance().getConnectionPool(null);
+//	  		constrains_DropAll(defaultConnection);
+//
+//		  	Iterator<ConnectionPool> auxConnIter = DBManagerServer.getInstance().auxPools_Iterator();
+//		  	while(auxConnIter != null && auxConnIter.hasNext()){
+//		  		ConnectionPool connectionPool = auxConnIter.next();
+//		  		if(connectionPool != null){
+//			  		constrains_DropAll(connectionPool);
+//		  		}
+//		  	}
+//	    }
 	  	//--------------------------------------------------
 
 	    //Do the adapt for the 2 FAB tables
@@ -268,7 +278,7 @@ public class DBAdaptor {
 			    		try{
 			    			constraint_Adapt(focDesc);
 			        }catch(Exception e){
-			        	Globals.logException(e);
+			        	Globals.logExceptionWithoutPopup(e);
 			    		}
 			    	}
 		      }
@@ -693,11 +703,12 @@ public class DBAdaptor {
 				  		if(refField != null){
 				  			
 				  			//If the column is already there with zeros instead of null this will rase errors when creating the constraints
-				  			if(alterAllFields) {
+				  			String focDescName = otherFocDesc.getName();
+				  			if(!(focDescName != null && focDescName.equals("POSTE"))) {
 									String replaceRequest = "UPDATE \""+focDesc.getStorageName_ForSQL()+"\" set \""+field.getDBName()+"\"=null WHERE \""+field.getDBName()+"\"<=0";
 									Globals.logString(replaceRequest);
-									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));
-				  			}				  			
+									Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(replaceRequest));	
+				  			}
 						    //-------------------------------------------------------------------------------------------------------------
 
 				  			if(alterAllFields || allConstraints == null || allConstraints.get(constraintName) == null) {
@@ -706,17 +717,16 @@ public class DBAdaptor {
 									request += " references \"" + otherFocDesc.getStorageName_ForSQL() +"\" (\""+refField.getDBName()+"\") ";
 									if (focDesc.getProvider() == DBManager.PROVIDER_ORACLE ) {
 										StatementWrapper stmt = DBManagerServer.getInstance().lockStatement(focDesc.getDbSourceKey());										
-										request += " novalidate";
-										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttempts(stmt, request);
+										stmt = DBManagerServer.getInstance().executeQuery_WithMultipleAttemptsRefIntegrity(stmt, request);
 								    DBManagerServer.getInstance().unlockStatement(stmt);
 									} else if (focDesc.getProvider() == DBManager.PROVIDER_POSTGRES) {
-								    Globals.getApp().getDataSource().command_ExecuteRequest(focDesc.getDbSourceKey(), new StringBuffer(request));
+								    Globals.getApp().getDataSource().command_ExecuteRequest_refIntegrity(focDesc.getDbSourceKey(), new StringBuffer(request));
 									}
 				  			}								
 				  		}
 			  		}
 		      }catch(Exception e){
-		      	Globals.logException(e);
+		      	Globals.refIntegrity_logExceptionWithoutPopup(e);
 		      }
 		  	}
 	    }

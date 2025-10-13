@@ -1532,6 +1532,23 @@ public class FocDataSource_DB implements IFocDataSource {
 	}
 	
 	@Override
+	public void command_ExecuteRequest_refIntegrity(String dbSourceKey, StringBuffer sqlRequest) throws SQLException {
+    StatementWrapper stmt = getDBManagerServer().lockStatement(dbSourceKey);
+    if (stmt != null) {
+    	try {
+      	String req = SQLRequest.adapteRequestToDBProvider(sqlRequest);
+        if(ConfigInfo.isLogDBRequestActive()){
+        	Globals.logString(req);
+        }
+        stmt.executeUpdate(req);
+    	} catch (Exception e) {
+        getDBManagerServer().unlockStatement(stmt);
+        throw e;
+			}
+    }
+	}
+	
+	@Override
 	public boolean command_ExecuteRequest(StringBuffer sqlRequest) {
 		return command_ExecuteRequest(null, sqlRequest);
 	}
