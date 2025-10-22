@@ -1825,4 +1825,10 @@ public class FocUser extends FocObject {
 		}
 		return encrypted;
 	}
+	
+	@Override
+	public void reloadWithSlaveLists() {
+		super.reloadWithSlaveLists();
+		userSites_Rebuild();
+	}
 }
