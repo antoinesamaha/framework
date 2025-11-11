@@ -5,6 +5,7 @@
   <version>${foc.version}</version>
   <name>focShared</name>
   <description>focShared</description>
+  <packaging>jar</packaging>
   
   <distributionManagement>
   <snapshotRepository>

@@ -1829,6 +1829,7 @@ public class FocUser extends FocObject {
 	@Override
 	public void reloadWithSlaveLists() {
 		super.reloadWithSlaveLists();
+		Globals.logString("Reloading user sites for user");
 		userSites_Rebuild();
 	}
 }

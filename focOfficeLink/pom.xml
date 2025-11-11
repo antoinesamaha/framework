@@ -5,6 +5,7 @@
   <version>${foc.version}</version>
   <name>focOfficeLink</name>
   <description>focOfficeLink</description>
+  <packaging>jar</packaging>
   
   <distributionManagement>
   <snapshotRepository>
@@ -34,12 +35,10 @@
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>foc</artifactId>
-  		<version>${foc.version}</version>
   	</dependency>  	
   	<dependency>
   		<groupId>com.focframework</groupId>
   		<artifactId>focAPI</artifactId>
-  		<version>${foc.version}</version>
   	</dependency>
   	<dependency>
   		<groupId>com.focframework</groupId>
@@ -75,4 +74,18 @@
 		<connection>scm:git:git://github.com/FOC-framework/framework.git</connection>
 		<developerConnection>scm:git:git@github.com/FOC-framework/framework.git</developerConnection>
 	</scm>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.focframework</groupId>
+				<artifactId>foc</artifactId>
+				<version>${foc.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.focframework</groupId>
+				<artifactId>focAPI</artifactId>
+				<version>${foc.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

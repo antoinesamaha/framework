@@ -6,6 +6,7 @@
 	<version>${foc.version}</version>
 	<name>focWebServer</name>
 	<description>focWebServer</description>
+	<packaging>jar</packaging>
 	<url>http://www.focframework.com</url>
 	<licenses>
 		<license>

@@ -6,6 +6,7 @@
 	<version>${foc.version}</version>
 	<name>focAPI</name>
 	<description>focAPI</description>
+	<packaging>jar</packaging>
 	<url>http://www.focframework.com</url>
 	<licenses>
 		<license>
@@ -52,24 +53,24 @@
 					<pushChanges>false</pushChanges>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-						<configuration>
-							<keyname>4AE5DB223147B9675773C136992A59191E28DBA2</keyname>
-							<passphraseServerId>4AE5DB223147B9675773C136992A59191E28DBA2</passphraseServerId>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-gpg-plugin</artifactId> -->
+<!-- 				<version>1.5</version> -->
+<!-- 				<executions> -->
+<!-- 					<execution> -->
+<!-- 						<id>sign-artifacts</id> -->
+<!-- 						<phase>verify</phase> -->
+<!-- 						<goals> -->
+<!-- 							<goal>sign</goal> -->
+<!-- 						</goals> -->
+<!-- 						<configuration> -->
+<!-- 							<keyname>4AE5DB223147B9675773C136992A59191E28DBA2</keyname> -->
+<!-- 							<passphraseServerId>4AE5DB223147B9675773C136992A59191E28DBA2</passphraseServerId> -->
+<!-- 						</configuration> -->
+<!-- 					</execution> -->
+<!-- 				</executions> -->
+<!-- 			</plugin> -->
 			<plugin>
 				<groupId>org.sonatype.plugins</groupId>
 				<artifactId>nexus-staging-maven-plugin</artifactId>
