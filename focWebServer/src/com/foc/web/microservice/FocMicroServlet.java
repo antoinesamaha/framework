@@ -52,6 +52,7 @@ public abstract class FocMicroServlet extends HttpServlet implements SrvConst_Se
 	public static int AUTH_BEARER                = 1;
 	public static int AUTH_USERNAME_PASSWORD     = 2;
 	public static int AUTH_BEARER_THEN_USER_PASS = 3;
+	public static int AUTH_OTC                   = 4;
 	
 	/**
 	 * Can be overwriden by the Servlet implementation 
