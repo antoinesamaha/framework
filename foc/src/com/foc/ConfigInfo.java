@@ -298,7 +298,7 @@ public class ConfigInfo {
         blobUseOTC = str != null ? str.compareTo("1") == 0 : false;          
         
         str = getProperty("blob.OTCTTL");
-        if(str != null) blobOTCTTL = Utils.parseInteger(str, 0);
+        if(str != null) blobOTCTTL = Utils.parseInteger(str, 10 * 60 * 1000);
         
         jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
         allowedUrlsForAdmin = getProperty("allowedUrlsForAdmin");

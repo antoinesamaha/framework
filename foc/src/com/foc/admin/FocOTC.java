@@ -21,6 +21,7 @@ package com.foc.admin;
 
 import java.sql.Date;
 
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.desc.FocConstructor;
 import com.foc.desc.FocObject;
@@ -85,7 +86,7 @@ public class FocOTC extends FocObject {
 	}
 	
 	public boolean consume() {
-		return (getCreatedAt() != null && getCreatedAt().getTime() + 10 * 60 * 1000 > Globals.getApp().getSystemDate().getTime()) ? true : false; 
+		return (getCreatedAt() != null && getCreatedAt().getTime() + ConfigInfo.getBlobOTCTTL() > Globals.getApp().getSystemDate().getTime()) ? true : false; 
 	}
 	
 	public static FocOTC newOTC(String tableName, long tableRef) {
@@ -106,11 +107,13 @@ public class FocOTC extends FocObject {
 		return focOTC;
 	}
 	
-	public static FocOTC findOTC(String otc) {
+	public static FocOTC findOTC(String otc, String accessTablename, String accessRef) {
 		FocOTC foundFocOTC = null;
 		
 		FocList list = new FocList(new FocLinkSimple(FocOTCDesc.getInstance()));
-		list.getFilter().putAdditionalWhere("OTC", "\""+FocOTCDesc.FNAME_OTC+"\" = '"+otc+"'");
+		String whereCondition = "\""+FocOTCDesc.FNAME_OTC+"\" = '"+otc+"' and "+whereConditionOnTTL(false);
+		whereCondition += " and \"ENTITY_NAME\"='" + accessTablename + "' and \"ENTITY_REF\"='" + accessRef +"'";   
+		list.getFilter().putAdditionalWhere("OTC", whereCondition);
 		list.loadIfNotLoadedFromDB();
 		
 		FocOTC focOTC = list.size() == 1 ? (FocOTC) list.getFocObject(0) : null ;
@@ -119,12 +122,18 @@ public class FocOTC extends FocObject {
 			foundFocOTC.copyPropertiesFrom(focOTC, null);
 		}
 
-//		focOTC.setDeleted(true);
-//		focOTC.validate(false);
-//		list.validate(false);
 		list.dispose();
 		
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("DELETE FROM \"FOTC\" WHERE " + whereConditionOnTTL(true) + ";");
+		Globals.getApp().getDataSource().command_ExecuteRequest(buffer);
+		
 		return foundFocOTC;
+	}
+	
+	public static String whereConditionOnTTL(boolean expired) {
+		String symbol = expired ? "<" : ">";
+		return "\"CREATED_AT\" "+symbol+" now() - INTERVAL '"+ConfigInfo.getBlobOTCTTL()+" milliseconds'";
 	}
  
 }

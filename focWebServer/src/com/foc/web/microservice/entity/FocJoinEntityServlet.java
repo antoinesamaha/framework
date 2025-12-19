@@ -176,7 +176,11 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					session = null;
 				}
 			} else if (authMethod == AUTH_OTC) {
-				FocOTC focOTC = FocOTC.findOTC(otc);
+				//table_name="+tableName+"&ref="+focObj.getReferenceInt()				
+				String accessTablename = (String) request.getParameter("table_name");
+				String accessRef = (String) request.getParameter("ref");
+				
+				FocOTC focOTC = FocOTC.findOTC(otc, accessTablename, accessRef);
 
 				if (focOTC != null) { 
 					FocUser otcUser = focOTC.getUser();
