@@ -124,6 +124,8 @@ public class ConfigInfo {
   
   private static String tempDownloadFolder = null;
   private static String blobStorageDirectory = null;
+  private static boolean blobUseOTC = false;
+  private static int     blobOTCTTL = 10 * 60 * 1000;
   
   private static boolean refreshCachedLists = false;
   private static boolean logOpenEvent       = true;
@@ -291,6 +293,12 @@ public class ConfigInfo {
 
         tempDownloadFolder = getProperty("tempDownloadFolder");
         blobStorageDirectory = getProperty("blobStorageDirectory");
+        
+        str = getProperty("blob.useOTC");
+        blobUseOTC = str != null ? str.compareTo("1") == 0 : false;          
+        
+        str = getProperty("blob.OTCTTL");
+        if(str != null) blobOTCTTL = Utils.parseInteger(str, 10 * 60 * 1000);
         
         jwtTokenAlgorithmKey = getProperty("jwtTokenAlgorithmKey");
         allowedUrlsForAdmin = getProperty("allowedUrlsForAdmin");
@@ -549,6 +557,14 @@ public class ConfigInfo {
   public static String getTempDownloadFolder(){
   	return tempDownloadFolder;
   }
+
+  public static boolean isBlobUseOTC() {
+	  return blobUseOTC;
+  }
+  
+  public static int getBlobOTCTTL() {
+	  return blobOTCTTL;
+  }  
   
   public static String getBlobStorageDirectory(){
   	return blobStorageDirectory;

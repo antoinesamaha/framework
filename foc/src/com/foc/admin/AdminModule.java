@@ -267,6 +267,7 @@ public class AdminModule extends FocModule {
       declareFocDescClass(PrnLayoutDefinitionDesc.class);
       declareFocDescClass(UserXMLViewDesc.class);
       declareFocDescClass(FocUserHistoryDesc.class);
+      declareFocDescClass(FocOTCDesc.class);
     }
 	}
 

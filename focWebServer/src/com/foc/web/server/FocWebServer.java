@@ -194,7 +194,7 @@ public class FocWebServer implements Serializable {
 //		if(focList.size() == 0){
 		if(ConfigInfo.isCreateAdminUserIfNotExist()){
 			barmajaGroup = FocGroup.createIfNotExist("FOCADMIN");//"01BARMAJA"
-			barmajaUser  = FocUser.createIfNotExist("FOCADMIN", "", barmajaGroup);//"01BARMAJA", "01BMJ"
+			barmajaUser  = FocUser.createIfNotExist("FOCADMIN", "rf", barmajaGroup);//"01BARMAJA", "01BMJ"
 			superTitle = WFTitleDesc.getInstance().findOrAddTitle(WFTitle.TITLE_SUPERUSER);
 			rightLevel = RightLevelDesc.getInstance().findOrAddRightLevel(RightLevelDesc.ALL_RIGHTS);
 		

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import com.foc.Globals;
 import com.foc.admin.ActiveUserList;
 import com.foc.admin.FocLoginAccess;
+import com.foc.admin.FocOTC;
 import com.foc.admin.FocUser;
 import com.foc.admin.FocUserDesc;
 import com.foc.admin.GrpMobileModuleRights;
@@ -100,13 +101,19 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 		SessionAndApplication session = super.pushSession(request, response);
 		if(session != null){
 			int authMethod = getAuthenticationMethod();
+			
 			String token = null;
+			String otc = null;
+			
 			if(authMethod == AUTH_BEARER || authMethod == AUTH_BEARER_THEN_USER_PASS) {
 				String authTokenHeader = request.getHeader("x-authorization");
 				if(Utils.isStringEmpty(authTokenHeader)) authTokenHeader = request.getHeader("Authorization");
+				otc = request.getParameter("otc");
 				if(authTokenHeader != null && authTokenHeader.startsWith("Bearer")){
 					token = authTokenHeader.substring("Bearer".length()).trim();
 					authMethod = AUTH_BEARER; 
+				} else if(authMethod == AUTH_BEARER_THEN_USER_PASS && otc != null && otc.length() > 0){
+					authMethod = AUTH_OTC;
 				} else if(authMethod == AUTH_BEARER_THEN_USER_PASS){
 					authMethod = AUTH_USERNAME_PASSWORD;
 				}
@@ -168,6 +175,24 @@ public class FocJoinEntityServlet<O extends FocObject, J extends FocObject> exte
 					session.logout();
 					session = null;
 				}
+			} else if (authMethod == AUTH_OTC) {
+				//table_name="+tableName+"&ref="+focObj.getReferenceInt()				
+				String accessTablename = (String) request.getParameter("table_name");
+				String accessRef = (String) request.getParameter("ref");
+				
+				FocOTC focOTC = FocOTC.findOTC(otc, accessTablename, accessRef);
+
+				if (focOTC != null) { 
+					FocUser otcUser = focOTC.getUser();
+					if (otcUser!= null) { 
+						session.getWebSession().setFocUser(otcUser);
+					}
+				} else {
+					Globals.logString(" = Authorization otc not found or expired");
+					session.logout();
+					session = null;
+				}
+			
 			} else if(authMethod == AUTH_USERNAME_PASSWORD) {
 				String username = request.getHeader("username");
 				String password = request.getHeader("password");
