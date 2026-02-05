@@ -15,15 +15,25 @@
  ******************************************************************************/
 package com.foc.cloudStorage;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+
+import com.foc.ConfigInfo;
 import com.foc.Globals;
 import com.foc.IFocEnvironment;
+import com.foc.util.Utils;
 
 public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 
@@ -58,32 +68,63 @@ public class FocCloudStorage_LocalDisc implements IFocCloudStorage {
 	@Override
 	public void uploadInputStream(String key, InputStream stream) throws FocCloudStorageException {
 		OutputStream outputStream = null;
-	 
-		try {
-			String fileName = getFileName(key); 
+		double imageCompressionRatio = ConfigInfo.getImageCompressionRatio();
+		try{
+			String fileName = getFileName(key);
 			if(fileName != null){
-//				//TO REMOVE
-//				DEBUG++;
-//				fileName = fileName.replace(".xlsx", DEBUG+".xlsx");
-//				//TO REMOVE
+				// //TO REMOVE
+				// DEBUG++;
+				// fileName = fileName.replace(".xlsx", DEBUG+".xlsx");
+				// //TO REMOVE
 				File theFile = new File(fileName);
+
 				if(!theFile.isDirectory()){
-					createDirectory(fileName);				
-					outputStream = new FileOutputStream(fileName);
-					
-					int read = 0;
-					byte[] bytes = new byte[1024];
-					
-					read = stream.read(bytes);
-					while (read != -1) {
-						outputStream.write(bytes, 0, read);
-						read = stream.read(bytes);					
+					createDirectory(fileName);
+					boolean compressedAndSaved = false;
+					String format = key.substring(key.lastIndexOf('.') + 1);
+					if(imageCompressionRatio > 0 && (format.equalsIgnoreCase("png") || format.equalsIgnoreCase("jpeg") || format.equalsIgnoreCase("jpg") || format.equals("bmp"))){
+						Globals.logDebug("Uploading image as compressed: image format:"+format);
+						Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName(format);
+						if(writers.hasNext()){
+							ImageWriter writer = (ImageWriter) writers.next();
+							if(writer != null){
+								BufferedImage image = ImageIO.read(stream);
+								outputStream = new FileOutputStream(theFile);
+
+								ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);
+								writer.setOutput(ios);
+
+								ImageWriteParam param = writer.getDefaultWriteParam();
+								if(param != null){
+									param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+									param.setCompressionQuality((float) imageCompressionRatio);
+									writer.write(null, new IIOImage(image, null, null), param);
+									Globals.logDebug("Image uploaded as compressed successfully");
+
+									compressedAndSaved = true;
+								}
+								ios.close();
+								writer.dispose();
+							}
+						}
 					}
+					if(!compressedAndSaved){
+						Globals.logDebug("Uploading image");
+						outputStream = new FileOutputStream(fileName);
+
+						int read = 0;
+						byte[] bytes = new byte[1024];
+
+						read = stream.read(bytes);
+						while (read != -1){
+							outputStream.write(bytes, 0, read);
+							read = stream.read(bytes);
+						}
+					}
+					Globals.logDebug("Image uploaded successfully");
 				}else{
 					Globals.showNotification("Error uploading", "File name not specified, could not upload", IFocEnvironment.TYPE_ERROR_MESSAGE);
 				}
-			}else{
-				Globals.showNotification("Error uploading", "File name not specified, could not upload", IFocEnvironment.TYPE_ERROR_MESSAGE);
 			}
 		} catch (Exception e) {
 			Globals.logException(e);
