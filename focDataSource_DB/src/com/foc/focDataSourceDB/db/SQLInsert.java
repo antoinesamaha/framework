@@ -31,12 +31,13 @@ public class SQLInsert extends SQLRequest {
 
   //BAntoineS - AUTOINCREMENT
   private boolean excludeFieldFromInsert(String fieldName){
-  	return fieldName.equals(focDesc.getRefFieldName()) && 
+	FField field = focDesc.getFieldByName(fieldName);
+  	return (fieldName.equals(focDesc.getRefFieldName()) && 
   			(  focDesc.getProvider() == DBManager.PROVIDER_MYSQL
   			|| focDesc.getProvider() == DBManager.PROVIDER_MSSQL
   			|| focDesc.getProvider() == DBManager.PROVIDER_POSTGRES
   			|| focDesc.getProvider() == DBManager.PROVIDER_H2
-  			) ;
+  			)) || (field != null && field.isExternallyManaged());
   }
   //EAntoineS - AUTOINCREMENT
   
