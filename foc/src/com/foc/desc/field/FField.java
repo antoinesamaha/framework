@@ -61,6 +61,7 @@ public abstract class FField implements Cloneable, IFocData {
   private boolean editableIfEmpty = false;
   private int     isMandatory = 0;
   private boolean includeInDBRequests = true;
+  private boolean externallyManaged = false;
   private int     indexOfPropertyInArray      = -1;
   private int     indexOfPropertyInDummyArray = -1;
   private FBoolField inheritanceField = null;
@@ -786,6 +787,14 @@ public abstract class FField implements Cloneable, IFocData {
   public void setIncludeInDBRequests(boolean includeInDBRequests) {
     this.includeInDBRequests = includeInDBRequests;
 	}
+  
+  public boolean isExternallyManaged() {
+	  return this.externallyManaged;
+  }
+  
+  public void setExternallyManaged(boolean externallyManaged) {
+	  this.externallyManaged = externallyManaged;
+  }
   
 	public boolean isAutoIncrement() {
 		return autoIncrement;
