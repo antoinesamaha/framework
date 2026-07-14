@@ -10,6 +10,7 @@ import com.foc.desc.FocFieldEnum;
 import com.foc.desc.FocObject;
 import com.foc.desc.field.FField;
 import com.foc.desc.field.FFieldPath;
+import com.foc.desc.field.FLastUpdatedDateTimeField;
 import com.foc.focDataSourceDB.db.util.DBUtil;
 import com.foc.property.FProperty;
 
@@ -51,11 +52,17 @@ public class SQLUpdate extends SQLRequest {
     if (focDesc != null && focDesc.isPersistent()) {
       boolean firstField = true;
       boolean atLeastOneFieldOtherThanRef = false;
-      
+      FLastUpdatedDateTimeField lastUpdatedField = null;
+
       FocFieldEnum enumer = focObj.newFocFieldEnum(FocFieldEnum.CAT_ALL_DB, FocFieldEnum.LEVEL_DB);
-      while (enumer.hasNext()) {   
+      while (enumer.hasNext()) {
         FField focField = (FField) enumer.next();
         FFieldPath path = enumer.getFieldPath();
+        if(focField instanceof FLastUpdatedDateTimeField && path.size() == 1){
+          //Not part of an insert (the column defaults to SYSDATE on insert); on update we force it to now
+          lastUpdatedField = (FLastUpdatedDateTimeField)focField;
+          continue;
+        }
         if(isFieldInQuery(path)){
           FProperty prop      = enumer.getProperty();                
           FProperty firstProp = path.getPropertyFromObject(focObj, 0);  
@@ -105,6 +112,29 @@ public class SQLUpdate extends SQLRequest {
         }
       }
       
+      if(lastUpdatedField != null){
+      	if (!firstField) {
+      		request.append(",");
+      	} else {
+      		request = new StringBuffer("");
+      		request.append("UPDATE ");
+      		if(DBManager.provider_TableNamesBetweenSpeachmarks(focDesc.getProvider())){
+      			request.append("\""+focDesc.getStorageName_ForSQL()+"\"");
+      		}else{
+      			request.append(focDesc.getStorageName_ForSQL());
+      		}
+      		request.append(" SET ");
+      	}
+
+      	String fldName = lastUpdatedField.getDBName();
+      	if(focDesc.getProvider() == DBManager.PROVIDER_MSSQL) fldName = "["+fldName+"]" ;
+      	if(DBManager.provider_FieldNamesBetweenSpeachmarks(focDesc.getProvider())) fldName = "\""+fldName+"\"" ;
+      	request.append(fldName + "=");
+      	request.append(lastUpdatedField.getUpdateNowSqlString());
+      	firstField = false;
+      	atLeastOneFieldOtherThanRef = true;
+      }
+
       if(atLeastOneFieldOtherThanRef){
       	error = addWhere();//firstField || addWhere()
       }else{

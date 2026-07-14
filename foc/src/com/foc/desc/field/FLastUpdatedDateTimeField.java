@@ -23,6 +23,16 @@ public class FLastUpdatedDateTimeField extends FDateTimeField {
 		this.includeFractionedSeconds = includeFractionedSeconds;
 	}
 	
+	public String getUpdateNowSqlString() {
+		if(getProvider() == DBManager.PROVIDER_ORACLE){
+			return includeFractionedSeconds() ? "SYSTIMESTAMP" : "SYSDATE";
+		} else if(getProvider() == DBManager.PROVIDER_POSTGRES) {
+			return "CURRENT_TIMESTAMP";
+		} else {
+			return "GETDATE()";
+		}
+	}
+
 	@Override
 	public String getCreationString(String name) {
 	  	if(getProvider()== DBManager.PROVIDER_ORACLE){
