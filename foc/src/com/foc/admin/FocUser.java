@@ -32,6 +32,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.foc.ConfigInfo;
 import com.foc.Globals;
@@ -1101,6 +1103,31 @@ public class FocUser extends FocObject {
   }
   
 //USERREFACTOR
+  // Guards userSites_Rebuild()'s cross-list traversal (site list -> each site's
+  // operator list). This method is reachable from several independent places
+  // (FenixAdminServlet's admin-refresh webhook, WFOperatorDesc's
+  // FocNotifAction_ReloadList notification trigger, and lazy calls from
+  // userSites_RebuildIfNeeded() during ordinary requests - itself called from
+  // ordinary permission checks like hasTitle()/hasSite()/hasCompany(), so this
+  // is reachable from regular application traffic, not just admin flows) that
+  // can also trigger a plain FocList.reloadFromDB()/loadIfNotLoadedFromDB() on
+  // the same site or operator list concurrently, in the opposite lock order -
+  // this caused a production deadlock (thread dump 2026-08-19). A single
+  // static lock, shared with FenixAdminServlet.treatTypeObjectRefresh(),
+  // serializes every path that can touch this pair of lists instead of
+  // relying on FocList's per-instance monitors, which have no globally
+  // consistent acquisition order.
+  //
+  // Uses tryLock() with a timeout rather than plain synchronized: if whatever
+  // is holding the lock hangs (e.g. a genuinely stuck DB call inside
+  // reloadFromDB()), callers give up after USER_SITES_REBUILD_LOCK_TIMEOUT_SECONDS
+  // instead of blocking their Tomcat worker thread forever - a hung holder
+  // would otherwise turn into an unbounded queue of blocked threads (admin
+  // webhook calls AND ordinary permission checks) which can exhaust the
+  // thread pool just as badly as the original deadlock did.
+  public static final ReentrantLock USER_SITES_REBUILD_LOCK = new ReentrantLock();
+  public static final long USER_SITES_REBUILD_LOCK_TIMEOUT_SECONDS = 30;
+
   private HashMap<Long, UserSite> userSites = null;
   private class UserSite {
   	private long companyRef = 0;
@@ -1219,19 +1246,33 @@ public class FocUser extends FocObject {
 //  }
   
   public synchronized void userSites_Rebuild() {
+	boolean locked = false;
+	try {
+		locked = USER_SITES_REBUILD_LOCK.tryLock(USER_SITES_REBUILD_LOCK_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+	} catch (InterruptedException e) {
+		Thread.currentThread().interrupt();
+		Globals.logException(e);
+		return;
+	}
+	if (!locked) {
+		Globals.logString("WARNING: userSites_Rebuild() could not acquire USER_SITES_REBUILD_LOCK within "
+			+ USER_SITES_REBUILD_LOCK_TIMEOUT_SECONDS + "s - skipping rebuild instead of hanging this thread.");
+		return;
+	}
+	try {
 		userSites = null;
 		userSites = new HashMap<Long, UserSite>();
-		
+
   	FocList siteList = WFSiteDesc.getInstance().getFocList();
   	if (siteList != null) {
   		siteList.loadIfNotLoadedFromDB();
-  		 
+
   		siteList.iterate(new IFocIterator() {
 				@Override
 				public boolean treatElement(Object element) {
 					if(element != null && element instanceof FocListElement) {
 						WFSite site = (WFSite) ((FocListElement)element).getFocObject();
-						
+
 						if(site != null && site.getReferenceInt() > 0) {
 							FocList operatorsList = site.getOperatorList();
 							if(operatorsList != null) {
@@ -1240,7 +1281,7 @@ public class FocUser extends FocObject {
 									public boolean treatElement(Object element) {
 										if(element != null && element instanceof FocListElement) {
 											WFOperator operator = (WFOperator) ((FocListElement)element).getFocObject();
-											
+
 											if(operator != null && operator.getUser() != null && operator.getUser().equalsRef(FocUser.this)) {
 												UserSite userSite = userSites.get(site.getReferenceInt());
 												if(userSite == null) {
@@ -1262,8 +1303,11 @@ public class FocUser extends FocObject {
 				}
 			});
   	}
+	} finally {
+		USER_SITES_REBUILD_LOCK.unlock();
+	}
   }
-  
+
   //USERREFACTOR
   private synchronized boolean hasCompany(Company company) {
   	

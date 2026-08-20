@@ -229,7 +229,7 @@ public class DBAdaptor {
 	    while(iter != null && iter.hasNext()){
 	    	IFocDescDeclaration focDescDeclaration = iter.next();
 	    	//if(focDescDeclaration != null && (!(focDescDeclaration instanceof DBFocDescDeclaration) || !ConfigInfo.isForDevelopment())){
-	    	if(focDescDeclaration != null /*&& (!(focDescDeclaration instanceof DBFocDescDeclaration) || !ConfigInfo.isForDevelopment())*/){
+	    	if(focDescDeclaration != null){
 		    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
 		    	if(focDesc != null && focDesc.isAllowAdaptDataModel()){
 		    		try{
@@ -305,29 +305,6 @@ public class DBAdaptor {
 	    		}
     		}
       }
-
-    	//Debug only
-    	//----------
-    	/*
-    	if(DBManagerServer.getInstance() != null){//Logging cached not cached
-    		Globals.logString("Cached or Not Cached:");
-    		
-		    iter = Globals.getApp().getFocDescDeclarationIterator();
-		    while(iter != null && iter.hasNext()){
-		    	IFocDescDeclaration focDescDeclaration = iter.next();
-		    	if(focDescDeclaration != null){
-			    	FocDesc focDesc =  focDescDeclaration.getFocDescription();
-			    	if(focDesc != null && focDesc.isDbResident()){
-			    		try{
-			    			Globals.logString(focDesc.getStorageName()+" , "+focDesc.isListInCache(), false);
-			        }catch(Exception e){
-			        	Globals.logException(e);
-			    		}
-			    	}
-		      }
-		    }
-      }
-      */
     	//----------
     	
 	    iter1 = Globals.getApp().modules_Iterator();
@@ -376,16 +353,23 @@ public class DBAdaptor {
 //	  		if(ConfigInfo.isLogDBRequestActive()) Globals.logString(req);
 //	  		stm.executeQuery(req);
 
-	  		ResultSet rs = stm != null ? stm.getResultSet() : null;
-	  		while(rs != null && rs.next()){
-	  			maxRef = rs.getLong(1);
+	  		try{
+	  			ResultSet rs = stm != null ? stm.getResultSet() : null;
+	  			while(rs != null && rs.next()){
+	  				maxRef = rs.getLong(1);
+	  			}
+	  			if(rs != null){
+	  				try{
+	  					rs.close();
+	  				}catch(Exception e){
+	  					Globals.logException(e);
+	  				}
+	  			}
+	  		}catch(Exception e){
+	  			Globals.logException(e);
+	  		}finally{
+	  			DBManagerServer.getInstance().unlockStatement(stm);
 	  		}
-        try{
-          rs.close();
-        }catch(Exception e){
-          Globals.logException(e);
-        }
-	  		DBManagerServer.getInstance().unlockStatement(stm);
 	
 	  		long seq = 0;
 	  		

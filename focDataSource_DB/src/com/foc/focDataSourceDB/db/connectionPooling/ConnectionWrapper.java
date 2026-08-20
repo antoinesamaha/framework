@@ -221,13 +221,11 @@ public class ConnectionWrapper {
       int maxidle = Utils.parseInteger(maxIdleStr, 1);
 
       String maxWaitStr = ConfigInfo.getProperty("jdbc.connections.maxwaitmillis");
-      int maxWait = Utils.parseInteger(maxWaitStr, -1);
+      int maxWait = Utils.parseInteger(maxWaitStr, 60000); // default 60s, never block forever
 
       apacheConnectionPool.setMaxIdle(maxidle);
       apacheConnectionPool.setMaxTotal(maxtotal);
-      if(maxWait > 0) {
-      	apacheConnectionPool.setMaxWaitMillis(maxWait);
-      }
+      apacheConnectionPool.setMaxWaitMillis(maxWait);
       /*
       Globals.logString("drivers "+credentials.getDrivers());
       Class.forName(credentials.getDrivers()).newInstance();

@@ -232,7 +232,15 @@ public class FocVersion extends FocObject{
     FocList    dbVersionList = getList();
     if(dbVersionList != null){
     	//versionList.loadIfNotLoadedFromDB();
-      ver = (FocVersion) dbVersionList.searchByPropertyStringValue(FocVersion.FLD_JAR, jar);
+    	// There can be duplicate rows for the same jar (data glitch), so pick the one with the highest ID.
+    	for(int i=0; i<dbVersionList.size(); i++){
+    		FocVersion candidate = (FocVersion) dbVersionList.getFocObject(i);
+    		if(candidate != null && jar.equals(candidate.getJar())){
+    			if(ver == null || candidate.getId() > ver.getId()){
+    				ver = candidate;
+    			}
+    		}
+    	}
     }
     return ver;
   }

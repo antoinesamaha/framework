@@ -62,10 +62,17 @@ public class FocThreadWithSession extends Thread {
 			}
 			
 			if(!initSession()) {
-				main();
+				try {
+					main();
+				} finally {
+					dispose();
+				}
 			}
 		}catch (InterruptedException e){
 			Globals.logException(e);
+			dispose(); // interrupted by watchdog — still must release DB connections
+		} catch (Exception e) {
+			Globals.logExceptionWithoutPopup(e);
 		}
 	}
 
@@ -98,6 +105,7 @@ public class FocThreadWithSession extends Thread {
 				webServer.addApplication(webApplication);
 			
 				webSession.setFocUser(batchUser);
+				Globals.logString("BACKGROUND THREAD: session opened, thread=" + Thread.currentThread().getName() + " id=" + Thread.currentThread().getId());
 			} else {
 				error = true;
 				Globals.logString(" ERROR : Could not find batch user:"+BATCH_USER);
@@ -108,6 +116,7 @@ public class FocThreadWithSession extends Thread {
 	
 	public void closeSession() {
 		if (webApplication != null) {
+			Globals.logString("BACKGROUND THREAD: session closed, thread=" + Thread.currentThread().getName() + " id=" + Thread.currentThread().getId());
 			if(webServer != null) webServer.removeApplication(webApplication);
 			webApplication.dispose();
 			webApplication = null;
